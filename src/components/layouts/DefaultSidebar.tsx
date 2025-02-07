@@ -9,6 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarFooter,
+  SidebarHeader,
 } from "../ui/sidebar";
 import {
   Home,
@@ -17,11 +18,12 @@ import {
   Smartphone,
   SquareUserIcon,
   LogOutIcon,
+  GalleryVerticalEnd,
 } from "lucide-react";
 
 const dashboard = [
   {
-    title: "메인화면",
+    title: "대시보드",
     url: "/",
     icon: Home,
   },
@@ -50,6 +52,19 @@ const dashboard = [
 export default function DefaultSidebar() {
   return (
     <Sidebar collapsible="icon">
+      <SidebarHeader>
+        <SidebarMenuButton
+          size="lg"
+          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+        >
+          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+            <GalleryVerticalEnd className="size-4" />
+          </div>
+          <div className="flex flex-col gap-0.5 leading-none">
+            <span className="font-semibold">Tangoplus</span>
+          </div>
+        </SidebarMenuButton>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>DASHBOARD</SidebarGroupLabel>

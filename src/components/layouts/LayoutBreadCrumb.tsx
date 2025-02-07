@@ -24,7 +24,7 @@ interface IMenu {
 
 const Menus: IMenu[] = [
   {
-    title: "메인화면",
+    title: "대시보드",
     url: "/",
     initial: "",
   },
