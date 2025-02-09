@@ -18,12 +18,12 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
+  { month: "1월", desktop: 186, mobile: 80 },
+  { month: "2월", desktop: 305, mobile: 200 },
+  { month: "3월", desktop: 237, mobile: 120 },
+  { month: "4월", desktop: 73, mobile: 190 },
+  { month: "5월", desktop: 209, mobile: 130 },
+  { month: "6월", desktop: 214, mobile: 140 },
 ];
 
 const chartConfig = {
@@ -102,7 +102,8 @@ export function AreaChartComponent({
               Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
             </div>
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              January - June 2024
+              {chartData[0].month} - {chartData[chartData.length - 1].month}{" "}
+              2024년
             </div>
           </div>
         </div>
