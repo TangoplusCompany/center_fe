@@ -17,48 +17,55 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-const chartData = [
-  { month: "1월", desktop: 186, mobile: 80 },
-  { month: "2월", desktop: 305, mobile: 200 },
-  { month: "3월", desktop: 237, mobile: 120 },
-  { month: "4월", desktop: 73, mobile: 190 },
-  { month: "5월", desktop: 209, mobile: 130 },
-  { month: "6월", desktop: 214, mobile: 140 },
-];
-
-const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "hsl(var(--chart-1))",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "hsl(var(--chart-2))",
-  },
-} satisfies ChartConfig;
+import { useState } from "react";
 
 type AreaChartTypes = {
-  className: string;
+  className?: string;
   title: string;
   description: string;
+  data: { [key: string]: string | number }[];
+  config: ChartConfig;
 };
 
 export function AreaChartComponent({
   className,
   title,
   description,
+  data,
+  config,
 }: AreaChartTypes) {
+  const [activeChart, setActiveChart] = useState<keyof typeof config>(
+    Object.keys(config)[0] as keyof typeof config
+  );
+
   return (
     <Card className={`${className} `}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
+        <div className="flex">
+          {Object.keys(config).map((key, uniqueNumber) => {
+            const chart = key as keyof typeof config;
+            return (
+              <button
+                key={chart + "-_-" + uniqueNumber}
+                data-active={activeChart === chart}
+                className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6"
+                onClick={() => setActiveChart(chart)}
+              >
+                <span className="text-xs text-muted-foreground">
+                  {config[chart].label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
+        <ChartContainer config={config}>
           <AreaChart
             accessibilityLayer
-            data={chartData}
+            data={data}
             margin={{
               left: 12,
               right: 12,
@@ -102,8 +109,7 @@ export function AreaChartComponent({
               Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
             </div>
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              {chartData[0].month} - {chartData[chartData.length - 1].month}{" "}
-              2024년
+              {data[0].month} - {data[data.length - 1].month} 2024년
             </div>
           </div>
         </div>
