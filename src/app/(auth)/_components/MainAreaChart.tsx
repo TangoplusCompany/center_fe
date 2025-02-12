@@ -113,7 +113,7 @@ const MainAreaChart = () => {
       description="센터 사용자들의 서비스 이용 현황 그래프 입니다."
       config={chartConfig}
       data={chartData}
-      className="col-span-12"
+      className="col-span-12 shadow-none rounded-sm"
     />
   );
 };
