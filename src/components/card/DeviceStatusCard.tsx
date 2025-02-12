@@ -1,39 +1,16 @@
 import React from "react";
-
-interface DeviceStatusCardProps {
-  sn: number;
-  serial_number: string;
-  install_location: string;
-  install_address: string;
-  install_address_detail: string;
-  install_zipcode: string;
-  device_name: string;
-  reg_date: Date;
-  modify_date: Date;
-  upload_date: Date;
-  uploaded: string;
-  used: string;
-  reg_status: string;
-}
+import { DeviceStatusCardProps } from "@/types/device";
 
 const DeviceStatus = ({ status }: { status: boolean }) => {
   if (status) {
     // OFF
     return (
-      <div className="h-3 w-3 rounded-full bg-green-400 relative group">
-        <p className=" group-hover:opacity-100 group-hover:visible invisible opacity-0 duration-300 absolute bottom-4 left-1 p-1 rounded border border-solid border-bodydark w-[105px]">
-          기기 가동 상태
-        </p>
-      </div>
+      <div className="h-3 w-3 rounded-full bg-green-400 relative group"></div>
     );
   } else {
     // ON
     return (
-      <div className="h-3 w-3 rounded-full bg-rose-500 relative group">
-        <p className=" group-hover:opacity-100 group-hover:visible invisible opacity-0 duration-300 absolute bottom-4 left-1 p-1 rounded border border-solid border-bodydark w-[105px]">
-          기기 정지 상태
-        </p>
-      </div>
+      <div className="h-3 w-3 rounded-full bg-rose-500 relative group"></div>
     );
   }
 };
