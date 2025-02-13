@@ -49,9 +49,9 @@ const MainDeviceStatus = () => {
   );
 };
 
-const MainDevice = () => {
+const MainDevice = ({ className }: { className?: string }) => {
   return (
-    <div className="col-span-12">
+    <div className={`${className}`}>
       <MainDeviceStatus />
     </div>
   );
