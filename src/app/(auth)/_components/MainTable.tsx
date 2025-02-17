@@ -177,7 +177,7 @@ export function MainDataTable() {
   });
 
   return (
-    <div className="w-full">
+    <div className="w-full overflow-scroll">
       {/* <div className="flex items-center py-4">
         <Input
           placeholder="이메일을 입력해주세요."
@@ -218,7 +218,7 @@ export function MainDataTable() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div> */}
-      <div className="rounded-md border">
+      <div className="rounded-md border min-w-[500px]">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

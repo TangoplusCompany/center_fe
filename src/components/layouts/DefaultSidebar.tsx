@@ -61,7 +61,7 @@ export default function DefaultSidebar() {
             <GalleryVerticalEnd className="size-4" />
           </div>
           <div className="flex flex-col gap-0.5 leading-none">
-            <span className="font-semibold">Tangoplus</span>
+            <span className="font-semibold text-xl">Tangoplus</span>
           </div>
         </SidebarMenuButton>
       </SidebarHeader>
