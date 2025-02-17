@@ -35,44 +35,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { UserStatus } from "./CenterUserStatus";
 
-const data: UserData[] = [
-  {
-    id: "m5gr84i9",
-    name: "김순자",
-    phone: "010-2534-5678",
-    status: "pending",
-    request: false,
-  },
-  {
-    id: "3u1reuv4",
-    name: "홍길동",
-    phone: "010-6574-2342",
-    status: "request",
-    request: true,
-  },
-  {
-    id: "derv1ws0",
-    name: "강호동",
-    phone: "010-2616-8867",
-    status: "approved",
-    request: false,
-  },
-  {
-    id: "5kma53ae",
-    name: "이수근",
-    phone: "010-8923-7014",
-    status: "pending",
-    request: false,
-  },
-  {
-    id: "bhqecj4p",
-    name: "사오정",
-    phone: "010-1237-1472",
-    status: "approved",
-    request: false,
-  },
-];
-
 export type UserData = {
   id: string;
   name: string;
@@ -164,7 +126,13 @@ export const columns: ColumnDef<UserData>[] = [
   },
 ];
 
-export function CenterUserList({ className }: { className?: string }) {
+export function CenterUserList({
+  className,
+  users,
+}: {
+  className?: string;
+  users: UserData[];
+}) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -174,7 +142,7 @@ export function CenterUserList({ className }: { className?: string }) {
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
-    data,
+    data: users,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -195,6 +163,7 @@ export function CenterUserList({ className }: { className?: string }) {
   return (
     <div className={`${className}`}>
       <div className="flex items-center py-4">
+        {/* 검색어 특정키워드가 아닌 전체적으로 검색되게 */}
         <Input
           placeholder="검색할 이름을 입력해주세요."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -204,7 +173,7 @@ export function CenterUserList({ className }: { className?: string }) {
           className="max-w-sm"
         />
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-md border  min-w-[500px]">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
