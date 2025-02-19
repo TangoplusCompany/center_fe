@@ -1,15 +1,18 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useEffect } from "react";
+
+const getUser = async () => {
+  const response = await fetch("/api/user");
+  return await response.json();
+};
 
 const TestComponent = () => {
-  const { data } = useQuery({
-    queryKey: ["test"],
-    queryFn: async () =>
-      (await fetch("/api/user")).json(),
+  useEffect(() => {
+    const data = getUser();
+    console.log(data);
   });
-  return <div>{data ? <p>{data}</p> : "asdf"}</div>;
+  return <div>asdf</div>;
 };
 
 export default TestComponent;
