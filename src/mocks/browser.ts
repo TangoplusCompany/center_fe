@@ -2,6 +2,8 @@
 
 // src/mocks/browser.js
 import { setupWorker } from "msw/browser";
-import { handlers } from "./handlers";
+import { userHandlers } from "./userHandlers";
+import { deviceHandlers } from "./deviceHandlers";
+import { centerHandlers } from "./centerHandlers";
 
-export const worker = setupWorker(...handlers);
+export const worker = setupWorker(...userHandlers, ...deviceHandlers, ...centerHandlers);
