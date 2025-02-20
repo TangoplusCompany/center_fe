@@ -20,6 +20,7 @@ import {
   LogOutIcon,
   GalleryVerticalEnd,
 } from "lucide-react";
+import Link from "next/link";
 
 const dashboard = [
   {
@@ -52,7 +53,7 @@ const dashboard = [
 export default function DefaultSidebar() {
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader>
+      <SidebarHeader className="bg-white dark:bg-black">
         <SidebarMenuButton
           size="lg"
           className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
@@ -65,7 +66,7 @@ export default function DefaultSidebar() {
           </div>
         </SidebarMenuButton>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="bg-white dark:bg-black">
         <SidebarGroup>
           <SidebarGroupLabel>DASHBOARD</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -84,14 +85,14 @@ export default function DefaultSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="bg-white dark:bg-black">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <div>
+              <Link href="/login">
                 <LogOutIcon className="lg:!w-5 lg:!h-5" />
                 <p>로그아웃</p>
-              </div>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
