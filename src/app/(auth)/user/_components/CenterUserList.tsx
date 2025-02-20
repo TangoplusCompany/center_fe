@@ -34,16 +34,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { UserStatus } from "./CenterUserStatus";
-
-export type UserData = {
-  id: string;
-  name: string;
-  status: UserAcessStatus;
-  request: boolean;
-  phone: string;
-};
-
-type UserAcessStatus = "pending" | "request" | "approved" | "rejected";
+import { UserAcessStatus, UserData } from "@/types/user";
 
 const statusTransKorean = {
   pending: "승인대기",
