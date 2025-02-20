@@ -19,13 +19,13 @@ export default function Home() {
         <h2 className="col-span-12 text-xl font-medium pb-2">
           최근 사용자 조회
         </h2>
-        <MainDataTable />
+        <MainDataTable url="/api/user/latest" />
       </div>
       <div className="col-span-12 lg:col-span-6">
         <h2 className="col-span-12 text-xl font-medium pb-2">
           신규 사용자 조회
         </h2>
-        <MainDataTable />
+        <MainDataTable url="/api/user/new" />
       </div>
     </div>
   );
