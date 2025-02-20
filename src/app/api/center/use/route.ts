@@ -1,16 +1,16 @@
 export async function GET() {
-  const data = "User Get";
+  const data = "Center Device Use Get";
   return Response.json(data);
 }
 export async function POST() {
-  const data = "User Post";
+  const data = "Center Device Use Post";
   return Response.json(data);
 }
 export async function PUT() {
-  const data = "User Put";
+  const data = "Center Device Use Put";
   return Response.json(data);
 }
 export async function DELETE() {
-  const data = "User Delete";
+  const data = "Center Device Use Delete";
   return Response.json(data);
 }
