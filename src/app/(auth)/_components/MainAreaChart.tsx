@@ -3,7 +3,7 @@
 import { AreaChartComponent } from "@/components/chart/Area";
 import { ChartConfig } from "@/components/ui/chart";
 import { useQuery } from "@tanstack/react-query";
-import React, { useEffect } from "react";
+import React from "react";
 
 const chartConfig = {
   kiosk: {
@@ -17,30 +17,29 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const MainAreaChart = ({ className }: { className?: string }) => {
-  const [centerData, setCenterData] =
-    React.useState<{ [key: string]: string | number }[]>();
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["centerData"],
     queryFn: async () => {
       const response = await fetch("/api/center");
       return response.json();
     },
   });
-  useEffect(() => {
-    setCenterData(data);
-  }, [data]);
 
   return (
     <>
-      {centerData && centerData.length > 0 ? (
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : data.length > 0 ? (
         <AreaChartComponent
           title="센터 서비스 이용 현황"
           description="센터 사용자들의 서비스 이용 현황 그래프 입니다."
           config={chartConfig}
-          data={centerData}
+          data={data}
           className={`${className}`}
         />
-      ) : null}
+      ) : (
+        <p>데이터가 존재하지 않습니다.</p>
+      )}
     </>
   );
 };

@@ -2,30 +2,29 @@
 
 import DeviceStatusCard from "@/components/card/DeviceStatusCard";
 import SkeletonDeviceCard from "@/components/card/SkeletonDeviceCard";
-import { DeviceStatusCardProps } from "@/types/device";
 import { useQuery } from "@tanstack/react-query";
-import React, { useEffect } from "react";
+import React from "react";
 
 const MainDeviceStatus = () => {
-  const [centerDevice, setCenterDevice] = React.useState<
-    DeviceStatusCardProps[]
-  >([]);
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["deviceStatus"],
     queryFn: async () => {
       const response = await fetch("/api/device/status");
       return response.json();
     },
   });
-  useEffect(() => {
-    setCenterDevice(data);
-  }, [data]);
   return (
     <>
-      {centerDevice && centerDevice.length > 0 ? (
-        <DeviceStatusCard devices={centerDevice} />
-      ) : (
+      {isLoading ? (
         <SkeletonDeviceCard />
+      ) : (
+        <>
+          {data.length > 0 ? (
+            <DeviceStatusCard devices={data} />
+          ) : (
+            <p>데이터가 존재하지 않습니다.</p>
+          )}
+        </>
       )}
     </>
   );

@@ -35,9 +35,6 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const MainUserDonutChart = ({ className }: { className: string }) => {
-  const [chartData, setChartData] = React.useState<
-    { browser: string; visitors: number; fill: string }[] | null
-  >([]);
   const { data } = useQuery({
     queryKey: ["centerUserDevice"],
     queryFn: async () => {
@@ -47,13 +44,16 @@ const MainUserDonutChart = ({ className }: { className: string }) => {
   });
 
   const totalVisitors = React.useMemo(() => {
-    if (!chartData) {
+    if (!data) {
       return null;
     }
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
-  }, [chartData]);
-  React.useEffect(() => {
-    setChartData(data);
+    return data.reduce(
+      (
+        acc: number,
+        curr: { browser: string; visitors: number; fill: string }
+      ) => acc + curr.visitors,
+      0
+    );
   }, [data]);
   return (
     <Card className={`${className} flex flex-col`}>
@@ -71,9 +71,9 @@ const MainUserDonutChart = ({ className }: { className: string }) => {
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            {chartData && (
+            {data && (
               <Pie
-                data={chartData}
+                data={data}
                 dataKey="visitors"
                 nameKey="browser"
                 innerRadius={60}
