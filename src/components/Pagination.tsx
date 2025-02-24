@@ -16,23 +16,28 @@ type PaginationProps = {
 };
 
 export function DefaultPagination({ ...props }: PaginationProps) {
+  const totalPage = Math.ceil(props.total / props.limit);
   return (
     <Pagination className={`${props.className}`}>
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious href="#" />
         </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">1</PaginationLink>
-        </PaginationItem>
+        {props.nowPage !== 1 && (
+          <PaginationItem>
+            <PaginationLink href="#">{props.nowPage - 1}</PaginationLink>
+          </PaginationItem>
+        )}
         <PaginationItem>
           <PaginationLink href="#" isActive>
             {props.nowPage}
           </PaginationLink>
         </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">3</PaginationLink>
-        </PaginationItem>
+        {props.nowPage !== totalPage && (
+          <PaginationItem>
+            <PaginationLink href="#">{props.nowPage + 1}</PaginationLink>
+          </PaginationItem>
+        )}
         <PaginationItem>
           <PaginationNext href="#" />
         </PaginationItem>
