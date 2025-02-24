@@ -32,10 +32,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { UserData } from "@/types/user";
-import { useQuery } from "@tanstack/react-query";
 
-export const columns: ColumnDef<UserData>[] = [
+export const columns: ColumnDef<{ [key: string]: string }>[] = [
   {
     accessorKey: "name",
     header: "이름",
@@ -104,7 +102,11 @@ export const columns: ColumnDef<UserData>[] = [
   },
 ];
 
-export function MainDataTable({ url }: { url: string }) {
+export function MainDataTable({
+  data,
+}: {
+  data: { [key: string]: string }[];
+}) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -112,16 +114,6 @@ export function MainDataTable({ url }: { url: string }) {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-
-  const { data = [] } = useQuery({
-    queryKey: ["centerUsers", url],
-    queryFn: async () => {
-      const response = await fetch(url, {
-        method: "GET",
-      });
-      return response.json();
-    },
-  });
 
   const table = useReactTable({
     data,

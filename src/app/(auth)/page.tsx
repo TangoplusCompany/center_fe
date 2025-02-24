@@ -1,9 +1,9 @@
 import React from "react";
 import MainDevice from "./_components/MainDevice";
 import MainAreaChart from "./_components/MainAreaChart";
-import { MainDataTable } from "./_components/MainTable";
 import MainUserDonutChart from "./_components/MainUserDonutChart";
 import { Separator } from "@/components/ui/separator";
+import MainUserTable from "./_components/MainUserTable";
 
 export default function Home() {
   return (
@@ -15,18 +15,8 @@ export default function Home() {
         <MainUserDonutChart className="shadow-none rounded-sm h-full" />
       </div>
       <Separator className="my-4 col-span-12" />
-      <div className="col-span-12 lg:col-span-6">
-        <h2 className="col-span-12 text-xl font-medium pb-2">
-          최근 사용자 조회
-        </h2>
-        <MainDataTable url="/api/user/latest" />
-      </div>
-      <div className="col-span-12 lg:col-span-6">
-        <h2 className="col-span-12 text-xl font-medium pb-2">
-          신규 사용자 조회
-        </h2>
-        <MainDataTable url="/api/user/new" />
-      </div>
+      <MainUserTable title="최근 사용자 조회" url="/api/user/latest" />
+      <MainUserTable title="신규 사용자 조회" url="/api/user/new" />
     </div>
   );
 }
