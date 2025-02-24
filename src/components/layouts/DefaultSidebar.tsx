@@ -62,7 +62,7 @@ export default function DefaultSidebar() {
             <GalleryVerticalEnd className="size-4" />
           </div>
           <div className="flex flex-col gap-0.5 leading-none">
-            <span className="font-semibold text-xl">Tangoplus</span>
+            <span className="font-semibold text-xl">탱고플러스 센터</span>
           </div>
         </SidebarMenuButton>
       </SidebarHeader>
@@ -74,10 +74,10 @@ export default function DefaultSidebar() {
               {dashboard.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon className="lg:!w-5 lg:!h-5" />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
