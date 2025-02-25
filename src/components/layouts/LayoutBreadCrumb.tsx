@@ -5,7 +5,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import {
@@ -52,20 +51,26 @@ const Menus: IMenu[] = [
 
 export function LayoutBreadcCrumb() {
   const pathName = usePathname();
+
   return (
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/">CENTER</BreadcrumbLink>
+          <BreadcrumbLink href="/">탱고플러스 센터</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center gap-1">
-              <p>
-                {Menus.find((menu) => menu.url === pathName)?.title ||
-                  "Not Found"}
-              </p>
+              {pathName === "/" ? (
+                <p className="text-slate-950">대시보드</p>
+              ) : (
+                <p className="text-slate-950">
+                  {Menus.filter((el) => el.url !== "/").find((menu) =>
+                    pathName.includes(menu.url)
+                  )?.title || "Not Found"}
+                </p>
+              )}
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
               {Menus.map((menu, index) => (
@@ -75,10 +80,6 @@ export function LayoutBreadcCrumb() {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbPage>Components</BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
