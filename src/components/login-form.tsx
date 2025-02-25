@@ -7,8 +7,9 @@ import { Label } from "@/components/ui/label";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "이메일 형식이 올바르지 않습니다." }),
@@ -42,10 +43,26 @@ export default function LoginForm({
     resolver: zodResolver(loginSchema),
   });
   const router = useRouter();
+  const [failMessage, setFailMessage] = useState<string>("");
 
-  const loginHandleSubmit = handleSubmit((data) => {
-    console.log(data);
-    router.push("/");
+  const loginHandleSubmit = handleSubmit(async (data) => {
+    const result = await fetch("/api/user/login", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+    if (result.status === 401) {
+      setFailMessage(
+        "이메일 혹은 비밀번호가 잘못 되었습니다.\n이메일과 비밀번호를 정확히 입력해 주세요."
+      );
+      return;
+    } else if (result.status === 201) {
+      router.replace("/");
+    } else {
+      setFailMessage(
+        "서버에 일시적인 에러가 발생하였습니다. 잠시 후 다시 시도바랍니다."
+      );
+      return;
+    }
   });
   return (
     <form
@@ -54,9 +71,9 @@ export default function LoginForm({
       onSubmit={loginHandleSubmit}
     >
       <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">Login to your account</h1>
+        <h1 className="text-2xl font-bold">탱고플러스 센터관리자 로그인</h1>
         <p className="text-balance text-sm text-muted-foreground">
-          Enter your email below to login to your account
+          이메일형식의 아이디를 입력하여 로그인해주세요.
         </p>
       </div>
       <div className="grid gap-6">
@@ -80,7 +97,7 @@ export default function LoginForm({
               href="#"
               className="ml-auto text-sm underline-offset-4 hover:underline"
             >
-              Forgot your password?
+              비밀번호를 잊어버리셨나요?
             </a>
           </div>
           <Input
@@ -94,8 +111,9 @@ export default function LoginForm({
             <ErrorText>{String(errors.password?.message)}</ErrorText>
           )}
         </div>
+        {failMessage && <ErrorText>{failMessage}</ErrorText>}
         <Button type="submit" className="w-full">
-          Login
+          로그인
         </Button>
         {/* <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
           <span className="relative z-10 bg-background px-2 text-muted-foreground">
@@ -113,10 +131,10 @@ export default function LoginForm({
         </Button> */}
       </div>
       <div className="text-center text-sm">
-        Don&apos;t have an account?{" "}
-        <a href="#" className="underline underline-offset-4">
-          Sign up
-        </a>
+        신규 관리자 이신가요?{" "}
+        <Link href="/register" className="underline underline-offset-4">
+          회원가입
+        </Link>
       </div>
     </form>
   );

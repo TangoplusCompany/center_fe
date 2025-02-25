@@ -33,53 +33,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const data: UserData[] = [
-  {
-    id: "m5gr84i9",
-    name: "홍길동",
-    phone: "010-2534-5678",
-    score: 81,
-    email: "ken99@yahoo.com",
-  },
-  {
-    id: "3u1reuv4",
-    name: "홍길동",
-    phone: "010-6574-2342",
-    score: 79,
-    email: "Abe45@gmail.com",
-  },
-  {
-    id: "derv1ws0",
-    name: "홍길동",
-    phone: "010-2616-8867",
-    score: 77,
-    email: "Monserrat44@gmail.com",
-  },
-  {
-    id: "5kma53ae",
-    name: "홍길동",
-    phone: "010-8923-7014",
-    score: 83,
-    email: "Silas22@gmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    name: "홍길동",
-    phone: "010-1237-1472",
-    score: 90,
-    email: "carmella@hotmail.com",
-  },
-];
-
-export type UserData = {
-  id: string;
-  name: string;
-  phone: string;
-  score: number;
-  email: string;
-};
-
-export const columns: ColumnDef<UserData>[] = [
+export const columns: ColumnDef<{ [key: string]: string }>[] = [
   {
     accessorKey: "name",
     header: "이름",
@@ -148,7 +102,11 @@ export const columns: ColumnDef<UserData>[] = [
   },
 ];
 
-export function MainDataTable() {
+export function MainDataTable({
+  data,
+}: {
+  data: { [key: string]: string }[];
+}) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -175,50 +133,9 @@ export function MainDataTable() {
       rowSelection,
     },
   });
-
   return (
-    <div className="w-full">
-      {/* <div className="flex items-center py-4">
-        <Input
-          placeholder="이메일을 입력해주세요."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              옵션 <ChevronDown />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {
-                      statusTransKorean[
-                        column.id as keyof typeof statusTransKorean
-                      ]
-                    }
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div> */}
-      <div className="rounded-md border">
+    <div className="w-full overflow-scroll">
+      <div className="rounded-md border min-w-[500px]">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

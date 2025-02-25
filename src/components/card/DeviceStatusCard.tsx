@@ -17,7 +17,7 @@ const DeviceStatus = ({ status }: { status: boolean }) => {
 
 const DeviceCard = ({ device }: { device: DeviceStatusCardProps }) => {
   return (
-    <li className="col-span-4 rounded-sm border border-stroke p-4 shadow-default dark:border-strokedark sm:px-7.5">
+    <li className="col-span-6 lg:col-span-4 rounded-sm border border-stroke p-4 shadow-default dark:border-strokedark sm:px-7.5">
       <div className="flex w-full items-center justify-between mb-1">
         <p className="text-xl">{device.device_name}</p>
         <DeviceStatus status={parseInt(device.used) > 0 ? false : true} />

@@ -18,10 +18,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-const chartData = [
-  { browser: "모바일", visitors: 2275, fill: "var(--color-chrome)" },
-  { browser: "키오스크", visitors: 1200, fill: "var(--color-safari)" },
-];
+import { useQuery } from "@tanstack/react-query";
+
 const chartConfig = {
   visitors: {
     label: "사용자",
@@ -37,9 +35,26 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const MainUserDonutChart = ({ className }: { className: string }) => {
+  const { data } = useQuery({
+    queryKey: ["centerUserDevice"],
+    queryFn: async () => {
+      const response = await fetch("/api/center/use");
+      return response.json();
+    },
+  });
+
   const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
-  }, []);
+    if (!data) {
+      return null;
+    }
+    return data.reduce(
+      (
+        acc: number,
+        curr: { browser: string; visitors: number; fill: string }
+      ) => acc + curr.visitors,
+      0
+    );
+  }, [data]);
   return (
     <Card className={`${className} flex flex-col`}>
       <CardHeader className="items-center pb-0">
@@ -56,43 +71,45 @@ const MainUserDonutChart = ({ className }: { className: string }) => {
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Pie
-              data={chartData}
-              dataKey="visitors"
-              nameKey="browser"
-              innerRadius={60}
-              strokeWidth={5}
-            >
-              <Label
-                content={({ viewBox }) => {
-                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                    return (
-                      <text
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                      >
-                        <tspan
+            {data && (
+              <Pie
+                data={data}
+                dataKey="visitors"
+                nameKey="browser"
+                innerRadius={60}
+                strokeWidth={5}
+              >
+                <Label
+                  content={({ viewBox }) => {
+                    if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                      return (
+                        <text
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
+                          textAnchor="middle"
+                          dominantBaseline="middle"
                         >
-                          {totalVisitors.toLocaleString()}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
-                        >
-                          이용자
-                        </tspan>
-                      </text>
-                    );
-                  }
-                }}
-              />
-            </Pie>
+                          <tspan
+                            x={viewBox.cx}
+                            y={viewBox.cy}
+                            className="fill-foreground text-3xl font-bold"
+                          >
+                            {totalVisitors && totalVisitors.toLocaleString()}
+                          </tspan>
+                          <tspan
+                            x={viewBox.cx}
+                            y={(viewBox.cy || 0) + 24}
+                            className="fill-muted-foreground"
+                          >
+                            이용자
+                          </tspan>
+                        </text>
+                      );
+                    }
+                  }}
+                />
+              </Pie>
+            )}
             <ChartLegend
               content={<ChartLegendContent nameKey="browser" />}
               className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
