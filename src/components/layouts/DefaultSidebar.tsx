@@ -9,6 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarFooter,
+  SidebarHeader,
 } from "../ui/sidebar";
 import {
   Home,
@@ -17,11 +18,13 @@ import {
   Smartphone,
   SquareUserIcon,
   LogOutIcon,
+  GalleryVerticalEnd,
 } from "lucide-react";
+import Link from "next/link";
 
 const dashboard = [
   {
-    title: "메인화면",
+    title: "대시보드",
     url: "/",
     icon: Home,
   },
@@ -50,7 +53,20 @@ const dashboard = [
 export default function DefaultSidebar() {
   return (
     <Sidebar collapsible="icon">
-      <SidebarContent>
+      <SidebarHeader className="bg-white dark:bg-black">
+        <SidebarMenuButton
+          size="lg"
+          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+        >
+          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+            <GalleryVerticalEnd className="size-4" />
+          </div>
+          <div className="flex flex-col gap-0.5 leading-none">
+            <span className="font-semibold text-xl">탱고플러스 센터</span>
+          </div>
+        </SidebarMenuButton>
+      </SidebarHeader>
+      <SidebarContent className="bg-white dark:bg-black">
         <SidebarGroup>
           <SidebarGroupLabel>DASHBOARD</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -58,10 +74,10 @@ export default function DefaultSidebar() {
               {dashboard.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon className="lg:!w-5 lg:!h-5" />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -69,14 +85,14 @@ export default function DefaultSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="bg-white dark:bg-black">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <div>
+              <Link href="/login">
                 <LogOutIcon className="lg:!w-5 lg:!h-5" />
                 <p>로그아웃</p>
-              </div>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
