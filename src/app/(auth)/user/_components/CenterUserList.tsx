@@ -13,15 +13,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, ChevronDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -35,6 +33,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { UserStatus } from "./CenterUserStatus";
 import { UserAcessStatus, UserData } from "@/types/user";
+import Link from "next/link";
 
 const statusTransKorean = {
   pending: "승인대기",
@@ -87,34 +86,46 @@ export const columns: ColumnDef<UserData>[] = [
     },
   },
   {
-    id: "actions",
+    accessorKey: "id",
+    header: "",
     enableHiding: false,
     cell: ({ row }) => {
-      const userData = row.original;
-
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">메뉴 열기</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>관리</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(userData.id)}
-            >
-              유저 이름 복사
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>상세 보기</DropdownMenuItem>
-            <DropdownMenuItem>승인 취소</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Link href={`/user/${row.getValue("id")}`}>
+          상세 보기
+        </Link>
       );
     },
   },
+  // {
+  //   id: "actions",
+  //   enableHiding: false,
+  //   cell: ({ row }) => {
+  //     const userData = row.original;
+
+  //     return (
+  //       <DropdownMenu>
+  //         <DropdownMenuTrigger asChild>
+  //           <Button variant="ghost" className="h-8 w-8 p-0">
+  //             <span className="sr-only">메뉴 열기</span>
+  //             <MoreHorizontal />
+  //           </Button>
+  //         </DropdownMenuTrigger>
+  //         <DropdownMenuContent align="end">
+  //           <DropdownMenuLabel>관리</DropdownMenuLabel>
+  //           <DropdownMenuItem
+  //             onClick={() => navigator.clipboard.writeText(userData.id)}
+  //           >
+  //             유저 이름 복사
+  //           </DropdownMenuItem>
+  //           <DropdownMenuSeparator />
+  //           <DropdownMenuItem>상세 보기</DropdownMenuItem>
+  //           <DropdownMenuItem>승인 취소</DropdownMenuItem>
+  //         </DropdownMenuContent>
+  //       </DropdownMenu>
+  //     );
+  //   },
+  // },
 ];
 
 export function CenterUserList({
@@ -153,7 +164,7 @@ export function CenterUserList({
 
   return (
     <div className={`${className}`}>
-      <div className="flex items-center py-4">
+      <div className="flex items-center justify-between py-4">
         {/* 검색어 특정키워드가 아닌 전체적으로 검색되게 */}
         <Input
           placeholder="검색할 이름을 입력해주세요."
@@ -163,6 +174,32 @@ export function CenterUserList({
           }
           className="max-w-sm"
         />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="ml-auto">
+              상태 <ChevronDown />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {table
+              .getAllColumns()
+              .filter((column) => column.getCanHide())
+              .map((column) => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                );
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <div className="rounded-md border  min-w-[500px]">
         <Table>
