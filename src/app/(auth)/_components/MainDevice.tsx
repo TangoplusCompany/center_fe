@@ -10,7 +10,7 @@ const MainDevice = ({ className }: { className?: string }) => {
     queryKey: ["deviceStatus"],
     queryFn: async () => {
       const response = await fetch("/api/device/status");
-      return response.json();
+      return await response.json();
     },
   });
   return (

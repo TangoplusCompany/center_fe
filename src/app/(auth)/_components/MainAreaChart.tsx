@@ -21,7 +21,7 @@ const MainAreaChart = ({ className }: { className?: string }) => {
     queryKey: ["centerData"],
     queryFn: async () => {
       const response = await fetch("/api/center");
-      return response.json();
+      return await response.json();
     },
   });
 
