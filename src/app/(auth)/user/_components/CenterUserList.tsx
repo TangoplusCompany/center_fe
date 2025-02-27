@@ -42,6 +42,14 @@ const statusTransKorean = {
   rejected: "미승인",
 };
 
+const headerTransKorean = {
+  name: "이름",
+  status: "상태",
+  phone: "전화번호",
+  request: "승인 요청",
+  id: "",
+};
+
 export const columns: ColumnDef<UserData>[] = [
   {
     accessorKey: "name",
@@ -90,11 +98,7 @@ export const columns: ColumnDef<UserData>[] = [
     header: "",
     enableHiding: false,
     cell: ({ row }) => {
-      return (
-        <Link href={`/user/${row.getValue("id")}`}>
-          상세 보기
-        </Link>
-      );
+      return <Link href={`/user/${row.getValue("id")}`}>상세 보기</Link>;
     },
   },
   // {
@@ -172,12 +176,12 @@ export function CenterUserList({
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="min-w-[260px] max-w-sm flex-1"
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              상태 <ChevronDown />
+              VIEW <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -194,7 +198,11 @@ export function CenterUserList({
                       column.toggleVisibility(!!value)
                     }
                   >
-                    {column.id}
+                    {
+                      headerTransKorean[
+                        column.id as keyof typeof headerTransKorean
+                      ]
+                    }
                   </DropdownMenuCheckboxItem>
                 );
               })}
