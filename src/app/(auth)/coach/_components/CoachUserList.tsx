@@ -31,9 +31,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
-import { UserStatus } from "./CenterUserStatus";
-import { UserAcessStatus, UserData } from "@/types/user";
 import Link from "next/link";
+import {
+  CoachAccessStatus,
+  CoachData,
+  CoachPersonalGrade,
+} from "@/types/coach";
 
 const statusTransKorean = {
   pending: "승인대기",
@@ -50,7 +53,15 @@ const headerTransKorean = {
   id: "",
 };
 
-export const columns: ColumnDef<UserData>[] = [
+const gradeTransKorean = {
+  "head coach": "헤더 코치",
+  "assistant coach": "수석코치",
+  manager: "매니저",
+  trainer: "트레이너",
+  coach: "코치",
+};
+
+export const columns: ColumnDef<CoachData>[] = [
   {
     accessorKey: "name",
     header: "이름",
@@ -60,12 +71,7 @@ export const columns: ColumnDef<UserData>[] = [
     accessorKey: "status",
     header: "상태",
     cell: ({ row }) => (
-      <UserStatus
-        variant={row.getValue("status")}
-        className="capitalize w-[60px] text-center font-medium"
-      >
-        {statusTransKorean[row.getValue("status") as UserAcessStatus]}
-      </UserStatus>
+      <p>{statusTransKorean[row.getValue("status") as CoachAccessStatus]}</p>
     ),
   },
   {
@@ -87,10 +93,25 @@ export const columns: ColumnDef<UserData>[] = [
     },
   },
   {
-    accessorKey: "request",
-    header: "승인 요청",
+    accessorKey: "email",
+    header: "이메일",
     cell: ({ row }) => {
-      return <>{row.getValue("request") ? <p>요청 승인</p> : <p></p>}</>;
+      return <p>{row.getValue("email")}</p>;
+    },
+  },
+  {
+    accessorKey: "personal_grade",
+    header: "코치등급",
+    cell: ({ row }) => {
+      return (
+        <p>
+          {
+            gradeTransKorean[
+              row.getValue("personal_grade") as CoachPersonalGrade
+            ]
+          }
+        </p>
+      );
     },
   },
   {
@@ -101,43 +122,14 @@ export const columns: ColumnDef<UserData>[] = [
       return <Link href={`/user/${row.getValue("id")}`}>상세 보기</Link>;
     },
   },
-  // {
-  //   id: "actions",
-  //   enableHiding: false,
-  //   cell: ({ row }) => {
-  //     const userData = row.original;
-
-  //     return (
-  //       <DropdownMenu>
-  //         <DropdownMenuTrigger asChild>
-  //           <Button variant="ghost" className="h-8 w-8 p-0">
-  //             <span className="sr-only">메뉴 열기</span>
-  //             <MoreHorizontal />
-  //           </Button>
-  //         </DropdownMenuTrigger>
-  //         <DropdownMenuContent align="end">
-  //           <DropdownMenuLabel>관리</DropdownMenuLabel>
-  //           <DropdownMenuItem
-  //             onClick={() => navigator.clipboard.writeText(userData.id)}
-  //           >
-  //             유저 이름 복사
-  //           </DropdownMenuItem>
-  //           <DropdownMenuSeparator />
-  //           <DropdownMenuItem>상세 보기</DropdownMenuItem>
-  //           <DropdownMenuItem>승인 취소</DropdownMenuItem>
-  //         </DropdownMenuContent>
-  //       </DropdownMenu>
-  //     );
-  //   },
-  // },
 ];
 
-export function CenterUserList({
+export function CoachUserList({
   className,
   users,
 }: {
   className?: string;
-  users: UserData[];
+  users: CoachData[];
 }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(

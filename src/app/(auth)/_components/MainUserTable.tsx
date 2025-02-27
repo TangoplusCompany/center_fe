@@ -9,7 +9,7 @@ const MainUserTable = ({ title, url }: { title: string; url: string }) => {
     queryKey: [title],
     queryFn: async () => {
       const response = await fetch(url);
-      return response.json();
+      return await response.json();
     },
   });
   return (

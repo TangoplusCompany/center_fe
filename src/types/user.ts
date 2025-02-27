@@ -1,4 +1,4 @@
-export type UserData = {
+export interface UserData {
   id: string;
   name: string;
   phone: string;
@@ -6,6 +6,6 @@ export type UserData = {
   email: string;
   status: UserAcessStatus | string;
   request: boolean;
-};
+}
 
 export type UserAcessStatus = "pending" | "request" | "approved" | "rejected";

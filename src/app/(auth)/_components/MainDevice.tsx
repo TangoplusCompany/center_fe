@@ -5,16 +5,16 @@ import SkeletonDeviceCard from "@/components/card/SkeletonDeviceCard";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
-const MainDeviceStatus = () => {
+const MainDevice = ({ className }: { className?: string }) => {
   const { data, isLoading } = useQuery({
     queryKey: ["deviceStatus"],
     queryFn: async () => {
       const response = await fetch("/api/device/status");
-      return response.json();
+      return await response.json();
     },
   });
   return (
-    <>
+    <div className={`${className}`}>
       {isLoading ? (
         <SkeletonDeviceCard />
       ) : (
@@ -26,14 +26,6 @@ const MainDeviceStatus = () => {
           )}
         </>
       )}
-    </>
-  );
-};
-
-const MainDevice = ({ className }: { className?: string }) => {
-  return (
-    <div className={`${className}`}>
-      <MainDeviceStatus />
     </div>
   );
 };
