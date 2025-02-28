@@ -3,7 +3,7 @@
 import { DefaultPagination } from "@/components/Pagination";
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect } from "react";
-import { CoachUserList } from "./CoachUserList";
+import { CoachList } from "./CoachUserList";
 import { CoachData } from "@/types/coach";
 
 const CoachPage = () => {
@@ -28,7 +28,7 @@ const CoachPage = () => {
   }
   return (
     <>
-      <CoachUserList
+      <CoachList
         className="col-span-12 overflow-scroll px-1"
         users={userData}
       />
