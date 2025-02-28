@@ -124,7 +124,7 @@ export const columns: ColumnDef<CoachData>[] = [
   },
 ];
 
-export function CoachUserList({
+export function CoachList({
   className,
   users,
 }: {
