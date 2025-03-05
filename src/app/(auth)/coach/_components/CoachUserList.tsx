@@ -49,6 +49,8 @@ const headerTransKorean = {
   name: "이름",
   status: "상태",
   phone: "전화번호",
+  email: "이메일",
+  personal_grade: "코치등급",
   request: "승인 요청",
   id: "",
 };
