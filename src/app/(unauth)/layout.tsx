@@ -1,4 +1,4 @@
-import UnAuthLayout from "@/components/layouts/UnAuthLayout";
+import UnAuthLayout from "@/components/Layouts/UnAuthLayout";
 
 export default function RootLayout({
   children,

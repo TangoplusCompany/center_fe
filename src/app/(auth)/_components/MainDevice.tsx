@@ -1,7 +1,7 @@
 "use client";
 
-import DeviceStatusCard from "@/components/card/DeviceStatusCard";
-import SkeletonDeviceCard from "@/components/card/SkeletonDeviceCard";
+import DeviceStatusCard from "@/components/Card/DeviceStatusCard";
+import SkeletonDeviceCard from "@/components/Card/SkeletonDeviceCard";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
