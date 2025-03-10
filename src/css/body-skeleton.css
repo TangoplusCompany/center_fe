@@ -1,6 +1,14 @@
-.sekeleton [class$="_1"] {
+path[class*="_1"] {
   fill: #ff8412 !important;
 }
-.sekeleton [class$="_2"] {
+path[class*="_2"] {
   fill: #f43f5e !important;
+}
+
+.on_view {
+  display: block;
+}
+
+.off_view {
+  display: none;
 }
