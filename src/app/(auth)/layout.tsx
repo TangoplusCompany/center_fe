@@ -1,6 +1,6 @@
-import DefaultLayout from "@/components/layouts/DefaultLayout";
+import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import DefaultSidebar from "@/components/layouts/DefaultSidebar";
+import DefaultSidebar from "@/components/Layouts/DefaultSidebar";
 
 export default function RootLayout({
   children,
