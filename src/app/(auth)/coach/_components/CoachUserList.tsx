@@ -34,7 +34,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import {
   CoachAccessStatus,
-  CoachData,
+  ICoachData,
   CoachPersonalGrade,
 } from "@/types/coach";
 
@@ -63,7 +63,7 @@ const gradeTransKorean = {
   coach: "코치",
 };
 
-export const columns: ColumnDef<CoachData>[] = [
+export const columns: ColumnDef<ICoachData>[] = [
   {
     accessorKey: "name",
     header: "이름",
@@ -131,7 +131,7 @@ export function CoachList({
   users,
 }: {
   className?: string;
-  users: CoachData[];
+  users: ICoachData[];
 }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(

@@ -1,9 +1,9 @@
 // src/mocks/handlers.js
 
-import { CoachData } from "@/types/coach";
+import { ICoachData } from "@/types/coach";
 import { http, HttpResponse } from "msw";
 
-const coaches: CoachData[] = [
+const coaches: ICoachData[] = [
   {
     id: "1",
     name: "김민준",

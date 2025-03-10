@@ -1,5 +1,5 @@
-export interface UserData {
-  id: string;
+export interface IUserData {
+  id: number;
   name: string;
   phone: string;
   score: number | string;
@@ -8,24 +8,26 @@ export interface UserData {
   request: boolean;
 }
 
-export interface UserDetail {
+export interface IUserDetail {
   isLogin: boolean;
   sn: number | string;
   userName: string;
   userData: {
     count: number | string;
-    measure_info: Partial<UserDetailMeasureInfo>;
-    dynamic: Partial<UserDetailDynamic>;
-    static_1: Partial<UserDetailStatic>;
-    static_2: Partial<UserDetailStatic>;
-    static_3: Partial<UserDetailStatic>;
-    static_4: Partial<UserDetailStatic>;
-    static_5: Partial<UserDetailStatic>;
-    static_6: Partial<UserDetailStatic>;
+    measure_info: Partial<IUserDetailMeasureInfo>;
+    dynamic: Partial<IUserDetailDynamic>;
+    static_1: Partial<IUserDetailStatic>;
+    static_2: Partial<IUserDetailStatic>;
+    static_3: Partial<IUserDetailStatic>;
+    static_4: Partial<IUserDetailStatic>;
+    static_5: Partial<IUserDetailStatic>;
+    static_6: Partial<IUserDetailStatic>;
   };
 }
 
-export interface UserDetailMeasureInfo {
+export interface IUserDetailMeasureInfo
+  extends IMeasureUserRisk,
+    IMeasureUserPain {
   device_sn: number | string; // 장치 sn
   mobile_temp: string;
   elapsed_time: number | string; // 측정 총 시간 (sec, 소수점 세번째 자리까지)
@@ -42,37 +44,43 @@ export interface UserDetailMeasureInfo {
   user_name: string; // 유저 이름
   user_sn: number | string; // 유저 sn
   user_uuid: string; // 유저 UUID
-  risk_neck: number | string; // 통증부위 목
-  risk_shoulder_left: number | string; // 통증부위 어깨
-  risk_shoulder_right: number | string; // 통증부위 어깨
-  risk_elbow_right: number | string; // 통증부위 팔꿈치
-  risk_elbow_left: number | string; // 통증부위 팔꿈치
-  risk_wrist_left: number | string; // 통증부위 손목
-  risk_wrist_right: number | string; // 통증부위 손목
-  risk_hip_left: number | string; // 통증부위 고관절
-  risk_hip_right: number | string; // 통증부위 고관절
-  risk_knee_left: number | string; // 통증부위 무릎
-  risk_knee_right: number | string; // 통증부위 무릎
-  risk_ankle_right: number | string; // 통증부위 발목
-  risk_ankle_left: number | string; // 통증부위 발목
-  risk_waist: number | string; // 통증부위 허리
-  pain_part_left_ankle: number | string;
-  pain_part_left_elbow: number | string;
-  pain_part_left_hip_joint: number | string;
-  pain_part_left_knee: number | string;
-  pain_part_left_shoulder: number | string;
-  pain_part_left_wrist: number | string;
-  pain_part_neck: number | string;
-  pain_part_right_ankle: number | string;
-  pain_part_right_elbow: number | string;
-  pain_part_right_hip_joint: number | string;
-  pain_part_right_knee: number | string;
-  pain_part_right_shoulder: number | string;
-  pain_part_right_wrist: number | string;
-  pain_part_waist: number | string;
 }
 
-export interface UserDetailDynamic {
+export interface IMeasureUserRisk {
+  risk_neck: number; // 통증부위 목
+  risk_shoulder_left: number; // 통증부위 어깨
+  risk_shoulder_right: number; // 통증부위 어깨
+  risk_elbow_right: number; // 통증부위 팔꿈치
+  risk_elbow_left: number; // 통증부위 팔꿈치
+  risk_wrist_left: number; // 통증부위 손목
+  risk_wrist_right: number; // 통증부위 손목
+  risk_hip_left: number; // 통증부위 고관절
+  risk_hip_right: number; // 통증부위 고관절
+  risk_knee_left: number; // 통증부위 무릎
+  risk_knee_right: number; // 통증부위 무릎
+  risk_ankle_right: number; // 통증부위 발목
+  risk_ankle_left: number; // 통증부위 발목
+  risk_waist: number; // 통증부위 허리
+}
+
+export interface IMeasureUserPain {
+  pain_part_left_ankle: number;
+  pain_part_left_elbow: number;
+  pain_part_left_hip_joint: number;
+  pain_part_left_knee: number;
+  pain_part_left_shoulder: number;
+  pain_part_left_wrist: number;
+  pain_part_neck: number;
+  pain_part_right_ankle: number;
+  pain_part_right_elbow: number;
+  pain_part_right_hip_joint: number;
+  pain_part_right_knee: number;
+  pain_part_right_shoulder: number;
+  pain_part_right_wrist: number;
+  pain_part_waist: number;
+}
+
+export interface IUserDetailDynamic {
   device_sn: number | string;
   local_sn: number | string;
   measure_end_time: string;
@@ -200,7 +208,7 @@ export interface UserDetailDynamic {
   user_uuid: string;
 }
 
-export interface UserDetailStatic {
+export interface IUserDetailStatic {
   local_sn: number | string;
   measure_end_time: string;
   measure_overlay_height: number | string;
@@ -344,9 +352,15 @@ export interface UserDetailStatic {
   back_sit_vertical_angle_nose_left_shoulder_right_shoulder: number | string;
   back_sit_vertical_angle_left_shoulder_right_shoulder_nose: number | string;
   back_sit_vertical_angle_right_shoulder_nose_left_shoulder: number | string;
-  back_sit_vertical_angle_left_shoulder_center_hip_right_shoulder: number | string;
-  back_sit_vertical_angle_center_hip_right_shoulder_left_shoulder: number | string;
-  back_sit_vertical_angle_right_shoulder_left_shoulder_center_hip: number | string;
+  back_sit_vertical_angle_left_shoulder_center_hip_right_shoulder:
+    | number
+    | string;
+  back_sit_vertical_angle_center_hip_right_shoulder_left_shoulder:
+    | number
+    | string;
+  back_sit_vertical_angle_right_shoulder_left_shoulder_center_hip:
+    | number
+    | string;
   back_sit_vertical_angle_shoulder_center_hip: number | string;
   front_elbow_align_angle_left_upper_elbow_elbow_wrist: number | string;
   front_elbow_align_angle_right_upper_elbow_elbow_wrist: number | string;

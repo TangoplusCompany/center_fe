@@ -1,4 +1,4 @@
-export interface DeviceStatusCardProps {
+export interface IDeviceStatusCardProps {
   sn: number;
   serial_number: string;
   install_location: string;

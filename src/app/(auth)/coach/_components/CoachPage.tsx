@@ -4,12 +4,12 @@ import { DefaultPagination } from "@/components/Pagination";
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect } from "react";
 import { CoachList } from "./CoachUserList";
-import { CoachData } from "@/types/coach";
+import { ICoachData } from "@/types/coach";
 
 const CoachPage = () => {
   const [nowPage, setNowPage] = React.useState(1);
-  const [userData, setUserData] = React.useState<CoachData[]>([]);
-  const { data, isLoading } = useQuery<CoachData[]>({
+  const [userData, setUserData] = React.useState<ICoachData[]>([]);
+  const { data, isLoading } = useQuery<ICoachData[]>({
     queryKey: ["UserMain"],
     queryFn: async () => {
       const response = await fetch("/api/coach", {

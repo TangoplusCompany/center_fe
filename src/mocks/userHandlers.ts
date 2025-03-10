@@ -1,10 +1,10 @@
 // src/mocks/handlers.js
 
-import { UserData, UserDetail } from "@/types/user";
+import { IUserData, IUserDetail } from "@/types/user";
 import { http, HttpResponse } from "msw";
-const data: UserData[] = [
+const data: IUserData[] = [
   {
-    id: "1",
+    id: 1,
     name: "주재홍",
     status: "pending",
     request: true,
@@ -13,7 +13,7 @@ const data: UserData[] = [
     email: "kim.areum@example.com",
   },
   {
-    id: "2",
+    id: 2,
     name: "이보람",
     status: "approved",
     request: false,
@@ -184,7 +184,7 @@ const data: UserData[] = [
     email: "park.taeeun@example.com",
   },
 ];
-const detailData: UserDetail[] = [
+const detailData: IUserDetail[] = [
   {
     isLogin: true,
     userName: "주재홍",
@@ -201,36 +201,36 @@ const detailData: UserDetail[] = [
         user_name: "주재홍",
         elapsed_time: 79.6653,
         measure_seq: 7,
-        pain_part_neck: "0",
-        pain_part_left_shoulder: "0",
-        pain_part_right_shoulder: "0",
-        pain_part_left_elbow: "0",
-        pain_part_right_elbow: "0",
-        pain_part_left_wrist: "0",
-        pain_part_right_wrist: "0",
-        pain_part_waist: "0",
-        pain_part_left_hip_joint: "0",
-        pain_part_right_hip_joint: "0",
-        pain_part_left_knee: "0",
-        pain_part_right_knee: "0",
-        pain_part_left_ankle: "0",
-        pain_part_right_ankle: "0",
-        uploaded: "1",
-        used: "0",
+        pain_part_neck: 0,
+        pain_part_left_shoulder: 0,
+        pain_part_right_shoulder: 0,
+        pain_part_left_elbow: 0,
+        pain_part_right_elbow: 0,
+        pain_part_left_wrist: 0,
+        pain_part_right_wrist: 0,
+        pain_part_waist: 0,
+        pain_part_left_hip_joint: 0,
+        pain_part_right_hip_joint: 0,
+        pain_part_left_knee: 0,
+        pain_part_right_knee: 0,
+        pain_part_left_ankle: 0,
+        pain_part_right_ankle: 0,
+        uploaded: 1,
+        used: 0,
         t_score: 89,
-        risk_neck: "1",
-        risk_shoulder_left: "0",
-        risk_shoulder_right: "1",
-        risk_elbow_left: "0",
-        risk_elbow_right: "2",
-        risk_wrist_left: "0",
-        risk_wrist_right: "0",
-        risk_hip_left: "0",
-        risk_hip_right: "0",
-        risk_knee_left: "0",
-        risk_knee_right: "0",
-        risk_ankle_left: "0",
-        risk_ankle_right: "0",
+        risk_neck: 1,
+        risk_shoulder_left: 0,
+        risk_shoulder_right: 1,
+        risk_elbow_left: 0,
+        risk_elbow_right: 2,
+        risk_wrist_left: 0,
+        risk_wrist_right: 0,
+        risk_hip_left: 0,
+        risk_hip_right: 0,
+        risk_knee_left: 0,
+        risk_knee_right: 0,
+        risk_ankle_left: 0,
+        risk_ankle_right: 0,
       },
       static_1: {
         sn: 835,
@@ -1338,13 +1338,15 @@ export const userHandlers = [
     async ({ params }: { params: { id: string } }) => {
       const { id } = params;
       const checkNums = /^\d+$/.test(id);
-      if(!checkNums) {
+      if (!checkNums) {
         return new HttpResponse(
           JSON.stringify({ error: "잘못된 접근입니다." }),
           { status: 400 }
         );
       }
-      const user: UserDetail | undefined = detailData.find((el) => el.sn === parseInt(id));
+      const user: IUserDetail | undefined = detailData.find(
+        (el) => el.sn === parseInt(id)
+      );
       if (!user) {
         return new HttpResponse(
           JSON.stringify({ error: "사용자를 찾을 수 없습니다." }),
