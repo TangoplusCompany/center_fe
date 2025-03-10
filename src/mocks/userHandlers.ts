@@ -4,7 +4,7 @@ import { IUserData, IUserDetail } from "@/types/user";
 import { http, HttpResponse } from "msw";
 const data: IUserData[] = [
   {
-    id: 1,
+    id: "1",
     name: "주재홍",
     status: "pending",
     request: true,
@@ -13,7 +13,7 @@ const data: IUserData[] = [
     email: "kim.areum@example.com",
   },
   {
-    id: 2,
+    id: "2",
     name: "이보람",
     status: "approved",
     request: false,
@@ -231,6 +231,9 @@ const detailData: IUserDetail[] = [
         risk_knee_right: 0,
         risk_ankle_left: 0,
         risk_ankle_right: 0,
+        measure_string: "",
+        sn: 0,
+        upload_string: "",
       },
       static_1: {
         sn: 835,
@@ -387,6 +390,8 @@ const detailData: IUserDetail[] = [
         uploaded_json: "1",
         uploaded_file: "1",
         used: "0",
+        reg_string: "",
+        upload_string: "",
       },
       dynamic: {
         sn: 143,
@@ -513,6 +518,8 @@ const detailData: IUserDetail[] = [
         uploaded_json_fail: "0",
         uploaded_file_fail: "0",
         used: "0",
+        reg_string: "",
+        upload_string: "",
       },
       static_2: {
         sn: 836,
@@ -669,6 +676,8 @@ const detailData: IUserDetail[] = [
         uploaded_json: "1",
         uploaded_file: "1",
         used: "0",
+        reg_string: "",
+        upload_string: "",
       },
       static_3: {
         sn: 837,
@@ -825,6 +834,8 @@ const detailData: IUserDetail[] = [
         uploaded_json: "1",
         uploaded_file: "1",
         used: "0",
+        reg_string: "",
+        upload_string: "",
       },
       static_4: {
         sn: 838,
@@ -981,6 +992,8 @@ const detailData: IUserDetail[] = [
         uploaded_json: "1",
         uploaded_file: "1",
         used: "0",
+        reg_string: "",
+        upload_string: "",
       },
       static_5: {
         sn: 839,
@@ -1137,6 +1150,8 @@ const detailData: IUserDetail[] = [
         uploaded_json: "1",
         uploaded_file: "1",
         used: "0",
+        reg_string: "",
+        upload_string: "",
       },
       static_6: {
         sn: 840,
@@ -1293,6 +1308,8 @@ const detailData: IUserDetail[] = [
         uploaded_json: "1",
         uploaded_file: "1",
         used: "0",
+        reg_string: "",
+        upload_string: "",
       },
     },
   },

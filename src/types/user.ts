@@ -1,5 +1,5 @@
 export interface IUserData {
-  id: number;
+  id: string;
   name: string;
   phone: string;
   score: number | string;
@@ -14,14 +14,14 @@ export interface IUserDetail {
   userName: string;
   userData: {
     count: number | string;
-    measure_info: Partial<IUserDetailMeasureInfo>;
-    dynamic: Partial<IUserDetailDynamic>;
-    static_1: Partial<IUserDetailStatic>;
-    static_2: Partial<IUserDetailStatic>;
-    static_3: Partial<IUserDetailStatic>;
-    static_4: Partial<IUserDetailStatic>;
-    static_5: Partial<IUserDetailStatic>;
-    static_6: Partial<IUserDetailStatic>;
+    measure_info: IUserDetailMeasureInfo;
+    dynamic: IUserDetailDynamic;
+    static_1: IUserDetailStatic;
+    static_2: IUserDetailStatic;
+    static_3: IUserDetailStatic;
+    static_4: IUserDetailStatic;
+    static_5: IUserDetailStatic;
+    static_6: IUserDetailStatic;
   };
 }
 
@@ -46,6 +46,12 @@ export interface IUserDetailMeasureInfo
   user_uuid: string; // 유저 UUID
 }
 
+export interface IFilterMeasureInfo {
+  risk: Record<string, number>;
+  pain: Record<string, number>;
+  information: Record<string, string | number>;
+}
+
 export interface IMeasureUserRisk {
   risk_neck: number; // 통증부위 목
   risk_shoulder_left: number; // 통증부위 어깨
@@ -60,7 +66,6 @@ export interface IMeasureUserRisk {
   risk_knee_right: number; // 통증부위 무릎
   risk_ankle_right: number; // 통증부위 발목
   risk_ankle_left: number; // 통증부위 발목
-  risk_waist: number; // 통증부위 허리
 }
 
 export interface IMeasureUserPain {
