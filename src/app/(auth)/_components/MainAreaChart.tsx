@@ -1,6 +1,6 @@
 "use client";
 
-import { AreaChartComponent } from "@/components/chart/Area";
+import { AreaChartComponent } from "@/components/Chart/Area";
 import { ChartConfig } from "@/components/ui/chart";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";

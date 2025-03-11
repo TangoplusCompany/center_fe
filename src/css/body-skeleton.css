@@ -1,0 +1,14 @@
+path[class*="_1"] {
+  fill: #ff8412 !important;
+}
+path[class*="_2"] {
+  fill: #f43f5e !important;
+}
+
+.on_view {
+  display: block;
+}
+
+.off_view {
+  display: none;
+}

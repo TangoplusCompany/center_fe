@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { UserStatus } from "./CenterUserStatus";
-import { UserAcessStatus, UserData } from "@/types/user";
+import { UserAcessStatus, IUserData } from "@/types/user";
 import Link from "next/link";
 
 const statusTransKorean = {
@@ -50,7 +50,7 @@ const headerTransKorean = {
   id: "",
 };
 
-export const columns: ColumnDef<UserData>[] = [
+export const columns: ColumnDef<IUserData>[] = [
   {
     accessorKey: "name",
     header: "이름",
@@ -137,7 +137,7 @@ export function CenterUserList({
   users,
 }: {
   className?: string;
-  users: UserData[];
+  users: IUserData[];
 }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(

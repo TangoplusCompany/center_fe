@@ -7,7 +7,7 @@ const QueryProvider = ({ children }: { children: ReactNode }) => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
-        retry: 3,
+        retry: 1,
       },
     },
   });

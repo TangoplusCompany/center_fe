@@ -1,4 +1,4 @@
-export interface CoachData {
+export interface ICoachData {
   id: string;
   name: string;
   phone: string;

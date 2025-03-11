@@ -4,12 +4,12 @@ import React, { useEffect } from "react";
 import { DefaultPagination } from "@/components/Pagination";
 import { CenterUserList } from "./CenterUserList";
 import { useQuery } from "@tanstack/react-query";
-import { UserData } from "@/types/user";
+import { IUserData } from "@/types/user";
 
 const UserPage = () => {
   const [nowPage, setNowPage] = React.useState(1);
-  const [userData, setUserData] = React.useState<UserData[]>([]);
-  const { data, isLoading } = useQuery<UserData[]>({
+  const [userData, setUserData] = React.useState<IUserData[]>([]);
+  const { data, isLoading } = useQuery<IUserData[]>({
     queryKey: ["UserMain"],
     queryFn: async () => {
       const response = await fetch("/api/user", {

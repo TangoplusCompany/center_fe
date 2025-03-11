@@ -1,4 +1,5 @@
 import React from "react";
+import CenterUserDetail from "../_components/CenterUserDetail";
 
 export default async function Page({
   params,
@@ -6,5 +7,9 @@ export default async function Page({
   params: Promise<{ userSn: string }>;
 }) {
   const userSn = (await params).userSn;
-  return <div>Page : {userSn}</div>;
+  return (
+    <div className="flex gap-5">
+      <CenterUserDetail sn={parseInt(userSn)} />
+    </div>
+  );
 }
