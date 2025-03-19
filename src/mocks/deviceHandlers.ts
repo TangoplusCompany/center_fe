@@ -1,10 +1,10 @@
 // src/mocks/handlers.js
-import { DeviceStatusCardProps } from "@/types/device";
+import { IDeviceStatusCardProps } from "@/types/device";
 import { http, HttpResponse } from "msw";
 
 export const deviceHandlers = [
   http.get("http://localhost:4862/api/device/status", async () => {
-    const centerDevice: DeviceStatusCardProps[] = [
+    const centerDevice: IDeviceStatusCardProps[] = [
       {
         sn: 0,
         serial_number: "SERIALNUMBER1",

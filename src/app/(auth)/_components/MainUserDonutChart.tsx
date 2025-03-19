@@ -39,7 +39,7 @@ const MainUserDonutChart = ({ className }: { className: string }) => {
     queryKey: ["centerUserDevice"],
     queryFn: async () => {
       const response = await fetch("/api/center/use");
-      return response.json();
+      return await response.json();
     },
   });
 

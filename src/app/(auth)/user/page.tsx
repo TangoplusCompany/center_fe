@@ -1,5 +1,11 @@
+"use client"
+
 import React from "react";
-import UserPage from "./_components/UserPage";
+import dynamic from "next/dynamic";
+
+const UserPage = dynamic(() => import("./_components/UserPage"), {
+  ssr: false,
+});
 
 const UserHome = () => {
   return (

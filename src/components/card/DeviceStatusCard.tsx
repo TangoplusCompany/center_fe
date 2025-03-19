@@ -1,5 +1,5 @@
 import React from "react";
-import { DeviceStatusCardProps } from "@/types/device";
+import { IDeviceStatusCardProps } from "@/types/device";
 
 const DeviceStatus = ({ status }: { status: boolean }) => {
   if (status) {
@@ -15,7 +15,7 @@ const DeviceStatus = ({ status }: { status: boolean }) => {
   }
 };
 
-const DeviceCard = ({ device }: { device: DeviceStatusCardProps }) => {
+const DeviceCard = ({ device }: { device: IDeviceStatusCardProps }) => {
   return (
     <li className="col-span-6 lg:col-span-4 rounded-sm border border-stroke p-4 shadow-default dark:border-strokedark sm:px-7.5">
       <div className="flex w-full items-center justify-between mb-1">
@@ -33,7 +33,7 @@ const DeviceCard = ({ device }: { device: DeviceStatusCardProps }) => {
 const DeviceStatusCard = ({
   devices,
 }: {
-  devices: DeviceStatusCardProps[];
+  devices: IDeviceStatusCardProps[];
 }) => {
   return (
     <ul className="grid grid-cols-12 col-span-12 items-start justify-start gap-4">

@@ -1,5 +1,11 @@
+"use client"
+
 import React from "react";
-import CoachPage from "./_components/CoachPage";
+import dynamic from "next/dynamic";
+
+const CoachPage = dynamic(() => import("./_components/CoachPage"), {
+  ssr: false,
+});
 
 const CoachHome = () => {
   return (
