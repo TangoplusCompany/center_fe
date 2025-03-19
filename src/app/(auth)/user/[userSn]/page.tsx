@@ -1,5 +1,9 @@
 import React from "react";
-import CenterUserDetail from "../_components/CenterUserDetail";
+import dynamic from "next/dynamic";
+
+const DynamicUserDetail = dynamic(
+  () => import("../_components/CenterUserDetail")
+);
 
 export default async function Page({
   params,
@@ -8,8 +12,8 @@ export default async function Page({
 }) {
   const userSn = (await params).userSn;
   return (
-    <div className="flex gap-5">
-      <CenterUserDetail sn={parseInt(userSn)} />
-    </div>
+    <>
+      <DynamicUserDetail sn={parseInt(userSn)} />
+    </>
   );
 }
