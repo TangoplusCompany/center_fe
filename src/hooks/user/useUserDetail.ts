@@ -6,6 +6,13 @@ import {
 } from "@/types/user";
 import { useQuery } from "@tanstack/react-query";
 
+
+/**
+ * useUserDetail
+ * @description 유저 상세 조회 API
+ * @param sn - 유저 고유번호
+ * @param date - 조회할 날짜 (optional)
+ */
 export const useUserDetail = ({
   sn,
   date = "",
