@@ -1,11 +1,20 @@
-import React from "react";
+"use client";
+
+import React, { useEffect } from "react";
 import DefaultHeaderLayout from "./DefaultHeaderLayout";
+import { useSidebar } from "../ui/sidebar";
+import { usePathname } from "next/navigation";
 
 export default function DefaultLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const usePathName = usePathname();
+  const { toggleSidebar } = useSidebar();
+  useEffect(() => {
+    toggleSidebar();
+  }, [usePathName]);
   return (
     <main className="flex flex-col items-center justify-start min-h-screen flex-1">
       <DefaultHeaderLayout />

@@ -1,28 +1,19 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { DefaultPagination } from "@/components/Pagination";
 import { CenterUserList } from "./CenterUserList";
-import { useQuery } from "@tanstack/react-query";
-import { IUserData } from "@/types/user";
+import { useGetUserList } from "@/hooks/user/useUserList";
 
 const UserPage = () => {
   const [nowPage, setNowPage] = React.useState(1);
-  const [userData, setUserData] = React.useState<IUserData[]>([]);
-  const { data, isLoading } = useQuery<IUserData[]>({
-    queryKey: ["UserMain"],
-    queryFn: async () => {
-      const response = await fetch("/api/user", {
-        method: "GET",
-      });
-      return await response.json();
-    },
-  });
-  useEffect(() => {
-    if (data) {
-      setUserData(data);
-    }
-  }, [data]);
+  const { data, isLoading } = useGetUserList({ nowPage });
+  if (!data)
+    return (
+      <div>
+        <p>데이터가 없습니다.</p>
+      </div>
+    );
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -30,13 +21,13 @@ const UserPage = () => {
     <>
       <CenterUserList
         className="col-span-12 overflow-scroll px-1"
-        users={userData}
+        users={data}
       />
       <DefaultPagination
         className="col-span-12"
         nowPage={nowPage}
         limit={10}
-        total={userData.length}
+        total={data.length}
         setNowPage={(page) => setNowPage(page)}
       />
     </>
