@@ -17,6 +17,18 @@ type PaginationProps = {
 
 export function DefaultPagination({ ...props }: PaginationProps) {
   const totalPage = Math.ceil(props.total / props.limit);
+  if (props.total < props.limit) {
+    <Pagination className={`${props.className}`}>
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationLink href="#" isActive>
+            {props.nowPage}
+          </PaginationLink>
+        </PaginationItem>
+        ;
+      </PaginationContent>
+    </Pagination>;
+  }
   return (
     <Pagination className={`${props.className}`}>
       <PaginationContent>

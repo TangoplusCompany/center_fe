@@ -30,7 +30,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
 import { UserStatus } from "./CenterUserStatus";
 import { UserAcessStatus, IUserData } from "@/types/user";
 import Link from "next/link";
@@ -169,21 +168,17 @@ export function CenterUserList({
   return (
     <div className={`${className}`}>
       <div className="flex items-center justify-between py-4">
-        {/* 검색어 특정키워드가 아닌 전체적으로 검색되게 */}
-        <Input
-          placeholder="검색할 이름을 입력해주세요."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="min-w-[260px] max-w-sm flex-1"
-        />
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              VIEW <ChevronDown />
-            </Button>
-          </DropdownMenuTrigger>
+          <div className="flex items-center justify-between gap-2 w-full">
+            <Link href={{ pathname: "/user/add" }}>
+              <Button variant="outline">사용자 추가</Button>
+            </Link>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                VIEW <ChevronDown />
+              </Button>
+            </DropdownMenuTrigger>
+          </div>
           <DropdownMenuContent align="end">
             {table
               .getAllColumns()
@@ -216,7 +211,7 @@ export function CenterUserList({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className="text-center text-lg">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -237,7 +232,7 @@ export function CenterUserList({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="text-center">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
