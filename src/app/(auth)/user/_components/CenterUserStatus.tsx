@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 // "pending" | "request" | "approved" | "rejected"
 const statusVariants = cva(
-  "px-2 rounded-sm text-xs text-white leading-[24px]",
+  "px-2 rounded-sm text-xs text-white leading-[24px] mx-auto",
   {
     variants: {
       variant: {
