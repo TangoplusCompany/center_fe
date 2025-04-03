@@ -33,11 +33,11 @@ const dashboard = [
     url: "/user",
     icon: SquareUserIcon,
   },
-  {
-    title: "코치 관리",
-    url: "/coach",
-    icon: Building2,
-  },
+  // {
+  //   title: "코치 관리",
+  //   url: "/coach",
+  //   icon: Building2,
+  // },
   {
     title: "기기 관리",
     url: "/device",

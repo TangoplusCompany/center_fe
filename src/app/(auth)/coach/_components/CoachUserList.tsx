@@ -163,15 +163,6 @@ export function CoachList({
   return (
     <div className={`${className}`}>
       <div className="flex items-center justify-between py-4">
-        {/* 검색어 특정키워드가 아닌 전체적으로 검색되게 */}
-        {/* <Input
-          placeholder="검색할 이름을 입력해주세요."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="min-w-[260px] max-w-sm flex-1"
-        /> */}
         <DropdownMenu>
           <div className="flex items-center gap-2">
             <Link href={{ pathname: "/coach/add" }}>
