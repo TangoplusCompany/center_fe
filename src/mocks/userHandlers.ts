@@ -1340,7 +1340,7 @@ export const userHandlers = [
     );
   }),
   http.get("http://localhost:4862/api/user", async () => {
-    return new HttpResponse(JSON.stringify(data), { status: 200 });
+    return new HttpResponse(JSON.stringify(data.filter(el => el.status !== "rejected")), { status: 200 });
   }),
   http.get("http://localhost:4862/api/user/latest", async () => {
     data.filter((el) => Number(el.id) % 2 === 0);
