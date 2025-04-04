@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import DefaultHeaderLayout from "./DefaultHeaderLayout";
 import { useSidebar } from "../ui/sidebar";
 import { usePathname } from "next/navigation";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function DefaultLayout({
   children,
@@ -12,8 +13,9 @@ export default function DefaultLayout({
 }) {
   const usePathName = usePathname();
   const { toggleSidebar } = useSidebar();
+  const isMobile = useIsMobile();
   useEffect(() => {
-    toggleSidebar();
+    if (isMobile) toggleSidebar();
   }, [usePathName]);
   return (
     <main className="flex flex-col items-center justify-start min-h-screen flex-1">

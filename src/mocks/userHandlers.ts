@@ -1340,7 +1340,26 @@ export const userHandlers = [
     );
   }),
   http.get("http://localhost:4862/api/user", async () => {
-    return new HttpResponse(JSON.stringify(data.filter(el => el.status !== "rejected")), { status: 200 });
+    return new HttpResponse(
+      JSON.stringify(data.filter((el) => el.status !== "rejected")),
+      { status: 200 }
+    );
+  }),
+  http.get("http://localhost:4862/api/user/search", async ({ request }) => {
+    const url = new URL(request.url);
+    const name = url.searchParams.get("name");
+    const getUser = data.filter((user) => user.name.includes(name!));
+    if (getUser.length === 0) {
+      return new HttpResponse(
+        JSON.stringify({ message: "해당 유저를 찾을 수 없습니다." }),
+        {
+          status: 404,
+        }
+      );
+    }
+    return new HttpResponse(JSON.stringify({ users: getUser }), {
+      status: 200,
+    });
   }),
   http.get("http://localhost:4862/api/user/latest", async () => {
     data.filter((el) => Number(el.id) % 2 === 0);

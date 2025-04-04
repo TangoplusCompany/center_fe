@@ -6,7 +6,12 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { ReactNode, useState } from "react";
-import { ICoachData } from "@/types/coach";
+import { IUserData } from "@/types/user";
+import {
+  useNameFiltering,
+  usePhoneFiltering,
+  useEmailFiltering,
+} from "@/hooks/utils";
 
 const EmptyUserList = () => (
   <div className="w-full flex items-center justify-center py-10">
@@ -24,10 +29,10 @@ const ErrorText = ({ children }: { children: ReactNode }) => {
   return <p className="text-lg font-medium text-red-500">{children}</p>;
 };
 
-const SearchAllCoach = ({
+const SearchAllUser = ({
   updateUser,
 }: {
-  updateUser: (coach: ICoachData) => void;
+  updateUser: (user: IUserData) => void;
 }) => {
   const {
     register,
@@ -36,30 +41,30 @@ const SearchAllCoach = ({
   } = useForm({
     resolver: zodResolver(loginSchema),
   });
-  const [coachList, setCoachList] = useState<ICoachData[]>([]);
-  const SearchCoachHandler = handleSubmit(async (data) => {
+  const [userList, setUserList] = useState<IUserData[]>([]);
+  const SearchUserHandler = handleSubmit(async (data) => {
     const result = await fetch(`/api/user/search?name=${data.name}`, {
       method: "GET",
     });
     if (result.ok) {
       const data = await result.json();
-      setCoachList(data.users);
+      setUserList(data.users);
     } else {
       if (result.status === 404) {
-        setCoachList([]);
+        setUserList([]);
       }
     }
   });
-  const selectCoachHandler = (id: string) => {
-    const selectedCoach = coachList.find((coach) => coach.id === id);
-    if (selectedCoach) {
-      updateUser(selectedCoach);
-      setCoachList([]);
+  const selectUserHandler = (id: string) => {
+    const selectedUser = userList.find((user) => user.id === id);
+    if (selectedUser) {
+      updateUser(selectedUser);
+      setUserList([]);
     }
   };
   return (
     <article className="w-full">
-      <form className="w-full flex gap-5 mb-5" onSubmit={SearchCoachHandler}>
+      <form className="w-full flex gap-5 mb-5" onSubmit={SearchUserHandler}>
         <Input
           placeholder="이름을 입력해주세요."
           type="text"
@@ -70,7 +75,7 @@ const SearchAllCoach = ({
         </Button>
       </form>
       <div className="flex flex-col w-full rounded-md border border-input bg-transparent text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm">
-        {coachList.length === 0 ? (
+        {userList.length === 0 ? (
           <EmptyUserList />
         ) : (
           <>
@@ -80,20 +85,24 @@ const SearchAllCoach = ({
               <p className="col-span-1 text-center">전화번호</p>
               <p className="col-span-1" />
             </div>
-            {coachList.map((coach) => {
+            {userList.map((user) => {
               return (
                 <div
-                  key={coach.id + coach.name}
+                  key={user.id + user.name}
                   className="grid grid-cols-6 items-center px-3 py-2 hover:bg-gray-100 border-b last:border-none border-solid border-gray-300"
                 >
-                  <p className="col-span-1 text-center"></p>
-                  <p className="col-span-1 text-center"></p>
-                  <p className="col-span-1 text-center"></p>
-                  <p className="col-span-1 text-center"></p>
-                  <p className="col-span-1 text-center"></p>
+                  <p className="col-span-1 text-center">
+                    {useNameFiltering(user.name)}
+                  </p>
+                  <p className="col-span-1 text-center">
+                    {useEmailFiltering(user.email)}
+                  </p>
+                  <p className="col-span-1 text-center">
+                    {usePhoneFiltering(user.phone)}
+                  </p>
                   <button
                     type="button"
-                    onClick={() => selectCoachHandler(coach.id)}
+                    onClick={() => selectUserHandler(user.id)}
                     className="col-span-1 text-center"
                   >
                     선택
@@ -109,8 +118,8 @@ const SearchAllCoach = ({
 };
 
 const UserAddContainer = () => {
-  const [user, setUser] = useState<ICoachData[] | []>([]);
-  const getUserData = (user: ICoachData) => {
+  const [user, setUser] = useState<IUserData[] | []>([]);
+  const getUserData = (user: IUserData) => {
     setUser((prev) => {
       if (prev.length === 0) {
         return [user];
@@ -127,7 +136,52 @@ const UserAddContainer = () => {
   return (
     <>
       {/* 유저 검색 */}
-      <SearchAllCoach updateUser={getUserData} />
+      <SearchAllUser updateUser={getUserData} />
+      <div className="w-full flex flex-col gap-5">
+        <h1 className="text-2xl w-full">추가된 사용자</h1>
+        {user.length > 0 && (
+          <>
+            <div className="flex flex-col w-full rounded-md border border-input bg-transparent text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm">
+              <div className="grid grid-cols-6 px-3 py-2 border-b border-solid border-gray-300">
+                <p className="col-span-1 text-center">이름</p>
+                <p className="col-span-1 text-center">이메일</p>
+                <p className="col-span-1 text-center">전화번호</p>
+                <p className="col-span-1" />
+              </div>
+              {user.map((user) => {
+                return (
+                  <div
+                    key={user.id + user.name}
+                    className="grid grid-cols-6 items-center px-3 py-2 hover:bg-gray-100 border-b last:border-none border-solid border-gray-300"
+                  >
+                    <p className="col-span-1 text-center">
+                      {useNameFiltering(user.name)}
+                    </p>
+                    <p className="col-span-1 text-center">
+                      {useEmailFiltering(user.email)}
+                    </p>
+                    <p className="col-span-1 text-center">
+                      {usePhoneFiltering(user.phone)}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex justify-center">
+              <Button
+                variant="default"
+                type="button"
+                className="ml-2"
+                onClick={() => {
+                  alert("사용자 추가 요청");
+                }}
+              >
+                사용자 추가 요청
+              </Button>
+            </div>
+          </>
+        )}
+      </div>
     </>
   );
 };
