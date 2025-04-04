@@ -14,7 +14,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown } from "lucide-react";
-
+import { USER_INFORMATION, USER_STATUS } from "@/lib/constants/userStatus";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -34,21 +34,6 @@ import { UserStatus } from "./CenterUserStatus";
 import { UserAcessStatus, IUserData } from "@/types/user";
 import Link from "next/link";
 
-const statusTransKorean = {
-  pending: "승인대기",
-  request: "승인요청",
-  approved: "승인됨",
-  rejected: "미승인",
-};
-
-const headerTransKorean = {
-  name: "이름",
-  status: "상태",
-  phone: "전화번호",
-  request: "승인 요청",
-  id: "",
-};
-
 export const columns: ColumnDef<IUserData>[] = [
   {
     accessorKey: "name",
@@ -63,7 +48,7 @@ export const columns: ColumnDef<IUserData>[] = [
         variant={row.getValue("status")}
         className="capitalize w-[60px] text-center font-medium"
       >
-        {statusTransKorean[row.getValue("status") as UserAcessStatus]}
+        {USER_STATUS[row.getValue("status") as UserAcessStatus]}
       </UserStatus>
     ),
   },
@@ -100,35 +85,6 @@ export const columns: ColumnDef<IUserData>[] = [
       return <Link href={`/user/${row.getValue("id")}`}>상세 보기</Link>;
     },
   },
-  // {
-  //   id: "actions",
-  //   enableHiding: false,
-  //   cell: ({ row }) => {
-  //     const userData = row.original;
-
-  //     return (
-  //       <DropdownMenu>
-  //         <DropdownMenuTrigger asChild>
-  //           <Button variant="ghost" className="h-8 w-8 p-0">
-  //             <span className="sr-only">메뉴 열기</span>
-  //             <MoreHorizontal />
-  //           </Button>
-  //         </DropdownMenuTrigger>
-  //         <DropdownMenuContent align="end">
-  //           <DropdownMenuLabel>관리</DropdownMenuLabel>
-  //           <DropdownMenuItem
-  //             onClick={() => navigator.clipboard.writeText(userData.id)}
-  //           >
-  //             유저 이름 복사
-  //           </DropdownMenuItem>
-  //           <DropdownMenuSeparator />
-  //           <DropdownMenuItem>상세 보기</DropdownMenuItem>
-  //           <DropdownMenuItem>승인 취소</DropdownMenuItem>
-  //         </DropdownMenuContent>
-  //       </DropdownMenu>
-  //     );
-  //   },
-  // },
 ];
 
 export function CenterUserList({
@@ -194,8 +150,8 @@ export function CenterUserList({
                     }
                   >
                     {
-                      headerTransKorean[
-                        column.id as keyof typeof headerTransKorean
+                      USER_INFORMATION[
+                        column.id as keyof typeof USER_INFORMATION
                       ]
                     }
                   </DropdownMenuCheckboxItem>
@@ -211,7 +167,7 @@ export function CenterUserList({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} className="text-center text-lg">
+                    <TableHead key={header.id} className="text-center">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
