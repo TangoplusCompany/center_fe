@@ -2,13 +2,13 @@
 
 import "@/css/body-skeleton.css";
 import { IFilterMeasureInfo } from "@/types/user";
-import SelectMeasureDate from "./SelectMeasureDate";
 import SkeletonBox from "./SkeletonBox";
+import MeasureDateSelect from "./MeasureDateSelect";
 
 const SkeletonContainer = ({ data }: { data: IFilterMeasureInfo }) => {
   return (
-    <div className="flex flex-1 flex-col order-2 lg:order-1 gap-3">
-      <SelectMeasureDate />
+    <div className="flex flex-1 flex-col gap-3">
+      <MeasureDateSelect />
       <SkeletonBox data={data} />
     </div>
   );

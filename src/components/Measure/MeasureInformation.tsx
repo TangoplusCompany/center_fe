@@ -3,7 +3,7 @@ import React from "react";
 
 const MeasureInformation = ({ data }: { data: IFilterMeasureInfo }) => {
   return (
-    <div className="flex-1 order-1 lg:order-2">
+    <div className="flex-1">
       <h1 className="text-4xl font-semibold text-[#333]">
         {data.information.user_name}님의 측정 내역
       </h1>
