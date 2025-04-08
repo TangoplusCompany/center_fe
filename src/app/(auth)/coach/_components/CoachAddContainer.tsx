@@ -114,7 +114,6 @@ const CoachAddContainer = () => {
   const [coach, setCoach] = useState<ICoachData | null>(null);
   const getCoachData = (coach: ICoachData) => {
     setCoach(coach);
-    console.log(coach);
   };
   return (
     <>
