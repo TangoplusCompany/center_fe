@@ -1,9 +1,9 @@
 "use client";
 
+import { useWarningDangerResult } from "@/hooks/utils";
 import React, { useEffect, useState } from "react";
 
 /**
- *
  * userAvg : 유저의 값
  * defaultAvg : 표준분표표의 평균수치
  * sdAvg : 표준편차 분포값
@@ -29,12 +29,10 @@ const ResultGraph = ({
 }) => {
   const [select, setSelect] = useState(0);
   const [avgResult, setAvgResult] = useState(0);
+  const { warningMin, dangerMin, warningMax, dangerMax } =
+    useWarningDangerResult({ defaultAvg, sdAvg });
   useEffect(() => {
     setAvgResult(Math.abs(Number((sdAvg * 0.191).toFixed(4))));
-    const warningMin = defaultAvg - Number((sdAvg * 0.191).toFixed(4));
-    const dangerMin = defaultAvg - Number((sdAvg * 0.433).toFixed(4));
-    const warningMax = defaultAvg + Number((sdAvg * 0.191).toFixed(4));
-    const dangerMax = defaultAvg + Number((sdAvg * 0.433).toFixed(4));
     if (userAvg > warningMin && userAvg < warningMax) {
       setSelect(0);
     } else if (userAvg < dangerMin || userAvg > dangerMax) {
@@ -44,7 +42,7 @@ const ResultGraph = ({
     }
   }, [defaultAvg, sdAvg, userAvg]);
   return (
-    <div className="w-full flex flex-col gap-3 flex-1">
+    <div className="w-full flex flex-col gap-3 flex-1 p-2 bg-[#F5F5F5] rounded">
       <p className="text-xl lg:text-2xl">{title}</p>
       <div className="flex w-full items-center gap-3 px-4 box-border py-2 rounded bg-[#F6F6F6] lg:bg-white dark:bg-meta-4 dark:lg:bg-meta-4">
         <div
