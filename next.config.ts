@@ -1,6 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "gym.tangoplus.co.kr",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+  },
   webpack: (config, context) => {
     if (context.isServer) {
       if (Array.isArray(config.resolve.alias)) {
