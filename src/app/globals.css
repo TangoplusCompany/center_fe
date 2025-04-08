@@ -6,7 +6,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -64,7 +63,6 @@ body {
   }
 }
 
-
 @layer base {
   * {
     @apply border-border;
@@ -72,4 +70,28 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.dangerous.select {
+  background-color: #ff5449;
+}
+
+.warning.select {
+  background-color: #ff971d;
+}
+
+.default.select {
+  background-color: #36abff;
+}
+
+.dangerous.select-text {
+  color: #ff5449;
+}
+
+.warning.select-text {
+  color: #ff971d;
+}
+
+.default.select-text {
+  color: #36abff;
 }
