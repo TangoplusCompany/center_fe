@@ -3,7 +3,7 @@
 import React from "react";
 import { DefaultPagination } from "@/components/Pagination";
 import { CenterUserList } from "./CenterUserList";
-import { useGetUserList } from "@/hooks/user/useUserList";
+import { useGetUserList } from "@/hooks/user";
 
 const UserPage = () => {
   const [nowPage, setNowPage] = React.useState(1);
