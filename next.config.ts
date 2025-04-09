@@ -11,6 +11,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: "/data/Results/:path*",
+        destination: "https://gym.tangoplus.co.kr/data/Results/:path*",
+      },
+    ];
+  },
   webpack: (config, context) => {
     if (context.isServer) {
       if (Array.isArray(config.resolve.alias)) {
