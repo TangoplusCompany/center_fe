@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import ResultGraph from "../ResultGraph";
 import Image from "next/image";
 import { useMeasureJson } from "@/hooks/user";
+import DummyStaticContainer from "../DummyStaticContainer";
 
 const MeasureStaticFourth = ({
   className,
@@ -202,7 +203,7 @@ const MeasureStaticFourth = ({
     drawCanvas();
   }, [imgRef.current, data]);
 
-  if (!data) return <div>데이터가 없습니다.</div>;
+  if (!data) return <DummyStaticContainer />;
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>에러가 발생했습니다.</div>;
 

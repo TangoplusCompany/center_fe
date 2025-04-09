@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import ResultGraph from "../ResultGraph";
 import Image from "next/image";
 import { useMeasureJson } from "@/hooks/user";
+import DummyStaticContainer from "../DummyStaticContainer";
 
 const MeasureStaticFirst = ({
   className,
@@ -28,9 +29,21 @@ const MeasureStaticFirst = ({
 
   useEffect(() => {
     if (imgRef.current === null) return;
+    const imgTag = imgRef.current;
+    const canvasWhite = canvasWhiteRef.current as HTMLCanvasElement;
+    const canvasRed = canvasRedRef.current as HTMLCanvasElement;
+    const canvasGreen = canvasGreenRef.current as HTMLCanvasElement;
+
+    const contextWhite = canvasWhite.getContext(
+      "2d",
+    ) as CanvasRenderingContext2D;
+    const contextRed = canvasRed.getContext("2d") as CanvasRenderingContext2D;
+    const contextGreen = canvasGreen.getContext(
+      "2d",
+    ) as CanvasRenderingContext2D;
     const updateCanvasScale = () => {
-      const imgWidth = imgRef.current!.width;
-      const imgHeight = imgRef.current!.height;
+      const imgWidth = imgTag.width;
+      const imgHeight = imgTag.height;
 
       const widthScale = Number((imgWidth / defaultWidth).toFixed(4));
       const heightScale = Number((imgHeight / defaultHeight).toFixed(4));
@@ -43,14 +56,6 @@ const MeasureStaticFirst = ({
     };
 
     const drawCanvas = () => {
-      const canvasWhite = canvasWhiteRef.current!;
-      const canvasRed = canvasRedRef.current!;
-      const canvasGreen = canvasGreenRef.current!;
-
-      const contextWhite = canvasWhite.getContext("2d")!;
-      const contextRed = canvasRed.getContext("2d")!;
-      const contextGreen = canvasGreen.getContext("2d")!;
-
       const clearAndDraw = (
         context: CanvasRenderingContext2D,
         color: string,
@@ -203,7 +208,7 @@ const MeasureStaticFirst = ({
     drawCanvas();
   }, [imgRef.current, data]);
 
-  if (!data) return <div>데이터가 없습니다.</div>;
+  if (!data) return <DummyStaticContainer />;
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>에러가 발생했습니다.</div>;
 
