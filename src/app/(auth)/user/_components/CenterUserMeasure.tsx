@@ -69,7 +69,7 @@ const CenterUserMeasure = ({
   ];
   return (
     <Tabs defaultValue="front" className="w-full">
-      <TabsList className="mb-5">
+      <TabsList>
         {measureList.map((measure: Omit<MeasureListType, "component">) => (
           <TabsTrigger key={measure.value} value={measure.value}>
             {measure.title}
@@ -77,7 +77,7 @@ const CenterUserMeasure = ({
         ))}
       </TabsList>
       {measureList.map((measure: MeasureListType) => (
-        <TabsContent key={measure.value} value={measure.value}>
+        <TabsContent key={measure.value} value={measure.value} className="!mt-0">
           {measure.component()}
         </TabsContent>
       ))}

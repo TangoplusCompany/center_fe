@@ -3,7 +3,7 @@ import { Skeleton } from "../ui/skeleton";
 
 const DummyStaticContainer = ({ className }: { className?: string }) => {
   return (
-    <div className={`${className} flex flex-col gap-4`}>
+    <div className={`${className} flex flex-col gap-4 lg:gap-10`}>
       <Skeleton className="w-full h-9" />
       <Skeleton className="w-full h-[600px]" />
       <Skeleton className="w-full h-9" />

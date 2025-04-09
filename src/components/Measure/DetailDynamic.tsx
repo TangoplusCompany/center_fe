@@ -10,7 +10,7 @@ const MeasureDetailDynamic = ({
   className?: string;
 }) => {
   return (
-    <div className={`${className} flex flex-col gap-4`}>
+    <div className={`${className} flex flex-col gap-4 lg:gap-10`}>
       <div className="relative w-full overflow-hidden">
         <div className="overflow-hidden w-full relative h-auto md:h-auto">
           <div className="relative -left-[50%] w-[200vw] h-full overflow-hidden md:relative md:w-auto md:h-auto md:left-0">
