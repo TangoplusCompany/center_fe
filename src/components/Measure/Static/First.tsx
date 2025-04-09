@@ -4,6 +4,8 @@ import ResultGraph from "../ResultGraph";
 import Image from "next/image";
 import { useMeasureJson } from "@/hooks/user";
 import DummyStaticContainer from "../DummyStaticContainer";
+import { useDrawCanvas, useWindowResize } from "@/hooks/utils";
+import { IPoseLandmark } from "@/types/pose";
 
 const MeasureStaticFirst = ({
   className,
@@ -16,7 +18,6 @@ const MeasureStaticFirst = ({
   const defaultHeight = statics.measure_overlay_height as number;
   const [nowWidth, setNowWidth] = useState(defaultWidth);
   const [nowHeight, setNowHeight] = useState(defaultHeight);
-  const [lineWidth, setLineWidth] = useState(1);
   const [scaleWidth, setScaleWidth] = useState(1);
   const [scaleHeight, setScaleHeight] = useState(1);
   const imgRef = useRef<HTMLImageElement | null>(null);
@@ -26,10 +27,28 @@ const MeasureStaticFirst = ({
   const { data, isLoading, isError } = useMeasureJson(
     statics.measure_server_json_name,
   );
+  const clearAndDraw = useDrawCanvas;
+  const windowWidth = useWindowResize();
 
   useEffect(() => {
     if (imgRef.current === null) return;
     const imgTag = imgRef.current;
+    const updateCanvasScale = () => {
+      const imgWidth = imgTag.width;
+      const imgHeight = imgTag.height;
+
+      const widthScale = Number((imgWidth / defaultWidth).toFixed(4));
+      const heightScale = Number((imgHeight / defaultHeight).toFixed(4));
+      setNowWidth(imgWidth);
+      setNowHeight(imgHeight);
+      setScaleWidth(widthScale);
+      setScaleHeight(heightScale);
+    };
+    updateCanvasScale();
+  }, [data, windowWidth]);
+
+  useEffect(() => {
+    if (!data || imgRef.current === null) return;
     const canvasWhite = canvasWhiteRef.current as HTMLCanvasElement;
     const canvasRed = canvasRedRef.current as HTMLCanvasElement;
     const canvasGreen = canvasGreenRef.current as HTMLCanvasElement;
@@ -41,33 +60,9 @@ const MeasureStaticFirst = ({
     const contextGreen = canvasGreen.getContext(
       "2d",
     ) as CanvasRenderingContext2D;
-    const updateCanvasScale = () => {
-      const imgWidth = imgTag.width;
-      const imgHeight = imgTag.height;
-
-      const widthScale = Number((imgWidth / defaultWidth).toFixed(4));
-      const heightScale = Number((imgHeight / defaultHeight).toFixed(4));
-
-      setLineWidth(imgWidth > 720 ? 2 : 1.5);
-      setNowWidth(imgWidth);
-      setNowHeight(imgHeight);
-      setScaleWidth(widthScale);
-      setScaleHeight(heightScale);
-    };
 
     const drawCanvas = () => {
-      const clearAndDraw = (
-        context: CanvasRenderingContext2D,
-        color: string,
-        drawFn: () => void,
-      ) => {
-        context.clearRect(0, 0, canvasWhite.width, canvasWhite.height);
-        context.strokeStyle = color;
-        context.lineWidth = lineWidth;
-        drawFn();
-      };
-
-      clearAndDraw(contextWhite, "#FFF", () => {
+      clearAndDraw(contextWhite, canvasWhite, "#FFF", () => {
         contextWhite.beginPath();
         contextWhite.moveTo(
           data.pose_landmark[7].sx * scaleWidth,
@@ -159,7 +154,7 @@ const MeasureStaticFirst = ({
         contextWhite.stroke();
       });
 
-      clearAndDraw(contextGreen, "#00FF00", () => {
+      clearAndDraw(contextGreen, canvasGreen, "#00FF00", () => {
         contextGreen.beginPath();
         contextGreen.moveTo(
           data.pose_landmark[11].sx * scaleWidth,
@@ -183,7 +178,7 @@ const MeasureStaticFirst = ({
         contextGreen.stroke();
       });
 
-      clearAndDraw(contextRed, "#FF0000", () => {
+      clearAndDraw(contextRed, canvasRed, "#FF0000", () => {
         contextRed.beginPath();
         contextRed.moveTo(
           Math.round(
@@ -204,9 +199,9 @@ const MeasureStaticFirst = ({
         contextRed.stroke();
       });
     };
-    updateCanvasScale();
+
     drawCanvas();
-  }, [imgRef.current, data]);
+  }, [data, scaleWidth, scaleHeight, nowHeight]);
 
   if (!data) return <DummyStaticContainer />;
   if (isLoading) return <div>Loading...</div>;
@@ -224,25 +219,25 @@ const MeasureStaticFirst = ({
           alt="측정 사진"
           width={1500}
           height={844}
-          className="lg:w-full lg:relative absolute top-0 left-0 w-[750px] h-[400px] object-cover lg:h-full -scale-x-[1]"
+          className="relative w-full z-0 h-[400px] object-cover lg:h-full -scale-x-[1]"
         />
         <canvas
           ref={canvasWhiteRef}
           width={nowWidth}
           height={nowHeight}
-          className="absolute bottom-0 left-0 right-0 top-0 z-9"
+          className="absolute bottom-0 left-0 right-0 top-0 z-[9]"
         />
         <canvas
           ref={canvasGreenRef}
           width={nowWidth}
           height={nowHeight}
-          className="absolute bottom-0 left-0 right-0 top-0 z-9"
+          className="absolute bottom-0 left-0 right-0 top-0 z-[9]"
         />
         <canvas
           ref={canvasRedRef}
           width={nowWidth}
           height={nowHeight}
-          className="absolute bottom-0 left-0 right-0 top-0 z-9"
+          className="absolute bottom-0 left-0 right-0 top-0 z-[9]"
         />
       </div>
       <div className="grid flex-1 grid-cols-12 gap-2 md:gap-5 w-full lg:gap-5">

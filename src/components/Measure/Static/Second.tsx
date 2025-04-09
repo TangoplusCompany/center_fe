@@ -4,6 +4,7 @@ import ResultGraph from "../ResultGraph";
 import Image from "next/image";
 import { useMeasureJson } from "@/hooks/user";
 import DummyStaticContainer from "../DummyStaticContainer";
+import { useDrawCanvas, useWindowResize } from "@/hooks/utils";
 
 const MeasureStaticSecond = ({
   className,
@@ -16,54 +17,42 @@ const MeasureStaticSecond = ({
   const defaultHeight = statics.measure_overlay_height as number;
   const [nowWidth, setNowWidth] = useState(defaultWidth);
   const [nowHeight, setNowHeight] = useState(defaultHeight);
-  const [lineWidth, setLineWidth] = useState(1);
   const [scaleWidth, setScaleWidth] = useState(1);
   const [scaleHeight, setScaleHeight] = useState(1);
   const imgRef = useRef<HTMLImageElement | null>(null);
   const canvasWhiteRef = useRef<HTMLCanvasElement | null>(null);
-  const canvasRedRef = useRef<HTMLCanvasElement | null>(null);
-  const canvasGreenRef = useRef<HTMLCanvasElement | null>(null);
   const { data, isLoading, isError } = useMeasureJson(
     statics.measure_server_json_name,
   );
+  const clearAndDraw = useDrawCanvas;
+  const windowWidth = useWindowResize();
 
   useEffect(() => {
     if (imgRef.current === null) return;
+    const imgTag = imgRef.current;
     const updateCanvasScale = () => {
-      const imgWidth = imgRef.current!.width;
-      const imgHeight = imgRef.current!.height;
+      const imgWidth = imgTag.width;
+      const imgHeight = imgTag.height;
 
       const widthScale = Number((imgWidth / defaultWidth).toFixed(4));
       const heightScale = Number((imgHeight / defaultHeight).toFixed(4));
-
-      setLineWidth(imgWidth > 720 ? 2 : 1.5);
       setNowWidth(imgWidth);
       setNowHeight(imgHeight);
       setScaleWidth(widthScale);
       setScaleHeight(heightScale);
     };
+    updateCanvasScale();
+  }, [data, windowWidth]);
+
+  useEffect(() => {
+    if (!data || imgRef.current === null) return;
+    const canvasWhite = canvasWhiteRef.current as HTMLCanvasElement;
+    const contextWhite = canvasWhite.getContext(
+      "2d",
+    ) as CanvasRenderingContext2D;
 
     const drawCanvas = () => {
-      const canvasWhite = canvasWhiteRef.current!;
-      const canvasRed = canvasRedRef.current!;
-      const canvasGreen = canvasGreenRef.current!;
-
-      const contextWhite = canvasWhite.getContext("2d")!;
-      const contextRed = canvasRed.getContext("2d")!;
-      const contextGreen = canvasGreen.getContext("2d")!;
-
-      const clearAndDraw = (
-        context: CanvasRenderingContext2D,
-        color: string,
-        drawFn: () => void,
-      ) => {
-        context.clearRect(0, 0, canvasWhite.width, canvasWhite.height);
-        context.strokeStyle = color;
-        context.lineWidth = lineWidth;
-        drawFn();
-      };
-
-      clearAndDraw(contextWhite, "#FFF", () => {
+      clearAndDraw(contextWhite, canvasWhite, "#FFF", () => {
         contextWhite.beginPath();
         contextWhite.moveTo(
           data.pose_landmark[7].sx * scaleWidth,
@@ -116,14 +105,9 @@ const MeasureStaticSecond = ({
         );
         contextWhite.stroke();
       });
-
-      clearAndDraw(contextGreen, "#00FF00", () => {});
-
-      clearAndDraw(contextRed, "#FF0000", () => {});
     };
-    updateCanvasScale();
     drawCanvas();
-  }, [imgRef.current, data]);
+  }, [data, scaleWidth, scaleHeight, nowHeight]);
 
   if (!data) return <DummyStaticContainer />;
   if (isLoading) return <div>Loading...</div>;
@@ -144,18 +128,6 @@ const MeasureStaticSecond = ({
         />
         <canvas
           ref={canvasWhiteRef}
-          width={nowWidth}
-          height={nowHeight}
-          className="absolute bottom-0 left-0 right-0 top-0 z-9"
-        />
-        <canvas
-          ref={canvasGreenRef}
-          width={nowWidth}
-          height={nowHeight}
-          className="absolute bottom-0 left-0 right-0 top-0 z-9"
-        />
-        <canvas
-          ref={canvasRedRef}
           width={nowWidth}
           height={nowHeight}
           className="absolute bottom-0 left-0 right-0 top-0 z-9"

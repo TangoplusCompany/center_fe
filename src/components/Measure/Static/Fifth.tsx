@@ -4,6 +4,7 @@ import ResultGraph from "../ResultGraph";
 import Image from "next/image";
 import { useMeasureJson } from "@/hooks/user";
 import DummyStaticContainer from "../DummyStaticContainer";
+import { useDrawCanvas, useWindowResize } from "@/hooks/utils";
 
 const MeasureStaticFifth = ({
   className,
@@ -26,43 +27,42 @@ const MeasureStaticFifth = ({
   const { data, isLoading, isError } = useMeasureJson(
     statics.measure_server_json_name,
   );
+  const clearAndDraw = useDrawCanvas;
+  const windowWidth = useWindowResize();
+
   useEffect(() => {
     if (imgRef.current === null) return;
+    const imgTag = imgRef.current;
     const updateCanvasScale = () => {
-      const imgWidth = imgRef.current!.width;
-      const imgHeight = imgRef.current!.height;
+      const imgWidth = imgTag.width;
+      const imgHeight = imgTag.height;
 
       const widthScale = Number((imgWidth / defaultWidth).toFixed(4));
       const heightScale = Number((imgHeight / defaultHeight).toFixed(4));
-
-      setLineWidth(imgWidth > 720 ? 2 : 1.5);
       setNowWidth(imgWidth);
       setNowHeight(imgHeight);
       setScaleWidth(widthScale);
       setScaleHeight(heightScale);
     };
+    updateCanvasScale();
+  }, [data, windowWidth]);
+
+  useEffect(() => {
+    if (!data || imgRef.current === null) return;
+    const canvasWhite = canvasWhiteRef.current as HTMLCanvasElement;
+    const canvasRed = canvasRedRef.current as HTMLCanvasElement;
+    const canvasGreen = canvasGreenRef.current as HTMLCanvasElement;
+
+    const contextWhite = canvasWhite.getContext(
+      "2d",
+    ) as CanvasRenderingContext2D;
+    const contextRed = canvasRed.getContext("2d") as CanvasRenderingContext2D;
+    const contextGreen = canvasGreen.getContext(
+      "2d",
+    ) as CanvasRenderingContext2D;
 
     const drawCanvas = () => {
-      const canvasWhite = canvasWhiteRef.current!;
-      const canvasRed = canvasRedRef.current!;
-      const canvasGreen = canvasGreenRef.current!;
-
-      const contextWhite = canvasWhite.getContext("2d")!;
-      const contextRed = canvasRed.getContext("2d")!;
-      const contextGreen = canvasGreen.getContext("2d")!;
-
-      const clearAndDraw = (
-        context: CanvasRenderingContext2D,
-        color: string,
-        drawFn: () => void,
-      ) => {
-        context.clearRect(0, 0, canvasWhite.width, canvasWhite.height);
-        context.strokeStyle = color;
-        context.lineWidth = lineWidth;
-        drawFn();
-      };
-
-      clearAndDraw(contextWhite, "#FFF", () => {
+      clearAndDraw(contextWhite, canvasWhite, "#FFF", () => {
         contextWhite.beginPath();
         contextWhite.moveTo(
           data.pose_landmark[7].sx * scaleWidth,
@@ -154,7 +154,7 @@ const MeasureStaticFifth = ({
         contextWhite.stroke();
       });
 
-      clearAndDraw(contextGreen, "#00FF00", () => {
+      clearAndDraw(contextGreen, canvasGreen, "#00FF00", () => {
         contextGreen.beginPath();
         contextGreen.moveTo(
           data.pose_landmark[11].sx * scaleWidth,
@@ -208,7 +208,7 @@ const MeasureStaticFifth = ({
         contextGreen.stroke();
       });
 
-      clearAndDraw(contextRed, "#FF0000", () => {
+      clearAndDraw(contextRed, canvasRed, "#FF0000", () => {
         contextRed.beginPath();
         contextRed.moveTo(
           Math.round(
@@ -229,9 +229,8 @@ const MeasureStaticFifth = ({
         contextRed.stroke();
       });
     };
-    updateCanvasScale();
     drawCanvas();
-  }, [imgRef.current, data]);
+  }, [data, scaleWidth, scaleHeight, nowHeight]);
 
   if (!data) return <DummyStaticContainer />;
   if (isLoading) return <div>Loading...</div>;
