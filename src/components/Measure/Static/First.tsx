@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useMeasureJson } from "@/hooks/user";
 import DummyStaticContainer from "../DummyStaticContainer";
 import { useDrawCanvas, useWindowResize } from "@/hooks/utils";
-import { IPoseLandmark } from "@/types/pose";
 
 const MeasureStaticFirst = ({
   className,
@@ -219,25 +218,25 @@ const MeasureStaticFirst = ({
           alt="측정 사진"
           width={1500}
           height={844}
-          className="relative w-full z-0 h-[400px] object-cover lg:h-full -scale-x-[1]"
+          className="relative w-full z-0 h-[400px] object-cover lg:h-full"
         />
         <canvas
           ref={canvasWhiteRef}
           width={nowWidth}
           height={nowHeight}
-          className="absolute bottom-0 left-0 right-0 top-0 z-[9]"
+          className="absolute bottom-0 left-0 right-0 top-0 z-[9] -scale-x-[1]"
         />
         <canvas
           ref={canvasGreenRef}
           width={nowWidth}
           height={nowHeight}
-          className="absolute bottom-0 left-0 right-0 top-0 z-[9]"
+          className="absolute bottom-0 left-0 right-0 top-0 z-[9] -scale-x-[1]"
         />
         <canvas
           ref={canvasRedRef}
           width={nowWidth}
           height={nowHeight}
-          className="absolute bottom-0 left-0 right-0 top-0 z-[9]"
+          className="absolute bottom-0 left-0 right-0 top-0 z-[9] -scale-x-[1]"
         />
       </div>
       <div className="grid flex-1 grid-cols-12 gap-2 md:gap-5 w-full lg:gap-5">
