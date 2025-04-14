@@ -1,9 +1,13 @@
-import React from 'react'
+import React from "react";
+import { DeviceMainContainer } from "./_components";
 
 const DeviceHome = () => {
   return (
-    <div>DeviceHome</div>
-  )
-}
+    <div className="grid grid-cols-12 gap-5">
+      <h1 className="text-2xl col-span-12">센터 기기 관리</h1>
+      <DeviceMainContainer />
+    </div>
+  );
+};
 
-export default DeviceHome
+export default DeviceHome;
