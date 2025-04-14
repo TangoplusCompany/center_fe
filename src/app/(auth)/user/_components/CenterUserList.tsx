@@ -14,7 +14,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown } from "lucide-react";
-import { USER_INFORMATION, USER_STATUS } from "@/lib/constants/userStatus";
+import { USER_INFORMATION, USER_STATUS } from "@/utils/constants/userStatus";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
