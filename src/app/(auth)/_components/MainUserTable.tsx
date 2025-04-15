@@ -5,7 +5,7 @@ import { MainDataTable } from "./MainTable";
 import { useQuery } from "@tanstack/react-query";
 
 const MainUserTable = ({ title, url }: { title: string; url: string }) => {
-  const { data, isLoading } = useQuery<{[key: string]:string}[]>({
+  const { data, isLoading } = useQuery<{ [key: string]: string }[]>({
     queryKey: [title],
     queryFn: async () => {
       const response = await fetch(url);

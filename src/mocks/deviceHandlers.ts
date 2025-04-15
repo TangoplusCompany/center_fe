@@ -45,19 +45,15 @@ export const deviceHandlers = [
       const { id } = params;
       const checkNumber = /^\d+$/.test(id);
       if (!checkNumber) {
-        return new HttpResponse(
-          JSON.stringify({ error: "잘못된 접근입니다." }),
-          { status: 400 },
-        );
+        return new HttpResponse(JSON.stringify({ error: "잘못된 접근입니다." }), { status: 400 });
       }
       const device: IDeviceStatusCardProps | undefined = centerDevice.find(
         (el) => el.sn === parseInt(id),
       );
       if (!device) {
-        return new HttpResponse(
-          JSON.stringify({ error: "기기를 찾을 수 없습니다." }),
-          { status: 404 },
-        );
+        return new HttpResponse(JSON.stringify({ error: "기기를 찾을 수 없습니다." }), {
+          status: 404,
+        });
       }
       return new HttpResponse(JSON.stringify(device), { status: 200 });
     },

@@ -5,13 +5,7 @@ import { useCallback, useState } from "react";
 import CenterUserInformation from "./CenterUserInformation";
 import CenterUserMeasure from "./CenterUserMeasure";
 
-const UserDetailTap = ({
-  nowTab,
-  update,
-}: {
-  nowTab: number;
-  update: (index: number) => void;
-}) => {
+const UserDetailTap = ({ nowTab, update }: { nowTab: number; update: (index: number) => void }) => {
   const handleClick = (value: number) => {
     update(value);
   };

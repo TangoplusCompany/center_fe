@@ -11,5 +11,5 @@ export const worker = setupWorker(
   ...userHandlers,
   ...deviceHandlers,
   ...centerHandlers,
-  ...coachHandlers
+  ...coachHandlers,
 );

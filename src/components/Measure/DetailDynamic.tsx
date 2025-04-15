@@ -20,9 +20,7 @@ const MeasureDetailDynamic = ({
   const [scaleHeight, setScaleHeight] = useState(1);
   const canvasWhiteRef = useRef<HTMLCanvasElement | null>(null);
   const canvasRedRef = useRef<HTMLCanvasElement | null>(null);
-  const { data, isLoading, isError } = useMeasureJson(
-    dynamic.measure_server_json_name,
-  );
+  const { data, isLoading, isError } = useMeasureJson(dynamic.measure_server_json_name);
   const clearAndDraw = useDrawCanvas;
   const [frame, setFrame] = useState(0);
   const frameLoopActive = useRef(false);
@@ -46,9 +44,7 @@ const MeasureDetailDynamic = ({
     observer.observe(video);
 
     // 초기에 강제 측정
-    handleResize([
-      { contentRect: video.getBoundingClientRect() } as ResizeObserverEntry,
-    ]);
+    handleResize([{ contentRect: video.getBoundingClientRect() } as ResizeObserverEntry]);
 
     const startFrameTracking = () => {
       const video = videoRef.current;
@@ -120,9 +116,7 @@ const MeasureDetailDynamic = ({
     const canvasWhite = canvasWhiteRef.current as HTMLCanvasElement;
     const canvasRed = canvasRedRef.current as HTMLCanvasElement;
 
-    const contextWhite = canvasWhite.getContext(
-      "2d",
-    ) as CanvasRenderingContext2D;
+    const contextWhite = canvasWhite.getContext("2d") as CanvasRenderingContext2D;
     const contextRed = canvasRed.getContext("2d") as CanvasRenderingContext2D;
 
     const drawCanvas = () => {

@@ -28,10 +28,7 @@ const CoachPage = () => {
   }
   return (
     <>
-      <CoachList
-        className="col-span-12 overflow-scroll px-1"
-        users={userData}
-      />
+      <CoachList className="col-span-12 overflow-scroll px-1" users={userData} />
       <DefaultPagination
         className="col-span-12"
         nowPage={nowPage}

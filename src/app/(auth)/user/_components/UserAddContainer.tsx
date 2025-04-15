@@ -7,11 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { ReactNode, useState } from "react";
 import { IUserData } from "@/types/user";
-import {
-  useNameFiltering,
-  usePhoneFiltering,
-  useEmailFiltering,
-} from "@/hooks/utils";
+import { useNameFiltering, usePhoneFiltering, useEmailFiltering } from "@/hooks/utils";
 
 const EmptyUserList = () => (
   <div className="w-full flex items-center justify-center py-10">
@@ -29,11 +25,7 @@ const ErrorText = ({ children }: { children: ReactNode }) => {
   return <p className="text-lg font-medium text-red-500">{children}</p>;
 };
 
-const SearchAllUser = ({
-  updateUser,
-}: {
-  updateUser: (user: IUserData) => void;
-}) => {
+const SearchAllUser = ({ updateUser }: { updateUser: (user: IUserData) => void }) => {
   const {
     register,
     handleSubmit,
@@ -65,11 +57,7 @@ const SearchAllUser = ({
   return (
     <article className="w-full">
       <form className="w-full flex gap-5 mb-5" onSubmit={SearchUserHandler}>
-        <Input
-          placeholder="이름을 입력해주세요."
-          type="text"
-          {...register("name")}
-        />
+        <Input placeholder="이름을 입력해주세요." type="text" {...register("name")} />
         <Button variant="outline" type="submit">
           조회하기
         </Button>
@@ -91,15 +79,9 @@ const SearchAllUser = ({
                   key={user.id + user.name}
                   className="grid grid-cols-6 items-center px-3 py-2 hover:bg-gray-100 border-b last:border-none border-solid border-gray-300"
                 >
-                  <p className="col-span-1 text-center">
-                    {useNameFiltering(user.name)}
-                  </p>
-                  <p className="col-span-1 text-center">
-                    {useEmailFiltering(user.email)}
-                  </p>
-                  <p className="col-span-1 text-center">
-                    {usePhoneFiltering(user.phone)}
-                  </p>
+                  <p className="col-span-1 text-center">{useNameFiltering(user.name)}</p>
+                  <p className="col-span-1 text-center">{useEmailFiltering(user.email)}</p>
+                  <p className="col-span-1 text-center">{usePhoneFiltering(user.phone)}</p>
                   <button
                     type="button"
                     onClick={() => selectUserHandler(user.id)}
@@ -154,15 +136,9 @@ const UserAddContainer = () => {
                     key={user.id + user.name}
                     className="grid grid-cols-6 items-center px-3 py-2 hover:bg-gray-100 border-b last:border-none border-solid border-gray-300"
                   >
-                    <p className="col-span-1 text-center">
-                      {useNameFiltering(user.name)}
-                    </p>
-                    <p className="col-span-1 text-center">
-                      {useEmailFiltering(user.email)}
-                    </p>
-                    <p className="col-span-1 text-center">
-                      {usePhoneFiltering(user.phone)}
-                    </p>
+                    <p className="col-span-1 text-center">{useNameFiltering(user.name)}</p>
+                    <p className="col-span-1 text-center">{useEmailFiltering(user.email)}</p>
+                    <p className="col-span-1 text-center">{usePhoneFiltering(user.phone)}</p>
                   </div>
                 );
               })}

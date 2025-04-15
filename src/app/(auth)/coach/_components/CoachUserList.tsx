@@ -32,11 +32,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import {
-  CoachAccessStatus,
-  ICoachData,
-  CoachPersonalGrade,
-} from "@/types/coach";
+import { CoachAccessStatus, ICoachData, CoachPersonalGrade } from "@/types/coach";
 
 const statusTransKorean = {
   pending: "승인대기",
@@ -72,9 +68,7 @@ export const columns: ColumnDef<ICoachData>[] = [
   {
     accessorKey: "status",
     header: "상태",
-    cell: ({ row }) => (
-      <p>{statusTransKorean[row.getValue("status") as CoachAccessStatus]}</p>
-    ),
+    cell: ({ row }) => <p>{statusTransKorean[row.getValue("status") as CoachAccessStatus]}</p>,
   },
   {
     accessorKey: "phone",
@@ -105,15 +99,7 @@ export const columns: ColumnDef<ICoachData>[] = [
     accessorKey: "personal_grade",
     header: "코치등급",
     cell: ({ row }) => {
-      return (
-        <p>
-          {
-            gradeTransKorean[
-              row.getValue("personal_grade") as CoachPersonalGrade
-            ]
-          }
-        </p>
-      );
+      return <p>{gradeTransKorean[row.getValue("personal_grade") as CoachPersonalGrade]}</p>;
     },
   },
   {
@@ -126,19 +112,10 @@ export const columns: ColumnDef<ICoachData>[] = [
   },
 ];
 
-export function CoachList({
-  className,
-  users,
-}: {
-  className?: string;
-  users: ICoachData[];
-}) {
+export function CoachList({ className, users }: { className?: string; users: ICoachData[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
@@ -184,15 +161,9 @@ export function CoachList({
                     key={column.id}
                     className="capitalize"
                     checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
+                    onCheckedChange={(value) => column.toggleVisibility(!!value)}
                   >
-                    {
-                      headerTransKorean[
-                        column.id as keyof typeof headerTransKorean
-                      ]
-                    }
+                    {headerTransKorean[column.id as keyof typeof headerTransKorean]}
                   </DropdownMenuCheckboxItem>
                 );
               })}
@@ -209,10 +180,7 @@ export function CoachList({
                     <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                        : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   );
                 })}
@@ -222,26 +190,17 @@ export function CoachList({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={columns.length} className="h-24 text-center">
                   데이터가 존재하지 않습니다.
                 </TableCell>
               </TableRow>

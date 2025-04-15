@@ -7,25 +7,16 @@ import { useQuery } from "@tanstack/react-query";
  * @param centerId - 센터 ID
  * @template T - 코치 데이터 타입(generic)
  */
-const useSearchCenterCoach = <T>({
-  name,
-  centerId,
-}: {
-  name: string;
-  centerId?: number;
-}) => {
+const useSearchCenterCoach = <T>({ name, centerId }: { name: string; centerId?: number }) => {
   return useQuery<T>({
     queryKey: ["useSearchCenterCoach"],
     queryFn: async () => {
-      const response = await fetch(
-        `/api/coach/search?name=${name}&center_id=${centerId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`/api/coach/search?name=${name}&center_id=${centerId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       if (response.ok) {
         return response.json();
       }

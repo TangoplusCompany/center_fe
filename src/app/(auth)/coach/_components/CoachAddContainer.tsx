@@ -18,11 +18,7 @@ const ErrorText = ({ children }: { children: ReactNode }) => {
   return <p className="text-sm text-red-500">{children}</p>;
 };
 
-const SearchAllCoach = ({
-  updateCoach,
-}: {
-  updateCoach: (coach: ICoachData) => void;
-}) => {
+const SearchAllCoach = ({ updateCoach }: { updateCoach: (coach: ICoachData) => void }) => {
   const {
     register,
     handleSubmit,
@@ -54,20 +50,14 @@ const SearchAllCoach = ({
   return (
     <article className="w-full">
       <form className="w-full flex gap-5 mb-5" onSubmit={SearchCoachHandler}>
-        <Input
-          placeholder="이름을 입력해주세요."
-          type="text"
-          {...register("name")}
-        />
+        <Input placeholder="이름을 입력해주세요." type="text" {...register("name")} />
         <Button variant="outline" type="submit">
           조회하기
         </Button>
       </form>
       <div className="flex flex-col w-full rounded-md border border-input bg-transparent text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm">
         {coachList.length === 0 ? (
-          <p className="text-sm text-gray-500">
-            조회를 통해 코치를 선택해주세요.
-          </p>
+          <p className="text-sm text-gray-500">조회를 통해 코치를 선택해주세요.</p>
         ) : (
           <>
             <div className="grid grid-cols-6 px-3 py-2 border-b border-solid border-gray-300">
@@ -87,12 +77,8 @@ const SearchAllCoach = ({
                   <p className="col-span-1 text-center">{coach.name}</p>
                   <p className="col-span-1 text-center">{coach.email}</p>
                   <p className="col-span-1 text-center">{coach.phone}</p>
-                  <p className="col-span-1 text-center">
-                    {coach.personal_grade}
-                  </p>
-                  <p className="col-span-1 text-center">
-                    {coach.personal_date}
-                  </p>
+                  <p className="col-span-1 text-center">{coach.personal_grade}</p>
+                  <p className="col-span-1 text-center">{coach.personal_date}</p>
                   <button
                     type="button"
                     onClick={() => selectCoachHandler(coach.id)}

@@ -6,11 +6,7 @@ import { useSidebar } from "../ui/sidebar";
 import { usePathname } from "next/navigation";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-export default function DefaultLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DefaultLayout({ children }: { children: React.ReactNode }) {
   const usePathName = usePathname();
   const { toggleSidebar } = useSidebar();
   const isMobile = useIsMobile();
