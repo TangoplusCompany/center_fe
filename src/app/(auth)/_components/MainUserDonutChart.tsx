@@ -48,11 +48,9 @@ const MainUserDonutChart = ({ className }: { className: string }) => {
       return null;
     }
     return data.reduce(
-      (
-        acc: number,
-        curr: { browser: string; visitors: number; fill: string }
-      ) => acc + curr.visitors,
-      0
+      (acc: number, curr: { browser: string; visitors: number; fill: string }) =>
+        acc + curr.visitors,
+      0,
     );
   }, [data]);
   return (
@@ -62,15 +60,9 @@ const MainUserDonutChart = ({ className }: { className: string }) => {
         <CardDescription>최근 1달간 사용자 기준</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
-        <ChartContainer
-          config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
-        >
+        <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">
           <PieChart>
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
+            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
             {data && (
               <Pie
                 data={data}

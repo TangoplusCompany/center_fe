@@ -1,8 +1,6 @@
 import MeasureInformation from "@/components/Measure/MeasureInformation";
 import SkeletonContainer from "@/components/Measure/SkeletonContainer";
-import {
-  IFilterMeasureInfo,
-} from "@/types/user";
+import { IFilterMeasureInfo } from "@/types/user";
 import React from "react";
 
 const CenterUserInformation = ({ data }: { data: IFilterMeasureInfo }) => {

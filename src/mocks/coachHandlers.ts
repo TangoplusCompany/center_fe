@@ -345,12 +345,9 @@ export const coachHandlers = [
     const name = url.searchParams.get("name");
     const getUser = coaches.filter((user) => user.name.includes(name!));
     if (getUser.length === 0) {
-      return new HttpResponse(
-        JSON.stringify({ message: "해당 유저를 찾을 수 없습니다." }),
-        {
-          status: 404,
-        }
-      );
+      return new HttpResponse(JSON.stringify({ message: "해당 유저를 찾을 수 없습니다." }), {
+        status: 404,
+      });
     }
     return new HttpResponse(JSON.stringify({ users: getUser }), {
       status: 200,

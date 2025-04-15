@@ -18,11 +18,7 @@ const SkeletonBox = ({ data }: { data: IFilterMeasureInfo }) => {
   }, [viewState]);
   return (
     <div className="relative box-border flex justify-center rounded border border-stroke bg-gray px-4 py-3 text-black  focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary">
-      <button
-        className="absolute right-3 top-3 z-10"
-        title="앞/뒤 보기"
-        onClick={viewStateHandle}
-      >
+      <button className="absolute right-3 top-3 z-10" title="앞/뒤 보기" onClick={viewStateHandle}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="32"
@@ -38,15 +34,11 @@ const SkeletonBox = ({ data }: { data: IFilterMeasureInfo }) => {
       </button>
       <div className="relative z-0 md:max-h-full skeleton">
         <SkeletonFront
-          className={`${
-            view === "front" ? "on_view" : "off_view"
-          } h-full w-full `}
+          className={`${view === "front" ? "on_view" : "off_view"} h-full w-full `}
           data={data}
         />
         <SkeletonBack
-          className={`${
-            view === "back" ? "on_view" : "off_view"
-          } h-full w-full `}
+          className={`${view === "back" ? "on_view" : "off_view"} h-full w-full `}
           data={data}
         />
       </div>

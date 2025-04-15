@@ -7,13 +7,7 @@ import DummyStaticContainer from "../DummyStaticContainer";
 import { useDrawCanvas, useWindowResize } from "@/hooks/utils";
 
 const MeasureStaticFifth = React.memo(
-  ({
-    className,
-    statics,
-  }: {
-    className?: string;
-    statics: IUserDetailStatic;
-  }) => {
+  ({ className, statics }: { className?: string; statics: IUserDetailStatic }) => {
     const defaultWidth = statics.measure_overlay_width as number;
     const defaultHeight = statics.measure_overlay_height as number;
     const [nowWidth, setNowWidth] = useState(defaultWidth);
@@ -24,9 +18,7 @@ const MeasureStaticFifth = React.memo(
     const canvasWhiteRef = useRef<HTMLCanvasElement | null>(null);
     const canvasRedRef = useRef<HTMLCanvasElement | null>(null);
     const canvasGreenRef = useRef<HTMLCanvasElement | null>(null);
-    const { data, isLoading, isError } = useMeasureJson(
-      statics.measure_server_json_name,
-    );
+    const { data, isLoading, isError } = useMeasureJson(statics.measure_server_json_name);
     const memoMeasureJson = useMemo(() => data, [data]);
     const clearAndDraw = useDrawCanvas;
     const windowWidth = useWindowResize();
@@ -54,13 +46,9 @@ const MeasureStaticFifth = React.memo(
       const canvasRed = canvasRedRef.current as HTMLCanvasElement;
       const canvasGreen = canvasGreenRef.current as HTMLCanvasElement;
 
-      const contextWhite = canvasWhite.getContext(
-        "2d",
-      ) as CanvasRenderingContext2D;
+      const contextWhite = canvasWhite.getContext("2d") as CanvasRenderingContext2D;
       const contextRed = canvasRed.getContext("2d") as CanvasRenderingContext2D;
-      const contextGreen = canvasGreen.getContext(
-        "2d",
-      ) as CanvasRenderingContext2D;
+      const contextGreen = canvasGreen.getContext("2d") as CanvasRenderingContext2D;
 
       const drawCanvas = () => {
         clearAndDraw(contextWhite, canvasWhite, "#FFF", () => {
@@ -242,10 +230,7 @@ const MeasureStaticFifth = React.memo(
         <div className="relative w-full overflow-hidden">
           <Image
             ref={imgRef}
-            src={
-              `https://gym.tangoplus.co.kr/data/Results/` +
-              statics.measure_server_file_name
-            }
+            src={`https://gym.tangoplus.co.kr/data/Results/` + statics.measure_server_file_name}
             alt="측정 사진"
             width={1500}
             height={844}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useGetDeviceDetail } from "@/hooks/device";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,6 +27,7 @@ import { Button } from "@/components/ui/button";
 export const DeviceDetailContainer = ({ sn }: { sn: number }) => {
   const { data, isLoading } = useGetDeviceDetail<IDeviceStatusCardProps>(sn);
   const [isEditing, setIsEditing] = useState(false);
+  const [deviceData, setDeviceData] = useState<IDeviceStatusCardProps>();
   const deviceDetailSchema = z.object({
     device_name: z.string(),
     install_address: z.string(),
@@ -46,17 +47,22 @@ export const DeviceDetailContainer = ({ sn }: { sn: number }) => {
   if (isLoading) return <p>Loading...</p>;
 
   const handleEdit = () => {
-    setIsEditing((prev) => !prev);
+    if (!isEditing) return setIsEditing(true);
+    else {
+      setDeviceData(data);
+      setIsEditing(false);
+      return;
+    }
   };
 
   const updateDeviceDetail = handleSubmit(async (data) => {
     // const result = useDeviceUpdate()
   });
+  useEffect(() => {
+    setDeviceData(data);
+  }, [data]);
   return (
-    <form
-      onSubmit={updateDeviceDetail}
-      className="flex flex-col col-span-12 gap-4 relative"
-    >
+    <form onSubmit={updateDeviceDetail} className="flex flex-col col-span-12 gap-4 relative">
       <div className="relative w-full">
         <legend className="text-2xl col-span-12">센터 기기 상세 조회</legend>
         <span className="">{}</span>
@@ -92,10 +98,7 @@ export const DeviceDetailContainer = ({ sn }: { sn: number }) => {
             disabled={!isEditing}
           />
         </Label>
-        <Label
-          className="w-full flex flex-col gap-1"
-          htmlFor="install_address_detail"
-        >
+        <Label className="w-full flex flex-col gap-1" htmlFor="install_address_detail">
           <h3 className="text-xl">기기 설치 상세 주소</h3>
           <Input
             {...register("install_address_detail")}

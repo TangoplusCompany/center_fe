@@ -1,6 +1,7 @@
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import DefaultSidebar from "@/components/Layouts/DefaultSidebar";
+import AuthStoreProvider from "@/providers/AuthProvider";
 
 export default function RootLayout({
   children,
@@ -9,8 +10,10 @@ export default function RootLayout({
 }>) {
   return (
     <SidebarProvider>
-      <DefaultSidebar />
-      <DefaultLayout>{children}</DefaultLayout>
+      <AuthStoreProvider>
+        <DefaultSidebar />
+        <DefaultLayout>{children}</DefaultLayout>
+      </AuthStoreProvider>
     </SidebarProvider>
   );
 }

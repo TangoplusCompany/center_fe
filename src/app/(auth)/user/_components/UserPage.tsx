@@ -19,10 +19,7 @@ const UserPage = () => {
   }
   return (
     <>
-      <CenterUserList
-        className="col-span-12 overflow-scroll px-1"
-        users={data}
-      />
+      <CenterUserList className="col-span-12 overflow-scroll px-1" users={data} />
       <DefaultPagination
         className="col-span-12"
         nowPage={nowPage}

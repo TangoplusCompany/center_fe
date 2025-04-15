@@ -25,9 +25,7 @@ export interface IUserDetail {
   };
 }
 
-export interface IUserDetailMeasureInfo
-  extends IMeasureUserRisk,
-    IMeasureUserPain {
+export interface IUserDetailMeasureInfo extends IMeasureUserRisk, IMeasureUserPain {
   device_sn: number | string; // 장치 sn
   mobile_temp: string;
   elapsed_time: number | string; // 측정 총 시간 (sec, 소수점 세번째 자리까지)

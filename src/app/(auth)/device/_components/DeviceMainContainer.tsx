@@ -7,8 +7,7 @@ import { IDeviceStatusCardProps } from "@/types/device";
 import { DeviceAnalytics, DeviceStatusItems } from "@/components/Device";
 
 export const DeviceMainContainer = () => {
-  const { data: deviceStatus, isLoading } =
-    useGetDeviceStatus<IDeviceStatusCardProps[]>();
+  const { data: deviceStatus, isLoading } = useGetDeviceStatus<IDeviceStatusCardProps[]>();
 
   if (isLoading) return <SkeletonDeviceCard />;
   if (!deviceStatus) return <p></p>;
@@ -17,10 +16,7 @@ export const DeviceMainContainer = () => {
     <div className="col-span-12 flex flex-col gap-4">
       <div className="grid grid-cols-2 items-start justify-center gap-3">
         {deviceStatus.map((device, index) => (
-          <DeviceStatusItems
-            key={device.serial_number + index}
-            device={device}
-          />
+          <DeviceStatusItems key={device.serial_number + index} device={device} />
         ))}
       </div>
       <DeviceAnalytics />
