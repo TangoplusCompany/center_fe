@@ -1,7 +1,14 @@
 import React from "react";
+import { RegisterContainer } from "../_components/RegisterForm";
 
 const RegisterPage = () => {
-  return <div className="grid min-h-svh lg:grid-cols-2 w-full">Register</div>;
+  return (
+    <div className="flex flex-1 items-center justify-center">
+      <div className="w-full max-w-xs">
+        <RegisterContainer />
+      </div>
+    </div>
+  );
 };
 
 export default RegisterPage;
