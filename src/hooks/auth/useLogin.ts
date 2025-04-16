@@ -25,12 +25,12 @@ interface ILoginResponse {
 
 export const useLogin = () => {
   const router = useRouter();
-  const { setAuthorization } = useAuthStore((state) => state);
+  const { setLogin } = useAuthStore((state) => state);
   return useMutation({
     mutationFn: postLogin,
     onSuccess: ({ data }: ILoginResponse) => {
       // Handle successful login, e.g., redirect to dashboard
-      setAuthorization({
+      setLogin({
         isLogin: true,
         adminName: data.admin_info.admin_name,
         adminEmail: data.admin_info.admin_email,
