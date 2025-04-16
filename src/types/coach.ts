@@ -7,6 +7,7 @@ export interface ICoachData {
   personal_grade: CoachPersonalGrade;
   status: CoachAccessStatus;
   request: boolean;
+  centerId: number;
 }
 
 export type CoachAccessStatus = "pending" | "request" | "approved" | "rejected";

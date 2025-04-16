@@ -14,13 +14,7 @@ export default function NotFound() {
     <main className="flex flex-col items-center justify-start min-h-screen flex-1">
       <header className="flex w-full p-2 md:p-5 justify-between items-center border-b border-solid border-gray-300 dark:border-gray-800">
         <div className="flex items-center gap-2 md:gap-5">
-          <Image
-            src="/logo-icon.png"
-            width={60}
-            height={60}
-            alt="탱고로고"
-            className="size-10"
-          />
+          <Image src="/logo-icon.png" width={60} height={60} alt="탱고로고" className="size-10" />
           <p className="text-2xl">TANGOPLUS</p>
         </div>
         <DarkModeToggle />

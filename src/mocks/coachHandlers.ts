@@ -13,6 +13,7 @@ const coaches: ICoachData[] = [
     personal_grade: "head coach",
     status: "approved",
     request: false,
+    centerId: 2,
   },
   {
     id: "2",
@@ -23,6 +24,7 @@ const coaches: ICoachData[] = [
     personal_grade: "assistant coach",
     status: "pending",
     request: false,
+    centerId: 1,
   },
   {
     id: "3",
@@ -33,6 +35,7 @@ const coaches: ICoachData[] = [
     personal_grade: "manager",
     status: "approved",
     request: false,
+    centerId: 1,
   },
   {
     id: "4",
@@ -43,6 +46,7 @@ const coaches: ICoachData[] = [
     personal_grade: "trainer",
     status: "rejected",
     request: false,
+    centerId: 1,
   },
   {
     id: "5",
@@ -53,6 +57,7 @@ const coaches: ICoachData[] = [
     personal_grade: "coach",
     status: "approved",
     request: false,
+    centerId: 2,
   },
   {
     id: "6",
@@ -63,6 +68,7 @@ const coaches: ICoachData[] = [
     personal_grade: "head coach",
     status: "pending",
     request: false,
+    centerId: 1,
   },
   {
     id: "7",
@@ -73,6 +79,7 @@ const coaches: ICoachData[] = [
     personal_grade: "assistant coach",
     status: "request",
     request: true,
+    centerId: 1,
   },
   {
     id: "8",
@@ -83,6 +90,7 @@ const coaches: ICoachData[] = [
     personal_grade: "manager",
     status: "approved",
     request: false,
+    centerId: 1,
   },
   {
     id: "9",
@@ -93,6 +101,7 @@ const coaches: ICoachData[] = [
     personal_grade: "trainer",
     status: "pending",
     request: false,
+    centerId: 2,
   },
   {
     id: "10",
@@ -103,6 +112,7 @@ const coaches: ICoachData[] = [
     personal_grade: "coach",
     status: "approved",
     request: false,
+    centerId: 1,
   },
   {
     id: "11",
@@ -113,6 +123,7 @@ const coaches: ICoachData[] = [
     personal_grade: "head coach",
     status: "rejected",
     request: false,
+    centerId: 1,
   },
   {
     id: "12",
@@ -123,6 +134,7 @@ const coaches: ICoachData[] = [
     personal_grade: "assistant coach",
     status: "request",
     request: true,
+    centerId: 2,
   },
   {
     id: "13",
@@ -133,6 +145,7 @@ const coaches: ICoachData[] = [
     personal_grade: "manager",
     status: "pending",
     request: false,
+    centerId: 1,
   },
   {
     id: "14",
@@ -143,6 +156,7 @@ const coaches: ICoachData[] = [
     personal_grade: "trainer",
     status: "approved",
     request: false,
+    centerId: 1,
   },
   {
     id: "15",
@@ -153,6 +167,7 @@ const coaches: ICoachData[] = [
     personal_grade: "coach",
     status: "approved",
     request: false,
+    centerId: 1,
   },
   {
     id: "16",
@@ -163,6 +178,7 @@ const coaches: ICoachData[] = [
     personal_grade: "head coach",
     status: "request",
     request: true,
+    centerId: 2,
   },
   {
     id: "17",
@@ -173,6 +189,7 @@ const coaches: ICoachData[] = [
     personal_grade: "assistant coach",
     status: "pending",
     request: false,
+    centerId: 1,
   },
   {
     id: "18",
@@ -183,6 +200,7 @@ const coaches: ICoachData[] = [
     personal_grade: "manager",
     status: "approved",
     request: false,
+    centerId: 2,
   },
   {
     id: "19",
@@ -193,6 +211,7 @@ const coaches: ICoachData[] = [
     personal_grade: "trainer",
     status: "rejected",
     request: false,
+    centerId: 1,
   },
   {
     id: "20",
@@ -203,6 +222,7 @@ const coaches: ICoachData[] = [
     personal_grade: "coach",
     status: "pending",
     request: false,
+    centerId: 1,
   },
   {
     id: "21",
@@ -213,6 +233,7 @@ const coaches: ICoachData[] = [
     personal_grade: "head coach",
     status: "approved",
     request: false,
+    centerId: 2,
   },
   {
     id: "22",
@@ -223,6 +244,7 @@ const coaches: ICoachData[] = [
     personal_grade: "assistant coach",
     status: "request",
     request: true,
+    centerId: 1,
   },
   {
     id: "23",
@@ -233,6 +255,7 @@ const coaches: ICoachData[] = [
     personal_grade: "manager",
     status: "pending",
     request: false,
+    centerId: 1,
   },
   {
     id: "24",
@@ -243,6 +266,7 @@ const coaches: ICoachData[] = [
     personal_grade: "trainer",
     status: "approved",
     request: false,
+    centerId: 1,
   },
   {
     id: "25",
@@ -253,6 +277,7 @@ const coaches: ICoachData[] = [
     personal_grade: "coach",
     status: "approved",
     request: false,
+    centerId: 1,
   },
   {
     id: "26",
@@ -263,6 +288,7 @@ const coaches: ICoachData[] = [
     personal_grade: "head coach",
     status: "pending",
     request: false,
+    centerId: 2,
   },
   {
     id: "27",
@@ -273,6 +299,7 @@ const coaches: ICoachData[] = [
     personal_grade: "assistant coach",
     status: "request",
     request: true,
+    centerId: 2,
   },
   {
     id: "28",
@@ -283,6 +310,7 @@ const coaches: ICoachData[] = [
     personal_grade: "manager",
     status: "pending",
     request: false,
+    centerId: 2,
   },
   {
     id: "29",
@@ -293,6 +321,7 @@ const coaches: ICoachData[] = [
     personal_grade: "trainer",
     status: "rejected",
     request: false,
+    centerId: 1,
   },
   {
     id: "30",
@@ -303,11 +332,25 @@ const coaches: ICoachData[] = [
     personal_grade: "coach",
     status: "approved",
     request: false,
+    centerId: 2,
   },
 ];
 
 export const coachHandlers = [
   http.get("http://localhost:4862/api/coach", async () => {
     return new HttpResponse(JSON.stringify(coaches), { status: 200 });
+  }),
+  http.get("http://localhost:4862/api/coach/search", async ({ request }) => {
+    const url = new URL(request.url);
+    const name = url.searchParams.get("name");
+    const getUser = coaches.filter((user) => user.name.includes(name!));
+    if (getUser.length === 0) {
+      return new HttpResponse(JSON.stringify({ message: "해당 유저를 찾을 수 없습니다." }), {
+        status: 404,
+      });
+    }
+    return new HttpResponse(JSON.stringify({ users: getUser }), {
+      status: 200,
+    });
   }),
 ];

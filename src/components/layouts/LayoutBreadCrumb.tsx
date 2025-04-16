@@ -51,7 +51,7 @@ const Menus: IMenu[] = [
 
 export function LayoutBreadcCrumb() {
   const pathName = usePathname();
-  
+
   return (
     <Breadcrumb>
       <BreadcrumbList>
@@ -66,9 +66,8 @@ export function LayoutBreadcCrumb() {
                 <p className="text-slate-950 dark:text-foreground">대시보드</p>
               ) : (
                 <p className="text-slate-950 dark:text-foreground">
-                  {Menus.filter((el) => el.url !== "/").find((menu) =>
-                    pathName.includes(menu.url)
-                  )?.title || "Not Found"}
+                  {Menus.filter((el) => el.url !== "/").find((menu) => pathName.includes(menu.url))
+                    ?.title || "Not Found"}
                 </p>
               )}
             </DropdownMenuTrigger>

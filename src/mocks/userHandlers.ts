@@ -407,8 +407,7 @@ const detailData: IUserDetail[] = [
         measure_type: 7,
         measure_start_time: "2024-10-08 14:19:25",
         measure_end_time: "2024-10-08 14:19:32",
-        measure_photo_file_name:
-          "MT_DYNAMIC_OVERHEADSQUAT_FRONT_1_160_20241008141925",
+        measure_photo_file_name: "MT_DYNAMIC_OVERHEADSQUAT_FRONT_1_160_20241008141925",
         measure_server_json_name: "1-143-2-7-1728364891.json",
         measure_server_file_name: "1-143-2-7-1728364897.mp4",
         measure_overlay_width: 1280,
@@ -1322,12 +1321,11 @@ export const userHandlers = [
     if (email !== "test@test.com" || password !== "test1234") {
       return HttpResponse.json(
         {
-          error:
-            "이메일 혹은 비밀번호가 잘못 되었습니다.이메일과 비밀번호를 정확히 입력해 주세요.",
+          error: "이메일 혹은 비밀번호가 잘못 되었습니다.이메일과 비밀번호를 정확히 입력해 주세요.",
         },
         {
           status: 401,
-        }
+        },
       );
     }
     return HttpResponse.json(
@@ -1336,11 +1334,26 @@ export const userHandlers = [
       },
       {
         status: 201,
-      }
+      },
     );
   }),
   http.get("http://localhost:4862/api/user", async () => {
-    return new HttpResponse(JSON.stringify(data), { status: 200 });
+    return new HttpResponse(JSON.stringify(data.filter((el) => el.status !== "rejected")), {
+      status: 200,
+    });
+  }),
+  http.get("http://localhost:4862/api/user/search", async ({ request }) => {
+    const url = new URL(request.url);
+    const name = url.searchParams.get("name");
+    const getUser = data.filter((user) => user.name.includes(name!));
+    if (getUser.length === 0) {
+      return new HttpResponse(JSON.stringify({ message: "해당 유저를 찾을 수 없습니다." }), {
+        status: 404,
+      });
+    }
+    return new HttpResponse(JSON.stringify({ users: getUser }), {
+      status: 200,
+    });
   }),
   http.get("http://localhost:4862/api/user/latest", async () => {
     data.filter((el) => Number(el.id) % 2 === 0);
@@ -1350,27 +1363,18 @@ export const userHandlers = [
     data.filter((el) => Number(el.id) % 2 !== 0);
     return new HttpResponse(JSON.stringify(data.splice(0, 5)), { status: 200 });
   }),
-  http.get(
-    "http://localhost:4862/api/user/:id",
-    async ({ params }: { params: { id: string } }) => {
-      const { id } = params;
-      const checkNums = /^\d+$/.test(id);
-      if (!checkNums) {
-        return new HttpResponse(
-          JSON.stringify({ error: "잘못된 접근입니다." }),
-          { status: 400 }
-        );
-      }
-      const user: IUserDetail | undefined = detailData.find(
-        (el) => el.sn === parseInt(id)
-      );
-      if (!user) {
-        return new HttpResponse(
-          JSON.stringify({ error: "사용자를 찾을 수 없습니다." }),
-          { status: 404 }
-        );
-      }
-      return new HttpResponse(JSON.stringify(user), { status: 200 });
+  http.get("http://localhost:4862/api/user/:id", async ({ params }: { params: { id: string } }) => {
+    const { id } = params;
+    const checkNums = /^\d+$/.test(id);
+    if (!checkNums) {
+      return new HttpResponse(JSON.stringify({ error: "잘못된 접근입니다." }), { status: 400 });
     }
-  ),
+    const user: IUserDetail | undefined = detailData.find((el) => el.sn === parseInt(id));
+    if (!user) {
+      return new HttpResponse(JSON.stringify({ error: "사용자를 찾을 수 없습니다." }), {
+        status: 404,
+      });
+    }
+    return new HttpResponse(JSON.stringify(user), { status: 200 });
+  }),
 ];

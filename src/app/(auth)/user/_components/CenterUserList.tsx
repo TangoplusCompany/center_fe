@@ -14,7 +14,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown } from "lucide-react";
-
+import { USER_INFORMATION, USER_STATUS } from "@/utils/constants/userStatus";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -30,25 +30,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
 import { UserStatus } from "./CenterUserStatus";
 import { UserAcessStatus, IUserData } from "@/types/user";
 import Link from "next/link";
-
-const statusTransKorean = {
-  pending: "승인대기",
-  request: "승인요청",
-  approved: "승인됨",
-  rejected: "미승인",
-};
-
-const headerTransKorean = {
-  name: "이름",
-  status: "상태",
-  phone: "전화번호",
-  request: "승인 요청",
-  id: "",
-};
 
 export const columns: ColumnDef<IUserData>[] = [
   {
@@ -64,7 +48,7 @@ export const columns: ColumnDef<IUserData>[] = [
         variant={row.getValue("status")}
         className="capitalize w-[60px] text-center font-medium"
       >
-        {statusTransKorean[row.getValue("status") as UserAcessStatus]}
+        {USER_STATUS[row.getValue("status") as UserAcessStatus]}
       </UserStatus>
     ),
   },
@@ -101,50 +85,12 @@ export const columns: ColumnDef<IUserData>[] = [
       return <Link href={`/user/${row.getValue("id")}`}>상세 보기</Link>;
     },
   },
-  // {
-  //   id: "actions",
-  //   enableHiding: false,
-  //   cell: ({ row }) => {
-  //     const userData = row.original;
-
-  //     return (
-  //       <DropdownMenu>
-  //         <DropdownMenuTrigger asChild>
-  //           <Button variant="ghost" className="h-8 w-8 p-0">
-  //             <span className="sr-only">메뉴 열기</span>
-  //             <MoreHorizontal />
-  //           </Button>
-  //         </DropdownMenuTrigger>
-  //         <DropdownMenuContent align="end">
-  //           <DropdownMenuLabel>관리</DropdownMenuLabel>
-  //           <DropdownMenuItem
-  //             onClick={() => navigator.clipboard.writeText(userData.id)}
-  //           >
-  //             유저 이름 복사
-  //           </DropdownMenuItem>
-  //           <DropdownMenuSeparator />
-  //           <DropdownMenuItem>상세 보기</DropdownMenuItem>
-  //           <DropdownMenuItem>승인 취소</DropdownMenuItem>
-  //         </DropdownMenuContent>
-  //       </DropdownMenu>
-  //     );
-  //   },
-  // },
 ];
 
-export function CenterUserList({
-  className,
-  users,
-}: {
-  className?: string;
-  users: IUserData[];
-}) {
+export function CenterUserList({ className, users }: { className?: string; users: IUserData[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
@@ -169,21 +115,17 @@ export function CenterUserList({
   return (
     <div className={`${className}`}>
       <div className="flex items-center justify-between py-4">
-        {/* 검색어 특정키워드가 아닌 전체적으로 검색되게 */}
-        <Input
-          placeholder="검색할 이름을 입력해주세요."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="min-w-[260px] max-w-sm flex-1"
-        />
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              VIEW <ChevronDown />
-            </Button>
-          </DropdownMenuTrigger>
+          <div className="flex items-center justify-between gap-2 w-full">
+            <Link href={{ pathname: "/user/add" }}>
+              <Button variant="outline">사용자 추가</Button>
+            </Link>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                VIEW <ChevronDown />
+              </Button>
+            </DropdownMenuTrigger>
+          </div>
           <DropdownMenuContent align="end">
             {table
               .getAllColumns()
@@ -194,15 +136,9 @@ export function CenterUserList({
                     key={column.id}
                     className="capitalize"
                     checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
+                    onCheckedChange={(value) => column.toggleVisibility(!!value)}
                   >
-                    {
-                      headerTransKorean[
-                        column.id as keyof typeof headerTransKorean
-                      ]
-                    }
+                    {USER_INFORMATION[column.id as keyof typeof USER_INFORMATION]}
                   </DropdownMenuCheckboxItem>
                 );
               })}
@@ -216,13 +152,10 @@ export function CenterUserList({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className="text-center">
                       {header.isPlaceholder
                         ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                        : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   );
                 })}
@@ -232,26 +165,17 @@ export function CenterUserList({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                    <TableCell key={cell.id} className="text-center">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={columns.length} className="h-24 text-center">
                   데이터가 존재하지 않습니다.
                 </TableCell>
               </TableRow>

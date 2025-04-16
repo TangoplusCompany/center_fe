@@ -2,13 +2,7 @@
 
 import { Bar, BarChart, XAxis } from "recharts";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
@@ -40,9 +34,7 @@ export function ToolTipChart() {
     <Card className="col-span-8 shadow-none rounded-sm">
       <CardHeader>
         <CardTitle>센터 서비스 이용 현황</CardTitle>
-        <CardDescription>
-          센터에 등록된 서비스를 사용하는 회원들의 이용 현황입니다.
-        </CardDescription>
+        <CardDescription>센터에 등록된 서비스를 사용하는 회원들의 이용 현황입니다.</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -56,23 +48,14 @@ export function ToolTipChart() {
                 return value;
               }}
             />
-            <Bar
-              dataKey="running"
-              stackId="a"
-              fill="var(--color-running)"
-              radius={[0, 0, 4, 4]}
-            />
+            <Bar dataKey="running" stackId="a" fill="var(--color-running)" radius={[0, 0, 4, 4]} />
             <Bar
               dataKey="swimming"
               stackId="a"
               fill="var(--color-swimming)"
               radius={[4, 4, 0, 0]}
             />
-            <ChartTooltip
-              content={<ChartTooltipContent />}
-              cursor={false}
-              defaultIndex={1}
-            />
+            <ChartTooltip content={<ChartTooltipContent />} cursor={false} defaultIndex={1} />
           </BarChart>
         </ChartContainer>
       </CardContent>

@@ -13,19 +13,15 @@ const MainDevice = ({ className }: { className?: string }) => {
       return await response.json();
     },
   });
+  if (isLoading) {
+    return <SkeletonDeviceCard />;
+  }
+  if (!data) {
+    return <p>데이터를 불러오는 중 오류가 발생했습니다.</p>;
+  }
   return (
     <div className={`${className}`}>
-      {isLoading ? (
-        <SkeletonDeviceCard />
-      ) : (
-        <>
-          {data.length > 0 ? (
-            <DeviceStatusCard devices={data} />
-          ) : (
-            <p>데이터가 존재하지 않습니다.</p>
-          )}
-        </>
-      )}
+      <DeviceStatusCard devices={data} />
     </div>
   );
 };
