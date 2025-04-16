@@ -38,7 +38,6 @@ export const useLogin = () => {
         accessJwt: data.access_jwt,
       });
       document.cookie = `isLogin=true; path=/; max-age=${60 * 60 * 3}`;
-      document.cookie = `refreshToken=${data.refresh_jwt}; path=/; max-age=${60 * 60 * 24 * 7}; httpOnly;`;
       router.push("/");
     },
     onError: (
