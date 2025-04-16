@@ -1,4 +1,4 @@
-import { customAuthAxios } from "@/lib/axios";
+import { customUnAuthAxios } from "@/lib/axios";
 
 export const postRegister = async ({
   email,
@@ -11,7 +11,7 @@ export const postRegister = async ({
   password: string;
   name: string;
 }) => {
-  const response = await customAuthAxios.post("/auth/register", {
+  const response = await customUnAuthAxios.post("/auth/register", {
     email,
     password,
     mobile,

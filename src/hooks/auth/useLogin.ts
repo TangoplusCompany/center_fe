@@ -25,12 +25,12 @@ interface ILoginResponse {
 
 export const useLogin = () => {
   const router = useRouter();
-  const { setAuthorization } = useAuthStore((state) => state);
+  const { setLogin } = useAuthStore((state) => state);
   return useMutation({
     mutationFn: postLogin,
     onSuccess: ({ data }: ILoginResponse) => {
       // Handle successful login, e.g., redirect to dashboard
-      setAuthorization({
+      setLogin({
         isLogin: true,
         adminName: data.admin_info.admin_name,
         adminEmail: data.admin_info.admin_email,
@@ -60,7 +60,9 @@ export const useLogin = () => {
         return;
       }
       if (error.status === 429) {
-        alert(`로그인 시도가 너무 잦습니다. ${error.data.data.delay}초 후 다시 시도해주세요.`);
+        alert(
+          `로그인 시도가 너무 잦습니다. ${error.data.data.delay}초 후 다시 시도해주세요.`,
+        );
       }
       if (error.status === 423) {
         alert("비밀번호가 틀려 계정이 잠겼습니다. 관리자에게 문의하세요.");

@@ -11,7 +11,9 @@ interface IAuthProps {
 
 interface IAuthActions {
   initAuthorization: () => void;
-  setAuthorization: (userData: IAuthProps) => void;
+  setLogin: (userData: IAuthProps) => void;
+  setAccessToken: (accessJwt: string) => void;
+  setLogout: () => void;
 }
 
 export type AuthStore = IAuthProps & IAuthActions;
@@ -30,7 +32,9 @@ export const createAuthStore = (initialState?: IAuthProps) => {
         ...DEFAULT_STATE,
         ...initialState,
         initAuthorization: () => set({ ...DEFAULT_STATE }),
-        setAuthorization: (userData: IAuthProps) => set({ ...userData }),
+        setLogin: (userData: IAuthProps) => set({ ...userData }),
+        setAccessToken: (accessJwt: string) => set({ accessJwt }),
+        setLogout: () => set({ ...DEFAULT_STATE }),
       }),
       {
         name: "login-user",

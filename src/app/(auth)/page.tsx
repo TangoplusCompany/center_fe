@@ -4,10 +4,12 @@ import MainAreaChart from "./_components/MainAreaChart";
 import MainUserDonutChart from "./_components/MainUserDonutChart";
 import { Separator } from "@/components/ui/separator";
 import MainUserTable from "./_components/MainUserTable";
+import RefreshTest from "./_components/RefreshTest";
 
 export default function Home() {
   return (
     <div className="grid grid-cols-12 gap-4">
+      <RefreshTest />
       {/* <MainDevice className="col-span-12" />
       <Separator className="my-4 col-span-12" />
       <MainAreaChart className="col-span-12 lg:col-span-8 shadow-none rounded-sm" />
