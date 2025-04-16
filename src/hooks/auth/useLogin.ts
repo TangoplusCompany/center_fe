@@ -38,6 +38,7 @@ export const useLogin = () => {
         accessJwt: data.access_jwt,
       });
       document.cookie = `isLogin=true; path=/; max-age=${60 * 60 * 3}`;
+      window.localStorage.setItem("kTonRfee_ersh", data.refresh_jwt);
       router.push("/");
     },
     onError: (
@@ -60,7 +61,9 @@ export const useLogin = () => {
         return;
       }
       if (error.status === 429) {
-        alert(`로그인 시도가 너무 잦습니다. ${error.data.data.delay}초 후 다시 시도해주세요.`);
+        alert(
+          `로그인 시도가 너무 잦습니다. ${error.data.data.delay}초 후 다시 시도해주세요.`,
+        );
       }
       if (error.status === 423) {
         alert("비밀번호가 틀려 계정이 잠겼습니다. 관리자에게 문의하세요.");
