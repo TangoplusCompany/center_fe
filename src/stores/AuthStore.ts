@@ -34,7 +34,10 @@ export const createAuthStore = (initialState?: IAuthProps) => {
         initAuthorization: () => set({ ...DEFAULT_STATE }),
         setLogin: (userData: IAuthProps) => set({ ...userData }),
         setAccessToken: (accessJwt: string) => set({ accessJwt }),
-        setLogout: () => set({ ...DEFAULT_STATE }),
+        setLogout: () => {
+          set({ ...DEFAULT_STATE });
+          sessionStorage.removeItem("login-user");
+        },
       }),
       {
         name: "login-user",
