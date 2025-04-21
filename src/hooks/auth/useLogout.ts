@@ -1,5 +1,3 @@
-
-
 import { useAuthStore } from "@/providers/AuthProvider";
 import { postLogout } from "@/services/auth/postLogout";
 import { useMutation } from "@tanstack/react-query";
