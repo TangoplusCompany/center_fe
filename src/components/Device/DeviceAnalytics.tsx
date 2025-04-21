@@ -1,7 +1,7 @@
 import React from "react";
 import { AreaChartComponent } from "../Chart/Area";
 import { ChartConfig } from "../ui/chart";
-import { useGetDeviceAnalytics } from "@/hooks/device/useGetDeviceAnalytics";
+import { useGetDeviceAnalytics } from "@/hooks/device/useDeviceAnalytics";
 
 const chartConfig = {
   kiosk: {

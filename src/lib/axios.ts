@@ -2,7 +2,7 @@ import { refreshAccessToken } from "@/services/auth/postRefreshAccessToken";
 import { createAuthStore } from "@/stores/AuthStore";
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
-const authStore = createAuthStore()
+const authStore = createAuthStore();
 
 let isRefreshing = false;
 let failedQueue: {
@@ -32,9 +32,9 @@ export const customAxios = axios.create({
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
+    Authorization: `Bearer ${authStore.getState().accessJwt}`,
   },
 });
-
 // ✅ 요청 인터셉터: 항상 최신 토큰을 헤더에 부착
 customAxios.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = authStore.getState().accessJwt;
