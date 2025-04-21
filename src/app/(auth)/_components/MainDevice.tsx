@@ -2,26 +2,30 @@
 
 import DeviceStatusCard from "@/components/Card/DeviceStatusCard";
 import SkeletonDeviceCard from "@/components/Card/SkeletonDeviceCard";
-import { useQuery } from "@tanstack/react-query";
+import { Separator } from "@/components/ui/separator";
+import { useGetDeviceStatus } from "@/hooks/device";
+import { IDeviceStatusCardProps } from "@/types/device";
 import React from "react";
 
 const MainDevice = ({ className }: { className?: string }) => {
-  const { data, isLoading } = useQuery({
-    queryKey: ["deviceStatus"],
-    queryFn: async () => {
-      const response = await fetch("/api/device/status");
-      return await response.json();
-    },
-  });
+  const { data, isLoading, error } =
+    useGetDeviceStatus<IDeviceStatusCardProps[]>();
+
   if (isLoading) {
     return <SkeletonDeviceCard />;
   }
   if (!data) {
-    return <p>데이터를 불러오는 중 오류가 발생했습니다.</p>;
+    return (
+      <p className="col-span-12">
+        센터에 등록된 기기가 존재하지 않습니다. 기기를 등록해주세요.
+      </p>
+    );
   }
+
   return (
     <div className={`${className}`}>
       <DeviceStatusCard devices={data} />
+      <Separator className="my-4 col-span-12" />
     </div>
   );
 };
