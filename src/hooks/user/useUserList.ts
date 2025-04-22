@@ -1,12 +1,11 @@
-import { customUnAuthAxios } from "@/lib/axios";
-import { IUserData } from "@/types/user";
+import { customAxios } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetUserList = ({ nowPage }: { nowPage: number }) =>
-  useQuery<IUserData[]>({
-    queryKey: ["UserMain", nowPage],
+export const useGetUserList = <T>() =>
+  useQuery<T>({
+    queryKey: ["UserMain"],
     queryFn: async () => {
-      const response = await customUnAuthAxios.get("/api/user", {});
-      return response.data;
+      const response = await customAxios.get("/members");
+      return response.data.data;
     },
   });
