@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import SkeletonBack from "./SkeletonBack";
 import SkeletonFront from "./SkeletonFront";
-import { IFilterMeasureInfo } from "@/types/user";
+import { IUserDetailMeasureInfo } from "@/types/user";
 
-const SkeletonBox = ({ data }: { data: IFilterMeasureInfo }) => {
+const SkeletonBox = ({ data }: { data: IUserDetailMeasureInfo }) => {
   const [view, setView] = useState("front");
   const [viewState, setViewState] = useState(true);
   const viewStateHandle = useCallback(() => {
