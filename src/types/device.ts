@@ -14,6 +14,13 @@ export interface IDeviceStatusCardProps {
   reg_status: string;
 }
 
+export interface IDeviceStatus {
+  status: number;
+  success: boolean;
+  message: string[];
+  data: IDeviceStatusCardProps[];
+}
+
 export interface IDeviceInfo {
   sn: number;
   device_name: string;
