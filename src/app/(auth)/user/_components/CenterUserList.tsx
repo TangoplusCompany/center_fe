@@ -31,7 +31,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { UserStatus } from "./CenterUserStatus";
-import { UserAcessStatus, IUserData } from "@/types/user";
+import { IUserData } from "@/types/user";
 import Link from "next/link";
 
 export const columns: ColumnDef<IUserData>[] = [
@@ -39,18 +39,6 @@ export const columns: ColumnDef<IUserData>[] = [
     accessorKey: "name",
     header: "이름",
     cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
-  },
-  {
-    accessorKey: "status",
-    header: "상태",
-    cell: ({ row }) => (
-      <UserStatus
-        variant={row.getValue("status")}
-        className="capitalize w-[60px] text-center font-medium"
-      >
-        {USER_STATUS[row.getValue("status") as UserAcessStatus]}
-      </UserStatus>
-    ),
   },
   {
     accessorKey: "phone",
@@ -87,10 +75,19 @@ export const columns: ColumnDef<IUserData>[] = [
   },
 ];
 
-export function CenterUserList({ className, users }: { className?: string; users: IUserData[] }) {
+export function CenterUserList({
+  className,
+  users,
+}: {
+  className?: string;
+  users: IUserData[];
+}) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
@@ -136,9 +133,15 @@ export function CenterUserList({ className, users }: { className?: string; users
                     key={column.id}
                     className="capitalize"
                     checked={column.getIsVisible()}
-                    onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
                   >
-                    {USER_INFORMATION[column.id as keyof typeof USER_INFORMATION]}
+                    {
+                      USER_INFORMATION[
+                        column.id as keyof typeof USER_INFORMATION
+                      ]
+                    }
                   </DropdownMenuCheckboxItem>
                 );
               })}
@@ -155,7 +158,10 @@ export function CenterUserList({ className, users }: { className?: string; users
                     <TableHead key={header.id} className="text-center">
                       {header.isPlaceholder
                         ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
                     </TableHead>
                   );
                 })}
@@ -165,17 +171,26 @@ export function CenterUserList({ className, users }: { className?: string; users
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className="text-center">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
                   데이터가 존재하지 않습니다.
                 </TableCell>
               </TableRow>

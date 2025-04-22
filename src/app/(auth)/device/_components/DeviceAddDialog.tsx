@@ -43,13 +43,12 @@ const DeviceAddDialog = () => {
 };
 
 const DeviceAddContainer = ({ deviceInfo }: { deviceInfo: IDeviceSearch }) => {
-  const mutateDeviceAdd = useDeviceAdd();
   const { refetch } = useRefetchContext();
+  const mutateDeviceAdd = useDeviceAdd(refetch);
   const handlePostDeviceAdd = (deviceSn: number) => {
     mutateDeviceAdd.mutate({
       deviceSn,
     });
-    refetch();
   };
   return (
     <div className="w-full flex items-start justify-between gap-2">
