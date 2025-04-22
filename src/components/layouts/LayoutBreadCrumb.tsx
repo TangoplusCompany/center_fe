@@ -49,7 +49,7 @@ const Menus: IMenu[] = [
   },
 ];
 
-export function LayoutBreadcCrumb() {
+export function LayoutBreadCrumb() {
   const pathName = usePathname();
 
   return (
