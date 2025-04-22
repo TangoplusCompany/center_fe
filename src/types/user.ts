@@ -1,11 +1,13 @@
 export interface IUserData {
-  id: string;
+  admin_sn: number;
+  center_sn: number;
+  user_sn: number;
+  user_uuid: string;
+  mobile: string;
   name: string;
-  phone: string;
-  score: number | string;
   email: string;
-  status: UserAcessStatus | string;
-  request: boolean;
+  created_at: string;
+  consent: boolean;
 }
 
 export interface IUserDetail {
@@ -25,7 +27,10 @@ export interface IUserDetail {
   };
 }
 
-export interface IUserDetailMeasureInfo extends IMeasureUserRisk, IMeasureUserPain {
+export interface IUserDetailMeasureInfo
+  extends IMeasureUserRisk,
+    IMeasureUserPain {
+  risk_result_ment: string; // 위험도 결과 멘트
   device_sn: number | string; // 장치 sn
   mobile_temp: string;
   elapsed_time: number | string; // 측정 총 시간 (sec, 소수점 세번째 자리까지)
@@ -370,4 +375,4 @@ export interface IUserDetailStatic {
   front_elbow_align_distance_center_mid_finger_right: number;
 }
 
-export type UserAcessStatus = "pending" | "request" | "approved" | "rejected";
+export type UserAccessStatus = "pending" | "request" | "approved" | "rejected";
