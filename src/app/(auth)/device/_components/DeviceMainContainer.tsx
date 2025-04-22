@@ -4,7 +4,7 @@ import React, { createContext, useContext } from "react";
 import { useGetDeviceStatus } from "@/hooks/device";
 import SkeletonDeviceCard from "@/components/Card/SkeletonDeviceCard";
 import { IDeviceStatusCardProps } from "@/types/device";
-import { DeviceAnalytics, DeviceStatusItems } from "@/components/Device";
+import { DeviceStatusItems } from "@/components/Device";
 import DeviceAddDialog from "./DeviceAddDialog";
 
 interface IDeviceStatus {
@@ -36,6 +36,9 @@ export const DeviceMainContainer = () => {
 
   if (isLoading) return <SkeletonDeviceCard />;
   if (!deviceStatus) {
+    return <p>잘못된 요청입니다. 잠시 후 다시 시도바랍니다.</p>;
+  }
+  if (!deviceStatus.data || deviceStatus.data.length === 0) {
     return (
       <RefetchContext.Provider value={{ refetch }}>
         <div className="col-span-12 flex items-start justify-center flex-col gap-4">
