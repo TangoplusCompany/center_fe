@@ -2,8 +2,8 @@ export interface IDeviceStatusCardProps {
   sn: number;
   serial_number: string;
   install_location: string;
-  install_address: string;
-  install_address_detail: string;
+  install_address_1: string;
+  install_address_2: string;
   install_zipcode: string;
   device_name: string;
   reg_date: Date;
@@ -12,4 +12,29 @@ export interface IDeviceStatusCardProps {
   uploaded: string;
   used: string;
   reg_status: string;
+}
+
+export interface IDeviceInfo {
+  sn: number;
+  device_name: string;
+  install_zipcode: string;
+  install_address_1: string;
+  install_address_2: string;
+  install_location: string;
+}
+
+export interface IDeviceSearch {
+  status: number;
+  success: boolean;
+  message: string[];
+  data: {
+    sn: number;
+    serial_number: string;
+    install_location: string;
+    install_address_1: string;
+    install_address_2: string;
+    install_zipcode: string;
+    device_name: string;
+    reg_status: string;
+  };
 }

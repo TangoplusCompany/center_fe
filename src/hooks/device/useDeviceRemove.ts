@@ -1,13 +1,17 @@
-import { patchDeviceInfo } from "@/services/device/patchDeviceInfo";
+import { deleteDeviceCenter } from "@/services/device/deleteDeviceCenter";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
-export const useDeviceUpdate = () => {
+export const useDeviceRemove = (
+  refetch: () => void,
+  setOpen: (value: React.SetStateAction<boolean>) => void,
+) => {
   return useMutation({
-    mutationFn: patchDeviceInfo,
-    onSuccess: (data) => {
-      // Handle successful login, e.g., redirect to dashboard
-      alert("기기 정보가 수정되었습니다.");
+    mutationFn: deleteDeviceCenter,
+    onSuccess: () => {
+      console.log("Device Remove successfully");
+      refetch();
+      setOpen(false);
     },
     onError: (
       data: AxiosError<{

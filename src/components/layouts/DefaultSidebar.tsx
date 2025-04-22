@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
   Sidebar,
@@ -21,6 +23,8 @@ import {
   GalleryVerticalEnd,
 } from "lucide-react";
 import Link from "next/link";
+import { Button } from "../ui/button";
+import { useLogout } from "@/hooks/auth/useLogout";
 
 const dashboard = [
   {
@@ -51,6 +55,10 @@ const dashboard = [
 ];
 
 export default function DefaultSidebar() {
+  const logoutMutation = useLogout();
+  const handleLogout = () => {
+    logoutMutation.mutate();
+  };
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="bg-white dark:bg-black">
@@ -89,10 +97,15 @@ export default function DefaultSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <Link href="/login">
+              <Button
+                type="button"
+                onClick={handleLogout}
+                variant="ghost"
+                className="inline-flex justify-start w-full"
+              >
                 <LogOutIcon className="lg:!w-5 lg:!h-5" />
                 <p>로그아웃</p>
-              </Link>
+              </Button>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

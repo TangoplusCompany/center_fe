@@ -1,13 +1,13 @@
-import { patchDeviceInfo } from "@/services/device/patchDeviceInfo";
+import { postDeviceAdd } from "@/services/device/postDeviceAdd";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
-export const useDeviceUpdate = () => {
+export const useDeviceAdd = () => {
   return useMutation({
-    mutationFn: patchDeviceInfo,
-    onSuccess: (data) => {
+    mutationFn: postDeviceAdd,
+    onSuccess: () => {
       // Handle successful login, e.g., redirect to dashboard
-      alert("기기 정보가 수정되었습니다.");
+      console.log("Device added successfully");
     },
     onError: (
       data: AxiosError<{

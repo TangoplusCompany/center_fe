@@ -1,7 +1,7 @@
 "use client";
 
-import { useGetDeviceDetail } from "@/hooks/device";
-import React, { useEffect, useState } from "react";
+import { useDeviceUpdate, useGetDeviceDetail } from "@/hooks/device";
+import React, { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,59 +10,76 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
+interface IDeviceDetail {
+  success: boolean;
+  status: number;
+  message: string[];
+  data: IDeviceStatusCardProps;
+}
+
 /**
  * DeviceDetailContainer
  * @sn {string} DB PrimaryKey
  * @device_name {string} 기기 이름
- * @reg_date {string} 등록일
- * @modify_date {string} 수정일
  * @install_zipcode {string} 설치 우편번호
- * @install_address {string} 설치 주소
- * @install_detail_address {string} 설치 상세 주소
+ * @install_address_1 {string} 설치 주소
+ * @install_address_2 {string} 설치 상세 주소
  * @install_location {string} 설치 기업
  * @serial_number {string} 기기 시리얼 번호
- * @used {string} 사용 여부
  */
-
 export const DeviceDetailContainer = ({ sn }: { sn: number }) => {
-  const { data, isLoading } = useGetDeviceDetail<IDeviceStatusCardProps>(sn);
+  const { data, isLoading, error } = useGetDeviceDetail<IDeviceDetail>(sn);
   const [isEditing, setIsEditing] = useState(false);
-  const [deviceData, setDeviceData] = useState<IDeviceStatusCardProps>();
+
+  const mutationDeviceUpdate = useDeviceUpdate();
+
   const deviceDetailSchema = z.object({
-    device_name: z.string(),
-    install_address: z.string(),
-    install_address_detail: z.string(),
-    install_location: z.string(),
-    used: z.string(),
+    device_name: z.string().min(1, {
+      message: "기기 이름을 입력해주세요.",
+    }),
+    install_address_1: z.string(),
+    install_address_2: z.string(),
+    install_location: z.string().min(1, {
+      message: "기기 설치 장소를 입력해주세요.",
+    }),
   });
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(deviceDetailSchema),
   });
-  if (!data) return <p></p>;
-  if (isLoading) return <p>Loading...</p>;
-
   const handleEdit = () => {
     if (!isEditing) return setIsEditing(true);
     else {
-      setDeviceData(data);
+      reset();
       setIsEditing(false);
       return;
     }
   };
-
   const updateDeviceDetail = handleSubmit(async (data) => {
-    // const result = useDeviceUpdate()
+    setIsEditing(false);
+    const deviceInfo = {
+      sn: sn,
+      device_name: data.device_name,
+      install_zipcode: "",
+      install_address_1: data.install_address_1,
+      install_address_2: data.install_address_2,
+      install_location: data.install_location,
+    };
+    mutationDeviceUpdate.mutate(deviceInfo);
   });
-  useEffect(() => {
-    setDeviceData(data);
-  }, [data]);
+  if (!data) return <p></p>;
+  if (isLoading) return <p>Loading...</p>;
+
   return (
-    <form onSubmit={updateDeviceDetail} className="flex flex-col col-span-12 gap-4 relative">
+    <form
+      onSubmit={updateDeviceDetail}
+      className="flex flex-col col-span-12 gap-4 relative"
+    >
       <div className="relative w-full">
         <legend className="text-2xl col-span-12">센터 기기 상세 조회</legend>
         <span className="">{}</span>
@@ -70,43 +87,69 @@ export const DeviceDetailContainer = ({ sn }: { sn: number }) => {
       <Label className="w-full flex flex-col gap-1" htmlFor="device_name">
         <h3 className="text-xl">기기 이름</h3>
         <Input
-          {...register("name")}
-          defaultValue={data.device_name}
+          {...register("device_name")}
+          defaultValue={data.data.device_name}
           className="w-full"
           id="device_name"
           disabled={!isEditing}
         />
+        {errors.device_name && (
+          <span className="text-red-500 text-sm">
+            {errors.device_name.message as string}
+          </span>
+        )}
       </Label>
       <Label className="w-full flex flex-col gap-1" htmlFor="install_location">
         <h3 className="text-xl">기기 설치 장소</h3>
         <Input
           {...register("install_location")}
-          defaultValue={data.install_location}
+          defaultValue={data.data.install_location}
           className="w-full"
           id="install_location"
           disabled={!isEditing}
         />
+        {errors.install_location && (
+          <span className="text-red-500 text-sm">
+            {errors.install_location.message as string}
+          </span>
+        )}
       </Label>
       <div className="flex gap-2 items-end">
-        <Label className="w-full flex flex-col gap-1" htmlFor="install_address">
+        <Label
+          className="w-full flex flex-col gap-1"
+          htmlFor="install_address_1"
+        >
           <h3 className="text-xl">기기 설치 주소</h3>
           <Input
-            {...register("install_address")}
-            defaultValue={data.install_address}
+            {...register("install_address_1")}
+            defaultValue={data.data.install_address_1}
             className="w-full"
-            id="install_address"
+            id="install_address_1"
             disabled={!isEditing}
           />
+          {errors.install_address_1 && (
+            <span className="text-red-500 text-sm">
+              {errors.install_address_1.message as string}
+            </span>
+          )}
         </Label>
-        <Label className="w-full flex flex-col gap-1" htmlFor="install_address_detail">
+        <Label
+          className="w-full flex flex-col gap-1"
+          htmlFor="install_address_2"
+        >
           <h3 className="text-xl">기기 설치 상세 주소</h3>
           <Input
-            {...register("install_address_detail")}
-            defaultValue={data.install_address_detail}
+            {...register("install_address_2")}
+            defaultValue={data.data.install_address_2}
             className="w-full"
-            id="install_address_detail"
+            id="install_address_2"
             disabled={!isEditing}
           />
+          {errors.install_address_2 && (
+            <span className="text-red-500 text-sm">
+              {errors.install_address_2.message as string}
+            </span>
+          )}
         </Label>
       </div>
       <div className="flex items-center justify-center gap-3 mt-10">

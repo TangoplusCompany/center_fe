@@ -63,6 +63,7 @@ export const useLogin = () => {
         alert(
           `로그인 시도가 너무 잦습니다. ${error.data.data.delay}초 후 다시 시도해주세요.`,
         );
+        return;
       }
       if (error.status === 423) {
         alert("비밀번호가 틀려 계정이 잠겼습니다. 관리자에게 문의하세요.");
