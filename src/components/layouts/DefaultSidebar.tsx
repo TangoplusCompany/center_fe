@@ -33,6 +33,11 @@ const dashboard = [
     icon: Home,
   },
   {
+    title: "측정 관리",
+    url: "/measure",
+    icon: Building2,
+  },
+  {
     title: "사용자 관리",
     url: "/user",
     icon: SquareUserIcon,
