@@ -3,16 +3,9 @@
 import React, { createContext, useContext } from "react";
 import { useGetDeviceStatus } from "@/hooks/device";
 import SkeletonDeviceCard from "@/components/Card/SkeletonDeviceCard";
-import { IDeviceStatusCardProps } from "@/types/device";
+import { IDeviceStatus } from "@/types/device";
 import { DeviceStatusItems } from "@/components/Device";
 import DeviceAddDialog from "./DeviceAddDialog";
-
-interface IDeviceStatus {
-  status: number;
-  success: boolean;
-  message: string[];
-  data: IDeviceStatusCardProps[];
-}
 
 type RefetchContextType = {
   refetch: () => void;
