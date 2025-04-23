@@ -1,30 +1,81 @@
+import { IMeasureList } from "./measure";
+
+export interface IUnregisterUserResponse {
+  status: number;
+  success: boolean;
+  message: string[];
+  data: {
+    last_page: number;
+    limit: number;
+    page: number;
+    total: number;
+    users: IUnregisterUserData[];
+  };
+}
+
+export interface IUnregisterUserData {
+  center_sn: number;
+  device_sn: number;
+  email: string;
+  last_measured: string;
+  mobile: string;
+  t_score: number;
+  reg_date: string;
+  user_name: string;
+  user_uuid: string;
+}
+
+export interface IUserResponse {
+  status: number;
+  success: boolean;
+  message: string[];
+  data: IUserListData;
+}
+
+export interface IUserListData {
+  last_page: number;
+  limit: number;
+  page: number;
+  total: number;
+  users: IUserData[];
+}
+
 export interface IUserData {
   admin_sn: number;
   center_sn: number;
   user_sn: number;
   user_uuid: string;
   mobile: string;
-  name: string;
+  user_name: string;
   email: string;
   created_at: string;
   consent: boolean;
+}
+
+export interface IUserMeasureList {
+  page: number;
+  total: number;
+  limit: number;
+  last_page: number;
+  measurements: IMeasureList[];
 }
 
 export interface IUserDetail {
   isLogin: boolean;
   sn: number | string;
   userName: string;
-  userData: {
-    count: number | string;
-    measure_info: IUserDetailMeasureInfo;
-    dynamic: IUserDetailDynamic;
-    static_1: IUserDetailStatic;
-    static_2: IUserDetailStatic;
-    static_3: IUserDetailStatic;
-    static_4: IUserDetailStatic;
-    static_5: IUserDetailStatic;
-    static_6: IUserDetailStatic;
-  };
+  userData: { count: number | string } & IUserMeasurement;
+}
+
+export interface IUserMeasurement {
+  dynamic: IUserDetailDynamic;
+  measure_info: IUserDetailMeasureInfo;
+  static_1: IUserDetailStatic;
+  static_2: IUserDetailStatic;
+  static_3: IUserDetailStatic;
+  static_4: IUserDetailStatic;
+  static_5: IUserDetailStatic;
+  static_6: IUserDetailStatic;
 }
 
 export interface IUserDetailMeasureInfo
