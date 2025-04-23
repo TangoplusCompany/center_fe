@@ -12,5 +12,6 @@ export const useMeasureDetail = <T>(sn: number, user_uuid: string) => {
       });
       return response.data.data;
     },
+    enabled: sn !== undefined && user_uuid !== undefined
   });
 };
