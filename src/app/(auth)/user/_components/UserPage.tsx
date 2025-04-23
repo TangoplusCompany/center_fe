@@ -1,15 +1,23 @@
 "use client";
 
 import React from "react";
-import { CenterUserList } from "./CenterUserList";
 import { useGetUserList } from "@/hooks/user";
-import { IUserData } from "@/types/user";
+import { IUserListData } from "@/types/user";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { UserList } from "@/components/User/UserList";
+import { useSearchParams } from "next/navigation";
+import CustomPagination from "@/components/Custom/Pagination";
 
 const UserPage = () => {
-  const [nowPage, setNowPage] = React.useState(1);
-  const { data, isLoading, isError } = useGetUserList<IUserData[]>();
+  const params = useSearchParams();
+  const page = parseInt(params.get("page") || "1");
+  const limit = parseInt(params.get("limit") || "20");
+  const {
+    data: userResponseData,
+    isLoading,
+    isError,
+  } = useGetUserList<IUserListData>({ page, limit });
   if (isLoading) {
     return (
       <div className="col-span-12">
@@ -24,22 +32,32 @@ const UserPage = () => {
       </div>
     );
   }
-  if (!data || data.length === 0)
+  if (!userResponseData || userResponseData.users.length === 0) {
     return (
       <div className="col-span-12 flex justify-between">
         <p>사용자가 존재하지 않습니다. 신규 사용자를 추가해주세요.</p>
         <Button>
-          <Link href={`/user/add`}>추가하기</Link>
+          <Link href={`/user/add`}>신규사용자 등록</Link>
         </Button>
       </div>
     );
+  }
+
   return (
-    <>
-      <CenterUserList
-        className="col-span-12 overflow-scroll px-1"
-        users={data}
+    <div className="col-span-12 flex flex-col gap-5">
+      <div className="flex justify-end">
+        <Button variant={"outline"}>
+          <Link href={`/user/add`}>신규사용자 등록</Link>
+        </Button>
+      </div>
+      <UserList users={userResponseData.users} />
+      <CustomPagination
+        total={userResponseData.total}
+        page={userResponseData.page}
+        last_page={userResponseData.last_page}
+        limit={userResponseData.limit}
       />
-    </>
+    </div>
   );
 };
 

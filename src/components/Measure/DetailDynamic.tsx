@@ -1,8 +1,9 @@
 import { IUserDetailDynamic } from "@/types/user";
 import React, { useEffect, useRef, useState } from "react";
 import ResultGraph from "./ResultGraph";
-import { useMeasureJson } from "@/hooks/user";
+
 import { useDrawCanvas } from "@/hooks/utils";
+import { useMeasureDynamicJson } from "@/hooks/measure/useMeasureDynamicJson";
 
 const MeasureDetailDynamic = ({
   dynamic,
@@ -20,7 +21,11 @@ const MeasureDetailDynamic = ({
   const [scaleHeight, setScaleHeight] = useState(1);
   const canvasWhiteRef = useRef<HTMLCanvasElement | null>(null);
   const canvasRedRef = useRef<HTMLCanvasElement | null>(null);
-  const { data, isLoading, isError } = useMeasureJson(dynamic.measure_server_json_name);
+  const {
+    data: measureJson,
+    isLoading,
+    isError,
+  } = useMeasureDynamicJson(dynamic.measure_server_json_name);
   const clearAndDraw = useDrawCanvas;
   const [frame, setFrame] = useState(0);
   const frameLoopActive = useRef(false);
@@ -44,7 +49,9 @@ const MeasureDetailDynamic = ({
     observer.observe(video);
 
     // 초기에 강제 측정
-    handleResize([{ contentRect: video.getBoundingClientRect() } as ResizeObserverEntry]);
+    handleResize([
+      { contentRect: video.getBoundingClientRect() } as ResizeObserverEntry,
+    ]);
 
     const startFrameTracking = () => {
       const video = videoRef.current;
@@ -107,12 +114,12 @@ const MeasureDetailDynamic = ({
       video.removeEventListener("seeked", handleSeeked);
       video.removeEventListener("loadedmetadata", handleSeeked);
     };
-  }, [data]);
+  }, [measureJson]);
 
   useEffect(() => {
-    if (!data || videoRef.current === null) return;
-    if (data[frame] === undefined) return;
-    if (data[frame].pose_landmark === undefined) return;
+    if (!measureJson || videoRef.current === null) return;
+    if (measureJson[frame] === undefined) return;
+    if (measureJson[frame].pose_landmark === undefined) return;
     const canvasWhite = canvasWhiteRef.current as HTMLCanvasElement;
     const canvasRed = canvasRedRef.current as HTMLCanvasElement;
 
@@ -123,205 +130,205 @@ const MeasureDetailDynamic = ({
       clearAndDraw(contextWhite, canvasWhite, "#FFF", () => {
         contextWhite.beginPath();
         contextWhite.moveTo(
-          data[frame].pose_landmark[7].sx * scaleWidth,
-          data[frame].pose_landmark[7].sy * scaleHeight,
+          measureJson[frame].pose_landmark[7].sx * scaleWidth,
+          measureJson[frame].pose_landmark[7].sy * scaleHeight,
         );
         contextWhite.lineTo(
-          data[frame].pose_landmark[8].sx * scaleWidth,
-          data[frame].pose_landmark[8].sy * scaleHeight,
+          measureJson[frame].pose_landmark[8].sx * scaleWidth,
+          measureJson[frame].pose_landmark[8].sy * scaleHeight,
         );
         contextWhite.stroke();
 
         contextWhite.beginPath();
         contextWhite.moveTo(
-          data[frame].pose_landmark[16].sx * scaleWidth,
-          data[frame].pose_landmark[16].sy * scaleHeight,
+          measureJson[frame].pose_landmark[16].sx * scaleWidth,
+          measureJson[frame].pose_landmark[16].sy * scaleHeight,
         );
         contextWhite.lineTo(
-          data[frame].pose_landmark[18].sx * scaleWidth,
-          data[frame].pose_landmark[18].sy * scaleHeight,
+          measureJson[frame].pose_landmark[18].sx * scaleWidth,
+          measureJson[frame].pose_landmark[18].sy * scaleHeight,
         );
         contextWhite.stroke();
 
         contextWhite.beginPath();
         contextWhite.moveTo(
-          data[frame].pose_landmark[16].sx * scaleWidth,
-          data[frame].pose_landmark[16].sy * scaleHeight,
+          measureJson[frame].pose_landmark[16].sx * scaleWidth,
+          measureJson[frame].pose_landmark[16].sy * scaleHeight,
         );
         contextWhite.lineTo(
-          data[frame].pose_landmark[20].sx * scaleWidth,
-          data[frame].pose_landmark[20].sy * scaleHeight,
+          measureJson[frame].pose_landmark[20].sx * scaleWidth,
+          measureJson[frame].pose_landmark[20].sy * scaleHeight,
         );
         contextWhite.stroke();
 
         contextWhite.beginPath();
         contextWhite.moveTo(
-          data[frame].pose_landmark[16].sx * scaleWidth,
-          data[frame].pose_landmark[16].sy * scaleHeight,
+          measureJson[frame].pose_landmark[16].sx * scaleWidth,
+          measureJson[frame].pose_landmark[16].sy * scaleHeight,
         );
         contextWhite.lineTo(
-          data[frame].pose_landmark[22].sx * scaleWidth,
-          data[frame].pose_landmark[22].sy * scaleHeight,
+          measureJson[frame].pose_landmark[22].sx * scaleWidth,
+          measureJson[frame].pose_landmark[22].sy * scaleHeight,
         );
         contextWhite.stroke();
 
         contextWhite.beginPath();
         contextWhite.moveTo(
-          data[frame].pose_landmark[15].sx * scaleWidth,
-          data[frame].pose_landmark[15].sy * scaleHeight,
+          measureJson[frame].pose_landmark[15].sx * scaleWidth,
+          measureJson[frame].pose_landmark[15].sy * scaleHeight,
         );
         contextWhite.lineTo(
-          data[frame].pose_landmark[19].sx * scaleWidth,
-          data[frame].pose_landmark[19].sy * scaleHeight,
+          measureJson[frame].pose_landmark[19].sx * scaleWidth,
+          measureJson[frame].pose_landmark[19].sy * scaleHeight,
         );
         contextWhite.stroke();
 
         contextWhite.beginPath();
         contextWhite.moveTo(
-          data[frame].pose_landmark[15].sx * scaleWidth,
-          data[frame].pose_landmark[15].sy * scaleHeight,
+          measureJson[frame].pose_landmark[15].sx * scaleWidth,
+          measureJson[frame].pose_landmark[15].sy * scaleHeight,
         );
         contextWhite.lineTo(
-          data[frame].pose_landmark[21].sx * scaleWidth,
-          data[frame].pose_landmark[21].sy * scaleHeight,
+          measureJson[frame].pose_landmark[21].sx * scaleWidth,
+          measureJson[frame].pose_landmark[21].sy * scaleHeight,
         );
         contextWhite.stroke();
 
         contextWhite.beginPath();
         contextWhite.moveTo(
-          data[frame].pose_landmark[15].sx * scaleWidth,
-          data[frame].pose_landmark[15].sy * scaleHeight,
+          measureJson[frame].pose_landmark[15].sx * scaleWidth,
+          measureJson[frame].pose_landmark[15].sy * scaleHeight,
         );
         contextWhite.lineTo(
-          data[frame].pose_landmark[17].sx * scaleWidth,
-          data[frame].pose_landmark[17].sy * scaleHeight,
+          measureJson[frame].pose_landmark[17].sx * scaleWidth,
+          measureJson[frame].pose_landmark[17].sy * scaleHeight,
         );
         contextWhite.stroke();
 
         contextWhite.beginPath();
         contextWhite.moveTo(
-          data[frame].pose_landmark[11].sx * scaleWidth,
-          data[frame].pose_landmark[11].sy * scaleHeight,
+          measureJson[frame].pose_landmark[11].sx * scaleWidth,
+          measureJson[frame].pose_landmark[11].sy * scaleHeight,
         );
         contextWhite.lineTo(
-          data[frame].pose_landmark[23].sx * scaleWidth,
-          data[frame].pose_landmark[23].sy * scaleHeight,
+          measureJson[frame].pose_landmark[23].sx * scaleWidth,
+          measureJson[frame].pose_landmark[23].sy * scaleHeight,
         );
         contextWhite.lineTo(
-          data[frame].pose_landmark[24].sx * scaleWidth,
-          data[frame].pose_landmark[24].sy * scaleHeight,
+          measureJson[frame].pose_landmark[24].sx * scaleWidth,
+          measureJson[frame].pose_landmark[24].sy * scaleHeight,
         );
         contextWhite.lineTo(
-          data[frame].pose_landmark[12].sx * scaleWidth,
-          data[frame].pose_landmark[12].sy * scaleHeight,
+          measureJson[frame].pose_landmark[12].sx * scaleWidth,
+          measureJson[frame].pose_landmark[12].sy * scaleHeight,
         );
         contextWhite.lineTo(
-          data[frame].pose_landmark[11].sx * scaleWidth,
-          data[frame].pose_landmark[11].sy * scaleHeight,
+          measureJson[frame].pose_landmark[11].sx * scaleWidth,
+          measureJson[frame].pose_landmark[11].sy * scaleHeight,
         );
         contextWhite.stroke();
 
         contextWhite.beginPath();
         contextWhite.moveTo(
-          data[frame].pose_landmark[11].sx * scaleWidth,
-          data[frame].pose_landmark[11].sy * scaleHeight,
+          measureJson[frame].pose_landmark[11].sx * scaleWidth,
+          measureJson[frame].pose_landmark[11].sy * scaleHeight,
         );
         contextWhite.lineTo(
-          data[frame].pose_landmark[13].sx * scaleWidth,
-          data[frame].pose_landmark[13].sy * scaleHeight,
+          measureJson[frame].pose_landmark[13].sx * scaleWidth,
+          measureJson[frame].pose_landmark[13].sy * scaleHeight,
         );
         contextWhite.lineTo(
-          data[frame].pose_landmark[15].sx * scaleWidth,
-          data[frame].pose_landmark[15].sy * scaleHeight,
+          measureJson[frame].pose_landmark[15].sx * scaleWidth,
+          measureJson[frame].pose_landmark[15].sy * scaleHeight,
         );
         contextWhite.stroke();
 
         contextWhite.beginPath();
         contextWhite.moveTo(
-          data[frame].pose_landmark[12].sx * scaleWidth,
-          data[frame].pose_landmark[12].sy * scaleHeight,
+          measureJson[frame].pose_landmark[12].sx * scaleWidth,
+          measureJson[frame].pose_landmark[12].sy * scaleHeight,
         );
         contextWhite.lineTo(
-          data[frame].pose_landmark[14].sx * scaleWidth,
-          data[frame].pose_landmark[14].sy * scaleHeight,
+          measureJson[frame].pose_landmark[14].sx * scaleWidth,
+          measureJson[frame].pose_landmark[14].sy * scaleHeight,
         );
         contextWhite.lineTo(
-          data[frame].pose_landmark[16].sx * scaleWidth,
-          data[frame].pose_landmark[16].sy * scaleHeight,
+          measureJson[frame].pose_landmark[16].sx * scaleWidth,
+          measureJson[frame].pose_landmark[16].sy * scaleHeight,
         );
         contextWhite.stroke();
 
         contextWhite.beginPath();
         contextWhite.moveTo(
-          data[frame].pose_landmark[23].sx * scaleWidth,
-          data[frame].pose_landmark[23].sy * scaleHeight,
+          measureJson[frame].pose_landmark[23].sx * scaleWidth,
+          measureJson[frame].pose_landmark[23].sy * scaleHeight,
         );
         contextWhite.lineTo(
-          data[frame].pose_landmark[25].sx * scaleWidth,
-          data[frame].pose_landmark[25].sy * scaleHeight,
+          measureJson[frame].pose_landmark[25].sx * scaleWidth,
+          measureJson[frame].pose_landmark[25].sy * scaleHeight,
         );
         contextWhite.lineTo(
-          data[frame].pose_landmark[27].sx * scaleWidth,
-          data[frame].pose_landmark[27].sy * scaleHeight,
+          measureJson[frame].pose_landmark[27].sx * scaleWidth,
+          measureJson[frame].pose_landmark[27].sy * scaleHeight,
         );
         contextWhite.stroke();
 
         contextWhite.beginPath();
         contextWhite.moveTo(
-          data[frame].pose_landmark[31].sx * scaleWidth,
-          data[frame].pose_landmark[31].sy * scaleHeight,
+          measureJson[frame].pose_landmark[31].sx * scaleWidth,
+          measureJson[frame].pose_landmark[31].sy * scaleHeight,
         );
         contextWhite.lineTo(
-          data[frame].pose_landmark[27].sx * scaleWidth,
-          data[frame].pose_landmark[27].sy * scaleHeight,
+          measureJson[frame].pose_landmark[27].sx * scaleWidth,
+          measureJson[frame].pose_landmark[27].sy * scaleHeight,
         );
         contextWhite.stroke();
 
         contextWhite.beginPath();
         contextWhite.moveTo(
-          data[frame].pose_landmark[29].sx * scaleWidth,
-          data[frame].pose_landmark[29].sy * scaleHeight,
+          measureJson[frame].pose_landmark[29].sx * scaleWidth,
+          measureJson[frame].pose_landmark[29].sy * scaleHeight,
         );
         contextWhite.lineTo(
-          data[frame].pose_landmark[27].sx * scaleWidth,
-          data[frame].pose_landmark[27].sy * scaleHeight,
+          measureJson[frame].pose_landmark[27].sx * scaleWidth,
+          measureJson[frame].pose_landmark[27].sy * scaleHeight,
         );
         contextWhite.stroke();
 
         contextWhite.beginPath();
         contextWhite.moveTo(
-          data[frame].pose_landmark[24].sx * scaleWidth,
-          data[frame].pose_landmark[24].sy * scaleHeight,
+          measureJson[frame].pose_landmark[24].sx * scaleWidth,
+          measureJson[frame].pose_landmark[24].sy * scaleHeight,
         );
         contextWhite.lineTo(
-          data[frame].pose_landmark[26].sx * scaleWidth,
-          data[frame].pose_landmark[26].sy * scaleHeight,
+          measureJson[frame].pose_landmark[26].sx * scaleWidth,
+          measureJson[frame].pose_landmark[26].sy * scaleHeight,
         );
         contextWhite.lineTo(
-          data[frame].pose_landmark[28].sx * scaleWidth,
-          data[frame].pose_landmark[28].sy * scaleHeight,
+          measureJson[frame].pose_landmark[28].sx * scaleWidth,
+          measureJson[frame].pose_landmark[28].sy * scaleHeight,
         );
         contextWhite.stroke();
 
         contextWhite.beginPath();
         contextWhite.moveTo(
-          data[frame].pose_landmark[30].sx * scaleWidth,
-          data[frame].pose_landmark[30].sy * scaleHeight,
+          measureJson[frame].pose_landmark[30].sx * scaleWidth,
+          measureJson[frame].pose_landmark[30].sy * scaleHeight,
         );
         contextWhite.lineTo(
-          data[frame].pose_landmark[28].sx * scaleWidth,
-          data[frame].pose_landmark[28].sy * scaleHeight,
+          measureJson[frame].pose_landmark[28].sx * scaleWidth,
+          measureJson[frame].pose_landmark[28].sy * scaleHeight,
         );
         contextWhite.stroke();
 
         contextWhite.beginPath();
         contextWhite.moveTo(
-          data[frame].pose_landmark[28].sx * scaleWidth,
-          data[frame].pose_landmark[28].sy * scaleHeight,
+          measureJson[frame].pose_landmark[28].sx * scaleWidth,
+          measureJson[frame].pose_landmark[28].sy * scaleHeight,
         );
         contextWhite.lineTo(
-          data[frame].pose_landmark[32].sx * scaleWidth,
-          data[frame].pose_landmark[32].sy * scaleHeight,
+          measureJson[frame].pose_landmark[32].sx * scaleWidth,
+          measureJson[frame].pose_landmark[32].sy * scaleHeight,
         );
         contextWhite.stroke();
       });
@@ -329,46 +336,45 @@ const MeasureDetailDynamic = ({
       clearAndDraw(contextRed, canvasRed, "#FF0000", () => {
         contextRed.beginPath();
         contextRed.moveTo(
-          data[frame].pose_landmark[20].sx * scaleWidth,
-          data[frame].pose_landmark[20].sy * scaleHeight,
+          measureJson[frame].pose_landmark[20].sx * scaleWidth,
+          measureJson[frame].pose_landmark[20].sy * scaleHeight,
         );
         contextRed.lineTo(
-          data[frame].pose_landmark[19].sx * scaleWidth,
-          data[frame].pose_landmark[19].sy * scaleHeight,
+          measureJson[frame].pose_landmark[19].sx * scaleWidth,
+          measureJson[frame].pose_landmark[19].sy * scaleHeight,
         );
         contextRed.stroke();
 
         contextRed.beginPath();
         contextRed.moveTo(
-          data[frame].pose_landmark[23].sx * scaleWidth,
-          data[frame].pose_landmark[23].sy * scaleHeight,
+          measureJson[frame].pose_landmark[23].sx * scaleWidth,
+          measureJson[frame].pose_landmark[23].sy * scaleHeight,
         );
         contextRed.lineTo(
-          data[frame].pose_landmark[24].sx * scaleWidth,
-          data[frame].pose_landmark[24].sy * scaleHeight,
+          measureJson[frame].pose_landmark[24].sx * scaleWidth,
+          measureJson[frame].pose_landmark[24].sy * scaleHeight,
         );
         contextRed.stroke();
 
         contextRed.beginPath();
         contextRed.moveTo(
-          data[frame].pose_landmark[25].sx * scaleWidth,
-          data[frame].pose_landmark[25].sy * scaleHeight,
+          measureJson[frame].pose_landmark[25].sx * scaleWidth,
+          measureJson[frame].pose_landmark[25].sy * scaleHeight,
         );
         contextRed.lineTo(
-          data[frame].pose_landmark[26].sx * scaleWidth,
-          data[frame].pose_landmark[26].sy * scaleHeight,
+          measureJson[frame].pose_landmark[26].sx * scaleWidth,
+          measureJson[frame].pose_landmark[26].sy * scaleHeight,
         );
         contextRed.stroke();
       });
     };
 
     drawCanvas();
-  }, [data, scaleWidth, scaleHeight, nowHeight, frame]);
+  }, [measureJson, scaleWidth, scaleHeight, nowHeight, frame]);
 
-  if (!data) return <div></div>;
+  if (!measureJson) return <div></div>;
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>에러가 발생했습니다.</div>;
-
   return (
     <div className={`${className} flex flex-col gap-4 lg:gap-10`}>
       <div className="relative w-full overflow-hidden">

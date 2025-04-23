@@ -1,10 +1,11 @@
 import { IUserDetailStatic } from "@/types/user";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ResultGraph from "../ResultGraph";
 import Image from "next/image";
-import { useMeasureJson } from "@/hooks/user";
 import DummyStaticContainer from "../DummyStaticContainer";
 import { useDrawCanvas, useWindowResize } from "@/hooks/utils";
+import { useMeasureJson } from "@/hooks/measure/useMeasureJson";
+
 
 const MeasureStaticFirst = React.memo(
   ({ className, statics }: { className?: string; statics: IUserDetailStatic }) => {
@@ -18,10 +19,9 @@ const MeasureStaticFirst = React.memo(
     const canvasWhiteRef = useRef<HTMLCanvasElement | null>(null);
     const canvasRedRef = useRef<HTMLCanvasElement | null>(null);
     const canvasGreenRef = useRef<HTMLCanvasElement | null>(null);
-    const { data, isLoading, isError } = useMeasureJson(statics.measure_server_json_name);
-    const memoMeasureJson = useMemo(() => data, [data]);
     const clearAndDraw = useDrawCanvas;
     const windowWidth = useWindowResize();
+    const {data: measureJson, isLoading, isError} = useMeasureJson(statics.measure_server_json_name);
 
     useEffect(() => {
       if (imgRef.current === null) return;
@@ -38,10 +38,10 @@ const MeasureStaticFirst = React.memo(
         setScaleHeight(heightScale);
       };
       updateCanvasScale();
-    }, [memoMeasureJson, windowWidth]);
+    }, [measureJson, windowWidth]);
 
     useEffect(() => {
-      if (!memoMeasureJson || imgRef.current === null) return;
+      if (!measureJson || imgRef.current === null) return;
       const canvasWhite = canvasWhiteRef.current as HTMLCanvasElement;
       const canvasRed = canvasRedRef.current as HTMLCanvasElement;
       const canvasGreen = canvasGreenRef.current as HTMLCanvasElement;
@@ -54,91 +54,91 @@ const MeasureStaticFirst = React.memo(
         clearAndDraw(contextWhite, canvasWhite, "#FFF", () => {
           contextWhite.beginPath();
           contextWhite.moveTo(
-            memoMeasureJson.pose_landmark[7].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[7].sy * scaleHeight,
+            measureJson.pose_landmark[7].sx * scaleWidth,
+            measureJson.pose_landmark[7].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[8].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[8].sy * scaleHeight,
+            measureJson.pose_landmark[8].sx * scaleWidth,
+            measureJson.pose_landmark[8].sy * scaleHeight,
           );
           contextWhite.stroke();
 
           contextWhite.beginPath();
           contextWhite.moveTo(
-            memoMeasureJson.pose_landmark[11].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[11].sy * scaleHeight,
+            measureJson.pose_landmark[11].sx * scaleWidth,
+            measureJson.pose_landmark[11].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[23].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[23].sy * scaleHeight,
+            measureJson.pose_landmark[23].sx * scaleWidth,
+            measureJson.pose_landmark[23].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[24].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[24].sy * scaleHeight,
+            measureJson.pose_landmark[24].sx * scaleWidth,
+            measureJson.pose_landmark[24].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[12].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[12].sy * scaleHeight,
+            measureJson.pose_landmark[12].sx * scaleWidth,
+            measureJson.pose_landmark[12].sy * scaleHeight,
           );
           contextWhite.stroke();
 
           contextWhite.beginPath();
           contextWhite.moveTo(
-            memoMeasureJson.pose_landmark[11].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[11].sy * scaleHeight,
+            measureJson.pose_landmark[11].sx * scaleWidth,
+            measureJson.pose_landmark[11].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[13].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[13].sy * scaleHeight,
+            measureJson.pose_landmark[13].sx * scaleWidth,
+            measureJson.pose_landmark[13].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[15].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[15].sy * scaleHeight,
+            measureJson.pose_landmark[15].sx * scaleWidth,
+            measureJson.pose_landmark[15].sy * scaleHeight,
           );
           contextWhite.stroke();
 
           contextWhite.beginPath();
           contextWhite.moveTo(
-            memoMeasureJson.pose_landmark[12].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[12].sy * scaleHeight,
+            measureJson.pose_landmark[12].sx * scaleWidth,
+            measureJson.pose_landmark[12].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[14].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[14].sy * scaleHeight,
+            measureJson.pose_landmark[14].sx * scaleWidth,
+            measureJson.pose_landmark[14].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[16].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[16].sy * scaleHeight,
+            measureJson.pose_landmark[16].sx * scaleWidth,
+            measureJson.pose_landmark[16].sy * scaleHeight,
           );
           contextWhite.stroke();
 
           contextWhite.beginPath();
           contextWhite.moveTo(
-            memoMeasureJson.pose_landmark[23].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[23].sy * scaleHeight,
+            measureJson.pose_landmark[23].sx * scaleWidth,
+            measureJson.pose_landmark[23].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[25].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[25].sy * scaleHeight,
+            measureJson.pose_landmark[25].sx * scaleWidth,
+            measureJson.pose_landmark[25].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[27].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[27].sy * scaleHeight,
+            measureJson.pose_landmark[27].sx * scaleWidth,
+            measureJson.pose_landmark[27].sy * scaleHeight,
           );
           contextWhite.stroke();
 
           contextWhite.beginPath();
           contextWhite.moveTo(
-            memoMeasureJson.pose_landmark[24].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[24].sy * scaleHeight,
+            measureJson.pose_landmark[24].sx * scaleWidth,
+            measureJson.pose_landmark[24].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[26].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[26].sy * scaleHeight,
+            measureJson.pose_landmark[26].sx * scaleWidth,
+            measureJson.pose_landmark[26].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[28].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[28].sy * scaleHeight,
+            measureJson.pose_landmark[28].sx * scaleWidth,
+            measureJson.pose_landmark[28].sy * scaleHeight,
           );
           contextWhite.stroke();
         });
@@ -146,23 +146,23 @@ const MeasureStaticFirst = React.memo(
         clearAndDraw(contextGreen, canvasGreen, "#00FF00", () => {
           contextGreen.beginPath();
           contextGreen.moveTo(
-            memoMeasureJson.pose_landmark[11].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[11].sy * scaleHeight,
+            measureJson.pose_landmark[11].sx * scaleWidth,
+            measureJson.pose_landmark[11].sy * scaleHeight,
           );
           contextGreen.lineTo(
-            memoMeasureJson.pose_landmark[12].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[12].sy * scaleHeight,
+            measureJson.pose_landmark[12].sx * scaleWidth,
+            measureJson.pose_landmark[12].sy * scaleHeight,
           );
           contextGreen.stroke();
 
           contextGreen.beginPath();
           contextGreen.moveTo(
-            memoMeasureJson.pose_landmark[23].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[23].sy * scaleHeight,
+            measureJson.pose_landmark[23].sx * scaleWidth,
+            measureJson.pose_landmark[23].sy * scaleHeight,
           );
           contextGreen.lineTo(
-            memoMeasureJson.pose_landmark[24].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[24].sy * scaleHeight,
+            measureJson.pose_landmark[24].sx * scaleWidth,
+            measureJson.pose_landmark[24].sy * scaleHeight,
           );
           contextGreen.stroke();
         });
@@ -171,28 +171,28 @@ const MeasureStaticFirst = React.memo(
           contextRed.beginPath();
           contextRed.moveTo(
             Math.round(
-              (memoMeasureJson.pose_landmark[11].sx * scaleWidth +
-                memoMeasureJson.pose_landmark[12].sx * scaleWidth) /
+              (measureJson.pose_landmark[11].sx * scaleWidth +
+                measureJson.pose_landmark[12].sx * scaleWidth) /
                 2,
             ),
-            memoMeasureJson.pose_landmark[27].sy * scaleHeight + nowHeight / 10,
+            measureJson.pose_landmark[27].sy * scaleHeight + nowHeight / 10,
           );
           contextRed.lineTo(
             Math.round(
-              (memoMeasureJson.pose_landmark[23].sx * scaleWidth +
-                memoMeasureJson.pose_landmark[24].sx * scaleWidth) /
+              (measureJson.pose_landmark[23].sx * scaleWidth +
+                measureJson.pose_landmark[24].sx * scaleWidth) /
                 2,
             ),
-            memoMeasureJson.pose_landmark[7].sy * scaleHeight - nowHeight / 10,
+            measureJson.pose_landmark[7].sy * scaleHeight - nowHeight / 10,
           );
           contextRed.stroke();
         });
       };
 
       drawCanvas();
-    }, [data, scaleWidth, scaleHeight, nowHeight]);
+    }, [measureJson, scaleWidth, scaleHeight, nowHeight]);
 
-    if (!data) return <DummyStaticContainer />;
+    if (!measureJson) return <DummyStaticContainer />;
     if (isLoading) return <div>Loading...</div>;
     if (isError) return <div>에러가 발생했습니다.</div>;
 

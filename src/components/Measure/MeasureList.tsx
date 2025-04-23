@@ -4,7 +4,6 @@ import { IMeasureList } from "@/types/measure";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -14,12 +13,17 @@ import Link from "next/link";
 import { FileText } from "lucide-react";
 import { nameFiltering, phoneFiltering } from "@/utils/regexFiltering";
 import { formatDate } from "@/utils/formatDate";
+import { useEffect, useState } from "react";
 
 export const MeasureList = ({
   measurements,
 }: {
   measurements: IMeasureList[];
 }) => {
+  const [list, setList] = useState<IMeasureList[]>(measurements);
+  useEffect(() => {
+    setList(measurements);
+  }, [measurements]);
   return (
     <Table>
       <TableHeader>
@@ -32,8 +36,8 @@ export const MeasureList = ({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {measurements.map((measurement) => (
-          <TableRow key={measurement.sn}>
+        {list.map((measurement, index) => (
+          <TableRow key={measurement.user_uuid}>
             <TableCell className="text-center font-medium">
               {measurement.user_name
                 ? nameFiltering(measurement.user_name)

@@ -14,7 +14,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown } from "lucide-react";
-import { USER_INFORMATION, USER_STATUS } from "@/utils/constants/userStatus";
+import { USER_INFORMATION } from "@/utils/constants/userStatus";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -30,18 +30,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { UserStatus } from "./CenterUserStatus";
 import { IUserData } from "@/types/user";
 import Link from "next/link";
 
 export const columns: ColumnDef<IUserData>[] = [
   {
-    accessorKey: "name",
+    accessorKey: "user_name",
     header: "이름",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("user_name")}</div>
+    ),
   },
   {
-    accessorKey: "phone",
+    accessorKey: "mobile",
     header: ({ column }) => {
       return (
         <Button
@@ -55,15 +56,15 @@ export const columns: ColumnDef<IUserData>[] = [
       );
     },
     cell: ({ row }) => {
-      return <div className="font-medium">{row.getValue("phone")}</div>;
+      return <div className="font-medium">{row.getValue("mobile")}</div>;
     },
   },
   {
-    accessorKey: "request",
-    header: "승인 요청",
-    cell: ({ row }) => {
-      return <>{row.getValue("request") ? <p>요청 승인</p> : <p></p>}</>;
-    },
+    accessorKey: "email",
+    header: "이메일",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("email")}</div>
+    ),
   },
   {
     accessorKey: "id",
@@ -117,35 +118,7 @@ export function CenterUserList({
             <Link href={{ pathname: "/user/add" }}>
               <Button variant="outline">사용자 추가</Button>
             </Link>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
-                VIEW <ChevronDown />
-              </Button>
-            </DropdownMenuTrigger>
           </div>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {
-                      USER_INFORMATION[
-                        column.id as keyof typeof USER_INFORMATION
-                      ]
-                    }
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
         </DropdownMenu>
       </div>
       <div className="rounded-md border  min-w-[500px]">

@@ -3,10 +3,10 @@
 import { useMeasureList } from "@/hooks/measure/useMeasureList";
 import { IMeasureListResponse } from "@/types/measure";
 import React from "react";
-import { MeasureList } from "./MeasureList";
+import { MeasureList } from "@/components/Measure/MeasureList";
 import CustomPagination from "@/components/Custom/Pagination";
 import { useSearchParams } from "next/navigation";
-import MeasureDeviceTab from "./MeasureDeviceTab";
+import MeasureDeviceTab from "@/components/Measure/MeasureDeviceTab";
 
 const MeasureMainContainer = () => {
   const params = useSearchParams();

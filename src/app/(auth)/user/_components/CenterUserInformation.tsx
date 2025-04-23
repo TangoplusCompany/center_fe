@@ -1,9 +1,9 @@
 import MeasureInformation from "@/components/Measure/MeasureInformation";
 import SkeletonContainer from "@/components/Measure/SkeletonContainer";
-import { IFilterMeasureInfo } from "@/types/user";
+import { IUserDetailMeasureInfo } from "@/types/user";
 import React from "react";
 
-const CenterUserInformation = ({ data }: { data: IFilterMeasureInfo }) => {
+const CenterUserInformation = ({ data }: { data: IUserDetailMeasureInfo }) => {
   return (
     <>
       <div className="w-full flex gap-5 lg:gap-10">

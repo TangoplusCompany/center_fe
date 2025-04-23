@@ -2,12 +2,18 @@ import { IUserDetailStatic } from "@/types/user";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import ResultGraph from "../ResultGraph";
 import Image from "next/image";
-import { useMeasureJson } from "@/hooks/user";
+import { useMeasureJson } from "@/hooks/measure/useMeasureJson";
 import DummyStaticContainer from "../DummyStaticContainer";
 import { useDrawCanvas, useWindowResize } from "@/hooks/utils";
 
 const MeasureStaticSixth = React.memo(
-  ({ className, statics }: { className?: string; statics: IUserDetailStatic }) => {
+  ({
+    className,
+    statics,
+  }: {
+    className?: string;
+    statics: IUserDetailStatic;
+  }) => {
     const defaultWidth = statics.measure_overlay_width as number;
     const defaultHeight = statics.measure_overlay_height as number;
     const [nowWidth, setNowWidth] = useState(defaultWidth);
@@ -18,8 +24,11 @@ const MeasureStaticSixth = React.memo(
     const canvasWhiteRef = useRef<HTMLCanvasElement | null>(null);
     const canvasRedRef = useRef<HTMLCanvasElement | null>(null);
     const canvasGreenRef = useRef<HTMLCanvasElement | null>(null);
-    const { data, isLoading, isError } = useMeasureJson(statics.measure_server_json_name);
-    const memoMeasureJson = useMemo(() => data, [data]);
+    const {
+      data: measureJson,
+      isLoading,
+      isError,
+    } = useMeasureJson(statics.measure_server_json_name);
     const clearAndDraw = useDrawCanvas;
     const windowWidth = useWindowResize();
 
@@ -38,81 +47,83 @@ const MeasureStaticSixth = React.memo(
         setScaleHeight(heightScale);
       };
       updateCanvasScale();
-    }, [memoMeasureJson, windowWidth]);
+    }, [measureJson, windowWidth]);
 
     useEffect(() => {
-      if (!memoMeasureJson || imgRef.current === null) return;
+      if (!measureJson || imgRef.current === null) return;
       const canvasWhite = canvasWhiteRef.current as HTMLCanvasElement;
       const canvasRed = canvasRedRef.current as HTMLCanvasElement;
 
-      const contextWhite = canvasWhite.getContext("2d") as CanvasRenderingContext2D;
+      const contextWhite = canvasWhite.getContext(
+        "2d",
+      ) as CanvasRenderingContext2D;
       const contextRed = canvasRed.getContext("2d") as CanvasRenderingContext2D;
 
       const drawCanvas = () => {
         clearAndDraw(contextWhite, canvasWhite, "#FFF", () => {
           contextWhite.beginPath();
           contextWhite.moveTo(
-            memoMeasureJson.pose_landmark[7].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[7].sy * scaleHeight,
+            measureJson.pose_landmark[7].sx * scaleWidth,
+            measureJson.pose_landmark[7].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[8].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[8].sy * scaleHeight,
+            measureJson.pose_landmark[8].sx * scaleWidth,
+            measureJson.pose_landmark[8].sy * scaleHeight,
           );
           contextWhite.stroke();
 
           contextWhite.beginPath();
           contextWhite.moveTo(
-            memoMeasureJson.pose_landmark[11].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[11].sy * scaleHeight,
+            measureJson.pose_landmark[11].sx * scaleWidth,
+            measureJson.pose_landmark[11].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[12].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[12].sy * scaleHeight,
+            measureJson.pose_landmark[12].sx * scaleWidth,
+            measureJson.pose_landmark[12].sy * scaleHeight,
           );
           contextWhite.stroke();
 
           contextWhite.beginPath();
           contextWhite.moveTo(
-            memoMeasureJson.pose_landmark[23].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[23].sy * scaleHeight,
+            measureJson.pose_landmark[23].sx * scaleWidth,
+            measureJson.pose_landmark[23].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[24].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[24].sy * scaleHeight,
+            measureJson.pose_landmark[24].sx * scaleWidth,
+            measureJson.pose_landmark[24].sy * scaleHeight,
           );
           contextWhite.stroke();
 
           contextWhite.beginPath();
           contextWhite.moveTo(
             Math.round(
-              (memoMeasureJson.pose_landmark[7].sx * scaleWidth +
-                memoMeasureJson.pose_landmark[8].sx * scaleWidth) /
+              (measureJson.pose_landmark[7].sx * scaleWidth +
+                measureJson.pose_landmark[8].sx * scaleWidth) /
                 2,
             ),
             Math.round(
-              (memoMeasureJson.pose_landmark[7].sy * scaleHeight +
-                memoMeasureJson.pose_landmark[8].sy * scaleHeight) /
+              (measureJson.pose_landmark[7].sy * scaleHeight +
+                measureJson.pose_landmark[8].sy * scaleHeight) /
                 2,
             ),
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[11].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[11].sy * scaleHeight,
+            measureJson.pose_landmark[11].sx * scaleWidth,
+            measureJson.pose_landmark[11].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[12].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[12].sy * scaleHeight,
+            measureJson.pose_landmark[12].sx * scaleWidth,
+            measureJson.pose_landmark[12].sy * scaleHeight,
           );
           contextWhite.lineTo(
             Math.round(
-              (memoMeasureJson.pose_landmark[7].sx * scaleWidth +
-                memoMeasureJson.pose_landmark[8].sx * scaleWidth) /
+              (measureJson.pose_landmark[7].sx * scaleWidth +
+                measureJson.pose_landmark[8].sx * scaleWidth) /
                 2,
             ),
             Math.round(
-              (memoMeasureJson.pose_landmark[7].sy * scaleHeight +
-                memoMeasureJson.pose_landmark[8].sy * scaleHeight) /
+              (measureJson.pose_landmark[7].sy * scaleHeight +
+                measureJson.pose_landmark[8].sy * scaleHeight) /
                 2,
             ),
           );
@@ -120,28 +131,28 @@ const MeasureStaticSixth = React.memo(
 
           contextWhite.beginPath();
           contextWhite.moveTo(
-            memoMeasureJson.pose_landmark[11].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[11].sy * scaleHeight,
+            measureJson.pose_landmark[11].sx * scaleWidth,
+            measureJson.pose_landmark[11].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[12].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[12].sy * scaleHeight,
+            measureJson.pose_landmark[12].sx * scaleWidth,
+            measureJson.pose_landmark[12].sy * scaleHeight,
           );
           contextWhite.lineTo(
             Math.round(
-              (memoMeasureJson.pose_landmark[23].sx * scaleWidth +
-                memoMeasureJson.pose_landmark[24].sx * scaleWidth) /
+              (measureJson.pose_landmark[23].sx * scaleWidth +
+                measureJson.pose_landmark[24].sx * scaleWidth) /
                 2,
             ),
             Math.round(
-              (memoMeasureJson.pose_landmark[23].sy * scaleHeight +
-                memoMeasureJson.pose_landmark[24].sy * scaleHeight) /
+              (measureJson.pose_landmark[23].sy * scaleHeight +
+                measureJson.pose_landmark[24].sy * scaleHeight) /
                 2,
             ),
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[11].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[11].sy * scaleHeight,
+            measureJson.pose_landmark[11].sx * scaleWidth,
+            measureJson.pose_landmark[11].sy * scaleHeight,
           );
           contextWhite.stroke();
         });
@@ -149,27 +160,27 @@ const MeasureStaticSixth = React.memo(
           contextRed.beginPath();
           contextRed.moveTo(
             Math.round(
-              (memoMeasureJson.pose_landmark[11].sx * scaleWidth +
-                memoMeasureJson.pose_landmark[12].sx * scaleWidth) /
+              (measureJson.pose_landmark[11].sx * scaleWidth +
+                measureJson.pose_landmark[12].sx * scaleWidth) /
                 2,
             ),
-            memoMeasureJson.pose_landmark[27].sy * scaleHeight + 100,
+            measureJson.pose_landmark[27].sy * scaleHeight + 100,
           );
           contextRed.lineTo(
             Math.round(
-              (memoMeasureJson.pose_landmark[27].sx * scaleWidth +
-                memoMeasureJson.pose_landmark[28].sx * scaleWidth) /
+              (measureJson.pose_landmark[27].sx * scaleWidth +
+                measureJson.pose_landmark[28].sx * scaleWidth) /
                 2,
             ),
-            memoMeasureJson.pose_landmark[7].sy * scaleHeight - 100,
+            measureJson.pose_landmark[7].sy * scaleHeight - 100,
           );
           contextRed.stroke();
         });
       };
       drawCanvas();
-    }, [data, scaleWidth, scaleHeight, nowHeight]);
+    }, [measureJson, scaleWidth, scaleHeight, nowHeight]);
 
-    if (!data) return <DummyStaticContainer />;
+    if (!measureJson) return <DummyStaticContainer />;
     if (isLoading) return <div>Loading...</div>;
     if (isError) return <div>에러가 발생했습니다.</div>;
     return (
@@ -177,7 +188,10 @@ const MeasureStaticSixth = React.memo(
         <div className="relative w-full overflow-hidden">
           <Image
             ref={imgRef}
-            src={`https://gym.tangoplus.co.kr/data/Results/` + statics.measure_server_file_name}
+            src={
+              `https://gym.tangoplus.co.kr/data/Results/` +
+              statics.measure_server_file_name
+            }
             alt="측정 사진"
             width={1500}
             height={844}
@@ -263,7 +277,9 @@ const MeasureStaticSixth = React.memo(
               sdAvg={3.94}
               unitName="각도"
               title="후면-앉은자세 골반중앙-오른어깨-왼어깨 각도"
-              userAvg={statics.back_sit_vertical_angle_center_hip_right_shoulder_left_shoulder}
+              userAvg={
+                statics.back_sit_vertical_angle_center_hip_right_shoulder_left_shoulder
+              }
               unit="°"
             />
             <ResultGraph
@@ -271,7 +287,9 @@ const MeasureStaticSixth = React.memo(
               sdAvg={5.27}
               unitName="각도"
               title="후면-앉은자세 왼어깨-골반중앙-오른어깨 각도"
-              userAvg={statics.back_sit_vertical_angle_left_shoulder_center_hip_right_shoulder}
+              userAvg={
+                statics.back_sit_vertical_angle_left_shoulder_center_hip_right_shoulder
+              }
               unit="°"
             />
           </div>
@@ -281,7 +299,9 @@ const MeasureStaticSixth = React.memo(
               sdAvg={4.48}
               unitName="각도"
               title="후면-앉은자세 왼어깨-오른어깨-코 각도"
-              userAvg={statics.back_sit_vertical_angle_left_shoulder_right_shoulder_nose}
+              userAvg={
+                statics.back_sit_vertical_angle_left_shoulder_right_shoulder_nose
+              }
               unit="°"
             />
             <ResultGraph
@@ -289,7 +309,9 @@ const MeasureStaticSixth = React.memo(
               sdAvg={2.52}
               unitName="각도"
               title="후면-앉은자세 오른어깨-왼어깨-골반중앙 각도"
-              userAvg={statics.back_sit_vertical_angle_right_shoulder_left_shoulder_center_hip}
+              userAvg={
+                statics.back_sit_vertical_angle_right_shoulder_left_shoulder_center_hip
+              }
               unit="°"
             />
           </div>
