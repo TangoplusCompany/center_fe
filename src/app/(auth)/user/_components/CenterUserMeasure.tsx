@@ -1,6 +1,10 @@
 "use client";
 
-import { IUserDetailDynamic, IUserDetailStatic } from "@/types/user";
+import {
+  IUserDetailDynamic,
+  IUserDetailStatic,
+  IUserMeasurement,
+} from "@/types/user";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MeasureDetailDynamic from "@/components/Measure/DetailDynamic";
 import React, { JSX } from "react";
@@ -20,15 +24,7 @@ type MeasureListType = {
 const CenterUserMeasure = ({
   measureData,
 }: {
-  measureData: {
-    dynamic: IUserDetailDynamic;
-    static_1: IUserDetailStatic;
-    static_2: IUserDetailStatic;
-    static_3: IUserDetailStatic;
-    static_4: IUserDetailStatic;
-    static_5: IUserDetailStatic;
-    static_6: IUserDetailStatic;
-  };
+  measureData: IUserMeasurement;
 }) => {
   const measureList: MeasureListType[] = [
     {
@@ -77,7 +73,11 @@ const CenterUserMeasure = ({
         ))}
       </TabsList>
       {measureList.map((measure: MeasureListType) => (
-        <TabsContent key={measure.value} value={measure.value} className="!mt-0">
+        <TabsContent
+          key={measure.value}
+          value={measure.value}
+          className="!mt-0"
+        >
           {measure.component()}
         </TabsContent>
       ))}
