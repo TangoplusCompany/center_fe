@@ -2,6 +2,22 @@ import { refreshAccessToken } from "@/services/auth/postRefreshAccessToken";
 import { createAuthStore } from "@/stores/AuthStore";
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
+export const customUnAuthAxios = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
+});
+
+export const customJsonAxios = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_FILE_URL,
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
+});
+
 const authStore = createAuthStore();
 
 let isRefreshing = false;
@@ -18,21 +34,13 @@ const processQueue = (error: AxiosError | null, token: string | null) => {
   failedQueue = [];
 };
 
-export const customUnAuthAxios = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-  headers: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  },
-});
-
 export const customAxios = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
-    "Authorization": `Bearer ${authStore.getState().accessJwt}`,
+    Authorization: `Bearer ${authStore.getState().accessJwt}`,
   },
 });
 
