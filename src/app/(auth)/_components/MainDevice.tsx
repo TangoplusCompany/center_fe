@@ -24,8 +24,6 @@ const MainDevice = ({ className }: { className?: string }) => {
 
   return (
     <div className={`${className}`}>
-      <DeviceStatusCard devices={data} />
-      <Separator className="my-4 col-span-12" />
     </div>
   );
 };
