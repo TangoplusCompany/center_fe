@@ -2,12 +2,18 @@ import { IUserDetailStatic } from "@/types/user";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import ResultGraph from "../ResultGraph";
 import Image from "next/image";
-import { useMeasureJson } from "@/hooks/user";
+import { useMeasureJson } from "@/hooks/measure/useMeasureJson";
 import DummyStaticContainer from "../DummyStaticContainer";
 import { useDrawCanvas, useWindowResize } from "@/hooks/utils";
 
 const MeasureStaticThird = React.memo(
-  ({ className, statics }: { className?: string; statics: IUserDetailStatic }) => {
+  ({
+    className,
+    statics,
+  }: {
+    className?: string;
+    statics: IUserDetailStatic;
+  }) => {
     const defaultWidth = statics.measure_overlay_width as number;
     const defaultHeight = statics.measure_overlay_height as number;
     const [nowWidth, setNowWidth] = useState(defaultWidth);
@@ -19,9 +25,11 @@ const MeasureStaticThird = React.memo(
     const canvasWhiteRef = useRef<HTMLCanvasElement | null>(null);
     const canvasRedRef = useRef<HTMLCanvasElement | null>(null);
     const canvasGreenRef = useRef<HTMLCanvasElement | null>(null);
-
-    const { data, isLoading, isError } = useMeasureJson(statics.measure_server_json_name);
-    const memoMeasureJson = useMemo(() => data, [data]);
+    const {
+      data: measureJson,
+      isLoading,
+      isError,
+    } = useMeasureJson(statics.measure_server_json_name);
     const clearAndDraw = useDrawCanvas;
     const windowWidth = useWindowResize();
 
@@ -40,70 +48,74 @@ const MeasureStaticThird = React.memo(
         setScaleHeight(heightScale);
       };
       updateCanvasScale();
-    }, [memoMeasureJson, windowWidth]);
+    }, [measureJson, windowWidth]);
 
     useEffect(() => {
-      if (!memoMeasureJson || imgRef.current === null) return;
+      if (!measureJson || imgRef.current === null) return;
       const canvasWhite = canvasWhiteRef.current as HTMLCanvasElement;
       const canvasRed = canvasRedRef.current as HTMLCanvasElement;
       const canvasGreen = canvasGreenRef.current as HTMLCanvasElement;
 
-      const contextWhite = canvasWhite.getContext("2d") as CanvasRenderingContext2D;
+      const contextWhite = canvasWhite.getContext(
+        "2d",
+      ) as CanvasRenderingContext2D;
       const contextRed = canvasRed.getContext("2d") as CanvasRenderingContext2D;
-      const contextGreen = canvasGreen.getContext("2d") as CanvasRenderingContext2D;
+      const contextGreen = canvasGreen.getContext(
+        "2d",
+      ) as CanvasRenderingContext2D;
 
       const drawCanvas = () => {
         clearAndDraw(contextWhite, canvasWhite, "#FFF", () => {
           contextWhite.beginPath();
           contextWhite.moveTo(
-            memoMeasureJson.pose_landmark[11].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[11].sy * scaleHeight,
+            measureJson.pose_landmark[11].sx * scaleWidth,
+            measureJson.pose_landmark[11].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[13].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[13].sy * scaleHeight,
+            measureJson.pose_landmark[13].sx * scaleWidth,
+            measureJson.pose_landmark[13].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[15].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[15].sy * scaleHeight,
+            measureJson.pose_landmark[15].sx * scaleWidth,
+            measureJson.pose_landmark[15].sy * scaleHeight,
           );
           contextWhite.stroke();
 
           contextWhite.beginPath();
           contextWhite.moveTo(
-            memoMeasureJson.pose_landmark[11].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[11].sy * scaleHeight,
+            measureJson.pose_landmark[11].sx * scaleWidth,
+            measureJson.pose_landmark[11].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[23].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[23].sy * scaleHeight,
+            measureJson.pose_landmark[23].sx * scaleWidth,
+            measureJson.pose_landmark[23].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[25].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[25].sy * scaleHeight,
+            measureJson.pose_landmark[25].sx * scaleWidth,
+            measureJson.pose_landmark[25].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[27].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[27].sy * scaleHeight,
+            measureJson.pose_landmark[27].sx * scaleWidth,
+            measureJson.pose_landmark[27].sy * scaleHeight,
           );
           contextWhite.stroke();
 
           contextWhite.beginPath();
           contextWhite.moveTo(
-            memoMeasureJson.pose_landmark[27].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[27].sy * scaleHeight,
+            measureJson.pose_landmark[27].sx * scaleWidth,
+            measureJson.pose_landmark[27].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[29].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[29].sy * scaleHeight,
+            measureJson.pose_landmark[29].sx * scaleWidth,
+            measureJson.pose_landmark[29].sy * scaleHeight,
           );
           contextWhite.moveTo(
-            memoMeasureJson.pose_landmark[27].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[27].sy * scaleHeight,
+            measureJson.pose_landmark[27].sx * scaleWidth,
+            measureJson.pose_landmark[27].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[31].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[31].sy * scaleHeight,
+            measureJson.pose_landmark[31].sx * scaleWidth,
+            measureJson.pose_landmark[31].sy * scaleHeight,
           );
           contextWhite.stroke();
         });
@@ -111,45 +123,45 @@ const MeasureStaticThird = React.memo(
         clearAndDraw(contextGreen, canvasGreen, "#00FF00", () => {
           contextGreen.beginPath();
           contextGreen.moveTo(
-            memoMeasureJson.pose_landmark[0].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[0].sy * scaleHeight,
+            measureJson.pose_landmark[0].sx * scaleWidth,
+            measureJson.pose_landmark[0].sy * scaleHeight,
           );
           contextGreen.lineTo(
-            memoMeasureJson.pose_landmark[11].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[11].sy * scaleHeight,
+            measureJson.pose_landmark[11].sx * scaleWidth,
+            measureJson.pose_landmark[11].sy * scaleHeight,
           );
           contextGreen.stroke();
 
           contextGreen.beginPath();
           contextGreen.moveTo(
-            memoMeasureJson.pose_landmark[15].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[15].sy * scaleHeight,
+            measureJson.pose_landmark[15].sx * scaleWidth,
+            measureJson.pose_landmark[15].sy * scaleHeight,
           );
           contextGreen.lineTo(
-            memoMeasureJson.pose_landmark[27].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[15].sy * scaleHeight,
+            measureJson.pose_landmark[27].sx * scaleWidth,
+            measureJson.pose_landmark[15].sy * scaleHeight,
           );
           contextGreen.stroke();
 
           contextGreen.beginPath();
           contextGreen.moveTo(
-            memoMeasureJson.pose_landmark[23].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[23].sy * scaleHeight,
+            measureJson.pose_landmark[23].sx * scaleWidth,
+            measureJson.pose_landmark[23].sy * scaleHeight,
           );
           contextGreen.lineTo(
-            memoMeasureJson.pose_landmark[27].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[23].sy * scaleHeight,
+            measureJson.pose_landmark[27].sx * scaleWidth,
+            measureJson.pose_landmark[23].sy * scaleHeight,
           );
           contextGreen.stroke();
 
           contextGreen.beginPath();
           contextGreen.moveTo(
-            memoMeasureJson.pose_landmark[25].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[25].sy * scaleHeight,
+            measureJson.pose_landmark[25].sx * scaleWidth,
+            measureJson.pose_landmark[25].sy * scaleHeight,
           );
           contextGreen.lineTo(
-            memoMeasureJson.pose_landmark[27].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[25].sy * scaleHeight,
+            measureJson.pose_landmark[27].sx * scaleWidth,
+            measureJson.pose_landmark[25].sy * scaleHeight,
           );
           contextGreen.stroke();
         });
@@ -157,42 +169,42 @@ const MeasureStaticThird = React.memo(
         clearAndDraw(contextRed, canvasRed, "#FF0000", () => {
           contextRed.beginPath();
           contextRed.moveTo(
-            memoMeasureJson.pose_landmark[11].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[0].sy * scaleHeight - 100,
+            measureJson.pose_landmark[11].sx * scaleWidth,
+            measureJson.pose_landmark[0].sy * scaleHeight - 100,
           );
           contextRed.lineTo(
-            memoMeasureJson.pose_landmark[27].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[27].sy * scaleHeight + 100,
+            measureJson.pose_landmark[27].sx * scaleWidth,
+            measureJson.pose_landmark[27].sy * scaleHeight + 100,
           );
           contextRed.stroke();
 
           contextRed.beginPath();
           contextRed.moveTo(
-            memoMeasureJson.pose_landmark[11].sx * scaleWidth - 100,
-            memoMeasureJson.pose_landmark[11].sy * scaleHeight,
+            measureJson.pose_landmark[11].sx * scaleWidth - 100,
+            measureJson.pose_landmark[11].sy * scaleHeight,
           );
           contextRed.lineTo(
-            memoMeasureJson.pose_landmark[11].sx * scaleWidth + 100,
-            memoMeasureJson.pose_landmark[11].sy * scaleHeight,
+            measureJson.pose_landmark[11].sx * scaleWidth + 100,
+            measureJson.pose_landmark[11].sy * scaleHeight,
           );
           contextRed.stroke();
 
           contextRed.beginPath();
           contextRed.moveTo(
-            memoMeasureJson.pose_landmark[0].sx * scaleWidth - 100,
-            memoMeasureJson.pose_landmark[0].sy * scaleHeight,
+            measureJson.pose_landmark[0].sx * scaleWidth - 100,
+            measureJson.pose_landmark[0].sy * scaleHeight,
           );
           contextRed.lineTo(
-            memoMeasureJson.pose_landmark[0].sx * scaleWidth + 100,
-            memoMeasureJson.pose_landmark[0].sy * scaleHeight,
+            measureJson.pose_landmark[0].sx * scaleWidth + 100,
+            measureJson.pose_landmark[0].sy * scaleHeight,
           );
           contextRed.stroke();
         });
       };
       drawCanvas();
-    }, [data, scaleWidth, scaleHeight, nowHeight]);
+    }, [measureJson, scaleWidth, scaleHeight, nowHeight]);
 
-    if (!data) return <DummyStaticContainer />;
+    if (!measureJson) return <DummyStaticContainer />;
     if (isLoading) return <div>Loading...</div>;
     if (isError) return <div>에러가 발생했습니다.</div>;
     return (
@@ -200,7 +212,10 @@ const MeasureStaticThird = React.memo(
         <div className="relative w-full overflow-hidden">
           <Image
             ref={imgRef}
-            src={`https://gym.tangoplus.co.kr/data/Results/` + statics.measure_server_file_name}
+            src={
+              `https://gym.tangoplus.co.kr/data/Results/` +
+              statics.measure_server_file_name
+            }
             alt="측정 사진"
             width={1500}
             height={844}
