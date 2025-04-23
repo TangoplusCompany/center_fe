@@ -4,7 +4,6 @@ import { IMeasureList } from "@/types/measure";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -32,8 +31,8 @@ export const MeasureList = ({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {measurements.map((measurement) => (
-          <TableRow key={measurement.sn}>
+        {measurements.map((measurement, index) => (
+          <TableRow key={measurement.sn + index}>
             <TableCell className="text-center font-medium">
               {measurement.user_name
                 ? nameFiltering(measurement.user_name)
