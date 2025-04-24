@@ -9,13 +9,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
-import { FileText } from "lucide-react";
+import { FileText, Trash } from "lucide-react";
 import { phoneHyphen } from "@/utils/regexFiltering";
 import { useEffect, useState } from "react";
 import { IUserData } from "@/types/user";
+import { useDeleteUser } from "@/hooks/user/useDeleteUser";
 
-export const UserList = ({ users }: { users: IUserData[] }) => {
+export const UserList = ({ users, refetch }: { users: IUserData[]; refetch: () => void }) => {
   const [list, setList] = useState<IUserData[]>(users);
+
+  const mutationDeleteUser = useDeleteUser(refetch);
+  const handleRemoveUser = (sn: number) => {
+    mutationDeleteUser.mutate({ sn });
+  };
+
   useEffect(() => {
     setList(users);
   }, [users]);
@@ -40,7 +47,7 @@ export const UserList = ({ users }: { users: IUserData[] }) => {
             </TableCell>
 
             <TableCell className="text-center">{user.email}</TableCell>
-            <TableCell className="text-right">
+            <TableCell className="flex items-center justify-end gap-2">
               <Link
                 href={`/user/${user.user_uuid}`}
                 className="flex items-center gap-2 justify-end cursor-pointer"
@@ -48,6 +55,13 @@ export const UserList = ({ users }: { users: IUserData[] }) => {
                 <FileText className="w-4 h-4" />
                 <span>상세보기</span>
               </Link>
+              <button
+                onClick={() => handleRemoveUser(user.user_sn)}
+                className="flex items-center gap-2 justify-end cursor-pointer text-red-500"
+              >
+                <Trash className="w-4 h-4" />
+                <span>제거</span>
+              </button>
             </TableCell>
           </TableRow>
         ))}
