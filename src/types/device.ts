@@ -45,3 +45,16 @@ export interface IDeviceSearch {
     reg_status: string;
   };
 }
+
+export interface IDeviceChartResponse {
+  status: number;
+  success: boolean;
+  message: string[];
+  data: IDeviceChartList[];
+}
+
+export interface IDeviceChartList {
+  device_sn: number;
+  device_name: string;
+  measure_count: number;
+}
