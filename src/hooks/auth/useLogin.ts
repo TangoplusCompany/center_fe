@@ -19,7 +19,6 @@ interface ILoginResponse {
       is_logged_in: boolean;
     };
     access_jwt: string;
-    refresh_jwt: string;
   };
 }
 
