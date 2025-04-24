@@ -94,13 +94,13 @@ const DeviceChart = ({
     { date: "2024-06-29", 테스트디바이스: 103, 탱고바디32: 160 },
     { date: "2024-06-30", 테스트디바이스: 446, 탱고바디32: 400 },
   ];
-  const [timeRange, setTimeRange] = React.useState("1w");
+  const [timeRange, setTimeRange] = React.useState("1m");
   const filteredData = chartData.filter((item) => {
     const date = new Date(item.date);
     const referenceDate = new Date("2024-06-30");
-    let daysToSubtract = 7;
-    if (timeRange === "1m") {
-      daysToSubtract = 30;
+    let daysToSubtract = 30;
+    if (timeRange === "1w") {
+      daysToSubtract = 7;
     } else if (timeRange === "3m") {
       daysToSubtract = 90;
     }
