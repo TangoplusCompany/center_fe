@@ -78,11 +78,11 @@ customAxios.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const { accessToken } = await refreshAccessToken(); // 🍪 쿠키로 refreshToken 보내는 API
-        authStore.getState().setAccessToken(accessToken); // 상태 업데이트
-        processQueue(null, accessToken);
+        const refreshResponse = await refreshAccessToken(); // 🍪 쿠키로 refreshToken 보내는 API
+        authStore.getState().setAccessToken(refreshResponse.data.access_jwt); // 상태 업데이트
+        processQueue(null, refreshResponse.data.access_jwt);
 
-        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+        originalRequest.headers.Authorization = `Bearer ${refreshResponse.data.access_jwt}`;
         return customAxios(originalRequest);
       } catch (err) {
         processQueue(err as AxiosError, null);
