@@ -17,6 +17,7 @@ const UserPage = () => {
     data: userResponseData,
     isLoading,
     isError,
+    refetch: refetchUserList,
   } = useGetUserList<IUserListData>({ page, limit });
   if (isLoading) {
     return (
@@ -50,7 +51,7 @@ const UserPage = () => {
           <Link href={`/user/add`}>신규사용자 등록</Link>
         </Button>
       </div>
-      <UserList users={userResponseData.users} />
+      <UserList users={userResponseData.users} refetch={refetchUserList} />
       <CustomPagination
         total={userResponseData.total}
         page={userResponseData.page}
