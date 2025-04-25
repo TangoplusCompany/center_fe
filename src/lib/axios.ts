@@ -40,7 +40,6 @@ export const customAxios = axios.create({
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
-    Authorization: `Bearer ${authStore.getState().accessJwt}`,
   },
 });
 
