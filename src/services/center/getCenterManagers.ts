@@ -1,8 +1,13 @@
-import { customUnAuthAxios } from "@/lib/axios";
+import { customAxios } from "@/lib/axios";
+import { IResponseDefault } from "@/types/default";
+import { ICenterManagerData } from "@/types/setting";
+
+type CenterManagerListResponse = {
+  data: ICenterManagerData[];
+} & IResponseDefault;
 
 export const getCenterManagers = async () => {
-  const response = await customUnAuthAxios.get(
-    `/centers/managers`,
-  );
-  return response.data;
+  const { data: responseData } =
+    await customAxios.get<CenterManagerListResponse>(`/centers/managers`);
+  return responseData.data;
 };
