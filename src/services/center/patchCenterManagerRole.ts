@@ -1,6 +1,6 @@
 import { customUnAuthAxios } from "@/lib/axios";
 
-export const getCenterManagers = async ({
+export const getCenterManagerRole = async ({
   sn,
   role,
 }: {
