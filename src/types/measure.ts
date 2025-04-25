@@ -1,14 +1,11 @@
-import { IPagination } from ".";
+import { IPagination, IResponseDefault } from "./default";
 import {
   IUserDetailMeasureInfo,
   IUserDetailDynamic,
   IUserDetailStatic,
 } from "./user";
 
-export interface IMeasureListResponse {
-  status: number;
-  success: boolean;
-  message: string[];
+export interface IMeasureListResponse extends IResponseDefault {
   data: IMeasureData;
 }
 

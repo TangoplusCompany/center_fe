@@ -1,3 +1,5 @@
+import { IResponseDefault } from "./default";
+
 export interface IDeviceStatusCardProps {
   sn: number;
   serial_number: string;
@@ -14,26 +16,20 @@ export interface IDeviceStatusCardProps {
   reg_status: string;
 }
 
-export interface IDeviceStatus {
-  status: number;
-  success: boolean;
-  message: string[];
+export interface IDeviceStatus extends IResponseDefault {
   data: IDeviceStatusCardProps[];
 }
 
 export interface IDeviceInfo {
   sn: number;
-  device_name: string;
-  install_zipcode: string;
+  install_location: string;
   install_address_1: string;
   install_address_2: string;
-  install_location: string;
+  install_zipcode: string;
+  device_name: string;
 }
 
-export interface IDeviceSearch {
-  status: number;
-  success: boolean;
-  message: string[];
+export interface IDeviceSearch extends IResponseDefault {
   data: {
     sn: number;
     serial_number: string;
@@ -46,10 +42,7 @@ export interface IDeviceSearch {
   };
 }
 
-export interface IDeviceChartResponse {
-  status: number;
-  success: boolean;
-  message: string[];
+export interface IDeviceChartResponse extends IResponseDefault {
   data: IDeviceChartList[];
 }
 

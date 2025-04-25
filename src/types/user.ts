@@ -1,9 +1,7 @@
+import { IResponseDefault } from "./default";
 import { IMeasureList } from "./measure";
 
-export interface IUnregisterUserResponse {
-  status: number;
-  success: boolean;
-  message: string[];
+export interface IUnregisterUserResponse extends IResponseDefault {
   data: {
     last_page: number;
     limit: number;
@@ -25,10 +23,7 @@ export interface IUnregisterUserData {
   user_uuid: string;
 }
 
-export interface IUserResponse {
-  status: number;
-  success: boolean;
-  message: string[];
+export interface IUserResponse extends IResponseDefault {
   data: IUserListData;
 }
 

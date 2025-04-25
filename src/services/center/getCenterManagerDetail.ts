@@ -1,11 +1,14 @@
 import { customUnAuthAxios } from "@/lib/axios";
+import { IResponseDefault } from "@/types/default";
+import { ICenterManagerData } from "@/types/setting";
 
-/**
- * 
- * @param sn string sn은 admin_sn입니다.
- * @returns 
- */
+type CenterManagerListResponse = {
+  data: ICenterManagerData;
+} & IResponseDefault;
 export const getCenterManagerDetail = async ({ sn }: { sn: string }) => {
-  const response = await customUnAuthAxios.get(`/centers/managers/${sn}`);
-  return response.data;
+  const { data: managerInformation } =
+    await customUnAuthAxios.get<CenterManagerListResponse>(
+      `/centers/managers/${sn}`,
+    );
+  return managerInformation.data;
 };

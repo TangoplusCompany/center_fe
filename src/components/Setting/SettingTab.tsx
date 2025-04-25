@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
+import { SettingTabEnum } from "@/types/setting";
 
-const settingTabList = [
+const settingTabList: { name: string; id: SettingTabEnum }[] = [
   {
     name: "센터 조회",
     id: "center_view",
@@ -9,20 +10,16 @@ const settingTabList = [
     name: "관리자 조회",
     id: "admin_view",
   },
-  {
-    name: "등급 관리",
-    id: "setting_grade",
-  },
 ];
 
 const SettingTab = ({
   nowTab,
   setNowTab,
 }: {
-  nowTab: string;
-  setNowTab: React.Dispatch<React.SetStateAction<string>>;
+  nowTab: SettingTabEnum;
+  setNowTab: React.Dispatch<React.SetStateAction<SettingTabEnum>>;
 }) => {
-  const onClickTab = (tab: string) => {
+  const onClickTab = (tab: SettingTabEnum) => {
     setNowTab(tab);
   };
   return (

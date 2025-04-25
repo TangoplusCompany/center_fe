@@ -10,7 +10,7 @@ import {
   PaginationEllipsis,
   PaginationButtonNext,
 } from "../ui/pagination";
-import { IPagination } from "@/types";
+import { IPagination } from "@/types/default";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
 
 const CustomPagination = ({ ...props }: IPagination) => {
