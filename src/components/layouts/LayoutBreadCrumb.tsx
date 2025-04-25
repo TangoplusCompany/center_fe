@@ -48,7 +48,7 @@ const Menus: IMenu[] = [
     initial: "device",
   },
   {
-    title: "환경 설정",
+    title: "설정",
     url: "/setting",
     initial: "setting",
   },

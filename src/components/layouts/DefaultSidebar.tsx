@@ -53,7 +53,7 @@ const dashboard = [
     icon: BookAudio,
   },
   {
-    title: "환경 설정",
+    title: "설정",
     url: "/setting",
     icon: Smartphone,
   },
