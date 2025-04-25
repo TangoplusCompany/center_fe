@@ -22,11 +22,13 @@ const DeviceChartContainer = ({
     useDevicePeriodData<IDeviceChartResponse>(period[0].value);
   if (isLoading) return <div>Loading...</div>;
   if (!chartResponse) return <div>No data</div>;
-  console.log(chartResponse);
+
   return (
     <div className="w-full flex flex-col gap-4">
       <h2 className="text-2xl">키오스크 사용자 추이</h2>
-      <div className="w-full"><DeviceChart chartConfig={chartConfig} chartData={chartResponse.data} /></div>
+      <div className="w-full">
+        <DeviceChart chartConfig={chartConfig} chartData={chartResponse.data} />
+      </div>
     </div>
   );
 };
