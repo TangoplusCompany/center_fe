@@ -1,6 +1,6 @@
-import { customUnAuthAxios } from "@/lib/axios";
+import { customAxios } from "@/lib/axios";
 
-export const patchCenterInformation = async ({
+export const patchCenterManagerInformation = async ({
   sn,
   admin_name,
   mobile,
@@ -9,7 +9,7 @@ export const patchCenterInformation = async ({
   admin_name: string;
   mobile: string;
 }) => {
-  const response = await customUnAuthAxios.patch(`/centers/update/${sn}`, {
+  const response = await customAxios.patch(`/centers/update/${sn}`, {
     admin_name,
     mobile,
   });

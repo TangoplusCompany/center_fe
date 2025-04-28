@@ -1,17 +1,14 @@
-import { customUnAuthAxios } from "@/lib/axios";
+import { customAxios } from "@/lib/axios";
 
-export const getCenterManagerRole = async ({
+export const patchCenterManagerRole = async ({
   sn,
   role,
 }: {
-  sn: string;
+  sn: number;
   role: number;
 }) => {
-  const response = await customUnAuthAxios.patch(
-    `/centers/managers/${sn}/roles`,
-    {
-      role,
-    },
-  );
+  const response = await customAxios.patch(`/centers/managers/${sn}/roles`, {
+    role,
+  });
   return response.data;
 };
