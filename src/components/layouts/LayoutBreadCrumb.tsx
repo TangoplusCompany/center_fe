@@ -48,6 +48,11 @@ const Menus: IMenu[] = [
     initial: "device",
   },
   {
+    title: "매니저 관리",
+    url: "/manager",
+    initial: "manager",
+  },
+  {
     title: "설정",
     url: "/setting",
     initial: "setting",

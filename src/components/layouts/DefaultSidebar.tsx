@@ -15,12 +15,13 @@ import {
 } from "../ui/sidebar";
 import {
   Home,
-  Building2,
-  BookAudio,
   Smartphone,
   SquareUserIcon,
   LogOutIcon,
   GalleryVerticalEnd,
+  Network,
+  Settings,
+  SquareActivity,
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
@@ -35,7 +36,7 @@ const dashboard = [
   {
     title: "측정 관리",
     url: "/measure",
-    icon: Building2,
+    icon: SquareActivity,
   },
   {
     title: "사용자 관리",
@@ -50,12 +51,17 @@ const dashboard = [
   {
     title: "기기 관리",
     url: "/device",
-    icon: BookAudio,
+    icon: Smartphone,
+  },
+  {
+    title: "매니저 관리",
+    url: "/manager",
+    icon: Network,
   },
   {
     title: "설정",
     url: "/setting",
-    icon: Smartphone,
+    icon: Settings,
   },
 ];
 

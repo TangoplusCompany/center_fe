@@ -1,6 +1,6 @@
 import { customAxios } from "@/lib/axios";
 import { IResponseDefault } from "@/types/default";
-import { ICenterManagerData } from "@/types/setting";
+import { ICenterManagerData } from "@/types/manager";
 
 type CenterManagerListResponse = {
   data: ICenterManagerData[];

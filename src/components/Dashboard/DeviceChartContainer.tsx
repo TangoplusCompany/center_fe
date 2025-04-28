@@ -1,15 +1,12 @@
 "use client";
 
 import { useDeviceChartConfig } from "@/hooks/device/useDeviceChartConfig";
-import {
-  IDeviceChartList,
-  IDeviceChartResponse,
-  IDeviceStatusCardProps,
-} from "@/types/device";
+import { IDeviceChartResponse, IDeviceStatusCardProps } from "@/types/device";
 import React from "react";
 import DeviceChart from "./DeviceChart";
-import { PERIOD_OPTIONS } from "@/utils/constants/Period";
+
 import { useDevicePeriodData } from "@/hooks/device/useDevicePeriodData";
+import { PERIOD_OPTIONS } from "@/utils/constants";
 
 const DeviceChartContainer = ({
   deviceList,

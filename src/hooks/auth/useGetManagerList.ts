@@ -1,9 +1,15 @@
 import { getCenterManagers } from "@/services/center/getCenterManagers";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetManagerList = () => {
+export const useGetManagerList = ({
+  page,
+  limit,
+}: {
+  page: number;
+  limit: number;
+}) => {
   return useQuery({
-    queryKey: ["adminList"],
+    queryKey: ["adminList", page, limit],
     queryFn: async () => await getCenterManagers(),
   });
 };
