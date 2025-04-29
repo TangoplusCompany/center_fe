@@ -1,6 +1,7 @@
 "use client";
 
 import ManagerRoleChangeDialog from "@/components/Manager/ManagerRoleChangeDialog";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
@@ -8,11 +9,13 @@ import { useGetManagerDetail } from "@/hooks/auth/useGetManagerDetail";
 import { useGetQuery } from "@/hooks/utils/useGetQuery";
 import { ADMIN_ROLE } from "@/utils/constants";
 import { phoneHyphen } from "@/utils/regexFiltering";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const CenterManagerDetailPage = () => {
   const { params } = useGetQuery();
   const { managerSn } = params as { managerSn: string };
+  const router = useRouter();
   const {
     data: managerDetail,
     isLoading,
@@ -56,6 +59,15 @@ const CenterManagerDetailPage = () => {
             }
           />
         </div>
+      </div>
+      <div className="w-full flex justify-center">
+        <Button
+          variant="outline"
+          className=""
+          onClick={() => router.back()}
+        >
+          뒤로가기
+        </Button>
       </div>
     </div>
   );
