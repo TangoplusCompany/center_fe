@@ -6,6 +6,7 @@ interface IAuthProps {
   adminName: string;
   adminEmail: string;
   adminRole: number;
+  adminSn: number;
   accessJwt: string;
 }
 
@@ -24,6 +25,7 @@ export const createAuthStore = (initialState?: IAuthProps) => {
     adminName: "",
     adminEmail: "",
     adminRole: 0,
+    adminSn: 0,
     accessJwt: "",
   };
   return createStore<AuthStore>()(
