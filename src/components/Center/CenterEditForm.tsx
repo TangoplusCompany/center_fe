@@ -34,7 +34,7 @@ const CenterEditForm = ({ centerData }: { centerData: ICenterInformation }) => {
     resolver: zodResolver(schema),
   });
   const mutationEditCenterInformation = usePatchCenterInformation();
-  const SubmitEditCenterInformation = handleSubmit(async (data) => {
+  const submitEditCenterInformation = handleSubmit(async (data) => {
     const { centerName, centerAddress, centerAddressDetail } = data;
     await mutationEditCenterInformation.mutateAsync({
       center_name: centerName,
@@ -45,7 +45,7 @@ const CenterEditForm = ({ centerData }: { centerData: ICenterInformation }) => {
   });
   return (
     <form
-      onSubmit={SubmitEditCenterInformation}
+      onSubmit={submitEditCenterInformation}
       className="flex flex-col gap-4"
     >
       <div className="flex w-full justify-between items-center">
