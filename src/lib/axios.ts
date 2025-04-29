@@ -1,5 +1,6 @@
 import { refreshAccessToken } from "@/services/auth/postRefreshAccessToken";
 import { createAuthStore } from "@/stores/AuthStore";
+import { session } from "@/utils/helperSessionStorage";
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
 export const customUnAuthAxios = axios.create({
@@ -45,10 +46,19 @@ export const customAxios = axios.create({
 
 // ✅ 요청 인터셉터: 항상 최신 토큰을 헤더에 부착
 customAxios.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  const token = authStore.getState().accessJwt;
+  const token = session.get<{
+    state: {
+      isLogin: boolean;
+      adminName: string;
+      adminEmail: string;
+      adminRole: number;
+      adminSn: number;
+      accessJwt: string;
+    };
+  }>("login-user");
   if (token) {
     config.headers = config.headers || {};
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `Bearer ${token.state.accessJwt}`;
   }
   return config;
 });
