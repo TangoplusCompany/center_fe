@@ -1,6 +1,6 @@
-import { customUnAuthAxios } from "@/lib/axios";
+import { customAxios } from "@/lib/axios";
 
-export const patchCenterInformation = async ({
+export const patchAdminPassword = async ({
   sn,
   current_password,
   new_password,
@@ -9,12 +9,9 @@ export const patchCenterInformation = async ({
   current_password: string;
   new_password: string;
 }) => {
-  const response = await customUnAuthAxios.patch(
-    `/auth/updated/${sn}/passwords`,
-    {
-      current_password,
-      new_password,
-    },
-  );
+  const response = await customAxios.patch(`/auth/updated/${sn}/passwords`, {
+    current_password,
+    new_password,
+  });
   return response.data;
 };
