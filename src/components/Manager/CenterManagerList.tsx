@@ -14,7 +14,7 @@ import { FileText } from "lucide-react";
 import Link from "next/link";
 import { ICenterManagerData } from "@/types/manager";
 import { ADMIN_ROLE } from "@/utils/constants";
-import ManagerRemoveDialog from "../Manager/ManagerRemoveDialog";
+import ManagerRemoveDialog from "./ManagerRemoveDialog";
 
 const CenterManagerList = ({
   managerList,
