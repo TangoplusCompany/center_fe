@@ -1,6 +1,6 @@
 "use client";
 
-import CenterManagerList from "@/components/Center/CenterManagerList";
+import CenterManagerList from "@/components/Manager/CenterManagerList";
 import CustomPagination from "@/components/Custom/Pagination";
 import { useGetManagerList } from "@/hooks/auth/useGetManagerList";
 import { useSearchParams } from "next/navigation";

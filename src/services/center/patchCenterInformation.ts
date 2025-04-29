@@ -1,4 +1,5 @@
-import { customUnAuthAxios } from "@/lib/axios";
+import { customAxios } from "@/lib/axios";
+import { IResponseDefault } from "@/types/default";
 
 export const patchCenterInformation = async ({
   center_name,
@@ -9,7 +10,7 @@ export const patchCenterInformation = async ({
   center_address: string;
   center_address_detail: string;
 }) => {
-  const response = await customUnAuthAxios.patch(`/centers`, {
+  const response = await customAxios.patch<IResponseDefault>(`/centers`, {
     center_name,
     center_address,
     center_address_detail,

@@ -34,6 +34,7 @@ export const useLogin = () => {
         adminName: data.admin_info.admin_name,
         adminEmail: data.admin_info.admin_email,
         adminRole: data.admin_info.admin_role,
+        adminSn: data.admin_info.sn,
         accessJwt: data.access_jwt,
       });
       document.cookie = `isLogin=true; path=/; max-age=${60 * 60 * 3}`;

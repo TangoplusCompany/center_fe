@@ -6,5 +6,6 @@ export const useGetManagerDetail = ({ managerSn }: { managerSn: string }) => {
   return useQuery({
     queryKey: ["ManagerDetails", managerSn],
     queryFn: async () => await getCenterManagerDetail({ sn: managerSn }),
+    enabled: managerSn !== "0",
   });
 };
