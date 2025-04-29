@@ -5,11 +5,11 @@ export const patchAdminPassword = async ({
   current_password,
   new_password,
 }: {
-  sn: string;
+  sn: number;
   current_password: string;
   new_password: string;
 }) => {
-  const response = await customAxios.patch(`/auth/updated/${sn}/passwords`, {
+  const response = await customAxios.patch(`/auth/update/${sn}/passwords`, {
     current_password,
     new_password,
   });
