@@ -43,7 +43,7 @@ const ManagerEditForm = ({
     resolver: zodResolver(schema),
   });
   const mutationManagerInformation = usePatchManagerInformation();
-  const SubmitEditManagerInformation = handleSubmit((data) => {
+  const submitEditManagerInformation = handleSubmit((data) => {
     const { managerName, managerMobile } = data;
     mutationManagerInformation.mutate({
       sn: managerData.sn,
@@ -55,7 +55,7 @@ const ManagerEditForm = ({
 
   return (
     <form
-      onSubmit={SubmitEditManagerInformation}
+      onSubmit={submitEditManagerInformation}
       className="flex flex-col gap-4"
     >
       <div className="flex w-full justify-between items-center">
