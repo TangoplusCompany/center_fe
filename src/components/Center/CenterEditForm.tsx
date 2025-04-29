@@ -8,8 +8,11 @@ import { usePatchCenterInformation } from "@/hooks/center/usePatchCenterInformat
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import { useAuthStore } from "@/providers/AuthProvider";
 
 const CenterEditForm = ({ centerData }: { centerData: ICenterInformation }) => {
+  const { adminRole } = useAuthStore((state) => state);
+
   const { isBoolean: editState, setToggle: setEditState } = useBoolean();
   const handleEditState = () => {
     if (editState) {
@@ -52,16 +55,18 @@ const CenterEditForm = ({ centerData }: { centerData: ICenterInformation }) => {
         <legend className="text-xl">
           {editState ? "센터 정보 수정" : "센터 정보"}
         </legend>
-        <div className="flex items-center justify-center gap-2">
-          <Button variant="outline" onClick={handleEditState} type="button">
-            {editState ? "취소하기" : "수정하기"}
-          </Button>
-          {editState && (
-            <Button type="submit" variant="default">
-              저장하기
+        {adminRole < 2 && (
+          <div className="flex items-center justify-center gap-2">
+            <Button variant="outline" onClick={handleEditState} type="button">
+              {editState ? "취소하기" : "수정하기"}
             </Button>
-          )}
-        </div>
+            {editState && (
+              <Button type="submit" variant="default">
+                저장하기
+              </Button>
+            )}
+          </div>
+        )}
       </div>
       <div className="flex flex-col gap-2">
         <Label htmlFor="centerName">센터 이름</Label>

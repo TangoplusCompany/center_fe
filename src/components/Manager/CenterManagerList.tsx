@@ -15,12 +15,14 @@ import Link from "next/link";
 import { ICenterManagerData } from "@/types/manager";
 import { ADMIN_ROLE } from "@/utils/constants";
 import ManagerRemoveDialog from "./ManagerRemoveDialog";
+import { useAuthStore } from "@/providers/AuthProvider";
 
 const CenterManagerList = ({
   managerList,
 }: {
   managerList: ICenterManagerData[];
 }) => {
+  const { adminRole } = useAuthStore((state) => state);
   return (
     <Table>
       <TableHeader>
@@ -54,7 +56,7 @@ const CenterManagerList = ({
                 <FileText className="w-4 h-4" />
                 <span>상세보기</span>
               </Link>
-              <ManagerRemoveDialog manager={manager} />
+              {adminRole < 2 && <ManagerRemoveDialog manager={manager} />}
             </TableCell>
           </TableRow>
         ))}

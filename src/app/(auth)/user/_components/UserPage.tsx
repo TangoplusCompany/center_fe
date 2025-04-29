@@ -8,8 +8,11 @@ import { Button } from "@/components/ui/button";
 import { UserList } from "@/components/User/UserList";
 import { useSearchParams } from "next/navigation";
 import CustomPagination from "@/components/Custom/Pagination";
+import { useAuthStore } from "@/providers/AuthProvider";
 
 const UserPage = () => {
+  const { adminRole } = useAuthStore((state) => state);
+
   const params = useSearchParams();
   const page = parseInt(params.get("page") || "1");
   const limit = parseInt(params.get("limit") || "20");
@@ -47,11 +50,17 @@ const UserPage = () => {
   return (
     <div className="col-span-12 flex flex-col gap-5">
       <div className="flex justify-end">
-        <Button variant={"outline"}>
-          <Link href={`/user/add`}>신규사용자 등록</Link>
-        </Button>
+        {adminRole < 3 && (
+          <Button variant={"outline"}>
+            <Link href={`/user/add`}>신규사용자 등록</Link>
+          </Button>
+        )}
       </div>
-      <UserList users={userResponseData.users} refetch={refetchUserList} />
+      <UserList
+        users={userResponseData.users}
+        refetch={refetchUserList}
+        adminRole={adminRole}
+      />
       <CustomPagination
         total={userResponseData.total}
         page={userResponseData.page}
