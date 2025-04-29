@@ -7,12 +7,15 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useGetManagerDetail } from "@/hooks/auth/useGetManagerDetail";
 import { useGetQuery } from "@/hooks/utils/useGetQuery";
+import { useAuthStore } from "@/providers/AuthProvider";
 import { ADMIN_ROLE } from "@/utils/constants";
 import { phoneHyphen } from "@/utils/regexFiltering";
 import { useRouter } from "next/navigation";
 import React from "react";
 
 const CenterManagerDetailPage = () => {
+  const { adminRole } = useAuthStore((state) => state);
+
   const { params } = useGetQuery();
   const { managerSn } = params as { managerSn: string };
   const router = useRouter();
@@ -30,7 +33,7 @@ const CenterManagerDetailPage = () => {
       <Separator />
       <div className="flex items-center justify-between w-full">
         <h2 className="text-xl">매니저 정보</h2>
-        <ManagerRoleChangeDialog manager={managerDetail} />
+        {adminRole < 3 && <ManagerRoleChangeDialog manager={managerDetail} />}
       </div>
       <div className="flex flex-col gap-4 w-full">
         <div className="flex flex-col gap-2 w-full">
@@ -61,11 +64,7 @@ const CenterManagerDetailPage = () => {
         </div>
       </div>
       <div className="w-full flex justify-center">
-        <Button
-          variant="outline"
-          className=""
-          onClick={() => router.back()}
-        >
+        <Button variant="outline" className="" onClick={() => router.back()}>
           뒤로가기
         </Button>
       </div>

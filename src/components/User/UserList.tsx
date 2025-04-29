@@ -15,7 +15,15 @@ import { useEffect, useState } from "react";
 import { IUserData } from "@/types/user";
 import { useDeleteUser } from "@/hooks/user/useDeleteUser";
 
-export const UserList = ({ users, refetch }: { users: IUserData[]; refetch: () => void }) => {
+export const UserList = ({
+  users,
+  refetch,
+  adminRole,
+}: {
+  users: IUserData[];
+  refetch: () => void;
+  adminRole: number;
+}) => {
   const [list, setList] = useState<IUserData[]>(users);
 
   const mutationDeleteUser = useDeleteUser(refetch);
@@ -55,13 +63,15 @@ export const UserList = ({ users, refetch }: { users: IUserData[]; refetch: () =
                 <FileText className="w-4 h-4" />
                 <span>상세보기</span>
               </Link>
-              <button
-                onClick={() => handleRemoveUser(user.user_sn)}
-                className="flex items-center gap-2 justify-end cursor-pointer text-red-500"
-              >
-                <Trash className="w-4 h-4" />
-                <span>제거</span>
-              </button>
+              {adminRole < 2 && (
+                <button
+                  onClick={() => handleRemoveUser(user.user_sn)}
+                  className="flex items-center gap-2 justify-end cursor-pointer text-red-500"
+                >
+                  <Trash className="w-4 h-4" />
+                  <span>제거</span>
+                </button>
+              )}
             </TableCell>
           </TableRow>
         ))}

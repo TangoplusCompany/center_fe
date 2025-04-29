@@ -6,6 +6,7 @@ import SkeletonDeviceCard from "@/components/Card/SkeletonDeviceCard";
 import { IDeviceStatus } from "@/types/device";
 import { DeviceStatusItems } from "@/components/Device";
 import DeviceAddDialog from "./DeviceAddDialog";
+import { useAuthStore } from "@/providers/AuthProvider";
 
 type RefetchContextType = {
   refetch: () => void;
@@ -21,6 +22,7 @@ export const useRefetchContext = () => {
 };
 
 export const DeviceMainContainer = () => {
+  const { adminRole } = useAuthStore((state) => state);
   const {
     data: deviceStatus,
     isLoading,
@@ -51,13 +53,12 @@ export const DeviceMainContainer = () => {
           {deviceStatus.data.map((device, index) => (
             <DeviceStatusItems
               key={device.serial_number + index}
+              adminRole={adminRole}
               device={device}
             />
           ))}
         </div>
-        <article>
-          <DeviceAddDialog />
-        </article>
+        <article>{adminRole < 2 && <DeviceAddDialog />}</article>
       </div>
     </RefetchContext.Provider>
   );
