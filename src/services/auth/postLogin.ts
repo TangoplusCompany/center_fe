@@ -1,4 +1,8 @@
 import { customUnAuthAxios } from "@/lib/axios";
+import { IResponseDefault } from "@/types/default";
+import { ILoginData } from "@/types/manager";
+
+type ILoginResponse = { data: ILoginData } & IResponseDefault;
 
 export const postLogin = async ({
   email,
@@ -7,7 +11,7 @@ export const postLogin = async ({
   email: string;
   password: string;
 }) => {
-  const response = await customUnAuthAxios.post(
+  const { data } = await customUnAuthAxios.post<ILoginResponse>(
     "/auth/login",
     {
       email,
@@ -17,5 +21,5 @@ export const postLogin = async ({
       withCredentials: true,
     },
   );
-  return response.data;
+  return data.data;
 };

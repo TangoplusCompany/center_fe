@@ -1,33 +1,16 @@
 import { useAuthStore } from "@/providers/AuthProvider";
 import { postLogin } from "@/services/auth/postLogin";
+import { ILoginData } from "@/types/manager";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
-
-interface ILoginResponse {
-  status: number;
-  success: boolean;
-  message: string[];
-  data: {
-    admin_info: {
-      sn: number;
-      center_sn: number;
-      admin_name: string;
-      admin_email: string;
-      admin_role: number;
-      mobile: string;
-      is_logged_in: boolean;
-    };
-    access_jwt: string;
-  };
-}
 
 export const useLogin = () => {
   const router = useRouter();
   const { setLogin } = useAuthStore((state) => state);
   return useMutation({
     mutationFn: postLogin,
-    onSuccess: ({ data }: ILoginResponse) => {
+    onSuccess: (data: ILoginData) => {
       // Handle successful login, e.g., redirect to dashboard
       setLogin({
         isLogin: true,

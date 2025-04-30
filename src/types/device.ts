@@ -43,11 +43,9 @@ export interface IDeviceSearch extends IResponseDefault {
 }
 
 export interface IDeviceChartResponse extends IResponseDefault {
-  data: IDeviceChartList[];
+  data: DeviceChartList[];
 }
 
-export interface IDeviceChartList {
-  device_sn: number;
-  device_name: string;
-  measure_count: number;
-}
+export type DeviceChartList = { date: string } & {
+  [key: string]: number;
+};

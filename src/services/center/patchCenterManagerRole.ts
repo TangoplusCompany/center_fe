@@ -1,4 +1,5 @@
 import { customAxios } from "@/lib/axios";
+import { IResponseDefault } from "@/types/default";
 
 export const patchCenterManagerRole = async ({
   sn,
@@ -7,7 +8,7 @@ export const patchCenterManagerRole = async ({
   sn: number;
   role: number;
 }) => {
-  const response = await customAxios.patch(`/centers/managers/${sn}/roles`, {
+  const response = await customAxios.patch<IResponseDefault>(`/centers/managers/${sn}/roles`, {
     role,
   });
   return response.data;
