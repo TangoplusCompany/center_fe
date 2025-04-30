@@ -1,4 +1,7 @@
 import { customUnAuthAxios } from "@/lib/axios";
+import { IResponseDefault } from "@/types/default";
+
+type RegisterResponse = { data: { admin_sn: number } } & IResponseDefault;
 
 export const postRegister = async ({
   center_id,
@@ -13,12 +16,15 @@ export const postRegister = async ({
   password: string;
   name: string;
 }) => {
-  const response = await customUnAuthAxios.post("/auth/register", {
-    center_id,
-    email,
-    password,
-    mobile,
-    name,
-  });
+  const response = await customUnAuthAxios.post<RegisterResponse>(
+    "/auth/register",
+    {
+      center_id,
+      email,
+      password,
+      mobile,
+      name,
+    },
+  );
   return response.data;
 };
