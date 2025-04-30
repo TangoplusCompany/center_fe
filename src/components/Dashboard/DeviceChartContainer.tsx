@@ -12,7 +12,7 @@ const DeviceChartContainer = ({
   deviceList: IDeviceStatusCardProps[];
 }) => {
   const { chartConfig } = useDeviceChartConfig(deviceList);
-  const { data: chartData, isLoading } = useDevicePeriodData("1m");
+  const { data: chartData, isLoading } = useDevicePeriodData("3m");
   if (isLoading) return <div>Loading...</div>;
   if (!chartData) return <div>No data</div>;
 
