@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { PencilLine } from "lucide-react";
 import DeviceRemoveDialog from "@/app/(auth)/device/_components/DeviceRemoveDialog";
+import { nameFiltering } from "@/utils/regexFiltering";
 
 export const DeviceStatusItems = React.memo(
   ({
@@ -37,7 +38,7 @@ export const DeviceStatusItems = React.memo(
               device.install_address_2 ?? ""
             } - ${device.install_location}`}
           </p>
-          <p className="text-sm text-gray-500">{`시리얼 넘버 : ${device.serial_number}`}</p>
+          <p className="text-sm text-gray-500">{`시리얼 넘버 : ${nameFiltering(device.serial_number)}`}</p>
         </div>
       </div>
     );
