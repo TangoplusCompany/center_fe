@@ -37,7 +37,7 @@ export const MeasureList = ({
       </TableHeader>
       <TableBody>
         {list.map((measurement, index) => (
-          <TableRow key={measurement.user_uuid}>
+          <TableRow key={measurement.user_uuid + `-${index}`}>
             <TableCell className="text-center font-medium">
               {measurement.user_name
                 ? nameFiltering(measurement.user_name)
