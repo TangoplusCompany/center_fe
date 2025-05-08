@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { FileText } from "lucide-react";
-import { phoneHyphen } from "@/utils/regexFiltering";
+import { emailFiltering, nameFiltering, phoneFiltering } from "@/utils/regexFiltering";
 import { useEffect, useState } from "react";
 import { IUserData } from "@/types/user";
 import { IMeasureList } from "@/types/measure";
@@ -44,13 +44,13 @@ export const MainUserList = ({
             {(list as IUserData[]).map((user) => (
               <TableRow key={user.user_uuid}>
                 <TableCell className="text-center font-medium">
-                  {user.user_name}
+                  {nameFiltering(user.user_name)}
                 </TableCell>
                 <TableCell className="text-center ">
-                  {phoneHyphen(user.mobile)}
+                  {phoneFiltering(user.mobile)}
                 </TableCell>
 
-                <TableCell className="text-center">{user.email}</TableCell>
+                <TableCell className="text-center">{emailFiltering(user.email)}</TableCell>
                 <TableCell className="flex items-center justify-end gap-2">
                   <Link
                     href={`/user/${user.user_uuid}`}
@@ -79,12 +79,11 @@ export const MainUserList = ({
             {(list as IMeasureList[]).map((measure) => (
               <TableRow key={measure.user_uuid}>
                 <TableCell className="text-center font-medium">
-                  {measure.user_name}
+                  {nameFiltering(measure.user_name)}
                 </TableCell>
                 <TableCell className="text-center ">
                   {measure.t_score}점
                 </TableCell>
-
                 <TableCell className="text-center">
                   {formatDate(measure.measure_date)}
                 </TableCell>

@@ -24,6 +24,19 @@ import {
   CardContent,
 } from "../ui/card";
 
+const pastelColors = [
+  "#FFD1DC", // Pastel Pink
+  "#AEC6CF", // Pastel Blue
+  "#B39EB5", // Pastel Purple
+  "#77DD77", // Pastel Green
+  "#FFB347", // Pastel Orange
+  "#FDFD96", // Pastel Yellow
+  "#CFCFC4", // Pastel Gray
+  "#C1E1C1", // Pastel Mint
+  "#F49AC2", // Pastel Rose
+  "#B0E0E6", // Pastel Aqua
+];
+
 const DeviceChart = ({
   chartConfig,
   chartData,
@@ -32,19 +45,24 @@ const DeviceChart = ({
   chartData: DeviceChartList[];
 }) => {
   const [timeRange, setTimeRange] = React.useState("1m");
-  const filteredData = chartData.filter((item) => {
-    const date = new Date(item.date);
-    const referenceDate = new Date();
-    let daysToSubtract = 30;
-    if (timeRange === "1w") {
-      daysToSubtract = 7;
-    } else if (timeRange === "3m") {
-      daysToSubtract = 90;
-    }
-    const startDate = new Date(referenceDate);
-    startDate.setDate(startDate.getDate() - daysToSubtract);
-    return date >= startDate;
-  });
+  const filteredData = chartData
+    .filter((item) => {
+      const date = new Date(item.date);
+      const referenceDate = new Date();
+      let daysToSubtract = 30;
+      if (timeRange === "1w") {
+        daysToSubtract = 7;
+      } else if (timeRange === "3m") {
+        daysToSubtract = 90;
+      }
+      const startDate = new Date(referenceDate);
+      startDate.setDate(startDate.getDate() - daysToSubtract);
+      return date >= startDate;
+    })
+    .reverse()
+    .sort((a, b) => {
+      return new Date(a.date).getTime() - new Date(b.date).getTime();
+    });
   return (
     <Card className="rounded-lg shadow-none">
       <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
@@ -81,30 +99,29 @@ const DeviceChart = ({
         >
           <AreaChart data={filteredData}>
             <defs>
-              <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-desktop)"
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-desktop)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
-              <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-mobile)"
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-mobile)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
+              {Object.keys(chartConfig).map((_, index) => {
+                return (
+                  <linearGradient
+                    id={`fill${index}`}
+                    key={`fill${index}`}
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop
+                      offset="5%"
+                      stopColor={pastelColors[index]}
+                      stopOpacity={0.8}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor={pastelColors[index]}
+                      stopOpacity={0.1}
+                    />
+                  </linearGradient>
+                );
+              })}
             </defs>
             <CartesianGrid vertical={false} />
             <XAxis
@@ -135,20 +152,18 @@ const DeviceChart = ({
                 />
               }
             />
-            <Area
-              dataKey="탱고바디32"
-              type="natural"
-              fill="url(#fillMobile)"
-              stroke="var(--color-mobile)"
-              stackId="a"
-            />
-            <Area
-              dataKey="테스트디바이스"
-              type="natural"
-              fill="url(#fillDesktop)"
-              stroke="var(--color-desktop)"
-              stackId="a"
-            />
+            {Object.keys(chartConfig).map((key, index) => {
+              return (
+                <Area
+                  dataKey={key}
+                  key={`chart-${key}`}
+                  type="natural"
+                  fill={`url(#fill${index})`}
+                  stroke={pastelColors[index]}
+                  stackId="a"
+                />
+              );
+            })}
             <ChartLegend content={<ChartLegendContent />} />
           </AreaChart>
         </ChartContainer>
