@@ -31,6 +31,7 @@ export const MeasureList = ({
           <TableHead className="text-center w-[100px]">이름</TableHead>
           <TableHead className="text-center">전화번호</TableHead>
           <TableHead className="text-center">측정일</TableHead>
+          <TableHead className="text-center">측정기기</TableHead>
           <TableHead className="text-center">측정점수</TableHead>
           <TableHead className="text-right"></TableHead>
         </TableRow>
@@ -48,6 +49,9 @@ export const MeasureList = ({
             </TableCell>
             <TableCell className="text-center">
               {formatDate(measurement.measure_date)}
+            </TableCell>
+            <TableCell className="text-center">
+              {measurement.device_sn}
             </TableCell>
             <TableCell className="text-center">
               {measurement.t_score}점
