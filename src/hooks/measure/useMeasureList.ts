@@ -1,4 +1,5 @@
 import { customAxios } from "@/lib/axios";
+import { getMeasureList } from "@/services/measure/getMeasureList";
 import { useQuery } from "@tanstack/react-query";
 
 export const useMeasureList = <T>(
@@ -9,14 +10,7 @@ export const useMeasureList = <T>(
   return useQuery<T>({
     queryKey: ["measureList", page, limit, deviceSn],
     queryFn: async () => {
-      const response = await customAxios.get(`/measurement`, {
-        params: {
-          page,
-          limit,
-          device_sn: deviceSn,
-        },
-      });
-      return response.data;
+      return await getMeasureList({ page, limit, deviceSn });
     },
   });
 };
