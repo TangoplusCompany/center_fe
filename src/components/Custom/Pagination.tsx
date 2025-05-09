@@ -27,6 +27,18 @@ const CustomPagination = ({ ...props }: IPagination) => {
             />
           </PaginationItem>
         )}
+        {page !== 1 && page - 1 > 1 && (
+          <PaginationItem>
+            <PaginationButton onClick={() => setQueryParam("page", 1)}>
+              1
+            </PaginationButton>
+          </PaginationItem>
+        )}
+        {page !== 1 && 1 < page - 2 && (
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+        )}
         {page - 1 > 0 && (
           <PaginationItem>
             <PaginationButton onClick={() => setQueryParam("page", page - 1)}>
@@ -44,9 +56,18 @@ const CustomPagination = ({ ...props }: IPagination) => {
             </PaginationButton>
           </PaginationItem>
         )}
-        {props.last_page > page + 1 && (
+        {props.last_page > page + 2 && (
           <PaginationItem>
             <PaginationEllipsis />
+          </PaginationItem>
+        )}
+        {props.last_page !== page && props.last_page - 1 > page && (
+          <PaginationItem>
+            <PaginationButton
+              onClick={() => setQueryParam("page", props.last_page)}
+            >
+              {props.last_page}
+            </PaginationButton>
           </PaginationItem>
         )}
         {props.last_page > page && (

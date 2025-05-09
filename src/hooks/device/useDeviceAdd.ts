@@ -1,14 +1,15 @@
 import { postDeviceAdd } from "@/services/device/postDeviceAdd";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
-export const useDeviceAdd = (refetch: () => void) => {
+export const useDeviceAdd = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: postDeviceAdd,
     onSuccess: () => {
       // Handle successful login, e.g., redirect to dashboard
       console.log("Device added successfully");
-      refetch();
+      queryClient.invalidateQueries({ queryKey: ["deviceStatusList"] });
     },
     onError: (
       data: AxiosError<{

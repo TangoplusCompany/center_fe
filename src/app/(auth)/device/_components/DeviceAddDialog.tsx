@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { useDeviceAdd } from "@/hooks/device";
-import { useRefetchContext } from "./DeviceMainContainer";
 
 const DeviceAddDialog = () => {
   return (
@@ -43,8 +42,8 @@ const DeviceAddDialog = () => {
 };
 
 const DeviceAddContainer = ({ deviceInfo }: { deviceInfo: IDeviceSearch }) => {
-  const { refetch } = useRefetchContext();
-  const mutateDeviceAdd = useDeviceAdd(refetch);
+  
+  const mutateDeviceAdd = useDeviceAdd();
   const handlePostDeviceAdd = (deviceSn: number) => {
     mutateDeviceAdd.mutate({
       deviceSn,
