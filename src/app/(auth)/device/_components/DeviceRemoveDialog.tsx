@@ -13,7 +13,6 @@ import {
 import { IDeviceStatusCardProps } from "@/types/device";
 import { Trash } from "lucide-react";
 import React from "react";
-import { useRefetchContext } from "./DeviceMainContainer";
 import { useDeviceRemove } from "@/hooks/device/useDeviceRemove";
 
 const DeviceRemoveDialog = ({
@@ -22,8 +21,8 @@ const DeviceRemoveDialog = ({
   deviceInfo: IDeviceStatusCardProps;
 }) => {
   const [open, setOpen] = React.useState(false);
-  const { refetch } = useRefetchContext();
-  const mutationRemoveDevice = useDeviceRemove(refetch, setOpen);
+  
+  const mutationRemoveDevice = useDeviceRemove(setOpen);
   const handleDeviceRemove = async () => {
     await mutationRemoveDevice.mutateAsync(deviceInfo.sn);
   };
