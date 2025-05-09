@@ -6,7 +6,7 @@ import React from "react";
 import { MeasureList } from "@/components/Measure/MeasureList";
 import CustomPagination from "@/components/Custom/Pagination";
 import { useSearchParams } from "next/navigation";
-import MeasureDeviceTab from "@/components/Measure/MeasureDeviceTab";
+import MeasureOptionBar from "@/components/Measure/MeasureOptionBar";
 
 const MeasureMainContainer = () => {
   const params = useSearchParams();
@@ -30,7 +30,7 @@ const MeasureMainContainer = () => {
   }
   return (
     <>
-      <MeasureDeviceTab />
+      <MeasureOptionBar totalItems={measureResponse.data.total} />
       <MeasureList measurements={measureResponse.data.measurements} />
       <CustomPagination
         total={measureResponse.data.total}

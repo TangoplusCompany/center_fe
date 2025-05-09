@@ -16,7 +16,10 @@ const MeasureDeviceTab = () => {
   } = useGetDeviceStatus<IDeviceStatus>();
 
   const handleDeviceClick = (deviceSn: number) => {
-    setQueryParam("device_sn", deviceSn);
+    setQueryParam([
+      ["device_sn", deviceSn],
+      ["page", "1"],
+    ]);
   };
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error...</div>;
@@ -28,7 +31,7 @@ const MeasureDeviceTab = () => {
           <Button
             key={device.device_name + index}
             className="cursor-pointer"
-            variant={deviceSn === device.sn ? "default" : "outline"}
+            variant={deviceSn === device.sn.toString() ? "default" : "outline"}
             onClick={() => handleDeviceClick(device.sn)}
           >
             {device.device_name}

@@ -4,7 +4,13 @@
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
 type QueryParams = Record<string, string>;
-type SetQueryParamFn = (key: string, value: string | number) => void;
+type QueryParamValue = string | number;
+type QueryParamEntry = [string, QueryParamValue];
+
+type SetQueryParamFn = {
+  (key: string, value: QueryParamValue): void;
+  (entries: QueryParamEntry[]): void;
+};
 type RemoveQueryParamFn = (key: string) => void;
 
 /**
@@ -35,9 +41,19 @@ export const useQueryParams = (): {
   }
 
   // 쓰기
-  const setQueryParam = (key: string, value: string | number) => {
+  const setQueryParam: SetQueryParamFn = (keyOrEntries: any, value?: any) => {
     const newParams = new URLSearchParams(searchParams.toString());
-    newParams.set(key, String(value));
+  
+    if (Array.isArray(keyOrEntries)) {
+      // 여러 개 세팅
+      keyOrEntries.forEach(([key, val]) => {
+        newParams.set(key, String(val));
+      });
+    } else {
+      // 기존 단일 세팅
+      newParams.set(keyOrEntries, String(value));
+    }
+  
     router.push(`${pathname}?${newParams.toString()}`, { scroll: false });
   };
 
