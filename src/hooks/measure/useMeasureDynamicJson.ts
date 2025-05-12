@@ -2,11 +2,11 @@
 "use client";
 
 import { getMeasureJson } from "@/app/actions/getMeasureJson";
-import { IPoseLandmark } from "@/types/pose";
+import { IMeasureJson } from "@/types/measure";
 import { useEffect, useState } from "react";
 
 export const useMeasureDynamicJson = (jsonPath?: string) => {
-  const [data, setData] = useState<{ pose_landmark: IPoseLandmark[] }[]>();
+  const [data, setData] = useState<IMeasureJson[]>();
   const [isLoading, setLoading] = useState(false);
   const [isError, setError] = useState<Error | null>(null);
 
