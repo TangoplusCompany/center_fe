@@ -153,13 +153,13 @@ const KneeMoveLine = ({
             ref={canvasLeftBlueRef}
             width={400}
             height={400}
-            className="absolute bottom-0 left-0 z-[9] -scale-x-[1] pointer-events-none"
+            className="absolute bottom-[25%] -left-[25%] z-[9] -scale-x-[1] pointer-events-none"
           />
           <canvas
             ref={canvasLeftRedRef}
             width={400}
             height={400}
-            className="absolute bottom-0 left-0 z-[9] -scale-x-[1] pointer-events-none"
+            className="absolute bottom-[25%] -left-[25%] z-[9] -scale-x-[1] pointer-events-none"
           />
         </div>
       </div>
@@ -170,13 +170,13 @@ const KneeMoveLine = ({
             ref={canvasRightBlueRef}
             width={400}
             height={400}
-            className="absolute bottom-0 right-0 z-[9] -scale-x-[1] pointer-events-none"
+            className="absolute bottom-[25%] -right-[25%] z-[9] -scale-x-[1] pointer-events-none"
           />
           <canvas
             ref={canvasRightRedRef}
             width={400}
             height={400}
-            className="absolute bottom-0 right-0 z-[9] -scale-x-[1] pointer-events-none"
+            className="absolute bottom-[25%] -right-[25%] z-[9] -scale-x-[1] pointer-events-none"
           />
         </div>
       </div>
