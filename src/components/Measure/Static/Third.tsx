@@ -219,29 +219,29 @@ const MeasureStaticThird = React.memo(
             alt="측정 사진"
             width={1500}
             height={844}
-            className="lg:w-full lg:relative absolute top-0 left-0 w-[750px] h-[400px] object-cover lg:h-full -scale-x-[1]"
+            className="lg:w-full lg:relative absolute top-0 left-0 w-[750px] h-[400px] object-cover lg:h-full"
           />
           <canvas
             ref={canvasWhiteRef}
             width={nowWidth}
             height={nowHeight}
-            className="absolute bottom-0 left-0 right-0 top-0 z-9"
+            className="absolute bottom-0 left-0 right-0 top-0 z-9 -scale-x-[1]"
           />
           <canvas
             ref={canvasGreenRef}
             width={nowWidth}
             height={nowHeight}
-            className="absolute bottom-0 left-0 right-0 top-0 z-9"
+            className="absolute bottom-0 left-0 right-0 top-0 z-9 -scale-x-[1]"
           />
           <canvas
             ref={canvasRedRef}
             width={nowWidth}
             height={nowHeight}
-            className="absolute bottom-0 left-0 right-0 top-0 z-9"
+            className="absolute bottom-0 left-0 right-0 top-0 z-9 -scale-x-[1]"
           />
         </div>
-        <div className="grid flex-1 grid-cols-12 gap-2 md:gap-5 w-full lg:gap-5">
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+        <div className="grid flex-1 grid-cols-12 gap-2 md:gap-5 w-full lg:gap-5 px-2">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={32.55}
               sdAvg={163.01}
@@ -259,7 +259,7 @@ const MeasureStaticThird = React.memo(
               unit="°"
             />
           </div>
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={-77.54}
               sdAvg={158.71}
@@ -277,7 +277,7 @@ const MeasureStaticThird = React.memo(
               unit="°"
             />
           </div>
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={78.81}
               sdAvg={111.75}
@@ -295,7 +295,7 @@ const MeasureStaticThird = React.memo(
               unit="cm"
             />
           </div>
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={2.16}
               sdAvg={1.28}

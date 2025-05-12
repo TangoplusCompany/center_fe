@@ -216,8 +216,8 @@ const MeasureStaticSixth = React.memo(
             className="absolute bottom-0 left-0 right-0 top-0 z-9 -scale-x-[1]"
           />
         </div>
-        <div className="grid flex-1 grid-cols-12 gap-2 md:gap-5 w-full lg:gap-5">
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+        <div className="grid flex-1 grid-cols-12 gap-2 md:gap-5 w-full lg:gap-5 px-2">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={0.04}
               sdAvg={0.29}
@@ -235,7 +235,7 @@ const MeasureStaticSixth = React.memo(
               unit="°"
             />
           </div>
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={-0.02}
               sdAvg={0.63}
@@ -253,7 +253,7 @@ const MeasureStaticSixth = React.memo(
               unit="°"
             />
           </div>
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={0.11}
               sdAvg={0.42}
@@ -271,7 +271,7 @@ const MeasureStaticSixth = React.memo(
               unit="°"
             />
           </div>
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={90 - 65.63}
               sdAvg={3.94}
@@ -293,7 +293,7 @@ const MeasureStaticSixth = React.memo(
               unit="°"
             />
           </div>
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={90 - 43.64}
               sdAvg={4.48}

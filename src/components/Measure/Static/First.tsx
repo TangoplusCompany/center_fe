@@ -226,8 +226,8 @@ const MeasureStaticFirst = React.memo(
             className="absolute bottom-0 left-0 right-0 top-0 z-[9] -scale-x-[1]"
           />
         </div>
-        <div className="grid flex-1 grid-cols-12 gap-2 md:gap-5 w-full lg:gap-5">
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+        <div className="grid flex-1 grid-cols-12 gap-2 md:gap-5 w-full lg:gap-5 px-2">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={0.1}
               sdAvg={0.23}
@@ -245,7 +245,7 @@ const MeasureStaticFirst = React.memo(
               unit="°"
             />
           </div>
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={-0.13}
               sdAvg={0.51}
@@ -263,7 +263,7 @@ const MeasureStaticFirst = React.memo(
               unit="°"
             />
           </div>
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={-0.14}
               sdAvg={0.83}
@@ -282,7 +282,7 @@ const MeasureStaticFirst = React.memo(
             />
           </div>
 
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={0.12}
               sdAvg={0.21}
@@ -301,7 +301,7 @@ const MeasureStaticFirst = React.memo(
             />
           </div>
 
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={-0.01}
               sdAvg={0.57}
@@ -319,7 +319,7 @@ const MeasureStaticFirst = React.memo(
               unit="°"
             />
           </div>
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={5.03}
               sdAvg={1.27}
@@ -337,7 +337,7 @@ const MeasureStaticFirst = React.memo(
               unit="cm"
             />
           </div>
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={-27.35}
               sdAvg={174.14}
@@ -355,7 +355,7 @@ const MeasureStaticFirst = React.memo(
               unit="°"
             />
           </div>
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={-39.92}
               sdAvg={174.14}
@@ -373,7 +373,7 @@ const MeasureStaticFirst = React.memo(
               unit="°"
             />
           </div>
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={3.85}
               sdAvg={1.5}
