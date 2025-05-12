@@ -1,7 +1,7 @@
 import UnAuthLayout from "@/components/Layouts/UnAuthLayout";
 import { GalleryVerticalEnd } from "lucide-react";
 
-export default function RootLayout({
+export default function UnAuthorizationLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
