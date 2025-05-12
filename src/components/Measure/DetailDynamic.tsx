@@ -4,6 +4,9 @@ import ResultGraph from "./ResultGraph";
 
 import { useDrawCanvas } from "@/hooks/utils";
 import { useMeasureDynamicJson } from "@/hooks/measure/useMeasureDynamicJson";
+import DataError from "../Util/DataError";
+import ShoulderMoveLine from "./Dynamic/ShoulderMoveLine";
+import KneeMoveLine from "./Dynamic/KneeMoveLine";
 
 const MeasureDetailDynamic = ({
   dynamic,
@@ -123,7 +126,9 @@ const MeasureDetailDynamic = ({
     const canvasWhite = canvasWhiteRef.current as HTMLCanvasElement;
     const canvasRed = canvasRedRef.current as HTMLCanvasElement;
 
-    const contextWhite = canvasWhite.getContext("2d") as CanvasRenderingContext2D;
+    const contextWhite = canvasWhite.getContext(
+      "2d",
+    ) as CanvasRenderingContext2D;
     const contextRed = canvasRed.getContext("2d") as CanvasRenderingContext2D;
 
     const drawCanvas = () => {
@@ -374,7 +379,7 @@ const MeasureDetailDynamic = ({
 
   if (!measureJson) return <div></div>;
   if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>에러가 발생했습니다.</div>;
+  if (isError) return <DataError />;
   return (
     <div className={`${className} flex flex-col gap-4 lg:gap-10`}>
       <div className="relative w-full overflow-hidden">
@@ -400,6 +405,16 @@ const MeasureDetailDynamic = ({
           className="absolute bottom-0 left-0 right-0 top-0 z-[9] -scale-x-[1] pointer-events-none"
         />
       </div>
+      <ShoulderMoveLine
+        nowWidth={nowWidth}
+        nowHeight={nowHeight}
+        measureJson={measureJson}
+      />
+      <KneeMoveLine
+        nowWidth={nowWidth}
+        nowHeight={nowHeight}
+        measureJson={measureJson}
+      />
       <div className="grid flex-1 grid-cols-12 gap-2 md:gap-5 w-full lg:gap-10 p-5 lg:p-0">
         <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
           <ResultGraph
