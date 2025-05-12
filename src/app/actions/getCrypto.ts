@@ -1,6 +1,6 @@
 "use server";
 
-import { IActionCryptoProps } from "@/types/\bcrypto";
+import { IActionCryptoProps } from "@/types/crypto";
 import crypto from "crypto";
 
 const algorithm = "aes-256-cbc";

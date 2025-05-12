@@ -1,6 +1,6 @@
 "use client";
 import { actionEncrypt, actionDecrypt } from "@/app/actions/getCrypto";
-import { IActionCryptoProps } from "@/types/\bcrypto";
+import { IActionCryptoProps } from "@/types/crypto";
 
 
 export const useActionEncrypt: (cryptoData: IActionCryptoProps) => Promise<string> = async (cryptoData: IActionCryptoProps) => {
