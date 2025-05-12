@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { formatDate } from "@/utils/formatDate";
+import { useGetUserDetail } from "@/hooks/user";
 
 const UserDetailTap = ({
   nowTab,
@@ -32,7 +33,6 @@ const UserDetailTap = ({
     update(value);
   };
   const handleSelect = (value: string) => {
-    console.log(value);
     update(0);
     onUpdateSn(parseInt(value));
   };
@@ -57,9 +57,7 @@ const UserDetailTap = ({
           );
         })}
       </ul>
-      <Select
-        onValueChange={handleSelect}
-      >
+      <Select onValueChange={handleSelect}>
         <SelectTrigger className="w-auto">
           <SelectValue
             placeholder={`${formatDate(
@@ -110,7 +108,10 @@ const CenterUserDetail = () => {
 
   const { data: userMeasureData, isLoading: userMeasureDataLoading } =
     useMeasureDetail<IUserMeasurement>(recentSn, userSn);
+  const { data: userDetailData, isLoading: userDetailLoading } =
+    useGetUserDetail({ userSn: "1" });
 
+  console.log(userDetailData);
   if (userMeasureLoading || userMeasureDataLoading) return <p>Loading...</p>;
   if (!userMeasureList || !userMeasureData) return <p>No data</p>;
   if (userMeasureError) {
