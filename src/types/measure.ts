@@ -20,6 +20,7 @@ export interface IMeasureList {
   user_uuid: string;
   user_name: string;
   device_sn: number;
+  device_name: string;
   measure_date: string;
   t_score: number;
 }
