@@ -7,6 +7,7 @@ import { MeasureList } from "@/components/Measure/MeasureList";
 import CustomPagination from "@/components/Custom/Pagination";
 import { useSearchParams } from "next/navigation";
 import MeasureOptionBar from "@/components/Measure/MeasureOptionBar";
+import DataError from "@/components/Util/DataError";
 
 const MeasureMainContainer = () => {
   const params = useSearchParams();
@@ -23,7 +24,7 @@ const MeasureMainContainer = () => {
     return <div>Loading...</div>;
   }
   if (isError) {
-    return <div>Error loading data</div>;
+    return <DataError />;
   }
   if (!measureResponse) {
     return <div>No data available</div>;

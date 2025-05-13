@@ -136,8 +136,8 @@ const MeasureStaticSecond = React.memo(
             className="absolute bottom-0 left-0 right-0 top-0 z-9 -scale-x-[1]"
           />
         </div>
-        <div className="grid flex-1 grid-cols-12 gap-2 md:gap-5 w-full lg:gap-5">
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+        <div className="grid flex-1 grid-cols-12 gap-2 md:gap-5 w-full lg:gap-5 px-2">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={-6.07}
               sdAvg={42.12}
@@ -159,7 +159,7 @@ const MeasureStaticSecond = React.memo(
               unit="°"
             />
           </div>
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={18.87}
               sdAvg={26.73}
@@ -181,7 +181,7 @@ const MeasureStaticSecond = React.memo(
               unit="°"
             />
           </div>
-          {/* <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          {/* <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
               <ResultGraph
                 defaultAvg={-0.12}
                 sdAvg={0.36}
@@ -199,7 +199,7 @@ const MeasureStaticSecond = React.memo(
                 unit="cm"
               />
             </div> */}
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={2.34}
               sdAvg={1.89}
@@ -217,7 +217,7 @@ const MeasureStaticSecond = React.memo(
               unit="cm"
             />
           </div>
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={-0.14}
               sdAvg={0.84}

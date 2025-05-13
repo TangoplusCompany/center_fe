@@ -83,6 +83,7 @@ export interface IUserDetailMeasureInfo
   measure_string: string; // 측정일자
   measure_seq: number | string; // 측정시퀸스
   measure_sn: number | string; // t_measure_info_sn
+  measure_date: string; // 측정일자
   mobile_device_uuid: string;
   modify_string?: string; // 수정일자
   sn: number | string; // sn

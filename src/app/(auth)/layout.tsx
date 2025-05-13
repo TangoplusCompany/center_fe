@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { createAuthStore } from "@/stores/AuthStore";
 import { useRouter } from "next/navigation";
 
-export default function RootLayout({
+export default function AuthLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
