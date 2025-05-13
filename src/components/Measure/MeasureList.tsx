@@ -51,7 +51,7 @@ export const MeasureList = ({
               {formatDate(measurement.measure_date)}
             </TableCell>
             <TableCell className="text-center">
-              {measurement.device_sn}
+              {measurement.device_name}
             </TableCell>
             <TableCell className="text-center">
               {measurement.t_score}점
