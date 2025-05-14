@@ -2,7 +2,7 @@ import { customAxios } from "@/lib/axios";
 import { IResponseDefault } from "@/types/default";
 
 type refreshAccessTokenResponse = {
-  data: { access_token: string };
+  data: { access_jwt: string };
 } & IResponseDefault;
 
 export const refreshAccessToken = async () => {

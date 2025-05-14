@@ -94,6 +94,8 @@ export interface IUserDetailMeasureInfo
   user_name: string; // 유저 이름
   user_sn: number | string; // 유저 sn
   user_uuid: string; // 유저 UUID
+  measure_position: string; // 측정 위치
+  mobile: string; // 휴대폰 번호
 }
 
 export interface IFilterMeasureInfo {
