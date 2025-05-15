@@ -53,7 +53,7 @@ export const MainUserList = ({
                 <TableCell className="text-center">{emailFiltering(user.email)}</TableCell>
                 <TableCell className="flex items-center justify-end gap-2">
                   <Link
-                    href={`/user/${user.user_uuid}`}
+                    href={`/user/${user.user_uuid}?key=${user.user_sn}`}
                     className="flex items-center gap-2 justify-end cursor-pointer"
                   >
                     <FileText className="w-4 h-4" />
@@ -89,7 +89,7 @@ export const MainUserList = ({
                 </TableCell>
                 <TableCell className="flex items-center justify-end gap-2">
                   <Link
-                    href={`/measure/${measure.sn}?user_uuid=${measure.user_uuid}`}
+                    href={`/measure/${measure.measure_sn}?user_uuid=${measure.user_uuid}`}
                     className="flex items-center gap-2 justify-end cursor-pointer"
                   >
                     <FileText className="w-4 h-4" />

@@ -20,7 +20,12 @@ const MeasureInformation = ({ data }: { data: IUserDetailMeasureInfo }) => {
       measure_position: data.measure_position,
     };
     const encryptData = await actionEncrypt(cryptoData);
-    await postKakaoSend(encryptData);
+    try {
+      await postKakaoSend(encryptData);
+      alert("카카오톡으로 측정 정보가 전송되었습니다.");
+    } catch (error) {
+      alert("카카오톡 공유에 실패했습니다. 잠시 후 다시 시도해주세요.");
+    }
   };
   return (
     <div className="flex-1">
@@ -28,8 +33,7 @@ const MeasureInformation = ({ data }: { data: IUserDetailMeasureInfo }) => {
         <h1 className="text-4xl font-semibold text-[#333]">
           {data.user_name}님의 측정 내역
         </h1>
-        {/* <button onClick={handleShare} title="카카오톡 공유하기"> */}
-        <button title="카카오톡 공유하기2">
+        <button onClick={handleShare} title="카카오톡 공유하기">
           <KakaoIcons />
         </button>
       </div>

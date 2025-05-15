@@ -22,6 +22,7 @@ const UserPage = () => {
     isError,
     refetch: refetchUserList,
   } = useGetUserList<IUserListData>({ page, limit });
+
   if (isLoading) {
     return (
       <div className="col-span-12">
@@ -36,6 +37,7 @@ const UserPage = () => {
       </div>
     );
   }
+
   if (!userResponseData || userResponseData.users.length === 0) {
     return (
       <div className="col-span-12 flex justify-between">

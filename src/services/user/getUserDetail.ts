@@ -1,11 +1,14 @@
 import { customAxios } from "@/lib/axios";
+import { ICenterUserDetail } from "@/types/center";
 import { IResponseDefault } from "@/types/default";
 
-// type CenterManagerDetailResponse = {
-//   data: ICenterManagerData;
-// } & IResponseDefault;
+type CenterUserDetailResponse = {
+  data: ICenterUserDetail;
+} & IResponseDefault;
 
 export const getUserDetail = async ({ sn }: { sn: string }) => {
-  const response = await customAxios.get(`/members/${sn}`);
-  return response.data;
+  const { data } = await customAxios.get<CenterUserDetailResponse>(
+    `/members/${sn}`,
+  );
+  return data;
 };
