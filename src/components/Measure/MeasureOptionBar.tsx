@@ -8,6 +8,26 @@ import {
 } from "../ui/select";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
 
+export const DummyMeasureOptionBar = () => {
+  return (
+    <div className="flex items-center justify-between ">
+      <p>검색된 측정자료는 0건 입니다.</p>
+      <div className="inline-block">
+        <Select>
+          <SelectTrigger>
+            <SelectValue placeholder="행 갯수" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="10">10건</SelectItem>
+            <SelectItem value="20">20건</SelectItem>
+            <SelectItem value="50">50건</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+    </div>
+  );
+};
+
 const MeasureOptionBar = ({ totalItems }: { totalItems: number }) => {
   const { setQueryParam, query } = useQueryParams();
   const defaultLimit = query.limit || 20;
