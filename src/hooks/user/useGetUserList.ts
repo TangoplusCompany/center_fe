@@ -1,22 +1,17 @@
-import { customAxios } from "@/lib/axios";
+import { getUserList } from "@/services/user/getUserList";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetUserList = <T>({
-  page,
-  limit,
-}: {
-  page: number;
-  limit: number;
-}) =>
+interface IUseUserListProps {
+  page?: number;
+  limit?: number;
+  search?: string;
+}
+
+export const useGetUserList = <T>(params: IUseUserListProps) =>
   useQuery<T>({
-    queryKey: ["CenterUserList"],
+    queryKey: ["CenterUserList", params],
     queryFn: async () => {
-      const response = await customAxios.get("/members", {
-        params: {
-          page,
-          limit,
-        },
-      });
-      return response.data.data;
+      const response = await getUserList(params);
+      return response.data;
     },
   });

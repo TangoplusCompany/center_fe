@@ -72,6 +72,10 @@ body {
   }
 }
 
+* {
+  box-sizing: border-box;
+}
+
 .dangerous.select {
   background-color: #ff5449;
 }
@@ -97,15 +101,15 @@ body {
 }
 
 .DialogOverlay {
-	background-color: var(--black-a9);
-	position: fixed;
-	inset: 0;
-	animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  background-color: var(--black-a9);
+  position: fixed;
+  inset: 0;
+  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .crop-wrapper {
-  width: 100%;           /* 또는 원하는 고정 크기 */
-  aspect-ratio: 3 / 4;   /* 세로 기준 비율 유지 */
+  width: 100%; /* 또는 원하는 고정 크기 */
+  aspect-ratio: 3 / 4; /* 세로 기준 비율 유지 */
   overflow: hidden;
   position: relative;
 }
@@ -113,8 +117,17 @@ body {
 .cropped-image {
   position: absolute;
   top: 0;
-  left: -25%;          /* 왼쪽을 -25%만큼 이동해서 가운데 맞춤 */
-  width: 150%;         /* 가로 50%만 남기고 2배 확대 */
+  left: -25%; /* 왼쪽을 -25%만큼 이동해서 가운데 맞춤 */
+  width: 150%; /* 가로 50%만 남기고 2배 확대 */
   height: 100%;
   object-fit: cover;
 }
+
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+    padding: 0;
+  }
+}
+

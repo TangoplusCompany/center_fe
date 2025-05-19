@@ -3,20 +3,17 @@
 import React, { useState } from "react";
 
 import CustomPagination from "@/components/Custom/Pagination";
-import MeasureOptionBar, {
-  DummyMeasureOptionBar,
-} from "@/components/Measure/MeasureOptionBar";
 import DataError from "@/components/Util/DataError";
 
 import { useMeasureList } from "@/hooks/measure/useMeasureList";
-import { IMeasureData, IMeasureListResponse } from "@/types/measure";
+import { IMeasureData } from "@/types/measure";
 import {
   MeasureDummyList,
   MeasureList,
 } from "@/components/Measure/MeasureList";
-import { useSearchParams } from "next/navigation";
-import MeasureSearchForm from "@/components/Measure/MeasureSearchForm";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
+import SearchForm from "@/components/Util/SearchForm";
+import OptionBar, { DummyOptionBar } from "@/components/Util/OptionBar";
 
 const MeasureMainContainer = () => {
   const { query, setQueryParam } = useQueryParams();
@@ -48,7 +45,7 @@ const MeasureMainContainer = () => {
   if (isLoading) {
     return (
       <>
-        <DummyMeasureOptionBar />
+        <DummyOptionBar />
         <MeasureDummyList limit={limit} />
       </>
     );
@@ -59,16 +56,16 @@ const MeasureMainContainer = () => {
   if (!measureResponse || Object.keys(measureResponse).length === 0) {
     return (
       <>
-        <MeasureOptionBar totalItems={0} />
+        <OptionBar totalItems={0} />
         <MeasureList measurements={[]} />
         <CustomPagination total={1} page={1} last_page={1} limit={20} />
-        <MeasureSearchForm setSearch={onChangeSearch} search={search} />
+        <SearchForm setSearch={onChangeSearch} search={search} />
       </>
     );
   }
   return (
     <>
-      <MeasureOptionBar totalItems={measureResponse.total} />
+      <OptionBar totalItems={measureResponse.total} />
       <MeasureList measurements={measureResponse.measurements} />
       <CustomPagination
         total={measureResponse.total}
@@ -76,7 +73,7 @@ const MeasureMainContainer = () => {
         last_page={measureResponse.last_page}
         limit={measureResponse.limit}
       />
-      <MeasureSearchForm setSearch={onChangeSearch} search={search} />
+      <SearchForm setSearch={onChangeSearch} search={search} />
     </>
   );
 };
