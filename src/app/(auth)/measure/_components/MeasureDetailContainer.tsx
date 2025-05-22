@@ -18,7 +18,7 @@ const MeasureDetailTap = ({
     update(value);
   };
   return (
-    <ul className="flex items-center justify-start gap-5">
+    <ul className="flex items-center justify-start gap-5 border-b">
       {["기본 정보", "측정 정보"].map((item, index) => {
         return (
           <li key={item + index}>
