@@ -12,6 +12,7 @@ import {
   SidebarMenuItem,
   SidebarFooter,
   SidebarHeader,
+  useSidebar,
 } from "../ui/sidebar";
 import {
   Home,
@@ -67,8 +68,19 @@ const dashboard = [
 
 export default function DefaultSidebar() {
   const logoutMutation = useLogout();
+  const { isMobile, setOpenMobile } = useSidebar(); // Sidebar 상태 접근
+
   const handleLogout = () => {
     logoutMutation.mutate();
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
+
+  const handleLinkClick = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
   };
   return (
     <Sidebar collapsible="icon">
@@ -93,7 +105,7 @@ export default function DefaultSidebar() {
               {dashboard.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <Link href={item.url}>
+                    <Link href={item.url} onClick={handleLinkClick}>
                       <item.icon className="lg:!w-5 lg:!h-5" />
                       <span>{item.title}</span>
                     </Link>
