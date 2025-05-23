@@ -405,7 +405,7 @@ const MeasureDetailDynamic = ({
           className="absolute bottom-0 left-0 right-0 top-0 z-[9] -scale-x-[1] pointer-events-none"
         />
       </div>
-      <ShoulderMoveLine
+      {/* <ShoulderMoveLine
         nowWidth={nowWidth}
         nowHeight={nowHeight}
         measureJson={measureJson}
@@ -414,7 +414,7 @@ const MeasureDetailDynamic = ({
         nowWidth={nowWidth}
         nowHeight={nowHeight}
         measureJson={measureJson}
-      />
+      /> */}
       <div className="grid flex-1 grid-cols-12 gap-2 md:gap-5 w-full lg:gap-10 p-5 lg:p-0">
         <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
           <ResultGraph

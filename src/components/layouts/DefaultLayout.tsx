@@ -10,9 +10,10 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
   const usePathName = usePathname();
   const { toggleSidebar } = useSidebar();
   const isMobile = useIsMobile();
-  useEffect(() => {
-    if (isMobile) toggleSidebar();
-  }, [usePathName]);
+  // useEffect(() => {
+  //   console.log("isMobile", isMobile);
+  //   if (isMobile) toggleSidebar();
+  // }, [usePathName]);
   return (
     <main className="flex flex-col items-center justify-start min-h-screen flex-1">
       <DefaultHeaderLayout />

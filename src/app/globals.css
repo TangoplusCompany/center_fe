@@ -3,9 +3,8 @@
 @tailwind utilities;
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "SUIT Variable", sans-serif;
 }
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -125,9 +124,9 @@ body {
 
 @media print {
   @page {
-    size: A4;
+    width: 1028px;
+    height: 1456px;
     margin: 0;
     padding: 0;
   }
 }
-
