@@ -1,4 +1,4 @@
-import UnAuthLayout from "@/components/Layoutss/UnAuthLayout";
+import UnAuthLayout from "@/components/Layouts/UnAuthLayout";
 import { GalleryVerticalEnd } from "lucide-react";
 
 export default function UnAuthorizationLayout({
