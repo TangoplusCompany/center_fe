@@ -2,11 +2,11 @@
 
 import React from "react";
 import { useGetDeviceStatus } from "@/hooks/device";
-import SkeletonDeviceCard from "@/components/Card/SkeletonDeviceCard";
 import { IDeviceStatus } from "@/types/device";
 import { DeviceStatusItems } from "@/components/Device";
 import DeviceAddDialog from "./DeviceAddDialog";
 import { useAuthStore } from "@/providers/AuthProvider";
+import SkeletonDeviceCard from "@/components/Card/SkeletonDeviceCard";
 
 export const DeviceMainContainer = () => {
   const { adminRole } = useAuthStore((state) => state);
