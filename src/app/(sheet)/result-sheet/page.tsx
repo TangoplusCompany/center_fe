@@ -4,8 +4,15 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import GradientContainer from "../_components/GradientContainer";
 import DescriptionContainer from "../_components/DescriptionContainer";
+import BoxIcons from "../_components/icons/BoxIcons";
+import QRCodeView from "../_components/QRCodeView";
+import { useQueryParams } from "@/hooks/utils/useQueryParams";
+import TitleLayout from "../_components/TitleLayout";
+import PoseImageResult from "../_components/PoseImageResult";
 
 const ResultSheetPage = () => {
+  const { query } = useQueryParams();
+  const secretKey = query.t_r;
   const handlePrint = async () => {
     window.print();
   };
@@ -30,7 +37,7 @@ const ResultSheetPage = () => {
       {/* ✅ 첫번째 페이지 영역 */}
       <div
         id="print-section"
-        className="w-full max-w-[1028px] h-[1456px] box-border mx-auto p-1 flex flex-col gap-5"
+        className="w-full max-w-[1028px] h-[1456px] box-border mx-auto p-1 flex flex-col gap-10"
       >
         {/* 헤더 */}
         <div className="w-full print:bg-gradient-to-r bg-gradient-to-r from-[#16286A] to-[#557BFF] text-white relative flex items-center justify-between py-2 pl-4 pr-9">
@@ -66,16 +73,95 @@ const ResultSheetPage = () => {
             </p>
           </div>
           <DescriptionContainer>
-            <p className="">측정을 통해 나온 결과를 요약하여 전달합니다.</p>
+            <p className="text-[#606060]">
+              측정을 통해 나온 결과를 요약하여 전달합니다.
+            </p>
           </DescriptionContainer>
         </div>
 
         {/* 신체 위험도 / 신체 안정도 */}
-        <div className="flex w-full gap-6 pr-[30px]">
+        <div className="flex w-full gap-6">
+          {/* 결과 요약 */}
+          <div className="flex-1 flex flex-col gap-[32px]">
+            <div className="flex w-full gap-[5px]">
+              <div className="flex items-center justify-center py-[28px] pl-[26px] pr-[49px] text-white bg-[#2F52D3] rounded-lg gap-[15px]">
+                <p className="text-center text-xl font-bold">
+                  탱고바디
+                  <br />
+                  종합 점수
+                </p>
+                <div className="w-0.5 h-12 bg-[#EFF7FF]"></div>
+                <p className="text-[48px] leading-[62px] font-bold">80점</p>
+              </div>
+              <div className="pl-6 pr-[18px] py-[9px] flex items-start justify-between flex-1 border-t-2 border-r-2 border-b-2 rounded-tr-lg rounded-br-lg border-l-0 border-[#2F52D3]">
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center justify-start gap-2">
+                    <BoxIcons />
+                    <p className="text-xl font-bold text-[#2F52D3]">
+                      모바일로 확인하기
+                    </p>
+                  </div>
+                  <p className="text-xs text-[#47484C]">
+                    쉽고 정확하게 하는 체형 분석
+                    <br />
+                    추가적인 정보는 QR코드를 통해 가능합니다.
+                  </p>
+                </div>
+                <QRCodeView
+                  url={`https://guest.tangoplus.co.kr?t_r=${secretKey ?? ""}`}
+                />
+              </div>
+            </div>
+            <div className="flex gap-1.5 w-full">
+              <div className="bg-[#FF5449] w-1 h-20 rounded-full"></div>
+              <div className="flex-1 flex gap-3 items-center">
+                <div className="w-20 h-20 bg-[#EFF7FF] rounded-lg"></div>
+                <div className="flex flex-col gap-0.5 items-start justify-start flex-1">
+                  <p className="text-[#47484C] text-xl">쏠림 위험(전후)</p>
+                  <div className="w-[120px] h-0.5 bg-[#FFDAD6] rounded-full"></div>
+                  <p className="break-keep text-[#AEAEAE]">
+                    등, 어깨 통증을 조심하세요.
+                  </p>
+                </div>
+              </div>
+              <div className="flex-1 flex gap-3 items-center">
+                <div className="w-20 h-20 bg-[#EFF7FF] rounded-lg"></div>
+                <div className="flex flex-col gap-0.5 items-start justify-start flex-1">
+                  <p className="text-[#47484C] text-xl">쏠림 위험(전후)</p>
+                  <div className="w-[120px] h-0.5 bg-[#FFDAD6] rounded-full"></div>
+                  <p className="break-keep text-[#AEAEAE]">
+                    등, 어깨 통증을 조심하세요.
+                  </p>
+                </div>
+              </div>
+              <div className="flex-1 flex gap-3 items-center">
+                <div className="w-20 h-20 bg-[#EFF7FF] rounded-lg"></div>
+                <div className="flex flex-col gap-0.5 items-start justify-start flex-1">
+                  <p className="text-[#47484C] text-xl">쏠림 위험(전후)</p>
+                  <div className="w-[120px] h-0.5 bg-[#FFDAD6] rounded-full"></div>
+                  <p className="break-keep text-[#AEAEAE]">
+                    등, 어깨 통증을 조심하세요.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[#F6F6F6] rounded-lg p-4 overflow-hidden text-[#47484C] h-[162px] w-full">
+              [체형 분석 결과]
+              <br />
+              정면 - 좌우 균형 : 좌우 기울기 균형이 잘 맞습니다.
+              <br />
+              측면 - 상지 좌우,균형 : 왼쪽 이두근이 긴장되어 있습니다.
+              <br />
+              후면 - 상하 균형 : 오른쪽 발목 질환이 예상됩니다.
+            </div>
+          </div>
+
+          {/* 스켈레톤 */}
           <div className="flex flex-col items-start justify-start">
-            <GradientContainer className="rounded-tl rounded-br w-auto text-xl font-semibold px-3 py-0.5 text-white">
-              <p>신체 위험도</p>
-            </GradientContainer>
+            <TitleLayout
+              title="신체 위험도"
+              description="전반적인 주의 부위 표시"
+            />
             <div className="relative w-[290px] h-[400px]">
               <Image
                 src="/skeleton.png"
@@ -83,77 +169,299 @@ const ResultSheetPage = () => {
                 width={290}
                 height={400}
               />
-            </div>
-          </div>
-
-          <div className="flex-1 flex flex-col items-start justify-start">
-            <GradientContainer className="rounded-tl rounded-br w-auto inline-block text-xl font-semibold px-3 py-0.5 text-white">
-              <p>신체 안정도</p>
-            </GradientContainer>
-            <div className="w-full h-[380px] overflow-hidden p-4 bg-[#EFF7FF] print:bg-[#EFF7FF]">
-              [체형 분석 결과] <br />
-              정면 - 좌우 균형 : 좌우 기울기 균형이 잘 맞습니다.
-              <br />
-              측면 - 상지 좌우,균형 : 왼쪽 이두근이 긴장되어 있습니다.
-              <br />
-              후면 - 상하 균형 : 오른쪽 발목 질환이 예상됩니다.
-              <br />
-              정면 - 좌우 균형 : 좌우 기울기 균형이 잘 맞습니다.
-              <br />
-              측면 - 상지 좌우,균형 : 왼쪽 이두근이 긴장되어 있습니다.
-              <br />
-              후면 - 상하 균형 : 오른쪽 발목 질환이 예상됩니다.
-              <br />
-              정면 - 좌우 균형 : 좌우 기울기 균형이 잘 맞습니다.
-              <br />
-              측면 - 상지 좌우,균형 : 왼쪽 이두근이 긴장되어 있습니다.
-              <br />
-              후면 - 상하 균형 : 오른쪽 발목 질환이 예상됩니다.
-              <br />
-              후면 - 상하 균형 : 오른쪽 발목 질환이 예상됩니다.
-              <br />
-              정면 - 좌우 균형 : 좌우 기울기 균형이 잘 맞습니다.
-              <br />
-              측면 - 상지 좌우,균형 : 왼쪽 이두근이 긴장되어 있습니다.
-              <br />
-              후면 - 상하 균형 : 오른쪽 발목 질환이 예상됩니다.
-              <br />
+              <div className="neck size-3 bg-red-500 print:bg-red-500 rounded-full absolute left-1/2 -translate-x-1/2 top-[19%]"></div>
+              <div className="left_shoulder size-3 bg-red-500 print:bg-red-500 rounded-full absolute left-[35%] top-[24%]"></div>
+              <div className="left_elbow size-3 bg-red-500 print:bg-red-500 rounded-full absolute left-[30%] top-[36%]"></div>
+              <div className="left_wrist size-3 bg-red-500 print:bg-red-500 rounded-full absolute left-[23%] top-[48%]"></div>
+              <div className="left_hip size-3 bg-red-500 print:bg-red-500 rounded-full absolute left-[40%] bottom-[46%]"></div>
+              <div className="left_knee size-3 bg-red-500 print:bg-red-500 rounded-full absolute left-[40%] bottom-[28%]"></div>
+              <div className="left_ankle size-3 bg-red-500 print:bg-red-500 rounded-full absolute  left-[40%] bottom-[10%]"></div>
+              <div className="left_shoulder size-3 bg-red-500 print:bg-red-500 rounded-full absolute right-[35%] top-[24%]"></div>
+              <div className="right_elbow size-3 bg-red-500 print:bg-red-500 rounded-full absolute right-[30%] top-[36%]"></div>
+              <div className="right_wrist size-3 bg-red-500 print:bg-red-500 rounded-full absolute right-[23%] top-[48%]"></div>
+              <div className="right_hip size-3 bg-red-500 print:bg-red-500 rounded-full absolute right-[40%] bottom-[46%]"></div>
+              <div className="right_knee size-3 bg-red-500 print:bg-red-500 rounded-full absolute right-[40%] bottom-[28%]"></div>
+              <div className="right_ankle size-3 bg-red-500 print:bg-red-500 rounded-full absolute right-[40%] bottom-[10%]"></div>
             </div>
           </div>
         </div>
 
-        {/* 측정 데이터 요약 */}
-        <div className="flex w-full gap-5 flex-col items-start justify-start">
-          <GradientContainer className="rounded-tl rounded-br w-auto text-xl font-semibold px-3 py-0.5 text-white">
-            <p>측정 데이터 요약</p>
-          </GradientContainer>
-          <div className="w-full h-[290px] bg-[#EFF7FF] print:bg-[#EFF7FF] flex items-center justify-center">
-            <p>측정 데이터 요약 영역</p>
+        {/* 요약 진단서 */}
+        <div className="flex flex-col gap-6">
+          <TitleLayout
+            title="요약 진단서"
+            description="측정 자세별 요약 정보와 우려 질환을 보여줍니다."
+          />
+          <div className="flex w-full gap-2.5 font-semibold">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div
+                className="flex-1 flex flex-col rounded bg-[#F6F6F6] py-2 gap-3"
+                key={index}
+              >
+                <div className="w-full flex items-center justify-center gap-2">
+                  <div className="h-0.5 w-[60px] bg-[#AEAEAE]"></div>
+                  <p className="text-[#47484C] text-xl">정면 측정</p>
+                  <div className="h-0.5 w-[60px] bg-[#AEAEAE]"></div>
+                </div>
+                <div className="w-full px-3 mb-1.5">
+                  <p className="text-[#47484C] mb-1">요약 정보</p>
+                  <p className="text-[#AEAEAE] leading-6 h-[48px] overflow-hidden font-normal">
+                    전방 밸런스와 어깨 주변 근육의 약화 가 측정 됩니다.
+                  </p>
+                </div>
+                <div className="w-full px-3">
+                  <p className="text-[#47484C] mb-1">우려 질환</p>
+                  <p className="text-[#AEAEAE] leading-6 h-[48px] overflow-hidden font-normal">
+                    상체 측만, 팔꿈치 외측 스트레스, 상체 측만, 팔꿈치 외측
+                    스트레스
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* 측정 자세 헤더 */}
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-3">
-            <GradientContainer className="rounded">
-              <p className="text-white font-semibold text-2xl flex items-center justify-center leading-6 w-9 h-9">
-                02
-              </p>
-            </GradientContainer>
-            <p className="text-[28px] leading-[42px] font-semibold text-[#2F52D3]">
-              측정 자세
-            </p>
-          </div>
-          <DescriptionContainer>
-            <p className="">실제 측정한 기본 측정 자세 데이터를 보여줍니다.</p>
-          </DescriptionContainer>
-        </div>
+        {/* 검사 종합수치 */}
+        <div className="flex flex-col">
+          <TitleLayout
+            title="검사 종합수치"
+            description="몸의 밸런스 수치를 표기합니다.신체 데이터 수치를 확인 할 수 있습니다."
+          />
+          <div className="flex flex-row gap-8 w-full p-1 mt-6">
+            {/* 왼쪽 테이블 */}
+            <table className="table-auto text-center flex-1 w-[49%]">
+              <thead className="bg-[#F6F6F6] text-[#47484C] ">
+                <tr>
+                  <th className="border-r border-t border-b border-r-[#AEAEAE] border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    밸런스
+                  </th>
+                  <th className="border-t border-b px-2 py-1 border-t-[#AEAEAE] border-b-[#AEAEAE]">
+                    세부
+                  </th>
+                  <th className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    결과
+                  </th>
+                  <th className="border-t border-b px-2 py-1 border-t-[#AEAEAE] border-b-[#AEAEAE]">
+                    참고
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td
+                    className="border-r border-t border-b border-r-[#AEAEAE] border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1"
+                    rowSpan={2}
+                  >
+                    목관절
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    좌우
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    178°
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    180°±1 이내
+                  </td>
+                </tr>
+                <tr>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    전후
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    89°
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    180°±1 이내
+                  </td>
+                </tr>
+                <tr>
+                  <td className="border-r border-t border-b border-r-[#AEAEAE] border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    골반 틀어짐
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    -
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    179°
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    180°±2 이내
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    className="border-r border-t border-b border-r-[#AEAEAE] border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1"
+                    rowSpan={2}
+                  >
+                    왼팔 긴장도
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    편 자세
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    179°
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    180°±2 이내
+                  </td>
+                </tr>
+                <tr>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    굽힘 자세
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    179°
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    180°±2 이내
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    className="border-r border-t border-b border-r-[#AEAEAE] border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1"
+                    rowSpan={2}
+                  >
+                    오른팔 긴장도
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    편 자세
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    179°
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    180°±2 이내
+                  </td>
+                </tr>
+                <tr>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    굽힘 자세
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    179°
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    180°±2 이내
+                  </td>
+                </tr>
+              </tbody>
+            </table>
 
-        {/* 측정 자세 이미지 */}
-        <div className="flex w-full gap-6 flex-col items-start justify-start">
-          <div className="w-full h-[290px] bg-[#EFF7FF] print:bg-[#EFF7FF] flex items-center justify-center">
-            <p>측정 데이터 요약 영역</p>
+            {/* 오른쪽 테이블 */}
+            <table className="table-auto text-center w-[49%]">
+              <thead className="bg-[#F6F6F6] text-[#47484C] ">
+                <tr>
+                  <th className="border-r border-t border-b border-r-[#AEAEAE] border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    밸런스
+                  </th>
+                  <th className="border-t border-b px-2 py-1 border-t-[#AEAEAE] border-b-[#AEAEAE]">
+                    세부
+                  </th>
+                  <th className="border-t border-b px-2 py-1 border-t-[#AEAEAE] border-b-[#AEAEAE]">
+                    결과
+                  </th>
+                  <th className="border-t border-b px-2 py-1 border-t-[#AEAEAE] border-b-[#AEAEAE]">
+                    참고
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td
+                    className="border-r border-t border-b border-r-[#AEAEAE] border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1"
+                    rowSpan={2}
+                  >
+                    하체밸런스
+                    <br />
+                    (좌우)
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    좌우
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    178°
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    180°±10 이내
+                  </td>
+                </tr>
+                <tr>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    전후
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    89°
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    180°±1 이내
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    className="border-r border-t border-b border-r-[#AEAEAE] border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1"
+                    rowSpan={2}
+                  >
+                    하체밸런스
+                    <br />
+                    (전후)
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    좌우
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    89°
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    180°±1 이내
+                  </td>
+                </tr>
+                <tr>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    전후
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    89°
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    180°±1 이내
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    className="border-r border-t border-b border-r-[#AEAEAE] border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1"
+                    rowSpan={2}
+                  >
+                    상체밸런스
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    좌우
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    179°
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    180°±2 이내
+                  </td>
+                </tr>
+                <tr>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    전후
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    179°
+                  </td>
+                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                    180°±2 이내
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
+          <p className="text-sm text-gray-500 mt-2">
+            * 밸런스 데이터를 참고하여 정밀한 진단 및 몸의 가능범위를 알 수
+            있습니다.
+          </p>
         </div>
       </div>
 
@@ -167,7 +475,7 @@ const ResultSheetPage = () => {
           <div className="flex items-center gap-3">
             <GradientContainer className="rounded">
               <p className="text-white font-semibold text-2xl flex items-center justify-center leading-6 w-9 h-9">
-                03
+                02
               </p>
             </GradientContainer>
             <p className="text-[28px] leading-[42px] font-semibold text-[#2F52D3]">
@@ -175,47 +483,109 @@ const ResultSheetPage = () => {
             </p>
           </div>
           <DescriptionContainer>
-            <p className="">
-              가장 핵심적인 근골격질환의 위험도를 분류하여 표기합니다.
-            </p>
+            <p className="">측정 자세와 함께 근골격질환 위험도를 확인합니다.</p>
           </DescriptionContainer>
         </div>
 
-        {/* 근골격 질환 위험 리스트 */}
-        <div className="w-full flex flex-col gap-6">
-          {/* 근골격 질환 위험 */}
-          <div className="flex flex-col gap-3 items-start">
-            <GradientContainer
-              variant="secondary"
-              className=" rounded-tl-full rounded-r-full w-auto text-xl font-semibold px-3 py-0.5 text-white"
-            >
-              <p>골반 측만 : 위험</p>
-            </GradientContainer>
-            <div className="flex w-full">
-              <div className="px-5">
-                <Image
-                  src="/pelvis_front.png"
-                  alt="pelvis_front"
-                  width={132}
-                  height={132}
-                />
-              </div>
-              <div className="flex gap-2 max-w-[422px] max-h-[132px] overflow-hidden mr-3 ml-[22px]">
-                <div className="w-0.5 h-full bg-[#FFDAD6] print:bg-[#FFDAD6]"></div>
-                <div className="flex-1">
-                  <p className="break-keep spacing tracking-[-1px]">
-                    앉은 자세에서 골반과 어깨의 기울기를 계산하여 골반 측만
-                    가능성을 분석합니다. 정면 후면, 앉은 후면 각 173.2˚, 172.7˚,
-                    178.0˚로 장기간 180˚에서 멀어질 경우 골반 틀어짐을 의심할 수
-                    있습니다. 이는 자세 습관이 영향을 줄 수 있습니다. 조기 인지
-                    및 좌우 대둔근의 밸런스 및 기립근의 균형 운동 등이
-                    필요합니다.
-                  </p>
+        {/* 측정 이미지 */}
+        <div className="w-full flex gap-4">
+          {Array.from({ length: 5 }).map((_, index) => (
+            <div className="relative flex-1" key={index}>
+              <div className="absolute top-0 left-0 z-10 flex flex-col gap-1 right-0 items-start justify-center">
+                <p className="px-2 py-0.5 text-xs leading-6 rounded bg-[#2F52D3] text-white inline">
+                  정면 측정
+                </p>
+                <div className="w-full flex items-center justify-between p-1">
+                  <div className="w-[18px] h-[18px] bg-white text-xs flex items-center justify-center rounded-full">
+                    L
+                  </div>
+                  <div className="w-[18px] h-[18px] bg-white text-xs flex items-center justify-center rounded-full">
+                    R
+                  </div>
                 </div>
               </div>
-              <div className="border rounded h-[132px] flex-1"></div>
+              <div className="w-[192px] h-[260px] relative z-0 bg-[#F6F6F6] rounded overflow-hidden">
+                <PoseImageResult
+                  imageUrl={
+                    "https://gym.tangoplus.co.kr/data/Results/1-11-1-1-1721881560.jpg"
+                  }
+                />
+                {/* <Image width={192} height={260} src={"https://gym.tangoplus.co.kr/data/Results/1-11-1-1-1721881560.jpg"} alt="posture-tilt-card" /> */}
+              </div>
             </div>
-          </div>
+          ))}
+        </div>
+
+        {/* 질환 상세 내역 */}
+        <div className="grid grid-cols-2 gap-x-[22px] gap-y-[18px]">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <div className="col-span-1" key={index}>
+              <div className="flex flex-col gap-2">
+                <div className="flex gap-2">
+                  <div className="w-[124px] flex flex-col items-center justify-center">
+                    <p className="border-t border-b border-[#AEAEAE] py-[5px] w-full text-center text-white text-xl font-bold  bg-[#47484C]">
+                      0{index + 1}.
+                    </p>
+                    <div className="w-[124px] h-[124px] bg-[#F6F6F6]"></div>
+                  </div>
+                  <div className="flex-1">
+                    <div className="border-t border-b border-[#47484C] w-full py-[5px] px-6 bg-[#F6F6F6]">
+                      <p className="text-xl text-[#47484C] font-bold">
+                        전신 전방 쏠림 : 정상
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-5 items-center border-[#AEAEAE] border-b">
+                      <div className="col-span-2"></div>
+                      <div className="col-span-1 border-l border-[#AEAEAE] text-xs text-[#AEAEAE] py-1.5 text-center">
+                        보통
+                      </div>
+                      <div className="col-span-1 border-l border-[#AEAEAE] text-xs text-[#AEAEAE] py-1.5 text-center">
+                        주의
+                      </div>
+                      <div className="col-span-1 border-l border-[#AEAEAE] text-xs text-[#FF5449] py-1.5 text-center">
+                        위험
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-5 text-xs text-[#47484C]">
+                      <div className="border-b border-[#AEAEAE] py-[15px] flex items-center justify-center col-span-2 gap-1">
+                        <p>양 골반 각도</p>
+                        <span className="leading-3 py-0.5 px-1 rounded-[2px] bg-[#DFDFE0]">
+                          180f
+                        </span>
+                      </div>
+                      <div className="col-span-3 border-l border-[#AEAEAE] grid grid-cols-3 items-center justify-center py-[18px]">
+                        <div className="col-span-1 flex items-center justify-center">
+                          <span className="bg-[#DFDFE0] w-16 h-3 rounded-[2px]"></span>
+                        </div>
+                        <div className="col-span-1 flex items-center justify-center">
+                          <span className="bg-[#DFDFE0] w-16 h-3 rounded-[2px]"></span>
+                        </div>
+                        <div className="col-span-1 flex items-center justify-center">
+                          <span className="bg-[#DFDFE0] w-16 h-3 rounded-[2px]"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-5 text-xs text-[#47484C]">
+                      <div className="border-b border-[#AEAEAE] py-[15px] flex items-center justify-center col-span-2 gap-1">
+                        <p>양 골반 각도</p>
+                        <span className="leading-3 py-0.5 px-1 rounded-[2px] bg-[#DFDFE0]">
+                          180f
+                        </span>
+                      </div>
+                      <div className="col-span-3 border-l border-[#AEAEAE] grid grid-cols-3 items-center justify-center py-[18px]">
+                        <div className="col-span-1 flex items-center justify-center">
+                          <span className="bg-[#DFDFE0] w-16 h-3 rounded-[2px]"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-[#F6F6F6] rounded-sm p-2 text-[#47484C] h-[78px]">
+                  <p className="">몸이 앞쪽으로 쏠려 허리 긴장 우려가 있음</p>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </>
