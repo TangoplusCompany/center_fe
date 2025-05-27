@@ -6,6 +6,7 @@ export const useDeleteUser = (refetch: () => void) => {
   return useMutation({
     mutationFn: deleteUser,
     onSuccess: (data) => {
+      console.log(data.message);
       alert("사용자 제거에 성공했습니다.");
       refetch();
     },

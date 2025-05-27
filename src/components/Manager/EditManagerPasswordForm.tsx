@@ -70,7 +70,7 @@ const EditMangerPasswordForm = () => {
   });
   const mutationChangePassword = usePatchManagerPassword(setError);
   const submitManagerPassword = handleSubmit(async (data) => {
-    const { currentPassword, newPassword, confirmPassword } = data;
+    const { currentPassword, newPassword } = data;
     await mutationChangePassword.mutateAsync({
       sn: adminSn,
       current_password: currentPassword,

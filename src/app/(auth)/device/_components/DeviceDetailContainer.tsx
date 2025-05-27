@@ -28,7 +28,7 @@ interface IDeviceDetail {
  * @serial_number {string} 기기 시리얼 번호
  */
 export const DeviceDetailContainer = ({ sn }: { sn: number }) => {
-  const { data, isLoading, error } = useGetDeviceDetail<IDeviceDetail>(sn);
+  const { data, isLoading } = useGetDeviceDetail<IDeviceDetail>(sn);
   const [isEditing, setIsEditing] = useState(false);
 
   const mutationDeviceUpdate = useDeviceUpdate();

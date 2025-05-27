@@ -41,7 +41,10 @@ export const useQueryParams = (): {
   }
 
   // 쓰기
-  const setQueryParam: SetQueryParamFn = (keyOrEntries: any, value?: any) => {
+  const setQueryParam: SetQueryParamFn = (
+    keyOrEntries: string | QueryParamEntry[],
+    value?: QueryParamValue
+  ) => {
     const newParams = new URLSearchParams(searchParams.toString());
   
     if (Array.isArray(keyOrEntries)) {

@@ -44,3 +44,5 @@ export const DeviceStatusItems = React.memo(
     );
   },
 );
+
+DeviceStatusItems.displayName = "DeviceStatusItems";
