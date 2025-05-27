@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReactNode, useState } from "react";
 import { useRegister } from "@/hooks/auth/useRegister";
+import RegisterCenterCheckForm from "./RegisterCenterCheckForm";
 
 const registerSchema = z
   .object({
@@ -62,9 +63,18 @@ export const RegisterContainer = () => {
   } = useForm({
     resolver: zodResolver(registerSchema),
   });
+
+  const [isCheckCenter, setIsCheckCenter] = useState(false);
+  const [isCenterId, setIsCenterId] = useState("");
+  const eventCenterCheck = (centerId: string) => {
+    setIsCenterId(centerId);
+    setIsCheckCenter(true);
+  };
+
   const registerMutation = useRegister(setError);
   const registerHandleSubmit = handleSubmit(async (data) => {
     registerMutation.mutateAsync({
+      center_id: isCenterId,
       email: data.email,
       password: data.password,
       name: data.name,
@@ -72,79 +82,110 @@ export const RegisterContainer = () => {
     });
   });
   return (
-    <form className={cn("flex flex-col gap-6 w-full")} onSubmit={registerHandleSubmit}>
+    <form
+      className={cn("flex flex-col gap-6 w-full")}
+      onSubmit={registerHandleSubmit}
+    >
       <div className="flex flex-col items-center gap-5 text-center">
         <legend className="sr-only">센터관리자 회원가입</legend>
-        <h1 className="text-2xl font-bold">탱고플러스 센터관리자 회원가입</h1>
-        <div className="flex flex-col gap-6 w-full">
-          <div className="flex flex-col items-start gap-2">
-            <Label htmlFor="email">이메일</Label>
-            <Input
-              id="email"
-              type="text"
-              placeholder="email@example.com"
-              required
-              {...register("email")}
-              className="bg-white dark:bg-border"
-            />
-            {errors.email?.message && <ErrorText>{String(errors.email?.message)}</ErrorText>}
-          </div>
-          <div className="flex flex-col items-start gap-2">
-            <Label htmlFor="password">비밀번호</Label>
+        <h1 className="text-2xl font-bold mb-3 lg:mb-5">
+          탱고플러스 센터관리자 회원가입
+        </h1>
+        {!isCheckCenter ? (
+          <RegisterCenterCheckForm onCenterCheck={eventCenterCheck} />
+        ) : (
+          <div className="flex flex-col gap-6 w-full">
+            <div className="flex flex-col items-start gap-2">
+              <Label htmlFor="email" className="lg:text-lg">
+                이메일
+              </Label>
+              <Input
+                id="email"
+                type="text"
+                placeholder="email@example.com"
+                required
+                {...register("email")}
+                className="bg-white dark:bg-border"
+              />
+              {errors.email?.message && (
+                <ErrorText>{String(errors.email?.message)}</ErrorText>
+              )}
+            </div>
+            <div className="flex flex-col items-start gap-2">
+              <Label htmlFor="password" className="lg:text-lg">
+                비밀번호
+              </Label>
 
-            <Input
-              id="password"
-              type="password"
-              placeholder="********"
-              required
-              className="bg-white dark:bg-border"
-              {...register("password")}
-            />
-            {errors.password?.message && <ErrorText>{String(errors.password?.message)}</ErrorText>}
-          </div>
-          <div className="flex flex-col items-start gap-2">
-            <Label htmlFor="passwordConfirm">비밀번호 확인</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="********"
+                required
+                className="bg-white dark:bg-border"
+                {...register("password")}
+              />
+              {errors.password?.message && (
+                <ErrorText>{String(errors.password?.message)}</ErrorText>
+              )}
+            </div>
+            <div className="flex flex-col items-start gap-2">
+              <Label htmlFor="passwordConfirm" className="lg:text-lg">
+                비밀번호 확인
+              </Label>
 
-            <Input
-              id="passwordConfirm"
-              type="password"
-              placeholder="********"
-              required
-              className="bg-white dark:bg-border"
-              {...register("passwordConfirm")}
-            />
-            {errors.passwordConfirm?.message && (
-              <ErrorText>{String(errors.passwordConfirm?.message)}</ErrorText>
-            )}
+              <Input
+                id="passwordConfirm"
+                type="password"
+                placeholder="********"
+                required
+                className="bg-white dark:bg-border"
+                {...register("passwordConfirm")}
+              />
+              {errors.passwordConfirm?.message && (
+                <ErrorText>{String(errors.passwordConfirm?.message)}</ErrorText>
+              )}
+            </div>
+            <div className="flex flex-col items-start gap-2">
+              <Label htmlFor="name" className="lg:text-lg">
+                이름
+              </Label>
+              <Input
+                id="name"
+                type="text"
+                placeholder="홍길동"
+                required
+                {...register("name")}
+                className="bg-white dark:bg-border"
+              />
+              {errors.name?.message && (
+                <ErrorText>{String(errors.name?.message)}</ErrorText>
+              )}
+            </div>
+            <div className="flex flex-col items-start gap-2">
+              <Label htmlFor="phone" className="lg:text-lg">
+                전화번호
+              </Label>
+              <Input
+                id="phone"
+                type="text"
+                placeholder="하이픈(-)없이 입력해주세요."
+                required
+                {...register("phone")}
+                className="bg-white dark:bg-border"
+              />
+              {errors.phone?.message && (
+                <ErrorText>{String(errors.phone?.message)}</ErrorText>
+              )}
+            </div>
+            <Button
+              type="submit"
+              variant={"outline"}
+              className="w-full lg:text-lg"
+            >
+              로그인
+            </Button>
           </div>
-          <div className="flex flex-col items-start gap-2">
-            <Label htmlFor="name">이름</Label>
-            <Input
-              id="name"
-              type="text"
-              placeholder="홍길동"
-              required
-              {...register("name")}
-              className="bg-white dark:bg-border"
-            />
-            {errors.name?.message && <ErrorText>{String(errors.name?.message)}</ErrorText>}
-          </div>
-          <div className="flex flex-col items-start gap-2">
-            <Label htmlFor="phone">전화번호</Label>
-            <Input
-              id="phone"
-              type="text"
-              placeholder="하이픈(-)없이 입력해주세요."
-              required
-              {...register("phone")}
-              className="bg-white dark:bg-border"
-            />
-            {errors.phone?.message && <ErrorText>{String(errors.phone?.message)}</ErrorText>}
-          </div>
-          <Button type="submit" variant={"outline"} className="w-full">
-            로그인
-          </Button>
-        </div>
+        )}
       </div>
     </form>
   );

@@ -2,12 +2,18 @@ import { IUserDetailStatic } from "@/types/user";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import ResultGraph from "../ResultGraph";
 import Image from "next/image";
-import { useMeasureJson } from "@/hooks/user";
 import DummyStaticContainer from "../DummyStaticContainer";
 import { useDrawCanvas, useWindowResize } from "@/hooks/utils";
+import { useMeasureJson } from "@/hooks/measure/useMeasureJson";
 
 const MeasureStaticFifth = React.memo(
-  ({ className, statics }: { className?: string; statics: IUserDetailStatic }) => {
+  ({
+    className,
+    statics,
+  }: {
+    className?: string;
+    statics: IUserDetailStatic;
+  }) => {
     const defaultWidth = statics.measure_overlay_width as number;
     const defaultHeight = statics.measure_overlay_height as number;
     const [nowWidth, setNowWidth] = useState(defaultWidth);
@@ -18,10 +24,9 @@ const MeasureStaticFifth = React.memo(
     const canvasWhiteRef = useRef<HTMLCanvasElement | null>(null);
     const canvasRedRef = useRef<HTMLCanvasElement | null>(null);
     const canvasGreenRef = useRef<HTMLCanvasElement | null>(null);
-    const { data, isLoading, isError } = useMeasureJson(statics.measure_server_json_name);
-    const memoMeasureJson = useMemo(() => data, [data]);
     const clearAndDraw = useDrawCanvas;
     const windowWidth = useWindowResize();
+    const {data: measureJson, isLoading, isError} = useMeasureJson(statics.measure_server_json_name);
 
     useEffect(() => {
       if (imgRef.current === null) return;
@@ -38,107 +43,111 @@ const MeasureStaticFifth = React.memo(
         setScaleHeight(heightScale);
       };
       updateCanvasScale();
-    }, [memoMeasureJson, windowWidth]);
+    }, [measureJson, windowWidth]);
 
     useEffect(() => {
-      if (!memoMeasureJson || imgRef.current === null) return;
+      if (!measureJson || imgRef.current === null) return;
       const canvasWhite = canvasWhiteRef.current as HTMLCanvasElement;
       const canvasRed = canvasRedRef.current as HTMLCanvasElement;
       const canvasGreen = canvasGreenRef.current as HTMLCanvasElement;
 
-      const contextWhite = canvasWhite.getContext("2d") as CanvasRenderingContext2D;
+      const contextWhite = canvasWhite.getContext(
+        "2d",
+      ) as CanvasRenderingContext2D;
       const contextRed = canvasRed.getContext("2d") as CanvasRenderingContext2D;
-      const contextGreen = canvasGreen.getContext("2d") as CanvasRenderingContext2D;
+      const contextGreen = canvasGreen.getContext(
+        "2d",
+      ) as CanvasRenderingContext2D;
 
       const drawCanvas = () => {
         clearAndDraw(contextWhite, canvasWhite, "#FFF", () => {
           contextWhite.beginPath();
           contextWhite.moveTo(
-            memoMeasureJson.pose_landmark[7].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[7].sy * scaleHeight,
+            measureJson.pose_landmark[7].sx * scaleWidth,
+            measureJson.pose_landmark[7].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[8].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[8].sy * scaleHeight,
+            measureJson.pose_landmark[8].sx * scaleWidth,
+            measureJson.pose_landmark[8].sy * scaleHeight,
           );
           contextWhite.stroke();
 
           contextWhite.beginPath();
           contextWhite.moveTo(
-            memoMeasureJson.pose_landmark[11].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[11].sy * scaleHeight,
+            measureJson.pose_landmark[11].sx * scaleWidth,
+            measureJson.pose_landmark[11].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[23].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[23].sy * scaleHeight,
+            measureJson.pose_landmark[23].sx * scaleWidth,
+            measureJson.pose_landmark[23].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[24].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[24].sy * scaleHeight,
+            measureJson.pose_landmark[24].sx * scaleWidth,
+            measureJson.pose_landmark[24].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[12].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[12].sy * scaleHeight,
+            measureJson.pose_landmark[12].sx * scaleWidth,
+            measureJson.pose_landmark[12].sy * scaleHeight,
           );
           contextWhite.stroke();
 
           contextWhite.beginPath();
           contextWhite.moveTo(
-            memoMeasureJson.pose_landmark[11].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[11].sy * scaleHeight,
+            measureJson.pose_landmark[11].sx * scaleWidth,
+            measureJson.pose_landmark[11].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[13].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[13].sy * scaleHeight,
+            measureJson.pose_landmark[13].sx * scaleWidth,
+            measureJson.pose_landmark[13].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[15].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[15].sy * scaleHeight,
+            measureJson.pose_landmark[15].sx * scaleWidth,
+            measureJson.pose_landmark[15].sy * scaleHeight,
           );
           contextWhite.stroke();
 
           contextWhite.beginPath();
           contextWhite.moveTo(
-            memoMeasureJson.pose_landmark[12].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[12].sy * scaleHeight,
+            measureJson.pose_landmark[12].sx * scaleWidth,
+            measureJson.pose_landmark[12].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[14].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[14].sy * scaleHeight,
+            measureJson.pose_landmark[14].sx * scaleWidth,
+            measureJson.pose_landmark[14].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[16].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[16].sy * scaleHeight,
+            measureJson.pose_landmark[16].sx * scaleWidth,
+            measureJson.pose_landmark[16].sy * scaleHeight,
           );
           contextWhite.stroke();
 
           contextWhite.beginPath();
           contextWhite.moveTo(
-            memoMeasureJson.pose_landmark[23].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[23].sy * scaleHeight,
+            measureJson.pose_landmark[23].sx * scaleWidth,
+            measureJson.pose_landmark[23].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[25].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[25].sy * scaleHeight,
+            measureJson.pose_landmark[25].sx * scaleWidth,
+            measureJson.pose_landmark[25].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[27].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[27].sy * scaleHeight,
+            measureJson.pose_landmark[27].sx * scaleWidth,
+            measureJson.pose_landmark[27].sy * scaleHeight,
           );
           contextWhite.stroke();
 
           contextWhite.beginPath();
           contextWhite.moveTo(
-            memoMeasureJson.pose_landmark[24].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[24].sy * scaleHeight,
+            measureJson.pose_landmark[24].sx * scaleWidth,
+            measureJson.pose_landmark[24].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[26].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[26].sy * scaleHeight,
+            measureJson.pose_landmark[26].sx * scaleWidth,
+            measureJson.pose_landmark[26].sy * scaleHeight,
           );
           contextWhite.lineTo(
-            memoMeasureJson.pose_landmark[28].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[28].sy * scaleHeight,
+            measureJson.pose_landmark[28].sx * scaleWidth,
+            measureJson.pose_landmark[28].sy * scaleHeight,
           );
           contextWhite.stroke();
         });
@@ -146,51 +155,51 @@ const MeasureStaticFifth = React.memo(
         clearAndDraw(contextGreen, canvasGreen, "#00FF00", () => {
           contextGreen.beginPath();
           contextGreen.moveTo(
-            memoMeasureJson.pose_landmark[11].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[11].sy * scaleHeight,
+            measureJson.pose_landmark[11].sx * scaleWidth,
+            measureJson.pose_landmark[11].sy * scaleHeight,
           );
           contextGreen.lineTo(
-            memoMeasureJson.pose_landmark[12].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[12].sy * scaleHeight,
+            measureJson.pose_landmark[12].sx * scaleWidth,
+            measureJson.pose_landmark[12].sy * scaleHeight,
           );
           contextGreen.stroke();
 
           contextGreen.beginPath();
           contextGreen.moveTo(
-            memoMeasureJson.pose_landmark[15].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[15].sy * scaleHeight,
+            measureJson.pose_landmark[15].sx * scaleWidth,
+            measureJson.pose_landmark[15].sy * scaleHeight,
           );
           contextGreen.lineTo(
-            memoMeasureJson.pose_landmark[16].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[16].sy * scaleHeight,
+            measureJson.pose_landmark[16].sx * scaleWidth,
+            measureJson.pose_landmark[16].sy * scaleHeight,
           );
           contextGreen.stroke();
 
           contextGreen.beginPath();
           contextGreen.moveTo(
-            memoMeasureJson.pose_landmark[25].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[25].sy * scaleHeight,
+            measureJson.pose_landmark[25].sx * scaleWidth,
+            measureJson.pose_landmark[25].sy * scaleHeight,
           );
           contextGreen.lineTo(
-            memoMeasureJson.pose_landmark[26].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[26].sy * scaleHeight,
+            measureJson.pose_landmark[26].sx * scaleWidth,
+            measureJson.pose_landmark[26].sy * scaleHeight,
           );
           contextGreen.stroke();
 
           contextGreen.beginPath();
           contextGreen.moveTo(
-            memoMeasureJson.pose_landmark[0].sx * scaleWidth,
-            memoMeasureJson.pose_landmark[0].sy * scaleHeight,
+            measureJson.pose_landmark[0].sx * scaleWidth,
+            measureJson.pose_landmark[0].sy * scaleHeight,
           );
           contextGreen.lineTo(
             Math.round(
-              (memoMeasureJson.pose_landmark[11].sx * scaleWidth +
-                memoMeasureJson.pose_landmark[12].sx * scaleWidth) /
+              (measureJson.pose_landmark[11].sx * scaleWidth +
+                measureJson.pose_landmark[12].sx * scaleWidth) /
                 2,
             ),
             Math.round(
-              (memoMeasureJson.pose_landmark[11].sy * scaleHeight +
-                memoMeasureJson.pose_landmark[12].sy * scaleHeight) /
+              (measureJson.pose_landmark[11].sy * scaleHeight +
+                measureJson.pose_landmark[12].sy * scaleHeight) /
                 2,
             ),
           );
@@ -201,27 +210,27 @@ const MeasureStaticFifth = React.memo(
           contextRed.beginPath();
           contextRed.moveTo(
             Math.round(
-              (memoMeasureJson.pose_landmark[11].sx * scaleWidth +
-                memoMeasureJson.pose_landmark[12].sx * scaleWidth) /
+              (measureJson.pose_landmark[11].sx * scaleWidth +
+                measureJson.pose_landmark[12].sx * scaleWidth) /
                 2,
             ),
-            memoMeasureJson.pose_landmark[27].sy * scaleHeight + 100,
+            measureJson.pose_landmark[27].sy * scaleHeight + 100,
           );
           contextRed.lineTo(
             Math.round(
-              (memoMeasureJson.pose_landmark[27].sx * scaleWidth +
-                memoMeasureJson.pose_landmark[28].sx * scaleWidth) /
+              (measureJson.pose_landmark[27].sx * scaleWidth +
+                measureJson.pose_landmark[28].sx * scaleWidth) /
                 2,
             ),
-            memoMeasureJson.pose_landmark[7].sy * scaleHeight - 100,
+            measureJson.pose_landmark[7].sy * scaleHeight - 100,
           );
           contextRed.stroke();
         });
       };
       drawCanvas();
-    }, [data, scaleWidth, scaleHeight, nowHeight]);
+    }, [measureJson, scaleWidth, scaleHeight, nowHeight]);
 
-    if (!data) return <DummyStaticContainer />;
+    if (!measureJson) return <DummyStaticContainer />;
     if (isLoading) return <div>Loading...</div>;
     if (isError) return <div>에러가 발생했습니다.</div>;
 
@@ -230,7 +239,10 @@ const MeasureStaticFifth = React.memo(
         <div className="relative w-full overflow-hidden">
           <Image
             ref={imgRef}
-            src={`https://gym.tangoplus.co.kr/data/Results/` + statics.measure_server_file_name}
+            src={
+              `https://gym.tangoplus.co.kr/data/Results/` +
+              statics.measure_server_file_name
+            }
             alt="측정 사진"
             width={1500}
             height={844}
@@ -255,8 +267,8 @@ const MeasureStaticFifth = React.memo(
             className="absolute bottom-0 left-0 right-0 top-0 z-9 -scale-x-[1]"
           />
         </div>
-        <div className="grid flex-1 grid-cols-12 gap-2 md:gap-5 w-full lg:gap-5">
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+        <div className="grid flex-1 grid-cols-12 gap-2 md:gap-5 w-full lg:gap-5 px-2">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={0.1}
               sdAvg={0.23}
@@ -274,7 +286,7 @@ const MeasureStaticFifth = React.memo(
               unit="°"
             />
           </div>
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={-0.13}
               sdAvg={0.51}
@@ -292,7 +304,7 @@ const MeasureStaticFifth = React.memo(
               unit="°"
             />
           </div>
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={-0.14}
               sdAvg={0.83}
@@ -310,7 +322,7 @@ const MeasureStaticFifth = React.memo(
               unit="°"
             />
           </div>
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={0.12}
               sdAvg={0.21}
@@ -328,7 +340,7 @@ const MeasureStaticFifth = React.memo(
               unit="°"
             />
           </div>
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={-0.01}
               sdAvg={0.57}
@@ -346,7 +358,7 @@ const MeasureStaticFifth = React.memo(
               unit="°"
             />
           </div>
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={5.03}
               sdAvg={1.27}
@@ -364,7 +376,7 @@ const MeasureStaticFifth = React.memo(
               unit="cm"
             />
           </div>
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={-27.35}
               sdAvg={174.14}
@@ -382,7 +394,7 @@ const MeasureStaticFifth = React.memo(
               unit="°"
             />
           </div>
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={-39.92}
               sdAvg={174.14}
@@ -400,7 +412,7 @@ const MeasureStaticFifth = React.memo(
               unit="°"
             />
           </div>
-          <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
               defaultAvg={3.85}
               sdAvg={1.5}

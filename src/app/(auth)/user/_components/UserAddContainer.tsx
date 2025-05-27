@@ -6,8 +6,14 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { ReactNode, useState } from "react";
-import { IUserData } from "@/types/user";
-import { useNameFiltering, usePhoneFiltering, useEmailFiltering } from "@/hooks/utils";
+import { IUnregisterUserData } from "@/types/user";
+import {
+  nameFiltering,
+  phoneFiltering,
+  emailFiltering,
+} from "@/utils/regexFiltering";
+import { useSearchUnregisterUser } from "@/hooks/user/useSearchUnregisterUser";
+import { useAddUser } from "@/hooks/user/useAddUser";
 
 const EmptyUserList = () => (
   <div className="w-full flex items-center justify-center py-10">
@@ -25,7 +31,11 @@ const ErrorText = ({ children }: { children: ReactNode }) => {
   return <p className="text-lg font-medium text-red-500">{children}</p>;
 };
 
-const SearchAllUser = ({ updateUser }: { updateUser: (user: IUserData) => void }) => {
+const SearchAllUser = ({
+  updateUser,
+}: {
+  updateUser: (user: IUnregisterUserData) => void;
+}) => {
   const {
     register,
     handleSubmit,
@@ -33,22 +43,20 @@ const SearchAllUser = ({ updateUser }: { updateUser: (user: IUserData) => void }
   } = useForm({
     resolver: zodResolver(loginSchema),
   });
-  const [userList, setUserList] = useState<IUserData[]>([]);
+  const [userList, setUserList] = useState<IUnregisterUserData[]>([]);
+  const mutationSearchUser = useSearchUnregisterUser();
   const SearchUserHandler = handleSubmit(async (data) => {
-    const result = await fetch(`/api/user/search?name=${data.name}`, {
-      method: "GET",
+    const result = await mutationSearchUser.mutateAsync({
+      searchValue: data.name,
     });
-    if (result.ok) {
-      const data = await result.json();
-      setUserList(data.users);
-    } else {
-      if (result.status === 404) {
-        setUserList([]);
-      }
+    if (result.data.users.length === 0) {
+      alert("조회된 사용자가 없습니다.");
+      return;
     }
+    setUserList(result.data.users);
   });
   const selectUserHandler = (id: string) => {
-    const selectedUser = userList.find((user) => user.id === id);
+    const selectedUser = userList.find((user) => user.user_uuid === id);
     if (selectedUser) {
       updateUser(selectedUser);
       setUserList([]);
@@ -57,7 +65,11 @@ const SearchAllUser = ({ updateUser }: { updateUser: (user: IUserData) => void }
   return (
     <article className="w-full">
       <form className="w-full flex gap-5 mb-5" onSubmit={SearchUserHandler}>
-        <Input placeholder="이름을 입력해주세요." type="text" {...register("name")} />
+        <Input
+          placeholder="이름을 입력해주세요."
+          type="text"
+          {...register("name")}
+        />
         <Button variant="outline" type="submit">
           조회하기
         </Button>
@@ -76,15 +88,21 @@ const SearchAllUser = ({ updateUser }: { updateUser: (user: IUserData) => void }
             {userList.map((user) => {
               return (
                 <div
-                  key={user.id + user.name}
+                  key={user.user_uuid + user.user_name}
                   className="grid grid-cols-6 items-center px-3 py-2 hover:bg-gray-100 border-b last:border-none border-solid border-gray-300"
                 >
-                  <p className="col-span-1 text-center">{useNameFiltering(user.name)}</p>
-                  <p className="col-span-1 text-center">{useEmailFiltering(user.email)}</p>
-                  <p className="col-span-1 text-center">{usePhoneFiltering(user.phone)}</p>
+                  <p className="col-span-1 text-center">
+                    {nameFiltering(user.user_name)}
+                  </p>
+                  <p className="col-span-1 text-center">
+                    {emailFiltering(user.email)}
+                  </p>
+                  <p className="col-span-1 text-center">
+                    {phoneFiltering(user.mobile)}
+                  </p>
                   <button
                     type="button"
-                    onClick={() => selectUserHandler(user.id)}
+                    onClick={() => selectUserHandler(user.user_uuid)}
                     className="col-span-1 text-center"
                   >
                     선택
@@ -100,13 +118,14 @@ const SearchAllUser = ({ updateUser }: { updateUser: (user: IUserData) => void }
 };
 
 const UserAddContainer = () => {
-  const [user, setUser] = useState<IUserData[] | []>([]);
-  const getUserData = (user: IUserData) => {
-    setUser((prev) => {
+  const [users, setUsers] = useState<IUnregisterUserData[] | []>([]);
+  const mutationAddUser = useAddUser();
+  const getUserData = (user: IUnregisterUserData) => {
+    setUsers((prev) => {
       if (prev.length === 0) {
         return [user];
       } else {
-        const userIndex = prev.findIndex((u) => u.id === user.id);
+        const userIndex = prev.findIndex((u) => u.user_uuid === user.user_uuid);
         if (userIndex !== -1) {
           return prev;
         } else {
@@ -115,13 +134,17 @@ const UserAddContainer = () => {
       }
     });
   };
+  const handleAddUser = async () => {
+    const data = users.map((user) => user.user_uuid);
+    await mutationAddUser.mutateAsync({ memberList: data });
+  };
   return (
     <>
       {/* 유저 검색 */}
       <SearchAllUser updateUser={getUserData} />
       <div className="w-full flex flex-col gap-5">
         <h1 className="text-2xl w-full">추가된 사용자</h1>
-        {user.length > 0 && (
+        {users.length > 0 && (
           <>
             <div className="flex flex-col w-full rounded-md border border-input bg-transparent text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm">
               <div className="grid grid-cols-6 px-3 py-2 border-b border-solid border-gray-300">
@@ -130,15 +153,21 @@ const UserAddContainer = () => {
                 <p className="col-span-1 text-center">전화번호</p>
                 <p className="col-span-1" />
               </div>
-              {user.map((user) => {
+              {users.map((user) => {
                 return (
                   <div
-                    key={user.id + user.name}
+                    key={user.user_uuid + user.user_name}
                     className="grid grid-cols-6 items-center px-3 py-2 hover:bg-gray-100 border-b last:border-none border-solid border-gray-300"
                   >
-                    <p className="col-span-1 text-center">{useNameFiltering(user.name)}</p>
-                    <p className="col-span-1 text-center">{useEmailFiltering(user.email)}</p>
-                    <p className="col-span-1 text-center">{usePhoneFiltering(user.phone)}</p>
+                    <p className="col-span-1 text-center">
+                      {nameFiltering(user.user_name)}
+                    </p>
+                    <p className="col-span-1 text-center">
+                      {emailFiltering(user.email)}
+                    </p>
+                    <p className="col-span-1 text-center">
+                      {phoneFiltering(user.mobile)}
+                    </p>
                   </div>
                 );
               })}
@@ -148,9 +177,7 @@ const UserAddContainer = () => {
                 variant="default"
                 type="button"
                 className="ml-2"
-                onClick={() => {
-                  alert("사용자 추가 요청");
-                }}
+                onClick={handleAddUser}
               >
                 사용자 추가 요청
               </Button>

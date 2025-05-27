@@ -44,11 +44,11 @@ const ResultGraph = ({
     }
   }, [defaultAvg, sdAvg, userAvg]);
   return (
-    <div className="w-full flex flex-col gap-3 flex-1 p-2 bg-[#F5F5F5] rounded">
+    <div className="w-full flex flex-col gap-3 flex-1 p-2 bg-[#F5F5F5] dark:bg-slate-900 rounded">
       <p className="text-xl lg:text-2xl">{title}</p>
-      <div className="flex w-full items-center gap-3 px-4 box-border py-2 rounded bg-[#F6F6F6] lg:bg-white dark:bg-meta-4 dark:lg:bg-meta-4">
+      <div className="flex w-full items-center gap-3 px-4 box-border py-2 rounded bg-[#F6F6F6] dark:bg-slate-900">
         <div
-          className={`px-1 py-0.5 rounded select text-white text-center w-[80px] ${
+          className={`px-1 py-0.5 rounded select text-white  text-center w-[80px] ${
             select === 0 ? "default" : select === 1 ? "warning" : "dangerous"
           }`}
         >

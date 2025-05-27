@@ -1,9 +1,11 @@
 import React from "react";
+import SettingContainer from "./_components/SettingContainer";
 
 const SettingHome = () => {
   return (
-    <div className="grid grid-cols-12 gap-5">
-      <h1 className="text-2xl col-span-12">설정</h1>
+    <div className="flex flex-col gap-5">
+      <h1 className="text-2xl">설정</h1>
+      <SettingContainer />
     </div>
   );
 };

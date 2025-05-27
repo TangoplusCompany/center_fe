@@ -1,8 +1,25 @@
 import { refreshAccessToken } from "@/services/auth/postRefreshAccessToken";
 import { createAuthStore } from "@/stores/AuthStore";
+import { session } from "@/utils/helperSessionStorage";
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
-const authStore = createAuthStore()
+export const customUnAuthAxios = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
+});
+
+export const customJsonAxios = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_FILE_URL,
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
+});
+
+const authStore = createAuthStore();
 
 let isRefreshing = false;
 let failedQueue: {
@@ -18,14 +35,6 @@ const processQueue = (error: AxiosError | null, token: string | null) => {
   failedQueue = [];
 };
 
-export const customUnAuthAxios = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-  headers: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  },
-});
-
 export const customAxios = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,
@@ -37,10 +46,19 @@ export const customAxios = axios.create({
 
 // ✅ 요청 인터셉터: 항상 최신 토큰을 헤더에 부착
 customAxios.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  const token = authStore.getState().accessJwt;
+  const token = session.get<{
+    state: {
+      isLogin: boolean;
+      adminName: string;
+      adminEmail: string;
+      adminRole: number;
+      adminSn: number;
+      accessJwt: string;
+    };
+  }>("login-user");
   if (token) {
     config.headers = config.headers || {};
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `Bearer ${token.state.accessJwt}`;
   }
   return config;
 });
@@ -69,11 +87,11 @@ customAxios.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const { accessToken } = await refreshAccessToken(); // 🍪 쿠키로 refreshToken 보내는 API
-        authStore.getState().setAccessToken(accessToken); // 상태 업데이트
-        processQueue(null, accessToken);
+        const refreshResponse = await refreshAccessToken(); // 🍪 쿠키로 refreshToken 보내는 API
+        authStore.getState().setAccessToken(refreshResponse.data.access_jwt); // 상태 업데이트
+        processQueue(null, refreshResponse.data.access_jwt);
 
-        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+        originalRequest.headers.Authorization = `Bearer ${refreshResponse.data.access_jwt}`;
         return customAxios(originalRequest);
       } catch (err) {
         processQueue(err as AxiosError, null);

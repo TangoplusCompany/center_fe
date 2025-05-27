@@ -1,55 +1,41 @@
 "use client";
 
-import { useUserDetail } from "@/hooks/user";
 import { useCallback, useState } from "react";
-import CenterUserInformation from "./CenterUserInformation";
-import CenterUserMeasure from "./CenterUserMeasure";
+import { useGetQuery } from "@/hooks/utils/useGetQuery";
+import UserDetailTap from "@/components/User/UserDetailTap";
+import CenterUserMeasureContainer from "./CenterUserMeasureContainer";
+import CenterUserInformation from "@/components/User/CenterUserInformation";
 
-const UserDetailTap = ({ nowTab, update }: { nowTab: number; update: (index: number) => void }) => {
-  const handleClick = (value: number) => {
-    update(value);
-  };
-  return (
-    <ul className="flex items-center justify-start gap-5">
-      {["기본 정보", "측정 정보"].map((item, index) => {
-        return (
-          <li key={item + index}>
-            <button
-              type="button"
-              className={`${
-                nowTab === index
-                  ? "text-black dark:text-gray-200 border-b-2 border-black dark:border-gray-200 font-semibold"
-                  : "text-gray-400"
-              } text-lg`}
-              onClick={() => handleClick(index)}
-            >
-              {item}
-            </button>
-          </li>
-        );
-      })}
-    </ul>
-  );
-};
-
-const CenterUserDetail = ({ sn }: { sn: number }) => {
-  const { data, isLoading, error } = useUserDetail({ sn });
+const CenterUserDetail = () => {
+  const { params } = useGetQuery();
+  const { userUUID } = params as { userUUID: string };
   const [tab, setTab] = useState(0);
   const handleTab = useCallback((index: number) => {
+    console.log(index);
     setTab(index);
   }, []);
-  if (isLoading) return <p>Loading...</p>;
-  if (!data) return <p>No data</p>;
-  if (error) {
-    return <p>{error.message}</p>;
-  }
+
+  const [measureSn, setMeasureSn] = useState<number>(0);
+
+  const handleRecentSn = useCallback((sn: number) => {
+    setMeasureSn(sn);
+  }, []);
+
   return (
     <div className="w-full h-full flex flex-col gap-5 lg:gap-10">
-      <UserDetailTap nowTab={tab} update={handleTab} />
-      {tab ? (
-        <CenterUserMeasure measureData={data} />
-      ) : (
-        <CenterUserInformation data={data.measure_info} />
+      <UserDetailTap
+        nowTab={tab}
+        userUUID={userUUID}
+        update={handleTab}
+        onUpdateMeasureSn={handleRecentSn}
+      />
+      {tab === 0 && <CenterUserInformation />}
+      {tab !== 0 && (
+        <CenterUserMeasureContainer
+          measureSn={measureSn}
+          userUUID={userUUID}
+          tab={tab}
+        />
       )}
     </div>
   );

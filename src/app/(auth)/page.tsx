@@ -1,24 +1,24 @@
-import React from "react";
-import MainDevice from "./_components/MainDevice";
-import MainAreaChart from "./_components/MainAreaChart";
-import MainUserDonutChart from "./_components/MainUserDonutChart";
+import { DeviceInformation } from "@/components/Dashboard/DeviceInformation";
+import LatestAddUser from "@/components/Dashboard/LatestAddUser";
+import LatestMeasureUser from "@/components/Dashboard/LatestMeasureUser";
 import { Separator } from "@/components/ui/separator";
-import MainUserTable from "./_components/MainUserTable";
-import RefreshTest from "./_components/RefreshTest";
+import React from "react";
 
 export default function Home() {
   return (
-    <div className="grid grid-cols-12 gap-4">
-      <RefreshTest />
-      {/* <MainDevice className="col-span-12" />
-      <Separator className="my-4 col-span-12" />
-      <MainAreaChart className="col-span-12 lg:col-span-8 shadow-none rounded-sm" />
-      <div className="col-span-12 lg:col-span-4">
-        <MainUserDonutChart className="shadow-none rounded-sm h-full" />
+    <div className="flex flex-col gap-5">
+      <DeviceInformation />
+      <Separator className="w-full" />
+      <div className="w-full grid grid-cols-2 gap-5">
+        <div className="col-span-1 flex flex-col gap-4">
+          <h2 className="text-2xl col-span-2">최근 등록 사용자 조회</h2>
+          <LatestAddUser />
+        </div>
+        <div className="col-span-1 flex flex-col gap-4">
+          <h2 className="text-2xl col-span-2">최근 측정 조회</h2>
+          <LatestMeasureUser />
+        </div>
       </div>
-      <Separator className="my-4 col-span-12" />
-      <MainUserTable title="최근 사용자 조회" url="/api/user/latest" />
-      <MainUserTable title="신규 사용자 조회" url="/api/user/new" /> */}
     </div>
   );
 }

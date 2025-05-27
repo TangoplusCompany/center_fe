@@ -1,37 +1,89 @@
-export interface IUserData {
-  id: string;
-  name: string;
-  phone: string;
-  score: number | string;
+import { IResponseDefault } from "./default";
+import { IMeasureList } from "./measure";
+
+export interface IUnregisterUserResponse extends IResponseDefault {
+  data: {
+    last_page: number;
+    limit: number;
+    page: number;
+    total: number;
+    users: IUnregisterUserData[];
+  };
+}
+
+export interface IUnregisterUserData {
+  center_sn: number;
+  device_sn: number;
   email: string;
-  status: UserAcessStatus | string;
-  request: boolean;
+  last_measured: string;
+  mobile: string;
+  t_score: number;
+  reg_date: string;
+  user_name: string;
+  user_uuid: string;
+}
+
+export interface IUserResponse extends IResponseDefault {
+  data: IUserListData;
+}
+
+export interface IUserListData {
+  last_page: number;
+  limit: number;
+  page: number;
+  total: number;
+  users: IUserData[];
+}
+
+export interface IUserData {
+  admin_sn: number;
+  center_sn: number;
+  user_sn: number;
+  user_uuid: string;
+  mobile: string;
+  user_name: string;
+  email: string;
+  created_at: string;
+  consent: boolean;
+}
+
+export interface IUserMeasureList {
+  page: number;
+  total: number;
+  limit: number;
+  last_page: number;
+  measurements: IMeasureList[];
 }
 
 export interface IUserDetail {
   isLogin: boolean;
   sn: number | string;
   userName: string;
-  userData: {
-    count: number | string;
-    measure_info: IUserDetailMeasureInfo;
-    dynamic: IUserDetailDynamic;
-    static_1: IUserDetailStatic;
-    static_2: IUserDetailStatic;
-    static_3: IUserDetailStatic;
-    static_4: IUserDetailStatic;
-    static_5: IUserDetailStatic;
-    static_6: IUserDetailStatic;
-  };
+  userData: { count: number | string } & IUserMeasurement;
 }
 
-export interface IUserDetailMeasureInfo extends IMeasureUserRisk, IMeasureUserPain {
+export interface IUserMeasurement {
+  dynamic: IUserDetailDynamic;
+  measure_info: IUserDetailMeasureInfo;
+  static_1: IUserDetailStatic;
+  static_2: IUserDetailStatic;
+  static_3: IUserDetailStatic;
+  static_4: IUserDetailStatic;
+  static_5: IUserDetailStatic;
+  static_6: IUserDetailStatic;
+}
+
+export interface IUserDetailMeasureInfo
+  extends IMeasureUserRisk,
+    IMeasureUserPain {
+  risk_result_ment: string; // 위험도 결과 멘트
   device_sn: number | string; // 장치 sn
   mobile_temp: string;
   elapsed_time: number | string; // 측정 총 시간 (sec, 소수점 세번째 자리까지)
   measure_string: string; // 측정일자
   measure_seq: number | string; // 측정시퀸스
   measure_sn: number | string; // t_measure_info_sn
+  measure_date: string; // 측정일자
   mobile_device_uuid: string;
   modify_string?: string; // 수정일자
   sn: number | string; // sn
@@ -42,6 +94,8 @@ export interface IUserDetailMeasureInfo extends IMeasureUserRisk, IMeasureUserPa
   user_name: string; // 유저 이름
   user_sn: number | string; // 유저 sn
   user_uuid: string; // 유저 UUID
+  measure_position: string; // 측정 위치
+  mobile: string; // 휴대폰 번호
 }
 
 export interface IFilterMeasureInfo {
@@ -370,4 +424,4 @@ export interface IUserDetailStatic {
   front_elbow_align_distance_center_mid_finger_right: number;
 }
 
-export type UserAcessStatus = "pending" | "request" | "approved" | "rejected";
+export type UserAccessStatus = "pending" | "request" | "approved" | "rejected";

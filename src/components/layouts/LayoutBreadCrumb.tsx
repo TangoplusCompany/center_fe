@@ -28,6 +28,11 @@ const Menus: IMenu[] = [
     initial: "",
   },
   {
+    title: "측정 관리",
+    url: "/measure",
+    initial: "measure",
+  },
+  {
     title: "사용자 관리",
     url: "/user",
     initial: "user",
@@ -43,13 +48,18 @@ const Menus: IMenu[] = [
     initial: "device",
   },
   {
-    title: "환경 설정",
+    title: "매니저 관리",
+    url: "/manager",
+    initial: "manager",
+  },
+  {
+    title: "설정",
     url: "/setting",
     initial: "setting",
   },
 ];
 
-export function LayoutBreadcCrumb() {
+export function LayoutBreadCrumb() {
   const pathName = usePathname();
 
   return (
