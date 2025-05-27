@@ -38,6 +38,7 @@ export function useStaticLandmark(
 } {
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const loadImage = useLoadImage;
 
   useEffect(() => {
     if (!imageUrl) return;
@@ -47,7 +48,7 @@ export function useStaticLandmark(
 
       try {
         const proxiedUrl = `/api/proxy?url=${encodeURIComponent(imageUrl)}`;
-        const image = await useLoadImage(proxiedUrl);
+        const image = await loadImage(proxiedUrl);
         const width = image.width;
         const height = image.height;
 

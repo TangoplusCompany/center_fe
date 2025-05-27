@@ -1,10 +1,8 @@
 import { IUserDetailStatic } from "@/types/user";
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import ResultGraph from "../ResultGraph";
-import Image from "next/image";
 import { useMeasureJson } from "@/hooks/measure/useMeasureJson";
 import DummyStaticContainer from "../DummyStaticContainer";
-import { useDrawCanvas, useWindowResize } from "@/hooks/utils";
 import { MeasurementImage } from "../MeasurementImage";
 
 const MeasureStaticThird = React.memo(
