@@ -1,10 +1,9 @@
 import { IUserDetailStatic } from "@/types/user";
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import ResultGraph from "../ResultGraph";
-import Image from "next/image";
 import { useMeasureJson } from "@/hooks/measure/useMeasureJson";
 import DummyStaticContainer from "../DummyStaticContainer";
-import { useDrawCanvas, useWindowResize } from "@/hooks/utils";
+import { MeasurementImage } from "../MeasurementImage";
 
 const MeasureStaticSecond = React.memo(
   ({
@@ -14,128 +13,26 @@ const MeasureStaticSecond = React.memo(
     className?: string;
     statics: IUserDetailStatic;
   }) => {
-    const defaultWidth = statics.measure_overlay_width as number;
-    const defaultHeight = statics.measure_overlay_height as number;
-    const [nowWidth, setNowWidth] = useState(defaultWidth);
-    const [nowHeight, setNowHeight] = useState(defaultHeight);
-    const [scaleWidth, setScaleWidth] = useState(1);
-    const [scaleHeight, setScaleHeight] = useState(1);
-    const imgRef = useRef<HTMLImageElement | null>(null);
-    const canvasWhiteRef = useRef<HTMLCanvasElement | null>(null);
     const {
       data: measureJson,
       isLoading,
       isError,
     } = useMeasureJson(statics.measure_server_json_name);
-    const clearAndDraw = useDrawCanvas;
-    const windowWidth = useWindowResize();
-
-    useEffect(() => {
-      if (imgRef.current === null) return;
-      const imgTag = imgRef.current;
-      const updateCanvasScale = () => {
-        const imgWidth = imgTag.width;
-        const imgHeight = imgTag.height;
-
-        const widthScale = Number((imgWidth / defaultWidth).toFixed(4));
-        const heightScale = Number((imgHeight / defaultHeight).toFixed(4));
-        setNowWidth(imgWidth);
-        setNowHeight(imgHeight);
-        setScaleWidth(widthScale);
-        setScaleHeight(heightScale);
-      };
-      updateCanvasScale();
-    }, [measureJson, windowWidth]);
-
-    useEffect(() => {
-      if (!measureJson || imgRef.current === null) return;
-      const canvasWhite = canvasWhiteRef.current as HTMLCanvasElement;
-      const contextWhite = canvasWhite.getContext(
-        "2d",
-      ) as CanvasRenderingContext2D;
-
-      const drawCanvas = () => {
-        clearAndDraw(contextWhite, canvasWhite, "#FFF", () => {
-          contextWhite.beginPath();
-          contextWhite.moveTo(
-            measureJson.pose_landmark[7].sx * scaleWidth,
-            measureJson.pose_landmark[7].sy * scaleHeight,
-          );
-          contextWhite.lineTo(
-            measureJson.pose_landmark[8].sx * scaleWidth,
-            measureJson.pose_landmark[8].sy * scaleHeight,
-          );
-          contextWhite.stroke();
-
-          contextWhite.beginPath();
-          contextWhite.moveTo(
-            measureJson.pose_landmark[11].sx * scaleWidth,
-            measureJson.pose_landmark[11].sy * scaleHeight,
-          );
-          contextWhite.lineTo(
-            measureJson.pose_landmark[12].sx * scaleWidth,
-            measureJson.pose_landmark[12].sy * scaleHeight,
-          );
-          contextWhite.stroke();
-
-          contextWhite.beginPath();
-          contextWhite.moveTo(
-            measureJson.pose_landmark[11].sx * scaleWidth,
-            measureJson.pose_landmark[11].sy * scaleHeight,
-          );
-          contextWhite.lineTo(
-            measureJson.pose_landmark[13].sx * scaleWidth,
-            measureJson.pose_landmark[13].sy * scaleHeight,
-          );
-          contextWhite.lineTo(
-            measureJson.pose_landmark[15].sx * scaleWidth,
-            measureJson.pose_landmark[15].sy * scaleHeight,
-          );
-          contextWhite.stroke();
-
-          contextWhite.beginPath();
-          contextWhite.moveTo(
-            measureJson.pose_landmark[12].sx * scaleWidth,
-            measureJson.pose_landmark[12].sy * scaleHeight,
-          );
-          contextWhite.lineTo(
-            measureJson.pose_landmark[14].sx * scaleWidth,
-            measureJson.pose_landmark[14].sy * scaleHeight,
-          );
-          contextWhite.lineTo(
-            measureJson.pose_landmark[16].sx * scaleWidth,
-            measureJson.pose_landmark[16].sy * scaleHeight,
-          );
-          contextWhite.stroke();
-        });
-      };
-      drawCanvas();
-    }, [measureJson, scaleWidth, scaleHeight, nowHeight]);
 
     if (!measureJson) return <DummyStaticContainer />;
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <DummyStaticContainer />;
     if (isError) return <div>에러가 발생했습니다.</div>;
+
     return (
-      <div className={`${className} flex flex-col gap-4 lg:gap-10`}>
-        <div className="relative w-full overflow-hidden">
-          <Image
-            ref={imgRef}
-            src={
-              `https://gym.tangoplus.co.kr/data/Results/` +
-              statics.measure_server_file_name
-            }
-            alt="측정 사진"
-            width={1500}
-            height={844}
-            className="lg:w-full lg:relative absolute top-0 left-0 w-[750px] h-[400px] object-cover lg:h-full"
-          />
-          <canvas
-            ref={canvasWhiteRef}
-            width={nowWidth}
-            height={nowHeight}
-            className="absolute bottom-0 left-0 right-0 top-0 z-9 -scale-x-[1]"
-          />
-        </div>
+      <div className={`${className ?? ""} flex flex-col gap-4 lg:gap-10`}>
+        <MeasurementImage
+          imageUrl={
+            `https://gym.tangoplus.co.kr/data/Results/` +
+            statics.measure_server_file_name
+          }
+          measureJson={measureJson}
+          step="second"
+        />
         <div className="grid flex-1 grid-cols-12 gap-2 md:gap-5 w-full lg:gap-5 px-2">
           <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
