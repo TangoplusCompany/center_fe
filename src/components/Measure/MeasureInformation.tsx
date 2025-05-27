@@ -6,7 +6,6 @@ import React from "react";
 import { actionEncrypt } from "@/app/actions/getCrypto";
 import { postKakaoSend } from "@/app/actions/postKakaoSend";
 import KakaoIcons from "../ui/KakaoIcons";
-import { CheckCircle } from "lucide-react";
 
 const MeasureInformation = ({ data }: { data: IUserDetailMeasureInfo }) => {
   const handleShare = async () => {
@@ -48,7 +47,7 @@ const MeasureInformation = ({ data }: { data: IUserDetailMeasureInfo }) => {
     //   </div>
     // </div>
     <div>
-      <div className="border rounded p-6">
+      <div className="rounded p-6">
         <div className="mb-6">
           <div className="flex items-center justify-between">
             <h2 className="text-4xl font-semibold text-[#333]">
@@ -69,8 +68,7 @@ const MeasureInformation = ({ data }: { data: IUserDetailMeasureInfo }) => {
             return el === "" ? <br key={key} /> : <p key={key}>{el}</p>;
           })}
         </div>
-
-        <div className="mt-6 pt-6 border-t">
+        {/* <div className="mt-6 pt-6 border-t">
           <h4 className="font-bold mb-3">추천 운동:</h4>
           <div className="space-y-2">
             <div className="flex items-start gap-2">
@@ -86,7 +84,7 @@ const MeasureInformation = ({ data }: { data: IUserDetailMeasureInfo }) => {
               <p>발목 회전 운동 (하루 2회, 각 방향 10회)</p>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
