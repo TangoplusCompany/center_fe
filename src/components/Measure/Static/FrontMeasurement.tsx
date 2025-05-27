@@ -2,7 +2,6 @@ import { IUserDetailStatic } from "@/types/user";
 import React from "react";
 import MeasureStaticFirst from "./First";
 import MeasureStaticSecond from "./Second";
-import TestFirstMeasurement from "./TestFirst";
 
 const FrontMeasurement = ({
   statics_1,

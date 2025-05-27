@@ -1,19 +1,11 @@
 "use client";
 
 import {
-  IUserDetailDynamic,
-  IUserDetailStatic,
   IUserMeasurement,
 } from "@/types/user";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MeasureDetailDynamic from "@/components/Measure/DetailDynamic";
 import React, { JSX } from "react";
-import MeasureStaticFirst from "@/components/Measure/Static/First";
-import MeasureStaticSecond from "@/components/Measure/Static/Second";
-import MeasureStaticThird from "@/components/Measure/Static/Third";
-import MeasureStaticFourth from "@/components/Measure/Static/Fourth";
-import MeasureStaticFifth from "@/components/Measure/Static/Fifth";
-import MeasureStaticSixth from "@/components/Measure/Static/Sixth";
 import BackMeasurement from "@/components/Measure/Static/BackMeasurement";
 import FrontMeasurement from "@/components/Measure/Static/FrontMeasurement";
 import SideMeasurement from "@/components/Measure/Static/SideMeasurement";

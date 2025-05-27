@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { ReactNode, useState } from "react";
+import React, { useState } from "react";
 import { ICoachData } from "@/types/coach";
 
 const loginSchema = z.object({
@@ -14,15 +14,11 @@ const loginSchema = z.object({
   }),
 });
 
-const ErrorText = ({ children }: { children: ReactNode }) => {
-  return <p className="text-sm text-red-500">{children}</p>;
-};
 
 const SearchAllCoach = ({ updateCoach }: { updateCoach: (coach: ICoachData) => void }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
   } = useForm({
     resolver: zodResolver(loginSchema),
   });
@@ -98,6 +94,7 @@ const SearchAllCoach = ({ updateCoach }: { updateCoach: (coach: ICoachData) => v
 
 const CoachAddContainer = () => {
   const [coach, setCoach] = useState<ICoachData | null>(null);
+  console.log(coach);
   const getCoachData = (coach: ICoachData) => {
     setCoach(coach);
   };

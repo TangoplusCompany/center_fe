@@ -24,28 +24,11 @@ const MeasureInformation = ({ data }: { data: IUserDetailMeasureInfo }) => {
       await postKakaoSend(encryptData);
       alert("카카오톡으로 측정 정보가 전송되었습니다.");
     } catch (error) {
+      console.error(error);
       alert("카카오톡 공유에 실패했습니다. 잠시 후 다시 시도해주세요.");
     }
   };
   return (
-    // <div className="flex-1">
-    //   <div className="flex w-full items-center justify-between space-y-4">
-    //     <h1 className="text-4xl font-semibold text-[#333]">
-    //       {data.user_name}님의 측정 내역
-    //     </h1>
-    //     <button onClick={handleShare} title="카카오톡 공유하기">
-    //       <KakaoIcons />
-    //     </button>
-    //   </div>
-    //   <div className="flex flex-col gap-2">
-    //     <p>측정점수 : {data.t_score}점</p>
-    //     <div>
-    //       {parseString(data.risk_result_ment).map((el, key) => {
-    //         return el === "" ? <br key={key} /> : <p key={key}>{el}</p>;
-    //       })}
-    //     </div>
-    //   </div>
-    // </div>
     <div>
       <div className="rounded p-6">
         <div className="mb-6">

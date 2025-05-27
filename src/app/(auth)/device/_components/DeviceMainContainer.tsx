@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext } from "react";
+import React from "react";
 import { useGetDeviceStatus } from "@/hooks/device";
 import SkeletonDeviceCard from "@/components/Card/SkeletonDeviceCard";
 import { IDeviceStatus } from "@/types/device";

@@ -1,5 +1,5 @@
 import { IUserDetailStatic } from "@/types/user";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ResultGraph from "../ResultGraph";
 import Image from "next/image";
 import { useMeasureJson } from "@/hooks/measure/useMeasureJson";
@@ -311,5 +311,7 @@ const MeasureStaticThird = React.memo(
     );
   },
 );
+
+MeasureStaticThird.displayName = "MeasureStaticThird";
 
 export default MeasureStaticThird;

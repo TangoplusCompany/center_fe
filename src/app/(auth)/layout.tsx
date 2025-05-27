@@ -21,7 +21,7 @@ export default function AuthLayout({
       authStore.getState().setLogout();
       router.replace("/login");
     }
-  }, []);
+  }, [authStore, router]);
   return (
     <SidebarProvider>
       <AuthStoreProvider>

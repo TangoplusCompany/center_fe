@@ -17,6 +17,7 @@ export const useCenterCheck = ({ onCenterCheck, centerCode }: Props) => {
   return useMutation({
     mutationFn: getCenterCheck,
     onSuccess: (data: ICenterCheck) => {
+      console.log(data.message);
       onCenterCheck(centerCode);
       // Handle successful login, e.g., redirect to dashboard
     },

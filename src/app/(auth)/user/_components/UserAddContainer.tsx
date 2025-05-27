@@ -39,7 +39,6 @@ const SearchAllUser = ({
   const {
     register,
     handleSubmit,
-    formState: { errors },
   } = useForm({
     resolver: zodResolver(loginSchema),
   });

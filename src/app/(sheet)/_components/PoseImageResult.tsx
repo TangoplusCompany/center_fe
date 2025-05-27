@@ -14,6 +14,7 @@ export default function PoseImageResult({ imageUrl }: Props) {
 
   return (
     <div className="flex flex-col items-center">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={resultUrl}
         alt="Processed Pose Image"
