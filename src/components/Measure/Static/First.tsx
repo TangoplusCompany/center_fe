@@ -5,10 +5,16 @@ import Image from "next/image";
 import DummyStaticContainer from "../DummyStaticContainer";
 import { useDrawCanvas, useWindowResize } from "@/hooks/utils";
 import { useMeasureJson } from "@/hooks/measure/useMeasureJson";
-
+import html2canvas from "html2canvas";
 
 const MeasureStaticFirst = React.memo(
-  ({ className, statics }: { className?: string; statics: IUserDetailStatic }) => {
+  ({
+    className,
+    statics,
+  }: {
+    className?: string;
+    statics: IUserDetailStatic;
+  }) => {
     const defaultWidth = statics.measure_overlay_width as number;
     const defaultHeight = statics.measure_overlay_height as number;
     const [nowWidth, setNowWidth] = useState(defaultWidth);
@@ -21,8 +27,14 @@ const MeasureStaticFirst = React.memo(
     const canvasGreenRef = useRef<HTMLCanvasElement | null>(null);
     const clearAndDraw = useDrawCanvas;
     const windowWidth = useWindowResize();
-    const {data: measureJson, isLoading, isError} = useMeasureJson(statics.measure_server_json_name);
-
+    const {
+      data: measureJson,
+      isLoading,
+      isError,
+    } = useMeasureJson(statics.measure_server_json_name);
+    const [capturedImageUrl, setCapturedImageUrl] = useState<string | null>(
+      null,
+    );
     useEffect(() => {
       if (imgRef.current === null) return;
       const imgTag = imgRef.current;
@@ -46,9 +58,13 @@ const MeasureStaticFirst = React.memo(
       const canvasRed = canvasRedRef.current as HTMLCanvasElement;
       const canvasGreen = canvasGreenRef.current as HTMLCanvasElement;
 
-      const contextWhite = canvasWhite.getContext("2d") as CanvasRenderingContext2D;
+      const contextWhite = canvasWhite.getContext(
+        "2d",
+      ) as CanvasRenderingContext2D;
       const contextRed = canvasRed.getContext("2d") as CanvasRenderingContext2D;
-      const contextGreen = canvasGreen.getContext("2d") as CanvasRenderingContext2D;
+      const contextGreen = canvasGreen.getContext(
+        "2d",
+      ) as CanvasRenderingContext2D;
 
       const drawCanvas = () => {
         clearAndDraw(contextWhite, canvasWhite, "#FFF", () => {
@@ -192,16 +208,82 @@ const MeasureStaticFirst = React.memo(
       drawCanvas();
     }, [measureJson, scaleWidth, scaleHeight, nowHeight]);
 
+    useEffect(() => {
+      if (!measureJson) return;
+
+      const captureAndCropImage = async () => {
+        const target = document.getElementById("pose-container");
+        if (!target) return;
+
+        const fullCanvas = await html2canvas(target, {
+          useCORS: true,
+          backgroundColor: null,
+          scale: 2, // 고해상도
+        });
+
+        const fullWidth = fullCanvas.width;
+        const fullHeight = fullCanvas.height;
+
+        // 목표: 중앙 기준 3:4 비율 영역 자르기
+        const targetAspect = 3 / 4;
+        const cropHeight = fullHeight;
+        const cropWidth = cropHeight * targetAspect;
+
+        const cropX = (fullWidth - cropWidth) / 2;
+        const cropY = 0;
+
+        // 잘라낸 새로운 canvas
+        const croppedCanvas = document.createElement("canvas");
+        croppedCanvas.width = cropWidth;
+        croppedCanvas.height = cropHeight;
+
+        const ctx = croppedCanvas.getContext("2d")!;
+        ctx.drawImage(
+          fullCanvas,
+          cropX,
+          cropY,
+          cropWidth,
+          cropHeight,
+          0,
+          0,
+          cropWidth,
+          cropHeight,
+        );
+
+        const resultUrl = croppedCanvas.toDataURL("image/png");
+        setCapturedImageUrl(resultUrl);
+      };
+
+      const timeout = setTimeout(() => {
+        captureAndCropImage();
+      }, 500);
+
+      return () => clearTimeout(timeout);
+    }, [measureJson]);
+
     if (!measureJson) return <DummyStaticContainer />;
     if (isLoading) return <div>Loading...</div>;
     if (isError) return <div>에러가 발생했습니다.</div>;
 
     return (
       <div className={`${className} flex flex-col gap-4 lg:gap-10`}>
-        <div className="relative w-full overflow-hidden">
+        {capturedImageUrl ? (
+          <div className="">
+            <img src={capturedImageUrl} alt="측정 이미지" className="" />
+          </div>
+        ) : (
+          <div className="w-full h-[720px]"></div>
+        )}
+        <div
+          className="fixed top-0 left-[-9999px] h-[720px] pointer-events-none w-[1280px] overflow-hidden"
+          id="pose-container"
+        >
           <Image
             ref={imgRef}
-            src={`https://gym.tangoplus.co.kr/data/Results/` + statics.measure_server_file_name}
+            src={
+              `https://gym.tangoplus.co.kr/data/Results/` +
+              statics.measure_server_file_name
+            }
             alt="측정 사진"
             width={1500}
             height={844}
