@@ -1,8 +1,8 @@
 "use client";
 
-import DefaultLayout from "@/components/Layouts/DefaultLayout";
+import DefaultLayout from "@/components/Layoutss/DefaultLayout";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import DefaultSidebar from "@/components/Layouts/DefaultSidebar";
+import DefaultSidebar from "@/components/Layoutss/DefaultSidebar";
 import AuthStoreProvider from "@/providers/AuthProvider";
 import { useEffect } from "react";
 import { createAuthStore } from "@/stores/AuthStore";
