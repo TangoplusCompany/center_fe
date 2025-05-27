@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -15,7 +15,6 @@ function loadImage(src: string): Promise<HTMLImageElement> {
 
 const usePoseLandmarkImage = (
   imageUrl: string,
-  landmark: { x: number; y: number }[],
 ): { resultUrl: string | null; loading: boolean } => {
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);

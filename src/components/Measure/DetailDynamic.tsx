@@ -1,12 +1,9 @@
 import { IUserDetailDynamic } from "@/types/user";
 import React, { useEffect, useRef, useState } from "react";
 import ResultGraph from "./ResultGraph";
-
 import { useDrawCanvas } from "@/hooks/utils";
 import { useMeasureDynamicJson } from "@/hooks/measure/useMeasureDynamicJson";
 import DataError from "../Util/DataError";
-import ShoulderMoveLine from "./Dynamic/ShoulderMoveLine";
-import KneeMoveLine from "./Dynamic/KneeMoveLine";
 
 const MeasureDetailDynamic = ({
   dynamic,
@@ -62,9 +59,8 @@ const MeasureDetailDynamic = ({
 
       syncFrameToCurrentTime(); // 🎯 여기가 중요!
 
-      const loop = (_: number) => {
+      const loop = () => {
         if (!frameLoopActive.current) return;
-
         const frame = Math.floor(video.currentTime * 30);
         setFrame(frame);
 

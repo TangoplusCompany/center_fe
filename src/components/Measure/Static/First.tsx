@@ -479,4 +479,6 @@ const MeasureStaticFirst = React.memo(
   },
 );
 
+MeasureStaticFirst.displayName = "MeasureStaticFirst";
+
 export default MeasureStaticFirst;

@@ -1,19 +1,13 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import DefaultHeaderLayout from "./DefaultHeaderLayout";
-import { useSidebar } from "../ui/sidebar";
-import { usePathname } from "next/navigation";
-import { useIsMobile } from "@/hooks/use-mobile";
 
-export default function DefaultLayout({ children }: { children: React.ReactNode }) {
-  const usePathName = usePathname();
-  const { toggleSidebar } = useSidebar();
-  const isMobile = useIsMobile();
-  // useEffect(() => {
-  //   console.log("isMobile", isMobile);
-  //   if (isMobile) toggleSidebar();
-  // }, [usePathName]);
+export default function DefaultLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <main className="flex flex-col items-center justify-start min-h-screen flex-1">
       <DefaultHeaderLayout />

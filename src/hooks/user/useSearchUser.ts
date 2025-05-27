@@ -1,7 +1,6 @@
 import { getSearchUser } from "@/services/user/getSearchUser";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { UseFormSetError, FieldValues } from "react-hook-form";
 
 export const useSearchUser = () => {
   return useMutation({

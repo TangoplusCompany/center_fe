@@ -6,6 +6,7 @@ export const useDeviceUpdate = () => {
   return useMutation({
     mutationFn: patchDeviceInfo,
     onSuccess: (data) => {
+      console.log(data.message);
       // Handle successful login, e.g., redirect to dashboard
       alert("기기 정보가 수정되었습니다.");
     },
