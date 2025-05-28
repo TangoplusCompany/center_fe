@@ -4,7 +4,7 @@ export interface IReportMeasureResponse {
   angle_data: IReportMeasureAngleData;
   figure_data: IReportMeasureFigureData;
   summary_data: IReportMeasureSummary[];
-  detail_data: IReportMeasureDetailData[];
+  detail_data: IReportMeasureDetail;
   result_ment_summary: string;
 }
 
@@ -136,11 +136,24 @@ export interface IReportMeasureSummary {
   risk_level: number;
 }
 
+export interface IReportMeasureDetail {
+  neck: IReportMeasureDetailData;
+  shoulder: IReportMeasureDetailData;
+  elbow: IReportMeasureDetailData;
+  hip: IReportMeasureDetailData;
+  knee: IReportMeasureDetailData;
+  ankle: IReportMeasureDetailData;
+}
+
 export interface IReportMeasureDetailData {
-  measure_server_sn: number;
-  body_part: string;
-  data: number;
   ment: string;
+  ment_all: string;
   risk_level: number;
-  score: number;
+  left_right: number;
+  data: number;
+  description: string;
+  disorder: string;
+  exercise: string;
+  left_data: number;
+  right_data: number;
 }
