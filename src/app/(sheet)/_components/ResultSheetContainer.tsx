@@ -11,30 +11,8 @@ import PoseImageResult from "../_components/PoseImageResult";
 import { usePostUserReport } from "@/hooks/report/usePostUserReport";
 import { formatDate } from "@/utils/formatDate";
 import { useEffect, useState } from "react";
-
-const IMAGE_KEYS = {
-  static_back: "후면 측정",
-  static_back_sit: "후면 앉은 측정",
-  static_front: "정면 측정",
-  static_left: "좌측 측정",
-  static_right: "우측 측정",
-};
-
-const SUMMARY_CATEGORY = {
-  front: "정면",
-  back: "후면",
-  side: "측면",
-  dynamic: "동적",
-};
-
-const BODY_PART = {
-  neck: "목관절",
-  shoulder: "어깨",
-  arm: "팔꿈치",
-  hip: "허리",
-  knee: "무릎",
-  ankle: "발목",
-};
+import { IMAGE_KEYS, SUMMARY_CATEGORY } from "@/utils/constants/reportConst";
+import { calcFigureRiskLevel } from "@/utils/reportCalc";
 
 const ResultSheetContainer = ({
   sn,
@@ -48,7 +26,17 @@ const ResultSheetContainer = ({
     isLoading,
     isError,
   } = usePostUserReport(user_uuid, sn);
+  // const DUMMY_UUID = "KYVEF55KKPEWVWL4";
+  // const DUMMY_SN = 453;
+
+  // const {
+  //   data: reportData,
+  //   isLoading,
+  //   isError,
+  // } = usePostUserReport(DUMMY_UUID, DUMMY_SN);
   const [riskResultMent, setRiskResultMent] = useState<string[]>([]);
+  const [riskWarning, setRiskWarning] = useState<string[]>([]);
+  const [riskDanger, setRiskDanger] = useState<string[]>([]);
 
   const handlePrint = async () => {
     window.print();
@@ -56,15 +44,21 @@ const ResultSheetContainer = ({
 
   useEffect(() => {
     if (reportData) {
+      const splitRiskResult =
+        reportData.measure_info.risk_result_ment.split("\n");
       setRiskResultMent(
-        reportData.measure_info.risk_result_ment
-          .split("\n")
-          .filter(
-            (ment) =>
-              !ment.includes("체형분석 결과") &&
-              !ment.includes("주의 부위") &&
-              !ment.includes("위험 부위"),
-          ),
+        splitRiskResult.filter(
+          (ment) =>
+            !ment.includes("체형분석 결과") &&
+            !ment.includes("주의 부위") &&
+            !ment.includes("위험 부위"),
+        ),
+      );
+      setRiskWarning(
+        splitRiskResult.filter((ment) => ment.includes("주의 부위")),
+      );
+      setRiskDanger(
+        splitRiskResult.filter((ment) => ment.includes("위험 부위")),
       );
     }
   }, [reportData]);
@@ -93,7 +87,7 @@ const ResultSheetContainer = ({
       {/* ✅ 첫번째 페이지 영역 */}
       <div
         id="print-section"
-        className="w-full max-w-[1028px] h-[1456px] box-border mx-auto p-1 flex flex-col gap-8"
+        className="w-full max-w-[1028px] h-[1456px] box-border mx-auto p-1 flex flex-col gap-5"
       >
         {/* 헤더 */}
         <div className="w-full print:bg-gradient-to-r bg-gradient-to-r from-[#16286A] to-[#557BFF] text-white relative flex items-center justify-between py-2 pl-4 pr-9">
@@ -139,7 +133,7 @@ const ResultSheetContainer = ({
         {/* 신체 위험도 / 신체 안정도 */}
         <div className="flex w-full gap-6">
           {/* 결과 요약 */}
-          <div className="flex-1 flex flex-col gap-[32px]">
+          <div className="flex-1 flex flex-col gap-5">
             <div className="flex w-full gap-[5px]">
               <div className="flex items-center justify-center py-[28px] pl-[26px] pr-[49px] text-white bg-[#2F52D3] rounded-lg gap-[15px]">
                 <p className="text-center text-xl font-bold">
@@ -176,15 +170,37 @@ const ResultSheetContainer = ({
                 />
               </div>
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 flex-1">
               <TitleLayout
                 title="체형분석 결과"
                 description="체형 분석 결과 요약"
               />
-              <div className="bg-[#F6F6F6] rounded-lg p-4 overflow-hidden text-[#47484C] h-[240px] w-full break-keep">
+              <div className="bg-[#F6F6F6] rounded-lg p-4 overflow-hidden text-[#47484C] flex-1 w-full break-keep">
                 {riskResultMent.map((ment, index) => {
                   return <p key={"riskMent" + index}>{ment}</p>;
                 })}
+                {riskWarning &&
+                  riskWarning.map((warning, index) => {
+                    return (
+                      <p
+                        key={"riskWarning" + index}
+                        className="text-[#FF971D] mt-2"
+                      >
+                        {warning}
+                      </p>
+                    );
+                  })}
+                {riskDanger &&
+                  riskDanger.map((danger, index) => {
+                    return (
+                      <p
+                        key={"riskDanger" + index}
+                        className="text-[#FF5449] mt-2"
+                      >
+                        {danger}
+                      </p>
+                    );
+                  })}
               </div>
             </div>
           </div>
@@ -202,43 +218,121 @@ const ResultSheetContainer = ({
                 height={400}
               />
               {reportData.measure_info.risk_neck !== "0" && (
-                <div className="neck size-3 bg-red-500 print:bg-red-500 rounded-full absolute left-1/2 -translate-x-1/2 top-[19%]"></div>
+                <div
+                  className={`${
+                    reportData.measure_info.risk_neck === "1"
+                      ? "bg-[#FF971D] print:bg-[#FF971D]"
+                      : "bg-red-500 print:bg-red-500"
+                  } neck size-3 rounded-full absolute left-1/2 -translate-x-1/2 top-[19%]`}
+                ></div>
               )}
               {reportData.measure_info.risk_shoulder_left !== "0" && (
-                <div className="left_shoulder size-3 bg-red-500 print:bg-red-500 rounded-full absolute left-[35%] top-[24%]"></div>
+                <div
+                  className={`${
+                    reportData.measure_info.risk_shoulder_left === "1"
+                      ? "bg-[#FF971D] print:bg-[#FF971D]"
+                      : "bg-red-500 print:bg-red-500"
+                  } left_shoulder size-3 rounded-full absolute left-[35%] top-[24%]`}
+                ></div>
               )}
               {reportData.measure_info.risk_elbow_left !== "0" && (
-                <div className="left_elbow size-3 bg-red-500 print:bg-red-500 rounded-full absolute left-[30%] top-[36%]"></div>
+                <div
+                  className={`${
+                    reportData.measure_info.risk_elbow_left === "1"
+                      ? "bg-[#FF971D] print:bg-[#FF971D]"
+                      : "bg-red-500 print:bg-red-500"
+                  } left_elbow size-3 rounded-full absolute left-[30%] top-[36%]`}
+                ></div>
               )}
               {reportData.measure_info.risk_wrist_left !== "0" && (
-                <div className="left_wrist size-3 bg-red-500 print:bg-red-500 rounded-full absolute left-[23%] top-[48%]"></div>
+                <div
+                  className={`${
+                    reportData.measure_info.risk_wrist_left === "1"
+                      ? "bg-[#FF971D] print:bg-[#FF971D]"
+                      : "bg-red-500 print:bg-red-500"
+                  } left_wrist size-3 rounded-full absolute left-[23%] top-[48%]`}
+                ></div>
               )}
               {reportData.measure_info.risk_hip_left !== "0" && (
-                <div className="left_hip size-3 bg-red-500 print:bg-red-500 rounded-full absolute left-[40%] bottom-[46%]"></div>
+                <div
+                  className={`${
+                    reportData.measure_info.risk_hip_left === "1"
+                      ? "bg-[#FF971D] print:bg-[#FF971D]"
+                      : "bg-red-500 print:bg-red-500"
+                  } left_hip size-3 rounded-full absolute left-[40%] bottom-[46%]`}
+                ></div>
               )}
               {reportData.measure_info.risk_knee_left !== "0" && (
-                <div className="left_knee size-3 bg-red-500 print:bg-red-500 rounded-full absolute left-[40%] bottom-[28%]"></div>
+                <div
+                  className={`${
+                    reportData.measure_info.risk_knee_left === "1"
+                      ? "bg-[#FF971D] print:bg-[#FF971D]"
+                      : "bg-red-500 print:bg-red-500"
+                  } left_knee size-3 rounded-full absolute left-[40%] bottom-[28%]`}
+                ></div>
               )}
               {reportData.measure_info.risk_ankle_left !== "0" && (
-                <div className="left_ankle size-3 bg-red-500 print:bg-red-500 rounded-full absolute  left-[40%] bottom-[10%]"></div>
+                <div
+                  className={`${
+                    reportData.measure_info.risk_ankle_left === "1"
+                      ? "bg-[#FF971D] print:bg-[#FF971D]"
+                      : "bg-red-500 print:bg-red-500"
+                  } left_ankle size-3 rounded-full absolute  left-[40%] bottom-[10%]`}
+                ></div>
               )}
               {reportData.measure_info.risk_shoulder_right !== "0" && (
-                <div className="left_shoulder size-3 bg-red-500 print:bg-red-500 rounded-full absolute right-[35%] top-[24%]"></div>
+                <div
+                  className={`${
+                    reportData.measure_info.risk_shoulder_right === "1"
+                      ? "bg-[#FF971D] print:bg-[#FF971D]"
+                      : "bg-red-500 print:bg-red-500"
+                  } left_shoulder size-3 rounded-full absolute right-[35%] top-[24%]`}
+                ></div>
               )}
               {reportData.measure_info.risk_elbow_right !== "0" && (
-                <div className="right_elbow size-3 bg-red-500 print:bg-red-500 rounded-full absolute right-[30%] top-[36%]"></div>
+                <div
+                  className={`${
+                    reportData.measure_info.risk_elbow_right === "1"
+                      ? "bg-[#FF971D] print:bg-[#FF971D]"
+                      : "bg-red-500 print:bg-red-500"
+                  } right_elbow size-3 rounded-full absolute right-[30%] top-[36%]`}
+                ></div>
               )}
               {reportData.measure_info.risk_wrist_right !== "0" && (
-                <div className="right_wrist size-3 bg-red-500 print:bg-red-500 rounded-full absolute right-[23%] top-[48%]"></div>
+                <div
+                  className={`${
+                    reportData.measure_info.risk_wrist_right === "1"
+                      ? "bg-[#FF971D] print:bg-[#FF971D]"
+                      : "bg-red-500 print:bg-red-500"
+                  } right_wrist size-3 rounded-full absolute right-[23%] top-[48%]`}
+                ></div>
               )}
               {reportData.measure_info.risk_hip_right !== "0" && (
-                <div className="right_hip size-3 bg-red-500 print:bg-red-500 rounded-full absolute right-[40%] bottom-[46%]"></div>
+                <div
+                  className={`${
+                    reportData.measure_info.risk_hip_right === "1"
+                      ? "bg-[#FF971D] print:bg-[#FF971D]"
+                      : "bg-red-500 print:bg-red-500"
+                  } right_hip size-3 rounded-full absolute right-[40%] bottom-[46%]`}
+                ></div>
               )}
               {reportData.measure_info.risk_knee_right !== "0" && (
-                <div className="right_knee size-3 bg-red-500 print:bg-red-500 rounded-full absolute right-[40%] bottom-[28%]"></div>
+                <div
+                  className={`${
+                    reportData.measure_info.risk_knee_right === "1"
+                      ? "bg-[#FF971D] print:bg-[#FF971D]"
+                      : "bg-red-500 print:bg-red-500"
+                  } right_knee size-3 rounded-full absolute right-[40%] bottom-[28%]`}
+                ></div>
               )}
               {reportData.measure_info.risk_ankle_right !== "0" && (
-                <div className="right_ankle size-3 bg-red-500 print:bg-red-500 rounded-full absolute right-[40%] bottom-[10%]"></div>
+                <div
+                  className={`${
+                    reportData.measure_info.risk_ankle_right === "1"
+                      ? "bg-[#FF971D] print:bg-[#FF971D]"
+                      : "bg-red-500 print:bg-red-500"
+                  } right_ankle size-3 rounded-full absolute right-[40%] bottom-[10%]`}
+                ></div>
               )}
             </div>
           </div>
@@ -269,14 +363,14 @@ const ResultSheetContainer = ({
                   <div className="h-0.5 w-[60px] bg-[#AEAEAE]"></div>
                 </div>
                 <div className="w-full px-3 mb-1.5">
-                  <p className="text-[#47484C] mb-1">요약 정보</p>
-                  <p className="text-[#AEAEAE] leading-6 h-[48px] overflow-hidden font-normal break-keep">
+                  <p className="text-[#AEAEAE] mb-1">요약 정보</p>
+                  <p className="text-[#47484C] leading-6 h-[48px] overflow-hidden font-normal break-keep">
                     {summary.ment_all}
                   </p>
                 </div>
                 <div className="w-full px-3">
-                  <p className="text-[#47484C] mb-1">위험 단계</p>
-                  <p className="text-[#AEAEAE] leading-6 h-[48px] overflow-hidden font-normal break-keep">
+                  <p className="text-[#AEAEAE] mb-1">밸런스 단계</p>
+                  <p className="text-[#47484C] leading-6 h-[48px] overflow-hidden font-normal break-keep">
                     {summary.risk_level === 0
                       ? `${
                           SUMMARY_CATEGORY[
@@ -307,7 +401,7 @@ const ResultSheetContainer = ({
             title="검사 종합수치"
             description="몸의 밸런스 수치를 표기합니다.신체 데이터 수치를 확인 할 수 있습니다."
           />
-          <div className="flex flex-row gap-4 w-full p-1 mt-6">
+          <div className="flex flex-row gap-4 w-full p-1 mt-3">
             {/* 왼쪽 테이블 */}
             <table className="table-auto text-center flex-1 w-[510px]">
               <thead className="bg-[#F6F6F6] text-[#47484C] ">
@@ -335,31 +429,115 @@ const ResultSheetContainer = ({
                   >
                     상체 좌우 쏠림
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.upper_body_tilt
+                          .front_shoulder_angle,
+                        180,
+                        2.1,
+                        3.9,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.upper_body_tilt
+                              .front_shoulder_angle,
+                            180,
+                            2.1,
+                            3.9,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     정면 어깨 기울기
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.upper_body_tilt
+                          .front_shoulder_angle,
+                        180,
+                        2.1,
+                        3.9,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.upper_body_tilt
+                              .front_shoulder_angle,
+                            180,
+                            2.1,
+                            3.9,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     {Math.abs(
                       reportData.figure_data.upper_body_tilt
                         .front_shoulder_angle,
                     ).toFixed(1)}
                     °
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                  >
                     180°±2.1 이내
                   </td>
                 </tr>
                 <tr>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.upper_body_tilt
+                          .back_shoulder_angle,
+                        0,
+                        1.3,
+                        3.2,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.upper_body_tilt
+                              .back_shoulder_angle,
+                            0,
+                            1.3,
+                            3.2,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     후면 어깨 기울기
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.upper_body_tilt
+                          .back_shoulder_angle,
+                        0,
+                        1.3,
+                        3.2,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.upper_body_tilt
+                              .back_shoulder_angle,
+                            0,
+                            1.3,
+                            3.2,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     {reportData.figure_data.upper_body_tilt.back_shoulder_angle.toFixed(
                       1,
                     )}
                     °
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                  >
                     0°±1.3 이내
                   </td>
                 </tr>
@@ -371,30 +549,108 @@ const ResultSheetContainer = ({
                   >
                     골반 측만
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.pelvic_scoliosis.back_pelvis_angle,
+                        0.1,
+                        1.7,
+                        3.3,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.pelvic_scoliosis.back_pelvis_angle,
+                            0.1,
+                            1.7,
+                            3.3,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     후면 골반 기울기
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.pelvic_scoliosis.back_pelvis_angle,
+                        0.1,
+                        1.7,
+                        3.3,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.pelvic_scoliosis.back_pelvis_angle,
+                            0.1,
+                            1.7,
+                            3.3,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     {reportData.figure_data.pelvic_scoliosis.back_pelvis_angle.toFixed(
                       1,
                     )}
                     °
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                  >
                     0.1°±1.9 이내
                   </td>
                 </tr>
                 <tr>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.pelvic_scoliosis.back_sit_pelvis_angle,
+                        0,
+                        1,
+                        1.7,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.pelvic_scoliosis
+                              .back_sit_pelvis_angle,
+                            0,
+                            1,
+                            1.7,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     앉은 골반 기울기
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.pelvic_scoliosis.back_sit_pelvis_angle,
+                        0,
+                        1,
+                        1.7,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.pelvic_scoliosis
+                              .back_sit_pelvis_angle,
+                            0,
+                            1,
+                            1.7,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     {reportData.figure_data.pelvic_scoliosis.back_sit_pelvis_angle.toFixed(
                       1,
                     )}
                     °
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                  >
                     0°±1 이내
                   </td>
                 </tr>
@@ -406,30 +662,106 @@ const ResultSheetContainer = ({
                   >
                     다리 변형
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.leg_deformity.left_hip_knee_ankle_angle,
+                        175,
+                        2.5,
+                        5,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                          reportData.figure_data.leg_deformity.left_hip_knee_ankle_angle,
+                          175,
+                          2.5,
+                          5,
+                        ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     좌측 다리 각도
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.leg_deformity.left_hip_knee_ankle_angle,
+                        175,
+                        2.5,
+                        5,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                          reportData.figure_data.leg_deformity.left_hip_knee_ankle_angle,
+                          175,
+                          2.5,
+                          5,
+                        ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     {reportData.figure_data.leg_deformity.left_hip_knee_ankle_angle.toFixed(
                       1,
                     )}
                     °
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                  >
                     175°±2.5 이내
                   </td>
                 </tr>
                 <tr>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.leg_deformity.right_hip_knee_ankle_angle,
+                        175,
+                        2.5,
+                        5,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                          reportData.figure_data.leg_deformity.right_hip_knee_ankle_angle,
+                          175,
+                          2.5,
+                          5,
+                        ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     우측 다리 각도
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.leg_deformity.right_hip_knee_ankle_angle,
+                        175,
+                        2.5,
+                        5,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                          reportData.figure_data.leg_deformity.right_hip_knee_ankle_angle,
+                          175,
+                          2.5,
+                          5,
+                        ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     {reportData.figure_data.leg_deformity.right_hip_knee_ankle_angle.toFixed(
                       1,
                     )}
                     °
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                  >
                     175°±2.5 이내
                   </td>
                 </tr>
@@ -441,30 +773,106 @@ const ResultSheetContainer = ({
                   >
                     테니스 엘보
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.elbow_stress.left_shoulder_elbow_wrist_angle,
+                        5,
+                        9,
+                        13,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                          reportData.figure_data.elbow_stress.left_shoulder_elbow_wrist_angle,
+                          5,
+                          9,
+                          13,
+                        ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     좌측 팔 각도
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.elbow_stress.left_shoulder_elbow_wrist_angle,
+                        5,
+                        9,
+                        13,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                          reportData.figure_data.elbow_stress.left_shoulder_elbow_wrist_angle,
+                          5,
+                          9,
+                          13,
+                        ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     {reportData.figure_data.elbow_stress.left_shoulder_elbow_wrist_angle.toFixed(
                       1,
                     )}
                     °
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                  >
                     5°±9 이내
                   </td>
                 </tr>
                 <tr>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.elbow_stress.right_shoulder_elbow_wrist_angle,
+                        5,
+                        9,
+                        13,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                          reportData.figure_data.elbow_stress.right_shoulder_elbow_wrist_angle,
+                          5,
+                          9,
+                          13,
+                        ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     우측 팔 각도
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.elbow_stress.right_shoulder_elbow_wrist_angle,
+                        5,
+                        9,
+                        13,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                          reportData.figure_data.elbow_stress.right_shoulder_elbow_wrist_angle,
+                          5,
+                          9,
+                          13,
+                        ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     {reportData.figure_data.elbow_stress.right_shoulder_elbow_wrist_angle.toFixed(
                       1,
                     )}
                     °
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                  >
                     5°±9 이내
                   </td>
                 </tr>
@@ -498,30 +906,106 @@ const ResultSheetContainer = ({
                   >
                     척추 후만증
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.body_forward_thrust.shoulder_distance_avg,
+                        1.9,
+                        6.1,
+                        8.9,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                          reportData.figure_data.body_forward_thrust.shoulder_distance_avg,
+                          1.9,
+                          6.1,
+                          8.9,
+                        ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     중심-어깨 거리
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.body_forward_thrust.shoulder_distance_avg,
+                        1.9,
+                        6.1,
+                        8.9,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.body_forward_thrust.shoulder_distance_avg,
+                            1.9,
+                            6.1,
+                            8.9,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     {reportData.figure_data.body_forward_thrust.shoulder_distance_avg.toFixed(
                       1,
                     )}
                     cm
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                  >
                     1.9cm±6 이내
                   </td>
                 </tr>
                 <tr>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.body_forward_thrust.hip_distance_avg,
+                        2.5,
+                        3.55,
+                        5.25,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.body_forward_thrust.hip_distance_avg,
+                            2.5,
+                            3.55,
+                            5.25,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     중심-골반 거리
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.body_forward_thrust.hip_distance_avg,
+                        2.5,
+                        3.55,
+                        5.25,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.body_forward_thrust.hip_distance_avg,
+                            2.5,
+                            3.55,
+                            5.25,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     {reportData.figure_data.body_forward_thrust.hip_distance_avg.toFixed(
                       1,
                     )}
                     cm
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                  >
                     2.5cm±3.5 이내
                   </td>
                 </tr>
@@ -533,30 +1017,106 @@ const ResultSheetContainer = ({
                   >
                     거북목
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.text_neck.left_nose_shoulder_angle,
+                        87,
+                        9.74,
+                        13.21,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.text_neck.left_nose_shoulder_angle,
+                            87,
+                            9.74,
+                            13.21,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     좌측 귀-어깨 각도
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.text_neck.left_nose_shoulder_angle,
+                        87,
+                        9.74,
+                        13.21,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.text_neck.left_nose_shoulder_angle,
+                            87,
+                            9.74,
+                            13.21,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     {reportData.figure_data.text_neck.left_nose_shoulder_angle.toFixed(
                       1,
                     )}
                     °
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                  >
                     87°±10 이내
                   </td>
                 </tr>
                 <tr>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.text_neck.right_nose_shoulder_angle,
+                        87,
+                        9.74,
+                        13.21,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.text_neck.right_nose_shoulder_angle,
+                            87,
+                            9.74,
+                            13.21,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     우측 귀-어깨 각도
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.text_neck.right_nose_shoulder_angle,
+                        87,
+                        9.74,
+                        13.21,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.text_neck.right_nose_shoulder_angle,
+                            87,
+                            9.74,
+                            13.21,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     {reportData.figure_data.text_neck.right_nose_shoulder_angle.toFixed(
                       1,
                     )}
                     °
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                  >
                     87°±10 이내
                   </td>
                 </tr>
@@ -568,30 +1128,106 @@ const ResultSheetContainer = ({
                   >
                     라운드 숄더
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.round_shoulder.left_shoulder_distance,
+                        1.9,
+                        6.1,
+                        8.9,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                          reportData.figure_data.round_shoulder.left_shoulder_distance,
+                          1.9,
+                          6.1,
+                          8.9,
+                        ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     좌 중심-어깨 거리
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.round_shoulder.left_shoulder_distance,
+                        1.9,
+                        6.1,
+                        8.9,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                          reportData.figure_data.round_shoulder.left_shoulder_distance,
+                          1.9,
+                          6.1,
+                          8.9,
+                        ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     {reportData.figure_data.round_shoulder.left_shoulder_distance.toFixed(
                       1,
                     )}
                     cm
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                  >
                     1.9cm±6 이내
                   </td>
                 </tr>
                 <tr>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.round_shoulder.right_shoulder_distance,
+                        1.9,
+                        6.1,
+                        8.9,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                          reportData.figure_data.round_shoulder.right_shoulder_distance,
+                          1.9,
+                          6.1,
+                          8.9,
+                        ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     우 중심-어깨 거리
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.round_shoulder.right_shoulder_distance,
+                        1.9,
+                        6.1,
+                        8.9,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                          reportData.figure_data.round_shoulder.right_shoulder_distance,
+                          1.9,
+                          6.1,
+                          8.9,
+                        ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     {reportData.figure_data.round_shoulder.right_shoulder_distance.toFixed(
                       1,
                     )}
                     cm
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                  >
                     1.9cm±6 이내
                   </td>
                 </tr>
@@ -603,30 +1239,106 @@ const ResultSheetContainer = ({
                   >
                     척추 측만증
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.scoliosis.back_shoulder_pevis_center_angle,
+                        90,
+                        3,
+                        5
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                          reportData.figure_data.scoliosis.back_shoulder_pevis_center_angle,
+                          90,
+                          3,
+                          5,
+                        ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     어깨-골반 중심각도
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.scoliosis.back_shoulder_pevis_center_angle,
+                        90,
+                        3,
+                        5,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                          reportData.figure_data.scoliosis.back_shoulder_pevis_center_angle,
+                          90,
+                          3,
+                          5,
+                        ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     {reportData.figure_data.scoliosis.back_shoulder_pevis_center_angle.toFixed(
                       1,
                     )}
                     °
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                  >
                     90°±3 이내
                   </td>
                 </tr>
                 <tr>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.scoliosis.back_sit_shoulder_pevis_center_angle,
+                        90,
+                        6,
+                        10,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                          reportData.figure_data.scoliosis.back_sit_shoulder_pevis_center_angle,
+                          90,
+                          6,
+                          10,
+                        ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     앉은 어깨-골반 중심각도
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.scoliosis.back_sit_shoulder_pevis_center_angle,
+                        90,
+                        6,
+                        10,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                          reportData.figure_data.scoliosis.back_sit_shoulder_pevis_center_angle,
+                          90,
+                          6,
+                          10,
+                        ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
                     {reportData.figure_data.scoliosis.back_sit_shoulder_pevis_center_angle.toFixed(
                       1,
                     )}
                     °
                   </td>
-                  <td className="border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1">
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                  >
                     90°±6 이내
                   </td>
                 </tr>
@@ -689,154 +1401,1095 @@ const ResultSheetContainer = ({
         </div>
 
         {/* 질환 상세 내역 */}
-        <div className="grid grid-cols-2 gap-x-[22px] gap-y-[18px]">
-          {reportData.detail_data
-            .filter(
-              (detail) =>
-                !detail.body_part.includes("balance") &&
-                !detail.body_part.includes("upper"),
-            )
-            .map((detail, index) => (
-              <div className="col-span-1" key={index}>
-                <div className="flex flex-col gap-2">
-                  <div className="flex gap-2">
-                    <div className="w-[124px] flex flex-col items-center justify-center">
+        <div className="grid grid-cols-2 gap-x-[22px] gap-y-[18px] flex-1">
+          {/* 목 */}
+          {reportData.detail_data.neck && (
+            <div className="col-span-1">
+              <div className="flex flex-col gap-2 h-full">
+                <div className="flex gap-2">
+                  <div className="w-[124px] flex flex-col items-center justify-center">
+                    <p
+                      className={`border-t border-b  py-[5px] w-full text-center text-white text-xl font-bold ${
+                        reportData.detail_data.neck.risk_level === 0
+                          ? "bg-[#AEAEAE] border-[#47484C]"
+                          : reportData.detail_data.neck.risk_level === 1
+                          ? "bg-[#FF971D] border-[#FF971D]"
+                          : "bg-[#FF5449] border-[#FFDAD6]"
+                      }`}
+                    >
+                      01.
+                    </p>
+                    <Image
+                      src={`/icons/neck_${
+                        reportData.detail_data.neck.risk_level === 0
+                          ? "normal"
+                          : reportData.detail_data.neck.risk_level === 1
+                          ? "warning"
+                          : "danger"
+                      }.png`}
+                      alt="측정 아이콘"
+                      width={124}
+                      height={124}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <div
+                      className={`border-t border-b w-full py-[5px] px-6 ${
+                        reportData.detail_data.neck.risk_level === 0
+                          ? "bg-[#F6F6F6] border-[#47484C]"
+                          : reportData.detail_data.neck.risk_level === 1
+                          ? "bg-[#ffe2a8] border-[#FF971D]"
+                          : "bg-[#FFDAD6] border-[#FF5449]"
+                      }`}
+                    >
                       <p
-                        className={`border-t border-b  py-[5px] w-full text-center text-white text-xl font-bold ${
-                          detail.risk_level === 0
-                            ? "bg-[#47484C] border-[#AEAEAE]"
-                            : "bg-[#FF5449] border-[#FFDAD6]"
+                        className={`text-xl font-bold ${
+                          reportData.detail_data.neck.risk_level === 0
+                            ? "text-[#47484C]"
+                            : reportData.detail_data.neck.risk_level === 1
+                            ? "text-[#FF971D]"
+                            : "text-[#FF5449]"
                         }`}
                       >
-                        0{index + 1}.
+                        목관절
+                        {reportData.detail_data.neck.risk_level === 0
+                          ? " : 정상"
+                          : reportData.detail_data.neck.risk_level === 1
+                          ? " : 주의"
+                          : " : 위험"}
                       </p>
-                      <Image
-                        src={`/icons/${detail.body_part}_${
-                          detail.risk_level === 0 ? "normal" : "warning"
-                        }.png`}
-                        alt="asdf"
-                        width={124}
-                        height={124}
-                      />
                     </div>
-                    <div className="flex-1">
+                    <div className="grid grid-cols-5 items-center border-[#AEAEAE] border-b">
+                      <div className="col-span-2"></div>
                       <div
-                        className={`border-t border-b w-full py-[5px] px-6 ${
-                          detail.risk_level === 0
-                            ? "bg-[#F6F6F6] border-[#47484C]"
-                            : "bg-[#FFDAD6] border-[#FF5449]"
+                        className={`col-span-1 border-l border-[#AEAEAE] text-xs text-[#AEAEAE] py-1.5 text-center`}
+                      >
+                        보통
+                      </div>
+                      <div
+                        className={`col-span-1 border-l border-[#AEAEAE] text-xs py-1.5 text-center ${
+                          reportData.detail_data.neck.risk_level === 1
+                            ? "text-[#FF971D]"
+                            : "text-[#AEAEAE]"
                         }`}
                       >
-                        <p
-                          className={`text-xl font-bold ${
-                            detail.risk_level === 0
-                              ? "text-[#47484C]"
-                              : "text-[#FF5449]"
-                          }`}
-                        >
-                          {
-                            BODY_PART[
-                              detail.body_part as keyof typeof BODY_PART
-                            ]
-                          }{" "}
-                          :{" "}
-                          {detail.risk_level === 0
-                            ? "정상"
-                            : detail.risk_level === 1
-                            ? "주의"
-                            : "위험"}
-                        </p>
+                        주의
                       </div>
-                      <div className="grid grid-cols-5 items-center border-[#AEAEAE] border-b">
-                        <div className="col-span-2"></div>
-                        <div className="col-span-1 border-l border-[#AEAEAE] text-xs text-[#AEAEAE] py-1.5 text-center">
-                          보통
-                        </div>
-                        <div className="col-span-1 border-l border-[#AEAEAE] text-xs text-[#AEAEAE] py-1.5 text-center">
-                          주의
-                        </div>
-                        <div className="col-span-1 border-l border-[#AEAEAE] text-xs text-[#FF5449] py-1.5 text-center">
-                          위험
-                        </div>
+                      <div
+                        className={`col-span-1 border-l border-[#AEAEAE] text-xs text-[#AEAEAE] py-1.5 text-center ${
+                          reportData.detail_data.neck.risk_level === 2
+                            ? "text-[#FF5449]"
+                            : "text-[#AEAEAE]"
+                        }`}
+                      >
+                        위험
                       </div>
-                      <div className="grid grid-cols-5 text-xs text-[#47484C]">
-                        <div className="border-b border-[#AEAEAE] py-[15px] flex items-center justify-center col-span-2 gap-1">
-                          {/* <p>양 골반 각도</p>
-                          <span
-                            className={`leading-3 py-0.5 px-1 rounded-[2px] ${
-                              detail.risk_level === 0
-                                ? "bg-[#DFDFE0]"
-                                : "bg-[#FFDAD6] text-[#FF5449]"
-                            }`}
-                          >
-                            180f
-                          </span> */}
-                          <p>위험 지수</p>
-                        </div>
-                        <div className="col-span-3 border-l border-[#AEAEAE] grid grid-cols-3 items-center justify-center py-[18px]">
-                          {detail.risk_level === 0 && (
+                    </div>
+                    <div className="grid grid-cols-5 text-xs text-[#47484C]">
+                      <div className="border-b border-[#AEAEAE] flex items-center flex-col justify-center col-span-2 gap-1">
+                        <p>목 좌우 기울기</p>
+                        <p>{reportData.detail_data.neck.data.toFixed(2)}°</p>
+                      </div>
+                      <div className="col-span-3 border-l border-[#AEAEAE] grid grid-cols-3 items-center justify-center py-[18px]">
+                        {reportData.detail_data.neck.risk_level === 0 && (
+                          <div className="col-span-1 flex items-center justify-center">
+                            <span
+                              className={`bg-[#DFDFE0] w-16 h-3 rounded-[2px]`}
+                            ></span>
+                          </div>
+                        )}
+                        {reportData.detail_data.neck.risk_level === 1 && (
+                          <>
                             <div className="col-span-1 flex items-center justify-center">
                               <span
-                                className={`bg-[#DFDFE0] w-16 h-3 rounded-[2px]`}
+                                className={`bg-[#ffe2a8] w-16 h-3 rounded-[2px]`}
                               ></span>
                             </div>
-                          )}
-                          {detail.risk_level === 1 && (
-                            <>
-                              <div className="col-span-1 flex items-center justify-center">
-                                <span
-                                  className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
-                                ></span>
-                              </div>
-                              <div className="col-span-1 flex items-center justify-center">
-                                <span
-                                  className={`bg-[#FF5449] w-16 h-3 rounded-[2px]`}
-                                ></span>
-                              </div>
-                            </>
-                          )}
-                          {detail.risk_level === 2 && (
-                            <>
-                              <div className="col-span-1 flex items-center justify-center">
-                                <span
-                                  className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
-                                ></span>
-                              </div>
-                              <div className="col-span-1 flex items-center justify-center">
-                                <span
-                                  className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
-                                ></span>
-                              </div>
-                              <div className="col-span-1 flex items-center justify-center">
-                                <span
-                                  className={`bg-[#FF5449] w-16 h-3 rounded-[2px]`}
-                                ></span>
-                              </div>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-5 text-xs text-[#47484C]">
-                        <div className="border-b border-[#AEAEAE] py-[15px] flex items-center justify-center col-span-2 gap-1">
-                          <p>-</p>
-                        </div>
-                        <div className="col-span-3 border-l border-[#AEAEAE] grid grid-cols-3 items-center justify-center py-[18px]">
-                          
-                        </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FF971D] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                          </>
+                        )}
+                        {reportData.detail_data.neck.risk_level === 2 && (
+                          <>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FF5449] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
-                  <div className="bg-[#F6F6F6] rounded-sm p-2 text-[#47484C] h-[78px]">
-                    <p className="">{detail.ment}</p>
-                  </div>
+                </div>
+                <div className="bg-[#F6F6F6] rounded-sm p-2 text-[#47484C] flex-1 text-sm">
+                  <p className="">{reportData.detail_data.neck.ment_all}</p>
+                  <p className="">{reportData.detail_data.neck.description}</p>
+                  <p className="">
+                    {reportData.detail_data.neck.disorder &&
+                      `주요 질환 : ${reportData.detail_data.neck.disorder}`}
+                  </p>
+                  <p>
+                    {reportData.detail_data.neck.exercise &&
+                      `추천 운동 : ${reportData.detail_data.neck.exercise}`}
+                  </p>
                 </div>
               </div>
-            ))}
-        </div>
-        {/* 비고 */}
-        <div className="flex flex-col gap-5">
-          <TitleLayout title="비고" description="" />
-          <div className="bg-[#F6F6F6] w-full h-[180px]"></div>
+            </div>
+          )}
+          {/* 어깨 */}
+          {reportData.detail_data.shoulder && (
+            <div className="col-span-1">
+              <div className="flex flex-col gap-2 h-full">
+                <div className="flex gap-2">
+                  <div className="w-[124px] flex flex-col items-center justify-center">
+                    <p
+                      className={`border-t border-b  py-[5px] w-full text-center text-white text-xl font-bold ${
+                        reportData.detail_data.shoulder.risk_level === 0
+                          ? "bg-[#AEAEAE] border-[#47484C]"
+                          : reportData.detail_data.shoulder.risk_level === 1
+                          ? "bg-[#FF971D] border-[#FF971D]"
+                          : "bg-[#FF5449] border-[#FFDAD6]"
+                      }`}
+                    >
+                      02.
+                    </p>
+                    <Image
+                      src={`/icons/shoulder_${
+                        reportData.detail_data.shoulder.risk_level === 0
+                          ? "normal"
+                          : reportData.detail_data.shoulder.risk_level === 1
+                          ? "warning"
+                          : "danger"
+                      }.png`}
+                      alt="측정 아이콘"
+                      width={124}
+                      height={124}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <div
+                      className={`border-t border-b w-full py-[5px] px-6 ${
+                        reportData.detail_data.shoulder.risk_level === 0
+                          ? "bg-[#F6F6F6] border-[#47484C]"
+                          : reportData.detail_data.shoulder.risk_level === 1
+                          ? "bg-[#ffe2a8] border-[#FF971D]"
+                          : "bg-[#FFDAD6] border-[#FF5449]"
+                      }`}
+                    >
+                      <p
+                        className={`text-xl font-bold ${
+                          reportData.detail_data.shoulder.risk_level === 0
+                            ? "text-[#47484C]"
+                            : reportData.detail_data.shoulder.risk_level === 1
+                            ? "text-[#FF971D]"
+                            : "text-[#FF5449]"
+                        }`}
+                      >
+                        어깨
+                        {reportData.detail_data.shoulder.risk_level === 0
+                          ? " : 정상"
+                          : reportData.detail_data.shoulder.risk_level === 1
+                          ? " : 주의"
+                          : " : 위험"}
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-5 items-center border-[#AEAEAE] border-b">
+                      <div className="col-span-2"></div>
+                      <div
+                        className={`col-span-1 border-l border-[#AEAEAE] text-xs text-[#AEAEAE] py-1.5 text-center`}
+                      >
+                        보통
+                      </div>
+                      <div
+                        className={`col-span-1 border-l border-[#AEAEAE] text-xs py-1.5 text-center ${
+                          reportData.detail_data.shoulder.risk_level === 1
+                            ? "text-[#FF971D]"
+                            : "text-[#AEAEAE]"
+                        }`}
+                      >
+                        주의
+                      </div>
+                      <div
+                        className={`col-span-1 border-l border-[#AEAEAE] text-xs text-[#AEAEAE] py-1.5 text-center ${
+                          reportData.detail_data.shoulder.risk_level === 2
+                            ? "text-[#FF5449]"
+                            : "text-[#AEAEAE]"
+                        }`}
+                      >
+                        위험
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-5 text-xs text-[#47484C]">
+                      <div className="border-b border-[#AEAEAE] flex items-center flex-col justify-center col-span-2 gap-1">
+                      <p>양 어깨 기울기</p>
+                      <p>{reportData.detail_data.shoulder.data.toFixed(2)}°</p>
+                      </div>
+                      <div className="col-span-3 border-l border-[#AEAEAE] grid grid-cols-3 items-center justify-center py-[18px]">
+                        {reportData.detail_data.shoulder.risk_level === 0 && (
+                          <div className="col-span-1 flex items-center justify-center">
+                            <span
+                              className={`bg-[#DFDFE0] w-16 h-3 rounded-[2px]`}
+                            ></span>
+                          </div>
+                        )}
+                        {reportData.detail_data.shoulder.risk_level === 1 && (
+                          <>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#ffe2a8] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FF971D] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                          </>
+                        )}
+                        {reportData.detail_data.shoulder.risk_level === 2 && (
+                          <>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FF5449] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    {/* <div className="grid grid-cols-5 text-xs text-[#47484C]">
+                      <div className="border-b border-[#AEAEAE] flex items-center flex-col justify-center col-span-2 gap-1">
+                        <p>{reportData.detail_data.shoulder.data}°</p>
+                      </div>
+                      <div className="col-span-3 border-l border-[#AEAEAE] grid grid-cols-3 items-center justify-center py-[18px]"></div>
+                    </div> */}
+                  </div>
+                </div>
+                <div className="bg-[#F6F6F6] rounded-sm p-2 text-[#47484C] flex-1 text-sm">
+                  <p className="">{reportData.detail_data.shoulder.ment_all}</p>
+                  <p className="">
+                    {reportData.detail_data.shoulder.description}
+                  </p>
+                  <p className="">
+                    {reportData.detail_data.shoulder.disorder &&
+                      `주요 질환 : ${reportData.detail_data.shoulder.disorder}`}
+                  </p>
+                  <p>
+                    {reportData.detail_data.shoulder.exercise &&
+                      `추천 운동 : ${reportData.detail_data.shoulder.exercise}`}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+          {/* 팔꿈치 */}
+          {reportData.detail_data.elbow && (
+            <div className="col-span-1">
+              <div className="flex flex-col gap-2 h-full">
+                <div className="flex gap-2">
+                  <div className="w-[124px] flex flex-col items-center justify-center">
+                    <p
+                      className={`border-t border-b  py-[5px] w-full text-center text-white text-xl font-bold ${
+                        reportData.detail_data.elbow.risk_level === 0
+                          ? "bg-[#AEAEAE] border-[#47484C]"
+                          : reportData.detail_data.elbow.risk_level === 1
+                          ? "bg-[#FF971D] border-[#FF971D]"
+                          : "bg-[#FF5449] border-[#FFDAD6]"
+                      }`}
+                    >
+                      03.
+                    </p>
+                    <Image
+                      src={`/icons/arm_${
+                        reportData.detail_data.elbow.risk_level === 0
+                          ? "normal"
+                          : reportData.detail_data.elbow.risk_level === 1
+                          ? "warning"
+                          : "danger"
+                      }.png`}
+                      alt="측정 아이콘"
+                      width={124}
+                      height={124}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <div
+                      className={`border-t border-b w-full py-[5px] px-6 ${
+                        reportData.detail_data.elbow.risk_level === 0
+                          ? "bg-[#F6F6F6] border-[#47484C]"
+                          : reportData.detail_data.elbow.risk_level === 1
+                          ? "bg-[#ffe2a8] border-[#FF971D]"
+                          : "bg-[#FFDAD6] border-[#FF5449]"
+                      }`}
+                    >
+                      <p
+                        className={`text-xl font-bold ${
+                          reportData.detail_data.elbow.risk_level === 0
+                            ? "text-[#47484C]"
+                            : reportData.detail_data.elbow.risk_level === 1
+                            ? "text-[#FF971D]"
+                            : "text-[#FF5449]"
+                        }`}
+                      >
+                        팔꿉
+                        {reportData.detail_data.elbow.risk_level === 0
+                          ? " : 정상"
+                          : reportData.detail_data.elbow.risk_level === 1
+                          ? " : 주의"
+                          : " : 위험"}
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-5 items-center border-[#AEAEAE] border-b">
+                      <div className="col-span-2"></div>
+                      <div
+                        className={`col-span-1 border-l border-[#AEAEAE] text-xs text-[#AEAEAE] py-1.5 text-center`}
+                      >
+                        보통
+                      </div>
+                      <div
+                        className={`col-span-1 border-l border-[#AEAEAE] text-xs py-1.5 text-center ${
+                          reportData.detail_data.elbow.risk_level === 1
+                            ? "text-[#FF971D]"
+                            : "text-[#AEAEAE]"
+                        }`}
+                      >
+                        주의
+                      </div>
+                      <div
+                        className={`col-span-1 border-l border-[#AEAEAE] text-xs text-[#AEAEAE] py-1.5 text-center ${
+                          reportData.detail_data.elbow.risk_level === 2
+                            ? "text-[#FF5449]"
+                            : "text-[#AEAEAE]"
+                        }`}
+                      >
+                        위험
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-5 text-xs text-[#47484C]">
+                      <div className="border-b border-[#AEAEAE] flex items-center flex-col justify-center col-span-2 gap-1">
+                        <p>양 팔꿉 기울기</p>
+                        <p>{reportData.detail_data.elbow.data.toFixed(2)}°</p>
+                      </div>
+                      <div className="col-span-3 border-l border-[#AEAEAE] grid grid-cols-3 items-center justify-center py-[18px]">
+                        {reportData.detail_data.elbow.risk_level === 0 && (
+                          <div className="col-span-1 flex items-center justify-center">
+                            <span
+                              className={`bg-[#DFDFE0] w-16 h-3 rounded-[2px]`}
+                            ></span>
+                          </div>
+                        )}
+                        {reportData.detail_data.elbow.risk_level === 1 && (
+                          <>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#ffe2a8] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FF971D] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                          </>
+                        )}
+                        {reportData.detail_data.elbow.risk_level === 2 && (
+                          <>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FF5449] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    {/* <div className="grid grid-cols-5 text-xs text-[#47484C]">
+                      <div className="border-b border-[#AEAEAE] flex items-center flex-col justify-center col-span-2 gap-1">
+                        <p>오른쪽 팔꿉 기울기</p>
+                        <p>{reportData.detail_data.elbow.right_data.toFixed(2)}°</p>
+                      </div>
+                      <div className="col-span-3 border-l border-[#AEAEAE] grid grid-cols-3 items-center justify-center py-[18px]">
+                        {reportData.detail_data.elbow.risk_level === 0 && (
+                          <div className="col-span-1 flex items-center justify-center">
+                            <span
+                              className={`bg-[#DFDFE0] w-16 h-3 rounded-[2px]`}
+                            ></span>
+                          </div>
+                        )}
+                        {reportData.detail_data.elbow.risk_level === 1 && (
+                          <>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#ffe2a8] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FF971D] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                          </>
+                        )}
+                        {reportData.detail_data.elbow.risk_level === 2 && (
+                          <>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FF5449] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div> */}
+                  </div>
+                </div>
+                <div className="bg-[#F6F6F6] rounded-sm p-2 text-[#47484C] flex-1 text-sm">
+                  <p className="">{reportData.detail_data.elbow.ment_all}</p>
+                  <p className="">{reportData.detail_data.elbow.description}</p>
+                  <p className="">
+                    {reportData.detail_data.elbow.disorder &&
+                      `주요 질환 : ${reportData.detail_data.elbow.disorder}`}
+                  </p>
+                  <p>
+                    {reportData.detail_data.elbow.exercise &&
+                      `추천 운동 : ${reportData.detail_data.elbow.exercise}`}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+          {/* 엉덩관절 */}
+          {reportData.detail_data.hip && (
+            <div className="col-span-1">
+              <div className="flex flex-col gap-2 h-full">
+                <div className="flex gap-2">
+                  <div className="w-[124px] flex flex-col items-center justify-center">
+                    <p
+                      className={`border-t border-b  py-[5px] w-full text-center text-white text-xl font-bold ${
+                        reportData.detail_data.hip.risk_level === 0
+                          ? "bg-[#AEAEAE] border-[#47484C]"
+                          : reportData.detail_data.hip.risk_level === 1
+                          ? "bg-[#FF971D] border-[#FF971D]"
+                          : "bg-[#FF5449] border-[#FFDAD6]"
+                      }`}
+                    >
+                      04.
+                    </p>
+                    <Image
+                      src={`/icons/hip_${
+                        reportData.detail_data.hip.risk_level === 0
+                          ? "normal"
+                          : reportData.detail_data.hip.risk_level === 1
+                          ? "warning"
+                          : "danger"
+                      }.png`}
+                      alt="측정 아이콘"
+                      width={124}
+                      height={124}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <div
+                      className={`border-t border-b w-full py-[5px] px-6 ${
+                        reportData.detail_data.hip.risk_level === 0
+                          ? "bg-[#F6F6F6] border-[#47484C]"
+                          : reportData.detail_data.hip.risk_level === 1
+                          ? "bg-[#ffe2a8] border-[#FF971D]"
+                          : "bg-[#FFDAD6] border-[#FF5449]"
+                      }`}
+                    >
+                      <p
+                        className={`text-xl font-bold ${
+                          reportData.detail_data.hip.risk_level === 0
+                            ? "text-[#47484C]"
+                            : reportData.detail_data.hip.risk_level === 1
+                            ? "text-[#FF971D]"
+                            : "text-[#FF5449]"
+                        }`}
+                      >
+                        엉덩관절
+                        {reportData.detail_data.hip.risk_level === 0
+                          ? " : 정상"
+                          : reportData.detail_data.hip.risk_level === 1
+                          ? " : 주의"
+                          : " : 위험"}
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-5 items-center border-[#AEAEAE] border-b">
+                      <div className="col-span-2"></div>
+                      <div
+                        className={`col-span-1 border-l border-[#AEAEAE] text-xs text-[#AEAEAE] py-1.5 text-center`}
+                      >
+                        보통
+                      </div>
+                      <div
+                        className={`col-span-1 border-l border-[#AEAEAE] text-xs py-1.5 text-center ${
+                          reportData.detail_data.hip.risk_level === 1
+                            ? "text-[#FF971D]"
+                            : "text-[#AEAEAE]"
+                        }`}
+                      >
+                        주의
+                      </div>
+                      <div
+                        className={`col-span-1 border-l border-[#AEAEAE] text-xs text-[#AEAEAE] py-1.5 text-center ${
+                          reportData.detail_data.hip.risk_level === 2
+                            ? "text-[#FF5449]"
+                            : "text-[#AEAEAE]"
+                        }`}
+                      >
+                        위험
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-5 text-xs text-[#47484C]">
+                      <div className="border-b border-[#AEAEAE] flex items-center flex-col justify-center col-span-2 gap-1">
+                        <p>왼쪽 고관절</p>
+                        <p>{reportData.detail_data.hip.left_data.toFixed(2)}°</p>
+                      </div>
+                      <div className="col-span-3 border-l border-[#AEAEAE] grid grid-cols-3 items-center justify-center py-[18px]">
+                        {reportData.detail_data.hip.risk_level === 0 && (
+                          <div className="col-span-1 flex items-center justify-center">
+                            <span
+                              className={`bg-[#DFDFE0] w-16 h-3 rounded-[2px]`}
+                            ></span>
+                          </div>
+                        )}
+                        {reportData.detail_data.hip.risk_level === 1 && (
+                          <>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#ffe2a8] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FF971D] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                          </>
+                        )}
+                        {reportData.detail_data.hip.risk_level === 2 && (
+                          <>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FF5449] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-5 text-xs text-[#47484C]">
+                      <div className="border-b border-[#AEAEAE] flex items-center flex-col justify-center col-span-2 gap-1">
+                        <p>오른쪽 고관절</p>
+                        <p>{reportData.detail_data.hip.right_data.toFixed(2)}°</p>
+                      </div>
+                      <div className="col-span-3 border-l border-[#AEAEAE] grid grid-cols-3 items-center justify-center py-[18px]">
+                        {reportData.detail_data.hip.risk_level === 0 && (
+                          <div className="col-span-1 flex items-center justify-center">
+                            <span
+                              className={`bg-[#DFDFE0] w-16 h-3 rounded-[2px]`}
+                            ></span>
+                          </div>
+                        )}
+                        {reportData.detail_data.hip.risk_level === 1 && (
+                          <>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#ffe2a8] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FF971D] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                          </>
+                        )}
+                        {reportData.detail_data.hip.risk_level === 2 && (
+                          <>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FF5449] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-[#F6F6F6] rounded-sm p-2 text-[#47484C] flex-1 text-sm">
+                  <p className="">{reportData.detail_data.hip.ment_all}</p>
+                  <p className="">{reportData.detail_data.hip.description}</p>
+                  <p className="">
+                    {reportData.detail_data.hip.disorder &&
+                      `주요 질환 : ${reportData.detail_data.hip.disorder}`}
+                  </p>
+                  <p>
+                    {reportData.detail_data.hip.exercise &&
+                      `추천 운동 : ${reportData.detail_data.hip.exercise}`}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+          {/* 무릎 */}
+          {reportData.detail_data.knee && (
+            <div className="col-span-1">
+              <div className="flex flex-col gap-2 h-full">
+                <div className="flex gap-2">
+                  <div className="w-[124px] flex flex-col items-center justify-center">
+                    <p
+                      className={`border-t border-b  py-[5px] w-full text-center text-white text-xl font-bold ${
+                        reportData.detail_data.knee.risk_level === 0
+                          ? "bg-[#AEAEAE] border-[#47484C]"
+                          : reportData.detail_data.knee.risk_level === 1
+                          ? "bg-[#FF971D] border-[#FF971D]"
+                          : "bg-[#FF5449] border-[#FFDAD6]"
+                      }`}
+                    >
+                      05.
+                    </p>
+                    <Image
+                      src={`/icons/knee_${
+                        reportData.detail_data.knee.risk_level === 0
+                          ? "normal"
+                          : reportData.detail_data.knee.risk_level === 1
+                          ? "warning"
+                          : "danger"
+                      }.png`}
+                      alt="측정 아이콘"
+                      width={124}
+                      height={124}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <div
+                      className={`border-t border-b w-full py-[5px] px-6 ${
+                        reportData.detail_data.knee.risk_level === 0
+                          ? "bg-[#F6F6F6] border-[#47484C]"
+                          : reportData.detail_data.knee.risk_level === 1
+                          ? "bg-[#ffe2a8] border-[#FF971D]"
+                          : "bg-[#FFDAD6] border-[#FF5449]"
+                      }`}
+                    >
+                      <p
+                        className={`text-xl font-bold ${
+                          reportData.detail_data.knee.risk_level === 0
+                            ? "text-[#47484C]"
+                            : reportData.detail_data.knee.risk_level === 1
+                            ? "text-[#FF971D]"
+                            : "text-[#FF5449]"
+                        }`}
+                      >
+                        무릎
+                        {reportData.detail_data.knee.risk_level === 0
+                          ? " : 정상"
+                          : reportData.detail_data.knee.risk_level === 1
+                          ? " : 주의"
+                          : " : 위험"}
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-5 items-center border-[#AEAEAE] border-b">
+                      <div className="col-span-2"></div>
+                      <div
+                        className={`col-span-1 border-l border-[#AEAEAE] text-xs text-[#AEAEAE] py-1.5 text-center`}
+                      >
+                        보통
+                      </div>
+                      <div
+                        className={`col-span-1 border-l border-[#AEAEAE] text-xs py-1.5 text-center ${
+                          reportData.detail_data.knee.risk_level === 1
+                            ? "text-[#FF971D]"
+                            : "text-[#AEAEAE]"
+                        }`}
+                      >
+                        주의
+                      </div>
+                      <div
+                        className={`col-span-1 border-l border-[#AEAEAE] text-xs text-[#AEAEAE] py-1.5 text-center ${
+                          reportData.detail_data.knee.risk_level === 2
+                            ? "text-[#FF5449]"
+                            : "text-[#AEAEAE]"
+                        }`}
+                      >
+                        위험
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-5 text-xs text-[#47484C]">
+                      <div className="border-b border-[#AEAEAE] flex items-center flex-col justify-center col-span-2 gap-1">
+                        <p>왼쪽 무릎</p>
+                        <p>{reportData.detail_data.knee.left_data.toFixed(2)}°</p>
+                      </div>
+                      <div className="col-span-3 border-l border-[#AEAEAE] grid grid-cols-3 items-center justify-center py-[18px]">
+                        {reportData.detail_data.knee.risk_level === 0 && (
+                          <div className="col-span-1 flex items-center justify-center">
+                            <span
+                              className={`bg-[#DFDFE0] w-16 h-3 rounded-[2px]`}
+                            ></span>
+                          </div>
+                        )}
+                        {reportData.detail_data.knee.risk_level === 1 && (
+                          <>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#ffe2a8] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FF971D] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                          </>
+                        )}
+                        {reportData.detail_data.knee.risk_level === 2 && (
+                          <>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FF5449] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-5 text-xs text-[#47484C]">
+                      <div className="border-b border-[#AEAEAE] flex items-center flex-col justify-center col-span-2 gap-1">
+                        <p>오른쪽 무릎</p>
+                        <p>{reportData.detail_data.knee.right_data.toFixed(2)}°</p>
+                      </div>
+                      <div className="col-span-3 border-l border-[#AEAEAE] grid grid-cols-3 items-center justify-center py-[18px]">
+                        {reportData.detail_data.knee.risk_level === 0 && (
+                          <div className="col-span-1 flex items-center justify-center">
+                            <span
+                              className={`bg-[#DFDFE0] w-16 h-3 rounded-[2px]`}
+                            ></span>
+                          </div>
+                        )}
+                        {reportData.detail_data.knee.risk_level === 1 && (
+                          <>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#ffe2a8] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FF971D] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                          </>
+                        )}
+                        {reportData.detail_data.knee.risk_level === 2 && (
+                          <>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FF5449] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-[#F6F6F6] rounded-sm p-2 text-[#47484C] flex-1 text-sm">
+                  <p className="">{reportData.detail_data.knee.ment_all}</p>
+                  <p className="">{reportData.detail_data.knee.description}</p>
+                  <p className="">
+                    {reportData.detail_data.knee.disorder &&
+                      `주요 질환 : ${reportData.detail_data.knee.disorder}`}
+                  </p>
+                  <p>
+                    {reportData.detail_data.knee.exercise &&
+                      `추천 운동 : ${reportData.detail_data.knee.exercise}`}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+          {/* 발목 */}
+          {reportData.detail_data.ankle && (
+            <div className="col-span-1">
+              <div className="flex flex-col gap-2 h-full">
+                <div className="flex gap-2">
+                  <div className="w-[124px] flex flex-col items-center justify-center">
+                    <p
+                      className={`border-t border-b  py-[5px] w-full text-center text-white text-xl font-bold ${
+                        reportData.detail_data.ankle.risk_level === 0
+                          ? "bg-[#AEAEAE] border-[#47484C]"
+                          : reportData.detail_data.ankle.risk_level === 1
+                          ? "bg-[#FF971D] border-[#FF971D]"
+                          : "bg-[#FF5449] border-[#FFDAD6]"
+                      }`}
+                    >
+                      06.
+                    </p>
+                    <Image
+                      src={`/icons/ankle_${
+                        reportData.detail_data.ankle.risk_level === 0
+                          ? "normal"
+                          : reportData.detail_data.ankle.risk_level === 1
+                          ? "warning"
+                          : "danger"
+                      }.png`}
+                      alt="측정 아이콘"
+                      width={124}
+                      height={124}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <div
+                      className={`border-t border-b w-full py-[5px] px-6 ${
+                        reportData.detail_data.ankle.risk_level === 0
+                          ? "bg-[#F6F6F6] border-[#47484C]"
+                          : reportData.detail_data.ankle.risk_level === 1
+                          ? "bg-[#ffe2a8] border-[#FF971D]"
+                          : "bg-[#FFDAD6] border-[#FF5449]"
+                      }`}
+                    >
+                      <p
+                        className={`text-xl font-bold ${
+                          reportData.detail_data.ankle.risk_level === 0
+                            ? "text-[#47484C]"
+                            : reportData.detail_data.ankle.risk_level === 1
+                            ? "text-[#FF971D]"
+                            : "text-[#FF5449]"
+                        }`}
+                      >
+                        발목
+                        {reportData.detail_data.ankle.risk_level === 0
+                          ? " : 정상"
+                          : reportData.detail_data.ankle.risk_level === 1
+                          ? " : 주의"
+                          : " : 위험"}
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-5 items-center border-[#AEAEAE] border-b">
+                      <div className="col-span-2"></div>
+                      <div
+                        className={`col-span-1 border-l border-[#AEAEAE] text-xs text-[#AEAEAE] py-1.5 text-center`}
+                      >
+                        보통
+                      </div>
+                      <div
+                        className={`col-span-1 border-l border-[#AEAEAE] text-xs py-1.5 text-center ${
+                          reportData.detail_data.ankle.risk_level === 1
+                            ? "text-[#FF971D]"
+                            : "text-[#AEAEAE]"
+                        }`}
+                      >
+                        주의
+                      </div>
+                      <div
+                        className={`col-span-1 border-l border-[#AEAEAE] text-xs text-[#AEAEAE] py-1.5 text-center ${
+                          reportData.detail_data.ankle.risk_level === 2
+                            ? "text-[#FF5449]"
+                            : "text-[#AEAEAE]"
+                        }`}
+                      >
+                        위험
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-5 text-xs text-[#47484C]">
+                      <div className="border-b border-[#AEAEAE] flex items-center flex-col justify-center col-span-2 gap-1">
+                        <p>왼쪽 발목</p>
+                        <p>{reportData.detail_data.ankle.left_data.toFixed(2)}°</p>
+                      </div>
+                      <div className="col-span-3 border-l border-[#AEAEAE] grid grid-cols-3 items-center justify-center py-[18px]">
+                        {reportData.detail_data.ankle.risk_level === 0 && (
+                          <div className="col-span-1 flex items-center justify-center">
+                            <span
+                              className={`bg-[#DFDFE0] w-16 h-3 rounded-[2px]`}
+                            ></span>
+                          </div>
+                        )}
+                        {reportData.detail_data.ankle.risk_level === 1 && (
+                          <>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#ffe2a8] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FF971D] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                          </>
+                        )}
+                        {reportData.detail_data.ankle.risk_level === 2 && (
+                          <>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FF5449] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-5 text-xs text-[#47484C]">
+                      <div className="border-b border-[#AEAEAE] flex items-center flex-col justify-center col-span-2 gap-1">
+                        <p>오른쪽 발목</p>
+                        <p>{reportData.detail_data.ankle.right_data.toFixed(2)}°</p>
+                      </div>
+                      <div className="col-span-3 border-l border-[#AEAEAE] grid grid-cols-3 items-center justify-center py-[18px]">
+                        {reportData.detail_data.ankle.risk_level === 0 && (
+                          <div className="col-span-1 flex items-center justify-center">
+                            <span
+                              className={`bg-[#DFDFE0] w-16 h-3 rounded-[2px]`}
+                            ></span>
+                          </div>
+                        )}
+                        {reportData.detail_data.ankle.risk_level === 1 && (
+                          <>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#ffe2a8] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FF971D] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                          </>
+                        )}
+                        {reportData.detail_data.ankle.risk_level === 2 && (
+                          <>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                            <div className="col-span-1 flex items-center justify-center">
+                              <span
+                                className={`bg-[#FF5449] w-16 h-3 rounded-[2px]`}
+                              ></span>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-[#F6F6F6] rounded-sm p-2 text-[#47484C] flex-1 text-sm">
+                  <p className="">{reportData.detail_data.ankle.ment_all}</p>
+                  <p className="">{reportData.detail_data.ankle.description}</p>
+                  <p className="">
+                    {reportData.detail_data.ankle.disorder &&
+                      `주요 질환 : ${reportData.detail_data.ankle.disorder}`}
+                  </p>
+                  <p>
+                    {reportData.detail_data.ankle.exercise &&
+                      `추천 운동 : ${reportData.detail_data.ankle.exercise}`}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>
