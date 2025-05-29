@@ -1751,19 +1751,23 @@ const ResultSheetContainer = ({
                     </div> */}
                   </div>
                 </div>
-                <div className="bg-[#F6F6F6] rounded-sm p-2 text-[#47484C] flex-1 text-sm">
-                  <p className="">{reportData.detail_data.shoulder.ment_all}</p>
-                  <p className="">
-                    {reportData.detail_data.shoulder.description}
-                  </p>
-                  <p className="">
-                    {reportData.detail_data.shoulder.disorder &&
-                      `주요 질환 : ${reportData.detail_data.shoulder.disorder}`}
-                  </p>
-                  <p>
-                    {reportData.detail_data.shoulder.exercise &&
-                      `추천 운동 : ${reportData.detail_data.shoulder.exercise}`}
-                  </p>
+                <div className="bg-[#F6F6F6] rounded-sm p-2 text-[#47484C] flex-1 text-sm space-y-3">
+                  <div>
+                    <p className="">{reportData.detail_data.shoulder.ment_all}</p>
+                    <p className="">
+                      {reportData.detail_data.shoulder.description}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="">
+                      {reportData.detail_data.shoulder.disorder &&
+                        `주요 질환 : ${reportData.detail_data.shoulder.disorder}`}
+                    </p>
+                    <p>
+                      {reportData.detail_data.shoulder.exercise &&
+                        `추천 운동 : ${reportData.detail_data.shoulder.exercise}`}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
