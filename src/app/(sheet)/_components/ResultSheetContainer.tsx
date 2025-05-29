@@ -364,7 +364,7 @@ const ResultSheetContainer = ({
                 </div>
                 <div className="w-full px-3 mb-1.5">
                   <p className="text-[#AEAEAE] mb-1">요약 정보</p>
-                  <p className="text-[#47484C] leading-6 h-[48px] overflow-hidden font-normal break-keep">
+                  <p className="text-[#47484C] leading-6 h-[72px] overflow-hidden font-normal break-keep">
                     {summary.ment_all}
                   </p>
                 </div>
@@ -552,14 +552,16 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.pelvic_scoliosis.back_pelvis_angle,
+                        reportData.figure_data.pelvic_scoliosis
+                          .back_pelvis_angle,
                         0.1,
                         1.7,
                         3.3,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                            reportData.figure_data.pelvic_scoliosis.back_pelvis_angle,
+                            reportData.figure_data.pelvic_scoliosis
+                              .back_pelvis_angle,
                             0.1,
                             1.7,
                             3.3,
@@ -573,14 +575,16 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.pelvic_scoliosis.back_pelvis_angle,
+                        reportData.figure_data.pelvic_scoliosis
+                          .back_pelvis_angle,
                         0.1,
                         1.7,
                         3.3,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                            reportData.figure_data.pelvic_scoliosis.back_pelvis_angle,
+                            reportData.figure_data.pelvic_scoliosis
+                              .back_pelvis_angle,
                             0.1,
                             1.7,
                             3.3,
@@ -604,7 +608,8 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.pelvic_scoliosis.back_sit_pelvis_angle,
+                        reportData.figure_data.pelvic_scoliosis
+                          .back_sit_pelvis_angle,
                         0,
                         1,
                         1.7,
@@ -626,7 +631,8 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.pelvic_scoliosis.back_sit_pelvis_angle,
+                        reportData.figure_data.pelvic_scoliosis
+                          .back_sit_pelvis_angle,
                         0,
                         1,
                         1.7,
@@ -665,18 +671,20 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.leg_deformity.left_hip_knee_ankle_angle,
+                        reportData.figure_data.leg_deformity
+                          .left_hip_knee_ankle_angle,
                         175,
                         2.5,
                         5,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                          reportData.figure_data.leg_deformity.left_hip_knee_ankle_angle,
-                          175,
-                          2.5,
-                          5,
-                        ) === 1
+                            reportData.figure_data.leg_deformity
+                              .left_hip_knee_ankle_angle,
+                            175,
+                            2.5,
+                            5,
+                          ) === 1
                         ? "text-[#FF971D]"
                         : "text-red-500"
                     }`}
@@ -686,18 +694,20 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.leg_deformity.left_hip_knee_ankle_angle,
+                        reportData.figure_data.leg_deformity
+                          .left_hip_knee_ankle_angle,
                         175,
                         2.5,
                         5,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                          reportData.figure_data.leg_deformity.left_hip_knee_ankle_angle,
-                          175,
-                          2.5,
-                          5,
-                        ) === 1
+                            reportData.figure_data.leg_deformity
+                              .left_hip_knee_ankle_angle,
+                            175,
+                            2.5,
+                            5,
+                          ) === 1
                         ? "text-[#FF971D]"
                         : "text-red-500"
                     }`}
@@ -717,18 +727,20 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.leg_deformity.right_hip_knee_ankle_angle,
+                        reportData.figure_data.leg_deformity
+                          .right_hip_knee_ankle_angle,
                         175,
                         2.5,
                         5,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                          reportData.figure_data.leg_deformity.right_hip_knee_ankle_angle,
-                          175,
-                          2.5,
-                          5,
-                        ) === 1
+                            reportData.figure_data.leg_deformity
+                              .right_hip_knee_ankle_angle,
+                            175,
+                            2.5,
+                            5,
+                          ) === 1
                         ? "text-[#FF971D]"
                         : "text-red-500"
                     }`}
@@ -738,18 +750,20 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.leg_deformity.right_hip_knee_ankle_angle,
+                        reportData.figure_data.leg_deformity
+                          .right_hip_knee_ankle_angle,
                         175,
                         2.5,
                         5,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                          reportData.figure_data.leg_deformity.right_hip_knee_ankle_angle,
-                          175,
-                          2.5,
-                          5,
-                        ) === 1
+                            reportData.figure_data.leg_deformity
+                              .right_hip_knee_ankle_angle,
+                            175,
+                            2.5,
+                            5,
+                          ) === 1
                         ? "text-[#FF971D]"
                         : "text-red-500"
                     }`}
@@ -776,18 +790,20 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.elbow_stress.left_shoulder_elbow_wrist_angle,
+                        reportData.figure_data.elbow_stress
+                          .left_shoulder_elbow_wrist_angle,
                         5,
                         9,
                         13,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                          reportData.figure_data.elbow_stress.left_shoulder_elbow_wrist_angle,
-                          5,
-                          9,
-                          13,
-                        ) === 1
+                            reportData.figure_data.elbow_stress
+                              .left_shoulder_elbow_wrist_angle,
+                            5,
+                            9,
+                            13,
+                          ) === 1
                         ? "text-[#FF971D]"
                         : "text-red-500"
                     }`}
@@ -797,18 +813,20 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.elbow_stress.left_shoulder_elbow_wrist_angle,
+                        reportData.figure_data.elbow_stress
+                          .left_shoulder_elbow_wrist_angle,
                         5,
                         9,
                         13,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                          reportData.figure_data.elbow_stress.left_shoulder_elbow_wrist_angle,
-                          5,
-                          9,
-                          13,
-                        ) === 1
+                            reportData.figure_data.elbow_stress
+                              .left_shoulder_elbow_wrist_angle,
+                            5,
+                            9,
+                            13,
+                          ) === 1
                         ? "text-[#FF971D]"
                         : "text-red-500"
                     }`}
@@ -828,18 +846,20 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.elbow_stress.right_shoulder_elbow_wrist_angle,
+                        reportData.figure_data.elbow_stress
+                          .right_shoulder_elbow_wrist_angle,
                         5,
                         9,
                         13,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                          reportData.figure_data.elbow_stress.right_shoulder_elbow_wrist_angle,
-                          5,
-                          9,
-                          13,
-                        ) === 1
+                            reportData.figure_data.elbow_stress
+                              .right_shoulder_elbow_wrist_angle,
+                            5,
+                            9,
+                            13,
+                          ) === 1
                         ? "text-[#FF971D]"
                         : "text-red-500"
                     }`}
@@ -849,18 +869,20 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.elbow_stress.right_shoulder_elbow_wrist_angle,
+                        reportData.figure_data.elbow_stress
+                          .right_shoulder_elbow_wrist_angle,
                         5,
                         9,
                         13,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                          reportData.figure_data.elbow_stress.right_shoulder_elbow_wrist_angle,
-                          5,
-                          9,
-                          13,
-                        ) === 1
+                            reportData.figure_data.elbow_stress
+                              .right_shoulder_elbow_wrist_angle,
+                            5,
+                            9,
+                            13,
+                          ) === 1
                         ? "text-[#FF971D]"
                         : "text-red-500"
                     }`}
@@ -909,18 +931,20 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.body_forward_thrust.shoulder_distance_avg,
+                        reportData.figure_data.body_forward_thrust
+                          .shoulder_distance_avg,
                         1.9,
                         6.1,
                         8.9,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                          reportData.figure_data.body_forward_thrust.shoulder_distance_avg,
-                          1.9,
-                          6.1,
-                          8.9,
-                        ) === 1
+                            reportData.figure_data.body_forward_thrust
+                              .shoulder_distance_avg,
+                            1.9,
+                            6.1,
+                            8.9,
+                          ) === 1
                         ? "text-[#FF971D]"
                         : "text-red-500"
                     }`}
@@ -930,14 +954,16 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.body_forward_thrust.shoulder_distance_avg,
+                        reportData.figure_data.body_forward_thrust
+                          .shoulder_distance_avg,
                         1.9,
                         6.1,
                         8.9,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                            reportData.figure_data.body_forward_thrust.shoulder_distance_avg,
+                            reportData.figure_data.body_forward_thrust
+                              .shoulder_distance_avg,
                             1.9,
                             6.1,
                             8.9,
@@ -961,14 +987,16 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.body_forward_thrust.hip_distance_avg,
+                        reportData.figure_data.body_forward_thrust
+                          .hip_distance_avg,
                         2.5,
                         3.55,
                         5.25,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                            reportData.figure_data.body_forward_thrust.hip_distance_avg,
+                            reportData.figure_data.body_forward_thrust
+                              .hip_distance_avg,
                             2.5,
                             3.55,
                             5.25,
@@ -982,14 +1010,16 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.body_forward_thrust.hip_distance_avg,
+                        reportData.figure_data.body_forward_thrust
+                          .hip_distance_avg,
                         2.5,
                         3.55,
                         5.25,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                            reportData.figure_data.body_forward_thrust.hip_distance_avg,
+                            reportData.figure_data.body_forward_thrust
+                              .hip_distance_avg,
                             2.5,
                             3.55,
                             5.25,
@@ -1020,14 +1050,16 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.text_neck.left_nose_shoulder_angle,
+                        reportData.figure_data.text_neck
+                          .left_nose_shoulder_angle,
                         87,
                         9.74,
                         13.21,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                            reportData.figure_data.text_neck.left_nose_shoulder_angle,
+                            reportData.figure_data.text_neck
+                              .left_nose_shoulder_angle,
                             87,
                             9.74,
                             13.21,
@@ -1041,14 +1073,16 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.text_neck.left_nose_shoulder_angle,
+                        reportData.figure_data.text_neck
+                          .left_nose_shoulder_angle,
                         87,
                         9.74,
                         13.21,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                            reportData.figure_data.text_neck.left_nose_shoulder_angle,
+                            reportData.figure_data.text_neck
+                              .left_nose_shoulder_angle,
                             87,
                             9.74,
                             13.21,
@@ -1072,14 +1106,16 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.text_neck.right_nose_shoulder_angle,
+                        reportData.figure_data.text_neck
+                          .right_nose_shoulder_angle,
                         87,
                         9.74,
                         13.21,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                            reportData.figure_data.text_neck.right_nose_shoulder_angle,
+                            reportData.figure_data.text_neck
+                              .right_nose_shoulder_angle,
                             87,
                             9.74,
                             13.21,
@@ -1093,14 +1129,16 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.text_neck.right_nose_shoulder_angle,
+                        reportData.figure_data.text_neck
+                          .right_nose_shoulder_angle,
                         87,
                         9.74,
                         13.21,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                            reportData.figure_data.text_neck.right_nose_shoulder_angle,
+                            reportData.figure_data.text_neck
+                              .right_nose_shoulder_angle,
                             87,
                             9.74,
                             13.21,
@@ -1131,18 +1169,20 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.round_shoulder.left_shoulder_distance,
+                        reportData.figure_data.round_shoulder
+                          .left_shoulder_distance,
                         1.9,
                         6.1,
                         8.9,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                          reportData.figure_data.round_shoulder.left_shoulder_distance,
-                          1.9,
-                          6.1,
-                          8.9,
-                        ) === 1
+                            reportData.figure_data.round_shoulder
+                              .left_shoulder_distance,
+                            1.9,
+                            6.1,
+                            8.9,
+                          ) === 1
                         ? "text-[#FF971D]"
                         : "text-red-500"
                     }`}
@@ -1152,18 +1192,20 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.round_shoulder.left_shoulder_distance,
+                        reportData.figure_data.round_shoulder
+                          .left_shoulder_distance,
                         1.9,
                         6.1,
                         8.9,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                          reportData.figure_data.round_shoulder.left_shoulder_distance,
-                          1.9,
-                          6.1,
-                          8.9,
-                        ) === 1
+                            reportData.figure_data.round_shoulder
+                              .left_shoulder_distance,
+                            1.9,
+                            6.1,
+                            8.9,
+                          ) === 1
                         ? "text-[#FF971D]"
                         : "text-red-500"
                     }`}
@@ -1183,18 +1225,20 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.round_shoulder.right_shoulder_distance,
+                        reportData.figure_data.round_shoulder
+                          .right_shoulder_distance,
                         1.9,
                         6.1,
                         8.9,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                          reportData.figure_data.round_shoulder.right_shoulder_distance,
-                          1.9,
-                          6.1,
-                          8.9,
-                        ) === 1
+                            reportData.figure_data.round_shoulder
+                              .right_shoulder_distance,
+                            1.9,
+                            6.1,
+                            8.9,
+                          ) === 1
                         ? "text-[#FF971D]"
                         : "text-red-500"
                     }`}
@@ -1204,18 +1248,20 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.round_shoulder.right_shoulder_distance,
+                        reportData.figure_data.round_shoulder
+                          .right_shoulder_distance,
                         1.9,
                         6.1,
                         8.9,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                          reportData.figure_data.round_shoulder.right_shoulder_distance,
-                          1.9,
-                          6.1,
-                          8.9,
-                        ) === 1
+                            reportData.figure_data.round_shoulder
+                              .right_shoulder_distance,
+                            1.9,
+                            6.1,
+                            8.9,
+                          ) === 1
                         ? "text-[#FF971D]"
                         : "text-red-500"
                     }`}
@@ -1242,18 +1288,20 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.scoliosis.back_shoulder_pevis_center_angle,
+                        reportData.figure_data.scoliosis
+                          .back_shoulder_pevis_center_angle,
                         90,
                         3,
-                        5
+                        5,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                          reportData.figure_data.scoliosis.back_shoulder_pevis_center_angle,
-                          90,
-                          3,
-                          5,
-                        ) === 1
+                            reportData.figure_data.scoliosis
+                              .back_shoulder_pevis_center_angle,
+                            90,
+                            3,
+                            5,
+                          ) === 1
                         ? "text-[#FF971D]"
                         : "text-red-500"
                     }`}
@@ -1263,18 +1311,20 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.scoliosis.back_shoulder_pevis_center_angle,
+                        reportData.figure_data.scoliosis
+                          .back_shoulder_pevis_center_angle,
                         90,
                         3,
                         5,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                          reportData.figure_data.scoliosis.back_shoulder_pevis_center_angle,
-                          90,
-                          3,
-                          5,
-                        ) === 1
+                            reportData.figure_data.scoliosis
+                              .back_shoulder_pevis_center_angle,
+                            90,
+                            3,
+                            5,
+                          ) === 1
                         ? "text-[#FF971D]"
                         : "text-red-500"
                     }`}
@@ -1294,18 +1344,20 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.scoliosis.back_sit_shoulder_pevis_center_angle,
+                        reportData.figure_data.scoliosis
+                          .back_sit_shoulder_pevis_center_angle,
                         90,
                         6,
                         10,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                          reportData.figure_data.scoliosis.back_sit_shoulder_pevis_center_angle,
-                          90,
-                          6,
-                          10,
-                        ) === 1
+                            reportData.figure_data.scoliosis
+                              .back_sit_shoulder_pevis_center_angle,
+                            90,
+                            6,
+                            10,
+                          ) === 1
                         ? "text-[#FF971D]"
                         : "text-red-500"
                     }`}
@@ -1315,18 +1367,20 @@ const ResultSheetContainer = ({
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
                       calcFigureRiskLevel(
-                        reportData.figure_data.scoliosis.back_sit_shoulder_pevis_center_angle,
+                        reportData.figure_data.scoliosis
+                          .back_sit_shoulder_pevis_center_angle,
                         90,
                         6,
                         10,
                       ) === 0
                         ? "text-[#47484C]"
                         : calcFigureRiskLevel(
-                          reportData.figure_data.scoliosis.back_sit_shoulder_pevis_center_angle,
-                          90,
-                          6,
-                          10,
-                        ) === 1
+                            reportData.figure_data.scoliosis
+                              .back_sit_shoulder_pevis_center_angle,
+                            90,
+                            6,
+                            10,
+                          ) === 1
                         ? "text-[#FF971D]"
                         : "text-red-500"
                     }`}
@@ -1535,17 +1589,23 @@ const ResultSheetContainer = ({
                     </div>
                   </div>
                 </div>
-                <div className="bg-[#F6F6F6] rounded-sm p-2 text-[#47484C] flex-1 text-sm">
-                  <p className="">{reportData.detail_data.neck.ment_all}</p>
-                  <p className="">{reportData.detail_data.neck.description}</p>
-                  <p className="">
-                    {reportData.detail_data.neck.disorder &&
-                      `주요 질환 : ${reportData.detail_data.neck.disorder}`}
-                  </p>
-                  <p>
-                    {reportData.detail_data.neck.exercise &&
-                      `추천 운동 : ${reportData.detail_data.neck.exercise}`}
-                  </p>
+                <div className="bg-[#F6F6F6] rounded-sm p-2 text-[#47484C] flex-1 text-sm space-y-3">
+                  <div>
+                    <p className="">{reportData.detail_data.neck.ment_all}</p>
+                    <p className="">
+                      {reportData.detail_data.neck.description}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="">
+                      {reportData.detail_data.neck.disorder &&
+                        `주요 질환 : ${reportData.detail_data.neck.disorder}`}
+                    </p>
+                    <p>
+                      {reportData.detail_data.neck.exercise &&
+                        `추천 운동 : ${reportData.detail_data.neck.exercise}`}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1635,8 +1695,10 @@ const ResultSheetContainer = ({
                     </div>
                     <div className="grid grid-cols-5 text-xs text-[#47484C]">
                       <div className="border-b border-[#AEAEAE] flex items-center flex-col justify-center col-span-2 gap-1">
-                      <p>양 어깨 기울기</p>
-                      <p>{reportData.detail_data.shoulder.data.toFixed(2)}°</p>
+                        <p>양 어깨 기울기</p>
+                        <p>
+                          {reportData.detail_data.shoulder.data.toFixed(2)}°
+                        </p>
                       </div>
                       <div className="col-span-3 border-l border-[#AEAEAE] grid grid-cols-3 items-center justify-center py-[18px]">
                         {reportData.detail_data.shoulder.risk_level === 0 && (
@@ -1837,67 +1899,25 @@ const ResultSheetContainer = ({
                         )}
                       </div>
                     </div>
-                    {/* <div className="grid grid-cols-5 text-xs text-[#47484C]">
-                      <div className="border-b border-[#AEAEAE] flex items-center flex-col justify-center col-span-2 gap-1">
-                        <p>오른쪽 팔꿉 기울기</p>
-                        <p>{reportData.detail_data.elbow.right_data.toFixed(2)}°</p>
-                      </div>
-                      <div className="col-span-3 border-l border-[#AEAEAE] grid grid-cols-3 items-center justify-center py-[18px]">
-                        {reportData.detail_data.elbow.risk_level === 0 && (
-                          <div className="col-span-1 flex items-center justify-center">
-                            <span
-                              className={`bg-[#DFDFE0] w-16 h-3 rounded-[2px]`}
-                            ></span>
-                          </div>
-                        )}
-                        {reportData.detail_data.elbow.risk_level === 1 && (
-                          <>
-                            <div className="col-span-1 flex items-center justify-center">
-                              <span
-                                className={`bg-[#ffe2a8] w-16 h-3 rounded-[2px]`}
-                              ></span>
-                            </div>
-                            <div className="col-span-1 flex items-center justify-center">
-                              <span
-                                className={`bg-[#FF971D] w-16 h-3 rounded-[2px]`}
-                              ></span>
-                            </div>
-                          </>
-                        )}
-                        {reportData.detail_data.elbow.risk_level === 2 && (
-                          <>
-                            <div className="col-span-1 flex items-center justify-center">
-                              <span
-                                className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
-                              ></span>
-                            </div>
-                            <div className="col-span-1 flex items-center justify-center">
-                              <span
-                                className={`bg-[#FFDAD6] w-16 h-3 rounded-[2px]`}
-                              ></span>
-                            </div>
-                            <div className="col-span-1 flex items-center justify-center">
-                              <span
-                                className={`bg-[#FF5449] w-16 h-3 rounded-[2px]`}
-                              ></span>
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    </div> */}
                   </div>
                 </div>
-                <div className="bg-[#F6F6F6] rounded-sm p-2 text-[#47484C] flex-1 text-sm">
-                  <p className="">{reportData.detail_data.elbow.ment_all}</p>
-                  <p className="">{reportData.detail_data.elbow.description}</p>
-                  <p className="">
-                    {reportData.detail_data.elbow.disorder &&
-                      `주요 질환 : ${reportData.detail_data.elbow.disorder}`}
-                  </p>
-                  <p>
-                    {reportData.detail_data.elbow.exercise &&
-                      `추천 운동 : ${reportData.detail_data.elbow.exercise}`}
-                  </p>
+                <div className="bg-[#F6F6F6] rounded-sm p-2 text-[#47484C] flex-1 text-sm space-y-3">
+                  <div>
+                    <p className="">{reportData.detail_data.elbow.ment_all}</p>
+                    <p className="">
+                      {reportData.detail_data.elbow.description}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="">
+                      {reportData.detail_data.elbow.disorder &&
+                        `주요 질환 : ${reportData.detail_data.elbow.disorder}`}
+                    </p>
+                    <p>
+                      {reportData.detail_data.elbow.exercise &&
+                        `추천 운동 : ${reportData.detail_data.elbow.exercise}`}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1988,7 +2008,9 @@ const ResultSheetContainer = ({
                     <div className="grid grid-cols-5 text-xs text-[#47484C]">
                       <div className="border-b border-[#AEAEAE] flex items-center flex-col justify-center col-span-2 gap-1">
                         <p>왼쪽 고관절</p>
-                        <p>{reportData.detail_data.hip.left_data.toFixed(2)}°</p>
+                        <p>
+                          {reportData.detail_data.hip.left_data.toFixed(2)}°
+                        </p>
                       </div>
                       <div className="col-span-3 border-l border-[#AEAEAE] grid grid-cols-3 items-center justify-center py-[18px]">
                         {reportData.detail_data.hip.risk_level === 0 && (
@@ -2036,7 +2058,9 @@ const ResultSheetContainer = ({
                     <div className="grid grid-cols-5 text-xs text-[#47484C]">
                       <div className="border-b border-[#AEAEAE] flex items-center flex-col justify-center col-span-2 gap-1">
                         <p>오른쪽 고관절</p>
-                        <p>{reportData.detail_data.hip.right_data.toFixed(2)}°</p>
+                        <p>
+                          {reportData.detail_data.hip.right_data.toFixed(2)}°
+                        </p>
                       </div>
                       <div className="col-span-3 border-l border-[#AEAEAE] grid grid-cols-3 items-center justify-center py-[18px]">
                         {reportData.detail_data.hip.risk_level === 0 && (
@@ -2083,17 +2107,21 @@ const ResultSheetContainer = ({
                     </div>
                   </div>
                 </div>
-                <div className="bg-[#F6F6F6] rounded-sm p-2 text-[#47484C] flex-1 text-sm">
-                  <p className="">{reportData.detail_data.hip.ment_all}</p>
-                  <p className="">{reportData.detail_data.hip.description}</p>
-                  <p className="">
-                    {reportData.detail_data.hip.disorder &&
-                      `주요 질환 : ${reportData.detail_data.hip.disorder}`}
-                  </p>
-                  <p>
-                    {reportData.detail_data.hip.exercise &&
-                      `추천 운동 : ${reportData.detail_data.hip.exercise}`}
-                  </p>
+                <div className="bg-[#F6F6F6] rounded-sm p-2 text-[#47484C] flex-1 text-sm space-y-3">
+                  <div>
+                    <p className="">{reportData.detail_data.hip.ment_all}</p>
+                    <p className="">{reportData.detail_data.hip.description}</p>
+                  </div>
+                  <div>
+                    <p className="">
+                      {reportData.detail_data.hip.disorder &&
+                        `주요 질환 : ${reportData.detail_data.hip.disorder}`}
+                    </p>
+                    <p>
+                      {reportData.detail_data.hip.exercise &&
+                        `추천 운동 : ${reportData.detail_data.hip.exercise}`}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2184,7 +2212,9 @@ const ResultSheetContainer = ({
                     <div className="grid grid-cols-5 text-xs text-[#47484C]">
                       <div className="border-b border-[#AEAEAE] flex items-center flex-col justify-center col-span-2 gap-1">
                         <p>왼쪽 무릎</p>
-                        <p>{reportData.detail_data.knee.left_data.toFixed(2)}°</p>
+                        <p>
+                          {reportData.detail_data.knee.left_data.toFixed(2)}°
+                        </p>
                       </div>
                       <div className="col-span-3 border-l border-[#AEAEAE] grid grid-cols-3 items-center justify-center py-[18px]">
                         {reportData.detail_data.knee.risk_level === 0 && (
@@ -2232,7 +2262,9 @@ const ResultSheetContainer = ({
                     <div className="grid grid-cols-5 text-xs text-[#47484C]">
                       <div className="border-b border-[#AEAEAE] flex items-center flex-col justify-center col-span-2 gap-1">
                         <p>오른쪽 무릎</p>
-                        <p>{reportData.detail_data.knee.right_data.toFixed(2)}°</p>
+                        <p>
+                          {reportData.detail_data.knee.right_data.toFixed(2)}°
+                        </p>
                       </div>
                       <div className="col-span-3 border-l border-[#AEAEAE] grid grid-cols-3 items-center justify-center py-[18px]">
                         {reportData.detail_data.knee.risk_level === 0 && (
@@ -2279,17 +2311,23 @@ const ResultSheetContainer = ({
                     </div>
                   </div>
                 </div>
-                <div className="bg-[#F6F6F6] rounded-sm p-2 text-[#47484C] flex-1 text-sm">
-                  <p className="">{reportData.detail_data.knee.ment_all}</p>
-                  <p className="">{reportData.detail_data.knee.description}</p>
-                  <p className="">
-                    {reportData.detail_data.knee.disorder &&
-                      `주요 질환 : ${reportData.detail_data.knee.disorder}`}
-                  </p>
-                  <p>
-                    {reportData.detail_data.knee.exercise &&
-                      `추천 운동 : ${reportData.detail_data.knee.exercise}`}
-                  </p>
+                <div className="bg-[#F6F6F6] rounded-sm p-2 text-[#47484C] flex-1 text-sm space-y-3">
+                  <div>
+                    <p className="">{reportData.detail_data.knee.ment_all}</p>
+                    <p className="">
+                      {reportData.detail_data.knee.description}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="">
+                      {reportData.detail_data.knee.disorder &&
+                        `주요 질환 : ${reportData.detail_data.knee.disorder}`}
+                    </p>
+                    <p>
+                      {reportData.detail_data.knee.exercise &&
+                        `추천 운동 : ${reportData.detail_data.knee.exercise}`}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2380,7 +2418,9 @@ const ResultSheetContainer = ({
                     <div className="grid grid-cols-5 text-xs text-[#47484C]">
                       <div className="border-b border-[#AEAEAE] flex items-center flex-col justify-center col-span-2 gap-1">
                         <p>왼쪽 발목</p>
-                        <p>{reportData.detail_data.ankle.left_data.toFixed(2)}°</p>
+                        <p>
+                          {reportData.detail_data.ankle.left_data.toFixed(2)}°
+                        </p>
                       </div>
                       <div className="col-span-3 border-l border-[#AEAEAE] grid grid-cols-3 items-center justify-center py-[18px]">
                         {reportData.detail_data.ankle.risk_level === 0 && (
@@ -2428,7 +2468,9 @@ const ResultSheetContainer = ({
                     <div className="grid grid-cols-5 text-xs text-[#47484C]">
                       <div className="border-b border-[#AEAEAE] flex items-center flex-col justify-center col-span-2 gap-1">
                         <p>오른쪽 발목</p>
-                        <p>{reportData.detail_data.ankle.right_data.toFixed(2)}°</p>
+                        <p>
+                          {reportData.detail_data.ankle.right_data.toFixed(2)}°
+                        </p>
                       </div>
                       <div className="col-span-3 border-l border-[#AEAEAE] grid grid-cols-3 items-center justify-center py-[18px]">
                         {reportData.detail_data.ankle.risk_level === 0 && (
@@ -2475,17 +2517,23 @@ const ResultSheetContainer = ({
                     </div>
                   </div>
                 </div>
-                <div className="bg-[#F6F6F6] rounded-sm p-2 text-[#47484C] flex-1 text-sm">
-                  <p className="">{reportData.detail_data.ankle.ment_all}</p>
-                  <p className="">{reportData.detail_data.ankle.description}</p>
-                  <p className="">
-                    {reportData.detail_data.ankle.disorder &&
-                      `주요 질환 : ${reportData.detail_data.ankle.disorder}`}
-                  </p>
-                  <p>
-                    {reportData.detail_data.ankle.exercise &&
-                      `추천 운동 : ${reportData.detail_data.ankle.exercise}`}
-                  </p>
+                <div className="bg-[#F6F6F6] rounded-sm p-2 text-[#47484C] flex-1 text-sm space-y-3">
+                  <div>
+                    <p className="">{reportData.detail_data.ankle.ment_all}</p>
+                    <p className="">
+                      {reportData.detail_data.ankle.description}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="">
+                      {reportData.detail_data.ankle.disorder &&
+                        `주요 질환 : ${reportData.detail_data.ankle.disorder}`}
+                    </p>
+                    <p>
+                      {reportData.detail_data.ankle.exercise &&
+                        `추천 운동 : ${reportData.detail_data.ankle.exercise}`}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
