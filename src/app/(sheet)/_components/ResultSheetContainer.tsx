@@ -364,7 +364,7 @@ const ResultSheetContainer = ({
                 </div>
                 <div className="w-full px-3 mb-1.5">
                   <p className="text-[#AEAEAE] mb-1">요약 정보</p>
-                  <p className="text-[#47484C] leading-6 h-[48px] overflow-hidden font-normal break-keep">
+                  <p className="text-[#47484C] leading-6 h-[72px] overflow-hidden font-normal break-keep">
                     {summary.ment_all}
                   </p>
                 </div>
