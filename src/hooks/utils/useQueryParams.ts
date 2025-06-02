@@ -1,6 +1,7 @@
 // hooks/usePagination.ts
 "use client";
 
+import { parseSearchParams } from "@/lib/parseSearchParams";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
 type QueryParams = Record<string, string>;
@@ -35,10 +36,7 @@ export const useQueryParams = (): {
   const searchParams = useSearchParams();
 
   // 읽기
-  const query: QueryParams = {};
-  for (const [key, value] of searchParams.entries()) {
-    query[key] = value;
-  }
+  const query: QueryParams = parseSearchParams(searchParams);
 
   // 쓰기
   const setQueryParam: SetQueryParamFn = (
