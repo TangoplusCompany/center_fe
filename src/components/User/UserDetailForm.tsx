@@ -26,13 +26,15 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
   const schema = z.object({
     userName: z.string()
       .min(2, { message: "사용자 이름을 입력해주세요." })
-      .regex(/^[가-힣]+$/, { message: "한글 완성형만 입력 가능합니다." }),
+      .regex(/^[가-힣]+$/, { message: "한글 낱말만 입력 가능합니다." }),
     email: z.string().email({ message: "이메일 형식으로 입력해주세요." }),
-    mobile: z.string().min(1, { message: "휴대폰 번호를 입력해주세요." }),
+    mobile: z.string().min(1, { message: "휴대폰 번호를 입력해주세요." }).regex(/^[0-9-]+$/, {
+      message: "숫자, 하이픈(-)만 입력해주세요.",
+    }),
     gender: z.string().optional().nullable(),
     birthday: z
       .string()
-      .regex(/^\d{4}-\d{2}-\d{2}$/, {
+      .regex(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/, {
         message: "YYYY-MM-DD 형식으로 입력해주세요.",
       })
       .min(1, { message: "생년월일을 입력해주세요." })
@@ -51,8 +53,12 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
       })
       .min(1, { message: "몸무게를 입력해주세요." })
       .optional(),
-    address: z.string().min(0, { message: "주소를 입력해주세요." }).optional(),
-    addressDetail: z.string().optional(),
+    address: z.string().min(0, { message: "주소를 입력해주세요." }).regex(/^[가-힣a-zA-Z0-9\s-]+$/, {
+      message: "한글, 영어, 숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
+    }).optional(),
+    addressDetail: z.string().regex(/^[가-힣a-zA-Z0-9\s-]+$/, {
+      message: "한글, 영어, 숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
+    }).optional(),
   });
   const {
     register,

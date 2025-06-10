@@ -12,7 +12,10 @@ import Link from "next/link";
 import { useLogin } from "@/hooks/auth/useLogin";
 
 const loginSchema = z.object({
-  email: z.string().email({ message: "이메일 형식이 올바르지 않습니다." }),
+  email: z.string().email({ message: "이메일 형식이 올바르지 않습니다." }).regex(
+    /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i,
+    "이메일은 영문, 숫자, @ 특수문자만 입력 가능합니다.",
+  ),
   password: z
     .string()
     .min(8, {

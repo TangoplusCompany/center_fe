@@ -11,6 +11,8 @@ import { ICoachData } from "@/types/coach";
 const loginSchema = z.object({
   name: z.string().min(1, {
     message: "이름을 입력해주세요.",
+  }).regex(/^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z]+$/, {
+    message: "한글, 영어만 입력해주세요.",
   }),
 });
 

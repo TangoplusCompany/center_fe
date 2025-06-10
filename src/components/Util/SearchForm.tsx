@@ -18,6 +18,8 @@ const SearchForm = ({
     search: z.string().min(1, {
       message:
         "검색어는 최소 1글자 이상입니다. 이름 혹은 전화번호를 입력해주세요.",
+    }).regex(/^[가-힣a-zA-Z0-9\s-]+$/, {
+      message: "한글, 영어, 숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
     }),
   });
 
