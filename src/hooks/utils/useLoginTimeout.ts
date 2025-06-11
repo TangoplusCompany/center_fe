@@ -23,7 +23,7 @@ export const useLoginTimeout = () => {
       if (timeLeft <= 0) {
         clearInterval(interval);
         logout();
-        alert('1분이 지나 자동 로그아웃 되었습니다.');
+        alert('15분이 지나 자동 로그아웃 되었습니다.');
         router.push('/login');
       }
     }, 1000);
