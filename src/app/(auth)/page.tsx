@@ -9,7 +9,7 @@ export default function Home() {
     <div className="flex flex-col gap-5">
       <DeviceInformation />
       <Separator className="w-full" />
-      <div className="w-full grid grid-cols-2 gap-5">
+      <div className="w-full grid grid-cols-1 gap-5 xl:grid-cols-2">
         <div className="col-span-1 flex flex-col gap-4">
           <h2 className="text-2xl col-span-2">최근 등록 사용자 조회</h2>
           <LatestAddUser />
