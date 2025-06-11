@@ -11,7 +11,6 @@ const UpdateSessionButton = () => {
     resetTimer();
     alert("로그인이 연장되었습니다.");
   };
-  console.log(remainingSeconds);
   return (
     <div className="flex items-center gap-2 md:gap-4">
       <p className="">
