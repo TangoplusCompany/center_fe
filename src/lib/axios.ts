@@ -56,6 +56,9 @@ customAxios.interceptors.request.use((config: InternalAxiosRequestConfig) => {
       accessJwt: string;
     };
   }>("login-user");
+  if (!token) {
+    window.location.href = "/login";
+  }
   if (token) {
     config.headers = config.headers || {};
     config.headers.Authorization = `Bearer ${token.state.accessJwt}`;
