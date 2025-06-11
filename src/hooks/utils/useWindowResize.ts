@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
 
+/**
+ * 창 크기 변경 훅
+ * @returns 창 크기
+ */
 export const useWindowResize = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 

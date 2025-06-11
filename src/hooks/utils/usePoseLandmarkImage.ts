@@ -13,6 +13,11 @@ function loadImage(src: string): Promise<HTMLImageElement> {
   });
 }
 
+/**
+ * 포즈 랜드마크 이미지 처리 훅
+ * @param imageUrl 이미지 URL
+ * @returns 처리된 이미지 URL 및 로딩 상태
+ */
 const usePoseLandmarkImage = (
   imageUrl: string,
 ): { resultUrl: string | null; loading: boolean } => {
