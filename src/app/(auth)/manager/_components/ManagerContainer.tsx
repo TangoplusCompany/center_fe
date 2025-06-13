@@ -20,7 +20,6 @@ const ManagerContainer = () => {
       ["limit", limit],
       ["search", searchValue],
     ]);
-    console.log(searchValue);
   };
   const {
     data: managerList,
