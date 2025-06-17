@@ -5,7 +5,16 @@ type Size = {
   height: number;
 };
 
-export const useElementSize = <T extends HTMLElement>(ref: RefObject<T | null>): Size => {
+/**
+ * 엘리먼트 크기 조회 Hooks
+ *
+ * HTML Element의 크기를 조회하는 Hooks
+ * @param ref 엘리먼트 참조
+ * @returns 엘리먼트 크기 (width, height)
+ */
+export const useElementSize = <T extends HTMLElement>(
+  ref: RefObject<T | null>,
+): Size => {
   const [size, setSize] = useState<Size>({ width: 0, height: 0 });
 
   useEffect(() => {

@@ -2,13 +2,14 @@ import { getSearchUser } from "@/services/user/getSearchUser";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
+/**
+ * 사용자 검색 Hooks
+ * @returns 사용자 검색 뮤테이션
+ */
 export const useSearchUser = () => {
   return useMutation({
     mutationFn: getSearchUser,
-    onSuccess: (data) => {
-      console.log(data);
-      // Handle successful login, e.g., redirect to dashboard
-    },
+    onSuccess: () => {},
     onError: (
       data: AxiosError<{
         data: unknown;
@@ -17,7 +18,7 @@ export const useSearchUser = () => {
         success: boolean;
       }>,
     ) => {
-      console.log(data);
+      console.error(data.message[0]);
       return;
     },
   });

@@ -1,5 +1,10 @@
 import { customAxios } from "@/lib/axios";
 
+/**
+ * 사용자 검색 API
+ * @param searchValue 검색어
+ * @returns 사용자 검색 응답
+ */
 export const getSearchUser = async ({
   searchValue,
 }: {

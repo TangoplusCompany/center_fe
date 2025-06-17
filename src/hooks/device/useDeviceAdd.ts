@@ -2,13 +2,15 @@ import { postDeviceAdd } from "@/services/device/postDeviceAdd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
+/**
+ * 센터 기기 추가 Hooks
+ * @returns 기기 추가 뮤테이션
+ */
 export const useDeviceAdd = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: postDeviceAdd,
     onSuccess: () => {
-      // Handle successful login, e.g., redirect to dashboard
-      console.log("Device added successfully");
       queryClient.invalidateQueries({ queryKey: ["deviceStatusList"] });
     },
     onError: (

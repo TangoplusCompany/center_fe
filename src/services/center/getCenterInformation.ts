@@ -6,6 +6,10 @@ type CenterInformationResponse = {
   data: ICenterInformation;
 } & IResponseDefault;
 
+/**
+ * 센터 정보 조회 API
+ * @returns 센터 정보 조회 응답
+ */
 export const getCenterInformation = async () => {
   const { data: centerInformation } =
     await customAxios.get<CenterInformationResponse>(`/centers`);

@@ -3,6 +3,10 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 
+/**
+ * 사용자 추가 Hooks
+ * @returns 사용자 추가 뮤테이션
+ */
 export const useAddUser = () => {
   const router = useRouter();
   return useMutation({

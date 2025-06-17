@@ -19,6 +19,10 @@ interface IAuthActions {
 
 export type AuthStore = IAuthProps & IAuthActions;
 
+/**
+ * 인증 상태 관리 Store
+ * @param initialState 초기 상태
+ */
 export const createAuthStore = (initialState?: IAuthProps) => {
   const DEFAULT_STATE: IAuthProps = {
     isLogin: false,

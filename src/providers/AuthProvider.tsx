@@ -8,6 +8,13 @@ export type AuthStoreApi = ReturnType<typeof createAuthStore>;
 
 export const AuthContext = createContext<AuthStoreApi | null>(null);
 
+/**
+ * 인증 상태 관리 Hooks
+ * 
+ * Zustand를 통해 인증 상태를 관리하는 Hooks.
+ * @param selector 인증 상태 관리 함수
+ * @returns 인증 상태 관리 함수
+ */
 export const useAuthStore = <T,>(selector: (store: AuthStore) => T): T => {
   const authStore = useContext(AuthContext);
   if (!authStore) {

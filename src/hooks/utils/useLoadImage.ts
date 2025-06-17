@@ -1,3 +1,8 @@
+/**
+ * 이미지 로딩 Hooks
+ * @param src 이미지 경로
+ * @returns 이미지 로딩 프로미스
+ */
 export function useLoadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image();

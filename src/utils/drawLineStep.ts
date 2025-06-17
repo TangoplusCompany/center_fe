@@ -1,5 +1,10 @@
 import { IPoseLandmark } from "@/types/pose";
 
+/**
+ * canvas 라인 그리기
+ * @param ctx 캔버스 컨텍스트
+ * @param measureJson 측정 데이터
+ */
 export function drawLineStepFirst(
   ctx: CanvasRenderingContext2D,
   measureJson: { pose_landmark: IPoseLandmark[] },

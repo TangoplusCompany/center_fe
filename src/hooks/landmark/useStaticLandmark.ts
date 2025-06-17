@@ -13,6 +13,13 @@ import {
   drawLineStepThird,
 } from "@/utils/drawLineStep";
 
+/**
+ * 랜드마크 별 DrawMap 생성 함수.
+ * 
+ * 각 부위마다 존재하는 DrawLine을 별도 함수로 관리하고 해당 함수를 값으로 가진 Map 객체 생성.
+ * 
+ * 이후 해당 함수를 호출하여 해당 순번에 맞는 랜드마크 그리기 함수 호출.
+ */
 const drawMap: Record<
   "first" | "second" | "third" | "fourth" | "fifth" | "sixth",
   (
@@ -28,6 +35,15 @@ const drawMap: Record<
   sixth: drawLineStepSixth,
 };
 
+/**
+ * 정적 랜드마크 처리 Hooks.
+ * 
+ * JSON형식의 랜드마크의 데이터중 pose_landmark 키를 기반으로 랜더링 후 canvas로 그려내 새로운 ImageURL로 변환시켜 리턴.
+ * @param imageUrl 이미지 URL
+ * @param measureJson 랜드마크 데이터
+ * @param step 랜드마크 순번
+ * @returns 랜드마크 처리 결과
+ */
 export function useStaticLandmark(
   imageUrl: string,
   measureJson: { pose_landmark: IPoseLandmark[] },
