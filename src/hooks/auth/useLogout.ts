@@ -4,6 +4,10 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 
+/**
+ * 로그아웃 Hooks
+ * @returns 로그아웃 뮤테이션
+ */
 export const useLogout = () => {
   const router = useRouter();
   const { setLogout } = useAuthStore((state) => state);

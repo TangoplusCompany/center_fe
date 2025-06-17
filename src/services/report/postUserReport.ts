@@ -6,7 +6,12 @@ type ReportMeasurementResponse = {
   data: IReportMeasureResponse
 } & IResponseDefault;
 
-// 센터 측정리스트
+/**
+ * 센터 측정 리포트 전송 API
+ * @param user_uuid 사용자 UUID
+ * @param sn 측정 번호
+ * @returns 센터 측정 리포트 전송 응답
+ */
 export const postUserReport = async ({
   user_uuid,
   sn,

@@ -3,6 +3,10 @@
 import { parseSearchParams } from "@/lib/parseSearchParams";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 
+/**
+ * 쿼리 파라미터 조회 Hooks
+ * @returns 쿼리 파라미터
+ */
 export const useGetQuery = () => {
   const params = useParams();
   const pathname = usePathname();

@@ -6,6 +6,10 @@ type CenterManagerListResponse = {
   data: ICenterManagerData[];
 } & IResponseDefault;
 
+/**
+ * 센터 관리자 목록 조회 API
+ * @returns 센터 관리자 목록 조회 응답
+ */
 export const getCenterManagers = async () => {
   const { data: responseData } =
     await customAxios.get<CenterManagerListResponse>(`/centers/managers`);

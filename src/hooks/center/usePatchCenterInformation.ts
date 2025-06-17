@@ -1,6 +1,10 @@
 import { patchCenterInformation } from "@/services/center/patchCenterInformation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
+/**
+ * 센터 정보 수정 Hooks
+ * @returns 센터 정보 수정 뮤테이션
+ */
 export const usePatchCenterInformation = () => {
   const queryClient = useQueryClient();
   return useMutation({

@@ -3,6 +3,10 @@ import { IResponseDefault } from "@/types/default";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
+/**
+ * 센터 관리자 정보 수정 Hooks
+ * @returns 센터 관리자 정보 수정 뮤테이션
+ */
 export const usePatchManagerInformation = () => {
   const queryClient = useQueryClient();
   return useMutation({
