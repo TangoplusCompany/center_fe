@@ -113,7 +113,7 @@ const MeasureDetailDynamic = ({
       video.removeEventListener("seeked", handleSeeked);
       video.removeEventListener("loadedmetadata", handleSeeked);
     };
-  }, [measureJson]);
+  }, [measureJson, defaultWidth, defaultHeight]);
 
   useEffect(() => {
     if (!measureJson || videoRef.current === null) return;
@@ -371,7 +371,7 @@ const MeasureDetailDynamic = ({
     };
 
     drawCanvas();
-  }, [measureJson, scaleWidth, scaleHeight, nowHeight, frame]);
+  }, [measureJson, scaleWidth, scaleHeight, nowHeight, frame, clearAndDraw]);
 
   if (!measureJson) return <div></div>;
   if (isLoading) return <div>Loading...</div>;

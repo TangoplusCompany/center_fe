@@ -49,7 +49,7 @@ const MeasureMainContainer = ({
     if (measureResponse) {
       handleTotalItems(measureResponse.total);
     }
-  }, [measureResponse]);
+  }, [measureResponse, handleTotalItems]);
 
   if (isLoading) {
     return (

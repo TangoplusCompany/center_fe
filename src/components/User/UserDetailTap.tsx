@@ -48,7 +48,7 @@ const UserDetailTap = ({
   };
   useEffect(() => {
     onUpdateMeasureSn(userMeasureList?.measurements[0]?.measure_sn as number);
-  }, [userMeasureList]);
+  }, [userMeasureList, onUpdateMeasureSn]);
 
   if (userMeasureLoading) return <p>Loading...</p>;
   if (userMeasureError) return <p>{userMeasureError.message}</p>;

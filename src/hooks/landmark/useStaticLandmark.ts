@@ -116,7 +116,7 @@ export function useStaticLandmark(
     };
 
     draw();
-  }, [imageUrl]);
+  }, [imageUrl, loadImage, step, measureJson]);
 
   return { resultUrl, loading };
 }
