@@ -5,6 +5,11 @@ import { getMeasureJson } from "@/app/actions/getMeasureJson";
 import { IMeasureJson } from "@/types/measure";
 import { useEffect, useState } from "react";
 
+/**
+ * 동적 JSON 로딩 Hooks
+ * @param jsonPath 측정 JSON 경로
+ * @returns 측정 JSON 데이터, 로딩중, 에러상태
+ */
 export const useMeasureDynamicJson = (jsonPath?: string) => {
   const [data, setData] = useState<IMeasureJson[]>();
   const [isLoading, setLoading] = useState(false);

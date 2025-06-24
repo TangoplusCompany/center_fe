@@ -12,7 +12,10 @@ import Link from "next/link";
 import { useLogin } from "@/hooks/auth/useLogin";
 
 const loginSchema = z.object({
-  email: z.string().email({ message: "이메일 형식이 올바르지 않습니다." }),
+  email: z.string().email({ message: "이메일 형식이 올바르지 않습니다." }).regex(
+    /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i,
+    "이메일은 영문, 숫자, @ 특수문자만 입력 가능합니다.",
+  ),
   password: z
     .string()
     .min(8, {
@@ -77,12 +80,12 @@ export default function LoginForm({
         <div className="grid gap-2">
           <div className="flex items-center">
             <Label htmlFor="password">Password</Label>
-            <a
-              href="#"
+            <Link
+              href="/find"
               className="ml-auto text-sm underline-offset-4 hover:underline"
             >
               비밀번호를 잊어버리셨나요?
-            </a>
+            </Link>
           </div>
           <Input
             id="password"

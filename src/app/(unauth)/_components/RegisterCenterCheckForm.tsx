@@ -16,6 +16,10 @@ const RegisterCenterCheckForm = ({
       center_id: centerCode,
     });
   };
+  const changeCenterCode = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const filteredValue = e.target.value.replace(/[^a-zA-Z0-9_-]/g, '');
+    setCenterCode(filteredValue);
+  };
   return (
     <div className="w-full flex flex-col items-start gap-2">
       <Label htmlFor="centerCheck" className="lg:text-lg">
@@ -26,7 +30,7 @@ const RegisterCenterCheckForm = ({
           id="centerCheck"
           type="text"
           value={centerCode}
-          onChange={(e) => setCenterCode(e.target.value)}
+          onChange={changeCenterCode}
           placeholder="센터 코드를 입력해주세요."
           required
           className="bg-white dark:bg-border"

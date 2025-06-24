@@ -1,4 +1,5 @@
 import { IDeviceStatusCardProps } from "@/types/device";
+import { RandomHexColor } from "@/utils/RandomHexColor";
 import { useEffect, useState } from "react";
 
 type ChartConfigValue = {
@@ -8,12 +9,14 @@ type ChartConfigValue = {
 
 type ChartConfig = Record<string, ChartConfigValue>;
 
-function getRandomHexColor() {
-  const hex = Math.floor(Math.random() * 0xffffff).toString(16);
-  return `#${hex.padStart(6, "0")}`;
-}
-
-export const useDeviceChartConfig = (devices: IDeviceStatusCardProps[] = []) => {
+/**
+ * 센터 기기 차트 설정 Hooks
+ * @param devices 기기 상태 카드 데이터
+ * @returns 센터 기기 차트 설정
+ */
+export const useDeviceChartConfig = (
+  devices: IDeviceStatusCardProps[] = [],
+) => {
   const [chartConfig, setChartConfig] = useState<ChartConfig>({});
 
   useEffect(() => {
@@ -26,7 +29,7 @@ export const useDeviceChartConfig = (devices: IDeviceStatusCardProps[] = []) => 
       if (!newConfig[name]) {
         newConfig[name] = {
           label: name,
-          color: getRandomHexColor(),
+          color: RandomHexColor(),
         };
       }
     });

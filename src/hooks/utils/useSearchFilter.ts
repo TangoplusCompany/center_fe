@@ -1,5 +1,9 @@
 import { useQueryParams } from "./useQueryParams";
 
+/**
+ * 검색 필터 적용 훅
+ * @returns 검색 필터 적용 함수
+ */
 export const useSearchFilter = () => {
   const { setQueryParam } = useQueryParams();
 

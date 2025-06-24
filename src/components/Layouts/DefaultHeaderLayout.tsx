@@ -2,6 +2,7 @@ import React from "react";
 import { DarkModeToggle } from "../ui/darkmode";
 import { SidebarTrigger } from "../ui/sidebar";
 import { LayoutBreadCrumb } from "./LayoutBreadCrumb";
+import UpdateSessionButton from "../Util/UpdateSessionButton";
 
 export default function DefaultHeaderLayout() {
   return (
@@ -10,7 +11,10 @@ export default function DefaultHeaderLayout() {
         <SidebarTrigger />
         <LayoutBreadCrumb />
       </div>
-      <DarkModeToggle />
+      <div className="flex items-center gap-2 md:gap-5">
+        <UpdateSessionButton />
+        <DarkModeToggle />
+      </div>
     </header>
   );
 }

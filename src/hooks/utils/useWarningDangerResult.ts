@@ -1,3 +1,9 @@
+/**
+ * 경고 및 위험 결과 계산 훅
+ * @param defaultAvg 기본 평균값
+ * @param sdAvg 표준 편차값
+ * @returns 경고 및 위험 결과 계산 결과
+ */
 export const useWarningDangerResult = ({
   defaultAvg,
   sdAvg,

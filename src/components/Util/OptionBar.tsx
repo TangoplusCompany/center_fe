@@ -32,7 +32,10 @@ const OptionBar = ({ totalItems }: { totalItems: number }) => {
   const { setQueryParam, query } = useQueryParams();
   const defaultLimit = query.limit || 20;
   const handleSelectChange = (value: string) => {
-    setQueryParam("limit", value);
+    setQueryParam([
+      ["limit", value],
+      ["page", "1"],
+    ]);
   };
   return (
     <div className="flex items-center justify-between ">

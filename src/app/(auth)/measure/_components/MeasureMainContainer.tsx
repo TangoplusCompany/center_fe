@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import CustomPagination from "@/components/Custom/Pagination";
 import DataError from "@/components/Util/DataError";
@@ -13,9 +13,12 @@ import {
 } from "@/components/Measure/MeasureList";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import SearchForm from "@/components/Util/SearchForm";
-import OptionBar, { DummyOptionBar } from "@/components/Util/OptionBar";
 
-const MeasureMainContainer = () => {
+const MeasureMainContainer = ({
+  handleTotalItems,
+}: {
+  handleTotalItems: (totalItems: number) => void;
+}) => {
   const { query, setQueryParam } = useQueryParams();
   const deviceSn = query.device_sn || "0";
   const page = parseInt(query.page || "1");
@@ -42,10 +45,15 @@ const MeasureMainContainer = () => {
     search: searchValue,
   });
 
+  useEffect(() => {
+    if (measureResponse) {
+      handleTotalItems(measureResponse.total);
+    }
+  }, [measureResponse, handleTotalItems]);
+
   if (isLoading) {
     return (
       <>
-        <DummyOptionBar />
         <MeasureDummyList limit={limit} />
       </>
     );
@@ -56,7 +64,6 @@ const MeasureMainContainer = () => {
   if (!measureResponse || Object.keys(measureResponse).length === 0) {
     return (
       <>
-        <OptionBar totalItems={0} />
         <MeasureList measurements={[]} />
         <CustomPagination total={1} page={1} last_page={1} limit={20} />
         <SearchForm setSearch={onChangeSearch} search={search} />
@@ -65,7 +72,6 @@ const MeasureMainContainer = () => {
   }
   return (
     <>
-      <OptionBar totalItems={measureResponse.total} />
       <MeasureList measurements={measureResponse.measurements} />
       <CustomPagination
         total={measureResponse.total}

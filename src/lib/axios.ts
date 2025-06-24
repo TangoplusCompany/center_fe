@@ -3,6 +3,9 @@ import { createAuthStore } from "@/stores/AuthStore";
 import { session } from "@/utils/helperSessionStorage";
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
+/**
+ * 비회원 전용 Axios 인스턴스
+ */
 export const customUnAuthAxios = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
@@ -11,6 +14,9 @@ export const customUnAuthAxios = axios.create({
   },
 });
 
+/**
+ * JSON 파일 전용 Axios 인스턴스
+ */
 export const customJsonAxios = axios.create({
   baseURL: process.env.NEXT_PUBLIC_FILE_URL,
   headers: {
@@ -35,6 +41,9 @@ const processQueue = (error: AxiosError | null, token: string | null) => {
   failedQueue = [];
 };
 
+/**
+ * 회원 전용 Axios 인스턴스
+ */
 export const customAxios = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,
@@ -56,6 +65,9 @@ customAxios.interceptors.request.use((config: InternalAxiosRequestConfig) => {
       accessJwt: string;
     };
   }>("login-user");
+  if (!token) {
+    window.location.href = "/login";
+  }
   if (token) {
     config.headers = config.headers || {};
     config.headers.Authorization = `Bearer ${token.state.accessJwt}`;
