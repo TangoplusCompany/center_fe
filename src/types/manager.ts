@@ -8,6 +8,15 @@ export interface ICenterManagerData {
   is_logged_in: number;
   account_locked: number;
 }
+
+export interface ICenterManagerListData {
+  total: number;
+  limit: number;
+  page: number;
+  last_page: number;
+  managers: ICenterManagerData[];
+}
+
 export interface ILoginData {
   admin_info: {
     sn: number;
