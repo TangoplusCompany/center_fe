@@ -2,6 +2,11 @@ import { deleteDeviceCenter } from "@/services/device/deleteDeviceCenter";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
+/**
+ * 센터 기기 삭제 Hooks
+ * @param setOpen 기기 삭제 모달 열기 함수
+ * @returns 센터 기기 삭제 뮤테이션
+ */
 export const useDeviceRemove = (
   setOpen: (value: React.SetStateAction<boolean>) => void,
 ) => {
@@ -9,7 +14,6 @@ export const useDeviceRemove = (
   return useMutation({
     mutationFn: deleteDeviceCenter,
     onSuccess: () => {
-      console.log("Device Remove successfully");
       queryClient.invalidateQueries({ queryKey: ["deviceStatusList"] });
       setOpen(false);
     },

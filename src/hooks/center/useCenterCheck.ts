@@ -13,13 +13,17 @@ type Props = {
   centerCode: string;
 };
 
+/**
+ * 센터 존재 여부 확인 Hooks
+ * @param onCenterCheck 센터 존재 여부 확인 함수
+ * @param centerCode 센터 코드
+ * @returns 센터 존재 여부 확인 뮤테이션
+ */
 export const useCenterCheck = ({ onCenterCheck, centerCode }: Props) => {
   return useMutation({
     mutationFn: getCenterCheck,
-    onSuccess: (data: ICenterCheck) => {
-      console.log(data.message);
+    onSuccess: () => {
       onCenterCheck(centerCode);
-      // Handle successful login, e.g., redirect to dashboard
     },
     onError: (
       data: AxiosError<{

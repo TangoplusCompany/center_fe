@@ -4,12 +4,16 @@ import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { FieldValues, UseFormSetError } from "react-hook-form";
 
+/**
+ * 회원가입 Hooks
+ * @param setError react-hook-form 에러 설정 함수
+ * @returns 회원가입 뮤테이션
+ */
 export const useRegister = (setError: UseFormSetError<FieldValues>) => {
   const router = useRouter();
   return useMutation({
     mutationFn: postRegister,
     onSuccess: () => {
-      // Handle successful login, e.g., redirect to dashboard
       router.push("/login");
     },
     onError: (
