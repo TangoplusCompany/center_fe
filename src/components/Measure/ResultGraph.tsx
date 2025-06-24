@@ -42,7 +42,7 @@ const ResultGraph = ({
     } else {
       setSelect(1);
     }
-  }, [defaultAvg, sdAvg, userAvg]);
+  }, [defaultAvg, sdAvg, userAvg, warningMin, warningMax, dangerMin, dangerMax]);
   return (
     <div className="w-full flex flex-col gap-3 flex-1 p-2 bg-[#F5F5F5] dark:bg-slate-900 rounded">
       <p className="text-xl lg:text-2xl">{title}</p>

@@ -1,6 +1,6 @@
 import { useAuthStore } from '@/providers/AuthProvider';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const SESSION_TIMEOUT = 15 * 60 * 1000; // 15분
 
@@ -34,7 +34,7 @@ export const useLoginTimeout = () => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [now]);
+  }, [now, logout, router]);
 
   return {
     resetTimer,
