@@ -10,12 +10,14 @@ import { useQuery } from "@tanstack/react-query";
 export const useGetManagerList = ({
   page,
   limit,
+  search,
 }: {
   page: number;
   limit: number;
+  search: string;
 }) => {
   return useQuery({
-    queryKey: ["adminList", page, limit],
-    queryFn: async () => await getCenterManagers(),
+    queryKey: ["adminList", page, limit, search],
+    queryFn: async () => await getCenterManagers(search),
   });
 };
