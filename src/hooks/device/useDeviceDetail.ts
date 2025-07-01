@@ -1,4 +1,4 @@
-import { customAxios } from "@/lib/axios";
+import { getDeviceDetail } from "@/services/device/getDeviceDetail";
 import { useQuery } from "@tanstack/react-query";
 
 /**
@@ -9,9 +9,6 @@ import { useQuery } from "@tanstack/react-query";
 export const useGetDeviceDetail = <T>(sn: number) => {
   return useQuery<T>({
     queryKey: ["deviceDetail", sn],
-    queryFn: async () => {
-      const response = await customAxios.get(`/kiosks/${sn}`);
-      return response.data;
-    },
+    queryFn: async () => await getDeviceDetail({ sn }),
   });
 };
