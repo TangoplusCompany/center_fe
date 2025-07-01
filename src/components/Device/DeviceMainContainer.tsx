@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import { useGetDeviceStatus } from "@/hooks/device";
+import { useGetDeviceStatus } from "@/hooks/device/useDeviceStatus";
 import { IDeviceStatus } from "@/types/device";
-import { DeviceStatusItems } from "@/components/Device";
+import { DeviceStatusItems } from "@/components/Device/DeviceStatusItems";
 import DeviceAddDialog from "./DeviceAddDialog";
 import { useAuthStore } from "@/providers/AuthProvider";
 import SkeletonDeviceCard from "@/components/Card/SkeletonDeviceCard";

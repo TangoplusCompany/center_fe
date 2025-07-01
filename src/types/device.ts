@@ -1,5 +1,12 @@
 import { IResponseDefault } from "./default";
 
+export interface IDeviceDetail {
+  success: boolean;
+  status: number;
+  message: string[];
+  data: IDeviceStatusCardProps;
+}
+
 export interface IDeviceStatusCardProps {
   sn: number;
   serial_number: string;

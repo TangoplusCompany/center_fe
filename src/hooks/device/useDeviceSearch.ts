@@ -1,8 +1,9 @@
+import { IDeviceSearchForm } from "@/schemas/deviceSchema";
 import { getDeviceSearch } from "@/services/device/getDeviceSearch";
 import { IDeviceSearch } from "@/types/device";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { UseFormSetError, FieldValues } from "react-hook-form";
+import { UseFormSetError } from "react-hook-form";
 
 /**
  * 센터 기기 검색 Hooks
@@ -11,7 +12,7 @@ import { UseFormSetError, FieldValues } from "react-hook-form";
  * @returns 센터 기기 검색 뮤테이션
  */
 export const useGetDeviceSearch = (
-  setError: UseFormSetError<FieldValues>,
+  setError: UseFormSetError<IDeviceSearchForm>,
   getDeviceInfo: (data: IDeviceSearch | null) => void,
 ) => {
   return useMutation({

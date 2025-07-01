@@ -14,18 +14,20 @@ import { IDeviceStatusCardProps } from "@/types/device";
 import { Trash } from "lucide-react";
 import React from "react";
 import { useDeviceRemove } from "@/hooks/device/useDeviceRemove";
+import { useBoolean } from "@/hooks/utils/useBoolean";
 
 const DeviceRemoveDialog = ({
   deviceInfo,
 }: {
   deviceInfo: IDeviceStatusCardProps;
 }) => {
-  const [open, setOpen] = React.useState(false);
-  
+  const { isBoolean: open, setToggle: setOpen } = useBoolean(false);
+
   const mutationRemoveDevice = useDeviceRemove(setOpen);
   const handleDeviceRemove = async () => {
     await mutationRemoveDevice.mutateAsync(deviceInfo.sn);
   };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>

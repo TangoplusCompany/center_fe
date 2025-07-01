@@ -1,88 +1,26 @@
-"use client";
-
-import { useDeviceUpdate, useGetDeviceDetail } from "@/hooks/device";
-import React, { useState } from "react";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { IDeviceStatusCardProps } from "@/types/device";
+import React from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { UseFormReturn } from "react-hook-form";
+import { IDeviceDetail } from "@/types/device";
+import { IDeviceDetailForm } from "@/schemas/deviceSchema";
 
-interface IDeviceDetail {
-  success: boolean;
-  status: number;
-  message: string[];
-  data: IDeviceStatusCardProps;
+interface IDeviceDetailFormProps extends UseFormReturn<IDeviceDetailForm> {
+  isEdit: boolean;
+  handleEdit: () => void;
+  updateDeviceDetail: () => void;
+  data: IDeviceDetail;
 }
 
-/**
- * DeviceDetailContainer
- * @sn {string} DB PrimaryKey
- * @device_name {string} 기기 이름
- * @install_zipcode {string} 설치 우편번호
- * @install_address_1 {string} 설치 주소
- * @install_address_2 {string} 설치 상세 주소
- * @install_location {string} 설치 기업
- * @serial_number {string} 기기 시리얼 번호
- */
-export const DeviceDetailContainer = ({ sn }: { sn: number }) => {
-  const { data, isLoading } = useGetDeviceDetail<IDeviceDetail>(sn);
-  const [isEditing, setIsEditing] = useState(false);
-
-  const mutationDeviceUpdate = useDeviceUpdate();
-
-  const deviceDetailSchema = z.object({
-    device_name: z.string().min(1, {
-      message: "기기 이름을 입력해주세요.",
-    }).regex(/^[가-힣a-zA-Z0-9\s-]+$/, {
-      message: "한글, 영어, 숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
-    }),
-    install_address_1: z.string().regex(/^[가-힣a-zA-Z0-9\s-]+$/, {
-      message: "한글, 영어, 숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
-    }),
-    install_address_2: z.string().regex(/^[가-힣a-zA-Z0-9\s-]+$/, {
-      message: "한글, 영어, 숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
-    }),
-    install_location: z.string().min(1, {
-      message: "기기 설치 장소를 입력해주세요.",
-    }).regex(/^[가-힣a-zA-Z0-9\s-]+$/, {
-      message: "한글, 영어, 숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
-    }),
-  });
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(deviceDetailSchema),
-  });
-  const handleEdit = () => {
-    if (!isEditing) return setIsEditing(true);
-    else {
-      reset();
-      setIsEditing(false);
-      return;
-    }
-  };
-  const updateDeviceDetail = handleSubmit(async (data) => {
-    setIsEditing(false);
-    const deviceInfo = {
-      sn: sn,
-      device_name: data.device_name,
-      install_zipcode: "",
-      install_address_1: data.install_address_1,
-      install_address_2: data.install_address_2,
-      install_location: data.install_location,
-    };
-    mutationDeviceUpdate.mutate(deviceInfo);
-  });
-  if (!data) return <p></p>;
-  if (isLoading) return <p>Loading...</p>;
-
+const DeviceDetailForm = ({
+  register,
+  formState: { errors },
+  updateDeviceDetail,
+  data,
+  isEdit,
+  handleEdit,
+}: IDeviceDetailFormProps) => {
   return (
     <form
       onSubmit={updateDeviceDetail}
@@ -99,7 +37,7 @@ export const DeviceDetailContainer = ({ sn }: { sn: number }) => {
           defaultValue={data.data.device_name}
           className="w-full"
           id="device_name"
-          disabled={!isEditing}
+          disabled={!isEdit}
         />
         {errors.device_name && (
           <span className="text-red-500 text-sm">
@@ -114,7 +52,7 @@ export const DeviceDetailContainer = ({ sn }: { sn: number }) => {
           defaultValue={data.data.install_location}
           className="w-full"
           id="install_location"
-          disabled={!isEditing}
+          disabled={!isEdit}
         />
         {errors.install_location && (
           <span className="text-red-500 text-sm">
@@ -133,7 +71,7 @@ export const DeviceDetailContainer = ({ sn }: { sn: number }) => {
             defaultValue={data.data.install_address_1}
             className="w-full"
             id="install_address_1"
-            disabled={!isEditing}
+            disabled={!isEdit}
           />
           {errors.install_address_1 && (
             <span className="text-red-500 text-sm">
@@ -151,7 +89,7 @@ export const DeviceDetailContainer = ({ sn }: { sn: number }) => {
             defaultValue={data.data.install_address_2}
             className="w-full"
             id="install_address_2"
-            disabled={!isEditing}
+            disabled={!isEdit}
           />
           {errors.install_address_2 && (
             <span className="text-red-500 text-sm">
@@ -162,9 +100,9 @@ export const DeviceDetailContainer = ({ sn }: { sn: number }) => {
       </div>
       <div className="flex items-center justify-center gap-3 mt-10">
         <Button type="button" onClick={handleEdit} variant="outline">
-          {!isEditing ? "수정하기" : "취소하기"}
+          {!isEdit ? "수정하기" : "취소하기"}
         </Button>
-        {isEditing && (
+        {isEdit && (
           <Button type="submit" className="">
             저장하기
           </Button>
@@ -173,3 +111,5 @@ export const DeviceDetailContainer = ({ sn }: { sn: number }) => {
     </form>
   );
 };
+
+export default DeviceDetailForm;
