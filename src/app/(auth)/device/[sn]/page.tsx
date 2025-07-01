@@ -1,5 +1,5 @@
 import React from "react";
-import { DeviceDetailContainer } from "../_components";
+import { DeviceDetailContainer } from "@/components/Device/DeviceDetailContainer";
 
 const DeviceDetailPage = async ({ params }: { params: Promise<{ sn: string }> }) => {
   const deviceSn = (await params).sn;
