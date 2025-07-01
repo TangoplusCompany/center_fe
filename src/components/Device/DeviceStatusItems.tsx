@@ -3,7 +3,7 @@ import { IDeviceStatusCardProps } from "@/types/device";
 import React from "react";
 import Link from "next/link";
 import { PencilLine } from "lucide-react";
-import DeviceRemoveDialog from "@/app/(auth)/device/_components/DeviceRemoveDialog";
+import DeviceRemoveDialog from "@/components/Device/DeviceRemoveDialog";
 import { nameFiltering } from "@/utils/regexFiltering";
 
 export const DeviceStatusItems = React.memo(
