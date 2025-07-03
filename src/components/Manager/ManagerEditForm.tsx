@@ -9,7 +9,7 @@ import { ADMIN_ROLE } from "@/utils/constants";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { phoneHyphen } from "@/utils/regexFiltering";
-import { usePatchManagerInformation } from "@/hooks/auth/usePatchManagerInformation";
+import { usePatchManagerInformation } from "@/hooks/api/manager/usePatchManagerInformation";
 const ManagerEditForm = ({
   managerData,
 }: {

@@ -6,7 +6,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { useBoolean } from "@/hooks/utils/useBoolean";
-import { usePatchManagerPassword } from "@/hooks/auth/usePatchManagerPassword";
+import { usePatchManagerPassword } from "@/hooks/api/manager/usePatchManagerPassword";
 import { useAuthStore } from "@/providers/AuthProvider";
 
 const EditMangerPasswordForm = () => {

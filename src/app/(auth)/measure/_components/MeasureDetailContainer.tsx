@@ -1,6 +1,6 @@
 "use client";
 
-import { useMeasureDetail } from "@/hooks/measure/useMeasureDetail";
+import { useMeasureDetail } from "@/hooks/api/measure/useMeasureDetail";
 import { useGetQuery } from "@/hooks/utils/useGetQuery";
 import { IMeasureDetailResponse } from "@/types/measure";
 import React, { useCallback, useState } from "react";

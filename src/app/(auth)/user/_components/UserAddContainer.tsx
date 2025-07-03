@@ -12,8 +12,8 @@ import {
   phoneFiltering,
   emailFiltering,
 } from "@/utils/regexFiltering";
-import { useSearchUnregisterUser } from "@/hooks/user/useSearchUnregisterUser";
-import { useAddUser } from "@/hooks/user/useAddUser";
+import { useSearchUnregisterUser } from "@/hooks/api/user/useSearchUnregisterUser";
+import { useAddUser } from "@/hooks/api/user/useAddUser";
 
 const EmptyUserList = () => (
   <div className="w-full flex items-center justify-center py-10">

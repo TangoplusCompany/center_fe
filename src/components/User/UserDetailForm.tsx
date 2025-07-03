@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { usePatchUserDetail } from "@/hooks/user/usePatchUserDetail";
+import { usePatchUserDetail } from "@/hooks/api/user/usePatchUserDetail";
 
 const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
   const { adminRole } = useAuthStore((state) => state);

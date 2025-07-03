@@ -16,7 +16,7 @@ import React from "react";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
 import { UserRoundPen } from "lucide-react";
-import { usePatchManagerRole } from "@/hooks/auth/usePatchManagerRole";
+import { usePatchManagerRole } from "@/hooks/api/manager/usePatchManagerRole";
 
 const ManagerRoleRadioGroup = ({
   nowRole,

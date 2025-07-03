@@ -1,4 +1,4 @@
-import { useMeasureDetail } from "@/hooks/measure/useMeasureDetail";
+import { useMeasureDetail } from "@/hooks/api/measure/useMeasureDetail";
 import { IUserMeasurement } from "@/types/user";
 import React from "react";
 import CenterUserMeasure from "./CenterUserMeasure";

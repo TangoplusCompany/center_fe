@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import React, { useEffect } from "react";
 import { formatDate } from "@/utils/formatDate";
-import { useGetUserMeasureList } from "@/hooks/user/useGetUserMeasureList";
+import { useGetUserMeasureList } from "@/hooks/api/user/useGetUserMeasureList";
 import { useGetQuery } from "@/hooks/utils/useGetQuery";
 
 const UserDetailTap = ({

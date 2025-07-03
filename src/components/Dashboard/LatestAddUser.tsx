@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetLatestAddUser } from "@/hooks/user/useGetLatestAddUser";
+import { useGetLatestAddUser } from "@/hooks/api/user/useGetLatestAddUser";
 import { IUserData } from "@/types/user";
 import React from "react";
 import { MainUserList } from "./MainUserList";

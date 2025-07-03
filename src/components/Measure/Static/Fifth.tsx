@@ -2,7 +2,7 @@ import { IUserDetailStatic } from "@/types/user";
 import React from "react";
 import ResultGraph from "../ResultGraph";
 import DummyStaticContainer from "../DummyStaticContainer";
-import { useMeasureJson } from "@/hooks/measure/useMeasureJson";
+import { useMeasureJson } from "@/hooks/api/measure/useMeasureJson";
 import { MeasurementImage } from "../MeasurementImage";
 
 const MeasureStaticFifth = React.memo(

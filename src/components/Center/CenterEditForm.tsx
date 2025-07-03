@@ -4,7 +4,7 @@ import * as z from "zod";
 import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { usePatchCenterInformation } from "@/hooks/center/usePatchCenterInformation";
+import { usePatchCenterInformation } from "@/hooks/api/center/usePatchCenterInformation";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";

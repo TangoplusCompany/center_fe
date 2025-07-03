@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetLatestMeasureUser } from "@/hooks/user/useGetLatestMeasureUser";
+import { useGetLatestMeasureUser } from "@/hooks/api/user/useGetLatestMeasureUser";
 import React from "react";
 import { MainUserList } from "./MainUserList";
 import { IMeasureList } from "@/types/measure";

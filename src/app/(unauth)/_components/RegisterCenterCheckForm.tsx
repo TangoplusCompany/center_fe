@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useCenterCheck } from "@/hooks/center/useCenterCheck";
+import { useCenterCheck } from "@/hooks/api/center/useCenterCheck";
 import React from "react";
 
 const RegisterCenterCheckForm = ({

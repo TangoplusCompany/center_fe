@@ -10,7 +10,7 @@ import {
   DialogDescription,
   DialogClose,
 } from "@/components/ui/dialog";
-import { useDeleteManager } from "@/hooks/auth/useDeleteManager";
+import { useDeleteManager } from "@/hooks/api/manager/useDeleteManager";
 import { ICenterManagerData } from "@/types/manager";
 import { Trash } from "lucide-react";
 import React from "react";

@@ -2,7 +2,7 @@ import { IUserDetailDynamic } from "@/types/user";
 import React, { useEffect, useRef, useState } from "react";
 import ResultGraph from "./ResultGraph";
 import { useDrawCanvas } from "@/hooks/utils";
-import { useMeasureDynamicJson } from "@/hooks/measure/useMeasureDynamicJson";
+import { useMeasureDynamicJson } from "@/hooks/api/measure/useMeasureDynamicJson";
 import DataError from "../Util/DataError";
 
 const MeasureDetailDynamic = ({
