@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useGetDeviceStatus } from "@/hooks/device/useDeviceStatus";
+import { useGetDeviceStatus } from "@/hooks/api/device/useDeviceStatus";
 import { IDeviceStatus } from "@/types/device";
 import { DeviceStatusItems } from "@/components/Device/DeviceStatusItems";
 import DeviceAddDialog from "./DeviceAddDialog";

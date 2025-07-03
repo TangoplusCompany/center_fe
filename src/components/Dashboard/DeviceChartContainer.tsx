@@ -4,7 +4,7 @@ import { useDeviceChartConfig } from "@/hooks/device/useDeviceChartConfig";
 import { IDeviceStatusCardProps } from "@/types/device";
 import React from "react";
 import DeviceChart from "./DeviceChart";
-import { useDevicePeriodData } from "@/hooks/device/useDevicePeriodData";
+import { useDevicePeriodData } from "@/hooks/api/device/useDevicePeriodData";
 
 const DeviceChartContainer = ({
   deviceList,

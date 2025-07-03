@@ -1,5 +1,5 @@
 import React from "react";
-import ManagerContainer from "./_components/ManagerContainer";
+import ManagerContainer from "@/components/Manager/ManagerContainer";
 
 const CenterManagerPage = () => {
   return (

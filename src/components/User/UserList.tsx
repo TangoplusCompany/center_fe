@@ -13,7 +13,7 @@ import { FileText, Trash } from "lucide-react";
 import { phoneHyphen } from "@/utils/regexFiltering";
 import { useEffect, useState } from "react";
 import { IUserData } from "@/types/user";
-import { useDeleteUser } from "@/hooks/user/useDeleteUser";
+import { useDeleteUser } from "@/hooks/api/user/useDeleteUser";
 
 export const UserList = ({
   users,

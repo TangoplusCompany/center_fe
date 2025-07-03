@@ -1,7 +1,7 @@
 "use client";
 
 import ManagerEditForm from "@/components/Manager/ManagerEditForm";
-import { useGetManagerDetail } from "@/hooks/auth/useGetManagerDetail";
+import { useGetManagerDetail } from "@/hooks/api/manager/useGetManagerDetail";
 import { useAuthStore } from "@/providers/AuthProvider";
 import React from "react";
 

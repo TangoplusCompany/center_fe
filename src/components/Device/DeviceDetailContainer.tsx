@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { useDeviceUpdate } from "@/hooks/device/useDeviceUpdate";
-import { useGetDeviceDetail } from "@/hooks/device/useDeviceDetail";
+import { useDeviceUpdate } from "@/hooks/api/device/useDeviceUpdate";
+import { useGetDeviceDetail } from "@/hooks/api/device/useDeviceDetail";
 import { useBoolean } from "@/hooks/utils/useBoolean";
 import { IDeviceDetail } from "@/types/device";
 import { zodResolver } from "@hookform/resolvers/zod";

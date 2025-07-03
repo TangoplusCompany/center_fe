@@ -16,7 +16,9 @@ import React from "react";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
 import { UserRoundPen } from "lucide-react";
-import { usePatchManagerRole } from "@/hooks/auth/usePatchManagerRole";
+import { usePatchManagerRole } from "@/hooks/api/manager/usePatchManagerRole";
+import { useBoolean } from "@/hooks/utils/useBoolean";
+import { useManagerRole } from "@/hooks/manager/useManagerRole";
 
 const ManagerRoleRadioGroup = ({
   nowRole,
@@ -51,18 +53,21 @@ const ManagerRoleChangeDialog = ({
 }: {
   manager: ICenterManagerData;
 }) => {
-  const [open, setOpen] = React.useState(false);
-  const [role, setRole] = React.useState(manager.admin_role);
+  const {
+    isBoolean: open,
+    setToggle: setOpen,
+    setFalse: closeDialog,
+  } = useBoolean(false);
+  const { role, handleRoleChange } = useManagerRole(manager.admin_role);
+
   const mutationManagerRole = usePatchManagerRole();
-  const handleRoleChange = (newRole: number) => {
-    setRole(newRole);
-  };
+
   const handleManagerRole = async () => {
     await mutationManagerRole.mutateAsync({
       sn: manager.sn,
       role,
     });
-    setOpen(false);
+    closeDialog();
   };
   return (
     <Dialog open={open} onOpenChange={setOpen}>

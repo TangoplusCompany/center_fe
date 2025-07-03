@@ -8,7 +8,7 @@ import BoxIcons from "../_components/icons/BoxIcons";
 import QRCodeView from "../_components/QRCodeView";
 import TitleLayout from "../_components/TitleLayout";
 import PoseImageResult from "../_components/PoseImageResult";
-import { usePostUserReport } from "@/hooks/report/usePostUserReport";
+import { usePostUserReport } from "@/hooks/api/report/usePostUserReport";
 import { formatDate } from "@/utils/formatDate";
 import { useEffect, useState } from "react";
 import { IMAGE_KEYS, SUMMARY_CATEGORY } from "@/utils/constants/reportConst";

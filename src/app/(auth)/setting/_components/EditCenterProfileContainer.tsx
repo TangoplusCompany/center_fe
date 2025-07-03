@@ -1,7 +1,7 @@
 "use client";
 
 import CenterEditForm from "@/components/Center/CenterEditForm";
-import { useGetCenterInformation } from "@/hooks/center/useGetCenterInformation";
+import { useGetCenterInformation } from "@/hooks/api/center/useGetCenterInformation";
 import React from "react";
 
 const EditCenterProfileContainer = () => {
