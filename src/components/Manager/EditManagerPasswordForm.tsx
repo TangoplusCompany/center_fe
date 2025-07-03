@@ -1,5 +1,4 @@
 import React from "react";
-import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input } from "../ui/input";
@@ -8,6 +7,10 @@ import { Button } from "../ui/button";
 import { useBoolean } from "@/hooks/utils/useBoolean";
 import { usePatchManagerPassword } from "@/hooks/api/manager/usePatchManagerPassword";
 import { useAuthStore } from "@/providers/AuthProvider";
+import {
+  IManagerPasswordForm,
+  managerPasswordSchema,
+} from "@/schemas/managerSchema";
 
 const EditMangerPasswordForm = () => {
   const { adminSn } = useAuthStore((state) => state);
@@ -21,53 +24,15 @@ const EditMangerPasswordForm = () => {
     setEditState();
   };
 
-  const scheme = z
-    .object({
-      currentPassword: z.string().min(1, "현재 비밀번호를 입력해주세요."),
-      newPassword: z
-        .string()
-        .min(1, "새 비밀번호를 입력해주세요.")
-        .min(8, "비밀번호는 최소 8글자 이상이여야 합니다.")
-        .max(16, "비밀번호는 최대 16글자 이하여야 합니다.")
-        .regex(
-          /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]+$/i,
-          "비밀번호는 영문, 숫자, ! ~ * 특수문자를 최소 1자리 이상 입력해야합니다.",
-        ),
-      confirmPassword: z
-        .string()
-        .min(1, "비밀번호 확인을 입력해주세요.")
-        .min(8, "비밀번호는 최소 8글자 이상이여야 합니다.")
-        .max(16, "비밀번호는 최대 16글자 이하여야 합니다.")
-        .regex(
-          /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]+$/i,
-          "비밀번호는 영문, 숫자, ! ~ * 특수문자를 최소 1자리 이상 입력해야합니다.",
-        ),
-    })
-    .superRefine((arg, ctx) => {
-      if (arg.newPassword !== arg.confirmPassword) {
-        return ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "비밀번호가 일치하지 않습니다.",
-          path: ["confirmPassword"],
-        });
-      }
-      if (arg.currentPassword === arg.newPassword) {
-        return ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "현재 비밀번호와 새 비밀번호가 같습니다.",
-          path: ["newPassword"],
-        });
-      }
-    });
-
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm({
-    resolver: zodResolver(scheme),
+  } = useForm<IManagerPasswordForm>({
+    resolver: zodResolver(managerPasswordSchema),
   });
+
   const mutationChangePassword = usePatchManagerPassword(setError);
   const submitManagerPassword = handleSubmit(async (data) => {
     const { currentPassword, newPassword } = data;

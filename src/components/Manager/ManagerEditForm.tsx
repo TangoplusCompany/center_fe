@@ -10,12 +10,26 @@ import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { phoneHyphen } from "@/utils/regexFiltering";
 import { usePatchManagerInformation } from "@/hooks/api/manager/usePatchManagerInformation";
+import {
+  IManagerInformationForm,
+  managerInformationSchema,
+} from "@/schemas/managerSchema";
 const ManagerEditForm = ({
   managerData,
 }: {
   managerData: ICenterManagerData;
 }) => {
   const { isBoolean: editState, setToggle: setEditState } = useBoolean();
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<IManagerInformationForm>({
+    resolver: zodResolver(managerInformationSchema),
+  });
+
   const handleEditState = () => {
     if (editState) {
       reset();
@@ -25,27 +39,6 @@ const ManagerEditForm = ({
     setEditState();
   };
 
-  const schema = z.object({
-    managerName: z.string().min(1, { message: "이름을 입력해주세요." }).regex(/^[가-힣]+$/, {
-      message: "한글 낱말만 입력 가능합니다.",
-    }),
-    managerMobile: z
-      .string()
-      .regex(/^\d{3}-\d{3,4}-\d{4}$/, {
-        message: "전화번호 형식이 올바르지 않습니다.",
-      }).regex(/^[0-9-]+$/, {
-        message: "숫자와 하이픈(-)만 입력해주세요.",
-      })
-      .transform((value) => value.replace(/-/g, "")),
-  });
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(schema),
-  });
   const mutationManagerInformation = usePatchManagerInformation();
   const submitEditManagerInformation = handleSubmit((data) => {
     const { managerName, managerMobile } = data;
