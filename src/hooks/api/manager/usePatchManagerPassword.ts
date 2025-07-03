@@ -1,3 +1,4 @@
+import { IManagerPasswordForm } from "@/schemas/managerSchema";
 import { patchAdminPassword } from "@/services/auth/patchAdminPassword";
 import { IResponseDefault } from "@/types/default";
 import { useMutation } from "@tanstack/react-query";
@@ -10,7 +11,7 @@ import { FieldValues, UseFormSetError } from "react-hook-form";
  * @returns 센터 관리자 비밀번호 수정 뮤테이션
  */
 export const usePatchManagerPassword = (
-  setError: UseFormSetError<FieldValues>,
+  setError: UseFormSetError<IManagerPasswordForm>,
 ) => {
   return useMutation({
     mutationFn: patchAdminPassword,
