@@ -11,16 +11,21 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { useDeleteManager } from "@/hooks/api/manager/useDeleteManager";
+import { useBoolean } from "@/hooks/utils/useBoolean";
 import { ICenterManagerData } from "@/types/manager";
 import { Trash } from "lucide-react";
 import React from "react";
 
 const ManagerRemoveDialog = ({ manager }: { manager: ICenterManagerData }) => {
-  const [open, setOpen] = React.useState(false);
+  const {
+    isBoolean: open,
+    setToggle: setOpen,
+    setFalse: closeDialog,
+  } = useBoolean(false);
   const mutationDeleteManager = useDeleteManager();
   const handleDeviceRemove = async () => {
     await mutationDeleteManager.mutateAsync({ sn: manager.sn });
-    setOpen(false);
+    closeDialog();
   };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
