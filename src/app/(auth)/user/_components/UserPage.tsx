@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { useGetUserList } from "@/hooks/user";
+import { useGetUserList } from "@/hooks/api/user/useGetUserList";
 import { IUserListData } from "@/types/user";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { UserList } from "@/components/User/UserList";
-import CustomPagination from "@/components/Custom/Pagination";
+import CustomPagination from "@/components/common/Pagination";
 import { useAuthStore } from "@/providers/AuthProvider";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import SearchForm from "@/components/Util/SearchForm";

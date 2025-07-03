@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import CenterManagerList from "@/components/Manager/CenterManagerList";
-import CustomPagination from "@/components/Custom/Pagination";
+import CustomPagination from "@/components/common/Pagination";
 import SearchForm from "@/components/Util/SearchForm";
 import { useGetManagerList } from "@/hooks/api/manager/useGetManagerList";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
