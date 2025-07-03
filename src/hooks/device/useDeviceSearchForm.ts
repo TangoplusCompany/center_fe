@@ -1,7 +1,7 @@
 import { deviceSearchSchema, IDeviceSearchForm } from "@/schemas/deviceSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useGetDeviceSearch } from "./useDeviceSearch";
+import { useGetDeviceSearch } from "../api/device/useDeviceSearch";
 import { useState } from "react";
 import { IDeviceSearch } from "@/types/device";
 

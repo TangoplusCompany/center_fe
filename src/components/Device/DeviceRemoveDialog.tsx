@@ -13,7 +13,7 @@ import {
 import { IDeviceStatusCardProps } from "@/types/device";
 import { Trash } from "lucide-react";
 import React from "react";
-import { useDeviceRemove } from "@/hooks/device/useDeviceRemove";
+import { useDeviceRemove } from "@/hooks/api/device/useDeviceRemove";
 import { useBoolean } from "@/hooks/utils/useBoolean";
 
 const DeviceRemoveDialog = ({

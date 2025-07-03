@@ -12,7 +12,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { useDeviceAdd } from "@/hooks/device/useDeviceAdd";
+import { useDeviceAdd } from "@/hooks/api/device/useDeviceAdd";
 import { DeviceSearchForm } from "./DeviceSearchForm";
 import { useDeviceSearchForm } from "@/hooks/device/useDeviceSearchForm";
 
