@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import ManagerRoleChangeDialog from "@/components/Manager/ManagerRoleChangeDialog";
 import { Button } from "@/components/ui/button";

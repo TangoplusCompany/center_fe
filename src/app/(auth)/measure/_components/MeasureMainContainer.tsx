@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 
-import CustomPagination from "@/components/Custom/Pagination";
+import CustomPagination from "@/components/common/Pagination";
 import DataError from "@/components/Util/DataError";
 
 import { useMeasureList } from "@/hooks/api/measure/useMeasureList";

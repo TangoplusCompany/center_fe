@@ -2,7 +2,7 @@
 
 import React from "react";
 import { IDeviceStatus, IDeviceStatusCardProps } from "@/types/device";
-import { useGetDeviceStatus } from "@/hooks/device";
+import { useGetDeviceStatus } from "@/hooks/api/device/useDeviceStatus"
 import { Skeleton } from "../ui/skeleton";
 import DeviceChartContainer from "./DeviceChartContainer";
 
