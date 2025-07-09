@@ -1,7 +1,6 @@
+import React from "react";
 import { useBoolean } from "@/hooks/utils/useBoolean";
 import { ICenterInformation } from "@/types/center";
-import * as z from "zod";
-import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { usePatchCenterInformation } from "@/hooks/api/center/usePatchCenterInformation";
@@ -9,6 +8,7 @@ import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useAuthStore } from "@/providers/AuthProvider";
+import { centerEditSchema, ICenterEditForm } from "@/schemas/centerSchema";
 
 const CenterEditForm = ({ centerData }: { centerData: ICenterInformation }) => {
   const { adminRole } = useAuthStore((state) => state);
@@ -23,24 +23,13 @@ const CenterEditForm = ({ centerData }: { centerData: ICenterInformation }) => {
     setEditState();
   };
 
-  const schema = z.object({
-    centerName: z.string().min(1, { message: "센터 이름을 입력해주세요." }).regex(/^[가-힣a-zA-Z0-9\s-]+$/, {
-      message: "한글, 영어, 숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
-    }),
-    centerAddress: z.string().min(1, { message: "센터 주소를 입력해주세요." }).regex(/^[가-힣a-zA-Z0-9\s-]+$/, {
-      message: "한글, 영어, 숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
-    }),
-    centerAddressDetail: z.string().regex(/^[가-힣a-zA-Z0-9\s-]+$/, {
-      message: "한글, 영어, 숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
-    }).optional(),
-  });
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({
-    resolver: zodResolver(schema),
+  } = useForm<ICenterEditForm>({
+    resolver: zodResolver(centerEditSchema),
   });
   const mutationEditCenterInformation = usePatchCenterInformation();
   const submitEditCenterInformation = handleSubmit(async (data) => {
@@ -48,7 +37,7 @@ const CenterEditForm = ({ centerData }: { centerData: ICenterInformation }) => {
     await mutationEditCenterInformation.mutateAsync({
       center_name: centerName,
       center_address: centerAddress,
-      center_address_detail: centerAddressDetail,
+      center_address_detail: centerAddressDetail ?? "",
     });
     setEditState();
   });

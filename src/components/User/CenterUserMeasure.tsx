@@ -22,41 +22,6 @@ const CenterUserMeasure = ({
   measureData: IUserMeasurement;
 }) => {
   const measureList: MeasureListType[] = [
-    // {
-    //   title: "정면 측정",
-    //   value: "front",
-    //   component: () => <MeasureStaticFirst statics={measureData.static_1} />,
-    // },
-    // {
-    //   title: "팔꿉 측정",
-    //   value: "elbow",
-    //   component: () => <MeasureStaticSecond statics={measureData.static_2} />,
-    // },
-    // {
-    //   title: "좌측 측정",
-    //   value: "left",
-    //   component: () => <MeasureStaticThird statics={measureData.static_3} />,
-    // },
-    // {
-    //   title: "우측 측정",
-    //   value: "right",
-    //   component: () => <MeasureStaticFourth statics={measureData.static_4} />,
-    // },
-    // {
-    //   title: "후면 측정",
-    //   value: "back",
-    //   component: () => <MeasureStaticFifth statics={measureData.static_5} />,
-    // },
-    // {
-    //   title: "후면 앉은 측정",
-    //   value: "back_sit",
-    //   component: () => <MeasureStaticSixth statics={measureData.static_6} />,
-    // },
-    // {
-    //   title: "스쿼트 측정",
-    //   value: "dynamic",
-    //   component: () => <MeasureDetailDynamic dynamic={measureData.dynamic} />,
-    // },
     {
       title: "정면 측정",
       value: "frontTotal",

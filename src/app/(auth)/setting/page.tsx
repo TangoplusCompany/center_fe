@@ -1,5 +1,5 @@
 import React from "react";
-import SettingContainer from "./_components/SettingContainer";
+import SettingContainer from "@/components/Setting/SettingContainer";
 
 const SettingHome = () => {
   return (

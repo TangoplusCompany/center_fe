@@ -3,8 +3,8 @@
 import React from "react";
 import EditCenterProfileContainer from "./EditCenterProfileContainer";
 import EditManagerProfileContainer from "./EditManagerProfileContainer";
-import { Separator } from "@/components/ui/separator";
 import EditManagerPasswordForm from "@/components/Manager/EditManagerPasswordForm";
+import { Separator } from "@/components/ui/separator";
 
 const SettingContainer = () => {
   return (

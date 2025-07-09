@@ -1,8 +1,9 @@
-import { useMeasureDetail } from "@/hooks/api/measure/useMeasureDetail";
-import { IUserMeasurement } from "@/types/user";
 import React from "react";
 import CenterUserMeasure from "./CenterUserMeasure";
-import CenterUserInformation from "./CenterUserInformation";
+import SkeletonContainer from "@/components/Measure/SkeletonContainer";
+import MeasureInformation from "@/components/Measure/MeasureInformation";
+import { useMeasureDetail } from "@/hooks/api/measure/useMeasureDetail";
+import { IUserMeasurement } from "@/types/user";
 
 const CenterUserMeasureContainer = ({
   measureSn,
@@ -22,7 +23,10 @@ const CenterUserMeasureContainer = ({
   return (
     <>
       {tab === 1 && (
-        <CenterUserInformation data={userMeasureData.measure_info} />
+        <div className="w-full flex gap-5 lg:gap-10">
+          <SkeletonContainer data={userMeasureData.measure_info} />
+          <MeasureInformation data={userMeasureData.measure_info} />
+        </div>
       )}
       {tab === 2 && <CenterUserMeasure measureData={userMeasureData} />}
     </>

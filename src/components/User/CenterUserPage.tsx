@@ -1,26 +1,27 @@
 "use client";
 
 import React, { useState } from "react";
-import { useGetUserList } from "@/hooks/api/user/useGetUserList";
-import { IUserListData } from "@/types/user";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { UserList } from "@/components/User/UserList";
 import CustomPagination from "@/components/common/Pagination";
-import { useAuthStore } from "@/providers/AuthProvider";
-import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import SearchForm from "@/components/Util/SearchForm";
 import OptionBar from "@/components/Util/OptionBar";
+import { useGetUserList } from "@/hooks/api/user/useGetUserList";
+import { IUserListData } from "@/types/user";
+import { Button } from "@/components/ui/button";
+import { UserList } from "@/components/User/UserList";
+import { useAuthStore } from "@/providers/AuthProvider";
+import { useQueryParams } from "@/hooks/utils/useQueryParams";
 
-const UserPage = () => {
+const CenterUserPage = () => {
   const { adminRole } = useAuthStore((state) => state);
-
+  
   const { query, setQueryParam } = useQueryParams();
   const deviceSn = query.device_sn || "0";
   const page = parseInt(query.page || "1");
   const limit = parseInt(query.limit || "20");
   const search = query.search || "";
   const [searchValue, setSearchValue] = useState(search);
+  
   const onChangeSearch = (searchValue: string) => {
     setSearchValue(searchValue);
     setQueryParam([
@@ -95,4 +96,4 @@ const UserPage = () => {
   );
 };
 
-export default UserPage;
+export default CenterUserPage;

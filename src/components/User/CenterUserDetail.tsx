@@ -1,25 +1,29 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { useGetQuery } from "@/hooks/utils/useGetQuery";
 import UserDetailTap from "@/components/User/UserDetailTap";
 import CenterUserMeasureContainer from "./CenterUserMeasureContainer";
 import CenterUserInformation from "@/components/User/CenterUserInformation";
 
-const CenterUserDetail = () => {
-  const { params } = useGetQuery();
-  const { userUUID } = params as { userUUID: string };
+const useTab = () => {
   const [tab, setTab] = useState(0);
   const handleTab = useCallback((index: number) => {
-    console.log(index);
     setTab(index);
   }, []);
+  return { tab, handleTab };
+};
 
+const useMeasureSn = () => {
   const [measureSn, setMeasureSn] = useState<number>(0);
-
   const handleRecentSn = useCallback((sn: number) => {
     setMeasureSn(sn);
   }, []);
+  return { measureSn, handleRecentSn };
+};
+
+const CenterUserDetail = ({ userUUID }: { userUUID: string }) => {
+  const { tab, handleTab } = useTab();
+  const { measureSn, handleRecentSn } = useMeasureSn();
 
   return (
     <div className="w-full h-full flex flex-col gap-5 lg:gap-10">
