@@ -3,7 +3,7 @@ import { patchAdminPassword } from "@/services/auth/patchAdminPassword";
 import { IResponseDefault } from "@/types/default";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { FieldValues, UseFormSetError } from "react-hook-form";
+import { UseFormSetError } from "react-hook-form";
 
 /**
  * 센터 관리자 비밀번호 수정 Hooks
