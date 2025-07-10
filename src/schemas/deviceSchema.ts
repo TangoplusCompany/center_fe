@@ -31,8 +31,8 @@ export const deviceSearchSchema = z.object({
   serial_number: z
     .string()
     .min(10, { message: "시리얼 넘버는 6자리 이상이어야 합니다." })
-    .regex(/^[a-zA-Z0-9]+$/, {
-      message: "영어 대소문자, 숫자만 입력해주세요.",
+    .regex(/^[a-zA-Z0-9-]+$/, {
+      message: "영어 대소문자, 숫자, 하이픈(-)만 입력해주세요.",
     }),
 });
 
