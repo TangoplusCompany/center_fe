@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetUserDetail } from "@/hooks/user";
+import { useGetUserDetail } from "@/hooks/api/user/useGetUserDetail";
 import { useGetQuery } from "@/hooks/utils/useGetQuery";
 import React from "react";
 import UserDetailForm from "./UserDetailForm";

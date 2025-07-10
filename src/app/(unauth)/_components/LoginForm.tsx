@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReactNode } from "react";
 import Link from "next/link";
-import { useLogin } from "@/hooks/auth/useLogin";
+import { useLogin } from "@/hooks/api/auth/useLogin";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "이메일 형식이 올바르지 않습니다." }).regex(

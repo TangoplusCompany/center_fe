@@ -8,7 +8,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReactNode, useState } from "react";
-import { useRegister } from "@/hooks/auth/useRegister";
+import { useRegister } from "@/hooks/api/auth/useRegister";
 import RegisterCenterCheckForm from "./RegisterCenterCheckForm";
 
 const registerSchema = z

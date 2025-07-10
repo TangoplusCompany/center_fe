@@ -1,5 +1,5 @@
 import React from "react";
-import { DeviceMainContainer } from "./_components";
+import { DeviceMainContainer } from "@/components/Device/DeviceMainContainer";
 
 const DeviceHome = () => {
   return (

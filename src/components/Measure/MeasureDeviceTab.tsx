@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useGetDeviceStatus } from "@/hooks/device";
+import { useGetDeviceStatus } from "@/hooks/api/device/useDeviceStatus";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import { IDeviceStatus } from "@/types/device";
 import React from "react";
