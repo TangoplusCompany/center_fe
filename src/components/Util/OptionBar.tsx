@@ -11,7 +11,7 @@ import { useQueryParams } from "@/hooks/utils/useQueryParams";
 export const DummyOptionBar = () => {
   return (
     <div className="flex items-center justify-between ">
-      <p>검색 결과는 0건 입니다.</p>
+      <p>검색 결과를 조회중입니다.</p>
       <div className="inline-block">
         <Select>
           <SelectTrigger>
@@ -39,7 +39,7 @@ const OptionBar = ({ totalItems }: { totalItems: number }) => {
   };
   return (
     <div className="flex items-center justify-between ">
-      <p>검색된 결과는 {totalItems}건 입니다.</p>
+      <p>검색된 결과는 {totalItems ?? 0}건 입니다.</p>
       <div className="inline-block">
         <Select
           onValueChange={handleSelectChange}

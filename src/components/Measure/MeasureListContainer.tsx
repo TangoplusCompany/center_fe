@@ -14,7 +14,7 @@ import {
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import SearchForm from "@/components/Util/SearchForm";
 
-const MeasureMainContainer = ({
+const MeasureListContainer = ({
   handleTotalItems,
 }: {
   handleTotalItems: (totalItems: number) => void;
@@ -84,4 +84,4 @@ const MeasureMainContainer = ({
   );
 };
 
-export default MeasureMainContainer;
+export default MeasureListContainer;
