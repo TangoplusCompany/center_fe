@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+/**
+ * 기기 상세 정보 수정 스키마
+ */
 export const deviceDetailSchema = z.object({
   device_name: z
     .string()
@@ -27,6 +30,9 @@ export const deviceDetailSchema = z.object({
 
 export type IDeviceDetailForm = z.infer<typeof deviceDetailSchema>;
 
+/**
+ * 기기 검색 스키마
+ */
 export const deviceSearchSchema = z.object({
   serial_number: z
     .string()

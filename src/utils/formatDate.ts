@@ -1,3 +1,8 @@
+/**
+ * 초를 분과 초로 변환
+ * @param date 초
+ * @returns 분과 초
+ */
 export const formatTime = (date: number) => {
   const totalSeconds = date;
   const minutes = Math.floor(totalSeconds / 60);
@@ -5,6 +10,11 @@ export const formatTime = (date: number) => {
   return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 };
 
+/**
+ * 날짜를 년-월-일 시간 형식으로 변환
+ * @param date 날짜
+ * @returns 년-월-일 시간 형식
+ */
 export const formatDate = (date: string) => {
   const dateObj = new Date(date);
   const year = dateObj.getFullYear();

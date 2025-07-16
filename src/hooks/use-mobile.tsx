@@ -1,7 +1,14 @@
 import * as React from "react";
 
+/**
+ * 모바일 화면 너비 기준점
+ */
 const MOBILE_BREAKPOINT = 1025;
 
+/**
+ * 모바일 화면 여부 확인
+ * @returns 모바일 화면 여부
+ */
 export function useIsMobile() {
   const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined);
 

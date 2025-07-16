@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useGetManagerDetail } from "@/hooks/api/manager/useGetManagerDetail";
 import { useAuthStore } from "@/providers/AuthProvider";
-import { ADMIN_ROLE } from "@/utils/constants";
+import { ADMIN_ROLE } from "@/utils/constants/adminRole";
 import { phoneHyphen } from "@/utils/regexFiltering";
 import { useRouter } from "next/navigation";
 
