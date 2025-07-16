@@ -10,7 +10,7 @@
 |Frontend|```React 19``` ```Next 15``` ```Typescript``` ```zustand``` ```tailwindCSS``` ```shadcn/ui``` ```tanstack-query``` ```zod``` ```react-hook-form``` ```qrcode.react``` |
 |Backend|```node.js(Next 15 Server)``` ```PHP```|
 |Infra|```vercel```|
-|기타|```ESLint``` ```Prettier``` ```next-intl```|
+|기타|```ESLint``` ```Prettier```|
 
 ## 폴더 구조
 ```
