@@ -5,6 +5,10 @@ import { useGetDeviceSearch } from "../api/device/useDeviceSearch";
 import { useState } from "react";
 import { IDeviceSearch } from "@/types/device";
 
+/**
+ * 기기 검색 폼 관리 훅
+ * @returns 기기 검색 폼 관리 훅
+ */
 export const useDeviceSearchForm = () => {
   const [deviceInfo, setDeviceInfo] = useState<IDeviceSearch | null>();
 

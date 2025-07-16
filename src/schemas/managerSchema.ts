@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+/**
+ * 매니저 비밀번호 변경 스키마
+ */
 export const managerPasswordSchema = z
   .object({
     currentPassword: z.string().min(1, "현재 비밀번호를 입력해주세요."),
@@ -41,6 +44,9 @@ export const managerPasswordSchema = z
 
 export type IManagerPasswordForm = z.infer<typeof managerPasswordSchema>;
 
+/**
+ * 매니저 정보 수정 스키마
+ */
 export const managerInformationSchema = z.object({
   managerName: z
     .string()

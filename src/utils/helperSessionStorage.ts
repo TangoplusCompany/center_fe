@@ -1,3 +1,6 @@
+/**
+ * 세션 스토리지 도우미
+ */
 export const session = {
   get<T = unknown>(key: string): T | null {
     try {

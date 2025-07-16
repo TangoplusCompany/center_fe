@@ -1,6 +1,11 @@
 // app/api/proxy/route.ts
 import { NextResponse } from "next/server";
 
+/**
+ * 이미지 프록시 요청
+ * @param request 요청
+ * @returns 이미지 프록시 응답
+ */
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const targetUrl = searchParams.get("url");
