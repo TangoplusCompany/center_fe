@@ -4,7 +4,7 @@ import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input } from "../ui/input";
-import { ADMIN_ROLE } from "@/utils/constants";
+import { ADMIN_ROLE } from "@/utils/constants/adminRole";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { phoneHyphen } from "@/utils/regexFiltering";

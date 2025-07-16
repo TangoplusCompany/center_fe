@@ -13,7 +13,7 @@ import { phoneHyphen } from "@/utils/regexFiltering";
 import { FileText } from "lucide-react";
 import Link from "next/link";
 import { ICenterManagerData } from "@/types/manager";
-import { ADMIN_ROLE } from "@/utils/constants";
+import { ADMIN_ROLE } from "@/utils/constants/adminRole";
 import ManagerRemoveDialog from "./ManagerRemoveDialog";
 import { useAuthStore } from "@/providers/AuthProvider";
 
