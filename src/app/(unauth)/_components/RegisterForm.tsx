@@ -182,7 +182,7 @@ export const RegisterContainer = () => {
               variant={"outline"}
               className="w-full lg:text-lg"
             >
-              로그인
+              회원가입
             </Button>
           </div>
         )}
