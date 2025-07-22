@@ -12,7 +12,7 @@ import { usePostUserReport } from "@/hooks/api/report/usePostUserReport";
 import { formatDate } from "@/utils/formatDate";
 import { useEffect, useState } from "react";
 import { IMAGE_KEYS, SUMMARY_CATEGORY } from "@/utils/constants/reportConst";
-import { calcFigureRiskLevel } from "@/utils/reportCalc";
+import { calcFigureRiskLevel, calcGapLeftRight } from "@/utils/reportCalc";
 
 const ResultSheetContainer = ({
   sn,
@@ -21,19 +21,20 @@ const ResultSheetContainer = ({
   sn: number;
   user_uuid: string;
 }) => {
-  const {
-    data: reportData,
-    isLoading,
-    isError,
-  } = usePostUserReport(user_uuid, sn);
   // const DUMMY_UUID = "KYVEF55KKPEWVWL4";
   // const DUMMY_SN = 453;
-
   // const {
   //   data: reportData,
   //   isLoading,
   //   isError,
   // } = usePostUserReport(DUMMY_UUID, DUMMY_SN);
+  // console.log(user_uuid, sn);
+  const {
+    data: reportData,
+    isLoading,
+    isError,
+  } = usePostUserReport(user_uuid, sn);
+
   const [riskResultMent, setRiskResultMent] = useState<string[]>([]);
   const [riskWarning, setRiskWarning] = useState<string[]>([]);
   const [riskDanger, setRiskDanger] = useState<string[]>([]);
@@ -416,12 +417,250 @@ const ResultSheetContainer = ({
                     결과
                   </th>
                   <th className="border-t border-b px-2 py-1 border-t-[#AEAEAE] border-b-[#AEAEAE]">
-                    참고
+                    정상 범위
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {/*  */}
+                {/* 거북목 */}
+                <tr>
+                  <td
+                    className="border-r border-t border-b border-r-[#AEAEAE] border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1"
+                    rowSpan={2}
+                  >
+                    거북목
+                  </td>
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.text_neck
+                          .left_nose_shoulder_angle,
+                        47,
+                        2,
+                        3,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.text_neck
+                              .left_nose_shoulder_angle,
+                            47,
+                            2,
+                            3,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
+                    좌측 귀-어깨 각도
+                  </td>
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.text_neck
+                          .left_nose_shoulder_angle,
+                        47,
+                        2,
+                        3,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.text_neck
+                              .left_nose_shoulder_angle,
+                            47,
+                            2,
+                            3,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
+                    {reportData.figure_data.text_neck.left_nose_shoulder_angle.toFixed(
+                      1,
+                    )}
+                    °
+                  </td>
+                  <td
+                    rowSpan={2}
+                    className={`border-l border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                  >
+                    44° 이상 50° 이하
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.text_neck
+                          .right_nose_shoulder_angle,
+                        47,
+                        2,
+                        3,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.text_neck
+                              .right_nose_shoulder_angle,
+                            47,
+                            2,
+                            3,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
+                    우측 귀-어깨 각도
+                  </td>
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.text_neck
+                          .right_nose_shoulder_angle,
+                        47,
+                        2,
+                        3,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.text_neck
+                              .right_nose_shoulder_angle,
+                            47,
+                            2,
+                            3,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
+                    {reportData.figure_data.text_neck.right_nose_shoulder_angle.toFixed(
+                      1,
+                    )}
+                    °
+                  </td>
+                </tr>
+                {/* 라운드 숄더 */}
+                <tr>
+                  <td
+                    className="border-r border-t border-b border-r-[#AEAEAE] border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1"
+                    rowSpan={2}
+                  >
+                    라운드 숄더
+                  </td>
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcGapLeftRight(
+                        reportData.figure_data.round_shoulder
+                          .left_shoulder_distance,
+                        reportData.figure_data.round_shoulder
+                          .right_shoulder_distance,
+                        2,
+                        5,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcGapLeftRight(
+                            reportData.figure_data.round_shoulder
+                              .left_shoulder_distance,
+                            reportData.figure_data.round_shoulder
+                              .right_shoulder_distance,
+                            2,
+                            5,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
+                    좌 중심-어깨 거리
+                  </td>
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcGapLeftRight(
+                        reportData.figure_data.round_shoulder
+                          .left_shoulder_distance,
+                        reportData.figure_data.round_shoulder
+                          .right_shoulder_distance,
+                        2,
+                        5,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcGapLeftRight(
+                            reportData.figure_data.round_shoulder
+                              .left_shoulder_distance,
+                            reportData.figure_data.round_shoulder
+                              .right_shoulder_distance,
+                            2,
+                            5,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
+                    {reportData.figure_data.round_shoulder.left_shoulder_distance.toFixed(
+                      1,
+                    )}
+                    cm
+                  </td>
+                  <td
+                    rowSpan={2}
+                    className={`border-l border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                  >
+                    좌/우 값 차이 2cm 이내
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcGapLeftRight(
+                        reportData.figure_data.round_shoulder
+                          .left_shoulder_distance,
+                        reportData.figure_data.round_shoulder
+                          .right_shoulder_distance,
+                        2,
+                        5,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcGapLeftRight(
+                            reportData.figure_data.round_shoulder
+                              .left_shoulder_distance,
+                            reportData.figure_data.round_shoulder
+                              .right_shoulder_distance,
+                            2,
+                            5,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
+                    우 중심-어깨 거리
+                  </td>
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcGapLeftRight(
+                        reportData.figure_data.round_shoulder
+                          .left_shoulder_distance,
+                        reportData.figure_data.round_shoulder
+                          .right_shoulder_distance,
+                        2,
+                        5,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcGapLeftRight(
+                            reportData.figure_data.round_shoulder
+                              .left_shoulder_distance,
+                            reportData.figure_data.round_shoulder
+                              .right_shoulder_distance,
+                            2,
+                            5,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
+                    {reportData.figure_data.round_shoulder.right_shoulder_distance.toFixed(
+                      1,
+                    )}
+                    cm
+                  </td>
+                </tr>
+                {/* 상체좌우쏠림 */}
                 <tr>
                   <td
                     className="border-r border-t border-b border-r-[#AEAEAE] border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1"
@@ -480,9 +719,9 @@ const ResultSheetContainer = ({
                     °
                   </td>
                   <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                    className={`border-l border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
                   >
-                    180°±2.1 이내
+                    180° 기준 ± 3° 이내
                   </td>
                 </tr>
                 <tr>
@@ -536,250 +775,13 @@ const ResultSheetContainer = ({
                     °
                   </td>
                   <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                    className={`border-l border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
                   >
-                    0°±1.3 이내
+                    0° 기준 ± 3° 이내
                   </td>
                 </tr>
-                {/*  */}
-                <tr>
-                  <td
-                    className="border-r border-t border-b border-r-[#AEAEAE] border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1"
-                    rowSpan={2}
-                  >
-                    골반 측만
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
-                        reportData.figure_data.pelvic_scoliosis
-                          .back_pelvis_angle,
-                        0.1,
-                        1.7,
-                        3.3,
-                      ) === 0
-                        ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
-                            reportData.figure_data.pelvic_scoliosis
-                              .back_pelvis_angle,
-                            0.1,
-                            1.7,
-                            3.3,
-                          ) === 1
-                        ? "text-[#FF971D]"
-                        : "text-red-500"
-                    }`}
-                  >
-                    후면 골반 기울기
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
-                        reportData.figure_data.pelvic_scoliosis
-                          .back_pelvis_angle,
-                        0.1,
-                        1.7,
-                        3.3,
-                      ) === 0
-                        ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
-                            reportData.figure_data.pelvic_scoliosis
-                              .back_pelvis_angle,
-                            0.1,
-                            1.7,
-                            3.3,
-                          ) === 1
-                        ? "text-[#FF971D]"
-                        : "text-red-500"
-                    }`}
-                  >
-                    {reportData.figure_data.pelvic_scoliosis.back_pelvis_angle.toFixed(
-                      1,
-                    )}
-                    °
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
-                  >
-                    0.1°±1.9 이내
-                  </td>
-                </tr>
-                <tr>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
-                        reportData.figure_data.pelvic_scoliosis
-                          .back_sit_pelvis_angle,
-                        0,
-                        1,
-                        1.7,
-                      ) === 0
-                        ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
-                            reportData.figure_data.pelvic_scoliosis
-                              .back_sit_pelvis_angle,
-                            0,
-                            1,
-                            1.7,
-                          ) === 1
-                        ? "text-[#FF971D]"
-                        : "text-red-500"
-                    }`}
-                  >
-                    앉은 골반 기울기
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
-                        reportData.figure_data.pelvic_scoliosis
-                          .back_sit_pelvis_angle,
-                        0,
-                        1,
-                        1.7,
-                      ) === 0
-                        ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
-                            reportData.figure_data.pelvic_scoliosis
-                              .back_sit_pelvis_angle,
-                            0,
-                            1,
-                            1.7,
-                          ) === 1
-                        ? "text-[#FF971D]"
-                        : "text-red-500"
-                    }`}
-                  >
-                    {reportData.figure_data.pelvic_scoliosis.back_sit_pelvis_angle.toFixed(
-                      1,
-                    )}
-                    °
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
-                  >
-                    0°±1 이내
-                  </td>
-                </tr>
-                {/*  */}
-                <tr>
-                  <td
-                    className="border-r border-t border-b border-r-[#AEAEAE] border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1"
-                    rowSpan={2}
-                  >
-                    다리 변형
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
-                        reportData.figure_data.leg_deformity
-                          .left_hip_knee_ankle_angle,
-                        175,
-                        2.5,
-                        5,
-                      ) === 0
-                        ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
-                            reportData.figure_data.leg_deformity
-                              .left_hip_knee_ankle_angle,
-                            175,
-                            2.5,
-                            5,
-                          ) === 1
-                        ? "text-[#FF971D]"
-                        : "text-red-500"
-                    }`}
-                  >
-                    좌측 다리 각도
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
-                        reportData.figure_data.leg_deformity
-                          .left_hip_knee_ankle_angle,
-                        175,
-                        2.5,
-                        5,
-                      ) === 0
-                        ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
-                            reportData.figure_data.leg_deformity
-                              .left_hip_knee_ankle_angle,
-                            175,
-                            2.5,
-                            5,
-                          ) === 1
-                        ? "text-[#FF971D]"
-                        : "text-red-500"
-                    }`}
-                  >
-                    {reportData.figure_data.leg_deformity.left_hip_knee_ankle_angle.toFixed(
-                      1,
-                    )}
-                    °
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
-                  >
-                    175°±2.5 이내
-                  </td>
-                </tr>
-                <tr>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
-                        reportData.figure_data.leg_deformity
-                          .right_hip_knee_ankle_angle,
-                        175,
-                        2.5,
-                        5,
-                      ) === 0
-                        ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
-                            reportData.figure_data.leg_deformity
-                              .right_hip_knee_ankle_angle,
-                            175,
-                            2.5,
-                            5,
-                          ) === 1
-                        ? "text-[#FF971D]"
-                        : "text-red-500"
-                    }`}
-                  >
-                    우측 다리 각도
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
-                        reportData.figure_data.leg_deformity
-                          .right_hip_knee_ankle_angle,
-                        175,
-                        2.5,
-                        5,
-                      ) === 0
-                        ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
-                            reportData.figure_data.leg_deformity
-                              .right_hip_knee_ankle_angle,
-                            175,
-                            2.5,
-                            5,
-                          ) === 1
-                        ? "text-[#FF971D]"
-                        : "text-red-500"
-                    }`}
-                  >
-                    {reportData.figure_data.leg_deformity.right_hip_knee_ankle_angle.toFixed(
-                      1,
-                    )}
-                    °
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
-                  >
-                    175°±2.5 이내
-                  </td>
-                </tr>
-                {/*  */}
+
+                {/* 테니스 엘보 */}
                 <tr>
                   <td
                     className="border-r border-t border-b border-r-[#AEAEAE] border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1"
@@ -837,9 +839,11 @@ const ResultSheetContainer = ({
                     °
                   </td>
                   <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                    rowSpan={2}
+                    className={`border-l border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
                   >
-                    5°±9 이내
+                    0° 기준 ± 10° 미만
+                    <br />± 10° 주의 / ± 20° 중증
                   </td>
                 </tr>
                 <tr>
@@ -892,11 +896,6 @@ const ResultSheetContainer = ({
                     )}
                     °
                   </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
-                  >
-                    5°±9 이내
-                  </td>
                 </tr>
               </tbody>
             </table>
@@ -915,369 +914,12 @@ const ResultSheetContainer = ({
                     결과
                   </th>
                   <th className="border-t border-b px-2 py-1 border-t-[#AEAEAE] border-b-[#AEAEAE]">
-                    참고
+                    정상 범위
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {/*  */}
-                <tr>
-                  <td
-                    className="border-r border-t border-b border-r-[#AEAEAE] border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1"
-                    rowSpan={2}
-                  >
-                    척추 후만증
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
-                        reportData.figure_data.body_forward_thrust
-                          .shoulder_distance_avg,
-                        1.9,
-                        6.1,
-                        8.9,
-                      ) === 0
-                        ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
-                            reportData.figure_data.body_forward_thrust
-                              .shoulder_distance_avg,
-                            1.9,
-                            6.1,
-                            8.9,
-                          ) === 1
-                        ? "text-[#FF971D]"
-                        : "text-red-500"
-                    }`}
-                  >
-                    중심-어깨 거리
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
-                        reportData.figure_data.body_forward_thrust
-                          .shoulder_distance_avg,
-                        1.9,
-                        6.1,
-                        8.9,
-                      ) === 0
-                        ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
-                            reportData.figure_data.body_forward_thrust
-                              .shoulder_distance_avg,
-                            1.9,
-                            6.1,
-                            8.9,
-                          ) === 1
-                        ? "text-[#FF971D]"
-                        : "text-red-500"
-                    }`}
-                  >
-                    {reportData.figure_data.body_forward_thrust.shoulder_distance_avg.toFixed(
-                      1,
-                    )}
-                    cm
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
-                  >
-                    1.9cm±6 이내
-                  </td>
-                </tr>
-                <tr>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
-                        reportData.figure_data.body_forward_thrust
-                          .hip_distance_avg,
-                        2.5,
-                        3.55,
-                        5.25,
-                      ) === 0
-                        ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
-                            reportData.figure_data.body_forward_thrust
-                              .hip_distance_avg,
-                            2.5,
-                            3.55,
-                            5.25,
-                          ) === 1
-                        ? "text-[#FF971D]"
-                        : "text-red-500"
-                    }`}
-                  >
-                    중심-골반 거리
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
-                        reportData.figure_data.body_forward_thrust
-                          .hip_distance_avg,
-                        2.5,
-                        3.55,
-                        5.25,
-                      ) === 0
-                        ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
-                            reportData.figure_data.body_forward_thrust
-                              .hip_distance_avg,
-                            2.5,
-                            3.55,
-                            5.25,
-                          ) === 1
-                        ? "text-[#FF971D]"
-                        : "text-red-500"
-                    }`}
-                  >
-                    {reportData.figure_data.body_forward_thrust.hip_distance_avg.toFixed(
-                      1,
-                    )}
-                    cm
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
-                  >
-                    2.5cm±3.5 이내
-                  </td>
-                </tr>
-                {/*  */}
-                <tr>
-                  <td
-                    className="border-r border-t border-b border-r-[#AEAEAE] border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1"
-                    rowSpan={2}
-                  >
-                    거북목
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
-                        reportData.figure_data.text_neck
-                          .left_nose_shoulder_angle,
-                        87,
-                        9.74,
-                        13.21,
-                      ) === 0
-                        ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
-                            reportData.figure_data.text_neck
-                              .left_nose_shoulder_angle,
-                            87,
-                            9.74,
-                            13.21,
-                          ) === 1
-                        ? "text-[#FF971D]"
-                        : "text-red-500"
-                    }`}
-                  >
-                    좌측 귀-어깨 각도
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
-                        reportData.figure_data.text_neck
-                          .left_nose_shoulder_angle,
-                        87,
-                        9.74,
-                        13.21,
-                      ) === 0
-                        ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
-                            reportData.figure_data.text_neck
-                              .left_nose_shoulder_angle,
-                            87,
-                            9.74,
-                            13.21,
-                          ) === 1
-                        ? "text-[#FF971D]"
-                        : "text-red-500"
-                    }`}
-                  >
-                    {reportData.figure_data.text_neck.left_nose_shoulder_angle.toFixed(
-                      1,
-                    )}
-                    °
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
-                  >
-                    87°±10 이내
-                  </td>
-                </tr>
-                <tr>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
-                        reportData.figure_data.text_neck
-                          .right_nose_shoulder_angle,
-                        87,
-                        9.74,
-                        13.21,
-                      ) === 0
-                        ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
-                            reportData.figure_data.text_neck
-                              .right_nose_shoulder_angle,
-                            87,
-                            9.74,
-                            13.21,
-                          ) === 1
-                        ? "text-[#FF971D]"
-                        : "text-red-500"
-                    }`}
-                  >
-                    우측 귀-어깨 각도
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
-                        reportData.figure_data.text_neck
-                          .right_nose_shoulder_angle,
-                        87,
-                        9.74,
-                        13.21,
-                      ) === 0
-                        ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
-                            reportData.figure_data.text_neck
-                              .right_nose_shoulder_angle,
-                            87,
-                            9.74,
-                            13.21,
-                          ) === 1
-                        ? "text-[#FF971D]"
-                        : "text-red-500"
-                    }`}
-                  >
-                    {reportData.figure_data.text_neck.right_nose_shoulder_angle.toFixed(
-                      1,
-                    )}
-                    °
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
-                  >
-                    87°±10 이내
-                  </td>
-                </tr>
-                {/*  */}
-                <tr>
-                  <td
-                    className="border-r border-t border-b border-r-[#AEAEAE] border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1"
-                    rowSpan={2}
-                  >
-                    라운드 숄더
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
-                        reportData.figure_data.round_shoulder
-                          .left_shoulder_distance,
-                        1.9,
-                        6.1,
-                        8.9,
-                      ) === 0
-                        ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
-                            reportData.figure_data.round_shoulder
-                              .left_shoulder_distance,
-                            1.9,
-                            6.1,
-                            8.9,
-                          ) === 1
-                        ? "text-[#FF971D]"
-                        : "text-red-500"
-                    }`}
-                  >
-                    좌 중심-어깨 거리
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
-                        reportData.figure_data.round_shoulder
-                          .left_shoulder_distance,
-                        1.9,
-                        6.1,
-                        8.9,
-                      ) === 0
-                        ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
-                            reportData.figure_data.round_shoulder
-                              .left_shoulder_distance,
-                            1.9,
-                            6.1,
-                            8.9,
-                          ) === 1
-                        ? "text-[#FF971D]"
-                        : "text-red-500"
-                    }`}
-                  >
-                    {reportData.figure_data.round_shoulder.left_shoulder_distance.toFixed(
-                      1,
-                    )}
-                    cm
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
-                  >
-                    1.9cm±6 이내
-                  </td>
-                </tr>
-                <tr>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
-                        reportData.figure_data.round_shoulder
-                          .right_shoulder_distance,
-                        1.9,
-                        6.1,
-                        8.9,
-                      ) === 0
-                        ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
-                            reportData.figure_data.round_shoulder
-                              .right_shoulder_distance,
-                            1.9,
-                            6.1,
-                            8.9,
-                          ) === 1
-                        ? "text-[#FF971D]"
-                        : "text-red-500"
-                    }`}
-                  >
-                    우 중심-어깨 거리
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
-                        reportData.figure_data.round_shoulder
-                          .right_shoulder_distance,
-                        1.9,
-                        6.1,
-                        8.9,
-                      ) === 0
-                        ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
-                            reportData.figure_data.round_shoulder
-                              .right_shoulder_distance,
-                            1.9,
-                            6.1,
-                            8.9,
-                          ) === 1
-                        ? "text-[#FF971D]"
-                        : "text-red-500"
-                    }`}
-                  >
-                    {reportData.figure_data.round_shoulder.right_shoulder_distance.toFixed(
-                      1,
-                    )}
-                    cm
-                  </td>
-                  <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
-                  >
-                    1.9cm±6 이내
-                  </td>
-                </tr>
-                {/*  */}
+                {/* 척추 측만증 */}
                 <tr>
                   <td
                     className="border-r border-t border-b border-r-[#AEAEAE] border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1"
@@ -1287,19 +929,21 @@ const ResultSheetContainer = ({
                   </td>
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
+                      calcGapLeftRight(
                         reportData.figure_data.scoliosis
                           .back_shoulder_pevis_center_angle,
-                        90,
-                        3,
+                        reportData.figure_data.scoliosis
+                          .back_sit_shoulder_pevis_center_angle,
+                        2,
                         5,
                       ) === 0
                         ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
+                        : calcGapLeftRight(
                             reportData.figure_data.scoliosis
                               .back_shoulder_pevis_center_angle,
-                            90,
-                            3,
+                            reportData.figure_data.scoliosis
+                              .back_sit_shoulder_pevis_center_angle,
+                            2,
                             5,
                           ) === 1
                         ? "text-[#FF971D]"
@@ -1310,19 +954,21 @@ const ResultSheetContainer = ({
                   </td>
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
+                      calcGapLeftRight(
                         reportData.figure_data.scoliosis
                           .back_shoulder_pevis_center_angle,
-                        90,
-                        3,
+                        reportData.figure_data.scoliosis
+                          .back_sit_shoulder_pevis_center_angle,
+                        2,
                         5,
                       ) === 0
                         ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
+                        : calcGapLeftRight(
                             reportData.figure_data.scoliosis
                               .back_shoulder_pevis_center_angle,
-                            90,
-                            3,
+                            reportData.figure_data.scoliosis
+                              .back_sit_shoulder_pevis_center_angle,
+                            2,
                             5,
                           ) === 1
                         ? "text-[#FF971D]"
@@ -1335,28 +981,32 @@ const ResultSheetContainer = ({
                     °
                   </td>
                   <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                    rowSpan={2}
+                    className={`border-l border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
                   >
-                    90°±3 이내
+                    어깨/앉은어깨 값 차이
+                    <br /> 2° 이내
                   </td>
                 </tr>
                 <tr>
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
+                      calcGapLeftRight(
+                        reportData.figure_data.scoliosis
+                          .back_shoulder_pevis_center_angle,
                         reportData.figure_data.scoliosis
                           .back_sit_shoulder_pevis_center_angle,
-                        90,
-                        6,
-                        10,
+                        2,
+                        5,
                       ) === 0
                         ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
+                        : calcGapLeftRight(
+                            reportData.figure_data.scoliosis
+                              .back_shoulder_pevis_center_angle,
                             reportData.figure_data.scoliosis
                               .back_sit_shoulder_pevis_center_angle,
-                            90,
-                            6,
-                            10,
+                            2,
+                            5,
                           ) === 1
                         ? "text-[#FF971D]"
                         : "text-red-500"
@@ -1366,20 +1016,22 @@ const ResultSheetContainer = ({
                   </td>
                   <td
                     className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
-                      calcFigureRiskLevel(
+                      calcGapLeftRight(
+                        reportData.figure_data.scoliosis
+                          .back_shoulder_pevis_center_angle,
                         reportData.figure_data.scoliosis
                           .back_sit_shoulder_pevis_center_angle,
-                        90,
-                        6,
-                        10,
+                        2,
+                        5,
                       ) === 0
                         ? "text-[#47484C]"
-                        : calcFigureRiskLevel(
+                        : calcGapLeftRight(
+                            reportData.figure_data.scoliosis
+                              .back_shoulder_pevis_center_angle,
                             reportData.figure_data.scoliosis
                               .back_sit_shoulder_pevis_center_angle,
-                            90,
-                            6,
-                            10,
+                            2,
+                            5,
                           ) === 1
                         ? "text-[#FF971D]"
                         : "text-red-500"
@@ -1390,10 +1042,360 @@ const ResultSheetContainer = ({
                     )}
                     °
                   </td>
+                </tr>
+                {/* 척추 후만증 */}
+                <tr>
                   <td
-                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                    className="border-r border-t border-b border-r-[#AEAEAE] border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1"
+                    rowSpan={2}
                   >
-                    90°±6 이내
+                    척추 후만증
+                  </td>
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcGapLeftRight(
+                        reportData.figure_data.body_forward_thrust
+                          .shoulder_distance_avg,
+                        reportData.figure_data.body_forward_thrust
+                          .hip_distance_avg,
+                        2,
+                        5,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcGapLeftRight(
+                            reportData.figure_data.body_forward_thrust
+                              .shoulder_distance_avg,
+                            reportData.figure_data.body_forward_thrust
+                              .hip_distance_avg,
+                            2,
+                            5,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
+                    중심-어깨 거리
+                  </td>
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcGapLeftRight(
+                        reportData.figure_data.body_forward_thrust
+                          .shoulder_distance_avg,
+                        reportData.figure_data.body_forward_thrust
+                          .hip_distance_avg,
+                        2,
+                        5,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcGapLeftRight(
+                            reportData.figure_data.body_forward_thrust
+                              .shoulder_distance_avg,
+                            reportData.figure_data.body_forward_thrust
+                              .hip_distance_avg,
+                            2,
+                            5,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
+                    {reportData.figure_data.body_forward_thrust.shoulder_distance_avg.toFixed(
+                      1,
+                    )}
+                    cm
+                  </td>
+                  <td
+                    rowSpan={2}
+                    className={`border-l border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                  >
+                    어깨/골반 거리 2cm 이내
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcGapLeftRight(
+                        reportData.figure_data.body_forward_thrust
+                          .shoulder_distance_avg,
+                        reportData.figure_data.body_forward_thrust
+                          .hip_distance_avg,
+                        2,
+                        5,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcGapLeftRight(
+                            reportData.figure_data.body_forward_thrust
+                              .shoulder_distance_avg,
+                            reportData.figure_data.body_forward_thrust
+                              .hip_distance_avg,
+                            2,
+                            5,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
+                    중심-골반 거리
+                  </td>
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcGapLeftRight(
+                        reportData.figure_data.body_forward_thrust
+                          .shoulder_distance_avg,
+                        reportData.figure_data.body_forward_thrust
+                          .hip_distance_avg,
+                        2,
+                        5,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcGapLeftRight(
+                            reportData.figure_data.body_forward_thrust
+                              .shoulder_distance_avg,
+                            reportData.figure_data.body_forward_thrust
+                              .hip_distance_avg,
+                            2,
+                            5,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
+                    {reportData.figure_data.body_forward_thrust.hip_distance_avg.toFixed(
+                      1,
+                    )}
+                    cm
+                  </td>
+                </tr>
+                {/* 골반 측만 */}
+                <tr>
+                  <td
+                    className="border-r border-t border-b border-r-[#AEAEAE] border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1"
+                    rowSpan={2}
+                  >
+                    골반 측만
+                  </td>
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.pelvic_scoliosis
+                          .back_pelvis_angle,
+                        0,
+                        2,
+                        5,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.pelvic_scoliosis
+                              .back_pelvis_angle,
+                            0,
+                            2,
+                            5,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
+                    후면 골반 기울기
+                  </td>
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.pelvic_scoliosis
+                          .back_pelvis_angle,
+                        0,
+                        2,
+                        5,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.pelvic_scoliosis
+                              .back_pelvis_angle,
+                            0,
+                            2,
+                            5,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
+                    {reportData.figure_data.pelvic_scoliosis.back_pelvis_angle.toFixed(
+                      1,
+                    )}
+                    °
+                  </td>
+                  <td
+                    rowSpan={2}
+                    className={`border-l border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                  >
+                    0° 기준 ± 2° 이내
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.pelvic_scoliosis
+                          .back_sit_pelvis_angle,
+                        0,
+                        2,
+                        5,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.pelvic_scoliosis
+                              .back_sit_pelvis_angle,
+                            0,
+                            2,
+                            5,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
+                    앉은 골반 기울기
+                  </td>
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.pelvic_scoliosis
+                          .back_sit_pelvis_angle,
+                        0,
+                        2,
+                        5,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.pelvic_scoliosis
+                              .back_sit_pelvis_angle,
+                            0,
+                            2,
+                            5,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
+                    {reportData.figure_data.pelvic_scoliosis.back_sit_pelvis_angle.toFixed(
+                      1,
+                    )}
+                    °
+                  </td>
+                </tr>
+                {/* 다리 변형  */}
+                <tr>
+                  <td
+                    className="border-r border-t border-b border-r-[#AEAEAE] border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1"
+                    rowSpan={2}
+                  >
+                    다리 변형
+                  </td>
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.leg_deformity
+                          .left_hip_knee_ankle_angle,
+                        175,
+                        5,
+                        5,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.leg_deformity
+                              .left_hip_knee_ankle_angle,
+                            175,
+                            5,
+                            5,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
+                    좌측 다리 각도
+                  </td>
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.leg_deformity
+                          .left_hip_knee_ankle_angle,
+                        175,
+                        5,
+                        5,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.leg_deformity
+                              .left_hip_knee_ankle_angle,
+                            175,
+                            5,
+                            5,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
+                    {reportData.figure_data.leg_deformity.left_hip_knee_ankle_angle.toFixed(
+                      1,
+                    )}
+                    °
+                  </td>
+                  <td
+                    rowSpan={2}
+                    className={`border-l border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 text-[#AEAEAE]`}
+                  >
+                    170° 이하 X다리
+                    <br />
+                    180도 이상 O다리
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.leg_deformity
+                          .right_hip_knee_ankle_angle,
+                        175,
+                        5,
+                        5,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.leg_deformity
+                              .right_hip_knee_ankle_angle,
+                            175,
+                            5,
+                            5,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
+                    우측 다리 각도
+                  </td>
+                  <td
+                    className={`border-t border-b border-t-[#AEAEAE] border-b-[#AEAEAE] px-2 py-1 ${
+                      calcFigureRiskLevel(
+                        reportData.figure_data.leg_deformity
+                          .right_hip_knee_ankle_angle,
+                        175,
+                        5,
+                        5,
+                      ) === 0
+                        ? "text-[#47484C]"
+                        : calcFigureRiskLevel(
+                            reportData.figure_data.leg_deformity
+                              .right_hip_knee_ankle_angle,
+                            175,
+                            5,
+                            5,
+                          ) === 1
+                        ? "text-[#FF971D]"
+                        : "text-red-500"
+                    }`}
+                  >
+                    {reportData.figure_data.leg_deformity.right_hip_knee_ankle_angle.toFixed(
+                      1,
+                    )}
+                    °
                   </td>
                 </tr>
               </tbody>
@@ -1753,7 +1755,9 @@ const ResultSheetContainer = ({
                 </div>
                 <div className="bg-[#F6F6F6] rounded-sm p-2 text-[#47484C] flex-1 text-sm space-y-3">
                   <div>
-                    <p className="">{reportData.detail_data.shoulder.ment_all}</p>
+                    <p className="">
+                      {reportData.detail_data.shoulder.ment_all}
+                    </p>
                     <p className="">
                       {reportData.detail_data.shoulder.description}
                     </p>
