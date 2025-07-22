@@ -28,6 +28,7 @@ const MeasureDeviceTab = () => {
     isLoading,
     isError,
   } = useGetDeviceStatus<IDeviceStatus>();
+  
 
   const handleDeviceClick = (deviceSn: number) => {
     setQueryParam([
@@ -40,6 +41,14 @@ const MeasureDeviceTab = () => {
   if (!measureDeviceResponse) return <div>No data</div>;
   return (
     <div className="flex items-center justify-start gap-3">
+      <Button
+        key="Default-Device-All-Select"
+        className="cursor-pointer"
+        variant={deviceSn === "0" ? "default" : "outline"}
+        onClick={() => handleDeviceClick(0)}
+      >
+        전체 조회
+      </Button>
       {measureDeviceResponse.data.map((device, index) => {
         return (
           <Button
