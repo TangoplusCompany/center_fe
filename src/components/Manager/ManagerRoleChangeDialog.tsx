@@ -11,7 +11,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { ICenterManagerData } from "@/types/manager";
-import { ADMIN_ROLE } from "@/utils/constants";
+import { ADMIN_ROLE } from "@/utils/constants/adminRole";
 import React from "react";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";

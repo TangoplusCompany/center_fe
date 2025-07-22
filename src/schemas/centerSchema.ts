@@ -1,5 +1,8 @@
 import * as z from "zod";
 
+/**
+ * 센터 정보 수정 스키마
+ */
 export const centerEditSchema = z.object({
   centerName: z
     .string()

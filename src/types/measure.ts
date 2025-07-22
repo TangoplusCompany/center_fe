@@ -15,6 +15,7 @@ export interface IMeasureData extends IPagination {
 }
 
 export interface IMeasureList {
+  sn: number;
   measure_sn: number;
   mobile: string;
   user_uuid: string;

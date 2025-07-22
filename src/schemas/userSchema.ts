@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+/**
+ * 사용자 검색 스키마
+ */
 export const userSearchSchema = z.object({
   name: z
     .string()

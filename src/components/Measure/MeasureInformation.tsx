@@ -51,23 +51,6 @@ const MeasureInformation = ({ data }: { data: IUserDetailMeasureInfo }) => {
             return el === "" ? <br key={key} /> : <p key={key}>{el}</p>;
           })}
         </div>
-        {/* <div className="mt-6 pt-6 border-t">
-          <h4 className="font-bold mb-3">추천 운동:</h4>
-          <div className="space-y-2">
-            <div className="flex items-start gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
-              <p>어깨 스트레칭 (하루 3회, 각 15초)</p>
-            </div>
-            <div className="flex items-start gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
-              <p>무릎 강화 운동 (주 3회, 각 10회)</p>
-            </div>
-            <div className="flex items-start gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
-              <p>발목 회전 운동 (하루 2회, 각 방향 10회)</p>
-            </div>
-          </div>
-        </div> */}
       </div>
     </div>
   );
