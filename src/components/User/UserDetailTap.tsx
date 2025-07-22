@@ -39,6 +39,7 @@ const UserDetailTap = ({
     limit,
     user_uuid: userUUID,
   });
+  
   const handleClick = (value: number) => {
     update(value);
   };
@@ -51,8 +52,9 @@ const UserDetailTap = ({
   }, [userMeasureList, onUpdateMeasureSn]);
 
   if (userMeasureLoading) return <p>Loading...</p>;
-  if (userMeasureError) return <p>{userMeasureError.message}</p>;
+  if (userMeasureError) return <p>Loading...</p>;
   if (!userMeasureList) return <p>No data</p>;
+
   return (
     <div className="w-full flex items-center justify-between">
       <ul className="flex items-center justify-start gap-5">

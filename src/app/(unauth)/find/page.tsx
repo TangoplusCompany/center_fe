@@ -17,6 +17,9 @@ const FindPasswordPage = () => {
     <div className="flex flex-1 items-center justify-center">
       <div className="w-full max-w-[480px]">
         <div className="w-full flex flex-col items-start gap-2">
+          <h1 className="text-2xl font-bold mb-3 lg:mb-5 text-center">
+            탱고플러스 센터관리자 비밀번호 찾기
+          </h1>
           <Label htmlFor="centerCheck" className="lg:text-lg">
             이메일 입력
           </Label>
