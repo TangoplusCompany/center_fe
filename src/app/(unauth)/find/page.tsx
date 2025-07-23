@@ -24,13 +24,11 @@ const FindPasswordPage = () => {
           <h1 className="text-2xl font-bold mb-3 lg:mb-5 text-center">
             탱고플러스 센터관리자 비밀번호 찾기
           </h1>
-          {step === 0 && (
-            <InputEmail setEmail={handleInputEmail} />
-          )}
+          {step === 0 && <InputEmail setEmail={handleInputEmail} />}
           {step === 1 && (
             <RequestOtpForm handleRequestOtp={handleRequestOtp} email={email} />
           )}
-          {step === 2 && <ResetPwd />}
+          {step === 2 && <ResetPwd jwt={jwt} email={email} />}
         </div>
       </div>
     </div>
