@@ -10,3 +10,8 @@ export interface IOtpProps {
 export interface IOtpVerifyProps extends IOtpProps {
   otp: string;
 }
+
+export interface IResetPwdProps extends IOtpProps {
+  jwt: string;
+  new_password: string;
+}
