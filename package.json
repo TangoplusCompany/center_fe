@@ -36,6 +36,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "html2canvas": "^1.4.1",
+    "http-proxy": "^1.18.1",
     "input-otp": "^1.4.2",
     "konva": "^9.3.20",
     "lucide-react": "^0.473.0",

@@ -50,18 +50,14 @@ export type IManagerPasswordForm = z.infer<typeof managerPasswordSchema>;
 export const managerInformationSchema = z.object({
   managerName: z
     .string()
-    .min(1, { message: "이름을 입력해주세요." })
-    .regex(/^[가-힣]+$/, {
-      message: "한글 낱말만 입력 가능합니다.",
-    }),
+    .min(2, { message: "이름은 최소 2자 이상이어야 합니다." })
+    .max(50, { message: "이름은 최대 50자까지 입력 가능합니다." })
+    .regex(/^[가-힣]+$/, { message: "이름은 한글만 입력 가능합니다." }),
   managerMobile: z
     .string()
-    .regex(/^\d{3}-\d{3,4}-\d{4}$/, {
-      message: "전화번호 형식이 올바르지 않습니다.",
-    })
-    .regex(/^[0-9-]+$/, {
-      message: "숫자와 하이픈(-)만 입력해주세요.",
-    })
-    .transform((value) => value.replace(/-/g, "")),
+    .regex(/^\d+$/, { message: "전화번호는 숫자만 입력 가능합니다." })
+    .min(10, { message: "전화번호는 최소 10자 이상이어야 합니다." })
+    .max(15, { message: "전화번호는 최대 15자까지 입력 가능합니다." }),
+    
 });
 export type IManagerInformationForm = z.infer<typeof managerInformationSchema>;

@@ -11,7 +11,7 @@ import { phoneHyphen } from "@/utils/regexFiltering";
 import { useRouter } from "next/navigation";
 
 const CenterManagerDetailContainer = ({ sn }: { sn: string }) => {
-  const { adminRole } = useAuthStore((state) => state);
+  const { adminRole, adminSn } = useAuthStore((state) => state);
 
   const router = useRouter();
   const {
@@ -26,7 +26,10 @@ const CenterManagerDetailContainer = ({ sn }: { sn: string }) => {
     <>
       <div className="flex items-center justify-between w-full">
         <h2 className="text-xl">매니저 정보</h2>
-        {adminRole < 3 && <ManagerRoleChangeDialog manager={managerDetail} />}
+        {/* ADMIN_ROLE이 1 이하인 경우 자기 자신은 권한 변경할 수 없음 */}
+        {adminRole < 3 && adminSn !== managerDetail.sn && (
+          <ManagerRoleChangeDialog manager={managerDetail} />
+        )}
       </div>
       <div className="flex flex-col gap-4 w-full">
         <div className="flex flex-col gap-2 w-full">

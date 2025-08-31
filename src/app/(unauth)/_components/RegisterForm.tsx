@@ -13,7 +13,10 @@ import RegisterCenterCheckForm from "./RegisterCenterCheckForm";
 
 const registerSchema = z
   .object({
-    email: z.string().email({ message: "이메일 형식이 올바르지 않습니다." }),
+    email: z
+      .string()
+      .max(30, { message: "이메일은 최대 30자까지 입력 가능합니다." })
+      .email({ message: "이메일 형식이 올바르지 않습니다." }),
     password: z
       .string()
       .min(8, "비밀번호는 최소 8글자 이상이여야 합니다.")
@@ -33,11 +36,13 @@ const registerSchema = z
     name: z
       .string()
       .min(2, "이름은 최소 2글자 이상이여야 합니다.")
+      .max(50, "이름은 최대 50글자 이하이여야 합니다.")
       .regex(/^[가-힣]+$/, "이름은 한글(낱말)만 입력 가능합니다."),
     phone: z
       .string()
       .min(10, "전화번호는 최소 10글자 이상이여야 합니다.")
-      .regex(/^01[0-9]\d{4}\d{4}$/, "전화번호 형식이 올바르지 않습니다."),
+      .max(15, "전화번호는 최대 15글자 이하여야 합니다.")
+      .regex(/^\d{10,15}$/, "전화번호는 숫자만 10~15자 입력 가능합니다."),
   })
   .superRefine((arg, ctx) => {
     if (arg.password !== arg.passwordConfirm) {
@@ -104,6 +109,7 @@ export const RegisterContainer = () => {
                 type="text"
                 placeholder="email@example.com"
                 required
+                maxLength={30}
                 {...register("email")}
                 className="bg-white dark:bg-border"
               />
@@ -121,6 +127,7 @@ export const RegisterContainer = () => {
                 type="password"
                 placeholder="********"
                 required
+                maxLength={16}
                 className="bg-white dark:bg-border"
                 {...register("password")}
               />
@@ -138,6 +145,7 @@ export const RegisterContainer = () => {
                 type="password"
                 placeholder="********"
                 required
+                maxLength={16}
                 className="bg-white dark:bg-border"
                 {...register("passwordConfirm")}
               />
@@ -154,6 +162,7 @@ export const RegisterContainer = () => {
                 type="text"
                 placeholder="홍길동"
                 required
+                maxLength={50}
                 {...register("name")}
                 className="bg-white dark:bg-border"
               />
@@ -170,6 +179,7 @@ export const RegisterContainer = () => {
                 type="text"
                 placeholder="하이픈(-)없이 입력해주세요."
                 required
+                maxLength={15}
                 {...register("phone")}
                 className="bg-white dark:bg-border"
               />

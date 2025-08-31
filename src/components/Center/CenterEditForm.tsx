@@ -72,6 +72,7 @@ const CenterEditForm = ({ centerData }: { centerData: ICenterInformation }) => {
           disabled={!editState}
           defaultValue={centerData.center_name}
           placeholder="센터 이름"
+          maxLength={30}
         />
         {errors.centerName && (
           <p className="text-sm text-red-500">
@@ -88,6 +89,7 @@ const CenterEditForm = ({ centerData }: { centerData: ICenterInformation }) => {
           disabled={!editState}
           defaultValue={centerData.center_address}
           placeholder="센터 주소"
+          maxLength={60}
         />
         {errors.centerAddress && (
           <p className="text-sm text-red-500">
@@ -104,7 +106,13 @@ const CenterEditForm = ({ centerData }: { centerData: ICenterInformation }) => {
           disabled={!editState}
           defaultValue={centerData.center_address_detail}
           placeholder="센터 상세 주소"
+          maxLength={30}
         />
+        {errors.centerAddressDetail && (
+          <p className="text-sm text-red-500">
+            {errors.centerAddressDetail.message?.toString()}
+          </p>
+        )}
       </div>
     </form>
   );

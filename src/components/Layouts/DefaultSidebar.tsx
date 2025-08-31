@@ -27,6 +27,7 @@ import {
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { useLogout } from "@/hooks/api/auth/useLogout";
+import { useAuthStore } from "@/providers/AuthProvider";
 
 const dashboard = [
   {
@@ -69,6 +70,7 @@ const dashboard = [
 export default function DefaultSidebar() {
   const logoutMutation = useLogout();
   const { isMobile, setOpenMobile } = useSidebar(); // Sidebar 상태 접근
+  const { adminRole } = useAuthStore((state) => state);
 
   const handleLogout = () => {
     logoutMutation.mutate();
@@ -102,16 +104,28 @@ export default function DefaultSidebar() {
           <SidebarGroupLabel>DASHBOARD</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {dashboard.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url} onClick={handleLinkClick}>
-                      <item.icon className="lg:!w-5 lg:!h-5" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {dashboard
+                .filter((item) => {
+                  // ADMIN_ROLE이 2인 경우: 기기관리와 매니저 관리 메뉴 숨김
+                  // ADMIN_ROLE이 3 이상인 경우: 기기관리, 매니저 관리, 사용자 관리 메뉴 숨김
+                  if (adminRole === 2) {
+                    return !["기기 관리", "매니저 관리"].includes(item.title);
+                  }
+                  if (adminRole >= 3) {
+                    return !["대시보드", "기기 관리", "매니저 관리", "사용자 관리", "측정 관리"].includes(item.title);
+                  }
+                  return true;
+                })
+                .map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <Link href={item.url} onClick={handleLinkClick}>
+                        <item.icon className="lg:!w-5 lg:!h-5" />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

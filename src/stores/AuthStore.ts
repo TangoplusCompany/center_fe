@@ -5,6 +5,7 @@ interface IAuthProps {
   isLogin: boolean;
   adminName: string;
   adminEmail: string;
+  adminMobile: string;
   adminRole: number;
   adminSn: number;
   accessJwt: string;
@@ -28,6 +29,7 @@ export const createAuthStore = (initialState?: IAuthProps) => {
     isLogin: false,
     adminName: "",
     adminEmail: "",
+    adminMobile: "",
     adminRole: 0,
     adminSn: 0,
     accessJwt: "",

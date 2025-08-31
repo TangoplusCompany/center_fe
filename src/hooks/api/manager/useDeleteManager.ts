@@ -10,6 +10,7 @@ export const useDeleteManager = () => {
   return useMutation({
     mutationFn: deleteCenterManager,
     onSuccess: () => {
+      alert("해당 매니저가 센터에서 성공적으로 삭제되었습니다.");
       queryClient.invalidateQueries({ queryKey: ["adminList"] });
     },
   });

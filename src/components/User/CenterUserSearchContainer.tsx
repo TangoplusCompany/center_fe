@@ -48,8 +48,9 @@ const CenterUserSearchContainer = ({
     <article className="w-full">
       <form className="w-full flex gap-5 mb-5" onSubmit={searchUserHandler}>
         <Input
-          placeholder="이름을 입력해주세요."
+          placeholder="이름 혹은 전화번호를 입력해주세요."
           type="text"
+          maxLength={50}
           {...register("name")}
         />
         <Button variant="outline" type="submit">
