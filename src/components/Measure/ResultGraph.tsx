@@ -253,7 +253,7 @@ const ResultGraph = ({
           </div>
         </div>
       </div>
-      <div className="flex flex-col items-start justify-center text-[#AEAEAE]">
+{/*       <div className="flex flex-col items-start justify-center text-[#AEAEAE]">
         <p>{title}를 비교한 값 입니다.</p>
         <p>
           {unitName} 값{" "}
@@ -261,7 +261,7 @@ const ResultGraph = ({
           <span className="text-[#36ABFF]">±{Number(avgResult.toFixed(4)) + unit}</span> 이내가
           표준적인 {unitName} 값 입니다.
         </p>
-      </div>
+      </div> */}
     </div>
   );
 };

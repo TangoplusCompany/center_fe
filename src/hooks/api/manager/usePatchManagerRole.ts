@@ -10,6 +10,7 @@ export const usePatchManagerRole = () => {
   return useMutation({
     mutationFn: patchCenterManagerRole,
     onSuccess: async () => {
+      alert("해당 매니저의 권한이 성공적으로 변경되었습니다.");
       await queryClient.invalidateQueries({ queryKey: ["ManagerDetails"] });
     },
   });

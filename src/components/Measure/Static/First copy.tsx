@@ -36,146 +36,146 @@ const MeasureStaticFirst = React.memo(
         <div className="grid flex-1 grid-cols-12 gap-2 md:gap-5 w-full lg:gap-5 px-2">
           <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
-              defaultAvg={-0.1}
+              defaultAvg={0.1}
               sdAvg={0.23}
               unitName="높이차"
-              title="정면 양쪽 귀 높이차"
-              userAvg={statics.front_horizontal_distance_sub_ear}
+              title="후면 양쪽 귀 높이차"
+              userAvg={statics.back_horizontal_distance_sub_ear}
               unit="cm"
             />
             <ResultGraph
-              defaultAvg={90.11 * 2}
-              sdAvg={2.51 * 2}
+              defaultAvg={86.5}
+              sdAvg={21.14}
               unitName="기울기"
-              title="정면 양쪽 귀 기울기"
-              userAvg={Math.abs(statics.front_horizontal_angle_ear)}
+              title="후면 양쪽 귀 기울기"
+              userAvg={90 - statics.back_horizontal_angle_ear}
               unit="°"
             />
           </div>
           <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
-              defaultAvg={-0.1}
-              sdAvg={0.45}
+              defaultAvg={-0.13}
+              sdAvg={0.51}
               unitName="높이차"
-              title="정면 양쪽 어깨 높이차"
-              userAvg={statics.front_horizontal_distance_sub_shoulder}
+              title="후면 양쪽 어깨 높이차"
+              userAvg={statics.back_horizontal_distance_sub_shoulder}
               unit="cm"
             />
             <ResultGraph
-              defaultAvg={90.35 * 2}
-              sdAvg={1.55 * 2}
+              defaultAvg={89.27}
+              sdAvg={14.88}
               unitName="기울기"
-              title="정면 양쪽 어깨 기울기"
-              userAvg={Math.abs(statics.front_horizontal_angle_shoulder)}
+              title="후면 양쪽 어깨 기울기"
+              userAvg={90 - statics.back_horizontal_angle_shoulder}
               unit="°"
             />
           </div>
           <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
-              defaultAvg={-0.17}
-              sdAvg={0.58}
+              defaultAvg={-0.14}
+              sdAvg={0.83}
               unitName="높이차"
-              title="정면 양쪽 팔꿉 높이차"
-              userAvg={statics.front_horizontal_distance_sub_elbow}
+              title="후면 양쪽 팔꿉 높이차"
+              userAvg={statics.back_horizontal_distance_sub_elbow}
               unit="cm"
             />
             <ResultGraph
-              defaultAvg={90.47 * 2}
-              sdAvg={1.58 * 2}
+              defaultAvg={89.16}
+              sdAvg={15.15}
               unitName="기울기"
-              title="정면 양쪽 팔꿉 기울기"
-              userAvg={statics.front_horizontal_angle_elbow}
+              title="후면 양쪽 팔꿉 기울기"
+              userAvg={90 - statics.back_horizontal_angle_elbow}
               unit="°"
             />
           </div>
 
           <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
-              defaultAvg={-0.25}
-              sdAvg={0.67}
+              defaultAvg={0.12}
+              sdAvg={0.21}
               unitName="높이차"
-              title="정면 양쪽 손목 높이차"
-              userAvg={statics.front_horizontal_distance_sub_wrist}
+              title="후면 양쪽 골반 높이차"
+              userAvg={statics.back_horizontal_distance_sub_hip}
               unit="cm"
             />
             <ResultGraph
               defaultAvg={88.07}
               sdAvg={14.86}
               unitName="기울기"
-              title="정면 양쪽 손목 기울기"
-              userAvg={Math.abs(statics.front_horizontal_angle_wrist)}
+              title="후면 양쪽 골반 기울기"
+              userAvg={90 - statics.back_horizontal_angle_hip}
               unit="°"
             />
           </div>
 
           <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
-              defaultAvg={0}
-              sdAvg={0.22}
+              defaultAvg={-0.01}
+              sdAvg={0.57}
               unitName="높이차"
-              title="정면 양쪽 골반 높이차"
-              userAvg={statics.front_horizontal_distance_sub_hip}
+              title="후면 양쪽 발목 높이차"
+              userAvg={statics.back_horizontal_distance_sub_ankle}
               unit="cm"
             />
             <ResultGraph
-              defaultAvg={89.98 * 2}
-              sdAvg={1.36 * 2}
+              defaultAvg={88.85}
+              sdAvg={15.51}
               unitName="기울기"
-              title="정면 양쪽 골반 기울기"
-              userAvg={Math.abs(statics.front_horizontal_angle_hip)}
+              title="후면 양쪽 발목 기울기"
+              userAvg={90 - statics.back_horizontal_angle_ankle}
               unit="°"
             />
           </div>
           <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
-              defaultAvg={-0.12}
-              sdAvg={0.36}
+              defaultAvg={5.03}
+              sdAvg={1.27}
               unitName="높이차"
-              title="정면 양쪽 무릎 높이차"
-              userAvg={statics.front_horizontal_distance_sub_knee}
+              title="후면 왼쪽 무릎 거리"
+              userAvg={statics.back_horizontal_distance_knee_left}
               unit="cm"
             />
             <ResultGraph
-              defaultAvg={90.81 * 2}
-              sdAvg={2.22 * 2}
-              unitName="기울기"
-              title="정면 양쪽 무릎 기울기"
-              userAvg={Math.abs(statics.front_horizontal_angle_knee)}
+              defaultAvg={4.79}
+              sdAvg={1.24}
+              unitName="높이차"
+              title="후면 오른쪽 무릎 거리"
+              userAvg={statics.back_horizontal_distance_knee_right}
+              unit="cm"
+            />
+          </div>
+          <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
+            <ResultGraph
+              defaultAvg={-27.35}
+              sdAvg={174.14}
+              unitName="각도"
+              title="후면 왼쪽 무릎-뒤꿈치 각도"
+              userAvg={statics.back_vertical_angle_knee_heel_left - 90}
+              unit="°"
+            />
+            <ResultGraph
+              defaultAvg={8.49}
+              sdAvg={176.42}
+              unitName="각도"
+              title="후면 오른쪽 무릎-뒤꿈치 각도"
+              userAvg={statics.back_vertical_angle_knee_heel_right - 90}
               unit="°"
             />
           </div>
           <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph
-              defaultAvg={0.01}
-              sdAvg={0.46}
-              unitName="높이차"
-              title="정면 양쪽 발목 높이차"
-              userAvg={statics.front_horizontal_distance_sub_ankle}
-              unit="cm"
-            />
-            <ResultGraph
-              defaultAvg={89.94 * 2}
-              sdAvg={3.89 * 2}
-              unitName="기울기"
-              title="정면 양쪽 발목 기울기"
-              userAvg={Math.abs(statics.front_horizontal_angle_ankle)}
-              unit="°"
-            />
-          </div>
-{/*           <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
-            <ResultGraph
-              defaultAvg={89.94 * 2}
-              sdAvg={3.89 * 2}
-              unitName="기울기"
-              title="정면 양쪽 발목 기울기"
-              userAvg={Math.abs(statics.front_horizontal_angle_ankle)}
+              defaultAvg={-39.92}
+              sdAvg={174.14}
+              unitName="각도"
+              title="후면 코-어깨-중심점 각도"
+              userAvg={statics.back_vertical_angle_nose_center_shoulder - 90}
               unit="°"
             />
             <ResultGraph
               defaultAvg={-20.82}
               sdAvg={175.28}
               unitName="각도"
-              title="정면 코-골반-중심점 각도"
+              title="후면 코-골반-중심점 각도"
               userAvg={statics.back_vertical_angle_nose_center_hip - 90}
               unit="°"
             />
@@ -185,7 +185,7 @@ const MeasureStaticFirst = React.memo(
               defaultAvg={3.85}
               sdAvg={1.5}
               unitName="거리"
-              title="정면 중심점-발뒤꿈치 거리"
+              title="후면 중심점-발뒤꿈치 거리"
               userAvg={statics.back_horizontal_distance_heel_left}
               unit="cm"
             />
@@ -193,11 +193,11 @@ const MeasureStaticFirst = React.memo(
               defaultAvg={3.82}
               sdAvg={1.62}
               unitName="거리"
-              title="정면 오른쪽 무릎-뒤꿈치 거리"
+              title="후면 오른쪽 무릎-뒤꿈치 거리"
               userAvg={statics.back_horizontal_distance_heel_right}
               unit="cm"
             />
-          </div> */}
+          </div>
         </div>
       </div>
     );

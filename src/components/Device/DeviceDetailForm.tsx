@@ -37,6 +37,7 @@ const DeviceDetailForm = ({
           defaultValue={data.data.device_name}
           className="w-full"
           id="device_name"
+          maxLength={30}
           disabled={!isEdit}
         />
         {errors.device_name && (
@@ -52,6 +53,7 @@ const DeviceDetailForm = ({
           defaultValue={data.data.install_location}
           className="w-full"
           id="install_location"
+          maxLength={30}
           disabled={!isEdit}
         />
         {errors.install_location && (
@@ -71,6 +73,7 @@ const DeviceDetailForm = ({
             defaultValue={data.data.install_address_1}
             className="w-full"
             id="install_address_1"
+            maxLength={60}
             disabled={!isEdit}
           />
           {errors.install_address_1 && (
@@ -89,6 +92,7 @@ const DeviceDetailForm = ({
             defaultValue={data.data.install_address_2}
             className="w-full"
             id="install_address_2"
+            maxLength={30}
             disabled={!isEdit}
           />
           {errors.install_address_2 && (

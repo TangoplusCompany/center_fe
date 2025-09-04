@@ -25,40 +25,45 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
 
   const schema = z.object({
     userName: z.string()
-      .min(2, { message: "사용자 이름을 입력해주세요." })
-      .regex(/^[가-힣]+$/, { message: "한글 낱말만 입력 가능합니다." }),
-    email: z.string().email({ message: "이메일 형식으로 입력해주세요." }),
-    mobile: z.string().min(1, { message: "휴대폰 번호를 입력해주세요." }).regex(/^[0-9-]+$/, {
-      message: "숫자, 하이픈(-)만 입력해주세요.",
-    }),
+      .min(2, { message: "사용자 이름은 최소 2자 이상이어야 합니다." })
+      .max(50, { message: "사용자 이름은 최대 50자까지 입력 가능합니다." })
+      .regex(/^[가-힣0-9]+$/, { message: "한글과 숫자만 입력 가능합니다." }),
     gender: z.string().optional().nullable(),
     birthday: z
       .string()
-      .regex(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/, {
+      .regex(/^\d{4}-\d{2}-\d{2}$/, {
         message: "YYYY-MM-DD 형식으로 입력해주세요.",
       })
       .min(1, { message: "생년월일을 입력해주세요." })
       .optional(),
     height: z
       .string()
-      .regex(/^[0-9]*\.?[0-9]{0,1}$/, {
+      .max(6, { message: "키는 최대 6자까지 입력 가능합니다." })
+      .regex(/^\d*\.?\d{0,1}$/, {
         message: "숫자와 소수점 첫째자리까지만 입력 가능합니다.",
       })
       .min(1, { message: "키를 입력해주세요." })
       .optional(),
     weight: z
       .string()
-      .regex(/^[0-9]*\.?[0-9]{0,1}$/, {
+      .max(6, { message: "몸무게는 최대 6자까지 입력 가능합니다." })
+      .regex(/^\d*\.?\d{0,1}$/, {
         message: "숫자와 소수점 첫째자리까지만 입력 가능합니다.",
       })
       .min(1, { message: "몸무게를 입력해주세요." })
       .optional(),
-    address: z.string().min(0, { message: "주소를 입력해주세요." }).regex(/^[가-힣a-zA-Z0-9\s-]+$/, {
-      message: "한글, 영어, 숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
-    }).optional(),
-    addressDetail: z.string().regex(/^[가-힣a-zA-Z0-9\s-]+$/, {
-      message: "한글, 영어, 숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
-    }).optional(),
+    address: z.string()
+      .max(60, { message: "주소는 최대 60자까지 입력 가능합니다." })
+      .regex(/^[가-힣a-zA-Z0-9\s-]*$/, {
+        message: "한글, 영어, 숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
+      })
+      .optional(),
+    addressDetail: z.string()
+      .max(30, { message: "상세주소는 최대 30자까지 입력 가능합니다." })
+      .regex(/^[가-힣a-zA-Z0-9\s-]*$/, {
+        message: "한글, 영어, 숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
+      })
+      .optional(),
   });
   const {
     register,
@@ -87,7 +92,7 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
   return (
     <form onSubmit={submitUserDetailForm} className="flex flex-col gap-5">
       <legend className="sr-only">사용자 정보 수정</legend>
-      {adminRole < 2 && (
+      {adminRole < 3 && (
         <div className="flex items-center justify-end gap-2">
           <Button variant="outline" onClick={handleEditState} type="button">
             {editState ? "취소하기" : "수정하기"}
@@ -108,6 +113,7 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
           disabled={!editState}
           defaultValue={userData.user_name}
           placeholder="사용자 이름"
+          maxLength={50}
         />
         {errors.userName && (
           <p className="text-sm text-red-500">
@@ -118,34 +124,24 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
       <div className="flex flex-col gap-2">
         <Label htmlFor="email">이메일</Label>
         <Input
-          {...register("email")}
           type="email"
           id="email"
           disabled
           defaultValue={userData.email}
           placeholder="이메일"
+          maxLength={30}
         />
-        {errors.email && (
-          <p className="text-sm text-red-500">
-            {errors.email.message?.toString()}
-          </p>
-        )}
       </div>
       <div className="flex flex-col gap-2">
         <Label htmlFor="mobile">휴대폰 번호</Label>
         <Input
-          {...register("mobile")}
           type="tel"
           id="mobile"
           disabled
           defaultValue={userData.mobile}
           placeholder="휴대폰 번호"
+          maxLength={15}
         />
-        {errors.mobile && (
-          <p className="text-sm text-red-500">
-            {errors.mobile.message?.toString()}
-          </p>
-        )}
       </div>
       <div className="w-full grid grid-cols-2 gap-2">
         <div className="flex flex-col gap-2 col-span-1">
@@ -157,6 +153,7 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
             disabled={!editState}
             defaultValue={userData.address}
             placeholder="주소"
+            maxLength={60}
           />
           {errors.address && (
             <p className="text-sm text-red-500">
@@ -173,6 +170,7 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
             disabled={!editState}
             defaultValue={userData.address_detail}
             placeholder="상세주소"
+            maxLength={30}
           />
           {errors.addressDetail && (
             <p className="text-sm text-red-500">
@@ -231,7 +229,7 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
       </div>
       <div className="w-full grid grid-cols-2 gap-2">
         <div className="flex flex-col gap-2 col-span-1">
-          <Label htmlFor="height">키</Label>
+          <Label htmlFor="height">키 (cm) </Label>
           <Input
             {...register("height")}
             type="text"
@@ -239,6 +237,7 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
             disabled={!editState}
             defaultValue={userData.height}
             placeholder="키"
+            maxLength={6}
           />
           {errors.height && (
             <p className="text-sm text-red-500">
@@ -247,7 +246,7 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
           )}
         </div>
         <div className="flex flex-col gap-2 col-span-1">
-          <Label htmlFor="weight">몸무게</Label>
+          <Label htmlFor="weight">몸무게 (kg)</Label>
           <Input
             {...register("weight")}
             type="text"
@@ -255,6 +254,7 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
             disabled={!editState}
             defaultValue={userData.weight}
             placeholder="몸무게"
+            maxLength={6}
           />
           {errors.weight && (
             <p className="text-sm text-red-500">

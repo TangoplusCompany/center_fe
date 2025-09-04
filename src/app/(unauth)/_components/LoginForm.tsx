@@ -12,7 +12,10 @@ import Link from "next/link";
 import { useLogin } from "@/hooks/api/auth/useLogin";
 
 const loginSchema = z.object({
-  email: z.string().email({ message: "이메일 형식이 올바르지 않습니다." }).regex(
+  email: z
+  .string()
+  .max(30, { message: "이메일은 최대 30자까지 입력 가능합니다." })
+  .email({ message: "이메일 형식이 올바르지 않습니다." }).regex(
     /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i,
     "이메일은 영문, 숫자, @ 특수문자만 입력 가능합니다.",
   ),
@@ -69,6 +72,7 @@ export default function LoginForm({
             id="email"
             type="text"
             placeholder="email@example.com"
+            maxLength={30}
             required
             {...register("email")}
             className="bg-white dark:bg-border"

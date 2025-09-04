@@ -69,6 +69,7 @@ const EditMangerPasswordForm = () => {
               disabled={!editState}
               defaultValue=""
               placeholder="기존 비밀번호"
+              maxLength={16}
             />
             {errors.currentPassword?.message && (
               <p className="text-sm text-red-500">
@@ -85,6 +86,7 @@ const EditMangerPasswordForm = () => {
               disabled={!editState}
               defaultValue=""
               placeholder="기존 비밀번호"
+              maxLength={16}
             />
             {errors.newPassword?.message && (
               <p className="text-sm text-red-500">
@@ -101,6 +103,7 @@ const EditMangerPasswordForm = () => {
               disabled={!editState}
               defaultValue=""
               placeholder="비밀번호 확인"
+              maxLength={16}
             />
             {errors.confirmPassword?.message && (
               <p className="text-sm text-red-500">

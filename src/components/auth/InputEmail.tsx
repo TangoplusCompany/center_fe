@@ -32,6 +32,7 @@ const InputEmail = ({ setEmail }: { setEmail: (email: string) => void }) => {
         <Input
           id="centerCheck"
           type="text"
+          maxLength={30}
           value={value}
           onChange={changeCenterCode}
           placeholder="회원가입 하신 이메일을 입력해주세요."

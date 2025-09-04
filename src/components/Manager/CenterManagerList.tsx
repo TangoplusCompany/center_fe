@@ -22,7 +22,7 @@ const CenterManagerList = ({
 }: {
   managerList: ICenterManagerData[];
 }) => {
-  const { adminRole } = useAuthStore((state) => state);
+  const { adminRole, adminSn } = useAuthStore((state) => state);
   return (
     <Table>
       <TableHeader>
@@ -56,7 +56,10 @@ const CenterManagerList = ({
                 <FileText className="w-4 h-4" />
                 <span>상세보기</span>
               </Link>
-              {adminRole < 2 && <ManagerRemoveDialog manager={manager} />}
+              {/* ADMIN_ROLE이 1 이하인 경우 자기 자신은 제거할 수 없음 */}
+              {adminRole < 2 && adminSn !== manager.sn && (
+                <ManagerRemoveDialog manager={manager} />
+              )}
             </TableCell>
           </TableRow>
         ))}

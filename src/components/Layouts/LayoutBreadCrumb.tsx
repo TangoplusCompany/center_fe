@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { usePathname } from "next/navigation";
+import { useAuthStore } from "@/providers/AuthProvider";
 
 interface IMenu {
   title: string;
@@ -61,6 +62,7 @@ const Menus: IMenu[] = [
 
 export function LayoutBreadCrumb() {
   const pathName = usePathname();
+  const { adminRole } = useAuthStore((state) => state);
 
   return (
     <Breadcrumb>
@@ -82,11 +84,23 @@ export function LayoutBreadCrumb() {
               )}
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
-              {Menus.map((menu, index) => (
-                <DropdownMenuItem key={menu.title + menu.initial + index}>
-                  <BreadcrumbLink href={menu.url}>{menu.title}</BreadcrumbLink>
-                </DropdownMenuItem>
-              ))}
+              {Menus
+                .filter((menu) => {
+                  // ADMIN_ROLE이 2인 경우: 기기관리와 매니저 관리 메뉴 숨김
+                  // ADMIN_ROLE이 3 이상인 경우: 기기관리, 매니저 관리, 사용자 관리 메뉴 숨김
+                  if (adminRole === 2) {
+                    return !["기기 관리", "매니저 관리"].includes(menu.title);
+                  }
+                  if (adminRole >= 3) {
+                    return !["대시보드", "기기 관리", "매니저 관리", "사용자 관리", "측정 관리"].includes(menu.title);
+                  }
+                  return true;
+                })
+                .map((menu, index) => (
+                  <DropdownMenuItem key={menu.title + menu.initial + index}>
+                    <BreadcrumbLink href={menu.url}>{menu.title}</BreadcrumbLink>
+                  </DropdownMenuItem>
+                ))}
             </DropdownMenuContent>
           </DropdownMenu>
         </BreadcrumbItem>

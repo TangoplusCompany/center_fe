@@ -20,6 +20,7 @@ export const useLogin = () => {
         isLogin: true,
         adminName: data.admin_info.admin_name,
         adminEmail: data.admin_info.admin_email,
+        adminMobile: data.admin_info.mobile, 
         adminRole: data.admin_info.admin_role,
         adminSn: data.admin_info.sn,
         accessJwt: data.access_jwt,
