@@ -26,6 +26,7 @@ export const DeviceSearchForm = ({
             type="text"
             placeholder="기기 시리얼 넘버를 입력하세요."
             {...register("serial_number")}
+            maxLength={50}
           />
           {errors.serial_number && (
             <p className="text-sm text-red-500 mt-1">

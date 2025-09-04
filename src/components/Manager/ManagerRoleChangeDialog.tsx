@@ -33,10 +33,6 @@ const ManagerRoleRadioGroup = ({
   return (
     <RadioGroup defaultValue={nowRole.toString()} onValueChange={updateRoles}>
       <div className="flex items-center space-x-2">
-        <RadioGroupItem value="1" id={ADMIN_ROLE[1]} />
-        <Label htmlFor={ADMIN_ROLE[1]}>{ADMIN_ROLE[1]}</Label>
-      </div>
-      <div className="flex items-center space-x-2">
         <RadioGroupItem value="2" id={ADMIN_ROLE[2]} />
         <Label htmlFor={ADMIN_ROLE[2]}>{ADMIN_ROLE[2]}</Label>
       </div>

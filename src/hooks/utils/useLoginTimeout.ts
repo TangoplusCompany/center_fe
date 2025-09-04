@@ -2,12 +2,12 @@ import { useAuthStore } from '@/providers/AuthProvider';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-const SESSION_TIMEOUT = 15 * 60 * 1000; // 15분
+const SESSION_TIMEOUT = 60 * 60 * 1000; // 60분(1시간)
 
 /**
  * 로그인 타임아웃 Hooks
  * 
- * 로그인 후 15분 동안 활동이 없으면 자동으로 로그아웃 되는 Hooks.
+ * 로그인 후 60분 동안 활동이 없으면 자동으로 로그아웃 되는 Hooks.
  * @returns 로그인 타임아웃 상태
  */
 export const useLoginTimeout = () => {
@@ -28,7 +28,7 @@ export const useLoginTimeout = () => {
       if (timeLeft <= 0) {
         clearInterval(interval);
         logout();
-        alert('15분이 지나 자동 로그아웃 되었습니다.');
+        alert('1시간이 지나 자동 로그아웃 되었습니다.');
         router.push('/login');
       }
     }, 1000);

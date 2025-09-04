@@ -50,6 +50,29 @@ npm run dev
 pnpm dev
 ```
 
+```
+# https 사용시
+const { createServer } = require("https");
+const { createProxyServer } = require("http-proxy");
+const fs = require("fs");
+
+const proxy = createProxyServer({ target: "http://localhost:3632" });
+
+# key와 cert는 본인의 인증 pem 파일에 맞게 사용하시면됩니다.
+const options = {
+  key: fs.readFileSync("./localhost+2-key.pem"),
+  cert: fs.readFileSync("./localhost+2.pem"),
+};
+
+createServer(options, (req, res) => {
+  proxy.web(req, res);
+}).listen(4862, () => {
+  console.log("🔐 HTTPS Proxy running at https://localhost:4862");
+});
+
+# 이후 해당 파일 node로 실행
+# node 파일명.js
+```
 ### 3. 빌드
 ```
 # use npm

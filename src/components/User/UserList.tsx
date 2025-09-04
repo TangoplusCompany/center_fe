@@ -63,7 +63,7 @@ export const UserList = ({
                 <FileText className="w-4 h-4" />
                 <span>상세보기</span>
               </Link>
-              {adminRole < 2 && (
+              {adminRole < 3 && (
                 <button
                   onClick={() => handleRemoveUser(user.user_sn)}
                   className="flex items-center gap-2 justify-end cursor-pointer text-red-500"
