@@ -19,19 +19,19 @@ export const useDeviceRemove = (
       setOpen(false);
     },
     onError: (
-      data: AxiosError<{
+      error: AxiosError<{
         data: unknown;
         message: string[];
         status: number;
         success: boolean;
       }>,
     ) => {
-      if (!data.response) {
+      if (!error.response) {
         alert("서버와 연결할 수 없습니다. 잠시 후 다시 시도해주세요.");
         return;
       }
       
-      const { status, data: errorData } = data.response;
+      const { status } = error.response;
       
       if (status === 400) {
         alert("잘못된 요청입니다. 입력 정보를 확인해주세요.");
