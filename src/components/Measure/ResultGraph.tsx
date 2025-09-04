@@ -18,23 +18,19 @@ const ResultGraph = ({
   sdAvg,
   title,
   unit,
-  unitName,
 }: {
   userAvg: number;
   defaultAvg: number;
   sdAvg: number;
   title: string;
   unit: string;
-  unitName: string;
 }) => {
   const [select, setSelect] = useState(0);
-  const [avgResult, setAvgResult] = useState(0);
   const { warningMin, dangerMin, warningMax, dangerMax } = useWarningDangerResult({
     defaultAvg,
     sdAvg,
   });
   useEffect(() => {
-    setAvgResult(Math.abs(Number((sdAvg * 0.191).toFixed(4))));
     if (userAvg > warningMin && userAvg < warningMax) {
       setSelect(0);
     } else if (userAvg < dangerMin || userAvg > dangerMax) {
