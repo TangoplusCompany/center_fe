@@ -419,12 +419,10 @@ const MeasureDetailDynamic = ({
             title="오버헤드스쿼트 양쪽 어깨 높이차"
             userAvg={dynamic.ohs_front_horizontal_distance_shoulder}
             unit="cm"
-            unitName="높이차"
           />
           <ResultGraph
             defaultAvg={89.9 * 2}
             sdAvg={1.93 * 2}
-            unitName="기울기"
             title="오버헤드스쿼트 양쪽 어깨 기울기"
             userAvg={Math.abs(dynamic.ohs_front_horizontal_angle_shoulder)}
             unit="°"
@@ -436,13 +434,11 @@ const MeasureDetailDynamic = ({
             sdAvg={1.16}
             title="오버헤드스쿼트 양쪽 팔꿉 높이차"
             userAvg={dynamic.ohs_front_horizontal_distance_elbow}
-            unitName="높이차"
             unit="cm"
           />
           <ResultGraph
             defaultAvg={90.39 * 2}
             sdAvg={2.44 * 2}
-            unitName="기울기"
             title="오버헤드스쿼트 양쪽 팔꿉 기울기"
             userAvg={Math.abs(dynamic.ohs_front_horizontal_angle_elbow)}
             unit="°"
@@ -453,14 +449,12 @@ const MeasureDetailDynamic = ({
             defaultAvg={0.5}
             sdAvg={1.52}
             title="오버헤드스쿼트 양쪽 손목 높이차"
-            unitName="높이차"
             userAvg={dynamic.ohs_front_horizontal_distance_wrist}
             unit="cm"
           />
           <ResultGraph
             defaultAvg={89.89 * 2}
             sdAvg={2.98 * 2}
-            unitName="기울기"
             title="오버헤드스쿼트 양쪽 손목 기울기"
             userAvg={Math.abs(dynamic.ohs_front_horizontal_angle_wrist)}
             unit="°"
@@ -470,7 +464,6 @@ const MeasureDetailDynamic = ({
           <ResultGraph
             defaultAvg={-0.18}
             sdAvg={0.28}
-            unitName="높이차"
             title="오버헤드스쿼트 양쪽 골반 높이차"
             userAvg={dynamic.ohs_front_horizontal_distance_hip}
             unit="cm"
@@ -478,7 +471,6 @@ const MeasureDetailDynamic = ({
           <ResultGraph
             defaultAvg={90.99 * 2}
             sdAvg={1.56 * 2}
-            unitName="기울기"
             title="오버헤드스쿼트 양쪽 골반 기울기"
             userAvg={Math.abs(dynamic.ohs_front_horizontal_angle_hip)}
             unit="°"
@@ -488,7 +480,6 @@ const MeasureDetailDynamic = ({
           <ResultGraph
             defaultAvg={-0.22}
             sdAvg={0.54}
-            unitName="높이차"
             title="오버헤드스쿼트 양쪽 무릎 높이차"
             userAvg={dynamic.ohs_front_horizontal_distance_knee}
             unit="cm"
@@ -496,7 +487,6 @@ const MeasureDetailDynamic = ({
           <ResultGraph
             defaultAvg={91.02 * 2}
             sdAvg={2.57 * 2}
-            unitName="기울기"
             title="오버헤드스쿼트 양쪽 무릎 기울기"
             userAvg={Math.abs(dynamic.ohs_front_horizontal_angle_knee)}
             unit="°"

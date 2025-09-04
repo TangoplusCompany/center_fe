@@ -38,7 +38,6 @@ const MeasureStaticThird = React.memo(
             <ResultGraph
               defaultAvg={32.55}
               sdAvg={163.01}
-              unitName="각도"
               title="왼쪽 어깨-팔꿈치 각도"
               userAvg={statics.side_left_vertical_angle_shoulder_elbow}
               unit="°"
@@ -46,7 +45,6 @@ const MeasureStaticThird = React.memo(
             <ResultGraph
               defaultAvg={129.93}
               sdAvg={71.34}
-              unitName="각도"
               title="왼쪽 팔꿈치-손목 각도"
               userAvg={statics.side_left_vertical_angle_elbow_wrist}
               unit="°"
@@ -56,7 +54,6 @@ const MeasureStaticThird = React.memo(
             <ResultGraph
               defaultAvg={-77.54}
               sdAvg={158.71}
-              unitName="각도"
               title="왼쪽 골반-무릎 각도"
               userAvg={statics.side_left_vertical_angle_hip_knee - 180}
               unit="°"
@@ -64,7 +61,6 @@ const MeasureStaticThird = React.memo(
             <ResultGraph
               defaultAvg={84.91}
               sdAvg={138.33}
-              unitName="각도"
               title="왼쪽 귀-어깨 각도"
               userAvg={statics.side_left_vertical_angle_ear_shoulder}
               unit="°"
@@ -74,7 +70,6 @@ const MeasureStaticThird = React.memo(
             <ResultGraph
               defaultAvg={78.81}
               sdAvg={111.75}
-              unitName="각도"
               title="왼쪽 코-어깨 각도"
               userAvg={statics.side_left_vertical_angle_nose_shoulder}
               unit="°"
@@ -82,7 +77,6 @@ const MeasureStaticThird = React.memo(
             <ResultGraph
               defaultAvg={1.93}
               sdAvg={1.29}
-              unitName="거리"
               title="중심점과 어깨와의 거리"
               userAvg={statics.side_left_horizontal_distance_shoulder}
               unit="cm"
@@ -92,7 +86,6 @@ const MeasureStaticThird = React.memo(
             <ResultGraph
               defaultAvg={2.16}
               sdAvg={1.28}
-              unitName="거리"
               title="중심점과 골반과의 거리"
               userAvg={statics.side_left_horizontal_distance_hip}
               unit="cm"
