@@ -19,6 +19,10 @@ export default function UnAuthorizationLayout({
             </a>
           </div>
           {children}
+          <div className="flex-1" />
+          <div className="text-center text-sm text-muted-foreground">
+            Tango Body Admin V1.0
+          </div>
         </div>
       </div>
     </UnAuthLayout>
