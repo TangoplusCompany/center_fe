@@ -143,7 +143,7 @@ const ShoulderMoveLine = ({
       );
     };
     drawCanvas();
-  }, [measureJson, clearAndDraw]);
+  }, [measureJson, clearAndDraw, scaleHeight, scaleWidth]);
   return (
     <div className="relative w-full p-5 flex items-center justify-center overflow-hidden bg-border rounded gap-10">
       <div className="flex items-start justify-center gap-5">

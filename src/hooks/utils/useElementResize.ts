@@ -35,7 +35,7 @@ export const useElementSize = <T extends HTMLElement>(
     });
 
     return () => observer.disconnect();
-  }, [ref.current]); // eslint가 싫어할 수 있지만 정상 동작함
+  }, [ref]); // ref 객체 자체를 의존성으로 사용
 
   return size;
 };
