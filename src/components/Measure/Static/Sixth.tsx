@@ -38,7 +38,6 @@ const MeasureStaticSixth = React.memo(
             <ResultGraph
               defaultAvg={0.04}
               sdAvg={0.29}
-              unitName="높이차"
               title="후면-앉은자세 양쪽 귀 높이차"
               userAvg={statics.back_sit_horizontal_distance_sub_ear}
               unit="cm"
@@ -46,7 +45,6 @@ const MeasureStaticSixth = React.memo(
             <ResultGraph
               defaultAvg={89.72 * 2}
               sdAvg={2.83 * 2}
-              unitName="기울기"
               title="후면-앉은자세 양쪽 귀 기울기"
               userAvg={statics.back_sit_horizontal_angle_ear + 180}
               unit="°"
@@ -56,7 +54,6 @@ const MeasureStaticSixth = React.memo(
             <ResultGraph
               defaultAvg={-0.02}
               sdAvg={0.63}
-              unitName="높이차"
               title="후면-앉은자세 양쪽 어깨 높이차"
               userAvg={statics.back_sit_horizontal_distance_sub_shoulder}
               unit="cm"
@@ -64,7 +61,6 @@ const MeasureStaticSixth = React.memo(
             <ResultGraph
               defaultAvg={90.13 * 2}
               sdAvg={2 * 2}
-              unitName="기울기"
               title="후면-앉은자세 양쪽 어깨 기울기"
               userAvg={statics.back_sit_horizontal_angle_shoulder + 180}
               unit="°"
@@ -74,7 +70,6 @@ const MeasureStaticSixth = React.memo(
             <ResultGraph
               defaultAvg={0.11}
               sdAvg={0.42}
-              unitName="높이차"
               title="후면-앉은자세 양쪽 골반 높이차"
               userAvg={statics.back_sit_horizontal_distance_sub_hip}
               unit="cm"
@@ -82,7 +77,6 @@ const MeasureStaticSixth = React.memo(
             <ResultGraph
               defaultAvg={89.42 * 2}
               sdAvg={2.52 * 2}
-              unitName="기울기"
               title="후면-앉은자세 양쪽 골반 기울기"
               userAvg={statics.back_sit_horizontal_angle_hip + 180}
               unit="°"
@@ -92,7 +86,6 @@ const MeasureStaticSixth = React.memo(
             <ResultGraph
               defaultAvg={90 - 65.63}
               sdAvg={3.94}
-              unitName="각도"
               title="후면-앉은자세 골반중앙-오른어깨-왼어깨 각도"
               userAvg={
                 statics.back_sit_vertical_angle_center_hip_right_shoulder_left_shoulder
@@ -102,7 +95,6 @@ const MeasureStaticSixth = React.memo(
             <ResultGraph
               defaultAvg={90 - 49.09}
               sdAvg={5.27}
-              unitName="각도"
               title="후면-앉은자세 왼어깨-골반중앙-오른어깨 각도"
               userAvg={
                 statics.back_sit_vertical_angle_left_shoulder_center_hip_right_shoulder
@@ -114,7 +106,6 @@ const MeasureStaticSixth = React.memo(
             <ResultGraph
               defaultAvg={90 - 43.64}
               sdAvg={4.48}
-              unitName="각도"
               title="후면-앉은자세 왼어깨-오른어깨-코 각도"
               userAvg={
                 statics.back_sit_vertical_angle_left_shoulder_right_shoulder_nose
@@ -124,7 +115,6 @@ const MeasureStaticSixth = React.memo(
             <ResultGraph
               defaultAvg={90 - 65.28}
               sdAvg={2.52}
-              unitName="각도"
               title="후면-앉은자세 오른어깨-왼어깨-골반중앙 각도"
               userAvg={
                 statics.back_sit_vertical_angle_right_shoulder_left_shoulder_center_hip

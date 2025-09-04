@@ -38,7 +38,6 @@ const MeasureStaticFourth = React.memo(
             <ResultGraph
               defaultAvg={15.26}
               sdAvg={163.25}
-              unitName="각도"
               title="오른쪽 어깨-팔꿈치 각도"
               userAvg={statics.side_right_vertical_angle_shoulder_elbow}
               unit="°"
@@ -46,7 +45,6 @@ const MeasureStaticFourth = React.memo(
             <ResultGraph
               defaultAvg={136.37}
               sdAvg={57.53}
-              unitName="각도"
               title="오른쪽 팔꿈치-손목 각도"
               userAvg={statics.side_right_vertical_angle_elbow_wrist}
               unit="°"
@@ -56,7 +54,6 @@ const MeasureStaticFourth = React.memo(
             <ResultGraph
               defaultAvg={-22.63}
               sdAvg={175.7}
-              unitName="각도"
               title="오른쪽 골반-무릎 각도"
               userAvg={-statics.side_right_vertical_angle_hip_knee}
               unit="°"
@@ -64,7 +61,6 @@ const MeasureStaticFourth = React.memo(
             <ResultGraph
               defaultAvg={85.36}
               sdAvg={139.1}
-              unitName="각도"
               title="오른쪽 귀-어깨 각도"
               userAvg={statics.side_right_vertical_angle_ear_shoulder}
               unit="°"
@@ -74,7 +70,6 @@ const MeasureStaticFourth = React.memo(
             <ResultGraph
               defaultAvg={74.88}
               sdAvg={114.72}
-              unitName="각도"
               title="오른쪽 코-어깨 각도"
               userAvg={statics.side_right_vertical_angle_nose_shoulder}
               unit="°"
@@ -82,7 +77,6 @@ const MeasureStaticFourth = React.memo(
             <ResultGraph
               defaultAvg={1.65}
               sdAvg={1.23}
-              unitName="거리"
               title="중심점과 어깨와의 거리"
               userAvg={statics.side_right_horizontal_distance_shoulder}
               unit="cm"
@@ -92,7 +86,6 @@ const MeasureStaticFourth = React.memo(
             <ResultGraph
               defaultAvg={1.63}
               sdAvg={1.2}
-              unitName="거리"
               title="중심점과 골반과의 거리"
               userAvg={statics.side_right_horizontal_distance_hip}
               unit="cm"
@@ -101,7 +94,6 @@ const MeasureStaticFourth = React.memo(
             {/* <ResultGraph
               defaultAvg={5.01}
               sdAvg={3.43}
-              unitName="거리"
                 title="중심점과 새끼손가락과의 거리"
                 userAvg={statics.side_right_horizontal_distance_pinky}
                 unit="cm"
