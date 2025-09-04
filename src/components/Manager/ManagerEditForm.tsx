@@ -13,7 +13,6 @@ import {
   IManagerInformationForm,
   managerInformationSchema,
 } from "@/schemas/managerSchema";
-import { useAuthStore } from "@/providers/AuthProvider";
 
 // ManagerEditForm에서 실제로 사용하는 속성만 포함하는 타입
 type ManagerEditData = Pick<ICenterManagerData, 'sn' | 'admin_name' | 'mobile' | 'admin_email' | 'admin_role'>;
@@ -26,7 +25,6 @@ const ManagerEditForm = ({
   onUpdateSuccess?: () => void;
 }) => {
   const { isBoolean: editState, setToggle: setEditState } = useBoolean();
-  const { adminRole } = useAuthStore((state) => state);
 
   const {
     register,
