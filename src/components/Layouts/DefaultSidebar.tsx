@@ -23,6 +23,7 @@ import {
   Network,
   Settings,
   SquareActivity,
+  FileText,
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
@@ -59,6 +60,12 @@ const dashboard = [
     title: "매니저 관리",
     url: "/manager",
     icon: Network,
+  },
+  {
+    title: "로그인 기록 관리",
+    url: "https://gym.tangoplus.co.kr/admin_api/login_page.php",
+    icon: FileText,
+    external: true,
   },
   {
     title: "설정",
@@ -109,20 +116,37 @@ export default function DefaultSidebar() {
                   // ADMIN_ROLE이 2인 경우: 기기관리와 매니저 관리 메뉴 숨김
                   // ADMIN_ROLE이 3 이상인 경우: 기기관리, 매니저 관리, 사용자 관리 메뉴 숨김
                   if (adminRole === 2) {
-                    return !["기기 관리", "매니저 관리"].includes(item.title);
+                    return !["기기 관리", "매니저 관리", "로그인 기록 관리"].includes(item.title);
                   }
                   if (adminRole >= 3) {
-                    return !["대시보드", "기기 관리", "매니저 관리", "사용자 관리", "측정 관리"].includes(item.title);
+                    return !["대시보드", "기기 관리", "매니저 관리", "사용자 관리", "측정 관리", "로그인 기록 관리"].includes(item.title);
+                  }
+                  // ADMIN_ROLE이 1 이하인 경우에만 로그인 기록 관리 메뉴 표시
+                  if (item.title === "로그인 기록 관리" && adminRole > 1) {
+                    return false;
                   }
                   return true;
                 })
                 .map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                      <Link href={item.url} onClick={handleLinkClick}>
-                        <item.icon className="lg:!w-5 lg:!h-5" />
-                        <span>{item.title}</span>
-                      </Link>
+                      {item.external ? (
+                        <a 
+                          href={item.url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          onClick={handleLinkClick}
+                          className="flex items-center gap-2"
+                        >
+                          <item.icon className="lg:!w-5 lg:!h-5" />
+                          <span>{item.title}</span>
+                        </a>
+                      ) : (
+                        <Link href={item.url} onClick={handleLinkClick}>
+                          <item.icon className="lg:!w-5 lg:!h-5" />
+                          <span>{item.title}</span>
+                        </Link>
+                      )}
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
