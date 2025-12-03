@@ -22,7 +22,7 @@ const DummyMeasureDeviceTab = () => {
 
 const MeasureDeviceTab = () => {
   const { query, setQueryParam } = useQueryParams();
-  const deviceSn = query.device_sn || 0;
+  const deviceSn = query.device_sn || "0";
   const {
     data: measureDeviceResponse,
     isLoading,

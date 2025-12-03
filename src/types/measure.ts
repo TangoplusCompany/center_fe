@@ -13,7 +13,7 @@ export interface IMeasureListResponse extends IResponseDefault {
 export interface IMeasureData extends IPagination {
   measurements: IMeasureList[];
 }
-
+// 이게 들어오는 측정 1개에 대한 data class임. = export inter
 export interface IMeasureList {
   sn: number;
   measure_sn: number;

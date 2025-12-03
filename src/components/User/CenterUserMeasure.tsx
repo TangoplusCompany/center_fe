@@ -23,7 +23,7 @@ const CenterUserMeasure = ({
 }) => {
   const measureList: MeasureListType[] = [
     {
-      title: "정면 측정",
+      title: "정면 자세",
       value: "frontTotal",
       component: () => (
         <FrontMeasurement
@@ -33,7 +33,7 @@ const CenterUserMeasure = ({
       ),
     },
     {
-      title: "측면 측정",
+      title: "측면 자세",
       value: "SideTotal",
       component: () => (
         <SideMeasurement
@@ -43,7 +43,7 @@ const CenterUserMeasure = ({
       ),
     },
     {
-      title: "후면 측정",
+      title: "후면 자세",
       value: "BackTotal",
       component: () => (
         <BackMeasurement
@@ -53,7 +53,7 @@ const CenterUserMeasure = ({
       ),
     },
     {
-      title: "스쿼트 측정",
+      title: "스쿼트 자세",
       value: "dynamic",
       component: () => <MeasureDetailDynamic dynamic={measureData.dynamic} />,
     },

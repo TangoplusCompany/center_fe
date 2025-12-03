@@ -65,7 +65,11 @@ export const UserList = ({
               </Link>
               {adminRole < 3 && (
                 <button
-                  onClick={() => handleRemoveUser(user.user_sn)}
+                  onClick={() => {
+                    if (window.confirm(`${user.user_name} 사용자를 제거하시습니까?`)) {
+                      handleRemoveUser(user.user_sn);
+                    }
+                  }}
                   className="flex items-center gap-2 justify-end cursor-pointer text-red-500"
                 >
                   <Trash className="w-4 h-4" />
