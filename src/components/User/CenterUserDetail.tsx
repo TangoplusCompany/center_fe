@@ -33,14 +33,14 @@ const CenterUserDetail = ({ userUUID }: { userUUID: string }) => {
         update={handleTab}
         onUpdateMeasureSn={handleRecentSn}
       />
-      {tab === 0 && <CenterUserInformation />}
-      {tab !== 0 && (
+      {tab !== 2 && (
         <CenterUserMeasureContainer
           measureSn={measureSn}
           userUUID={userUUID}
           tab={tab}
         />
       )}
+      {tab === 2 && <CenterUserInformation />}
     </div>
   );
 };

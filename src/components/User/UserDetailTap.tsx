@@ -9,7 +9,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { formatDate } from "@/utils/formatDate";
 import { useGetUserMeasureList } from "@/hooks/api/user/useGetUserMeasureList";
 import { useGetQuery } from "@/hooks/utils/useGetQuery";
@@ -40,25 +40,33 @@ const UserDetailTap = ({
     user_uuid: userUUID,
   });
   
+  const [selectedMeasureSn, setSelectedMeasureSn] = useState<number | null>(null);
+
   const handleClick = (value: number) => {
     update(value);
   };
   const handleSelect = (value: string) => {
+    const sn = parseInt(value);
+    setSelectedMeasureSn(sn);
     update(1);
-    onUpdateMeasureSn(parseInt(value));
+    onUpdateMeasureSn(sn);
   };
   useEffect(() => {
-    onUpdateMeasureSn(userMeasureList?.measurements[0]?.measure_sn as number);
+    // 여기서 이제 기본값 넣기
+    const defaultSn = userMeasureList?.measurements[0]?.measure_sn as number;
+    setSelectedMeasureSn(defaultSn);
+    onUpdateMeasureSn(defaultSn);
+  
   }, [userMeasureList, onUpdateMeasureSn]);
 
   if (userMeasureLoading) return <p>Loading...</p>;
   if (userMeasureError) return <p>Loading...</p>;
   if (!userMeasureList) return <p>No data</p>;
-
+  // 센터 사용자 상세 조회
   return (
     <div className="w-full flex items-center justify-between">
       <ul className="flex items-center justify-start gap-5">
-        {["사용자 정보", "기본 정보", "측정 정보"].map((item, index) => {
+        {["기본 정보", "측정 정보", "사용자 정보"].map((item, index) => {
           return (
             <li key={item + index}>
               <button
@@ -76,24 +84,42 @@ const UserDetailTap = ({
           );
         })}
       </ul>
-      <Select onValueChange={handleSelect}>
-        <SelectTrigger className="w-auto">
-          <SelectValue
-            placeholder={`${formatDate(
-              userMeasureList.measurements[0].measure_date,
-            )} - ${userMeasureList.measurements[0].t_score}점`}
-          />
-        </SelectTrigger>
+      {/* TODO 날짜 선택 콤보 박스 */}
+      <div className="flex items-center gap-3 ml-auto">
+        {/* <Select onValueChange={handleSelect}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="비교를 선택하세요" />
+          </SelectTrigger>
         <SelectContent>
-          {userMeasureList.measurements.map((item: IMeasureList) => {
-            return (
+          {userMeasureList.measurements
+            .filter(item => item.measure_sn !== selectedMeasureSn) // 현재 선택 제외
+            .map(item => (
               <SelectItem key={item.measure_sn} value={item.measure_sn.toString()}>
-                {`${formatDate(item.measure_date)} - ${item.t_score}점`}
+                {formatDate(item.measure_date)}
               </SelectItem>
-            );
-          })}
-        </SelectContent>
-      </Select>
+            ))}
+        </SelectContent> */}
+        {/* </Select> */}
+        <Select onValueChange={handleSelect}>
+          <SelectTrigger className="w-auto">
+            <SelectValue
+              placeholder={`${formatDate(
+                userMeasureList.measurements[0].measure_date,
+              )}`}
+            />
+          </SelectTrigger>
+          <SelectContent>
+            {userMeasureList.measurements.map((item: IMeasureList) => {
+              return (
+                <SelectItem key={item.measure_sn} value={item.measure_sn.toString()}>
+                  {`${formatDate(item.measure_date)}`}
+                </SelectItem>
+              );
+            })}
+          </SelectContent>
+        </Select>
+      </div>
+      
     </div>
   );
 };

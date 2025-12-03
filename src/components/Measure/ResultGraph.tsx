@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
  * unitName : 값 단위의 이름
  * @returns Component
  */
+// 여기에다가 사진 아래에 데이터를 넣으면 됨.
 const ResultGraph = ({
   userAvg,
   defaultAvg,
