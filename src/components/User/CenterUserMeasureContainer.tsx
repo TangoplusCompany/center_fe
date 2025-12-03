@@ -19,16 +19,16 @@ const CenterUserMeasureContainer = ({
 
   if (userMeasureDataLoading) return <p>측정내역 불러오는중...</p>;
   if (!userMeasureData) return <></>;
-
+//  TODO 이 곳에서 기본 정보를 수정하기 (component를 만들어서)
   return (
     <>
-      {tab === 1 && (
+      {tab === 0 && (
         <div className="w-full flex gap-5 lg:gap-10">
           <SkeletonContainer data={userMeasureData.measure_info} />
           <MeasureInformation data={userMeasureData.measure_info} />
         </div>
       )}
-      {tab === 2 && <CenterUserMeasure measureData={userMeasureData} />}
+      {tab === 1 && <CenterUserMeasure measureData={userMeasureData} />}
     </>
   );
 };

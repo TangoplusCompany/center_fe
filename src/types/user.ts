@@ -75,7 +75,11 @@ export interface IUserMeasurement {
 
 export interface IUserDetailMeasureInfo
   extends IMeasureUserRisk,
-    IMeasureUserPain {
+    IMeasureUserPain,
+    IMeasureRangeLevel,
+    IMeasureRiskResult,
+    IMatStatic,
+    IMatOhs {
   risk_result_ment: string; // 위험도 결과 멘트
   device_sn: number | string; // 장치 sn
   mobile_temp: string;
@@ -135,6 +139,51 @@ export interface IMeasureUserPain {
   pain_part_right_shoulder: number;
   pain_part_right_wrist: number;
   pain_part_waist: number;
+}
+export interface IMeasureRangeLevel {
+  range_level_neck: number;
+  range_level_shoulder: number;
+  range_level_elbow: number;
+  range_level_hip: number;
+  range_level_knee: number;
+  range_level_ankle: number;
+}
+export interface IMeasureRiskResult {
+  risk_upper_ment: string;
+  risk_upper_risk_level: number;
+  risk_upper_range_level: number;
+
+  risk_lower_ment: string;
+  risk_lower_risk_level: number;
+  risk_lower_range_level: number;
+}
+export interface IMatStatic {
+  mat_static_horizontal_ment: string;
+  mat_static_vertical_ment: string;
+  mat_static_risk_level: number;
+  mat_static_range_level: number;
+  mat_static_left_top: number;
+  mat_static_left_bottom: number;
+  mat_static_right_top: number;
+  mat_static_right_bottom: number;
+  mat_static_left_pressure: number;
+  mat_static_right_pressure: number;
+  mat_static_top_pressure: number;
+  mat_static_bottom_pressure: number;
+}
+
+export interface IMatOhs {
+  mat_ohs_horizontal_ment: string;
+  mat_ohs_vertical_ment: string;
+  mat_ohs_knee_ment: string;
+  mat_ohs_left_top: number;
+  mat_ohs_left_bottom: number;
+  mat_ohs_right_top: number;
+  mat_ohs_right_bottom: number;
+  mat_ohs_left_pressure: number;
+  mat_ohs_right_pressure: number;
+  mat_ohs_top_pressure: number;
+  mat_ohs_bottom_pressure: number;
 }
 
 export interface IUserDetailDynamic {

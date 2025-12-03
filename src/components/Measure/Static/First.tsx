@@ -33,6 +33,7 @@ const MeasureStaticFirst = React.memo(
           measureJson={measureJson}
           step="first"
         />
+        {/* TODO 여기서 이제 사진 하단의 데이터들 수정해야 함 */}
         <div className="grid flex-1 grid-cols-12 gap-2 md:gap-5 w-full lg:gap-5 px-2">
           <div className="col-span-12 flex flex-col gap-5 text-black dark:text-white">
             <ResultGraph

@@ -17,14 +17,16 @@ const SearchForm = ({
   const searchSchema = z.object({
     search: z
       .string()
-      .min(1, {
-        message:
-          "검색어는 최소 1글자 이상입니다. 이름 혹은 전화번호를 입력해주세요.",
-      })
+      // .min(0, {
+      //   message:
+      //     "검색어는 최소 1글자 이상입니다. 이름 혹은 전화번호를 입력해주세요.",
+      // })
       .max(50, { message: "검색어는 최대 50자까지 입력 가능합니다." })
-      .regex(/^[가-힣a-zA-Z0-9]+$/, {
+      .regex(/^[가-힣a-zA-Z0-9]*$/, {
         message: "한글, 영어, 숫자만 입력해주세요.",
-      }),
+      })
+      .transform((value) => (value.trim() === "" ? "" : value))
+      ,
   });
 
   const { register, handleSubmit, formState: { errors } } = useForm<z.infer<typeof searchSchema>>({
