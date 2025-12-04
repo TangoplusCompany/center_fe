@@ -13,6 +13,7 @@ import React, { useEffect, useState } from "react";
 import { formatDate } from "@/utils/formatDate";
 import { useGetUserMeasureList } from "@/hooks/api/user/useGetUserMeasureList";
 import { useGetQuery } from "@/hooks/utils/useGetQuery";
+import { Calendar } from "lucide-react";
 
 const UserDetailTap = ({
   nowTab,
@@ -101,21 +102,59 @@ const UserDetailTap = ({
         </SelectContent> */}
         {/* </Select> */}
         <Select onValueChange={handleSelect}>
-          <SelectTrigger className="w-auto">
+          <SelectTrigger
+            className="
+              w-auto 
+              border border-[#454545]
+              dark:border-gray-600
+              rounded-[12px]
+              px-3 py-2 
+              text-sm
+              shadow-sm
+              hover:border-gray-400 
+              dark:hover:border-gray-500
+              focus:outline-none 
+              focus:ring-2 
+              focus:ring-blue-500 
+              focus:border-blue-500
+              transition
+              [&>svg:last-child]:hidden
+            "
+          >
+          <Calendar className="w-4 h-4 m-1.5 text-gray-600" />
             <SelectValue
-              placeholder={`${formatDate(
-                userMeasureList.measurements[0].measure_date,
-              )}`}
+              placeholder={
+                formatDate(
+                  userMeasureList.measurements.find(
+                    (item) => item.measure_sn === selectedMeasureSn
+                  )?.measure_date ?? ""
+                )
+              }
             />
           </SelectTrigger>
-          <SelectContent>
-            {userMeasureList.measurements.map((item: IMeasureList) => {
-              return (
-                <SelectItem key={item.measure_sn} value={item.measure_sn.toString()}>
-                  {`${formatDate(item.measure_date)}`}
-                </SelectItem>
-              );
-            })}
+
+          <SelectContent
+            className="
+              border border-gray-200 
+              dark:border-gray-700 
+              rounded-xl 
+              shadow-lg
+            "
+          >
+            {userMeasureList.measurements.map((item: IMeasureList) => (
+              <SelectItem
+                key={item.measure_sn}
+                value={item.measure_sn.toString()}
+                className="
+                  cursor-pointer 
+                  hover:bg-gray-100 
+                  dark:hover:bg-gray-800
+                  px-3 py-2
+                "
+              >
+                {formatDate(item.measure_date)}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
