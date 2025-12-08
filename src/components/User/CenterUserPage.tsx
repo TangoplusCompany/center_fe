@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import CustomPagination from "@/components/common/Pagination";
-import SearchForm from "@/components/Util/SearchForm";
 import OptionBar from "@/components/Util/OptionBar";
 import { useGetUserList } from "@/hooks/api/user/useGetUserList";
 import { IUserListData } from "@/types/user";
@@ -61,25 +60,23 @@ const CenterUserPage = () => {
       <div className="col-span-12 flex flex-col gap-5">
         <div className="col-span-12 flex justify-between">
           <p>사용자가 존재하지 않습니다. 신규 사용자를 추가해주세요.</p>
-          <Button>
+          <Button variant="secondary">
             <Link href={`/user/add`}>신규사용자 등록</Link>
           </Button>
         </div>
-        <SearchForm setSearch={onChangeSearch} search={search} />
       </div>
     );
   }
 
   return (
     <div className="col-span-12 flex flex-col gap-5">
-      {adminRole < 3 && (
-        <div className="flex justify-end absolute top-0 right-0">
-          <Button>
-            <Link href={`/user/add`}>신규사용자 등록</Link>
-          </Button>
-        </div>
-      )}
-      <OptionBar totalItems={userResponseData.total} />
+      <OptionBar 
+        totalItems={userResponseData.total} 
+        search={search} 
+        onSearchChange={onChangeSearch}
+        showAddButton={adminRole < 3}
+        addButtonHref="/user/add"
+      />
       <UserList
         users={userResponseData.users}
         refetch={refetchUserList}
@@ -91,7 +88,6 @@ const CenterUserPage = () => {
         last_page={userResponseData.last_page}
         limit={userResponseData.limit}
       />
-      <SearchForm setSearch={onChangeSearch} search={search} />
     </div>
   );
 };
