@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
  * @param user_uuid 유저 고유 아이디
  * @returns 측정 상세 데이터
  */
-export const useMeasureDetail = <T>(measure_sn: number, user_uuid: string) => {
+export const useMeasureDetail = <T>(measure_sn: number | undefined, user_uuid: string) => {
   return useQuery<T>({
     queryKey: ["measureDetail", measure_sn, user_uuid],
     queryFn: async () => {

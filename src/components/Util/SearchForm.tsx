@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Input } from "../ui/input";
+import { SearchInput } from "../ui/search-Input";
 import { Button } from "../ui/button";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -10,9 +10,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 const SearchForm = ({
   setSearch,
   search,
+
 }: {
   setSearch: (searchValue: string) => void;
   search: string;
+  className?: string;
 }) => {
   const searchSchema = z.object({
     search: z
@@ -46,19 +48,20 @@ const SearchForm = ({
     <>
       <form
         onSubmit={submitSearch}
-        className="w-full max-w-[450px] mx-auto flex items-center justify-center gap-4"
+        className="w-full max-w-[800px] mx-auto flex items-center justify-center gap-4 shrink-0"
       >
-        <Input
+        <SearchInput
           type="text"
           aria-invalid={!!errors.search}
           {...register("search")}
           placeholder="이름 혹은 전화번호를 입력해주세요."
           maxLength={50}
+          className="w-[800px]"
         />
         <Button type="submit">검색</Button>
       </form>
       {errors.search?.message && (
-        <p className="w-full max-w-[450px] mx-auto mt-2 text-sm text-red-500">{errors.search.message}</p>
+        <p className="w-full max-w-[800px] mx-auto mt-2 text-sm text-red-500">{errors.search.message}</p>
       )}
     </>
   );
