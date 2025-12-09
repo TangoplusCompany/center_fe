@@ -108,14 +108,12 @@ const CenterUserMeasureContainer = ({
                   onClick={() => 
                     onUpdateMeasureSn(0)
                   } // ✅ measureSn 초기화 → 다시 리스트 화면
-                  className="px-3 py-1 rounded-md border text-sm"
+                  className="px-3 py-1 rounded-md text-sm"
                 >
                   ← 목록으로
                 </button>
-                {/* 필요하면 측정일자/기기명 같은 헤더도 여기에 */}
               </div>
                 
-              {/* 본문: 선택된 1개의 측정 요약 */}
               {userMeasureDataLoading && (
                 <p className="py-8 text-center">측정내역 불러오는 중입니다...</p>
               )}

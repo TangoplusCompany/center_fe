@@ -93,7 +93,7 @@ const MeasureGraph = ({ data }: MeasureHeatmapProps) => {
           
           <div className="flex flex-col items-center justify-center w-full h-32 bg-gray-100 rounded-xl p-4">
             <div className="text-sm text-gray-600 text-center space-y-1">
-              <p>*측정 기록이 부족합니다.</p>
+              <p>측정 기록이 부족합니다.</p>
               <p>유형에 대한 결과는 최소 5회 이상이 필요합니다.</p>
               <p>꾸준히 내 건강을 관리하여 나의 체형 유형을 파악해보세요.</p>
             </div>

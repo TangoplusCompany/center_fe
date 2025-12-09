@@ -57,7 +57,11 @@ const CenterUserMeasure = ({
       component: () => (
         // 원하는 요약 컴포넌트를 여기 넣으면 됩니다.
         // 예시: measureData.measure_info 기반
-        <MeasureIntro data={measureData.measure_info} />
+        <MeasureIntro 
+          info={measureData.measure_info}
+          static0={measureData.static_1}
+          dynamic={measureData.dynamic}
+         />
       ),
     },
     {
