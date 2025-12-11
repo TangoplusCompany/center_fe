@@ -1,4 +1,4 @@
-export interface IActionCryptoProps {
+export interface IActionKaKaoCryptoProps {
   device_sn: number;
   sn: number;
   measure_sn: number;

@@ -312,6 +312,10 @@ export interface IUserDetailDynamic {
   user_name: string;
   user_sn: number | string;
   user_uuid: string;
+  mat_hip_down_image_name: string;
+  mat_hip_trajectory_name: string;
+  mat_left_knee_trajectory_image_name: string;
+  mat_right_knee_trajectory_image_name: string;
 }
 
 export interface IUserDetailStatic {
@@ -325,6 +329,8 @@ export interface IUserDetailStatic {
   measure_seq: number | string;
   measure_server_file_name: string;
   measure_server_json_name: string;
+  measure_server_mat_image_name: string;
+  measure_server_mat_json_name: string;
   measure_sn: number | string;
   measure_start_time: string;
   measure_type: number | string;
@@ -337,6 +343,8 @@ export interface IUserDetailStatic {
   uploaded: string;
   uploaded_file: string;
   uploaded_json: string;
+  uploaded_mat_image: string;
+  uploaded_mat_json: string;
   used: string;
   user_name: string;
   user_sn: number | string;

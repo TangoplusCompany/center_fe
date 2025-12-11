@@ -30,7 +30,7 @@ const MeasureSummary = ({ data }: { data: IUserDetailMeasureInfo }) => {
   // };
   return (
     <div>
-      <div className="rounded-xl border p-5 shadow-sm bg-white">
+      <div className="rounded-3xl border p-5 shadow-sm bg-white">
         <div className="mb-6">
           <div className="flex items-center justify-between">
             {/* <button onClick={handleShare} title="카카오톡 공유하기">

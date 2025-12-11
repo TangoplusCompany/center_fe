@@ -7,7 +7,7 @@ type TWorstPart = {
 };
 const MeasureBest = ({ data }: { data: TWorstPart }) => {
   return (
-    <div className="w-full rounded-xl border shadow-sm bg-white relative overflow-hidden">
+    <div className="w-full rounded-3xl border shadow-sm bg-white relative overflow-hidden">
       {/* 제목 - 좌상단 작은 원 배지와 함께 */}
       <div className="flex items-center gap-2 mb-4 p-5 ">
         {/* TODO 이곳에 아이콘 넣기 */}

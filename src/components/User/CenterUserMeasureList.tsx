@@ -19,7 +19,7 @@ export const CenterUserMeasureList = ({
   onDelete?: (sn: number) => void;
   onRowClick?: (measureSn: number) => void;
 }) => {
-  console.log(measures);
+
   if (!measures || measures.length === 0) {
     return <p className="text-center py-8 text-gray-500">측정 데이터가 없습니다.</p>;
   }
