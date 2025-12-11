@@ -1,6 +1,5 @@
 import { IUserDetailDynamic } from "@/types/user";
 import React, { useEffect, useRef, useState } from "react";
-import ResultGraph from "./ResultGraph";
 import { useDrawCanvas } from "@/hooks/utils";
 import { useMeasureDynamicJson } from "@/hooks/api/measure/useMeasureDynamicJson";
 import DataError from "../Util/DataError";
@@ -411,88 +410,6 @@ const MeasureDetailDynamic = ({
         nowHeight={nowHeight}
         measureJson={measureJson}
       /> */}
-      <div className="grid flex-1 grid-cols-12 gap-2 md:gap-5 w-full lg:gap-10 p-5 lg:p-0">
-        <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
-          <ResultGraph
-            defaultAvg={0.01}
-            sdAvg={0.51}
-            title="오버헤드스쿼트 양쪽 어깨 높이차"
-            userAvg={dynamic.ohs_front_horizontal_distance_shoulder}
-            unit="cm"
-          />
-          <ResultGraph
-            defaultAvg={89.9 * 2}
-            sdAvg={1.93 * 2}
-            title="오버헤드스쿼트 양쪽 어깨 기울기"
-            userAvg={Math.abs(dynamic.ohs_front_horizontal_angle_shoulder)}
-            unit="°"
-          />
-        </div>
-        <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
-          <ResultGraph
-            defaultAvg={-0.23}
-            sdAvg={1.16}
-            title="오버헤드스쿼트 양쪽 팔꿉 높이차"
-            userAvg={dynamic.ohs_front_horizontal_distance_elbow}
-            unit="cm"
-          />
-          <ResultGraph
-            defaultAvg={90.39 * 2}
-            sdAvg={2.44 * 2}
-            title="오버헤드스쿼트 양쪽 팔꿉 기울기"
-            userAvg={Math.abs(dynamic.ohs_front_horizontal_angle_elbow)}
-            unit="°"
-          />
-        </div>
-        <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
-          <ResultGraph
-            defaultAvg={0.5}
-            sdAvg={1.52}
-            title="오버헤드스쿼트 양쪽 손목 높이차"
-            userAvg={dynamic.ohs_front_horizontal_distance_wrist}
-            unit="cm"
-          />
-          <ResultGraph
-            defaultAvg={89.89 * 2}
-            sdAvg={2.98 * 2}
-            title="오버헤드스쿼트 양쪽 손목 기울기"
-            userAvg={Math.abs(dynamic.ohs_front_horizontal_angle_wrist)}
-            unit="°"
-          />
-        </div>
-        <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
-          <ResultGraph
-            defaultAvg={-0.18}
-            sdAvg={0.28}
-            title="오버헤드스쿼트 양쪽 골반 높이차"
-            userAvg={dynamic.ohs_front_horizontal_distance_hip}
-            unit="cm"
-          />
-          <ResultGraph
-            defaultAvg={90.99 * 2}
-            sdAvg={1.56 * 2}
-            title="오버헤드스쿼트 양쪽 골반 기울기"
-            userAvg={Math.abs(dynamic.ohs_front_horizontal_angle_hip)}
-            unit="°"
-          />
-        </div>
-        <div className="col-span-12 flex lg:flex-row flex-col items-start gap-5 text-black dark:text-white">
-          <ResultGraph
-            defaultAvg={-0.22}
-            sdAvg={0.54}
-            title="오버헤드스쿼트 양쪽 무릎 높이차"
-            userAvg={dynamic.ohs_front_horizontal_distance_knee}
-            unit="cm"
-          />
-          <ResultGraph
-            defaultAvg={91.02 * 2}
-            sdAvg={2.57 * 2}
-            title="오버헤드스쿼트 양쪽 무릎 기울기"
-            userAvg={Math.abs(dynamic.ohs_front_horizontal_angle_knee)}
-            unit="°"
-          />
-        </div>
-      </div>
     </div>
   );
 };

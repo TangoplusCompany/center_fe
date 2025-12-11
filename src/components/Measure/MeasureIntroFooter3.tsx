@@ -46,16 +46,17 @@ const MeasureIntroFooter3= (
             <div className="w-full rounded-md border text-center py-1 mb-1">
               무릎이동 궤적(L)
             </div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img 
-              src={processedLeftSrc} 
-              alt="정적 족압 이미지"
-              className="w-32 h-32 p-1 rounded-md border bg-accent"
-              onError={(e) => {
-                // 이미지 로드 실패 시 처리
-                e.currentTarget.src = '/images/measure_default.png';
-              }}
-            />
+            {processedLeftSrc !== "" && processedLeftSrc !== null && (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={processedLeftSrc}
+                alt="왼쪽 무릎이동 궤적"
+                className="w-full h-full p-1 rounded-md border bg-accent"
+                onError={(e) => {
+                  e.currentTarget.src = "/images/measure_default.png";
+                }}
+              />
+            )}
           </div>
       </div>
       
@@ -64,15 +65,17 @@ const MeasureIntroFooter3= (
           <div className="w-full rounded-md border text-center py-1 mb-1">
             무릎이동 궤적(R)
           </div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img 
-            src={processedRightSrc} 
-            alt="정적 족압 이미지"
-            className="w-32 h-32 p-1 rounded-md border bg-accent"
-            onError={(e) => {
-              // 이미지 로드 실패 시 처리
-              e.currentTarget.src = '/images/measure_default.png';
-            }} />
+          {processedRightSrc !== "" && processedRightSrc !== null && (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={processedRightSrc}
+                alt="오른쪽 무릎이동 궤적"
+                className="w-full h-full p-1 rounded-md border bg-accent"
+                onError={(e) => {
+                  e.currentTarget.src = "/images/measure_default.png";
+                }}
+              />
+            )}
         </div>
       </div>
     </div>

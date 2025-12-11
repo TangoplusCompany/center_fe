@@ -34,7 +34,7 @@ const MeasureIntroUpper = (
     위험: "text-danger-foreground",
   }[condition] ?? "bg-primary-foreground";
   return (
-    <div className="flex-1 p-4 border rounded-3xl bg-white">
+    <div className="flex flex-1 flex-col h-full p-4 border rounded-3xl bg-white">
       {/* 헤더 */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">상지 결과</h2>
@@ -56,24 +56,26 @@ const MeasureIntroUpper = (
         </div>
       )}
 
-      <button
-        type="button"
-        onClick={() => setExpanded((prev) => !prev)}
-        className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-800 transition-all duration-200 mx-auto"
-      >
-        <span>{expanded ? "접기" : "상세 보기"}</span>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/icons/ic_arrow_circle_down.svg"
-          alt="카드 접기/펼치기 버튼"
-          width={20}
-          height={20}
-          className={cn(
-            "transition-transform duration-300",
-            expanded && "rotate-180"
-          )}  
-        />
-      </button>
+      <div className="mt-auto sticky bottom-3 flex justify-center">
+        <button
+          type="button"
+          onClick={() => setExpanded((prev) => !prev)}
+          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-800 transition-all duration-200"
+        >
+          <span>{expanded ? "접기" : "상세 보기"}</span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/icons/ic_arrow_circle_down.svg"
+            alt="카드 접기/펼치기 버튼"
+            width={20}
+            height={20}
+            className={cn(
+              "transition-transform duration-300",
+              expanded && "rotate-180"
+            )}
+          />
+        </button>
+      </div>
 
     </div>
   );

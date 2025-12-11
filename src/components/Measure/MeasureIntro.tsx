@@ -165,7 +165,7 @@ const dummyPartCard: PartCard[] = [
         {/* 첫 번째 */}
         <div className="flex-1 p-4">
           <MeasureIntroFooter1 
-            comment={"[좌우 무게 분석]\n" + mat_static_horizontal_ment + "\n[상하 무게 분석]\n" + mat_static_vertical_ment}
+            comment={"[좌우 무게 분석]\n" + (mat_static_horizontal_ment ?? "\n") + "\n[상하 무게 분석]\n" + (mat_static_vertical_ment ?? "\n")}
             condition={kneeCondition}
             level={mat_static_range_level}
             fileName={measure_server_mat_image_name}
@@ -175,7 +175,7 @@ const dummyPartCard: PartCard[] = [
 
         <div className="flex-1 p-4">
           <MeasureIntroFooter2 
-            comment={"[좌우 무게 분석]\n" + mat_ohs_horizontal_ment + "\n[상하 무게 분석]\n" + mat_ohs_vertical_ment}
+            comment={"[좌우 무게 분석]\n" + (mat_ohs_horizontal_ment ?? "\n") + "\n[상하 무게 분석]\n" + (mat_ohs_vertical_ment ?? "\n")}
             footFileName={mat_hip_down_image_name}
             hipFileName={mat_hip_trajectory_name}
             matOhs={ ohsFourCorners }
@@ -185,7 +185,7 @@ const dummyPartCard: PartCard[] = [
         {/* 세 번째 */}
         <div className="flex-1 p-4">
           <MeasureIntroFooter3 
-            comment={"무릎 흔들림 분석\n" + mat_ohs_knee_ment}
+            comment={"무릎 흔들림 분석\n" + (mat_ohs_knee_ment ?? "")}
             leftKneeFileName={mat_left_knee_trajectory_image_name}
             rightKneeFileName={mat_right_knee_trajectory_image_name}
             />

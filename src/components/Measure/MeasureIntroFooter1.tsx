@@ -75,15 +75,17 @@ const MeasureIntroFooter1 = (
               무릎이동 궤적(L)
             </div>
             <div className="relative w-32 h-32">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={processedImageSrc}
-                alt="정적 족압 이미지"
-                className="w-full h-full p-1 rounded-md border bg-accent"
-                onError={(e) => {
-                  e.currentTarget.src = "/images/measure_default.png";
-                }}
-              />
+              {processedImageSrc !== "" && processedImageSrc !== null && (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={processedImageSrc}
+                  alt="정적 족압 이미지"
+                  className="w-full h-full p-1 rounded-md border bg-accent"
+                  onError={(e) => {
+                    e.currentTarget.src = "/images/measure_default.png";
+                  }}
+                />
+              )}
               <div className="absolute top-1/2 left-[40%] w-1/5 h-[1px] bg-sub300 -translate-y-1/2" />
               <div className="absolute left-1/2 top-[40%] h-1/5 w-[1px] bg-sub300 -translate-x-1/2" />
 
