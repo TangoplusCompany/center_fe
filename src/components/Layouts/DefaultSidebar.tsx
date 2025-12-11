@@ -93,16 +93,24 @@ export default function DefaultSidebar() {
       return true;
     });
 
-    const activeIndex = filteredDashboard.findIndex(item => pathname === item.url);
+    const activeIndex = filteredDashboard.findIndex((item) => {
+      // url이 "/"인 경우는 정확히 pathname도 "/"일 때만 매칭
+      if (item.url === '/') {
+        return pathname === '/';
+      }
+      // 다른 url들은 startsWith로 매칭
+      return pathname.startsWith(item.url);
+    });
     
     if (activeIndex >= 0 && menuItemRefs.current[activeIndex]) {
       const element = menuItemRefs.current[activeIndex];
-      if (element) {
-        setIndicatorStyle({
-          top: element.offsetTop,
-          height: element.offsetHeight
-        });
-      }
+      const rect = element.getBoundingClientRect();
+      const parentRect = element.offsetParent?.getBoundingClientRect();
+      
+      setIndicatorStyle({
+        top: rect.top - (parentRect?.top || 0),
+        height: rect.height
+      });
     }
   }, [pathname, adminRole]);
 
@@ -129,7 +137,7 @@ export default function DefaultSidebar() {
             />
           </div>
           <div className="flex flex-col gap-0.5 leading-none">
-            <span className="font-semibold text-xl">탱고플러스 센터</span>
+            <span className="font-semibold text-xl">탱고바디</span>
           </div>
         </SidebarMenuButton>
           <SidebarTrigger className="mx-4" />
@@ -144,7 +152,7 @@ export default function DefaultSidebar() {
                 className={`absolute left-0 transition-all duration-300 ease-in-out ${
                   state === "collapsed" 
                     ? "w-8 h-8 rounded-full left-1/2 -translate-x-1/2" // 👈 접혔을 때: 원형 + 중앙
-                    : "w-full bg-[#4169E1] rounded-l-[20px] rounded-r-none ml-4" // 👈 펼쳤을 때
+                    : "w-full bg-[#4169E1] rounded-l-[20px] rounded-r-none ml-4 " // 👈 펼쳤을 때
                 }`}
                 style={{
                   top: state === "collapsed" 
@@ -172,7 +180,9 @@ export default function DefaultSidebar() {
                   return true;
                 })
                 .map((item, index) => {
-                  const isActive = pathname === item.url;
+                  const isActive = item.url === '/' 
+                    ? pathname === item.url
+                    : pathname.startsWith(item.url);
                   // TODO 여기서 하단 스크롤만 없애고 넣기 
                   return (
                     <SidebarMenuItem 
@@ -184,7 +194,9 @@ export default function DefaultSidebar() {
                         <Link 
                           href={item.url} 
                           onClick={handleLinkClick} 
-                          className="flex items-center gap-3 py-3 px-4 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:justify-center"
+                          className={`flex items-center gap-3 py-3 px-4 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:justify-center ${
+                            isActive ? 'bg-transparent' : ''
+                          }`}
                         >
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img

@@ -55,9 +55,9 @@ export const UserList = ({
             </TableCell>
 
             <TableCell className="text-center">{user.email}</TableCell>
-            <TableCell className="flex items-center justify-end gap-2">
+            <TableCell className="flex mr-4 items-center justify-end gap-6">
               <Link
-                href={`/user/${user.user_uuid}?key=${user.user_sn}`}
+                href={`/user/${user.user_uuid}?key=${user.user_sn}&name=${encodeURIComponent(user.user_name)}`}
                 className="flex items-center gap-2 justify-end cursor-pointer"
               >
                 <FileText className="w-4 h-4" />

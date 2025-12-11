@@ -378,7 +378,7 @@ const MeasureDetailDynamic = ({
   if (isError) return <DataError />;
   return (
     <div className={`${className} flex flex-col gap-4 lg:gap-10`}>
-      <div className="relative w-full overflow-hidden">
+      <div className="relative w-2/3 overflow-hidden mx-auto">
         <video
           ref={videoRef}
           muted

@@ -6,8 +6,9 @@ import SkeletonBox from "./SkeletonBox";
 
 const SkeletonContainer = ({ data }: { data: IUserDetailMeasureInfo }) => {
   return (
-    <div className="flex flex-1 flex-col gap-3">
+    <div className="h-full">
       <SkeletonBox data={data} />
+      
     </div>
   );
 };

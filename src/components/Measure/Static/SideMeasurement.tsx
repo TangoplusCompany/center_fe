@@ -12,10 +12,6 @@ const SideMeasurement = ({
 }) => {
   return (
     <div className="grid grid-cols-2 relative">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 z-10 flex ">
-        <p className="px-5 py-1 rounded-bl-lg bg-white border-t border-r">좌</p>
-        <p className="px-5 py-1 rounded-br-lg bg-white border-t border-l">우</p>
-      </div>
       <div className="col-span-1">
         <MeasureStaticThird statics={statics_3} />
       </div>

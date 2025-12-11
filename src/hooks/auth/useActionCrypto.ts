@@ -1,18 +1,18 @@
 "use client";
-import { actionEncrypt, actionDecrypt } from "@/app/actions/getCrypto";
-import { IActionCryptoProps } from "@/types/crypto";
+import { actionKakaoEncrypt, actionDecrypt } from "@/app/actions/getCrypto";
+import { IActionKaKaoCryptoProps } from "@/types/kakaoCrypto";
 
 /**
  * 암호화/복호화 Hooks
  * @param cryptoData 암호화/복호화 데이터
  * @returns 암호화/복호화 데이터
  */
-export const useActionEncrypt: (cryptoData: IActionCryptoProps) => Promise<string> = async (cryptoData: IActionCryptoProps) => {
-  const encrypted = await actionEncrypt(cryptoData);
+export const useActionEncrypt: (cryptoData: IActionKaKaoCryptoProps) => Promise<string> = async (cryptoData: IActionKaKaoCryptoProps) => {
+  const encrypted = await actionKakaoEncrypt(cryptoData);
   return encrypted;
 };
-export const useActionDecrypt: (text: string) => Promise<IActionCryptoProps> = async (text: string) => {
+export const useActionDecrypt: (text: string) => Promise<IActionKaKaoCryptoProps> = async (text: string) => {
   const decryptedString = await actionDecrypt(text);
-  const decryptedData: IActionCryptoProps = JSON.parse(decryptedString);
+  const decryptedData: IActionKaKaoCryptoProps = JSON.parse(decryptedString);
   return decryptedData;
 };

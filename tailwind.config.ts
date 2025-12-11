@@ -12,6 +12,13 @@ export default {
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        danger: 'hsl(var(--danger))',
+        'danger-foreground': 'hsl(var(--danger-foreground))',
+        warning: 'hsl(var(--warning))',
+        'warning-foreground': 'hsl(var(--warning-foreground))',
+        sub200: "hsl(var(--sub200))",
+        sub300: "hsl(var(--sub300))",
+        sub400: "hsl(var(--sub400))",
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
@@ -60,6 +67,11 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        toggleAccent: {
+          DEFAULT: "hsl(var(--toggle-accent))",
+          foreground: "hsl(var(--toggle-accent-foreground))",
+        },
+        
       },
       borderRadius: {
         lg: "var(--radius)",
