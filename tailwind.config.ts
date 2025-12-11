@@ -16,7 +16,9 @@ export default {
         'danger-foreground': 'hsl(var(--danger-foreground))',
         warning: 'hsl(var(--warning))',
         'warning-foreground': 'hsl(var(--warning-foreground))',
-        
+        sub200: "hsl(var(--sub200))",
+        sub300: "hsl(var(--sub300))",
+        sub400: "hsl(var(--sub400))",
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",

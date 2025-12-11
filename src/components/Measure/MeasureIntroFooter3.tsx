@@ -1,5 +1,8 @@
 "use client";
 
+import { removeDarkBackground } from "@/utils/removeDarkBackground";
+import { useEffect, useState } from "react";
+
 const MeasureIntroFooter3= (
   { 
     comment,
@@ -14,7 +17,22 @@ const MeasureIntroFooter3= (
     const baseUrl = `https://gym.tangoplus.co.kr/data/Results/`;
   const leftImageUrl = `${baseUrl}${leftKneeFileName}`;
   const rightImageUrl = `${baseUrl}${rightKneeFileName}`;
-  
+  const [processedLeftSrc, setProcessedLeftSrc] = useState<string>("");
+  const [processedRightSrc, setProcessedRightSrc] = useState<string>("");
+  useEffect(() => {
+    removeDarkBackground(leftImageUrl)
+      .then((result) => {
+        setProcessedLeftSrc(result);
+      })
+      .catch(() => {
+        setProcessedLeftSrc("/images/measure_default.png");
+      });
+
+    removeDarkBackground(rightImageUrl)
+      .then((result) => setProcessedRightSrc(result))
+      .catch(() => setProcessedRightSrc("/images/measure_default.png"));
+  }, [leftImageUrl, rightImageUrl]);
+
   return (
     <div className="flex-1 p-4 bg-white">
       {/* 헤더 */}
@@ -24,30 +42,40 @@ const MeasureIntroFooter3= (
 
       <div className="flex justify-center gap-4">
         <div className="flex justify-center mb-4">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img 
-          src={leftImageUrl} 
-          alt="정적 족압 이미지"
-          className="w-32 h-32"
-          onError={(e) => {
-            // 이미지 로드 실패 시 처리
-            e.currentTarget.src = '/images/measure_default.png';
-          }}
-        />
+          <div className="flex flex-col items-center w-fit">
+            <div className="w-full rounded-md border text-center py-1 mb-1">
+              무릎이동 궤적(L)
+            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img 
+              src={processedLeftSrc} 
+              alt="정적 족압 이미지"
+              className="w-32 h-32 p-1 rounded-md border bg-accent"
+              onError={(e) => {
+                // 이미지 로드 실패 시 처리
+                e.currentTarget.src = '/images/measure_default.png';
+              }}
+            />
+          </div>
       </div>
+      
       <div className="flex justify-center mb-4">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img 
-          src={rightImageUrl} 
-          alt="정적 족압 이미지"
-          className="w-32 h-32"
-          onError={(e) => {
-            // 이미지 로드 실패 시 처리
-            e.currentTarget.src = '/images/measure_default.png';
-          }}
-        />
+        <div className="flex flex-col items-center w-fit">
+          <div className="w-full rounded-md border text-center py-1 mb-1">
+            무릎이동 궤적(R)
+          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img 
+            src={processedRightSrc} 
+            alt="정적 족압 이미지"
+            className="w-32 h-32 p-1 rounded-md border bg-accent"
+            onError={(e) => {
+              // 이미지 로드 실패 시 처리
+              e.currentTarget.src = '/images/measure_default.png';
+            }} />
+        </div>
       </div>
-      </div>
+    </div>
       
       {/* 코멘트 */}
       <div className="text-base text-gray-700 whitespace-pre-line">

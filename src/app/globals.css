@@ -38,6 +38,9 @@ body {
     --danger-foreground: 0 100% 94.9%;
     --warning: 33 100% 50%;
     --warning-foreground: 33 100% 88.6%; 
+    --sub200: 0 0% 91%;
+    --sub300: 0 0% 85.1%;
+    --sub400: 0 0% 73.3%;
   }
 
   .dark {
@@ -71,6 +74,9 @@ body {
     --danger-foreground: 0 100% 94.9%;
     --warning: 33 100% 50%;
     --warning-foreground: 33 100% 88.6%; 
+    --sub200: 0 0% 91%;
+    --sub300: 0 0% 85.1%;
+    --sub400: 0 0% 73.3%;
   }
 }
 

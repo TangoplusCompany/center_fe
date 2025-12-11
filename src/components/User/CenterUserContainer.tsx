@@ -8,8 +8,10 @@ import { useMeasureDetail } from "@/hooks/api/measure/useMeasureDetail";
 
 import { IDayData } from '@/types/IDayData';
 import CenterUserMeasureListContainer from "./CenterUserMeasureListContainer";
-import { IUserMeasurement } from "@/types/user";
+import { IUserMeasureList, IUserMeasurement } from "@/types/user";
 import CenterUserMeasure from "@/components/User/CenterUserMeasure";
+import { useGetUserMeasureList } from "@/hooks/api/user/useGetUserMeasureList";
+import { useGetQuery } from "@/hooks/utils/useGetQuery";
 const CenterUserMeasureContainer = ({
   measureSn,
   userUUID,
@@ -32,6 +34,21 @@ const CenterUserMeasureContainer = ({
     shouldFetchDetail ? measureSn : undefined,
     userUUID
   );
+  const { query } = useGetQuery();
+  const { page = "1", limit = "100" } = query as {
+    page: string;
+    limit: string;
+  };
+  const {
+      data: userMeasureList,
+      isLoading: userMeasureLoading,
+      error: userMeasureError,
+    } = useGetUserMeasureList<IUserMeasureList>({
+      page,
+      limit,
+      user_uuid: userUUID,
+    });
+
 
   // 탭 0에서 쓸 더미/요약용 데이터 (기존 코드 유지)
   const worstPart = {
@@ -108,7 +125,7 @@ const CenterUserMeasureContainer = ({
                   onClick={() => 
                     onUpdateMeasureSn(0)
                   } // ✅ measureSn 초기화 → 다시 리스트 화면
-                  className="px-3 py-1 rounded-md text-sm"
+                  className="px-3 py-1 rounded-md text-sm text-primary-foreground"
                 >
                   ← 목록으로
                 </button>
@@ -124,8 +141,19 @@ const CenterUserMeasureContainer = ({
                 </p>
               )}
 
-              {!userMeasureDataLoading && !userMeasureDataError && userMeasureData && (
-                <CenterUserMeasure measureData={userMeasureData}  />
+              {!userMeasureDataLoading &&
+               !userMeasureDataError &&
+               !userMeasureLoading &&
+               !userMeasureError && 
+                userMeasureData &&
+                userMeasureList &&
+                  (
+                <CenterUserMeasure 
+                measureData={userMeasureData}
+                measureList= { userMeasureList?.measurements }
+                selectedMeasureSn= { measureSn }
+                onChangeMeasureSn={onUpdateMeasureSn}
+                   />
               )}
             </div>
           )}

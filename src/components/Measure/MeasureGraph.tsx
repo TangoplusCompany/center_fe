@@ -19,7 +19,7 @@ const MeasureGraph = ({ data }: MeasureHeatmapProps) => {
   };
 
   return (
-    <div className="w-full rounded-xl border p-5 shadow-sm bg-white">
+    <div className="w-full rounded-3xl border p-5 shadow-sm bg-white">
       <h2 className="text-xl font-bold mb-4">측정 한눈에 보기</h2>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

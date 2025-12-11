@@ -38,7 +38,7 @@ const CenterUserDetail = ({
     };
     
   return (
-    <div className="w-full h-full flex flex-col gap-5 lg:gap-10">
+    <div className="w-full h-full flex flex-col gap-5 lg:gap-4">
       <UserDetailTap
         nowTab={tab}
         userUUID={userUUID}
