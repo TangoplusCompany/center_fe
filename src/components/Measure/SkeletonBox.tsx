@@ -37,7 +37,6 @@ const SkeletonBox = ({ data }: { data: IUserDetailMeasureInfo }) => {
         </svg>
       </button> */}
 
-      {/* ⭐ Skeleton 영역 */}
       <div className="flex-1 flex items-center justify-center">
         <div className="relative z-0 skeleton mb-8">
           <SkeletonFront
@@ -52,7 +51,7 @@ const SkeletonBox = ({ data }: { data: IUserDetailMeasureInfo }) => {
       </div>
 
       {/* ⭐ 기준바: Skeleton 하단 중앙 */}
-      <div className="w-3/4 max-w-xl mx-auto text-center mt-auto">
+      <div className="w-full max-w-xl mx-auto text-center mt-auto">
         <div className="flex items-start">
           <p className="text-sm mb-2" style={{ color: "#9A9A9A" }}>
             * 측정 기준 설명

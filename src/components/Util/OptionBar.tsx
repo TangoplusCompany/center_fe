@@ -60,13 +60,15 @@ const OptionBar = ({
     <div className="flex flex-col gap-3">
       {/* 첫 번째 줄: 검색결과, SearchForm, 버튼들 */}
       <div className="flex items-center justify-between">
-        <p className="text-xl">검색결과: {totalItems ?? 0}건</p>
-        <div className="flex items-center gap-12">
-          <SearchForm 
-          setSearch={onSearchChange}
-          search={search}
-          className="max-w-md mx-4 gap-4"
-          />
+        <p className="text-xl shrink-0">
+          검색결과: {totalItems ?? 0}건
+        </p>
+
+        <div className="flex items-center gap-4 flex-1 justify-end">
+          <div className="w-2/3">
+            <SearchForm setSearch={onSearchChange} search={search} />
+          </div>
+
           {showAddButton && (
             <Button variant="secondary">
               <Link href={addButtonHref}>신규사용자 등록</Link>

@@ -40,8 +40,8 @@ export const RawDataResult = (
         <div className="grid grid-rows-[1fr,2fr] flex-1 h-24">
           {/* 1/3 영역: title */}
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold">{data.title}</h2>
-            <span className={`inline-block px-3 py-1 ${
+            <h2 className="text-lg font-semibold">{data.title}</h2>
+            <span className={`inline-block px-3 py-1 whitespace-nowrap flex-shrink-0 ${
               data.level === 2 ? "bg-danger" : "bg-warning"
             } text-white text-sm font-semibold rounded-xl`}>{levelstring}</span>
           </div>

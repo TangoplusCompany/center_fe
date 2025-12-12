@@ -25,12 +25,14 @@ const MeasureMainContainer = () => {
       ]);
     };
   return (
+    
     <>
-      <MeasureDeviceTab />
       <OptionBar totalItems={totalItems}
         search={searchValue} 
         onSearchChange={onChangeSearch}
       />
+      <MeasureDeviceTab />
+      
       <MeasureListContainer handleTotalItems={handleTotalItems} />
     </>
   );

@@ -79,7 +79,6 @@ const MeasureListContainer = ({
         last_page={measureResponse.last_page}
         limit={measureResponse.limit}
       />
-      <SearchForm setSearch={onChangeSearch} search={search} />
     </>
   );
 };

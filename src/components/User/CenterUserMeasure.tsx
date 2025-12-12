@@ -150,7 +150,7 @@ const CenterUserMeasure = ({
       {/* ✅ 상단 줄: TabsList (좌측) + Select(우측) */}
       
       <div className="flex items-center justify-between mb-4 gap-4">
-        <TabsList className="relative z-10 inline-flex w-max gap-6 bg-transparent p-0">
+        <TabsList className="relative z-10 inline-flex w-max gap-1 bg-transparent p-0">
           <div className="absolute bottom-0 left-0 w-full h-[3px] bg-sub200 rounded-md" />
   
           {measureTabs.map((measure) => (

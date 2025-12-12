@@ -44,7 +44,7 @@ const BackMeasurement = ({
   return (
         <div className="flex flex-col gap-5">
       {/* 상단: 이미지 2개 */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2">
         <div className="col-span-1">
           <MeasureStaticFifth statics={statics_5} />
         </div>

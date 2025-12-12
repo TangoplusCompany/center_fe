@@ -86,21 +86,20 @@ const CenterUserMeasureContainer = ({
               </div>
             </div>
 
-            {/* Graph */}
+            <div className="flex-[1]">
+              {userMeasureData ? (
+                <MeasureSummary data={userMeasureData.measure_info} />
+              ) : (
+                <p className="text-gray-500">요약 데이터를 불러오는 중이거나 없습니다.</p>
+              )}
+            </div>
             <div>
               <MeasureGraph data={measureData} />
             </div>
           </div>
 
-          {/* 오른쪽 Summary - 지금은 userMeasureData를 쓰고 있지만,
-              나중에 유저 전체 요약용 API가 생기면 그걸로 교체해도 됨 */}
-          <div className="flex-[1]">
-            {userMeasureData ? (
-              <MeasureSummary data={userMeasureData.measure_info} />
-            ) : (
-              <p className="text-gray-500">요약 데이터를 불러오는 중이거나 없습니다.</p>
-            )}
-          </div>
+
+          
         </div>
       )}
 
