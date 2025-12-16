@@ -2,43 +2,10 @@
 
 import { useMeasureDetail } from "@/hooks/api/measure/useMeasureDetail";
 import { useGetQuery } from "@/hooks/utils/useGetQuery";
-import { IMeasureDetailResponse } from "@/types/measure";
-import React, { useCallback, useState } from "react";
-import MeasurementList from "@/components/User/MeasurementList";
-import InformationContainer from "@/components/User/InformationContainer";
+import React from "react";
+import { IUserMeasurement } from "@/types/measure";
+import CenterUserMeasure from "./MeasureDetail";
 
-const MeasureDetailTap = ({
-  nowTab,
-  update,
-}: {
-  nowTab: number;
-  update: (index: number) => void;
-}) => {
-  const handleClick = (value: number) => {
-    update(value);
-  };
-  return (
-    <ul className="flex items-center justify-start gap-5 border-b">
-      {["기본 정보", "측정 정보"].map((item, index) => {
-        return (
-          <li key={item + index}>
-            <button
-              type="button"
-              className={`${
-                nowTab === index
-                  ? "text-black dark:text-gray-200 border-b-2 border-black dark:border-gray-200 font-semibold"
-                  : "text-gray-400"
-              } text-lg`}
-              onClick={() => handleClick(index)}
-            >
-              {item}
-            </button>
-          </li>
-        );
-      })}
-    </ul>
-  );
-};
 
 const MeasureDetailContainer = () => {
   const { params, query } = useGetQuery();
@@ -48,24 +15,39 @@ const MeasureDetailContainer = () => {
     data: measureData,
     isLoading,
     isError,
-  } = useMeasureDetail<IMeasureDetailResponse>(parseInt(measureSn), user_uuid);
-
-  const [tab, setTab] = useState(0);
-  const handleTab = useCallback((index: number) => {
-    setTab(index);
-  }, []);
+  } = useMeasureDetail<IUserMeasurement>(parseInt(measureSn), user_uuid);
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error...</div>;
   if (!measureData) return <div>No data</div>;
 
   return (
-    <div className="w-full h-full flex flex-col gap-5 lg:gap-10">
-      <MeasureDetailTap nowTab={tab} update={handleTab} />
-      {tab ? (
-        <MeasurementList measureData={measureData} />
-      ) : (
-        <InformationContainer data={measureData.measure_info} />
+    <div className="w-full h-full flex flex-col gap-4">
+      <div className="flex items-center gap-3">
+        <div className="w-1 h-12 bg-toggleAccent rounded-full"></div>
+        <h2 className="text-3xl font-semibold text-[#333] dark:text-white">
+          {measureData.measure_info.user_name}님 측정 결과
+        </h2>
+      </div>
+      {isLoading && (
+        <p className="py-8 text-center">측정내역 불러오는 중입니다...</p>
+      )}
+
+      {isError && (
+        <p className="py-8 text-center text-red-500">
+          측정 데이터를 불러오는 중 오류가 발생했습니다.
+        </p>
+      )}
+
+      {!isLoading &&
+      !isError && 
+      measureData &&
+          (
+        <CenterUserMeasure 
+        measureData={measureData}
+        measureList= { undefined }
+        selectedMeasureSn= { parseInt(measureSn) }
+          />
       )}
     </div>
   );

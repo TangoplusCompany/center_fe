@@ -1,4 +1,4 @@
-import { IUserDetailDynamic } from "@/types/user";
+import { IUserDetailDynamic } from "@/types/measure";
 import React, { useEffect, useRef, useState } from "react";
 import { useDrawCanvas } from "@/hooks/utils";
 import { useMeasureDynamicJson } from "@/hooks/api/measure/useMeasureDynamicJson";

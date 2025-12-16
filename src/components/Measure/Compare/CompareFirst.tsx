@@ -1,10 +1,11 @@
 import { IUserDetailStatic } from "@/types/measure";
 import React from "react";
-import { useMeasureJson } from "@/hooks/api/measure/useMeasureJson";
 import DummyStaticContainer from "../DummyStaticContainer";
+import { useMeasureJson } from "@/hooks/api/measure/useMeasureJson";
 import { MeasurementImage } from "../MeasurementImage";
 
-const MeasureStaticFourth = React.memo(
+
+const MeasureStaticCompareFirst = React.memo(
   ({
     className,
     statics,
@@ -21,7 +22,7 @@ const MeasureStaticFourth = React.memo(
     if (!measureJson) return <DummyStaticContainer />;
     if (isLoading) return <DummyStaticContainer />;
     if (isError) return <div>에러가 발생했습니다.</div>;
-
+    
     return (
       <div className={`${className ?? ""} flex flex-col gap-4 lg:gap-10`}>
         <MeasurementImage
@@ -30,13 +31,13 @@ const MeasureStaticFourth = React.memo(
             statics.measure_server_file_name
           }
           measureJson={measureJson}
-          step="fourth"
+          step="first"
         />
       </div>
     );
   },
 );
 
-MeasureStaticFourth.displayName = "MeasureStaticFourth";
+MeasureStaticCompareFirst.displayName = "MeasureStaticFirst";
 
-export default MeasureStaticFourth;
+export default MeasureStaticCompareFirst;

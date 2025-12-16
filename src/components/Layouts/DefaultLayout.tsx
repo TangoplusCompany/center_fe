@@ -3,11 +3,7 @@
 import React from "react";
 import DefaultHeaderLayout from "./DefaultHeaderLayout";
 
-export default function DefaultLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DefaultLayout({ children }: { children: React.ReactNode }) {
   return (
     <main className="flex flex-col items-center justify-start min-h-screen flex-1">
       <DefaultHeaderLayout />

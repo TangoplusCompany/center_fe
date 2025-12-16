@@ -1,8 +1,6 @@
 "use client";
 
-import {
-  IUserMeasurement,
-} from "@/types/user";
+import { IUserMeasurement } from "@/types/measure";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MeasureDetailDynamic from "@/components/Measure/DetailDynamic";
 import React, { JSX } from "react";
@@ -38,7 +36,7 @@ type CenterUserMeasureProps = {
   onChangeMeasureSn?: (sn: number) => void;  // 다른 sn 선택 시 호출
 };
 
-const CenterUserMeasure = ({
+const MeasureDetail = ({
   measureData,
   measureList,
   selectedMeasureSn,
@@ -102,9 +100,12 @@ const CenterUserMeasure = ({
         // 원하는 요약 컴포넌트를 여기 넣으면 됩니다.
         // 예시: measureData.measure_info 기반
         <MeasureIntro 
-          info={measureData.measure_info}
-          static0={measureData.static_1}
-          dynamic={measureData.dynamic}
+        data={{
+          info : measureData.measure_info,
+          static0 : measureData.static_1,
+          dynamic : measureData.dynamic,
+        }}
+          
          />
       ),
     },
@@ -283,4 +284,4 @@ const CenterUserMeasure = ({
   );
 };
 
-export default CenterUserMeasure;
+export default MeasureDetail;

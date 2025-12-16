@@ -1,4 +1,4 @@
-import { IUserDetailStatic } from "@/types/user";
+import { IUserDetailStatic } from "@/types/measure";
 import React from "react";
 import { useMeasureJson } from "@/hooks/api/measure/useMeasureJson";
 import DummyStaticContainer from "../DummyStaticContainer";

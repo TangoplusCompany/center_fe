@@ -1,4 +1,4 @@
-import { IUserDetailStatic } from "@/types/user";
+import { IUserDetailStatic } from "@/types/measure";
 import React from "react";
 import MeasureStaticFirst from "./First";
 import MeasureStaticSecond from "./Second";

@@ -1,10 +1,10 @@
 import { IUserDetailStatic } from "@/types/measure";
 import React from "react";
-import { useMeasureJson } from "@/hooks/api/measure/useMeasureJson";
 import DummyStaticContainer from "../DummyStaticContainer";
+import { useMeasureJson } from "@/hooks/api/measure/useMeasureJson";
 import { MeasurementImage } from "../MeasurementImage";
 
-const MeasureStaticFourth = React.memo(
+const MeasureStaticCompareFifth = React.memo(
   ({
     className,
     statics,
@@ -30,13 +30,13 @@ const MeasureStaticFourth = React.memo(
             statics.measure_server_file_name
           }
           measureJson={measureJson}
-          step="fourth"
+          step="fifth"
         />
       </div>
     );
   },
 );
 
-MeasureStaticFourth.displayName = "MeasureStaticFourth";
+MeasureStaticCompareFifth.displayName = "MeasureStaticFifth";
 
-export default MeasureStaticFourth;
+export default MeasureStaticCompareFifth;

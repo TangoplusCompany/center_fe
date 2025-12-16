@@ -4,7 +4,7 @@ import { useMeasureJson } from "@/hooks/api/measure/useMeasureJson";
 import DummyStaticContainer from "../DummyStaticContainer";
 import { MeasurementImage } from "../MeasurementImage";
 
-const MeasureStaticFourth = React.memo(
+const MeasureStaticCompareFourth = React.memo(
   ({
     className,
     statics,
@@ -37,6 +37,6 @@ const MeasureStaticFourth = React.memo(
   },
 );
 
-MeasureStaticFourth.displayName = "MeasureStaticFourth";
+MeasureStaticCompareFourth.displayName = "MeasureStaticFourth";
 
-export default MeasureStaticFourth;
+export default MeasureStaticCompareFourth;

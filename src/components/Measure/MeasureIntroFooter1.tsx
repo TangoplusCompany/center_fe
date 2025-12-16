@@ -53,8 +53,7 @@ const MeasureIntroFooter1 = (
           console.log("converted foot image =", result);
           setProcessedImageSrc(result);
         })
-        .catch((err) => {
-          console.error("removeBlackBackground foot failed:", err);
+        .catch(() => {
           setProcessedImageSrc("/images/measure_default.png");
         });
     }, [imageUrl]);
