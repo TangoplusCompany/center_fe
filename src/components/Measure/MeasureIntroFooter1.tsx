@@ -50,7 +50,6 @@ const MeasureIntroFooter1 = (
 
       removeBlackBackground(imageUrl)
         .then((result) => {
-          console.log("converted foot image =", result);
           setProcessedImageSrc(result);
         })
         .catch(() => {
