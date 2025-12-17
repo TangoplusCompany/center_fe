@@ -11,8 +11,7 @@ export const useAddUser = () => {
   const router = useRouter();
   return useMutation({
     mutationFn: postAddUser,
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       alert("사용자 추가에 성공했습니다.");
       router.push("/user");
     },
