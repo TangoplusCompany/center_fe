@@ -13,8 +13,23 @@ const UserDetailTap = ({
 }) => {
   const handleClick = (value: number) => {
     update(value);
+    
+    if (value !== 1) {
+      // ✅ 필터 관련 쿼리만 삭제
+      const currentParams = new URLSearchParams(window.location.search);
+      currentParams.delete("from");
+      currentParams.delete("to");
+      currentParams.delete("page");
+      currentParams.delete("limit");
+      currentParams.delete("sort");
+      
+      window.history.replaceState(
+        {},
+        "",
+        `${window.location.pathname}?${currentParams.toString()}`
+      );
+    }
   };
-
   return (
     <div className="w-full flex items-center justify-between">
       <div className="inline-flex rounded-xl bg-gray-100 dark:bg-gray-800 p-1">

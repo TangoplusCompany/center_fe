@@ -17,7 +17,7 @@ export const MeasurementImage = ({
   if (!resultUrl) return <Skeleton className="w-full h-[720px]" />;
 
   return (
-    <div className="relative w-2/3 mx-auto">
+    <div className="relative w-full mx-auto">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={resultUrl} alt="측정 이미지" className="w-full" />
 

@@ -3,6 +3,6 @@
  * @param str 문자열
  * @returns 분리된 문자열 배열
  */
-export const parseString = (str: string) => {
-  return str.split("\r\n");
+export const parseString = (str: string | null | undefined): string[] => {
+  return str ? str.split("\r\n") : [];
 };

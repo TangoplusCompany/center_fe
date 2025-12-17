@@ -1,6 +1,6 @@
 import React from "react";
 import "@/css/body-skeleton.css";
-import { IUserDetailMeasureInfo } from "@/types/user";
+import { IUserDetailMeasureInfo } from "@/types/measure";
 
 const SkeletonFront = ({
   className,

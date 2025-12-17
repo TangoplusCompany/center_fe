@@ -10,12 +10,12 @@ interface SearchInputProps extends React.ComponentProps<"input"> {
 const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
   ({ className, onClear, value, ...props }, ref) => {
     return (
-      <div className="relative">
+      <div className={cn("relative w-full", className)}>
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
         <Input
           ref={ref}
           value={value}
-          className={cn("pl-9 pr-9", className)}
+          className="pl-9 pr-9 w-full"
           {...props}
         />
         {value && onClear && (
@@ -31,6 +31,7 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
     );
   }
 );
+
 SearchInput.displayName = "SearchInput";
 
 export { SearchInput };

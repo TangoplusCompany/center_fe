@@ -1,7 +1,7 @@
 "use client";
 
 import "@/css/body-skeleton.css";
-import { IUserDetailMeasureInfo } from "@/types/user";
+import { IUserDetailMeasureInfo } from "@/types/measure";
 import SkeletonBox from "./SkeletonBox";
 
 const SkeletonContainer = ({ data }: { data: IUserDetailMeasureInfo }) => {

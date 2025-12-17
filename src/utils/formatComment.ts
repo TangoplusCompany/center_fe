@@ -1,4 +1,9 @@
-export function formatComment(raw: string) {
+export function formatComment(raw: string | null | undefined): string {
+  // null, undefined, 빈 문자열 처리
+  if (!raw || raw.trim() === "") {
+    return "";
+  }
+
   const lines = raw.split("\n").map(l => l.trim());
   const result: string[] = [];
   let currentSection = "";
