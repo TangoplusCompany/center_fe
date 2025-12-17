@@ -1,6 +1,6 @@
 "use client";
 
-import { IUserDetailDynamic, IUserDetailStatic } from "@/types/user";
+import { IUserDetailDynamic, IUserDetailStatic } from "@/types/measure";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MeasureDetailDynamic from "@/components/Measure/DetailDynamic";
 import React, { JSX } from "react";

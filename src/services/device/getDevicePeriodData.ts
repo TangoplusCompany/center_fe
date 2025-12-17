@@ -15,5 +15,5 @@ export const getDevicePeriodData = async ({ period }: { period: string }) => {
       },
     },
   );
-  return data.data;
+   return data.data ?? [];
 };

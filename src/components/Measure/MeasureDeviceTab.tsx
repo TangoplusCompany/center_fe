@@ -40,29 +40,44 @@ const MeasureDeviceTab = () => {
   if (isError) return <div>Error...</div>;
   if (!measureDeviceResponse) return <div>No data</div>;
   return (
-    <div className="flex items-center justify-start gap-3">
-      <Button
-        key="Default-Device-All-Select"
-        className="cursor-pointer"
-        variant={deviceSn === "0" ? "default" : "outline"}
-        onClick={() => handleDeviceClick(0)}
-      >
-        전체 조회
-      </Button>
-      {measureDeviceResponse.data.map((device, index) => {
-        return (
-          <Button
-            key={device.device_name + index}
-            className="cursor-pointer"
-            variant={deviceSn === device.sn.toString() ? "default" : "outline"}
-            onClick={() => handleDeviceClick(device.sn)}
-          >
-            {device.device_name}
-          </Button>
-        );
-      })}
+    <div className="w-full flex items-center justify-between">
+      <div className="inline-flex rounded-xl bg-gray-100 dark:bg-gray-800 p-1 gap-1">
+        {/* 전체 조회 */}
+        <button
+          type="button"
+          className={`${
+            deviceSn === "0"
+              ? "bg-toggleAccent dark:bg-gray-700 text-toggleAccent-foreground dark:text-black shadow-sm"
+              : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+          } px-4 py-1 text-sm font-medium rounded-xl transition-all`}
+          onClick={() => handleDeviceClick(0)}
+        >
+          전체 조회
+        </button>
+
+        {/* 디바이스 목록 */}
+        {measureDeviceResponse.data.map((device, index) => {
+          const active = deviceSn === device.sn.toString();
+
+          return (
+            <button
+              key={device.device_name + index}
+              type="button"
+              className={`${
+                active
+                  ? "bg-toggleAccent dark:bg-gray-700 text-toggleAccent-foreground dark:text-black shadow-sm"
+                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+              } px-4 py-1 text-sm font-medium rounded-xl transition-all`}
+              onClick={() => handleDeviceClick(device.sn)}
+            >
+              {device.device_name}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
+
 };
 
 export default MeasureDeviceTab;

@@ -48,7 +48,7 @@ const SearchForm = ({
     <>
       <form
         onSubmit={submitSearch}
-        className="w-full max-w-[800px] mx-auto flex items-center justify-center gap-4 shrink-0"
+        className="flex items-center gap-4"
       >
         <SearchInput
           type="text"
@@ -56,12 +56,15 @@ const SearchForm = ({
           {...register("search")}
           placeholder="이름 혹은 전화번호를 입력해주세요."
           maxLength={50}
-          className="w-[800px]"
+          className="flex-1"
         />
         <Button type="submit">검색</Button>
       </form>
+
       {errors.search?.message && (
-        <p className="w-full max-w-[800px] mx-auto mt-2 text-sm text-red-500">{errors.search.message}</p>
+        <p className="mt-2 text-sm text-red-500">
+          {errors.search.message}
+        </p>
       )}
     </>
   );

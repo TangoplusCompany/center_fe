@@ -8,20 +8,40 @@ import { useMeasureDetail } from "@/hooks/api/measure/useMeasureDetail";
 
 import { IDayData } from '@/types/IDayData';
 import CenterUserMeasureListContainer from "./CenterUserMeasureListContainer";
-import { IUserMeasureList, IUserMeasurement } from "@/types/user";
-import CenterUserMeasure from "@/components/User/CenterUserMeasure";
-import { useGetUserMeasureList } from "@/hooks/api/user/useGetUserMeasureList";
-import { useGetQuery } from "@/hooks/utils/useGetQuery";
+import { IUserMeasurement } from "@/types/measure";
+import CenterUserMeasure from "@/components/Measure/MeasureDetail";
+import CompareContainer from "../Measure/Compare/CompareContainer";
+import { IUserMeasureList } from "@/types/user";
+import { ComparePair, CompareSlot } from "@/types/compare";
+
 const CenterUserMeasureContainer = ({
   measureSn,
   userUUID,
   tab,
   onUpdateMeasureSn,
+  comparePair,
+  onToggleCompareSn,
+  onClearCompare,
+  userMeasureList,
+  onRemoveCompare,
+  onCompareDialogOpen,
+  onOpenCompareMode,
+  onCloseCompareMode,
+  isCompareMode
 }: {
   measureSn: number;
   userUUID: string;
   tab: number;
   onUpdateMeasureSn: (sn: number) => void;
+  comparePair: ComparePair;
+  onToggleCompareSn: (sn: number, slot: CompareSlot) => void; // ✅ 추가
+  onClearCompare: () => void;
+  userMeasureList: IUserMeasureList;
+  onRemoveCompare: (slot: CompareSlot) => void;
+  onCompareDialogOpen: (slot: CompareSlot) => void;
+  onOpenCompareMode: () => void;
+  onCloseCompareMode: () => void;
+  isCompareMode: boolean;
 }) => {
   // 탭 1에서, measureSn이 있을 때만 상세 호출
   const shouldFetchDetail = tab === 1 && measureSn > 0;
@@ -34,21 +54,6 @@ const CenterUserMeasureContainer = ({
     shouldFetchDetail ? measureSn : undefined,
     userUUID
   );
-  const { query } = useGetQuery();
-  const { page = "1", limit = "100" } = query as {
-    page: string;
-    limit: string;
-  };
-  const {
-      data: userMeasureList,
-      isLoading: userMeasureLoading,
-      error: userMeasureError,
-    } = useGetUserMeasureList<IUserMeasureList>({
-      page,
-      limit,
-      user_uuid: userUUID,
-    });
-
 
   // 탭 0에서 쓸 더미/요약용 데이터 (기존 코드 유지)
   const worstPart = {
@@ -68,7 +73,8 @@ const CenterUserMeasureContainer = ({
     { date: "12/01", values: [0, 2, 1, 0, 1, 2] },
     { date: "12/02", values: [0, 1, 0, 0, 0, 1] },
   ];
-
+  const hasCompare = comparePair[0] !== null || comparePair[1] !== null;
+  const shouldShowCompare = isCompareMode || hasCompare;
   return (
     <>
       {/* ✅ 탭 0: 유저 전체 요약/그래프 화면 */}
@@ -86,76 +92,89 @@ const CenterUserMeasureContainer = ({
               </div>
             </div>
 
-            {/* Graph */}
+            <div className="flex-[1]">
+              {userMeasureData ? (
+                <MeasureSummary data={userMeasureData.measure_info} />
+              ) : (
+                <p className="text-gray-500">요약 데이터를 불러오는 중이거나 없습니다.</p>
+              )}
+            </div>
             <div>
               <MeasureGraph data={measureData} />
             </div>
           </div>
 
-          {/* 오른쪽 Summary - 지금은 userMeasureData를 쓰고 있지만,
-              나중에 유저 전체 요약용 API가 생기면 그걸로 교체해도 됨 */}
-          <div className="flex-[1]">
-            {userMeasureData ? (
-              <MeasureSummary data={userMeasureData.measure_info} />
-            ) : (
-              <p className="text-gray-500">요약 데이터를 불러오는 중이거나 없습니다.</p>
-            )}
-          </div>
+
+          
         </div>
       )}
 
       {/* ✅ 탭 1: 리스트 화면 vs 상세 화면 전환 */}
       {tab === 1 && (
         <>
-          {/* 1) measureSn이 아직 선택되지 않은 경우 → 리스트 전체 화면 */}
-          {measureSn <= 0 && (
-            <CenterUserMeasureListContainer
+          { shouldShowCompare ? (
+            <CompareContainer
               userUUID={userUUID}
-              onSelectMeasure={onUpdateMeasureSn} // 클릭 시 measureSn 업데이트
-            />
-          )}
-
-          {/* 2) measureSn이 선택된 경우 → 해당 측정 상세를 전체 화면으로 */}
-          {measureSn > 0 && (
-            <div className="w-full h-full flex flex-col gap-4">
-              {/* 상단에 뒤로가기/목록 버튼 */}
-              <div className="flex items-center justify-between">
-                <button
-                  type="button"
-                  onClick={() => 
-                    onUpdateMeasureSn(0)
-                  } // ✅ measureSn 초기화 → 다시 리스트 화면
-                  className="px-3 py-1 rounded-md text-sm text-primary-foreground"
-                >
-                  ← 목록으로
-                </button>
-              </div>
-                
-              {userMeasureDataLoading && (
-                <p className="py-8 text-center">측정내역 불러오는 중입니다...</p>
+              measureList={ userMeasureList?.measurements }
+              comparePair={comparePair}
+              onClose={onClearCompare}
+              onRemoveCompare={onRemoveCompare}
+              onCompareDialogOpen={onCompareDialogOpen}
+              onCloseCompareMode={onCloseCompareMode}
+              />
+          ) : (
+            <>
+              {/* 2) measureSn이 아직 선택되지 않은 경우 → 리스트 전체 화면 */}
+              {measureSn <= 0 && (
+                <CenterUserMeasureListContainer
+                  userUUID={userUUID}
+                  onSelectMeasure={onUpdateMeasureSn} // 클릭 시 measureSn 업데이트
+                  onToggleCompareSn={ onToggleCompareSn }
+                  onOpenCompareMode={onOpenCompareMode}
+                  
+                />
               )}
 
-              {userMeasureDataError && (
-                <p className="py-8 text-center text-red-500">
-                  측정 데이터를 불러오는 중 오류가 발생했습니다.
-                </p>
-              )}
+              {/* 2) measureSn이 선택된 경우 → 해당 측정 상세를 전체 화면으로 */}
+              {measureSn > 0 && (
+                <div className="w-full h-full flex flex-col gap-4">
+                  {/* 상단에 뒤로가기/목록 버튼 */}
+                  <div className="flex items-center justify-between">
+                    <button
+                      type="button"
+                      onClick={() => 
+                        onUpdateMeasureSn(0)
+                      } // ✅ measureSn 초기화 → 다시 리스트 화면
+                      className="px-3 py-1 rounded-md text-sm text-primary-foreground"
+                    >
+                      ← 목록으로
+                    </button>
+                  </div>
+                    
+                  {userMeasureDataLoading && (
+                    <p className="py-8 text-center">측정내역 불러오는 중입니다...</p>
+                  )}
 
-              {!userMeasureDataLoading &&
-               !userMeasureDataError &&
-               !userMeasureLoading &&
-               !userMeasureError && 
-                userMeasureData &&
-                userMeasureList &&
-                  (
-                <CenterUserMeasure 
-                measureData={userMeasureData}
-                measureList= { userMeasureList?.measurements }
-                selectedMeasureSn= { measureSn }
-                onChangeMeasureSn={onUpdateMeasureSn}
-                   />
+                  {userMeasureDataError && (
+                    <p className="py-8 text-center text-red-500">
+                      측정 데이터를 불러오는 중 오류가 발생했습니다.
+                    </p>
+                  )}
+
+                  {!userMeasureDataLoading &&
+                  !userMeasureDataError &&
+                  userMeasureData &&
+                    (
+                  <CenterUserMeasure 
+                  measureData={userMeasureData}
+                  measureList= { userMeasureList?.measurements }
+                  selectedMeasureSn= { measureSn }
+                  onChangeMeasureSn={onUpdateMeasureSn}
+                    />
+                  )}
+                </div>
               )}
-            </div>
+              </>
           )}
         </>
       )}
