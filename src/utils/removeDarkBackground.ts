@@ -1,9 +1,10 @@
 export async function removeDarkBackground(originalUrl: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    const proxiedUrl = `/api/proxy-image?url=${encodeURIComponent(originalUrl)}`;
+    
+    const proxiedUrl = `/api/proxy?url=${encodeURIComponent(originalUrl)}`;
     img.src = proxiedUrl;
-
+    img.crossOrigin = ""; // ✅ 필수
     img.onload = () => {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
