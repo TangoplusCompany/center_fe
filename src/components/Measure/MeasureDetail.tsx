@@ -79,9 +79,9 @@ const MeasureDetail = ({
       user_uuid: data.user_uuid,
       receiver: data.mobile,
     };
-    console.log(data);
+
     const encryptData = await actionPrintEncrypt(cryptoData);
-    console.log(encryptData);
+
     try {
       const url = await getResultReportUrl(encryptData);
       // 🔗 크롬(브라우저) 새 창/새 탭으로 리포트 페이지 열기

@@ -216,7 +216,7 @@ const CenterUserMeasureListContainer = ({
               : "opacity-0 pointer-events-none"
           )}
           onClick={() => {
-            console.log("삭제 대상:", deleteSelectedSns);
+
           }}
         >
           선택 삭제
