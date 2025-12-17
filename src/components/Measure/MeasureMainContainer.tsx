@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useMeasureCount } from "@/hooks/api/measure/useMeasureCount";
-import MeasureDeviceTab from "./MeasureDeviceTab";
 import OptionBar from "../Util/OptionBar";
 import MeasureListContainer from "./MeasureListContainer";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
@@ -25,15 +24,14 @@ const MeasureMainContainer = () => {
       ]);
     };
   return (
-    
     <>
       <OptionBar totalItems={totalItems}
         search={searchValue} 
         onSearchChange={onChangeSearch}
       />
-      <MeasureDeviceTab />
+
       
-      <MeasureListContainer handleTotalItems={handleTotalItems} />
+      <MeasureListContainer handleTotalItems={handleTotalItems} searchValue={searchValue} />
     </>
   );
 };

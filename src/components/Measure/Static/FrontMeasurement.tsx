@@ -2,7 +2,7 @@ import { IUserDetailStatic } from "@/types/measure";
 import React from "react";
 import MeasureStaticFirst from "./First";
 import MeasureStaticSecond from "./Second";
-import RawDataResult, { IStaticRawDataProps } from "./RawDataResult";
+import RawDataResult, { IStaticRawDataProps } from "../RawDataResult";
 
 const FrontMeasurement = ({
   statics_1,
@@ -54,7 +54,7 @@ const FrontMeasurement = ({
       </div>
 
       {/* 하단: RawDataCard 3개 */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {dummyCardDatas.map((data, idx) => (
           <RawDataResult key={idx} data={data} />
         ))}

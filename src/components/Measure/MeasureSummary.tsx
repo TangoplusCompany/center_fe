@@ -1,6 +1,6 @@
 "use client";
 
-import { IUserDetailMeasureInfo } from "@/types/user";
+import { IUserDetailMeasureInfo } from "@/types/measure";
 import { parseString } from "@/utils/parseString";
 import React from "react";
 

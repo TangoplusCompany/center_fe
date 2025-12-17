@@ -96,7 +96,7 @@ const CenterUserDetail = ({
   const closeCompareMode = () => setIsCompareMode(false);
 
   return (
-    <div className="w-full h-full flex flex-col gap-5 lg:gap-4">
+    <div className="w-full h-full flex flex-col gap-4 lg:gap-4">
       <UserDetailTap
         nowTab={tab}
         userUUID={userUUID}
@@ -125,10 +125,9 @@ const CenterUserDetail = ({
       )}
       {tab === 2 && <CenterUserInformation />}
 
-      {/* ✅ Dialog는 부모에서 렌더 (어디서 열든 동일하게 열림) */}
       <MeasurePickerDialog
         open={isCompareDialogOpen}
-        items={userMeasureList?.measurements ?? []} // 실제 리스트 구조에 맞게 매핑 필요
+        items={userMeasureList?.measurements ?? []} 
         comparePair={comparePair}
         activeSlot={ activeSlot }
         onOpenChange={setIsCompareDialogOpen}

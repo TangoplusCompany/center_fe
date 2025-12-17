@@ -19,19 +19,18 @@ const GhostSkeletonBox = ({
   data,
   className,
   onCardClick,
+  currentSlot,
 }: {
   data: IUserDetailMeasureInfo;
   className?: string;
   onCardClick?: (slot: CompareSlot) => void;
+  currentSlot?: CompareSlot;
 }) => {
   return (
     <div
       role="button"
       tabIndex={0}
-      onClick={onCardClick ? () => onCardClick(currentSlot) : undefined}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") onClick?.();
-      }}
+      onClick={onCardClick && currentSlot ? () => onCardClick(currentSlot) : undefined}
       className={[
         "relative h-full rounded-3xl border border-sub300 box-border",
         "transition cursor-pointer select-none",
@@ -58,17 +57,20 @@ const GhostSkeletonBox = ({
 
 const EmptyIntro = ({ 
   layout,
-  onCompareDialogOpen
+  onCompareDialogOpen,
+  currentSlot,
 }: { 
   layout: LayoutVariant;
   onCompareDialogOpen?: (slot: CompareSlot) => void;
- }) => {
+  currentSlot?: CompareSlot;
+}) => {
   const dummyInfo = {} as unknown as IUserDetailMeasureInfo;
 
   const topLeft = 
     <GhostSkeletonBox 
       data={dummyInfo}
-      onClick= {onCompareDialogOpen}
+      onCardClick= {onCompareDialogOpen}
+      currentSlot={currentSlot}
       />;
 
   return (
@@ -92,6 +94,7 @@ const MeasureIntro = ({
   data,
   layout = "grid",
   onCompareDialogOpen,
+  currentSlot,
 }: {
   data?: {
     info: IUserDetailMeasureInfo;
@@ -100,9 +103,10 @@ const MeasureIntro = ({
   };
   layout?: LayoutVariant;
   onCompareDialogOpen? : (slot: CompareSlot) => void;
+  currentSlot?: CompareSlot;
 }) => {
   // ✅ data 없으면 “빈 Intro” 렌더
-  if (!data) return <EmptyIntro layout={layout} onCompareDialogOpen={ onCompareDialogOpen }/>;
+  if (!data) return <EmptyIntro layout={layout} onCompareDialogOpen={ onCompareDialogOpen } currentSlot={ currentSlot}/>;
 
   // ✅ data 있을 때만 안전하게 꺼냄
   const { info, static0, dynamic } = data;

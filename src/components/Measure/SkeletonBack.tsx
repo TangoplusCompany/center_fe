@@ -1,5 +1,5 @@
 import React from "react";
-import { IUserDetailMeasureInfo } from "@/types/user";
+import { IUserDetailMeasureInfo } from "@/types/measure";
 
 const SkeletonBack = ({ className, data }: { className?: string; data: IUserDetailMeasureInfo }) => {
   return (

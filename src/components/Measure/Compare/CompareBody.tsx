@@ -90,7 +90,7 @@ const CompareBody = ({
                 }}
                 layout="stack"
               />
-            ) : <MeasureIntro layout="stack" onCompareDialogOpen={onCompareDialogOpen} />
+            ) : <MeasureIntro layout="stack" onCompareDialogOpen={onCompareDialogOpen} currentSlot={0} />
           }
           right={
             right ? (
@@ -102,7 +102,7 @@ const CompareBody = ({
                 }}
                 layout="stack"
               />
-            ) : <MeasureIntro layout="stack" onCompareDialogOpen={onCompareDialogOpen} />
+            ) : <MeasureIntro layout="stack" onCompareDialogOpen={onCompareDialogOpen} currentSlot={1}/>
           }
         />
       ),

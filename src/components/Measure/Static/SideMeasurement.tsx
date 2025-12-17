@@ -1,8 +1,8 @@
 import React from "react";
 import MeasureStaticThird from "./Third";
 import MeasureStaticFourth from "./Fourth";
-import { IUserDetailStatic } from "@/types/user";
-import RawDataResult, { IStaticRawDataProps } from "./RawDataResult";
+import { IUserDetailStatic } from "@/types/measure";
+import RawDataResult, { IStaticRawDataProps } from "../RawDataResult";
 
 const SideMeasurement = ({
   statics_3,

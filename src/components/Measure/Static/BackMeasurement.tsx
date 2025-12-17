@@ -1,8 +1,8 @@
-import { IUserDetailStatic } from "@/types/user";
+import { IUserDetailStatic } from "@/types/measure";
 import React from "react";
 import MeasureStaticFifth from "./Fifth";
 import MeasureStaticSixth from "./Sixth";
-import RawDataResult, { IStaticRawDataProps } from "./RawDataResult";
+import RawDataResult, { IStaticRawDataProps } from "../RawDataResult";
 
 const BackMeasurement = ({
   statics_5,

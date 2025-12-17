@@ -12,20 +12,34 @@ export const useGetUserMeasureList = <T>({
   page,
   limit,
   user_uuid,
+  from,
+  to
 }: {
   page: string;
   limit: string;
   user_uuid: string;
+  from?: string;
+  to?: string;
 }) =>
   useQuery<T>({
-    queryKey: ["UserMeasureList", page, limit, user_uuid],
+    queryKey: ["UserMeasureList", page, limit, user_uuid, from, to],
     queryFn: async () => {
+      const params: Record<string, string> = {
+        user_uuid,
+        page,
+        limit,
+      };
+
+      if (from) {
+        params.from = from;
+      }
+
+      if (to) {
+        params.to = to;
+      }
+
       const response = await customAxios.get("/measurement/members", {
-        params: {
-          user_uuid,
-          page,
-          limit,
-        },
+        params,
       });
       return response.data.data;
     },

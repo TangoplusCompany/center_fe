@@ -1,10 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-
+import React, { useEffect } from "react";
 import CustomPagination from "@/components/common/Pagination";
 import DataError from "@/components/Util/DataError";
-
 import { useMeasureList } from "@/hooks/api/measure/useMeasureList";
 import { IMeasureData } from "@/types/measure";
 import {
@@ -12,28 +10,19 @@ import {
   MeasureList,
 } from "@/components/Measure/MeasureList";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
-import SearchForm from "@/components/Util/SearchForm";
 
 const MeasureListContainer = ({
   handleTotalItems,
+  searchValue,
 }: {
   handleTotalItems: (totalItems: number) => void;
+  searchValue: string;
 }) => {
-  const { query, setQueryParam } = useQueryParams();
+  const { query } = useQueryParams();
   const deviceSn = query.device_sn || "0";
   const page = parseInt(query.page || "1");
   const limit = parseInt(query.limit || "20");
-  const search = query.search || "";
-  const [searchValue, setSearchValue] = useState(search);
-  const onChangeSearch = (searchValue: string) => {
-    setSearchValue(searchValue);
-    setQueryParam([
-      ["page", "1"],
-      ["limit", "20"],
-      ["device_sn", deviceSn],
-      ["search", searchValue],
-    ]);
-  };
+
   const {
     data: measureResponse,
     isLoading,
@@ -47,6 +36,7 @@ const MeasureListContainer = ({
 
   useEffect(() => {
     if (measureResponse) {
+      console.log(measureResponse)
       handleTotalItems(measureResponse.total);
     }
   }, [measureResponse, handleTotalItems]);
@@ -66,7 +56,6 @@ const MeasureListContainer = ({
       <>
         <MeasureList measurements={[]} />
         <CustomPagination total={1} page={1} last_page={1} limit={20} />
-        <SearchForm setSearch={onChangeSearch} search={search} />
       </>
     );
   }

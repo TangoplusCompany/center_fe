@@ -6,7 +6,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { FileText } from "lucide-react";
 import { phoneHyphen } from "@/utils/regexFiltering";
 import { IMeasureList } from "@/types/measure";
 import { CompareSlot } from "@/types/compare";
@@ -27,9 +26,7 @@ export const CenterUserMeasureList = ({
   onToggleCompareSn?: (sn: number, slot: CompareSlot) => void;
   onOpenCompareMode: () => void;
 }) => {
-  if (!measures || measures.length === 0) {
-    return <p className="text-center py-8 text-gray-500">측정 데이터가 없습니다.</p>;
-  }
+  
 
   return (
     <Table>
@@ -75,7 +72,12 @@ export const CenterUserMeasureList = ({
                   onClick={() => onRowClick?.(sn)}
                   className="flex items-center gap-2 justify-end cursor-pointer"
                 >
-                  <FileText className="w-4 h-4" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/icons/ic_paper_detail.svg"
+                    alt="상세보기"
+                    className="w-5 h-5 gap-4"
+                  />
                   <span>상세보기</span>
                 </button>
                 <button
@@ -87,7 +89,12 @@ export const CenterUserMeasureList = ({
                   }}
                   className="flex items-center gap-2 justify-end cursor-pointer"
                 >
-                  <FileText className="w-4 h-4" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/icons/ic_compare.svg"
+                    alt="비교하기"
+                    className="w-5 h-5 gap-4"
+                  />
                   <span>결과비교</span>
                 </button>
 

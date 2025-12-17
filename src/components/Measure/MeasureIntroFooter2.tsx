@@ -64,7 +64,7 @@ const MeasureIntroFooter2 = (
               동적 족압 분석
             </div>
             <div className="relative w-32 h-32">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
+              
               {processedFootSrc !== "" && processedFootSrc !== null && (
               /* eslint-disable-next-line @next/next/no-img-element */
               <img
