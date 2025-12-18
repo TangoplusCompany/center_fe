@@ -1,15 +1,15 @@
 import React from "react";
 import MeasureStaticThird from "./Third";
 import MeasureStaticFourth from "./Fourth";
-import { IUserDetailStatic } from "@/types/measure";
 import RawDataResult, { IStaticRawDataProps } from "../RawDataResult";
 
 const SideMeasurement = ({
-  statics_3,
-  statics_4,
+  sns
 }: {
-  statics_3: IUserDetailStatic;
-  statics_4: IUserDetailStatic;
+  sns: {
+    measureSn: string;
+    userSn: string;
+  };
 }) => {
   const dummyCardDatas : IStaticRawDataProps[] = [
       {

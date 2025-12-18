@@ -1,15 +1,16 @@
-import { IUserDetailDynamic } from "@/types/measure";
+
 import React, { useEffect, useRef, useState } from "react";
 import { useDrawCanvas } from "@/hooks/utils";
 import { useMeasureDynamicJson } from "@/hooks/api/measure/useMeasureDynamicJson";
 import DataError from "../Util/DataError";
 
 const MeasureDetailDynamic = ({
-  dynamic,
-  className,
+  sns
 }: {
-  dynamic: IUserDetailDynamic;
-  className?: string;
+  sns: {
+    measureSn: string;
+    userSn: string;
+  };
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const defaultWidth = dynamic.measure_overlay_width as number;

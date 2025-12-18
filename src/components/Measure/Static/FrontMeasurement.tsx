@@ -1,15 +1,16 @@
-import { IUserDetailStatic } from "@/types/measure";
+
 import React from "react";
 import MeasureStaticFirst from "./First";
 import MeasureStaticSecond from "./Second";
 import RawDataResult, { IStaticRawDataProps } from "../RawDataResult";
 
 const FrontMeasurement = ({
-  statics_1,
-  statics_2,
+  sns
 }: {
-  statics_1: IUserDetailStatic;
-  statics_2: IUserDetailStatic;
+  sns: {
+    measureSn: string;
+    userSn: string;
+  };
 }) => {
   const dummyCardDatas : IStaticRawDataProps[] = [
     {

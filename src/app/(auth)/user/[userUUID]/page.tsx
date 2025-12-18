@@ -1,5 +1,6 @@
 import React from "react";
 import CenterUserDetail from "@/components/User/CenterUserDetail";
+import { notFound } from "next/navigation";
 
 type UserDetailPageProps = {
   params: Promise<{ userUUID: string }>;
@@ -7,9 +8,18 @@ type UserDetailPageProps = {
 };
 
 const UserDetailPage = async ({ params, searchParams }: UserDetailPageProps) => {
-  // ✅ Next가 넘겨주는 Promise를 먼저 await
   const { userUUID } = await params;
-  const { name } = await searchParams;
+  const { key, name } = await searchParams;
+
+  if (!key) {
+    notFound(); // 또는 redirect(...)
+  }
+
+  const userSn = Number(key);
+
+  if (Number.isNaN(userSn)) {
+    notFound();
+  }
 
   return (
     <div className="flex flex-col gap-5">
@@ -20,7 +30,7 @@ const UserDetailPage = async ({ params, searchParams }: UserDetailPageProps) => 
         </h2>
       </div>
 
-      <CenterUserDetail userUUID={userUUID} />
+      <CenterUserDetail userUUID={userUUID} userSn={userSn} />
     </div>
   );
 };

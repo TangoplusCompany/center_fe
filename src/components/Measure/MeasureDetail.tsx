@@ -1,6 +1,6 @@
 "use client";
 
-import { IUserMeasurement } from "@/types/measure";
+import { IUserMeasureDetailResponse } from "@/types/measure";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MeasureDetailDynamic from "@/components/Measure/DetailDynamic";
 import React, { JSX } from "react";
@@ -30,17 +30,20 @@ type MeasureListType = {
 };
 
 type CenterUserMeasureProps = {
-  measureData: IUserMeasurement;
+  measureData: IUserMeasureDetailResponse;
   measureList?: IMeasureList[];              // 전체 측정 리스트
   selectedMeasureSn?: number | null;         // 현재 선택된 sn
   onChangeMeasureSn?: (sn: number) => void;  // 다른 sn 선택 시 호출
+  userSn: string;
 };
 
+// intro, front, side, back, dynamic 등 여러 탭이 들어가는 detail화면
 const MeasureDetail = ({
   measureData,
   measureList,
   selectedMeasureSn,
   onChangeMeasureSn,
+  userSn,
 }: CenterUserMeasureProps) => {
   const handleSelect = (value: string) => {
     const sn = parseInt(value, 10);
@@ -50,9 +53,9 @@ const MeasureDetail = ({
     measureList && selectedMeasureSn != null
       ? measureList.find((item) => item.measure_sn === selectedMeasureSn)
       : undefined;
-  
+  const data = measureData.result_summary_data
   const handleKakaoSend = async () => {
-    const data = measureData.measure_info
+    
     const cryptoData = {
       device_sn: Number(data.device_sn),
       sn: Number(data.sn),
@@ -60,8 +63,7 @@ const MeasureDetail = ({
       user_uuid: data.user_uuid,
       receiver: data.mobile,
       receiver_name: data.user_name,
-      measure_date: data.measure_date,
-      measure_position: data.measure_position,
+      measure_date: data.measure_date
     };
     const encryptData = await actionKakaoEncrypt(cryptoData);
     try {
@@ -72,8 +74,8 @@ const MeasureDetail = ({
       alert("카카오톡 공유에 실패했습니다. 잠시 후 다시 시도해주세요.");
     }
   };
+  
   const handlePrint = async () => {
-    const data = measureData.measure_info
     const cryptoData = {
       sn: Number(data.sn),
       user_uuid: data.user_uuid,
@@ -100,13 +102,7 @@ const MeasureDetail = ({
         // 원하는 요약 컴포넌트를 여기 넣으면 됩니다.
         // 예시: measureData.measure_info 기반
         <MeasureIntro 
-        data={{
-          info : measureData.measure_info,
-          static0 : measureData.static_1,
-          dynamic : measureData.dynamic,
-        }}
-          
-         />
+        data={measureData} />
       ),
     },
     {
@@ -114,8 +110,10 @@ const MeasureDetail = ({
       value: "frontTotal",
       component: () => (
         <FrontMeasurement
-          statics_1={measureData.static_1}
-          statics_2={measureData.static_2}
+          sns={{
+          measureSn: String(measureData.result_summary_data.sn),
+          userSn: userSn
+        }}
         />
       ),
     },
@@ -124,8 +122,10 @@ const MeasureDetail = ({
       value: "sideTotal",
       component: () => (
         <SideMeasurement
-          statics_3={measureData.static_3}
-          statics_4={measureData.static_4}
+          sns={{
+          measureSn: String(measureData.result_summary_data.sn),
+          userSn: userSn
+        }}
         />
       ),
     },
@@ -134,15 +134,23 @@ const MeasureDetail = ({
       value: "backTotal",
       component: () => (
         <BackMeasurement
-          statics_5={measureData.static_5}
-          statics_6={measureData.static_6}
+          sns={{
+          measureSn: String(measureData.result_summary_data.sn),
+          userSn: userSn
+        }}
         />
       ),
     },
     {
       title: "스쿼트 자세",
       value: "dynamic",
-      component: () => <MeasureDetailDynamic dynamic={measureData.dynamic} />,
+      component: () => 
+      <MeasureDetailDynamic 
+        sns={{
+            measureSn: String(measureData.result_summary_data.sn),
+            userSn: userSn
+          }} 
+          />,
     },
   ];
 
@@ -180,7 +188,7 @@ const MeasureDetail = ({
         <div className="flex items-center gap-4">
           <Button variant="default"
             onClick={() => {
-              if (window.confirm(`${measureData.measure_info.user_name}로 카카오톡 결과를 전송하시습니까?`)) {
+              if (window.confirm(`${measureData.result_summary_data.user_name}로 카카오톡 결과를 전송하시습니까?`)) {
                 handleKakaoSend()
               }
             }}>

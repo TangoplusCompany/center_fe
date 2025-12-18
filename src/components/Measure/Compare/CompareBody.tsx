@@ -1,4 +1,4 @@
-import { IUserMeasurement } from "@/types/measure";
+import { IUserMeasureDetailResponse } from "@/types/measure";
 import React, { useState } from "react";
 import MeasureStaticCompareFirst from "./CompareFirst";
 import MeasureStaticCompareSecond from "./CompareSecond";
@@ -9,12 +9,13 @@ import MeasureStaticCompareSixth from "./CompareSixth";
 import MeasureDetailDynamic from "../DetailDynamic";
 import MeasureIntro from "../MeasureIntro";
 import CompareDateCard from "./CompareDateCard";
-import { CompareSlot } from "@/types/compare";
+import { ComparePair, CompareSlot } from "@/types/compare";
+import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
 
 type MeasureTab = {
   title: string;
   value: string;
-  render: (left?: IUserMeasurement, right?: IUserMeasurement) => React.ReactNode;
+  render: (left?: IUserMeasureDetailResponse, right?: IUserMeasureDetailResponse) => React.ReactNode;
 };
 
 const CompareTwoCol = ({
@@ -62,16 +63,43 @@ const CompareEmptyCard = ({
 };
 
 const CompareBody = ({
-  leftData,
-  rightData,
+  userSn,
+  comparePair,
   onRemoveCompare,
   onCompareDialogOpen,
-}: {
-  leftData?: IUserMeasurement;
-  rightData?: IUserMeasurement;
+} : {
+  userSn: string;
+  comparePair: ComparePair;
   onRemoveCompare: (slot: CompareSlot) => void;
   onCompareDialogOpen: (slot: CompareSlot) => void;
 }) => {
+  const leftSn = comparePair[0];
+  const rightSn = comparePair[1];
+  const [activeIdx, setActiveIdx] = useState(0);
+  // ✅ 좌/우 상세 데이터 로딩 (이미 쓰고 계신 훅 재사용)
+  const leftEnabled = !!leftSn;
+  const rightEnabled = !!rightSn;
+  const {
+    data: leftData,
+    isLoading: leftLoading,
+    isError: leftError,
+  } = useMeasureInfo(leftEnabled ? leftSn : undefined, userSn);
+
+  const {
+    data: rightData,
+    isLoading: rightLoading,
+    isError: rightError,
+  } = useMeasureInfo(rightEnabled ? rightSn : undefined, userSn);
+
+  if (leftLoading || rightLoading) {
+    return <div>불러오는 중...</div>;
+  }
+
+  if (leftError || rightError) {
+    return <div>데이터 로딩 중 오류가 발생했습니다.</div>;
+  }
+
+
   const leftSlot: CompareSlot = 0;  // 또는 1
   const rightSlot: CompareSlot = 1;
   const measureTabs: MeasureTab[] = [
@@ -83,11 +111,7 @@ const CompareBody = ({
           left={
             left ? (
               <MeasureIntro
-                data={{
-                  info: left.measure_info,
-                  static0: left.static_1,
-                  dynamic: left.dynamic,
-                }}
+                data= {left}
                 layout="stack"
               />
             ) : <MeasureIntro layout="stack" onCompareDialogOpen={onCompareDialogOpen} currentSlot={0} />
@@ -95,11 +119,7 @@ const CompareBody = ({
           right={
             right ? (
               <MeasureIntro
-                data={{
-                  info: right.measure_info,
-                  static0: right.static_1,
-                  dynamic: right.dynamic,
-                }}
+                data= {right}
                 layout="stack"
               />
             ) : <MeasureIntro layout="stack" onCompareDialogOpen={onCompareDialogOpen} currentSlot={1}/>
@@ -113,11 +133,17 @@ const CompareBody = ({
       render: (left, right) => (
         <CompareTwoCol
           left={ left ? (
-              <MeasureStaticCompareFirst statics={left.static_1}/>
+              <MeasureStaticCompareFirst sns={{
+                measureSn: String(left.result_summary_data.sn),
+                userSn: userSn
+              }}/>
             ) : <CompareEmptyCard />
           }
           right={ right ? (
-              <MeasureStaticCompareFirst statics={right.static_1}/>
+              <MeasureStaticCompareFirst sns={{
+                measureSn: String(right.result_summary_data.sn),
+                userSn: userSn
+              }}/>
             ) : <CompareEmptyCard />
           }
         />
@@ -129,11 +155,17 @@ const CompareBody = ({
       render: (left, right) => (
         <CompareTwoCol
           left={ left ? (
-              <MeasureStaticCompareSecond statics={left.static_2}/>
+              <MeasureStaticCompareSecond sns={{
+                measureSn: String(left.result_summary_data.sn),
+                userSn: userSn
+              }}/>
             ) : <CompareEmptyCard />
           }
           right={ right ? (
-              <MeasureStaticCompareSecond statics={right.static_2}/>
+              <MeasureStaticCompareSecond sns={{
+                measureSn: String(right.result_summary_data.sn),
+                userSn: userSn
+              }}/>
             ) : <CompareEmptyCard />
           }
         />
@@ -145,11 +177,17 @@ const CompareBody = ({
       render: (left, right) => (
         <CompareTwoCol
           left={ left ? (
-              <MeasureStaticCompareThird statics={left.static_3}/>
+              <MeasureStaticCompareThird sns={{
+                measureSn: String(left.result_summary_data.sn),
+                userSn: userSn
+              }} />
             ) : <CompareEmptyCard />
           }
           right={ right ? (
-              <MeasureStaticCompareThird statics={right.static_3}/>
+              <MeasureStaticCompareThird sns={{
+                measureSn: String(right.result_summary_data.sn),
+                userSn: userSn
+              }}/>
             ) : <CompareEmptyCard />
           }
         />
@@ -161,11 +199,17 @@ const CompareBody = ({
       render: (left, right) => (
         <CompareTwoCol
           left={ left ? (
-              <MeasureStaticCompareFourth statics={left.static_4}/>
+              <MeasureStaticCompareFourth sns={{
+                measureSn: String(left.result_summary_data.sn),
+                userSn: userSn
+              }} />
             ) : <CompareEmptyCard />
           }
           right={ right ? (
-              <MeasureStaticCompareFourth statics={right.static_4}/>
+              <MeasureStaticCompareFourth sns={{
+                measureSn: String(right.result_summary_data.sn),
+                userSn: userSn
+              }} />
             ) : <CompareEmptyCard />
           }
         />
@@ -177,11 +221,17 @@ const CompareBody = ({
       render: (left, right) => (
         <CompareTwoCol
           left={ left ? (
-              <MeasureStaticCompareFifth statics={left.static_5}/>
+              <MeasureStaticCompareFifth sns={{
+                measureSn: String(left.result_summary_data.sn),
+                userSn: userSn
+              }} />
             ) : <CompareEmptyCard />
           }
           right={ right ? (
-              <MeasureStaticCompareFifth statics={right.static_5}/>
+              <MeasureStaticCompareFifth sns={{
+                measureSn: String(right.result_summary_data.sn),
+                userSn: userSn
+              }} />
             ) : <CompareEmptyCard />
           }
         />
@@ -193,11 +243,17 @@ const CompareBody = ({
       render: (left, right) => (
         <CompareTwoCol
           left={ left ? (
-              <MeasureStaticCompareSixth statics={left.static_6}/>
+              <MeasureStaticCompareSixth sns={{
+                measureSn: String(left.result_summary_data.sn),
+                userSn: userSn
+              }} />
             ) : <CompareEmptyCard />
           }
           right={ right ? (
-              <MeasureStaticCompareSixth statics={right.static_6}/>
+              <MeasureStaticCompareSixth sns={{
+                measureSn: String(right.result_summary_data.sn),
+                userSn: userSn
+              }} />
             ) : <CompareEmptyCard />
           }
         />
@@ -209,18 +265,24 @@ const CompareBody = ({
       render: (left, right) => (
         <CompareTwoCol
           left={  left ? (
-            <MeasureDetailDynamic dynamic={left.dynamic}/>
+            <MeasureDetailDynamic sns={{
+                measureSn: String(left.result_summary_data.sn),
+                userSn: userSn
+              }} />
           ) : <CompareEmptyCard />
          }
           right={ right ? (
-              <MeasureDetailDynamic dynamic={right.dynamic} />
+              <MeasureDetailDynamic sns={{
+                measureSn: String(right.result_summary_data.sn),
+                userSn: userSn
+              }}  />
             ) : <CompareEmptyCard />
           }
         />
       ),
     },
   ];
-  const [activeIdx, setActiveIdx] = useState(0);
+  
   const activeTab = measureTabs[activeIdx];
 
   return (
@@ -243,14 +305,14 @@ const CompareBody = ({
       <div className="grid grid-cols-2 gap-4 items-stretch bg-primary rounded-xl">
         <div className="min-w-0 h-full">
           <CompareDateCard 
-            regDate={leftData ? leftData.measure_info.measure_date : ""}
+            regDate={leftData ? leftData.result_summary_data.measure_date : ""}
             currentSlot={ leftSlot }
             onRemove={leftData ? () => onRemoveCompare( leftSlot ) : undefined}
             onCardClick={onCompareDialogOpen} />
         </div>
         <div className="min-w-0 h-full">
           <CompareDateCard 
-            regDate={rightData ? rightData.measure_info.measure_date : ""}
+            regDate={rightData ? rightData.result_summary_data.measure_date : ""}
             currentSlot={ rightSlot }
             onRemove={rightData ? () => onRemoveCompare( rightSlot ) : undefined}
             onCardClick={onCompareDialogOpen} />

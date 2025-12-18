@@ -49,9 +49,9 @@ export const RawDataResult = (
     위험: "bg-danger",
   }[levelstring] ?? "bg-primary-foreground";
   const img = {
-  정상: "/icons/ic_normal.svg",
+  정상: "/icons/ic_heart.svg",
   주의: "/icons/ic_warning.svg",
-  위험: "/icons/ic_heart.svg",
+  위험: "/icons/ic_danger.svg",
 }[levelstring] ?? "/icons/ic_default.svg";
 
   return (

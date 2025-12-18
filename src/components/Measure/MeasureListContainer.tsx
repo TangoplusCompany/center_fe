@@ -33,10 +33,8 @@ const MeasureListContainer = ({
     deviceSn,
     search: searchValue,
   });
-
   useEffect(() => {
     if (measureResponse) {
-      console.log(measureResponse)
       handleTotalItems(measureResponse.total);
     }
   }, [measureResponse, handleTotalItems]);

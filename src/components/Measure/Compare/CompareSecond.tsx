@@ -1,4 +1,3 @@
-import { IUserDetailStatic } from "@/types/measure";
 import React from "react";
 import { useMeasureJson } from "@/hooks/api/measure/useMeasureJson";
 import DummyStaticContainer from "../DummyStaticContainer";
@@ -7,10 +6,13 @@ import { MeasurementImage } from "../MeasurementImage";
 const MeasureStaticCompareSecond = React.memo(
   ({
     className,
-    statics,
+    sns,
   }: {
     className?: string;
-    statics: IUserDetailStatic;
+    sns: {
+      measureSn: string;
+      userSn: string;
+    };
   }) => {
     const {
       data: measureJson,

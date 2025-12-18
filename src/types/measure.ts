@@ -9,9 +9,17 @@ export interface IMeasureListResponse extends IResponseDefault {
 export interface IMeasureData extends IPagination {
   measurements: IMeasureList[];
 }
-// 이게 들어오는 측정 1개에 대한 data class임. = export inter
+
+export interface IUserMeasureDetailResponse {
+  result_summary_data: IUserDetailMeasureInfo;
+  static_mat_data: IStaticMat;
+  dynamic_mat_data: IDynamicMat;
+  detail_data: IPartDetailData;
+}
+
 export interface IMeasureList {
   sn: number;
+  user_sn: number;
   measure_sn: number;
   mobile: string;
   user_uuid: string;
@@ -35,31 +43,19 @@ export interface IUserMeasurement {
 
 export interface IUserDetailMeasureInfo
   extends IMeasureUserRisk,
-    IMeasureUserPain,
     IMeasureRangeLevel,
     IMeasureRiskResult,
     IMatStatic,
     IMatOhs {
-  risk_result_ment: string; // 위험도 결과 멘트
-  device_sn: number | string; // 장치 sn
-  mobile_temp: string;
-  elapsed_time: number | string; // 측정 총 시간 (sec, 소수점 세번째 자리까지)
-  measure_string: string; // 측정일자
-  measure_seq: number | string; // 측정시퀸스
-  measure_sn: number | string; // t_measure_info_sn
-  measure_date: string; // 측정일자
-  mobile_device_uuid: string;
-  modify_string?: string; // 수정일자
   sn: number | string; // sn
-  t_score: number | string; // 점수
-  upload_string: string; // 업로드일자
-  uploaded: number | string; // 업로드여부
-  used: number | string; // 사용여부
+  device_sn: number | string; // 장치 sn
+  measure_sn: number | string; // t_measure_info_sn
   user_name: string; // 유저 이름
-  user_sn: number | string; // 유저 sn
+  measure_date: string; // 측정일자
+  gender: string;
   user_uuid: string; // 유저 UUID
-  measure_position: string; // 측정 위치
   mobile: string; // 휴대폰 번호
+  camera_orientation: number;
 }
 
 export interface IFilterMeasureInfo {
@@ -82,24 +78,14 @@ export interface IMeasureUserRisk {
   risk_knee_right: number; // 통증부위 무릎
   risk_ankle_right: number; // 통증부위 발목
   risk_ankle_left: number; // 통증부위 발목
+  risk_level_neck: number;
+  risk_level_shoulder: number; 
+  risk_level_elbow: number; 
+  risk_level_hip: number; 
+  risk_level_knee: number; 
+  risk_level_ankle: number; 
 }
 
-export interface IMeasureUserPain {
-  pain_part_left_ankle: number;
-  pain_part_left_elbow: number;
-  pain_part_left_hip_joint: number;
-  pain_part_left_knee: number;
-  pain_part_left_shoulder: number;
-  pain_part_left_wrist: number;
-  pain_part_neck: number;
-  pain_part_right_ankle: number;
-  pain_part_right_elbow: number;
-  pain_part_right_hip_joint: number;
-  pain_part_right_knee: number;
-  pain_part_right_shoulder: number;
-  pain_part_right_wrist: number;
-  pain_part_waist: number;
-}
 export interface IMeasureRangeLevel {
   range_level_neck: number;
   range_level_shoulder: number;
@@ -144,6 +130,45 @@ export interface IMatOhs {
   mat_ohs_right_pressure: number;
   mat_ohs_top_pressure: number;
   mat_ohs_bottom_pressure: number;
+}
+
+export interface IStaticMat {
+  measure_server_mat_image_name: string;
+  measure_server_mat_json_name: string;
+  mat_static_horizontal_ment: string;
+  mat_static_vertical_ment: string;
+}
+
+export interface IDynamicMat {
+  mat_hip_down_image_name: string;
+  mat_hip_trajectory_image_name: string;
+  mat_left_knee_trajectory_image_name: string;
+  mat_right_knee_trajectory_image_name: string;
+  mat_ohs_horizontal_ment: string;
+  mat_ohs_vertical_ment: string;
+  mat_ohs_knee_ment: string;
+}
+
+export interface IMeasureItem {
+  measure_type: number;
+  landmark: number;
+  data: number;
+  risk_level: number;
+  range_level: number;
+  measure_unit: string;
+}
+
+export type IPartDetail = {
+  [measureName: string]: IMeasureItem;
+};
+
+export interface IPartDetailData {
+  neck: IPartDetail;
+  shoulder: IPartDetail;
+  elbow: IPartDetail;
+  hip: IPartDetail;
+  knee: IPartDetail;
+  ankle: IPartDetail;
 }
 
 export interface IUserDetailDynamic {
@@ -482,4 +507,38 @@ export interface IMeasureJson {
   vertical_angle_wrist_elbow_shoulder_left: number;
   vertical_angle_wrist_elbow_shoulder_right: number;
   pose_landmark: IPoseLandmark[];
+}
+
+
+export interface LatestMeasureSummary {
+  user_name: string;
+  risk_upper_ment: string;
+  risk_upper_risk_level: string;
+  risk_upper_range_level: string;
+  risk_lower_ment: string;
+  risk_lower_risk_level: string;
+  risk_lower_range_level: string;
+  measure_date: string;
+}
+
+export interface MeasureHistory {
+  measure_date: string;
+  risk_level_neck: 1,
+  range_level_neck: string;
+  risk_level_shoulder: string;
+  range_level_shoulder: string;
+  risk_level_elbow: string;
+  range_level_elbow:string;
+  risk_level_hip: string;
+  range_level_hip: string;
+  risk_level_knee: string;
+  range_level_knee: string;
+  risk_level_ankle: string;
+  range_level_ankle: string;
+}
+
+export interface IUserDashBoard {
+  latest_measure_summary: LatestMeasureSummary;
+  total_measure_count: number;
+  measure_history: MeasureHistory[];
 }

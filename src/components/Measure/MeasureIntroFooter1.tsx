@@ -36,7 +36,7 @@ const MeasureIntroFooter1 = (
   const [processedImageSrc, setProcessedImageSrc] = useState<string>("");
 
   const bgCondition = {
-    정상: "bg-primary-foreground",
+    정상: "bg-sub600",
     주의: "bg-warning",
     위험: "bg-danger",
   }[condition] ?? "bg-[#7E7E7E]";
@@ -61,7 +61,7 @@ const MeasureIntroFooter1 = (
       {/* 헤더 */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">정적 족압</h2>
-        <span className={`px-3 py-1 ${bgCondition} ${textCondition} rounded-xl text-sm`}>
+        <span className={`px-3 py-1 ${bgCondition} ${textCondition} rounded-xl text-xs`}>
           {condition} {level}단계
         </span>
       </div>

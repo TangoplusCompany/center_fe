@@ -5,11 +5,12 @@ import MeasureStaticSixth from "./Sixth";
 import RawDataResult, { IStaticRawDataProps } from "../RawDataResult";
 
 const BackMeasurement = ({
-  statics_5,
-  statics_6,
+  sns
 }: {
-  statics_5: IUserDetailStatic;
-  statics_6: IUserDetailStatic;
+  sns: {
+    measureSn: string;
+    userSn: string;
+  };
 }) => {
   const dummyCardDatas : IStaticRawDataProps[] = [
       {

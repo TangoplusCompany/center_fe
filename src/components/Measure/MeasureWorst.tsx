@@ -1,10 +1,7 @@
 "use client";
 
-type TWorstPart = {
-  partName: string;   // 예: '목', '어깨
-  level: number;      // 예: '위험', '주의'
-  description: string // 설명
-};
+import { TWorstPart } from "@/types/dashboard";
+
 
 const MeasureWorst = ({ data }: { data: TWorstPart }) => {
   return (

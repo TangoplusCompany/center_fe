@@ -2,156 +2,164 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
+import { IPartDetail } from "@/types/measure";
 
-export interface PartCard {
-  title: string;
-  condition: string; // 정상 / 주의 / 위험
-  level: number;
-  row0name: string;
-  row0data: string;
-  row0level: number; // 0: 정상, 1: 주의, 2: 위험
-  row1name: string;
-  row1data: string;
-  row1level: number;
-  row2name: string;
-  row2data: string;
-  row2level: number;
-}
-
-const conditionBg: Record<string, string> = {
-  정상: "bg-primary-foreground",
-  주의: "bg-warning",
-  위험: "bg-danger",
+const conditionBg: Record<0 | 1 | 2, string> = {
+  0: "bg-sub600",
+  1: "bg-warning",
+  2: "bg-danger",
 };
 
-const conditionText: Record<string, string> = {
-  정상: "text-white",
-  주의: "text-warning-foreground",
-  위험: "text-danger-foreground",
+const conditionText: Record<0 | 1 | 2, string> = {
+  0: "text-white",
+  1: "text-warning-foreground",
+  2: "text-danger-foreground",
 };
 
 // 각 단계별 셀 색
-const levelCellBg: Record<number, string> = {
-  0: "bg-primary-foreground", // 정상
-  1: "bg-warning", // 주의
-  2: "bg-danger", // 위험
+const levelCellBg: Record<0 | 1 | 2, string> = {
+  0: "bg-sub100", // 정상
+  1: "bg-sub200", // 주의
+  2: "bg-sub300", // 위험
 };
 
-// 비활성 셀 배경
-const inactiveCellBg = "bg-[#F2F2F2]";
+export const MEASURE_NAME_MAP: Record<string, string> = {
+  turtle_neck: "거북목",
+  scoliosis: "경추 측만",
+  side_neck_balance: "측면 목 근육",
 
-const MeasureIntroPart = ({ cardData }: { cardData: PartCard }) => {
-  const {
-    title,
-    condition,
-    level,
-    row0name,
-    row0data,
-    row0level,
-    row1name,
-    row1data,
-    row1level,
-    row2name,
-    row2data,
-    row2level,
-  } = cardData;
+  shoulder_tilit: "어깨 기울기",
+  frozen_shoulder: "오십견",
+  shoulder_impingement: "어깨 충돌 증후군",
 
-  const badgeBg = conditionBg[condition] ?? "bg-primary-foreground";
-  const badgeText = conditionText[condition] ?? "text-white";
+  bicep_tension: "이두근 긴장",
+  elbow_disorder: "팔꿈치 질환",
+  elbow_muscle_tension: "팔꿈치 아래팔 근육 긴장",
 
+  hip_tilit: "골반 기울기",
+  hip_disorder: "골반 질환",
+  hip_knee_tilit: "골반과 무릎 기울기(측면)",
+
+  knee_angle: "골반 무릎 각도(정면)",
+  knee_disorder: "무릎 질환 (OHS)",
+  hip_knee_ankle_tilit: "골반, 무릎, 발목 기울기(OHS)",
+
+  ankle_angle: "발목 각도",
+  left_right_balance: "좌우 무게 균형",
+  uppper_lower_balance: "상하 무게 균형",
+};
+
+const MeasureIntroPart = ({ 
+  title,
+  cardData,
+  riskLevel,
+  rangeLevel,
+}: { 
+  title: string;
+  cardData: IPartDetail; 
+  riskLevel: number;
+  rangeLevel: number;
+}) => {
+  const items = Object.entries(cardData);
+  const badgeBg = conditionBg[(riskLevel ?? 0) as 0 | 1 | 2];
+  const badgeText = conditionText[(riskLevel ?? 0) as 0 | 1 | 2];
+  const levelString = {
+    0:"정상",
+    1:"주의",
+    2:"위험",
+  }[riskLevel];
   // 한 줄 렌더링 함수
-  const renderGridRow = (
-    name: string,
-    data: string,
-    lvl: number,
+  
+  const renderRangeBoxes = (
+    riskLevel: number,  // 화살표 위치(0~2)
+    rangeLevel: number, // 표시할 단계값(0~2)
+    rowIdx: number,
+    rowsLen: number
   ) => {
+    const safeRisk = Math.max(0, Math.min(2, riskLevel)) as 0 | 1 | 2;
+    const safeRange = Math.max(0, Math.min(2, rangeLevel)); // 0~2
+
     return (
-      <>
-        {/* 이름 칸 */}
-        <div className="py-2 border-t border-gray-200 text-[11px] leading-[1.3] text-gray-600 flex items-center justify-center mx-2">
-          {name}
-        </div>
+      <div className="flex w-full h-full">
+        {[0, 1, 2].map((index) => {
+          const isActive = safeRisk === index;
 
-        {[0, 1, 2].map((col) => {
-          const isActive = col === lvl;
-          const topBgClass = isActive ? levelCellBg[lvl] : inactiveCellBg;
+          // ✅ 윗줄(화살표 줄) 배경: 선택칸은 warning/danger, 나머지는 sub색
+          const topBg = isActive
+            ? conditionBg[safeRisk] // bg-warning / bg-danger 등
+            : levelCellBg[index as 0 | 1 | 2]; // bg-sub100/sub200/sub300
 
-          const stageText = `${lvl + 1}단계`; // 0→1단계, 1→2단계, 2→3단계
+          // ✅ 마지막 셀 라운드
+          const isLastCell = index === 2;
+          const roundClass =
+            isLastCell && rowIdx === 0
+              ? "rounded-tr-xl"
+              : isLastCell && rowIdx === rowsLen - 1
+              ? "rounded-br-xl"
+              : "";
 
           return (
-            <div key={col} className="flex flex-col w-full border-t border-gray-200">
-              
-              {/* 🔹 1행: 화살표 + 배경색 */}
-              <div
-                className={cn(
-                  "flex items-center justify-center h-5 text-[10px]",
-                  topBgClass
-                )}
-              >
-                {isActive && "▼"}
+            <div
+              key={index}
+              className={[
+                "relative flex-1 flex flex-col overflow-hidden", // ✅ 위/아래 분리 + 라운드 클립
+                roundClass,
+               
+                "border-l border-dashed border-sub-100 first:border-l-0",
+              ].join(" ")}
+            >
+              {/* ✅ 위 1/3: 화살표 영역(칸별 색 유지) */}
+              <div className={["flex-[1] flex items-center justify-center", topBg].join(" ")}>
+                {isActive && <div className="text-xs leading-none">▼</div>}
               </div>
 
-              {/* 🔹 2행: 단계 텍스트 + 점선 구분 */}
-              <div
-                className={cn(
-                  "flex items-center justify-center h-5 text-[10px] bg-white",
-                  col < 2 && "border-r border-dotted border-gray-300" // 마지막 제외
+              {/* ✅ 아래 2/3: 단계 텍스트 영역(무조건 흰색) */}
+              <div className="flex-[1] bg-white flex items-center justify-center">
+                {isActive && (
+                  <div className="text-xs leading-none">{safeRange + 1}단계</div>
                 )}
-              >
-                {isActive && stageText}
               </div>
             </div>
           );
         })}
-      </>
+      </div>
     );
   };
 
 
+
+
   return (
-    <div className="flex flex-col rounded-3xl border bg-white px-4 py-3 shadow-sm h-full">
+    <div className="flex rounded-xl border bg-white shadow-sm h-full">
       {/* 전체 grid */}
-      <div className="grid grid-cols-[64px,2fr,1fr,1fr,1fr] justify-center">
-        {/* ── 헤더 row ─────────────────────────────── */}
-        <div className="flex items-center justify-center text-lg font-semibold text-gray-800 pb-2">
-          {title}
+      <div className="flex flex-col w-1/4 items-center justify-center text-base font-semibold gap-1">
+        {title}
+        <div
+          className={cn(
+            "px-3 py-1  rounded-full text-xs",
+            badgeBg,
+            badgeText
+          )}
+        >
+          {`${levelString} ${Number(rangeLevel)}단계`}
         </div>
-
-        <div className="flex items-center justify-center pb-2">
-          <span
-            className={cn(
-              "px-3 py-1 rounded-full text-xs font-semibold",
-              badgeBg,
-              badgeText
-            )}
-          >
-            {condition} {level}단계
-          </span>
-        </div>
-
-        <div className="flex items-center justify-center text-xs text-gray-600 pb-2">
-          정상
-        </div>
-        <div className="flex items-center justify-center text-xs text-gray-600 pb-2">
-          주의
-        </div>
-        <div className="flex items-center justify-center text-xs text-gray-600 pb-2">
-          위험
-        </div>
-        
-       
-        <div className="row-span-3 w-16 h-full rounded-xl border border-[#E0E0E0] flex items-center justify-center">
-          <span className="text-gray-300 text-xs">IMG</span>
-        </div>
-
-        
-        {renderGridRow(row0name, row0data, row0level)}
-        {renderGridRow(row1name, row1data, row1level)}
-        {renderGridRow(row2name, row2data, row2level)}
       </div>
+      
+      {/* 오른쪽 영역 */}
+      <div className="flex flex-col w-3/4 h-full border-l">
+        {items.map(([measureName, item], idx) => (
+          <div key={idx} className={cn(
+            "flex flex-1 min-h-0 items-stretch",
+            idx !== items.length - 1 && "border-b "
+          )}>
+            <div className="flex w-1/2 text-sm flex items-center justify-center border-r px-2 py-1 text-center">{MEASURE_NAME_MAP[measureName] ?? item.measure_unit ?? measureName}</div>
+            <div className="flex w-1/2 items-stretch">{renderRangeBoxes(item.risk_level, item.range_level, idx, items.length)}</div>
+          </div>
+        ))}
+      </div>
+      
     </div>
-    );
-
+  );
 };
 
 export default MeasureIntroPart;
