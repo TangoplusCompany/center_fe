@@ -1,6 +1,6 @@
 "use client";
 
-import { IUserMeasureDetailResponse } from "@/types/measure";
+import { IUserMeasureInfoResponse } from "@/types/measure";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MeasureDetailDynamic from "@/components/Measure/DetailDynamic";
 import React, { JSX } from "react";
@@ -30,7 +30,7 @@ type MeasureListType = {
 };
 
 type CenterUserMeasureProps = {
-  measureData: IUserMeasureDetailResponse;
+  measureData: IUserMeasureInfoResponse;
   measureList?: IMeasureList[];              // 전체 측정 리스트
   selectedMeasureSn?: number | null;         // 현재 선택된 sn
   onChangeMeasureSn?: (sn: number) => void;  // 다른 sn 선택 시 호출
@@ -114,6 +114,7 @@ const MeasureDetail = ({
           measureSn: String(measureData.result_summary_data.sn),
           userSn: userSn
         }}
+        cameraOrientation={data.camera_orientation}
         />
       ),
     },
@@ -126,6 +127,7 @@ const MeasureDetail = ({
           measureSn: String(measureData.result_summary_data.sn),
           userSn: userSn
         }}
+        cameraOrientation={data.camera_orientation}
         />
       ),
     },
@@ -138,6 +140,7 @@ const MeasureDetail = ({
           measureSn: String(measureData.result_summary_data.sn),
           userSn: userSn
         }}
+        cameraOrientation={data.camera_orientation}
         />
       ),
     },
@@ -150,6 +153,7 @@ const MeasureDetail = ({
             measureSn: String(measureData.result_summary_data.sn),
             userSn: userSn
           }} 
+          cameraOrientation={data.camera_orientation}
           />,
     },
   ];
@@ -171,7 +175,7 @@ const MeasureDetail = ({
                 "bg-transparent data-[state=active]:bg-transparent",
                 "shadow-none data-[state=active]:shadow-none",
                 "border-none",
-                "text-sub200",
+                "text-sub300",
                 "hover:text-secondary", 
                 "data-[state=active]:text-toggleAccent",
                 "after:absolute after:-bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-md",

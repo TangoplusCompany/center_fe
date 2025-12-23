@@ -52,7 +52,7 @@ const MeasureDeviceTab = () => {
           } px-4 py-1 text-sm font-medium rounded-xl transition-all`}
           onClick={() => handleDeviceClick(0)}
         >
-          전체 조회
+          전체 보기
         </button>
 
         {/* 디바이스 목록 */}

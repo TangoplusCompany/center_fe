@@ -10,7 +10,20 @@ export interface IMeasureData extends IPagination {
   measurements: IMeasureList[];
 }
 
-export interface IUserMeasureDetailResponse {
+export interface IUserMeasureSequence {
+  file_data: IUserMeasureFileData;
+  detail_data: IUserMeasureDetailData[];
+}
+
+
+export interface IUserMeasureInfoResponse {
+  result_summary_data: IUserDetailMeasureInfo;
+  static_mat_data: IStaticMat;
+  dynamic_mat_data: IDynamicMat;
+  detail_data: IPartDetailData;
+}
+
+export interface IUserMeasureSeqResponse {
   result_summary_data: IUserDetailMeasureInfo;
   static_mat_data: IStaticMat;
   dynamic_mat_data: IDynamicMat;
@@ -55,7 +68,7 @@ export interface IUserDetailMeasureInfo
   gender: string;
   user_uuid: string; // 유저 UUID
   mobile: string; // 휴대폰 번호
-  camera_orientation: number;
+  camera_orientation: 0 | 1;
 }
 
 export interface IFilterMeasureInfo {
@@ -541,4 +554,28 @@ export interface IUserDashBoard {
   latest_measure_summary: LatestMeasureSummary;
   total_measure_count: number;
   measure_history: MeasureHistory[];
+}
+
+export interface IUserMeasureFileData {
+  server_sn: number;
+  measure_seq: number;
+  measure_type: number;
+  measure_server_json_name: string;
+  measure_server_file_name: string;
+  measure_server_mat_image_name: string;
+  measure_server_mat_json_name: string;
+  measure_overlay_width: number;
+  measure_overlay_height: number;
+}
+
+export interface IUserMeasureDetailData {
+  measure_type: number;
+  landmark: number;
+  data: number;
+  risk_level: number;
+  range_level: number;
+  measure_unit: string | null;
+  ment_all: string;
+  ment: string;
+  left_right: number; // 0 | 1 로 좁혀도 됨
 }

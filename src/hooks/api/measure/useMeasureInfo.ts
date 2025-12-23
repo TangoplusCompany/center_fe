@@ -1,5 +1,5 @@
 import { customAxios } from "@/lib/axios";
-import { IUserMeasureDetailResponse } from "@/types/measure";
+import { IUserMeasureInfoResponse } from "@/types/measure";
 import { useQuery } from "@tanstack/react-query";
 
 /**
@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
  * @returns 측정 상세 데이터
  */
 export const useMeasureInfo = (measure_sn: number | undefined, user_sn: string) => {
-  return useQuery<IUserMeasureDetailResponse>({
+  return useQuery<IUserMeasureInfoResponse>({
     queryKey: ["measureDetail", measure_sn, user_sn],
     queryFn: async () => {
       const response = await customAxios.get(`/measurement/${measure_sn}/members/${user_sn}`, {

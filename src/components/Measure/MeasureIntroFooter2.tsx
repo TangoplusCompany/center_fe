@@ -33,7 +33,7 @@ const MeasureIntroFooter2 = (
   const [processedFootSrc, setProcessedFootSrc] = useState<string>("");
   const [processedHipSrc, setProcessedHipSrc] = useState<string>("");
   useEffect(() => {
-    console.log("footImageUrl =", footImageUrl);
+    
 
     removeBlackBackground(footImageUrl)
       .then((result) => {

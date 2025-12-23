@@ -62,7 +62,7 @@ const CenterUserDashBoard = ({
   const bestPart = calculateExtremePart(dashboardData ? dashboardData?.measure_history : [], "best");
 
   const measureDate = calculateIDayData(dashboardData ? dashboardData?.measure_history : []);
-  console.log(measureDate);
+
   return (
     
     <div className="flex w-full gap-4">

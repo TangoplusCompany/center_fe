@@ -75,6 +75,7 @@ export default {
         toggleAccent: {
           DEFAULT: "hsl(var(--toggle-accent))",
           foreground: "hsl(var(--toggle-accent-foreground))",
+          background: "hsl(var(--toggle-accent-background))"
         },
         
       },

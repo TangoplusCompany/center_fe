@@ -10,6 +10,18 @@ const conditionBg: Record<0 | 1 | 2, string> = {
   2: "bg-danger",
 };
 
+const cellConditionBg: Record<0 | 1 | 2, string> = {
+  0: "bg-sub100",
+  1: "bg-warning",
+  2: "bg-danger",
+};
+
+const arrowCondition: Record<0 | 1 | 2, string> = {
+  0: "text-sub400",
+  1: "text-black",
+  2: "text-black",
+};
+
 const conditionText: Record<0 | 1 | 2, string> = {
   0: "text-white",
   1: "text-warning-foreground",
@@ -86,7 +98,7 @@ const MeasureIntroPart = ({
 
           // ✅ 윗줄(화살표 줄) 배경: 선택칸은 warning/danger, 나머지는 sub색
           const topBg = isActive
-            ? conditionBg[safeRisk] // bg-warning / bg-danger 등
+            ? cellConditionBg[safeRisk] // bg-warning / bg-danger 등
             : levelCellBg[index as 0 | 1 | 2]; // bg-sub100/sub200/sub300
 
           // ✅ 마지막 셀 라운드
@@ -110,7 +122,7 @@ const MeasureIntroPart = ({
             >
               {/* ✅ 위 1/3: 화살표 영역(칸별 색 유지) */}
               <div className={["flex-[1] flex items-center justify-center", topBg].join(" ")}>
-                {isActive && <div className="text-xs leading-none">▼</div>}
+                {isActive && <div className={`text-xs ${arrowCondition} leading-none`}>▼</div>}
               </div>
 
               {/* ✅ 아래 2/3: 단계 텍스트 영역(무조건 흰색) */}
@@ -125,9 +137,6 @@ const MeasureIntroPart = ({
       </div>
     );
   };
-
-
-
 
   return (
     <div className="flex rounded-xl border bg-white shadow-sm h-full">

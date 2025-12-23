@@ -1,6 +1,6 @@
 "use client";
 
-import { IPartDetailData, IUserDetailMeasureInfo, IUserMeasureDetailResponse } from "@/types/measure";
+import { IPartDetailData, IUserDetailMeasureInfo, IUserMeasureInfoResponse } from "@/types/measure";
 import React from "react";
 import SkeletonContainer from "./SkeletonContainer";
 import MeasureIntroFooter1, { IMatStaticPressure } from "./MeasureIntroFooter1";
@@ -33,9 +33,9 @@ const GhostSkeletonBox = ({
       tabIndex={0}
       onClick={onCardClick && currentSlot ? () => onCardClick(currentSlot) : undefined}
       className={[
-        "relative h-full rounded-3xl border border-sub300 box-border",
+        "relative h-full rounded-3xl border-2 border-sub300/50 border-dashed box-border",
         "transition cursor-pointer select-none",
-        "hover:bg-sub200 active:bg-sub300",
+        "hover:border-sub400 active:bg-sub400",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-toggleAccent",
         className ?? "",
       ].join(" ")}
@@ -97,7 +97,7 @@ const MeasureIntro = ({
   onCompareDialogOpen,
   currentSlot,
 }: {
-  data?: IUserMeasureDetailResponse;
+  data?: IUserMeasureInfoResponse;
   layout?: LayoutVariant;
   onCompareDialogOpen? : (slot: CompareSlot) => void;
   currentSlot?: CompareSlot;
@@ -132,6 +132,7 @@ const MeasureIntro = ({
     mat_ohs_right_pressure,
     mat_ohs_top_pressure,
     mat_ohs_bottom_pressure,
+    
   } = data.result_summary_data;
 
   const staticFourCorners: IMatStaticPressure = {

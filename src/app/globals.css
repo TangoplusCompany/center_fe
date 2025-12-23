@@ -34,6 +34,7 @@ body {
     --chart-5: 27 87% 67%;
     --toggle-accent: 227 65.1% 49.4%;
     --toggle-accent-foreground: 0 0% 100%;
+    --toggle-accent-background: 210 40% 96.1%;
     --danger: 0 100% 64.5%;
     --danger-foreground: 0 100% 94.9%;
     --danger-deep: 0 100% 23.5%;
@@ -75,6 +76,7 @@ body {
     --chart-5: 340 75% 55%;
     --toggle-accent: 210 40% 96.1%;
     --toggle-accent-foreground: 0 0% 0%;
+    --toggle-accent-background: 227 65.1% 49.4%;
     --danger: 0 100% 64.5%;
     --danger-foreground: 0 100% 94.9%;
     --danger-deep: 0 100% 23.5%;
