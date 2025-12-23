@@ -6,7 +6,8 @@ export async function removeBlackBackground(originalUrl: string): Promise<string
     // img.crossOrigin = "anonymous";
 
     // ✅ 원본이 아니라, 프록시 경유 주소를 사용
-    const proxiedUrl = `/api/proxy-image?url=${encodeURIComponent(originalUrl)}`;
+    const proxiedUrl = `/api/proxy?url=${encodeURIComponent(originalUrl)}`;
+    img.crossOrigin = "";
     img.src = proxiedUrl;
 
     img.onload = () => {

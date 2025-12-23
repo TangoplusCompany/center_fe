@@ -96,12 +96,9 @@ export const MeasureList = ({
             <TableCell className="text-center">
               {measurement.device_name}
             </TableCell>
-            {/* <TableCell className="text-center">
-              {measurement.t_score}점
-            </TableCell> */}
             <TableCell className="text-right">
               <Link
-                href={`/measure/${measurement.measure_sn}?user_uuid=${measurement.user_uuid}`}
+                href={`/measure/${measurement.measure_sn}?user_sn=${measurement.user_sn}`}
                 className="flex items-center gap-2 justify-end cursor-pointer"
               >
                 <FileText className="w-4 h-4" />

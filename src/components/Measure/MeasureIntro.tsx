@@ -1,6 +1,6 @@
 "use client";
 
-import { IUserDetailStatic, IUserDetailDynamic, IUserDetailMeasureInfo } from "@/types/measure";
+import { IPartDetailData, IUserDetailMeasureInfo, IUserMeasureInfoResponse } from "@/types/measure";
 import React from "react";
 import SkeletonContainer from "./SkeletonContainer";
 import MeasureIntroFooter1, { IMatStaticPressure } from "./MeasureIntroFooter1";
@@ -11,6 +11,7 @@ import MeasureIntroLower from "./MeasureIntroLower";
 import { riskLevelMap } from "@/utils/riskLevelMap";
 import SkeletonBox from "./SkeletonBox";
 import { CompareSlot } from "@/types/compare";
+import MeasureIntroPart from "./MeasureIntroPart";
 
 
 type LayoutVariant = "grid" | "stack";
@@ -32,9 +33,9 @@ const GhostSkeletonBox = ({
       tabIndex={0}
       onClick={onCardClick && currentSlot ? () => onCardClick(currentSlot) : undefined}
       className={[
-        "relative h-full rounded-3xl border border-sub300 box-border",
+        "relative h-full rounded-3xl border-2 border-sub300/50 border-dashed box-border",
         "transition cursor-pointer select-none",
-        "hover:bg-sub200 active:bg-sub300",
+        "hover:border-sub400 active:bg-sub400",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-toggleAccent",
         className ?? "",
       ].join(" ")}
@@ -96,11 +97,7 @@ const MeasureIntro = ({
   onCompareDialogOpen,
   currentSlot,
 }: {
-  data?: {
-    info: IUserDetailMeasureInfo;
-    static0: IUserDetailStatic;
-    dynamic: IUserDetailDynamic;
-  };
+  data?: IUserMeasureInfoResponse;
   layout?: LayoutVariant;
   onCompareDialogOpen? : (slot: CompareSlot) => void;
   currentSlot?: CompareSlot;
@@ -108,8 +105,6 @@ const MeasureIntro = ({
   // ✅ data 없으면 “빈 Intro” 렌더
   if (!data) return <EmptyIntro layout={layout} onCompareDialogOpen={ onCompareDialogOpen } currentSlot={ currentSlot}/>;
 
-  // ✅ data 있을 때만 안전하게 꺼냄
-  const { info, static0, dynamic } = data;
 
   const {
     risk_upper_ment,
@@ -118,9 +113,6 @@ const MeasureIntro = ({
     risk_lower_ment,
     risk_lower_risk_level,
     risk_lower_range_level,
-
-    mat_static_horizontal_ment,
-    mat_static_vertical_ment,
     mat_static_risk_level,
     mat_static_range_level,
     mat_static_left_top,
@@ -132,9 +124,6 @@ const MeasureIntro = ({
     mat_static_top_pressure,
     mat_static_bottom_pressure,
 
-    mat_ohs_horizontal_ment,
-    mat_ohs_vertical_ment,
-    mat_ohs_knee_ment,
     mat_ohs_left_top,
     mat_ohs_left_bottom,
     mat_ohs_right_top,
@@ -143,7 +132,8 @@ const MeasureIntro = ({
     mat_ohs_right_pressure,
     mat_ohs_top_pressure,
     mat_ohs_bottom_pressure,
-  } = info;
+    
+  } = data.result_summary_data;
 
   const staticFourCorners: IMatStaticPressure = {
     leftTopPressure: mat_static_left_top,
@@ -171,62 +161,33 @@ const MeasureIntro = ({
   const lowerCondition = riskLevelMap[risk_lower_risk_level as 0 | 1 | 2];
   const kneeCondition = riskLevelMap[mat_static_risk_level as 0 | 1 | 2];
 
-  const { measure_server_mat_image_name } = static0;
+  const { 
+    measure_server_mat_image_name,
+    mat_static_horizontal_ment,
+    mat_static_vertical_ment,
+   } = data.static_mat_data;
   const {
     mat_hip_down_image_name,
-    mat_hip_trajectory_name,
+    mat_hip_trajectory_image_name,
     mat_left_knee_trajectory_image_name,
     mat_right_knee_trajectory_image_name,
-  } = dynamic;
+    mat_ohs_horizontal_ment,
+    mat_ohs_vertical_ment,
+    mat_ohs_knee_ment,
+  } = data.dynamic_mat_data;
 
-  // const dummyPartCard: PartCard[] = [
-  //   {
-  //     title: "목",
-  //     condition: "정상",
-  //     level: 1,
-  //     row0name: "압력 분포",
-  //     row0data: "균형적",
-  //     row0level: 1,
-  //     row1name: "최대 압력",
-  //     row1data: "45 kPa",
-  //     row1level: 0,
-  //     row2name: "접촉 면적",
-  //     row2data: "120 cm²",
-  //     row2level: 2,
-  //   },
-  //   {
-  //     title: "어깨",
-  //     condition: "주의",
-  //     level: 2,
-  //     row0name: "압력 분포",
-  //     row0data: "불균형",
-  //     row0level: 1,
-  //     row1name: "최대 압력",
-  //     row1data: "68 kPa",
-  //     row1level: 1,
-  //     row2name: "접촉 면적",
-  //     row2data: "85 cm²",
-  //     row2level: 0,
-  //   },
-  //   {
-  //     title: "팔꿉",
-  //     condition: "위험",
-  //     level: 3,
-  //     row0name: "압력 분포",
-  //     row0data: "심각한 불균형",
-  //     row0level: 2,
-  //     row1name: "최대 압력",
-  //     row1data: "92 kPa",
-  //     row1level: 2,
-  //     row2name: "접촉 면적",
-  //     row2data: "65 cm²",
-  //     row2level: 1,
-  //   },
-  // ];
+  const PART_ORDER: { key: keyof IPartDetailData; label: string }[] = [
+    { key: "neck", label: "목" },
+    { key: "shoulder", label: "어깨" },
+    { key: "elbow", label: "팔꿈치" },
+    { key: "hip", label: "고관절" },
+    { key: "knee", label: "무릎" },
+    { key: "ankle", label: "발목" },
+  ];
 
   const topLeft = (
     <div className="h-full">
-      <SkeletonContainer data={info} />
+      <SkeletonContainer data={data.result_summary_data} />
     </div>
   );
 
@@ -269,7 +230,7 @@ const MeasureIntro = ({
             (mat_ohs_vertical_ment ?? "\n")
           }
           footFileName={mat_hip_down_image_name}
-          hipFileName={mat_hip_trajectory_name}
+          hipFileName={mat_hip_trajectory_image_name}
           matOhs={ohsFourCorners}
         />
         <MeasureIntroFooter3
@@ -303,7 +264,7 @@ const MeasureIntro = ({
               (mat_ohs_vertical_ment ?? "\n")
             }
             footFileName={mat_hip_down_image_name}
-            hipFileName={mat_hip_trajectory_name}
+            hipFileName={mat_hip_trajectory_image_name}
             matOhs={ohsFourCorners}
           />
         </div>
@@ -316,7 +277,9 @@ const MeasureIntro = ({
         </div>
       </div>
     );
-
+  type PartKey = "neck" | "shoulder" | "elbow" | "hip" | "knee" | "ankle";
+  type RiskLevelKey = `risk_level_${PartKey}`;
+  type RangeLevelKey = `range_level_${PartKey}`;
   return (
     <div className="flex flex-col h-full gap-4">
       {layout === "grid" ? (
@@ -328,6 +291,82 @@ const MeasureIntro = ({
         <div className="flex flex-col gap-4">
           <div>{topLeft}</div>
           <div>{topRight}</div>
+        </div>
+      )}
+      {layout === "grid" ? (
+        <div className="rounded-3xl border p-4">
+          {/* 상체 */}
+          <div className="text-base font-semibold mb-2">상체 분석</div>
+          <div className="grid grid-cols-3 auto-rows-fr gap-4">
+            {PART_ORDER.slice(0, 3).map(({ key, label }) => {
+              const partData = data.detail_data[key];
+              if (!partData) return null;
+
+              const partKey = key as PartKey;
+              const riskLevel =
+                data.result_summary_data[`risk_level_${partKey}` as RiskLevelKey];
+              const rangeLevel =
+                data.result_summary_data[`range_level_${partKey}` as RangeLevelKey];
+
+              return (
+                <MeasureIntroPart
+                  key={key}
+                  title={label}
+                  cardData={partData}
+                  riskLevel={riskLevel}
+                  rangeLevel={rangeLevel}
+                />
+              );
+            })}
+          </div>
+
+          {/* 하체 */}
+          <div className="text-base font-semibold mt-4 mb-2">하체 분석</div>
+          <div className="grid grid-cols-3 auto-rows-fr gap-4">
+            {PART_ORDER.slice(3, 6).map(({ key, label }) => {
+              const partData = data.detail_data[key];
+              if (!partData) return null;
+
+              const partKey = key as PartKey;
+              const riskLevel =
+                data.result_summary_data[`risk_level_${partKey}` as RiskLevelKey];
+              const rangeLevel =
+                data.result_summary_data[`range_level_${partKey}` as RangeLevelKey];
+
+              return (
+                <MeasureIntroPart
+                  key={key}
+                  title={label}
+                  cardData={partData}
+                  riskLevel={riskLevel}
+                  rangeLevel={rangeLevel}
+                />
+              );
+            })}
+          </div>
+        </div>
+
+        
+      ) : (
+        <div className="flex flex-col gap-4">
+          {PART_ORDER.map(({ key, label }) => {
+            const partData = data.detail_data[key];
+            if (!partData) return null;
+            const partKey = key as PartKey;
+            const riskLevel =
+              data.result_summary_data[`risk_level_${partKey}` as RiskLevelKey];
+            const rangeLevel =
+              data.result_summary_data[`range_level_${partKey}` as RangeLevelKey];
+            return (
+              <MeasureIntroPart
+                key={key}
+                title={label}
+                cardData={partData}
+                riskLevel={riskLevel}
+                rangeLevel={rangeLevel}
+              />
+            );
+          })}
         </div>
       )}
 
