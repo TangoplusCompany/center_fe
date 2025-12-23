@@ -34,15 +34,19 @@ body {
     --chart-5: 27 87% 67%;
     --toggle-accent: 227 65.1% 49.4%;
     --toggle-accent-foreground: 0 0% 100%;
+    --toggle-accent-background: 210 40% 96.1%;
     --danger: 0 100% 64.5%;
     --danger-foreground: 0 100% 94.9%;
     --danger-deep: 0 100% 23.5%;
     --warning: 33 100% 50%;
     --warning-foreground: 33 100% 88.6%; 
     --warning-deep:33 100% 28.2%;
-    --sub200: 0 0% 91%;
-    --sub300: 0 0% 85.1%;
+    --sub100: 0 0% 97.3%;
+    --sub200: 0 0% 92.9%;
+    --sub300: 0 0% 86.3%;
     --sub400: 0 0% 73.3%;
+    --sub600: 0 0% 49.4%;
+    --sub800: 0 0% 27.1%;
   }
 
   .dark {
@@ -72,6 +76,7 @@ body {
     --chart-5: 340 75% 55%;
     --toggle-accent: 210 40% 96.1%;
     --toggle-accent-foreground: 0 0% 0%;
+    --toggle-accent-background: 227 65.1% 49.4%;
     --danger: 0 100% 64.5%;
     --danger-foreground: 0 100% 94.9%;
     --danger-deep: 0 100% 23.5%;

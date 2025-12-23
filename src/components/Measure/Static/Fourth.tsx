@@ -1,4 +1,4 @@
-import { IUserDetailStatic } from "@/types/measure";
+import { IUserMeasureFileData } from "@/types/measure";
 import React from "react";
 import { useMeasureJson } from "@/hooks/api/measure/useMeasureJson";
 import DummyStaticContainer from "../DummyStaticContainer";
@@ -6,17 +6,19 @@ import { MeasurementImage } from "../MeasurementImage";
 
 const MeasureStaticFourth = React.memo(
   ({
-    className,
-    statics,
-  }: {
-    className?: string;
-    statics: IUserDetailStatic;
-  }) => {
+      className,
+      files,
+      cameraOrientation
+    }: {
+      className?: string;
+      files?: IUserMeasureFileData;
+      cameraOrientation: 0 | 1;
+    }) => {
     const {
       data: measureJson,
       isLoading,
       isError,
-    } = useMeasureJson(statics.measure_server_json_name);
+    } = useMeasureJson(files?.measure_server_json_name);
 
     if (!measureJson) return <DummyStaticContainer />;
     if (isLoading) return <DummyStaticContainer />;
@@ -27,10 +29,11 @@ const MeasureStaticFourth = React.memo(
         <MeasurementImage
           imageUrl={
             `https://gym.tangoplus.co.kr/data/Results/` +
-            statics.measure_server_file_name
+            files?.measure_server_file_name
           }
           measureJson={measureJson}
           step="fourth"
+          cameraOrientation={cameraOrientation}
         />
       </div>
     );

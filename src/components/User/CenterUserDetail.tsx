@@ -28,8 +28,10 @@ const useMeasureSn = () => {
 
 const CenterUserDetail = ({ 
   userUUID,
+  userSn
 }: {
   userUUID: string;
+  userSn: number;
 }) => {
   const { tab, handleTab } = useTab();
   const { measureSn, handleRecentSn } = useMeasureSn();
@@ -110,6 +112,7 @@ const CenterUserDetail = ({
         <CenterUserMeasureContainer
           measureSn={measureSn}
           userUUID={userUUID}
+          userSn={userSn}
           tab={tab}
           onUpdateMeasureSn={handleRecentSn}
           comparePair={ comparePair }

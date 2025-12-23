@@ -6,5 +6,4 @@ export interface IActionKaKaoCryptoProps {
   receiver: string;
   receiver_name: string;
   measure_date: string;
-  measure_position: string;
 }

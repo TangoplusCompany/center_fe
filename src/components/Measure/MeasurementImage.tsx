@@ -6,12 +6,14 @@ export const MeasurementImage = ({
   imageUrl,
   measureJson,
   step,
+  cameraOrientation,
 }: {
   imageUrl: string;
   measureJson: { pose_landmark: IPoseLandmark[] };
   step: "first" | "second" | "third" | "fourth" | "fifth" | "sixth";
+  cameraOrientation: 0 | 1;
 }) => {
-  const { resultUrl, loading } = useStaticLandmark(imageUrl, measureJson, step);
+  const { resultUrl, loading } = useStaticLandmark(imageUrl, measureJson, step, cameraOrientation);
 
   if (loading) return <Skeleton className="w-full h-[720px]" />;
   if (!resultUrl) return <Skeleton className="w-full h-[720px]" />;

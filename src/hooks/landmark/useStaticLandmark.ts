@@ -48,6 +48,7 @@ export function useStaticLandmark(
   imageUrl: string,
   measureJson: { pose_landmark: IPoseLandmark[] },
   step: "first" | "second" | "third" | "fourth" | "fifth" | "sixth",
+  cameraOrientation: 0 | 1,
 ): {
   resultUrl: string | null;
   loading: boolean;
@@ -65,29 +66,55 @@ export function useStaticLandmark(
       try {
         const proxiedUrl = `/api/proxy?url=${encodeURIComponent(imageUrl)}`;
         const image = await loadImage(proxiedUrl);
-        const width = image.width;
-        const height = image.height;
+
+        const srcW = image.width;   // 1280
+        const srcH = image.height;  // 720
+
+        const dstW = cameraOrientation === 1 ? srcH : srcW; // 720 or 1280
+        const dstH = cameraOrientation === 1 ? srcW : srcH; // 1280 or 720
 
         const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
+        canvas.width = dstW;
+        canvas.height = dstH;
         const ctx = canvas.getContext("2d")!;
 
-        ctx.drawImage(image, 0, 0, width, height);
         ctx.save();
-        ctx.translate(width, 0);
+        if (cameraOrientation === 1) {
+          ctx.translate(0, dstH);
+          ctx.rotate(-Math.PI / 2);
+        }
+        ctx.drawImage(image, 0, 0, srcW, srcH);
+        ctx.restore(); 
+        ctx.save();
+
+        // 미러
+        ctx.translate(dstW, 0);
         ctx.scale(-1, 1);
 
         drawMap[step](ctx, measureJson);
 
         ctx.restore();
 
-        // crop to 3:4
+        // ✅ crop to 3:4 (정방향 기준으로 수행)
+        let cropX = 0;
+        let cropY = 0;
+        let cropWidth = dstW;
+        let cropHeight = dstH;
         const targetAspect = 3 / 4;
-        const cropHeight = height;
-        const cropWidth = cropHeight * targetAspect;
-        const cropX = (width - cropWidth) / 2;
-        const cropY = 0;
+
+        if (cameraOrientation === 0) {
+          // 16:9(가로) -> 3:4 만들기: 좌우 크롭 (기존)
+          cropHeight = dstH;
+          cropWidth = cropHeight * targetAspect;
+          cropX = (dstW - cropWidth) / 2;
+          cropY = 0;
+        } else {
+          // 9:16(세로) -> 3:4 만들기: 위아래 크롭
+          cropWidth = dstW;
+          cropHeight = cropWidth / targetAspect; // = dstW * 4/3
+          cropX = 0;
+          cropY = (dstH - cropHeight) / 2;
+        }
 
         const croppedCanvas = document.createElement("canvas");
         croppedCanvas.width = cropWidth;
@@ -116,7 +143,7 @@ export function useStaticLandmark(
     };
 
     draw();
-  }, [imageUrl, loadImage, step, measureJson]);
+  }, [imageUrl, loadImage, step, measureJson, cameraOrientation]);
 
   return { resultUrl, loading };
 }
