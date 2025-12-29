@@ -56,3 +56,13 @@ export interface IDeviceChartResponse extends IResponseDefault {
 export type DeviceChartList = { date: string } & {
   [key: string]: number;
 };
+
+// export interface IDeviceChartResponse extends IResponseDefault {
+//   data: DeviceUsageData[];
+// }
+
+// export interface DeviceUsageData {
+//   device_sn: number;
+//   device_name: string;
+//   measure_count: number;
+// }

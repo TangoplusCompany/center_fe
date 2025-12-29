@@ -74,11 +74,11 @@ const DeviceChart = ({
     if (selectedLegend === "all") return pastelColors[index];
     return selectedLegend === key ? COLOR_ACTIVE : COLOR_INACTIVE;
   };
-  // Legend용: 맨 앞에 all 추가
   const legendKeys = React.useMemo(
     () => ["all", ...seriesKeys],
     [seriesKeys]
   );
+  console.log(legendKeys)
   const getSeriesColor = (key: string, index: number) => {
     // 전체보기면 기존 pastelColors 그대로
     if (selectedLegend === "all") return pastelColors[index];

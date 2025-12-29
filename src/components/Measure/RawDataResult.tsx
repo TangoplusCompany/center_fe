@@ -21,6 +21,7 @@ export const RawDataResult = (
     data: IStaticRawDataProps
   }
 ) => {
+  console.log(data)
   const formattedData = data.data.toFixed(1);
   const unit = data.measure_unit?.includes("거리") ? "cm" : "°";
   const leftRightString = {
@@ -56,7 +57,7 @@ export const RawDataResult = (
   const barCondition = {
     정상: "bg-gradient-to-r from-[#eeeeee]/50 from-[0%] to-[#eeeeee]/100 to-[100%]",
     주의: "bg-gradient-to-r from-[#FFA73A]/10 from-[0%] to-[#FFA73A]/100 to-[100%]",
-    위험: "bg-gradient-to-r from-[#FF5252]/10 from-[0%] to[#FF5252]/100 to-[100%]",
+    위험: "bg-gradient-to-r from-[#ff5252]/10 from-[0%] to-[#ff5252]/100 to-[100%]",
   }[levelstring] ?? "bg-primary-foreground";
 
 
@@ -71,6 +72,11 @@ export const RawDataResult = (
     주의: "text-warningDeep",
     위험: "text-dangerDeep",
   }[levelstring] ?? "bg-primary-foreground";
+  const textLeftRightCondition = {
+    정상: "text-sub600",
+    주의: "text-white",
+    위험: "text-white",
+  }[levelstring] ?? "text-sub600";
   const textBgCondition = {
     정상: "bg-sub200/50",
     주의: "bg-warning",
@@ -90,7 +96,7 @@ export const RawDataResult = (
                 inline-flex items-center gap-1.5
                 px-3 py-1 whitespace-nowrap flex-shrink-0
                 ${textBgCondition}
-                ${textCondition} text-xs rounded-full
+                ${textLeftRightCondition} text-xs rounded-full
               `}
             >
               {leftRightString}
@@ -147,10 +153,10 @@ export const RawDataResult = (
 
 
       
-      <div className={`flex items-center gap-3 border-t-2 ${borderCondition}`}>
+      <div className={`flex items-center gap-3 border-t-2 ${borderCondition} h-[60px]`}>
         <div className="flex items-center px-4 py-3">
-          <div className={`w-1 h-4 ${textBgCondition} rounded-full`}></div>
-          <div className={`flex text-sm text-secondary px-2 ${textCondition}`}>
+          <div className={`w-1 h-4 ${textBgCondition} rounded-full flex-shrink-0`}></div>
+          <div className={`text-sm text-secondary px-2 ${textCondition} line-clamp-2`}>
             {data.ment_all}
           </div>
         </div>

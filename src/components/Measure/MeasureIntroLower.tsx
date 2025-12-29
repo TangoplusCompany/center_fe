@@ -2,22 +2,27 @@
 
 import { formatComment } from "@/utils/formatComment";
 import React from "react";
+import { useHeightSync } from "./Compare/CompareBody";
 
 const MeasureIntroLower  = (
   { 
+    side,
     comment,
     condition,
     level,
     
   }:
   {
+    side?: "left" | "right";
     comment: string
     condition: string
     level: number
     
   }
 ) => {
-  
+  const { register, getMinHeight } = useHeightSync();
+  const minH = getMinHeight("lower");
+
   const formattedComment = formatComment(comment);
   const borderCondition = {
       정상: "border-sub300/50",
@@ -41,8 +46,18 @@ const MeasureIntroLower  = (
     주의: "bg-warning",
     위험: "bg-danger",
   }[condition] ?? "bg-primary-foreground";
+  if (!side) {
+    return (
+      <div >
+
+      </div>
+    );
+  }
   return (
-    <div className={`flex flex-1 flex-col h-full p-4 border border-2 ${borderCondition} ${bgCondition} rounded-3xl shadow-[inset_0_4px_8px_rgba(255,255,255,0.25)]`}>
+    <div 
+      ref={register("lower", side)}
+      style={minH ? { minHeight: minH } : undefined}
+      className={`flex flex-1 flex-col h-full p-4 border border-2 ${borderCondition} ${bgCondition} rounded-3xl shadow-[inset_0_4px_8px_rgba(255,255,255,0.25)]`}>
       {/* 헤더 */}
       <div className="flex justify-between items-center mb-4">
         <h2 className={`text-xl font-semibold ${textCondition}`}>하지 결과</h2>

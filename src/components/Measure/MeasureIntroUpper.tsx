@@ -2,21 +2,25 @@
 
 import { formatComment } from "@/utils/formatComment";
 import React from "react";
+import { useHeightSync } from "./Compare/CompareBody";
 
 
 const MeasureIntroUpper = (
   { 
+    side,
     comment,
     condition,
     level,
   }:
   {
-    comment: string
-    condition: string
-    level: number
+    side?: "left" | "right";
+    comment: string;
+    condition: string;
+    level: number;
   }
 ) => {
-
+  const { register, getMinHeight } = useHeightSync();
+  const minH = getMinHeight("upper");
   const formattedComment = formatComment(comment);
   const borderCondition = {
     정상: "border-sub300/50",
@@ -42,11 +46,18 @@ const MeasureIntroUpper = (
   }[condition] ?? "bg-primary-foreground";
 
 
+  if (!side) {
+    return (
+      <div>
 
-
-  
+      </div>
+    );
+  }
   return (
-    <div className={`flex flex-1 flex-col h-full p-4 border border-2 ${borderCondition} ${bgCondition} rounded-3xl shadow-[inset_0_6px_12px_rgba(255,255,255,0.25)]`}>
+    <div 
+      ref={register("upper", side)}
+      style={minH ? { minHeight: minH } : undefined}
+      className={`flex flex-1 flex-col h-full p-4 border border-2 ${borderCondition} ${bgCondition} rounded-3xl shadow-[inset_0_6px_12px_rgba(255,255,255,0.25)]`}>
       {/* 헤더 */}
       <div className="flex justify-between items-center mb-4">
         <h2 className={`text-xl font-semibold ${textCondition}`}>상지 결과</h2>

@@ -1,0 +1,127 @@
+import React from "react";
+import { graphDetailCardProps } from "./ActivityContainer";
+
+
+const ActivityGraph = ({
+  data
+}: {
+  data: graphDetailCardProps;
+}) => {
+  // ICenterActivityGraph 객체를 배열로 변환
+  const barData = React.useMemo(() => {
+    if (!data.usage) return [];
+    
+    if (data.case === 0) {
+      // 오늘 요일 구하기 (0: 일요일, 1: 월요일, ..., 6: 토요일)
+      const today = new Date().getDay();
+      const allDays = ["일", "월", "화", "수", "목", "금", "토"];
+      const allData = [
+        data.usage[0], // 일요일
+        data.usage[1], // 월요일
+        data.usage[2], // 화요일
+        data.usage[3], // 수요일
+        data.usage[4], // 목요일
+        data.usage[5], // 금요일
+        data.usage[6], // 토요일
+      ];
+      
+      // 오늘을 기준으로 7일 재배열 (오늘이 맨 오른쪽)
+      const result = [];
+      for (let i = 6; i >= 0; i--) {
+        const dayIndex = (today - i + 7) % 7;
+        result.push({
+          label: allDays[dayIndex],
+          value: allData[dayIndex],
+        });
+      }
+      return result;
+    } else {
+      // 연령대
+      const labels = ["10대", "20대", "30대", "40대", "50대", "60대", "70대"];
+      return [
+        { label: labels[0], value: data.usage[0] },
+        { label: labels[1], value: data.usage[1] },
+        { label: labels[2], value: data.usage[2] },
+        { label: labels[3], value: data.usage[3] },
+        { label: labels[4], value: data.usage[4] },
+        { label: labels[5], value: data.usage[5] },
+        { label: labels[6], value: data.usage[6] },
+      ];
+    }
+  }, [data]);
+
+  const maxValue = Math.max(...barData.map(d => d.value.measure_count));
+
+  // 오늘 날짜 포맷팅
+  const todayFormatted = React.useMemo(() => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}.${month}.${day}`;
+  }, []);
+  
+  return (
+    <div className="flex flex-col border-2 border-toggleAccent-background rounded-xl gap-6 bg-gradient-to-b from-[#2c4fd0]/10 from-[2%] to-white to-[40%]">
+      <div className="p-4 flex justify-between items-center">
+        <div className="text-xl font-semibold text-toggleAccent">
+          {data.case === 0 && "요일별 사용량"}
+          {data.case === 1 && "회원 연령대"}
+        </div>
+        {/* case 0일 때만 날짜 표시 */}
+        {data.case === 0 && (
+          <div className="text-sm font-medium text-gray-500">
+            {todayFormatted}
+          </div>
+        )}
+      </div>
+
+      {/* 막대 그래프 */}
+      <div className="px-4 pb-4">
+        {/* 전체 그라디언트 정의 */}
+        <svg width="0" height="0" style={{ position: 'absolute' }}>
+          <defs>
+            <linearGradient id="masterGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+              <stop offset="0%" stopColor="white" />
+              <stop offset="100%" className="[stop-color:hsl(var(--toggle-accent))]" />
+            </linearGradient>
+          </defs>
+        </svg>
+
+        <div className="flex items-end justify-between gap-2 h-24">
+          {barData.map((item, index) => {
+            const heightPercent = (item.value.measure_count / maxValue) * 100;
+            
+            // 그라디언트 시작 지점 계산 (0~100%)
+            const gradientStart = ((maxValue - item.value.measure_count) / maxValue) * 100;
+
+            return (
+              <div key={index} className="flex flex-col items-center gap-2 flex-1">
+                {/* 막대 영역 */}
+                <div className="w-3/4 h-24 flex items-end">
+                  <div 
+                    className="w-full rounded-t-full"
+                    style={{ 
+                      height: `${heightPercent}%`,
+                      background: `linear-gradient(to bottom, 
+                        hsl(var(--toggle-accent)) ${gradientStart}%, 
+                        white 100%
+                      )`
+                    }}
+                  />
+                </div>
+                
+                {/* 라벨 */}
+                <div className="text-xs font-medium text-gray-600">
+                  {item.label}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ActivityGraph;
