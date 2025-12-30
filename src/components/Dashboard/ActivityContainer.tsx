@@ -3,17 +3,18 @@
 import { useGetCenterActivity } from "@/hooks/api/center/useGetCenterActivity";
 import ActivityCard from "./ActivityCard";
 import ActivityGraph from "./ActivityGraph";
-import { ICenterActivityUsage } from "@/types/center";
+import { ICenterActivityAgeGroup, ICenterActivityUsage } from "@/types/center";
 
 export type countDetailCardProps = {
   case: 0 | 1;
   count: number;
   upDown: 0 | 1 | 2;
 };
-export type graphDetailCardProps = {
-  case: 0 | 1;
-  usage: ICenterActivityUsage[];
-};
+export type GraphData = 
+  | { case: 0; usage: ICenterActivityUsage[] }
+  | { case: 1; ageGroup: ICenterActivityAgeGroup };
+
+export type graphDetailCardProps = GraphData;
 
 
 const ActivityContainer = () => {
@@ -31,14 +32,21 @@ const ActivityContainer = () => {
     upDown: (activityResponse?.weekly_trend as 0 | 1 | 2) ?? 1
   };
 
-  const graphData_0: graphDetailCardProps = {
-    case: 0,
-    usage: activityResponse?.usage_by_day_of_week ?? [],
-  };
-  const graphData_1: graphDetailCardProps = {
-    case: 1,
-    usage: activityResponse?.usage_by_day_of_week ?? [],
-  };
+  const graphData_0: graphDetailCardProps  = {
+  case: 0,
+  usage: activityResponse?.usage_by_day_of_week ?? [],
+};
+
+const graphData_1: graphDetailCardProps  = {
+  case: 1,
+  ageGroup: activityResponse?.measure_count_by_age_group ?? {
+    total_user_count: 0,
+    measure_count_by_age_group: {
+      teens: 0, twenties: 0, thirties: 0, forties: 0,
+      fifties: 0, sixties: 0, seventies: 0, eighties: 0, nineties: 0
+    }
+  },
+};
 
   
   return (

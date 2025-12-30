@@ -1,56 +1,54 @@
 import React from "react";
-import { graphDetailCardProps } from "./ActivityContainer";
+import { graphDetailCardProps  } from "./ActivityContainer";
+
 
 
 const ActivityGraph = ({
   data
 }: {
-  data: graphDetailCardProps;
+  data: graphDetailCardProps ;
 }) => {
   // ICenterActivityGraph 객체를 배열로 변환
+  // ICenterActivityGraph 객체를 배열로 변환
   const barData = React.useMemo(() => {
-    if (!data.usage) return [];
-    
     if (data.case === 0) {
+      if (!data.usage) return [];
+      
       // 오늘 요일 구하기 (0: 일요일, 1: 월요일, ..., 6: 토요일)
       const today = new Date().getDay();
       const allDays = ["일", "월", "화", "수", "목", "금", "토"];
-      const allData = [
-        data.usage[0], // 일요일
-        data.usage[1], // 월요일
-        data.usage[2], // 화요일
-        data.usage[3], // 수요일
-        data.usage[4], // 목요일
-        data.usage[5], // 금요일
-        data.usage[6], // 토요일
-      ];
       
       // 오늘을 기준으로 7일 재배열 (오늘이 맨 오른쪽)
       const result = [];
       for (let i = 6; i >= 0; i--) {
         const dayIndex = (today - i + 7) % 7;
+        const dayData = data.usage.find(u => u.day === allDays[dayIndex]);
         result.push({
           label: allDays[dayIndex],
-          value: allData[dayIndex],
+          value: dayData?.measure_count ?? 0,
         });
       }
       return result;
     } else {
       // 연령대
-      const labels = ["10대", "20대", "30대", "40대", "50대", "60대", "70대"];
+      if (!data.ageGroup) return [];
+      
+      const ageData = data.ageGroup.measure_count_by_age_group;
       return [
-        { label: labels[0], value: data.usage[0] },
-        { label: labels[1], value: data.usage[1] },
-        { label: labels[2], value: data.usage[2] },
-        { label: labels[3], value: data.usage[3] },
-        { label: labels[4], value: data.usage[4] },
-        { label: labels[5], value: data.usage[5] },
-        { label: labels[6], value: data.usage[6] },
+        { label: "10대", value: ageData.teens },
+        { label: "20대", value: ageData.twenties },
+        { label: "30대", value: ageData.thirties },
+        { label: "40대", value: ageData.forties },
+        { label: "50대", value: ageData.fifties },
+        { label: "60대", value: ageData.sixties },
+        { label: "70대", value: ageData.seventies },
+        { label: "80대", value: ageData.eighties },
+        { label: "90대", value: ageData.nineties },
       ];
     }
   }, [data]);
 
-  const maxValue = Math.max(...barData.map(d => d.value.measure_count));
+  const maxValue = Math.max(...barData.map(d => d.value));
 
   // 오늘 날짜 포맷팅
   const todayFormatted = React.useMemo(() => {
@@ -90,10 +88,10 @@ const ActivityGraph = ({
 
         <div className="flex items-end justify-between gap-2 h-24">
           {barData.map((item, index) => {
-            const heightPercent = (item.value.measure_count / maxValue) * 100;
+            const heightPercent = (item.value / maxValue) * 100;
             
             // 그라디언트 시작 지점 계산 (0~100%)
-            const gradientStart = ((maxValue - item.value.measure_count) / maxValue) * 100;
+            const gradientStart = ((maxValue - item.value) / maxValue) * 100;
 
             return (
               <div key={index} className="flex flex-col items-center gap-2 flex-1">
