@@ -103,11 +103,11 @@ body {
 }
 
 .dangerous.select {
-  background-color: #ff5449;
+  background-color: #ff4a4a;
 }
 
 .warning.select {
-  background-color: #ff971d;
+  background-color: #FFA73A;
 }
 
 .default.select {

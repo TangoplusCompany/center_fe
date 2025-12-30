@@ -104,8 +104,14 @@ const MeasureIntro = ({
 }) => {
   // ✅ data 없으면 “빈 Intro” 렌더
   if (!data) return <EmptyIntro layout={layout} onCompareDialogOpen={ onCompareDialogOpen } currentSlot={ currentSlot}/>;
-
-
+  
+  const slotMap: Record<number, "left" | "right"> = {
+    0: "left",
+    1: "right",
+  };
+  const slotSide = currentSlot !== undefined ? slotMap[currentSlot] : undefined;
+  console.log(currentSlot)
+  console.log(slotSide)
   const {
     risk_upper_ment,
     risk_upper_risk_level,
@@ -194,11 +200,13 @@ const MeasureIntro = ({
   const topRight = (
     <div className="flex h-full flex-col gap-4">
       <MeasureIntroUpper
+        side={slotSide}
         comment={risk_upper_ment}
         condition={upperCondition}
         level={risk_upper_range_level}
       />
       <MeasureIntroLower
+        side={slotSide}
         comment={risk_lower_ment}
         condition={lowerCondition}
         level={risk_lower_range_level}
@@ -281,7 +289,7 @@ const MeasureIntro = ({
   type RiskLevelKey = `risk_level_${PartKey}`;
   type RangeLevelKey = `range_level_${PartKey}`;
   return (
-    <div className="flex flex-col h-full gap-4">
+    <div className="flex flex-col gap-4">
       {layout === "grid" ? (
         <div className="grid grid-cols-[1fr_2fr] gap-4 items-stretch">
           <div className="h-full">{topLeft}</div>
@@ -345,8 +353,6 @@ const MeasureIntro = ({
             })}
           </div>
         </div>
-
-        
       ) : (
         <div className="flex flex-col gap-4">
           {PART_ORDER.map(({ key, label }) => {
