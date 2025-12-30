@@ -25,7 +25,7 @@ const RawDataTab = ({ selectedPart, onSelectPart }: RawDataTabProps) => {
             ${
               selectedPart === tab.id
                 ? "border border-toggleAccent text-toggleAccent bg-toggleAccent-background"
-                : "bg-white border border-sub300 text-sub300 hover:bg-sub400"
+                : "bg-white border border-sub300 text-sub300 hover:border-sub600 hover:text-sub600"
             }
           `}
         >

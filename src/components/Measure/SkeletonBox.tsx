@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import SkeletonBack from "./SkeletonBack";
 import SkeletonFront from "./SkeletonFront";
 import { IUserDetailMeasureInfo } from "@/types/measure";
 
@@ -20,10 +19,6 @@ const SkeletonBox = ({ data }: { data: IUserDetailMeasureInfo }) => {
         <div className="relative z-0 skeleton mb-8">
           <SkeletonFront
             className={`${view === "front" ? "on_view" : "off_view"} h-full w-full`}
-            data={data}
-          />
-          <SkeletonBack
-            className={`${view === "back" ? "on_view" : "off_view"} h-full w-full`}
             data={data}
           />
         </div>

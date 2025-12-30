@@ -1,5 +1,5 @@
 import { IUserMeasureInfoResponse } from "@/types/measure";
-import React, { useState } from "react";
+import React, { createContext, useCallback, useContext, useLayoutEffect, useMemo, useRef, useState } from "react";
 import MeasureStaticCompareFirst from "./CompareFirst";
 import MeasureStaticCompareSecond from "./CompareSecond";
 import MeasureStaticCompareThird from "./CompareThird";
@@ -20,18 +20,121 @@ type MeasureTab = {
   render: (left?: IUserMeasureInfoResponse, right?: IUserMeasureInfoResponse) => React.ReactNode;
 };
 
-const CompareTwoCol = ({
+type GroupKey = "upper" | "lower";
+type SideKey = "left" | "right";
+
+type HeightSyncCtx = {
+  register: (group: GroupKey, side: SideKey) => (el: HTMLDivElement | null) => void;
+  getMinHeight: (group: GroupKey) => number | undefined;
+};
+
+const HeightSyncContext = createContext<HeightSyncCtx | null>(null);
+
+function useHeightSyncProvider(syncKey?: string | number) {
+  const elsRef = useRef<Record<GroupKey, Record<SideKey, HTMLDivElement | null>>>({
+    upper: { left: null, right: null },
+    lower: { left: null, right: null },
+  });
+
+  const [minHeights, setMinHeights] = useState<Record<GroupKey, number>>({
+    upper: 0,
+    lower: 0,
+  });
+
+  const calcGroup = useCallback((group: GroupKey) => {
+    const leftEl = elsRef.current[group].left;
+    const rightEl = elsRef.current[group].right;
+    if (!leftEl || !rightEl) return;
+
+    // “자연 높이” 기준으로 측정
+    requestAnimationFrame(() => {
+      const lh = leftEl.getBoundingClientRect().height;
+      const rh = rightEl.getBoundingClientRect().height;
+      const maxH = Math.ceil(Math.max(lh, rh));
+      setMinHeights((prev) => (prev[group] === maxH ? prev : { ...prev, [group]: maxH }));
+    });
+  }, []);
+
+  const calcAll = useCallback(() => {
+    calcGroup("upper");
+    calcGroup("lower");
+  }, [calcGroup]);
+
+  const register = useCallback(
+    (group: GroupKey, side: SideKey) => (el: HTMLDivElement | null) => {
+      elsRef.current[group][side] = el;
+      // 엘리먼트가 생기는 순간 바로 재계산
+      calcGroup(group);
+    },
+    [calcGroup]
+  );
+
+  useLayoutEffect(() => {
+    const upperL = elsRef.current.upper.left;
+    const upperR = elsRef.current.upper.right;
+    const lowerL = elsRef.current.lower.left;
+    const lowerR = elsRef.current.lower.right;
+
+    // 아직 다 안 붙었으면 패스
+    if (!upperL || !upperR || !lowerL || !lowerR) return;
+
+    calcAll();
+
+    const ro = new ResizeObserver(() => calcAll());
+    ro.observe(upperL);
+    ro.observe(upperR);
+    ro.observe(lowerL);
+    ro.observe(lowerR);
+
+    window.addEventListener("resize", calcAll);
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", calcAll);
+    };
+  }, [calcAll, syncKey]);
+
+  const getMinHeight = useCallback((group: GroupKey) => {
+    const h = minHeights[group];
+    return h > 0 ? h : undefined;
+  }, [minHeights]);
+
+  return useMemo<HeightSyncCtx>(() => ({ register, getMinHeight }), [register, getMinHeight]);
+}
+
+export const HeightSyncProvider = ({
+  children,
+  syncKey,
+}: {
+  children: React.ReactNode;
+  syncKey?: string | number;
+}) => {
+  const value = useHeightSyncProvider(syncKey);
+  return <HeightSyncContext.Provider value={value}>{children}</HeightSyncContext.Provider>;
+};
+
+export function useHeightSync() {
+  const ctx = useContext(HeightSyncContext);
+  if (!ctx) throw new Error("useHeightSync must be used within HeightSyncProvider");
+  return ctx;
+}
+
+export const CompareTwoCol = ({
   left,
   right,
+  syncKey,
 }: {
   left?: React.ReactNode;
   right?: React.ReactNode;
+  syncKey?: string | number;
 }) => {
   return (
-    <div className="grid grid-cols-2 gap-4 items-stretch">
-      <div className="min-w-0 min-h-[655px]">{left}</div>
-      <div className="min-w-0 min-h-[655px]">{right}</div>
-    </div>
+    <HeightSyncProvider syncKey={syncKey}>
+      <div className="grid grid-cols-2 gap-4 items-stretch">
+        <div className="min-w-0">{left}</div>
+        <div className="min-w-0">{right}</div>
+      </div>
+    </HeightSyncProvider>
   );
 };
 
@@ -106,15 +209,17 @@ const CompareBody = ({
     {
       title: "결과 요약",
       value: "summary",
+      
       render: (left, right) => (
         <CompareTwoCol
+          syncKey={`${leftSn ?? "x"}-${rightSn ?? "y"}-${leftLoading}-${rightLoading}`}
           left={left ? (
-            <MeasureIntro data={left} layout="stack" />
+            <MeasureIntro data={left} layout="stack" currentSlot={0} />
           ) : (
             <MeasureIntro layout="stack" onCompareDialogOpen={onCompareDialogOpen} currentSlot={0} />
           )}
           right={right ? (
-            <MeasureIntro data={right} layout="stack" />
+            <MeasureIntro data={right} layout="stack" currentSlot={1} />
           ) : (
             <MeasureIntro layout="stack" onCompareDialogOpen={onCompareDialogOpen} currentSlot={1} />
           )}
