@@ -154,6 +154,7 @@ const MeasureDetail = ({
             userSn: userSn
           }} 
           cameraOrientation={data.camera_orientation}
+          isCompare={0}
           />,
     },
   ];

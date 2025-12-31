@@ -12,7 +12,8 @@ import RawDataContainer from "./RawDataContainer";
 const MeasureDetailDynamic = ({
   className,
   sns,
-  cameraOrientation
+  cameraOrientation,
+  isCompare
 }: {
   className? : string;
   sns: {
@@ -20,6 +21,7 @@ const MeasureDetailDynamic = ({
     userSn: string;
   };
   cameraOrientation: number;
+  isCompare: 0 | 1;
 }) => {
   const {
       data: measureDynamic,
@@ -591,7 +593,7 @@ const MeasureDetailDynamic = ({
           />
         </div>
       </div> */}
-      <RawDataContainer mergedDetailData={measureDynamic?.detail_data ?? []} isCompare={0}/>
+      <RawDataContainer mergedDetailData={measureDynamic?.detail_data ?? []} isCompare={isCompare}/>
     </div>
   );
 
