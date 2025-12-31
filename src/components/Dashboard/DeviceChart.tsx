@@ -1,5 +1,5 @@
 import React from "react";
-import { DeviceChartList } from "@/types/device";
+import {  DeviceDailyUsage } from "@/types/device";
 import {
   ChartConfig,
   ChartContainer,
@@ -10,18 +10,16 @@ import {
 } from "../ui/chart";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import {
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-  Select,
-} from "../ui/select";
-import {
   Card,
   CardHeader,
   CardTitle,
   CardContent,
 } from "../ui/card";
+
+interface TransformedChartData {
+  date: string;
+  [deviceKey: string]: string | number; // device_sn을 포함한 고유 키
+}
 
 const pastelColors = [
   "#FFD1DC", // Pastel Pink
@@ -43,42 +41,54 @@ const DeviceChart = ({
   chartData,
 }: {
   chartConfig: ChartConfig;
-  chartData: DeviceChartList[];
+  chartData: DeviceDailyUsage[];
 }) => {
-  const [timeRange, setTimeRange] = React.useState("1m");
-  const [selectedLegend, setSelectedLegend] = React.useState<string | null>('all'); // 추가
-  const filteredData = chartData
-    .filter((item) => {
-      const date = new Date(item.date);
-      const referenceDate = new Date();
-      let daysToSubtract = 30;
-      if (timeRange === "1w") {
-        daysToSubtract = 7;
-      } else if (timeRange === "3m") {
-        daysToSubtract = 90;
-      }
-      const startDate = new Date(referenceDate);
-      startDate.setDate(startDate.getDate() - daysToSubtract);
-      return date >= startDate;
-    })
-    .reverse()
-    .sort((a, b) => {
-      return new Date(a.date).getTime() - new Date(b.date).getTime();
+  const [selectedLegend, setSelectedLegend] = React.useState<string | null>('all');
+  
+
+  const transformChartData = (data: DeviceDailyUsage[]): TransformedChartData[] => {
+    if (!data || data.length === 0) return [];
+
+    // 날짜 기준 내림차순 정렬 (최신이 왼쪽)
+    const sortedData = [...data].sort((a, b) => 
+      new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+
+    return sortedData.map(item => {
+      const result: TransformedChartData = { date: item.date };
+      
+      // device_sn을 포함한 고유 키로 변환
+      item.devices.forEach(device => {
+        const uniqueKey = `${device.device_name} (${device.device_sn})`;
+        result[uniqueKey] = device.count;
+      });
+      
+      return result;
     });
+  };
+
+  // 데이터 변환
+  const transformedData = React.useMemo(() => 
+    transformChartData(chartData), 
+    [chartData]
+  );
+
   const seriesKeys = React.useMemo(() => {
-    const first = chartData?.[0];
+    const first = transformedData?.[0];
     if (!first) return [];
     return Object.keys(first).filter((k) => k !== "date");
-  }, [chartData]);
+  }, [transformedData]);
+
   const getStroke = (key: string, index: number) => {
     if (selectedLegend === "all") return pastelColors[index];
     return selectedLegend === key ? COLOR_ACTIVE : COLOR_INACTIVE;
   };
+
   const legendKeys = React.useMemo(
     () => ["all", ...seriesKeys],
     [seriesKeys]
   );
-  console.log(legendKeys)
+
   const getSeriesColor = (key: string, index: number) => {
     // 전체보기면 기존 pastelColors 그대로
     if (selectedLegend === "all") return pastelColors[index];
@@ -91,57 +101,46 @@ const DeviceChart = ({
       ? "hsl(var(--toggleAccent))"
       : "hsl(var(--sub300))";
   };
-
   return (
     <Card className="rounded-lg shadow-none border-2 border-toggleAccent-background">
       <CardHeader className="flex items-center gap-2 space-y-0 border-2 border-toggleAccent-background py-2 sm:flex-row bg-toggleAccent-background">
         <div className="grid flex-1 gap-1 text-center sm:text-left">
           <CardTitle className="text-toggleAccent text-xl">센터 키오스크 사용자 추이</CardTitle>
-          
         </div>
-        <Select value={timeRange} onValueChange={setTimeRange}>
-          <SelectTrigger
-            className="w-[160px] rounded-xl border border-toggleAccent sm:ml-auto  text-toggleAccent"
-            aria-label="Select a value"
-          >
-            <SelectValue placeholder="Last 3 months" />
-          </SelectTrigger>
-          <SelectContent className="rounded-xl ">
-            <SelectItem value="1w" className="rounded-t-lg text-toggleAccent hover:!text-toggleAccent hover:bg-toggleAccent-background focus:bg-toggleAccent-background">
-              최근 1주일
-            </SelectItem>
-            <SelectItem value="1m" className="text-toggleAccent hover:!text-toggleAccent hover:bg-toggleAccent-background focus:bg-toggleAccent-background">
-              최근 한달
-            </SelectItem>
-            <SelectItem value="3m" className="rounded-b-lg text-toggleAccent hover:bg-toggleAccent-background focus:bg-toggleAccent-background">
-              최근 세달
-            </SelectItem>
-          </SelectContent>
-        </Select>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         <ChartContainer
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
         >
-          <AreaChart data={filteredData}>
+          <AreaChart data={transformedData}>
             <defs>
-              {seriesKeys.map((key, index) => {
-                const color = selectedLegend === "all"
-                  ? pastelColors[index]
-                  : (selectedLegend === key ? COLOR_ACTIVE : COLOR_INACTIVE);
-
-                const isAll = selectedLegend === "all";
-                const isActive = isAll || selectedLegend === key;
-
-                return (
-                  <linearGradient id={`fill-${key}`} key={key} x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor={color} stopOpacity={isAll ? 0.8 : (isActive ? 0.5 : 0.15)} />
-                    <stop offset="95%" stopColor={color} stopOpacity={isAll ? 0.1 : (isActive ? 0.12 : 0.03)} />
-                  </linearGradient>
-                );
-              })}
+              {/* 단일 그라데이션 정의 */}
+              <linearGradient id="fill-gradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="hsl(var(--toggle-accent))" stopOpacity={0.6} />
+                <stop offset="100%" stopColor="white" stopOpacity={0.05} />
+              </linearGradient>
             </defs>
+
+            {/* Area에서 사용 */}
+            {seriesKeys.map((key, index) => {
+              const isAll = selectedLegend === "all";
+              const isActive = isAll || selectedLegend === key;
+              const strokeColor = getStroke(key, index);
+
+              return (
+                <Area
+                  dataKey={key}
+                  key={`chart-${key}`}
+                  type="natural"
+                  fill={isAll ? "transparent" : "url(#fill-gradient)"} 
+                  stroke={strokeColor}
+                  strokeOpacity={isActive ? 1 : 0.35}
+                  fillOpacity={isActive ? 1 : 0.3}
+                  strokeWidth={isActive ? 2.5 : 1.5}
+                />
+              );
+            })}
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="date"
@@ -171,27 +170,7 @@ const DeviceChart = ({
                 />
               }
             />
-            {seriesKeys.map((key, index) => {
-              const isAll = selectedLegend === "all";
-              const isActive = isAll || selectedLegend === key;
-
-              const strokeColor = getStroke(key, index);
-
-              return (
-                <Area
-                  dataKey={key}
-                  key={`chart-${key}`}
-                  type="natural"
-                  fill={`url(#fill-${key})`}
-                  stroke={strokeColor}
-                  strokeOpacity={isActive ? 1 : 0.35}
-                  fillOpacity={1}
-                  stackId="a"
-                  // 선택된 것만 조금 더 두껍게
-                  strokeWidth={isActive ? 2.5 : 1.5}
-                />
-              );
-            })}
+            
             <ChartLegend
               content={() => {
                 return (

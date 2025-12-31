@@ -115,7 +115,6 @@ export const HeightSyncProvider = ({
 
 export function useHeightSync() {
   const ctx = useContext(HeightSyncContext);
-  if (!ctx) throw new Error("useHeightSync must be used within HeightSyncProvider");
   return ctx;
 }
 

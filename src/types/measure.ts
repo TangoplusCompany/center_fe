@@ -568,6 +568,20 @@ export interface IUserMeasureFileData {
   measure_overlay_height: number;
 }
 
+export interface IUserMeasureDynamicFileData {
+  server_sn: number;
+  measure_seq: number;
+  measure_type: number;
+  mat_hip_down_image_name: string;
+  mat_hip_trajectory_image_name: string;
+  mat_left_knee_trajectory_image_name: string;
+  mat_right_knee_trajectory_image_name: string;
+  measure_server_file_name: string;
+  measure_server_json_name: string;
+  measure_overlay_width: number;
+  measure_overlay_height: number;
+}
+
 export interface IUserMeasureDetailData {
   measure_type: number;
   landmark: number;
@@ -578,4 +592,9 @@ export interface IUserMeasureDetailData {
   ment_all: string;
   ment: string;
   left_right: number; // 0 | 1 로 좁혀도 됨
+}
+
+export interface IUserMeasureSequenceDynamic {
+  file_data: IUserMeasureDynamicFileData;
+  detail_data: IUserMeasureDetailData[];
 }

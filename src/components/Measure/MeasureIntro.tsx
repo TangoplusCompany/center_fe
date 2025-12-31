@@ -110,8 +110,6 @@ const MeasureIntro = ({
     1: "right",
   };
   const slotSide = currentSlot !== undefined ? slotMap[currentSlot] : undefined;
-  console.log(currentSlot)
-  console.log(slotSide)
   const {
     risk_upper_ment,
     risk_upper_risk_level,
