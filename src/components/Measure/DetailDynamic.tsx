@@ -5,6 +5,9 @@ import React, { useEffect, useRef, useState } from "react";
 // import DataError from "../Util/DataError";
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
 import RawDataContainer from "./RawDataContainer";
+import { IUserMeasureDynamicFileData } from "@/types/measure";
+// import MeasureIntroFooter2 from "./MeasureIntroFooter2";
+// import MeasureIntroFooter3 from "./MeasureIntroFooter3";
 // import MeasureIntroFooter2, { IMatOhsPressure } from "./MeasureIntroFooter2";
 // import MeasureIntroFooter3 from "./MeasureIntroFooter3";
 // import { IUserMeasureDynamicFileData } from "@/types/measure";
@@ -34,15 +37,18 @@ const MeasureDetailDynamic = ({
     );
   
   const data = measureDynamic?.file_data
-  // const fileData = measureDynamic?.file_data as IUserMeasureDynamicFileData;
-  //   const {
-  //   mat_hip_down_image_name,
-  //   mat_hip_trajectory_image_name,
-  //   mat_left_knee_trajectory_image_name,
-  //   mat_right_knee_trajectory_image_name,
-  //   // measure_server_file_name,
-  //   // measure_server_json_name,
-  // } = fileData
+  const fileData = measureDynamic?.file_data as IUserMeasureDynamicFileData;
+  const {
+    // mat_hip_down_image_name,
+    // mat_hip_trajectory_image_name,
+    // mat_left_knee_trajectory_image_name,
+    // mat_right_knee_trajectory_image_name,
+    // mat_ohs_horizontal_ment,
+    // mat_ohs_vertical_ment,
+    // mat_ohs_knee_ment
+    // measure_server_file_name,
+    // measure_server_json_name,
+  } = fileData
   // const ohsFourCorners: IMatOhsPressure = {
   //     leftTopPressure: 0,
   //     leftBottomPressure: 0,

@@ -572,6 +572,9 @@ export interface IUserMeasureDynamicFileData {
   server_sn: number;
   measure_seq: number;
   measure_type: number;
+  mat_ohs_horizontal_ment: string;
+  mat_ohs_vertical_ment: string;
+  mat_ohs_knee_ment: string;
   mat_hip_down_image_name: string;
   mat_hip_trajectory_image_name: string;
   mat_left_knee_trajectory_image_name: string;

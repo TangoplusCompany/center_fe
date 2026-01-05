@@ -177,7 +177,6 @@ const CompareBody = ({
   const leftSn = comparePair[0];
   const rightSn = comparePair[1];
   const [activeIdx, setActiveIdx] = useState(0);
-  // ✅ 좌/우 상세 데이터 로딩 (이미 쓰고 계신 훅 재사용)
   const leftEnabled = !!leftSn;
   const rightEnabled = !!rightSn;
   const {

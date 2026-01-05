@@ -15,18 +15,32 @@ export interface IStaticRawDataProps {
 
 export const RawDataResult = (
   {
-    data
+    data,
+    isCompare
   } : 
   {
-    data: IStaticRawDataProps
+    data: IStaticRawDataProps | [IStaticRawDataProps, IStaticRawDataProps];
+    isCompare: 0 | 1;
   }
 ) => {
-  const formattedData = data.data.toFixed(1);
-  const unit = data.measure_unit?.includes("거리") ? "cm" : "°";
-  const leftRightString = {
+  const isArrayData = Array.isArray(data);
+  const data0 = isArrayData ? data[0] : data;
+  const data1 = isArrayData && data.length === 2 ? data[1] : undefined;
+  
+  // data0용 변수들
+  const formattedData0 = data0.data.toFixed(1);
+  const unit0 = data0.measure_unit?.includes("족압") 
+    ? "%" 
+    : data0.measure_unit?.includes("거리") 
+      ? "cm" 
+      : "°";
+  const leftRightString0 = {
     0: "좌측",
     1: "우측"
-  }[data.left_right] ?? ""
+  }[data0.left_right] ?? "";
+
+  console.log(data0.risk_level, leftRightString0, formattedData0, unit0)
+
   const seqString = {
     1 : "정면 측정",
     51 : "측면 측정",
@@ -34,132 +48,159 @@ export const RawDataResult = (
     5 : "앉은 후면",
     6 : "팔꿉 측정",
     7 : "오버헤드 스쿼트"
-  }[data.measure_type] ?? ""
-
-  const levelstring = {
+  }[data0.measure_type] ?? "";
+  const levelString0 = {
     0: "정상",
     1: "주의",
     2: "위험"
-  }[data.risk_level] ?? "정상";
+  }[data0.risk_level] ?? "정상";
 
-  const borderCondition = {
-    정상: "border-sub300/50",
-    주의: "border-[#FFE8CD]",
-    위험: "border-[#FFD1D1]",
-  }[levelstring] ?? "bg-primary-foreground";
-  const bgCondition = {
-    정상: "bg-gradient-to-b from-[#eeeeee]/50 from-[4%] to-white to-[50%]",
-    주의: "bg-gradient-to-b from-[#FFA73A]/10 from-[4%] to-white to-[50%]",
-    위험: "bg-gradient-to-b from-[#FF5252]/10 from-[2%] to-white to-[50%]",
-  }[levelstring] ?? "bg-primary-foreground";
+  // data1용 변수들 (존재할 경우에만)
+  const formattedData1 = data1 ? data1.data.toFixed(1) : null;
+  const unit1 = data1?.measure_unit?.includes("족압") 
+    ? "%" 
+    : data1?.measure_unit?.includes("거리") 
+      ? "cm" 
+      : "°";
+  const leftRightString1 = data1 ? ({
+    0: "좌측",
+    1: "우측"
+  }[data1.left_right] ?? "") : undefined;
 
-  const barCondition = {
-    정상: "bg-gradient-to-r from-[#eeeeee]/50 from-[0%] to-[#eeeeee]/100 to-[100%]",
-    주의: "bg-gradient-to-r from-[#FFA73A]/10 from-[0%] to-[#FFA73A]/100 to-[100%]",
-    위험: "bg-gradient-to-r from-[#ff5252]/10 from-[0%] to-[#ff5252]/100 to-[100%]",
-  }[levelstring] ?? "bg-primary-foreground";
+  const levelString1 = data1 ? ({
+    0: "정상",
+    1: "주의",
+    2: "위험"
+  }[data1.risk_level] ?? "정상") : null;
+  
 
 
-  const textTitleCondition = {
-    정상: "text-secondary",
-    주의: "text-warningDeep",
-    위험: "text-dangerDeep",
-  }[levelstring] ?? "bg-primary-foreground";
+  // const borderCondition = {
+  //   정상: "border-sub300/50",
+  //   주의: "border-[#FFE8CD]",
+  //   위험: "border-[#FFD1D1]",
+  // }[levelString] ?? "bg-primary-foreground";
+  // const bgCondition = {
+  //   정상: "bg-gradient-to-b from-[#eeeeee]/50 from-[4%] to-white to-[50%]",
+  //   주의: "bg-gradient-to-b from-[#FFA73A]/10 from-[4%] to-white to-[50%]",
+  //   위험: "bg-gradient-to-b from-[#FF5252]/10 from-[2%] to-white to-[50%]",
+  // }[levelString] ?? "bg-primary-foreground";
 
-  const textCondition = {
+  // const barCondition = {
+  //   정상: "bg-gradient-to-r from-[#eeeeee]/50 from-[0%] to-[#eeeeee]/100 to-[100%]",
+  //   주의: "bg-gradient-to-r from-[#FFA73A]/10 from-[0%] to-[#FFA73A]/100 to-[100%]",
+  //   위험: "bg-gradient-to-r from-[#ff5252]/10 from-[0%] to-[#ff5252]/100 to-[100%]",
+  // }[levelString] ?? "bg-primary-foreground";
+
+
+  // const textTitleCondition = {
+  //   정상: "text-secondary",
+  //   주의: "text-warningDeep",
+  //   위험: "text-dangerDeep",
+  // }[levelString] ?? "bg-primary-foreground";
+
+  const textCondition0 = {
     정상: "text-sub600",
     주의: "text-warningDeep",
     위험: "text-dangerDeep",
-  }[levelstring] ?? "bg-primary-foreground";
-  const textLeftRightCondition = {
+  }[levelString0] ?? "bg-primary-foreground";
+  const textLeftRightCondition0 = {
     정상: "text-sub600",
     주의: "text-white",
     위험: "text-white",
-  }[levelstring] ?? "text-sub600";
-  const textBgCondition = {
+  }[levelString0] ?? "text-sub600";
+  const textBgCondition0 = {
     정상: "bg-sub200/50",
     주의: "bg-warning",
     위험: "bg-danger",
-  }[levelstring] ?? "bg-primary-foreground";
+  }[levelString0] ?? "bg-primary-foreground";
 
+  const textCondition1 = {
+    정상: "text-sub600",
+    주의: "text-warningDeep",
+    위험: "text-dangerDeep",
+  }[levelString1 ?? "정상"] ?? "bg-primary-foreground";
+  const textLeftRightCondition1 = {
+    정상: "text-sub600",
+    주의: "text-white",
+    위험: "text-white",
+  }[levelString1 ?? "정상"] ?? "text-sub600";
+  const textBgCondition1 = {
+    정상: "bg-sub200/50",
+    주의: "bg-warning",
+    위험: "bg-danger",
+  }[levelString1 ?? "정상"] ?? "bg-primary-foreground";
+
+  // const widths = [25, 55, 90];
   return (
-    <div className={`flex flex-col rounded-3xl border-2 ${borderCondition} ${bgCondition} shadow-[inset_0_2px_4px_rgba(255,255,255,0.25)]`}>
-      
-      <div className="grid grid-cols-[3fr,1fr,3fr] flex-1">
+    <div className={`flex flex-col`}>
+      {/* 헤더 영역 */}
+      <div className="flex order-t-2 border-b-2 border-sub200 px-2 py-2 bg-sub100 gap-4">
+        <span className="text-sm font-semibold text-black">{data0.measure_unit}</span>
+        <span className="text-sm font-semibold text-sub600">{seqString}</span>
+      </div>
 
-        <div className="flex flex-col">
-          <div className="flex justify-between items-center px-2">
-            <h2 className={`text-base font-semibold px-2 py-2 ${textCondition}`}>{seqString}</h2>
-            <span
-              className={`
-                inline-flex items-center gap-1.5
-                px-3 py-1 whitespace-nowrap flex-shrink-0
-                ${textBgCondition}
-                ${textLeftRightCondition} text-xs rounded-full
-              `}
-            >
-              {leftRightString}
-            </span>
-          </div>
-          <div className="flex flex-col justify-center px-4 py-2">
-            <div className={`text-base ${textTitleCondition}`}>{data.measure_unit}</div>
-          </div>
+      {/* 데이터 영역 - 좌측만 */}
+      {isCompare === 1 ? (
+        // 비교하는 곳
+        <div className="flex items-center gap-4">
+          <span className="text-sm text-sub600 w-12">{leftRightString0}</span>
+          <span className="text-lg font-medium">{formattedData0} {unit0}</span>
+          <span className={`
+            inline-flex items-center justify-center mx-auto
+            px-3 py-1 ${textBgCondition0} ${textLeftRightCondition0} 
+            text-xs rounded-full
+          `}>
+            {levelString0} {data0?.range_level}단계
+          </span>
+          <span>{data0.ment_all}</span>
         </div>
-        {/* 점수 */}
-        <div className={`flex items-center justify-center border-l-2 border-r-2 ${borderCondition}`}>
-          {formattedData}{unit}
-        </div>
+      ) : (
+        // MeasureDetail
+        <div className="grid grid-cols-2 gap-4">
 
-        {/* 그래프 */}
-        <div className="relative h-full grid grid-rows-[1fr_2fr]">
-          {/* 배경 그리드 (3등분 + 점선) - 1fr */}
-          <div className="grid grid-cols-3 w-full">
-            <div className={`border-r-2 border-dashed ${borderCondition} flex items-center justify-center`}>
-              <span className={`text-xs ${textCondition} font-semibold`}>정상</span>
+
+          <div className="grid grid-cols-[25%_15%_60%] items-center gap-2 h-full">
+            <div className="flex flex-col items-center justify-center h-full w-full">
+              <span className="text-sm text-sub600 self-start px-2 py-1 rounded-full bg-sub100 mx-2 my-2">
+                {leftRightString0}
+              </span>
+              <span className="text-lg font-medium leading-none pb-6">
+                {formattedData0} {unit0}
+              </span>
             </div>
-            <div className={`border-r-2 border-dashed ${borderCondition} flex items-center justify-center`}>
-              <span className={`text-xs ${textCondition} font-semibold`}>주의</span>
-            </div>
-            <div className="flex items-center justify-center">
-              <span className={`text-xs ${textCondition} font-semibold`}>위험</span>
-            </div>
-          </div>
-          
-          {/* 레벨 바 영역 - 2fr */}
-          <div className="relative grid grid-cols-3">
-            {/* 배경 점선 */}
-            <div className={`border-r-2 border-dashed ${borderCondition}`}></div>
-            <div className={`border-r-2 border-dashed ${borderCondition}`}></div>
-            <div></div>
             
-            {/* 레벨 바 */}
-            <div className="absolute inset-0 flex items-center">
-              <div 
-                className={`h-6 rounded-r-lg transition-all border-t-2 border-b-2 border-r-2 ${barCondition} ${borderCondition} flex justify-center items-center `}
-                style={{ 
-                  width: `${(data.risk_level + 1) * 25}%`
-                }}
-              >
-                <span className={`text-xs font-bold ${textCondition}`}>
-                  {data.range_level}단계
-                </span>
-              </div>
+            <span className={`
+              inline-flex items-center justify-center mx-auto
+              px-2 py-1 ${textBgCondition0} ${textLeftRightCondition0} 
+              text-xs rounded-full
+            `}>
+              {levelString0} {data0?.range_level}단계
+            </span>
+            <span className={`${textCondition0} text-sm text-sub600`}>{data0.ment_all}</span>
+          </div>
+
+          <div className={`grid grid-cols-[25%_15%_60%] items-center gap-2 h-full ${!data1 && 'invisible'}`}>
+            <div className="flex flex-col items-center justify-center h-full w-full">
+              <span className="text-sm text-sub600 self-start px-2 py-1 rounded-full bg-sub100 mx-2 my-2">
+                {leftRightString1}
+              </span>
+              <span className="text-lg font-medium leading-none pb-6">
+                {formattedData1} {unit1}
+              </span>
             </div>
+            
+            <span className={`
+              inline-flex items-center justify-center mx-auto
+              px-2 py-1 ${textBgCondition1} ${textLeftRightCondition1} 
+              text-xs rounded-full
+            `}>
+              {levelString1} {data1?.range_level}단계
+            </span>
+            <span className={`${textCondition1} text-sm text-sub600`}>{data1?.ment_all}</span>
           </div>
         </div>
-      </div>
-
-
-
-      
-      <div className={`flex items-center gap-3 border-t-2 ${borderCondition} h-[60px]`}>
-        <div className="flex items-center px-4 py-3">
-          <div className={`w-1 h-4 ${textBgCondition} rounded-full flex-shrink-0`}></div>
-          <div className={`text-sm text-secondary px-2 ${textCondition} line-clamp-2`}>
-            {data.ment_all}
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

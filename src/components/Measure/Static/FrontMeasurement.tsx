@@ -67,8 +67,8 @@ const FrontMeasurement = ({
           <MeasureStaticSecond files={measureSecond?.file_data} cameraOrientation={cameraOrientation} />
         </div>
       </div>
-
-      {/* 하단: RawDataCard 3개 */}
+      {/* TODO 이 곳에 족압 이미지를 넣는 컴포넌트가 필요함. */}
+      {/* 하단: RawDataResult*/}
       <RawDataContainer mergedDetailData={mergedDetailData} isCompare={0}/>
     </div>
   );
