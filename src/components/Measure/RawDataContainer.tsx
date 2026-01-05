@@ -37,6 +37,7 @@ const RawDataContainer = ({
         <RawDataTab 
           selectedPart={selectedPart} 
           onSelectPart={handleSelectPart} 
+          mergedDetailData={mergedDetailData}
         />
         
         <RawDataDetailContainer 

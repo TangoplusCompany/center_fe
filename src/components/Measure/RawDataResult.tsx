@@ -21,7 +21,6 @@ export const RawDataResult = (
     data: IStaticRawDataProps
   }
 ) => {
-  console.log(data)
   const formattedData = data.data.toFixed(1);
   const unit = data.measure_unit?.includes("거리") ? "cm" : "°";
   const leftRightString = {

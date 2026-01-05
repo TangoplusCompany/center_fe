@@ -115,7 +115,6 @@ export const HeightSyncProvider = ({
 
 export function useHeightSync() {
   const ctx = useContext(HeightSyncContext);
-  if (!ctx) throw new Error("useHeightSync must be used within HeightSyncProvider");
   return ctx;
 }
 
@@ -376,6 +375,7 @@ const CompareBody = ({
                 userSn
               }}
               cameraOrientation={data.result_summary_data.camera_orientation}
+              isCompare={1}
             />
           ) : <CompareEmptyCard />;
 
@@ -443,7 +443,7 @@ const CompareBody = ({
             onCardClick={onCompareDialogOpen} />
         </div>
       </div>
-      {/* ✅ 선택된 탭 콘텐츠 */}
+
       <div className="w-full">
         {activeTab.render(leftData, rightData)}
       </div>
