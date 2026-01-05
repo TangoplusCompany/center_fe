@@ -49,20 +49,25 @@ export interface IDeviceSearch extends IResponseDefault {
   };
 }
 
+// export interface IDeviceChartResponse extends IResponseDefault {
+//   data: DeviceChartList[];
+// }
+
+// export type DeviceChartList = { date: string } & {
+//   [key: string]: number;
+// };
+
 export interface IDeviceChartResponse extends IResponseDefault {
-  data: DeviceChartList[];
+  data: DeviceDailyUsage[];
 }
 
-export type DeviceChartList = { date: string } & {
-  [key: string]: number;
-};
+export interface DeviceDailyUsage {
+  date: string;
+  devices: DeviceUsageData[];
+}
 
-// export interface IDeviceChartResponse extends IResponseDefault {
-//   data: DeviceUsageData[];
-// }
-
-// export interface DeviceUsageData {
-//   device_sn: number;
-//   device_name: string;
-//   measure_count: number;
-// }
+export interface DeviceUsageData {
+  device_sn: number;
+  device_name: string;
+  count: number; // measure_count에서 count로 변경된 것 같음
+}

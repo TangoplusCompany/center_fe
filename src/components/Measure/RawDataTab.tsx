@@ -1,9 +1,12 @@
+import { IStaticRawDataProps } from "./RawDataResult";
+
 interface RawDataTabProps {
   selectedPart: 0 | 1 | 2 | 3 | 4 | 5 | 6;
   onSelectPart: (part: 0 | 1 | 2 | 3 | 4 | 5 | 6) => void;
+  mergedDetailData:  IStaticRawDataProps[];
 }
 
-const RawDataTab = ({ selectedPart, onSelectPart }: RawDataTabProps) => {
+const RawDataTab = ({ selectedPart, onSelectPart, mergedDetailData }: RawDataTabProps) => {
   const tabs = [
     { id: 0, label: "전체보기" },
     { id: 1, label: "목(경추)" },
@@ -13,10 +16,24 @@ const RawDataTab = ({ selectedPart, onSelectPart }: RawDataTabProps) => {
     { id: 5, label: "무릎(슬관절)" },
     { id: 6, label: "발목(족관절)" },
   ] as const;
-
+   const partLandmarkMap: { [key: number]: number[] } = {
+      0: [], // 전체보기는 항상 표시
+      1: [0], 
+      2: [11, 12],
+      3: [13, 14, 15, 16], 
+      4: [23, 24], 
+      5: [25, 26], 
+      6: [27, 28], 
+    };
+  const availableTabs = tabs.filter((tab) => {
+      if (tab.id === 0) return true; // 전체보기는 항상 표시
+      
+      const landmarks = partLandmarkMap[tab.id] || [];
+      return mergedDetailData.some((data) => landmarks.includes(data.landmark));
+    });
   return (
     <div className="flex gap-4 overflow-x-auto pb-2">
-      {tabs.map((tab) => (
+      {availableTabs.map((tab) => (
         <button
           key={tab.id}
           onClick={() => onSelectPart(tab.id)}
