@@ -373,6 +373,7 @@ const CompareBody = ({
                 measureSn: String(data.result_summary_data.sn),
                 userSn
               }}
+              measureInfo={data}
               cameraOrientation={data.result_summary_data.camera_orientation}
               isCompare={1}
             />

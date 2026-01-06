@@ -4,15 +4,19 @@ import MeasureStaticFourth from "./Fourth";
 import { IStaticRawDataProps } from "../RawDataResult";
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
 import RawDataContainer from "../RawDataContainer";
+import { IUserMeasureInfoResponse } from "@/types/measure";
+import StaticDataContainer from "./DataContainer";
 
 const SideMeasurement = ({
   sns,
+  measureInfo,
   cameraOrientation
 }: {
   sns: {
     measureSn: string;
     userSn: string;
   };
+  measureInfo: IUserMeasureInfoResponse;
   cameraOrientation: 0 | 1;
 }) => {
   const {
@@ -66,7 +70,7 @@ const SideMeasurement = ({
           <MeasureStaticFourth files={measureFourth?.file_data} cameraOrientation={cameraOrientation} />
         </div>
       </div>
-
+      <StaticDataContainer measureData={measureInfo} />
       <RawDataContainer mergedDetailData={mergedDetailData} isCompare={0}/>
     </div>
   );

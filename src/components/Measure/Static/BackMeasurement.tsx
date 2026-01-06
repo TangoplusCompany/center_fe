@@ -5,15 +5,19 @@ import MeasureStaticSixth from "./Sixth";
 import { IStaticRawDataProps } from "../RawDataResult";
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
 import RawDataContainer from "../RawDataContainer";
+import StaticDataContainer from "./DataContainer";
+import { IUserMeasureInfoResponse } from "@/types/measure";
 
 const BackMeasurement = ({
   sns,
+  measureInfo,
   cameraOrientation
 }: {
   sns: {
     measureSn: string;
     userSn: string;
   };
+  measureInfo: IUserMeasureInfoResponse;
   cameraOrientation: 0 | 1;
 }) => {
   const {
@@ -67,7 +71,7 @@ if (seq5Error || seq6Error) {
           <MeasureStaticSixth files={measureSixth?.file_data} cameraOrientation={cameraOrientation} />
         </div>
       </div>
-
+      <StaticDataContainer measureData={measureInfo} />
       <RawDataContainer mergedDetailData={mergedDetailData} isCompare={0}/>
     </div>
   );

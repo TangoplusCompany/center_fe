@@ -574,6 +574,14 @@ export interface IUserMeasureDynamicFileData {
   measure_type: number;
   mat_ohs_horizontal_ment: string;
   mat_ohs_vertical_ment: string;
+  mat_ohs_left_top: number;
+  mat_ohs_left_bottom: number;
+  mat_ohs_right_top: number;
+  mat_ohs_right_bottom: number;
+  mat_ohs_left_pressure: number;
+  mat_ohs_right_pressure: number;
+  mat_ohs_top_pressure: number;
+  mat_ohs_bottom_pressure: number;
   mat_ohs_knee_ment: string;
   mat_hip_down_image_name: string;
   mat_hip_trajectory_image_name: string;

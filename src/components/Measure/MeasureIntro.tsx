@@ -3,9 +3,9 @@
 import { IPartDetailData, IUserDetailMeasureInfo, IUserMeasureInfoResponse } from "@/types/measure";
 import React from "react";
 import SkeletonContainer from "./SkeletonContainer";
-import MeasureIntroFooter1, { IMatStaticPressure } from "./MeasureIntroFooter1";
-import MeasureIntroFooter2, { IMatOhsPressure } from "./MeasureIntroFooter2";
-import MeasureIntroFooter3 from "./MeasureIntroFooter3";
+import MeasureFootStatic, { IMatStaticPressure } from "./MeasureFootStatic";
+import MeasureFootDynamic, { IMatOhsPressure } from "./MeasureIntroFooter2";
+import MeasureIntroFooter3 from "./MeasureKneeTrajectory";
 import MeasureIntroUpper from "./MeasureIntroUpper";
 import MeasureIntroLower from "./MeasureIntroLower";
 import { riskLevelMap } from "@/utils/riskLevelMap";
@@ -163,7 +163,7 @@ const MeasureIntro = ({
 
   const upperCondition = riskLevelMap[risk_upper_risk_level as 0 | 1 | 2];
   const lowerCondition = riskLevelMap[risk_lower_risk_level as 0 | 1 | 2];
-  const kneeCondition = riskLevelMap[mat_static_risk_level as 0 | 1 | 2];
+  const footStaticCondition = riskLevelMap[mat_static_risk_level as 0 | 1 | 2];
 
   const { 
     measure_server_mat_image_name,
@@ -216,19 +216,20 @@ const MeasureIntro = ({
   const footer =
     layout === "stack" ? (
       <div className="border border-sub300 rounded-3xl flex flex-col gap-4 p-4">
-        <MeasureIntroFooter1
+        <MeasureFootStatic
           comment={
             "[좌우 무게 분석]\n" +
             (mat_static_horizontal_ment ?? "\n") +
             "\n[상하 무게 분석]\n" +
             (mat_static_vertical_ment ?? "\n")
           }
-          condition={kneeCondition}
+          condition={footStaticCondition}
           level={mat_static_range_level}
           fileName={measure_server_mat_image_name}
           matStatics={staticFourCorners}
+          lCase={0}
         />
-        <MeasureIntroFooter2
+        <MeasureFootDynamic
           comment={
             "[좌우 무게 분석]\n" +
             (mat_ohs_horizontal_ment ?? "\n") +
@@ -248,21 +249,22 @@ const MeasureIntro = ({
     ) : (
       <div className="flex border border-sub300 rounded-3xl gap-4">
         <div className="flex-1 p-4">
-          <MeasureIntroFooter1
+          <MeasureFootStatic
             comment={
               "[좌우 무게 분석]\n" +
               (mat_static_horizontal_ment ?? "\n") +
               "\n[상하 무게 분석]\n" +
               (mat_static_vertical_ment ?? "\n")
             }
-            condition={kneeCondition}
+            condition={footStaticCondition}
             level={mat_static_range_level}
             fileName={measure_server_mat_image_name}
             matStatics={staticFourCorners}
+            lCase={0}
           />
         </div>
         <div className="flex-1 p-4">
-          <MeasureIntroFooter2
+          <MeasureFootDynamic
             comment={
               "[좌우 무게 분석]\n" +
               (mat_ohs_horizontal_ment ?? "\n") +

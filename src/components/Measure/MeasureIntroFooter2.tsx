@@ -65,16 +65,16 @@ const MeasureIntroFooter2 = (
             <div className="relative w-32 h-32">
               
               {processedFootSrc !== "" && processedFootSrc !== null && (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img
-                src={processedFootSrc}
-                alt="오른쪽 무릎이동 궤적"
-                className="w-full h-full p-1 rounded-md border bg-accent"
-                onError={(e) => {
-                  e.currentTarget.src = "/images/measure_default.png";
-                }}
-              />
-            )}
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={processedFootSrc}
+                  alt="동적 족압 분석"
+                  className="w-full h-full p-1 rounded-md border bg-accent"
+                  onError={(e) => {
+                    e.currentTarget.src = "/images/measure_default.png";
+                  }}
+                />
+              )}
               <div className="absolute top-1/2 left-[40%] w-1/5 h-[1px] bg-sub300 -translate-y-1/2" />
               <div className="absolute left-1/2 top-[40%] h-1/5 w-[1px] bg-sub300 -translate-x-1/2" />
 
@@ -107,17 +107,19 @@ const MeasureIntroFooter2 = (
             <div className="w-full rounded-md border text-center py-1 mb-1">
               골반 이동 분석
             </div>
-            {processedHipSrc !== "" && processedHipSrc !== null && (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img
-                src={processedHipSrc}
-                alt="오른쪽 무릎이동 궤적"
-                className="w-full h-full p-1 rounded-md border bg-accent"
-                onError={(e) => {
-                  e.currentTarget.src = "/images/measure_default.png";
-                }}
-              />
-            )}
+            <div className="relative w-32 h-32">
+              {processedHipSrc !== "" && processedHipSrc !== null && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={processedHipSrc}
+                  alt="골반 이동 분석"
+                  className="w-full h-full object-cover p-1 rounded-md border bg-accent"
+                  onError={(e) => {
+                    e.currentTarget.src = "/images/measure_default.png";
+                  }}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>

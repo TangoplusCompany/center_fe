@@ -167,17 +167,23 @@ function formatDate(dateStr: string) {
     date.getDate()
   ).padStart(2, "0")}`;
 }
+
 export function calculateIDayData(
   history: MeasureHistory[]
 ): IDayData[] {
   return history.map((item) => {
-    const values = RISK_PART_KEYS.map((key) =>
+    const riskValues = RISK_PART_KEYS.map((key) =>
       Number(item[`risk_level_${key}`] ?? 0)
+    );
+
+    const rangeValues = RISK_PART_KEYS.map((key) =>
+      Number(item[`range_level_${key}`] ?? 0)
     );
 
     return {
       date: formatDate(item.measure_date),
-      values,
+      riskValues,
+      rangeValues,
     };
   });
 }

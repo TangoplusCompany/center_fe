@@ -39,7 +39,6 @@ export const RawDataResult = (
     1: "우측"
   }[data0.left_right] ?? "";
 
-  console.log(data0.risk_level, leftRightString0, formattedData0, unit0)
 
   const seqString = {
     1 : "정면 측정",

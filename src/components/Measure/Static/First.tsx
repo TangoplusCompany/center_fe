@@ -37,6 +37,7 @@ const MeasureStaticFirst = React.memo(
           step="first"
           cameraOrientation={cameraOrientation}
         />
+        
       </div>
     );
   },

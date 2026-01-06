@@ -52,9 +52,8 @@ const RawDataDetailContainer = ({
     });
   }, [filteredData]);
   
-  // 여기에 return 추가!
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col">
       {(() => {
         const grouped: (IStaticRawDataProps | [IStaticRawDataProps, IStaticRawDataProps])[] = [];
         const processed = new Set<number>();

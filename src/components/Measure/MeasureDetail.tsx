@@ -114,6 +114,7 @@ const MeasureDetail = ({
           measureSn: String(measureData.result_summary_data.sn),
           userSn: userSn
         }}
+        measureInfo={measureData}
         cameraOrientation={data.camera_orientation}
         />
       ),
@@ -127,6 +128,7 @@ const MeasureDetail = ({
           measureSn: String(measureData.result_summary_data.sn),
           userSn: userSn
         }}
+        measureInfo={measureData}
         cameraOrientation={data.camera_orientation}
         />
       ),
@@ -140,6 +142,7 @@ const MeasureDetail = ({
           measureSn: String(measureData.result_summary_data.sn),
           userSn: userSn
         }}
+        measureInfo={measureData}
         cameraOrientation={data.camera_orientation}
         />
       ),
@@ -153,9 +156,10 @@ const MeasureDetail = ({
             measureSn: String(measureData.result_summary_data.sn),
             userSn: userSn
           }} 
-          cameraOrientation={data.camera_orientation}
-          isCompare={0}
-          />,
+        measureInfo={measureData}
+        cameraOrientation={data.camera_orientation}
+        isCompare={0}
+        />,
     },
   ];
 

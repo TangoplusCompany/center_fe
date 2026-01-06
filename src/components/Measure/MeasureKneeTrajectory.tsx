@@ -3,7 +3,7 @@
 import { removeDarkBackground } from "@/utils/removeDarkBackground";
 import { useEffect, useState } from "react";
 
-const MeasureIntroFooter3= (
+const MeasureKneeTrajectory = (
   { 
     comment,
     leftKneeFileName,
@@ -46,17 +46,19 @@ const MeasureIntroFooter3= (
             <div className="w-full rounded-md border text-center py-1 mb-1">
               무릎이동 궤적(L)
             </div>
-            {processedLeftSrc !== "" && processedLeftSrc !== null && (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img
-                src={processedLeftSrc}
-                alt="왼쪽 무릎이동 궤적"
-                className="w-full h-full p-1 rounded-md border bg-accent"
-                onError={(e) => {
-                  e.currentTarget.src = "/images/measure_default.png";
-                }}
-              />
-            )}
+            <div className="relative w-32 h-32">
+              {processedLeftSrc !== "" && processedLeftSrc !== null && (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={processedLeftSrc}
+                  alt="왼쪽 무릎이동 궤적"
+                  className="w-full h-full p-1 rounded-md border bg-accent"
+                  onError={(e) => {
+                    e.currentTarget.src = "/images/measure_default.png";
+                  }}
+                />
+              )}
+            </div>
           </div>
       </div>
       
@@ -65,17 +67,19 @@ const MeasureIntroFooter3= (
           <div className="w-full rounded-md border text-center py-1 mb-1">
             무릎이동 궤적(R)
           </div>
-          {processedRightSrc !== "" && processedRightSrc !== null && (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img
-                src={processedRightSrc}
-                alt="오른쪽 무릎이동 궤적"
-                className="w-full h-full p-1 rounded-md border bg-accent"
-                onError={(e) => {
-                  e.currentTarget.src = "/images/measure_default.png";
-                }}
-              />
-            )}
+          <div className="relative w-32 h-32">
+            {processedRightSrc !== "" && processedRightSrc !== null && (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={processedRightSrc}
+                  alt="오른쪽 무릎이동 궤적"
+                  className="w-full h-full p-1 rounded-md border bg-accent"
+                  onError={(e) => {
+                    e.currentTarget.src = "/images/measure_default.png";
+                  }}
+                />
+              )}
+          </div>
         </div>
       </div>
     </div>
@@ -88,4 +92,4 @@ const MeasureIntroFooter3= (
   );
 }
 
-export default MeasureIntroFooter3;
+export default MeasureKneeTrajectory;
