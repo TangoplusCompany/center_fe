@@ -10,7 +10,7 @@ const MeasureStaticCompareThird = React.memo(
 ({
   className,
   sns,
-  cameraOrientation
+  cameraOrientations
 }: {
   className?: string;
   sns: {
@@ -18,7 +18,10 @@ const MeasureStaticCompareThird = React.memo(
     measureSn1?: string;
     userSn: string;
   };
-  cameraOrientation: 0 | 1;
+  cameraOrientations: {
+    orient0 :0 | 1;
+    orient1 : 0 | 1;
+  };
 }) => {
   const {
     data: measure0,
@@ -82,7 +85,7 @@ const MeasureStaticCompareThird = React.memo(
             }
             measureJson={measureJson0}
             step="first"
-            cameraOrientation={cameraOrientation}
+            cameraOrientation={cameraOrientations.orient0}
           />
         )}
       </div>
@@ -95,7 +98,7 @@ const MeasureStaticCompareThird = React.memo(
               }
               measureJson={measureJson1}
               step="first"
-              cameraOrientation={cameraOrientation}
+              cameraOrientation={cameraOrientations.orient1}
             />
           )}
         </div>

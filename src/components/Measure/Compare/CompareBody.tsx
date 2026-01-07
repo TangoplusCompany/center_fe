@@ -108,7 +108,10 @@ const CompareBody = ({
                 measureSn1: right ? String(right.result_summary_data.sn) : undefined,
                 userSn
               }}
-              cameraOrientation={left?.result_summary_data.camera_orientation ?? 0}
+              cameraOrientations={{
+                orient0: left?.result_summary_data.camera_orientation ?? 0,
+                orient1: right?.result_summary_data.camera_orientation ?? 0
+              }}
             />
           </div>
         );
@@ -126,7 +129,10 @@ const CompareBody = ({
                 measureSn1: right ? String(right.result_summary_data.sn) : undefined,
                 userSn
               }}
-              cameraOrientation={left?.result_summary_data.camera_orientation ?? 0}
+              cameraOrientations={{
+                orient0: left?.result_summary_data.camera_orientation ?? 0,
+                orient1: right?.result_summary_data.camera_orientation ?? 0
+              }}
             />
           </div>
         );
@@ -144,7 +150,10 @@ const CompareBody = ({
                 measureSn1: right ? String(right.result_summary_data.sn) : undefined,
                 userSn
               }}
-              cameraOrientation={left?.result_summary_data.camera_orientation ?? 0}
+              cameraOrientations={{
+                orient0: left?.result_summary_data.camera_orientation ?? 0,
+                orient1: right?.result_summary_data.camera_orientation ?? 0
+              }}
             />
           </div>
         );
@@ -162,7 +171,10 @@ const CompareBody = ({
                 measureSn1: right ? String(right.result_summary_data.sn) : undefined,
                 userSn
               }}
-              cameraOrientation={left?.result_summary_data.camera_orientation ?? 0}
+              cameraOrientations={{
+                orient0: left?.result_summary_data.camera_orientation ?? 0,
+                orient1: right?.result_summary_data.camera_orientation ?? 0
+              }}
             />
           </div>
         );
@@ -180,7 +192,10 @@ const CompareBody = ({
                 measureSn1: right ? String(right.result_summary_data.sn) : undefined,
                 userSn
               }}
-              cameraOrientation={left?.result_summary_data.camera_orientation ?? 0}
+              cameraOrientations={{
+                orient0: left?.result_summary_data.camera_orientation ?? 0,
+                orient1: right?.result_summary_data.camera_orientation ?? 0
+              }}
             />
           </div>
         );
@@ -198,7 +213,10 @@ const CompareBody = ({
                 measureSn1: right ? String(right.result_summary_data.sn) : undefined,
                 userSn
               }}
-              cameraOrientation={left?.result_summary_data.camera_orientation ?? 0}
+              cameraOrientations={{
+                orient0: left?.result_summary_data.camera_orientation ?? 0,
+                orient1: right?.result_summary_data.camera_orientation ?? 0
+              }}
             />
           </div>
         );
@@ -216,7 +234,10 @@ const CompareBody = ({
                 measureSn1: right ? String(right.result_summary_data.sn) : undefined,
                 userSn
               }}
-              cameraOrientation={left?.result_summary_data.camera_orientation ?? 0}
+              cameraOrientations={{
+                orient0: left?.result_summary_data.camera_orientation ?? 0,
+                orient1: right?.result_summary_data.camera_orientation ?? 0
+              }}
               // measureInfo={{
               //   info0: left,
               //   info1: right

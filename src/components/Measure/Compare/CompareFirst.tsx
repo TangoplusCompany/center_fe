@@ -11,7 +11,7 @@ const MeasureStaticCompareFirst = React.memo(
 ({
   className,
   sns,
-  cameraOrientation
+  cameraOrientations
 }: {
   className?: string;
   sns: {
@@ -19,7 +19,10 @@ const MeasureStaticCompareFirst = React.memo(
     measureSn1?: string;
     userSn: string;
   };
-  cameraOrientation: 0 | 1;
+  cameraOrientations: {
+    orient0 :0 | 1;
+    orient1 : 0 | 1;
+  };
 }) => {
   // TODO 정적 조회하는 api를 사용 + 하단의 useMeasureJson을 써야함 (+ Raw Data card도 넣어줘야함)
   const {
@@ -73,7 +76,7 @@ const MeasureStaticCompareFirst = React.memo(
   if (!hasData0 && !hasData1) {
     return <DummyStaticContainer />;
   }
-
+  
   return (
     <div className="flex flex-col gap-4">
       <div className="grid grid-cols-2 gap-4">
@@ -86,23 +89,23 @@ const MeasureStaticCompareFirst = React.memo(
             }
             measureJson={measureJson0}
             step="first"
-            cameraOrientation={cameraOrientation}
+            cameraOrientation={cameraOrientations.orient0}
           />
         )}
       </div>
       <div className={`${className ?? ""} flex flex-col gap-4 lg:gap-10`}>
         {measureJson1 && measureFirst1 && (
-            <MeasurementImage
-              imageUrl={
-                baseUrl + "/" +
-                measureFirst1?.file_data?.measure_server_file_name
-              }
-              measureJson={measureJson1}
-              step="first"
-              cameraOrientation={cameraOrientation}
-            />
-          )}
-        </div>
+          <MeasurementImage
+            imageUrl={
+              baseUrl + "/" +
+              measureFirst1?.file_data?.measure_server_file_name
+            }
+            measureJson={measureJson1}
+            step="first"
+            cameraOrientation={cameraOrientations.orient1}
+          />
+        )}
+      </div>
     </div>
     <RawDataContainer mergedDetailData={mergedDetailData} isCompare={1}/>
 

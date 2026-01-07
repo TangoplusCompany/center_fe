@@ -6,7 +6,7 @@ const MeasureDynamicCompare = ({
   className,
   sns,
   // measureInfos,
-  cameraOrientation,
+  cameraOrientations
 }: {
   className? : string;
   sns: {
@@ -18,7 +18,10 @@ const MeasureDynamicCompare = ({
   //   info0?: IUserMeasureInfoResponse;
   //   info1?: IUserMeasureInfoResponse;
   // };
-  cameraOrientation: number;
+  cameraOrientations: {
+    orient0 :0 | 1;
+    orient1 : 0 | 1;
+  };
 }) => {
   const {
     data: measure0,
@@ -132,7 +135,7 @@ const MeasureDynamicCompare = ({
     <div className="grid grid-cols-2 gap-2">
       <div className={`${className} flex flex-col`}>
         <div className={`relative mx-auto w-full overflow-hidden ${
-          cameraOrientation === 1 
+          cameraOrientations.orient0 === 1 
             ? "h-[600px]"  // 원하는 높이로 설정
             : "aspect-video"
         }`}>
@@ -145,7 +148,7 @@ const MeasureDynamicCompare = ({
             src={`${process.env.NEXT_PUBLIC_FILE_URL}/${data0?.measure_server_file_name}`}
             className={`
               absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0
-              ${cameraOrientation === 1 
+              ${cameraOrientations.orient0 === 1 
                 ? "-rotate-90 h-[133%] w-auto" 
                 : "w-full h-full object-contain"
               }`
@@ -213,7 +216,7 @@ const MeasureDynamicCompare = ({
 
       <div className={`${className} flex flex-col`}>
         <div className={`relative mx-auto w-full overflow-hidden ${
-          cameraOrientation === 1 
+          cameraOrientations.orient1 === 1 
             ? "h-[600px]"  // 원하는 높이로 설정
             : "aspect-video"
         }`}>
@@ -226,7 +229,7 @@ const MeasureDynamicCompare = ({
             src={`${process.env.NEXT_PUBLIC_FILE_URL}/${data1?.measure_server_file_name}`}
             className={`
               absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0
-              ${cameraOrientation === 1 
+              ${cameraOrientations.orient1 === 1 
                 ? "-rotate-90 h-[133%] w-auto" 
                 : "w-full h-full object-contain"
               }`
