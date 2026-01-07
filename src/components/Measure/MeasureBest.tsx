@@ -17,7 +17,7 @@ const MeasureBest = ({ data }: { data: TWorstPart }) => {
   return (
     <div className="flex flex-col h-full w-full rounded-3xl border shadow-sm bg-white relative overflow-hidden">
       {/* 제목 - 좌상단 작은 원 배지와 함께 */}
-      <div className="flex flex-shrink-0 items-center gap-2 mb-4 p-5 relative z-10">
+      <div className="flex flex-shrink-0 items-center gap-2 mb-4 p-5 relative">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={`/icons/ic_arrow_45_circle.svg`}
@@ -27,7 +27,7 @@ const MeasureBest = ({ data }: { data: TWorstPart }) => {
         <h2 className="text-xl font-bold">유지 추천 부위</h2>
       </div>
 
-      <div className="flex flex-col justify-end flex-1 space-y-3 p-5 mb-6 relative z-10 mr-48">
+      <div className="flex flex-col justify-end flex-1 space-y-3 p-5 mb-6 relative mr-48">
         {/* 위험 레벨 배지 */}
         <div className={`w-fit px-3 py-1 ${
           data.level === 0 ? "bg-toggleAccent" : "bg-secondary"

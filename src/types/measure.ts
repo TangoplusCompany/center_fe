@@ -523,7 +523,7 @@ export interface IMeasureJson {
 }
 
 
-export interface LatestMeasureSummary {
+export interface MeasureSummary {
   user_name: string;
   risk_upper_ment: string;
   risk_upper_risk_level: string;
@@ -550,8 +550,19 @@ export interface MeasureHistory {
   range_level_ankle: string;
 }
 
+export interface UpperAndLowerMeasureHistory {
+  sn: number;
+  user_name: string;
+  risk_upper_risk_level: string;
+  risk_upper_range_level: string; 
+  risk_lower_risk_level: string;
+  risk_lower_range_level: string;
+  measure_date: string;
+}
+
 export interface IUserDashBoard {
-  latest_measure_summary: LatestMeasureSummary;
+  latest_measure_summary: MeasureSummary;
+  upper_and_lower_measure_history: UpperAndLowerMeasureHistory[];
   total_measure_count: number;
   measure_history: MeasureHistory[];
 }

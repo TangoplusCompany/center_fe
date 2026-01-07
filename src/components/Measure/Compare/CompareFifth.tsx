@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useMemo } from "react";
 import DummyStaticContainer from "../DummyStaticContainer";
 import { useMeasureJson } from "@/hooks/api/measure/useMeasureJson";
 import { MeasurementImage } from "../MeasurementImage";
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
 import RawDataContainer from "../RawDataContainer";
+import { IStaticRawDataProps } from "../RawDataResult";
 
 const MeasureStaticCompareFifth  = React.memo(
 ({
@@ -13,55 +14,93 @@ const MeasureStaticCompareFifth  = React.memo(
 }: {
   className?: string;
   sns: {
-    measureSn: string;
+    measureSn0?: string;
+    measureSn1?: string;
     userSn: string;
   };
   cameraOrientation: 0 | 1;
 }) => {
   const {
-    data: measureFifth,
-    isLoading: seq5Loading,
-    isError: seq5Error,
+    data: measure0,
+    isLoading: seqLoading0,
+    isError: seqError0,
   } = useMeasureSequence(
-    sns.measureSn,
+    sns.measureSn0,
     sns.userSn,
     3
   );
   const {
-    data: measureJson,
-    isLoading,
-    isError,
-  } = useMeasureJson(measureFifth?.file_data.measure_server_json_name);
+    data: measure1,
+    isLoading: seqLoading1,
+    isError: seqError1,
+  } = useMeasureSequence(
+    sns.measureSn1,
+    sns.userSn,
+    3
+  );
+  const {
+    data: measureJson0,
+    isLoading: jsonLoading0,
+    isError: jsonError0,
+  } = useMeasureJson(measure0?.file_data.measure_server_json_name);
+  const {
+    data: measureJson1,
+    isLoading: jsonLoading1,
+    isError: jsonError1,
+  } = useMeasureJson(measure1?.file_data.measure_server_json_name);
+  const mergedDetailData: IStaticRawDataProps[] = useMemo(() => {
+    return [
+      ...(measure0?.detail_data ?? []),
+      ...(measure1?.detail_data ?? []),
+    ];
+  }, [measure0, measure1]);
+  const baseUrl = process.env.NEXT_PUBLIC_FILE_URL || '';
 
-  if (!measureJson) return <DummyStaticContainer />;
-  if (isLoading) return <DummyStaticContainer />;
-  if (isError) return <div>에러가 발생했습니다.</div>;
-  if (seq5Loading) {
-    return (
-      <div className="col-span-12">
-        <p>로딩중...</p>
-      </div>
-    );
+  const isLoading = seqLoading0 || seqLoading1 || jsonLoading0 || jsonLoading1;
+  
+  const isError = seqError0 || seqError1 || jsonError0 || jsonError1;
+  const hasData0 = measureJson0 && measure0;
+  const hasData1 = measureJson1 && measure1;
+  if (isLoading) {
+    return <DummyStaticContainer />;
   }
-  if (seq5Error) {
-    return (
-      <div className="col-span-12">
-        <p>오류가 발생했습니다</p>
-      </div>
-    );
+  if (isError) {
+    return <div>에러가 발생했습니다.</div>;
+  }
+  if (!hasData0 && !hasData1) {
+    return <DummyStaticContainer />;
   }
   return (
-    <div className={`${className ?? ""} flex flex-col gap-4 lg:gap-10`}>
-      <MeasurementImage
-        imageUrl={
-          `https://gym.tangoplus.co.kr/data/Results/` +
-          measureFifth?.file_data?.measure_server_file_name
-        }
-        measureJson={measureJson}
-        step="first"
-        cameraOrientation={cameraOrientation}
-      />
-      <RawDataContainer mergedDetailData={measureFifth?.detail_data ?? []} isCompare={1}/>
+    <div className="flex flex-col gap-4">
+      <div className="grid grid-cols-2 gap-4">
+      <div className={`${className ?? ""} flex flex-col gap-4 lg:gap-10`}>
+        {measureJson0 && measure0 && (
+          <MeasurementImage
+            imageUrl={
+              baseUrl + "/" +
+              measure0?.file_data?.measure_server_file_name
+            }
+            measureJson={measureJson0}
+            step="first"
+            cameraOrientation={cameraOrientation}
+          />
+        )}
+      </div>
+      <div className={`${className ?? ""} flex flex-col gap-4 lg:gap-10`}>
+        {measureJson1 && measure1 && (
+            <MeasurementImage
+              imageUrl={
+                baseUrl + "/" +
+                measure1?.file_data?.measure_server_file_name
+              }
+              measureJson={measureJson1}
+              step="first"
+              cameraOrientation={cameraOrientation}
+            />
+          )}
+        </div>
+      </div>
+      <RawDataContainer mergedDetailData={mergedDetailData} isCompare={1}/>
     </div>
   );
 },

@@ -3,7 +3,7 @@
 import { removeDarkBackground } from "@/utils/removeDarkBackground";
 import { useEffect, useState } from "react";
 
-const MeasureKneeTrajectory = (
+const KneeTrajectory = (
   { 
     comment,
     leftKneeFileName,
@@ -34,10 +34,10 @@ const MeasureKneeTrajectory = (
   }, [leftImageUrl, rightImageUrl]);
 
   return (
-    <div className="flex-1 p-4 bg-white">
+    <div className="flex-1 p-4">
       {/* 헤더 */}
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-xl font-semibold">관절 이동</h3>
+        <h3 className="text-xl font-semibold">무릎 이동</h3>
       </div>
 
       <div className="flex justify-center gap-4">
@@ -92,4 +92,4 @@ const MeasureKneeTrajectory = (
   );
 }
 
-export default MeasureKneeTrajectory;
+export default KneeTrajectory;

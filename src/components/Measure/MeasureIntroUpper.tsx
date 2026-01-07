@@ -2,26 +2,16 @@
 
 import { formatComment } from "@/utils/formatComment";
 import React from "react";
-import { useHeightSync } from "./Compare/CompareBody";
+import { UpperLowerProps } from "./MeasureIntroLower";
 
 
 const MeasureIntroUpper = (
   { 
-    side,
     comment,
     condition,
     level,
-  }:
-  {
-    side?: "left" | "right";
-    comment: string;
-    condition: string;
-    level: number;
-  }
+  }: UpperLowerProps
 ) => {
-  const heightSync = useHeightSync();
-  const minH = heightSync?.getMinHeight("upper");
-  
   const formattedComment = formatComment(comment);
   const borderCondition = {
     정상: "border-sub300/50",
@@ -50,8 +40,6 @@ const MeasureIntroUpper = (
 
   return (
     <div 
-      ref={side && heightSync ? heightSync.register("upper", side) : undefined}
-      style={minH ? { minHeight: minH } : undefined}
       className={`flex flex-1 flex-col h-full p-4 border border-2 ${borderCondition} ${bgCondition} rounded-3xl shadow-[inset_0_6px_12px_rgba(255,255,255,0.25)]`}>
       {/* 헤더 */}
       <div className="flex justify-between items-center mb-4">

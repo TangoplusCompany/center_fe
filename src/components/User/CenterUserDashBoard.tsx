@@ -2,7 +2,7 @@
 import MeasureWorst from "@/components/Measure/MeasureWorst";
 import MeasureBest from "@/components/Measure/MeasureBest";
 import MeasureGraph from "@/components/Measure/MeasureGraph";
-import MeasureSummary from "@/components/Measure/MeasureSummary";
+import MeasureSummaryContainer from "@/components/Measure/MeasureSummaryContainer";
 import { IUserDashBoard, MeasureHistory } from "@/types/measure";
 import { IDayData } from "@/types/IDayData";
 import { useGetUserDashboard } from "@/hooks/api/user/useGetUserDashboard";
@@ -60,9 +60,7 @@ const CenterUserDashBoard = ({
   // 탭 0에서 쓸 더미/요약용 데이터 (기존 코드 유지)
   const worstPart = calculateExtremePart(dashboardData ? dashboardData?.measure_history : [], "worst");
   const bestPart = calculateExtremePart(dashboardData ? dashboardData?.measure_history : [], "best");
-
   const measureDate = calculateIDayData(dashboardData ? dashboardData?.measure_history : []);
-
   return (
     
     <div className="flex w-full gap-4">
@@ -80,7 +78,13 @@ const CenterUserDashBoard = ({
 
         <div className="flex-[1]">
           {dashboardData ? (
-            <MeasureSummary data={dashboardData?.latest_measure_summary} count={dashboardData?.total_measure_count} />
+            <MeasureSummaryContainer 
+            userSn={userSn ?? -1} 
+            latestSummary={dashboardData?.latest_measure_summary} 
+            graphData={dashboardData?.upper_and_lower_measure_history} 
+            count={dashboardData?.total_measure_count} 
+            
+            />
           ) : (
             <p className="text-gray-500">요약 데이터를 불러오는 중이거나 없습니다.</p>
           )}
@@ -92,12 +96,7 @@ const CenterUserDashBoard = ({
     </div>
   )
 };
-
-
 export default CenterUserDashBoard;
-
-
-
 
 export function calculateExtremePart(
   history: MeasureHistory[],
