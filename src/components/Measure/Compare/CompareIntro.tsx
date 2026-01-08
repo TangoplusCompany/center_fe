@@ -5,10 +5,10 @@ import CompareDefault from "./CompareDefault";
 import  { UpperLowerProps } from "../MeasureIntroLower";
 import { riskLevelMap } from "@/utils/riskLevelMap";
 import { JSX } from "react";
-import FootStatic from "../Mat/FootStatic";
-import KneeTrajectory from "../Mat/KneeTrajectory";
+import FootStatic from "../Mat/FootStaticContainer";
+import KneeTrajectory from "../Mat/KneeTrajectoryContainer";
 import HipTrajectory from "../Mat/HipTrajectory";
-import FootDynamic from "../Mat/FootDynamic";
+import FootDynamic from "../Mat/FootDynamicContainer";
 import CompareUpperLower from "./CompareUpperLower";
 
 const CompareIntro = ({

@@ -1,14 +1,13 @@
 import React from "react";
-import RawDataResult, { IStaticRawDataProps } from "./RawDataResult";
+import RawDataResult from "./RawData";
+import { IUserMeasureDetailData } from "@/types/measure";
 
 const RawDataDetailContainer = ({ 
   mergedDetailData, 
   selectedPart,
-  isCompare,
 }: {
-  mergedDetailData: IStaticRawDataProps[];
+  mergedDetailData: IUserMeasureDetailData[];
   selectedPart: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-  isCompare: 0 | 1;
 }) => {
 
   const partLandmarkMap: { [key: number]: number[] } = {
@@ -55,7 +54,7 @@ const RawDataDetailContainer = ({
   return (
     <div className="flex flex-col">
       {(() => {
-        const grouped: (IStaticRawDataProps | [IStaticRawDataProps, IStaticRawDataProps])[] = [];
+        const grouped: (IUserMeasureDetailData | [IUserMeasureDetailData, IUserMeasureDetailData])[] = [];
         const processed = new Set<number>();
 
         sortedData.forEach((data, idx) => {
@@ -85,9 +84,8 @@ const RawDataDetailContainer = ({
           }
         });
         
-        console.log(grouped);
         return grouped.map((data, idx) => (
-          <RawDataResult key={idx} data={data} isCompare={isCompare} />
+          <RawDataResult key={idx} data={data}  />
         ));
       })()}
     </div>

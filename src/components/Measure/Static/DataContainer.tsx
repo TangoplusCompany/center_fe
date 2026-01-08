@@ -1,8 +1,6 @@
 import { IUserMeasureInfoResponse } from "@/types/measure";
-import MeasureIntroUpper from "../MeasureIntroUpper";
-import MeasureIntroLower from "../MeasureIntroLower";
 import { riskLevelMap } from "@/utils/riskLevelMap";
-import MeasureFootStatic, { IMatStaticPressure } from "../Mat/FootStatic";
+import MeasureFootStatic, { IMatStaticPressure } from "../Mat/FootStaticContainer";
 
 const StaticDataContainer = ({
   measureData,
@@ -11,12 +9,6 @@ const StaticDataContainer = ({
 
 }) => {
   const {
-    risk_upper_ment,
-    risk_upper_risk_level,
-    risk_upper_range_level,
-    risk_lower_ment,
-    risk_lower_risk_level,
-    risk_lower_range_level,
     mat_static_risk_level,
     mat_static_range_level,
     mat_static_left_top,
@@ -45,8 +37,6 @@ const StaticDataContainer = ({
     bottomPressure: Math.round(mat_static_bottom_pressure),
   };
 
-  const upperCondition = riskLevelMap[risk_upper_risk_level as 0 | 1 | 2];
-  const lowerCondition = riskLevelMap[risk_lower_risk_level as 0 | 1 | 2];
   const footStaticCondition = riskLevelMap[mat_static_risk_level as 0 | 1 | 2];
 
   const borderCondition = {
@@ -60,20 +50,7 @@ const StaticDataContainer = ({
     위험: "bg-gradient-to-b from-[#FF5252]/10 from-[2%] to-white to-[50%]",
   }[footStaticCondition] ?? "bg-primary-foreground";
   // 위아래로 할 경우 flex h-full flex-col gap-4
-  const leftRight = (
-    <div className="grid grid-cols-2 h-full gap-4">
-      <MeasureIntroUpper
-        comment={risk_upper_ment}
-        condition={upperCondition}
-        level={risk_upper_range_level}
-      />
-      <MeasureIntroLower
-        comment={risk_lower_ment}
-        condition={lowerCondition}
-        level={risk_lower_range_level}
-      />
-    </div>
-  );
+  
 
 
   return (
@@ -93,7 +70,7 @@ const StaticDataContainer = ({
         lCase={1}
       />
       </div>
-      {leftRight}
+      
     </div>
   );
 };

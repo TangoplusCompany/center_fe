@@ -523,7 +523,7 @@ export interface IMeasureJson {
 }
 
 
-export interface MeasureSummary {
+export interface MeasureSummary extends MeasureFootCOP {
   user_name: string;
   risk_upper_ment: string;
   risk_upper_risk_level: string;
@@ -532,6 +532,19 @@ export interface MeasureSummary {
   risk_lower_risk_level: string;
   risk_lower_range_level: string;
   measure_date: string;
+}
+
+export interface MeasureFootCOP extends IMatStatic, IMatOhs {
+  sn: number;
+  user_name: string;
+  measure_date: string;
+
+  measure_server_mat_image_name: string;
+  measure_server_mat_json_name: string;
+  mat_hip_down_image_name: string;
+  mat_hip_trajectory_image_name: string;
+  mat_left_knee_trajectory_image_name: string;
+  mat_right_knee_trajectory_image_name: string;
 }
 
 export interface MeasureHistory {
@@ -560,9 +573,18 @@ export interface UpperAndLowerMeasureHistory {
   measure_date: string;
 }
 
+export interface FootPressureHistory {
+  sn: number;
+  user_name: string;
+  mat_static_risk_level: string;
+  mat_static_range_level: string; 
+  measure_date: string;
+}
+
 export interface IUserDashBoard {
   latest_measure_summary: MeasureSummary;
   upper_and_lower_measure_history: UpperAndLowerMeasureHistory[];
+  foot_pressure_history: FootPressureHistory[];
   total_measure_count: number;
   measure_history: MeasureHistory[];
 }
@@ -610,7 +632,7 @@ export interface IUserMeasureDetailData {
   data: number;
   risk_level: number;
   range_level: number;
-  measure_unit: string | null;
+  measure_unit: string | undefined;
   ment_all: string;
   ment: string;
   left_right: number; // 0 | 1 로 좁혀도 됨

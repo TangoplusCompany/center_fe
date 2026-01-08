@@ -1,5 +1,5 @@
 import { ChartConfigValue } from "@/hooks/device/useDeviceChartConfig";
-import { UpperAndLowerMeasureHistory } from "@/types/measure";
+import { FootPressureHistory, UpperAndLowerMeasureHistory } from "@/types/measure";
 import { RandomHexColor } from "@/utils/RandomHexColor";
 import { useEffect, useState } from "react";
 
@@ -11,7 +11,7 @@ type ChartConfig = Record<string, ChartConfigValue>;
  * @returns 센터 기기 차트 설정
  */
 export const useMeasureSummaryChartConfig = (
-  summarys: UpperAndLowerMeasureHistory[] = [],
+  summarys: UpperAndLowerMeasureHistory[] | FootPressureHistory[] = [],
 ) => {
   const [chartConfig, setChartConfig] = useState<ChartConfig>({});
 

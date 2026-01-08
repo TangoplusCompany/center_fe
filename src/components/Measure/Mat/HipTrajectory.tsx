@@ -13,9 +13,9 @@ const HipTrajectory = ({   hipFileName }: {   hipFileName: string }) => {
 
   return (
     <div className="flex-1 p-4">
-      <div className="flex justify-between items-center mb-4">
+      {/* <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-semibold">골반 이동</h3>
-      </div>
+      </div> */}
       <div className="flex justify-center items-center">
         <div className="flex flex-col items-center w-fit">
           <div className="w-full rounded-md border text-center py-1 mb-1">

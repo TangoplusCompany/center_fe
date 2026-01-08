@@ -67,7 +67,7 @@ const CenterUserDashBoard = ({
       {/* 왼쪽 */}
       <div className="flex flex-col flex-[2] gap-4">
         {/* Worst + Best */}
-        <div className="flex gap-4">
+        <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1">
             <MeasureWorst data={worstPart} />
           </div>
@@ -81,7 +81,8 @@ const CenterUserDashBoard = ({
             <MeasureSummaryContainer 
             userSn={userSn ?? -1} 
             latestSummary={dashboardData?.latest_measure_summary} 
-            graphData={dashboardData?.upper_and_lower_measure_history} 
+            summaryData={dashboardData?.upper_and_lower_measure_history} 
+            footData={dashboardData?.foot_pressure_history}
             count={dashboardData?.total_measure_count} 
             
             />

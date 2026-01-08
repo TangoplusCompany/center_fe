@@ -2,11 +2,10 @@
 import React, { useMemo } from "react";
 import MeasureStaticFirst from "./First";
 import MeasureStaticSecond from "./Second";
-import { IStaticRawDataProps } from "../RawDataResult";
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
 import RawDataContainer from "../RawDataContainer";
 import StaticDataContainer from "./DataContainer";
-import { IUserMeasureInfoResponse } from "@/types/measure";
+import { IUserMeasureDetailData, IUserMeasureInfoResponse } from "@/types/measure";
 
 const FrontMeasurement = ({
   sns,
@@ -39,7 +38,7 @@ const FrontMeasurement = ({
     sns.userSn,
     5
   );
-  const mergedDetailData: IStaticRawDataProps[] = useMemo(() => {
+  const mergedDetailData: IUserMeasureDetailData[] = useMemo(() => {
     return [
       ...(measureFirst?.detail_data ?? []),
       ...(measureSecond?.detail_data ?? []),
@@ -74,7 +73,7 @@ const FrontMeasurement = ({
       {/* TODO 이 곳에 족압 이미지를 넣는 컴포넌트가 필요함. */}
       {/* 하단: RawDataResult*/}
       <StaticDataContainer measureData={measureInfo} />
-      <RawDataContainer mergedDetailData={mergedDetailData} isCompare={0}/>
+      <RawDataContainer mergedDetailData0={mergedDetailData} />
     </div>
   );
 };

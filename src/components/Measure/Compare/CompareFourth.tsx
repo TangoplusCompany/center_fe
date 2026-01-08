@@ -1,11 +1,10 @@
 
-import React, { useMemo } from "react";
+import React from "react";
 import { useMeasureJson } from "@/hooks/api/measure/useMeasureJson";
 import DummyStaticContainer from "../DummyStaticContainer";
 import { MeasurementImage } from "../MeasurementImage";
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
 import RawDataContainer from "../RawDataContainer";
-import { IStaticRawDataProps } from "../RawDataResult";
 
 const MeasureStaticCompareFourth = React.memo(
 ({
@@ -52,12 +51,6 @@ const MeasureStaticCompareFourth = React.memo(
     isLoading: jsonLoading1,
     isError: jsonError1,
   } = useMeasureJson(measure1?.file_data.measure_server_json_name);
-  const mergedDetailData: IStaticRawDataProps[] = useMemo(() => {
-    return [
-      ...(measure0?.detail_data ?? []),
-      ...(measure1?.detail_data ?? []),
-    ];
-  }, [measure0, measure1]);
   const baseUrl = process.env.NEXT_PUBLIC_FILE_URL || '';
 
   const isLoading = seqLoading0 || seqLoading1 || jsonLoading0 || jsonLoading1;
@@ -104,7 +97,7 @@ const MeasureStaticCompareFourth = React.memo(
           )}
         </div>
       </div>
-      <RawDataContainer mergedDetailData={mergedDetailData} isCompare={1}/>
+      <RawDataContainer mergedDetailData0={measure0?.detail_data ?? []} mergedDetailData1={measure1?.detail_data}/>
     </div>
   );
 },

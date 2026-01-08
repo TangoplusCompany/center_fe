@@ -50,7 +50,7 @@ const MeasureBest = ({ data }: { data: TWorstPart }) => {
         <img
           src={`/images/${imageSrc}`}
           alt=""
-          className="w-full h-full object-cover object-bottom"
+          className="w-full h-full object-cover object-bottom opacity-50"
         />
       </div>
     </div>

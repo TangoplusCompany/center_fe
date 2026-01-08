@@ -57,14 +57,14 @@ const CenterUserMeasureListContainer = ({
     };
   const defaultLimit = query.limit || 20;
   
-  const [deleteSelectedSns, setDeleteSelectedSns] = useState<number[]>([]);
-  const onToggleDeleteSn = (sn: number) => {
-    setDeleteSelectedSns((prev) =>
-      prev.includes(sn)
-        ? prev.filter((x) => x !== sn)
-        : [...prev, sn]
-    );
-  };
+  const [deleteSelectedSns, ] = useState<number[]>([]); // setDeleteSelectedSns
+  // const onToggleDeleteSn = (sn: number) => {
+  //   setDeleteSelectedSns((prev) =>
+  //     prev.includes(sn)
+  //       ? prev.filter((x) => x !== sn)
+  //       : [...prev, sn]
+  //   );
+  // };
 
   // query에서 날짜 범위 가져오기
   // 달력 범위 (임시 상태)
@@ -321,8 +321,8 @@ const CenterUserMeasureListContainer = ({
     <CenterUserMeasureList
       measures={sortedMeasurements}
       onRowClick={(sn) => onSelectMeasure?.(sn)}
-      deleteSelectedSns={deleteSelectedSns}
-      onToggleDeleteSn={onToggleDeleteSn}
+      // deleteSelectedSns={deleteSelectedSns}
+      // onToggleDeleteSn={onToggleDeleteSn}
       onToggleCompareSn={onToggleCompareSn}
       onOpenCompareMode={onOpenCompareMode}
     />

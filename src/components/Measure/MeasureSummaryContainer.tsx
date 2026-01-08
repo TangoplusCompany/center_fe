@@ -1,22 +1,26 @@
 "use client";
 
-import { MeasureSummary, UpperAndLowerMeasureHistory } from "@/types/measure";
-import { parseString } from "@/utils/parseString";
+import { FootPressureHistory, MeasureSummary, UpperAndLowerMeasureHistory } from "@/types/measure";
 import React, { useEffect, useState } from "react";
 import MeasureSummaryGraph from "./MeasureSummaryGraph";
 import { useGetMeasureSummary } from "@/hooks/api/measure/useGetMeasureSummary";
+import MeasureSummaryUnit from "./MeasureSummaryUnit";
+import MatUserDashBoardContainer from "./Mat/MatUserDashBoardContainer";
+
 
 export interface SummaryProps {
   userSn: number;
   latestSummary: MeasureSummary;
-  graphData: UpperAndLowerMeasureHistory[];
+  summaryData: UpperAndLowerMeasureHistory[];
+  footData: FootPressureHistory[];
   count: number;
 }
 
 const MeasureSummaryContainer = ({ 
   userSn,
   latestSummary,
-  graphData,
+  summaryData,
+  footData,
   count
  }: SummaryProps 
 ) => {
@@ -44,26 +48,7 @@ const MeasureSummaryContainer = ({
     }
   }, [newSummary]);
 
-  const riskString = (level?: string) => 
-  ({
-    "0": "정상",
-    "1": "주의",
-    "2": "위험"
-  } as const)[level ?? "0"] ?? "정상";
-
-  const getRiskBgClass = (level?: string) =>
-  ({
-    정상: "bg-sub300",
-    주의: "bg-warning",
-    위험: "bg-danger",
-  } as const)[level as "정상" | "주의" | "위험"] ?? "bg-primary-foreground";
-
-  // 사용
-  const upperRiskString = riskString(selectedSummary?.risk_upper_risk_level);
-  const lowerRiskString = riskString(selectedSummary?.risk_lower_risk_level);
-  const upperBg = getRiskBgClass(upperRiskString);
-  const lowerBg = getRiskBgClass(lowerRiskString);
-
+  
   return (
     <div className="flex flex-col gap-4 rounded-3xl border p-5 shadow-sm bg-white">
       
@@ -83,40 +68,29 @@ const MeasureSummaryContainer = ({
       {/* TODO 그래프 레이아웃 변경 */}
       {summaryLoading && <div>로딩 중...</div>}
       {summaryError && <div>데이터를 불러오는데 실패했습니다.</div>}
-      <MeasureSummaryGraph data={graphData} legendClick={handleLegendClick}/>
-
       {/* 상지 */}
       <div className="grid grid-cols-2 gap-4">
-        <div >
-          <div className="flex justify-between items-center py-2">
-            <h2 className="text-xl font-semibold">상지 결과</h2>
-            <span className={`px-3 py-1 ${upperBg} rounded-xl text-sm text-white`}>
-              {upperRiskString} {selectedSummary?.risk_upper_range_level}단계
-            </span>
-          </div>
+        <MeasureSummaryUnit 
+          ment={selectedSummary?.risk_upper_ment} 
+          risk_level={selectedSummary?.risk_upper_risk_level} 
+          range_level={selectedSummary?.risk_upper_range_level}
+        />
+        <MeasureSummaryGraph data={summaryData} legendClick={handleLegendClick} dCase={0}/>      
+      </div>
+      {/* 하지 */}
+      <div className="grid grid-cols-2 gap-4">
+        <MeasureSummaryUnit 
+          ment={selectedSummary?.risk_upper_ment} 
+          risk_level={selectedSummary?.risk_upper_risk_level} 
+          range_level={selectedSummary?.risk_upper_range_level}
+        />
+        <MeasureSummaryGraph data={summaryData} legendClick={handleLegendClick} dCase={1}/>      
+      </div>
+      {/* 족압 */}
+      <div className="grid grid-cols-2 gap-4">
 
-          <div className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
-            {parseString(selectedSummary?.risk_upper_ment).map((el, key) =>
-              el === "" ? <br key={key} /> : <p key={key}>{el}</p>
-            )}
-          </div>
-        </div>
-
-        {/* 하지 */}
-        <div>
-          <div className="flex justify-between items-center py-2">
-            <h2 className="text-xl font-semibold">하지 결과</h2>
-            <span className={`px-3 py-1 ${lowerBg} rounded-xl text-sm text-white`}>
-              {lowerRiskString} {selectedSummary?.risk_lower_range_level}단계
-            </span>
-          </div>
-
-          <div className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
-            {parseString(selectedSummary?.risk_lower_ment).map((el, key) =>
-              el === "" ? <br key={key} /> : <p key={key}>{el}</p>
-            )}
-          </div>
-        </div>
+        <MatUserDashBoardContainer footOCP={selectedSummary} />
+        <MeasureSummaryGraph data={footData} legendClick={handleLegendClick} dCase={2}/>      
       </div>
 
       

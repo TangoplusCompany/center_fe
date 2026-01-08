@@ -13,32 +13,31 @@ import { CompareSlot } from "@/types/compare";
 export const CenterUserMeasureList = ({
   measures,
   onRowClick,
-  deleteSelectedSns,
-  onToggleDeleteSn,
+  // deleteSelectedSns,
+  // onToggleDeleteSn,
   onToggleCompareSn,
   onOpenCompareMode,
 }: {
   measures: IMeasureList[];
   onRowClick?: (measureSn: number) => void;
 
-  deleteSelectedSns: number[];
-  onToggleDeleteSn: (sn: number) => void;
+  // deleteSelectedSns: number[];
+  // onToggleDeleteSn: (sn: number) => void;
   onToggleCompareSn?: (sn: number, slot: CompareSlot) => void;
   onOpenCompareMode: () => void;
 }) => {
-  
-
   return (
     <Table>
       <TableHeader>
         <TableRow>
           {/* ✅ 체크박스 컬럼 */}
-          <TableHead className="w-10 text-center"></TableHead>
+          {/* <TableHead className="w-10 text-center"></TableHead> */}
 
           <TableHead className="text-center">이름</TableHead>
           <TableHead className="text-center">전화번호</TableHead>
           <TableHead className="text-center">측정 일자</TableHead>
           <TableHead className="text-center">측정 기기</TableHead>
+          <TableHead className="text-center">측정 요약</TableHead>
           <TableHead className="text-right"></TableHead>
         </TableRow>
       </TableHeader>
@@ -46,18 +45,22 @@ export const CenterUserMeasureList = ({
       <TableBody>
         {measures.map((measure) => {
           const sn = measure.measure_sn;
-          const checked = deleteSelectedSns.includes(sn);
+          // const checked = deleteSelectedSns.includes(sn);
 
           return (
-            <TableRow key={sn}>
+            <TableRow 
+            key={sn} 
+            onClick={() => onRowClick?.(sn)}
+            className="cursor-pointer"
+            >
               {/* ✅ 삭제 선택 체크박스 */}
-              <TableCell className="text-center" onClick={(e) => e.stopPropagation()}>
+              {/* <TableCell className="text-center" onClick={(e) => e.stopPropagation()}>
                 <input
                   type="checkbox"
                   checked={checked}
                   onChange={() => onToggleDeleteSn(sn)}
                 />
-              </TableCell>
+              </TableCell> */}
 
               <TableCell className="text-center font-medium">
                 {measure.user_name}
@@ -65,21 +68,25 @@ export const CenterUserMeasureList = ({
               <TableCell className="text-center">{phoneHyphen(measure.mobile)}</TableCell>
               <TableCell className="text-center">{measure.measure_date}</TableCell>
               <TableCell className="text-center">{measure.device_name}</TableCell>
-
+              {/* <TableCell className="text-center">
+                <div>
+                  <span className={`
+                    flex inline-flex items-center justify-center mx-auto
+                    px-2 py-1 ${textBgCondition1} ${textLeftRightCondition1}
+                    text-xs rounded-full
+                  `}>
+                    {levelString1} {data1?.range_level}단계
+                  </span>
+                  <span className={`
+                    flex inline-flex items-center justify-center mx-auto
+                    px-2 py-1 ${textBgCondition1} ${textLeftRightCondition1}
+                    text-xs rounded-full
+                  `}>
+                    {levelString1} {data1?.range_level}단계
+                  </span>
+                </div>
+              </TableCell> */}
               <TableCell className="flex items-center justify-end gap-4">
-                <button
-                  type="button"
-                  onClick={() => onRowClick?.(sn)}
-                  className="flex items-center gap-2 justify-end cursor-pointer"
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/icons/ic_paper_detail.svg"
-                    alt="상세보기"
-                    className="w-5 h-5 gap-4"
-                  />
-                  <span>상세보기</span>
-                </button>
                 <button
                   type="button"
                   onClick={(e) => {
