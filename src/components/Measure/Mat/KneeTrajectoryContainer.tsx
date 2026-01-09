@@ -28,7 +28,9 @@ const KneeTrajectoryContainer = (
             <div className="w-full rounded-md border text-center py-1 mb-1">
               무릎이동 궤적(L)
             </div>
-            <KneeTrajectory kneeFileName={leftKneeFileName} />
+            <div className="w-32 h-32">
+              <KneeTrajectory kneeFileName={leftKneeFileName} />
+            </div>
           </div>
       </div>
       
@@ -37,7 +39,9 @@ const KneeTrajectoryContainer = (
           <div className="w-full rounded-md border text-center py-1 mb-1">
             무릎이동 궤적(R)
           </div>
-          <KneeTrajectory kneeFileName={rightKneeFileName} />
+          <div className="w-32 h-32">
+            <KneeTrajectory kneeFileName={rightKneeFileName} />
+          </div>
         </div>
       </div>
     </div>

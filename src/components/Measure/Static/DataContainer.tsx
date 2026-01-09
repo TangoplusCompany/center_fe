@@ -1,6 +1,6 @@
 import { IUserMeasureInfoResponse } from "@/types/measure";
 import { riskLevelMap } from "@/utils/riskLevelMap";
-import MeasureFootStatic, { IMatStaticPressure } from "../Mat/FootStaticContainer";
+import FootStaticContainer, { IMatStaticPressure } from "../Mat/FootStaticContainer";
 
 const StaticDataContainer = ({
   measureData,
@@ -56,7 +56,7 @@ const StaticDataContainer = ({
   return (
     <div className="flex flex-col gap-4">
       <div className={`rounded-2xl border-2 border-sub200 ${borderCondition} ${bgCondition}`}>
-        <MeasureFootStatic
+        <FootStaticContainer
         comment={
           "[좌우 무게 분석]\n" +
           (mat_static_horizontal_ment ?? "\n") +

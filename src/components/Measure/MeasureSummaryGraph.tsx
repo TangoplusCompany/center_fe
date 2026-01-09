@@ -1,7 +1,7 @@
 import { useMeasureSummaryChartConfig } from "@/hooks/api/measure/useMeasureSummaryChartConfig";
 import { FootPressureHistory, UpperAndLowerMeasureHistory } from "@/types/measure";
 import { Card, CardContent } from "../ui/card";
-import { ChartContainer, ChartLegend, ChartTooltip } from "../ui/chart";
+import { ChartContainer, ChartTooltip } from "../ui/chart";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import React from "react";
 
@@ -80,10 +80,11 @@ const MeasureSummaryGraph = ({
       };
     });
   }, [data, dCase]);
-  const yAxisTicks = [4, 7, 10];
+  const yAxisTicks = [1, 4, 7];
 
   // y축 라벨 포맷터
   const formatYAxis = (value: number) => {
+    if (value <= 1) return '정상';
     if (value <= 4) return '주의'; // 정상은 생략
     if (value <= 7) return '위험';
     return '';
@@ -114,13 +115,13 @@ const MeasureSummaryGraph = ({
   };
 
   return (
-    <Card className="shadow-none border-white">
+    <Card className="shadow-none rounded-xl border-2 border-sub200">
       {/* <CardHeader className="flex items-center gap-2 space-y-0 border-2 border-toggleAccent-background py-2 sm:flex-row bg-toggleAccent-background">
         <div className="grid flex-1 gap-1 text-center sm:text-left">
           <CardTitle className="text-toggleAccent text-xl">상지·하지 요약 추이</CardTitle>
         </div>
       </CardHeader> */}
-      <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+      <CardContent className="px-2 pt-2 sm:px-4 sm:pt-4">
         <ChartContainer
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
@@ -151,7 +152,7 @@ const MeasureSummaryGraph = ({
               }}
             />
             <YAxis
-              domain={[0, 10]}
+              domain={[1, 9]}
               ticks={yAxisTicks}
               tickFormatter={formatYAxis}
               tickLine={false}
@@ -166,7 +167,7 @@ const MeasureSummaryGraph = ({
                 const data = payload[0].payload;
                 
                 return (
-                  <div className="rounded-lg border bg-background p-3 shadow-sm">
+                  <div className="rounded-lg border p-3 shadow-sm">
                     <div className="text-sm font-medium mb-2">
                       {data.measure_date.split(' ')[0]}
                     </div>
@@ -242,7 +243,7 @@ const MeasureSummaryGraph = ({
               />
             )}
             
-            <ChartLegend
+            {/* <ChartLegend
               content={() => {
                 return (
                   <div className="flex justify-center items-center gap-3 pt-2">
@@ -259,7 +260,7 @@ const MeasureSummaryGraph = ({
                   </div>
                 );
               }}
-            />
+            /> */}
           </AreaChart>
         </ChartContainer>
       </CardContent>

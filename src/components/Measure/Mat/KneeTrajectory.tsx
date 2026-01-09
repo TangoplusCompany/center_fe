@@ -20,7 +20,7 @@ const KneeTrajectory = ({
       .catch(() => setProcessedKneeSrc("/images/measure_default.png"));
   }, [kneeImageUrl]);
   return (
-    <div className="relative w-32 h-32">
+    <div className="relative w-full h-full">
       {processedKneeSrc !== "" && processedKneeSrc !== null && (
         /* eslint-disable-next-line @next/next/no-img-element */
         <img

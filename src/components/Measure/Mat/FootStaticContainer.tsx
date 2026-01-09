@@ -66,7 +66,7 @@ const FootStaticContainer = (
                 <div className="w-full rounded-md border text-center py-1 mb-1 invisible">
                   가려진 타이틀
                 </div>
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center w-32 h-32">
                   <FootStatic fileName={fileName} matStatics={matStatics} />
                 </div>
               </div>
@@ -82,7 +82,9 @@ const FootStaticContainer = (
         <div className="grid grid-cols-2 gap-6">
           {/* 왼쪽: 이미지 */}
           <div className="flex flex-col items-center">
-            <FootStatic fileName={fileName} matStatics={matStatics} />
+            <div className="flex flex-col items-center w-32 h-32">
+              <FootStatic fileName={fileName} matStatics={matStatics} />
+            </div>
           </div>
 
           {/* 오른쪽: 코멘트 */}

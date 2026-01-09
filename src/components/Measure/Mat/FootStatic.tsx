@@ -26,7 +26,7 @@ const FootStatic = ({
       });
   }, [imageUrl]);
     return (
-      <div className="relative w-32 h-32">
+      <div className="relative w-full h-full">
         {processedImageSrc !== "" && processedImageSrc !== null && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
