@@ -1,10 +1,10 @@
 import React, { useMemo } from "react";
 import MeasureStaticThird from "./Third";
 import MeasureStaticFourth from "./Fourth";
-import { IStaticRawDataProps } from "../RawDataResult";
+
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
 import RawDataContainer from "../RawDataContainer";
-import { IUserMeasureInfoResponse } from "@/types/measure";
+import { IUserMeasureDetailData, IUserMeasureInfoResponse } from "@/types/measure";
 import StaticDataContainer from "./DataContainer";
 
 const SideMeasurement = ({
@@ -37,7 +37,7 @@ const SideMeasurement = ({
         sns.userSn,
         4
       );
-      const mergedDetailData: IStaticRawDataProps[] = useMemo(() => {
+      const mergedDetailData: IUserMeasureDetailData[] = useMemo(() => {
         return [
           ...(measureThird?.detail_data ?? []),
           ...(measureFourth?.detail_data ?? []),
@@ -71,7 +71,7 @@ const SideMeasurement = ({
         </div>
       </div>
       <StaticDataContainer measureData={measureInfo} />
-      <RawDataContainer mergedDetailData={mergedDetailData} isCompare={0}/>
+      <RawDataContainer mergedDetailData0={mergedDetailData} />
     </div>
   );
 };

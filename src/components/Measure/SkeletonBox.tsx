@@ -1,24 +1,18 @@
-import React, { useState, useEffect } from "react";
-import SkeletonFront from "./SkeletonFront";
+import React from "react";
+import SkeletonSvg from "./SkeletonSvg";
 import { IUserDetailMeasureInfo } from "@/types/measure";
 
 const SkeletonBox = ({ data }: { data: IUserDetailMeasureInfo }) => {
-  const [view, setView] = useState("front");
-  const [viewState] = useState(true);
+  
 
-  useEffect(() => {
-    if (viewState) {
-      setView("front");
-    } else {
-      setView("back");
-    }
-  }, [viewState]);
+
+
   return (
     <div className="relative box-border flex h-full flex-col items-center rounded-3xl border border border-sub300 bg-gray p-4 text-black focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary">
       <div className="flex-1 flex items-center justify-center">
         <div className="relative z-0 skeleton mb-8">
-          <SkeletonFront
-            className={`${view === "front" ? "on_view" : "off_view"} h-full w-full`}
+          <SkeletonSvg
+            
             data={data}
           />
         </div>

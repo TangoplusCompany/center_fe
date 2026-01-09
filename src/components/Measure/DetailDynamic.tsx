@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 // import { useMeasureDynamicJson } from "@/hooks/api/measure/useMeasureDynamicJson";
 // import DataError from "../Util/DataError";
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
-import { IUserMeasureDynamicFileData, IUserMeasureInfoResponse } from "@/types/measure";
+import { IUserMeasureDynamicFileData } from "@/types/measure";
 import DynamicDataContainer from "./Dynamic/DataContainer";
 // import MeasureIntroFooter2 from "./MeasureIntroFooter2";
 // import MeasureIntroFooter3 from "./MeasureIntroFooter3";
@@ -15,7 +15,6 @@ import DynamicDataContainer from "./Dynamic/DataContainer";
 const MeasureDetailDynamic = ({
   className,
   sns,
-  measureInfo,
   cameraOrientation,
   isCompare
 }: {
@@ -24,7 +23,6 @@ const MeasureDetailDynamic = ({
     measureSn: string;
     userSn: string;
   };
-  measureInfo: IUserMeasureInfoResponse;
   cameraOrientation: number;
   isCompare: 0 | 1;
 }) => {
@@ -581,7 +579,6 @@ const MeasureDetailDynamic = ({
       <DynamicDataContainer 
         fileData={fileData} 
         detailData={measureDynamic?.detail_data ?? []}
-        measureInfo={measureInfo}
         isCompare={isCompare}
         />
     </div>

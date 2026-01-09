@@ -1,21 +1,16 @@
-import { IUserMeasureDetailData, IUserMeasureDynamicFileData, IUserMeasureInfoResponse } from "@/types/measure";
-import FootDynamic, { IMatOhsPressure } from "../Mat/FootDynamic";
-import MeasureKneeTrajectory from "../Mat/KneeTrajectory";
+import { IUserMeasureDetailData, IUserMeasureDynamicFileData } from "@/types/measure";
+import FootDynamic, { IMatOhsPressure } from "../Mat/FootDynamicContainer";
+import MeasureKneeTrajectory from "../Mat/KneeTrajectoryContainer";
 import RawDataContainer from "../RawDataContainer";
-import MeasureIntroUpper from "../MeasureIntroUpper";
-import MeasureIntroLower from "../MeasureIntroLower";
-import { riskLevelMap } from "@/utils/riskLevelMap";
 
 const DynamicDataContainer = (
   {
     fileData,
     detailData,
-    measureInfo,
     isCompare,
   }:{
     fileData: IUserMeasureDynamicFileData;
     detailData?: IUserMeasureDetailData[];
-    measureInfo: IUserMeasureInfoResponse;
     isCompare: 0 | 1 ; // isCompare==0 이면 compare임. 
   }
 ) => {
@@ -50,30 +45,6 @@ const DynamicDataContainer = (
     bottomPressure: Math.round(mat_ohs_bottom_pressure),
   };
 
-  const {
-    risk_upper_ment,
-    risk_upper_risk_level,
-    risk_upper_range_level,
-    risk_lower_ment,
-    risk_lower_risk_level,
-    risk_lower_range_level,
-  } = measureInfo.result_summary_data;
-  const upperCondition = riskLevelMap[risk_upper_risk_level as 0 | 1 | 2];
-  const lowerCondition = riskLevelMap[risk_lower_risk_level as 0 | 1 | 2];
-  const leftRight = (
-    <div className="grid grid-cols-2 h-full gap-4">
-      <MeasureIntroUpper
-        comment={risk_upper_ment}
-        condition={upperCondition}
-        level={risk_upper_range_level}
-      />
-      <MeasureIntroLower
-        comment={risk_lower_ment}
-        condition={lowerCondition}
-        level={risk_lower_range_level}
-      />
-    </div>
-  );
   return (
     <div className="flex flex-col gap-4">
       <div className="flex border border-sub300 rounded-3xl">
@@ -99,8 +70,7 @@ const DynamicDataContainer = (
           />
         </div>
       </div>
-      {leftRight}
-      <RawDataContainer mergedDetailData={detailData ?? []} isCompare={isCompare}/>
+      <RawDataContainer mergedDetailData0={detailData ?? []} />
     </div>
   );
 }

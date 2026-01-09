@@ -7,15 +7,15 @@ type TWorstPart = {
 };
 const MeasureBest = ({ data }: { data: TWorstPart }) => {
     const imageSrc = {
-    "목": "image_neck_2.svg",
-    "어깨": "image_shoulder_2.svg",
-    "팔꿈치": "image_elbow_2.svg",
-    "골반": "image_hip_2.svg",
-    "무릎": "image_knee_2.svg",
-    "발목": "image_ankle_2.svg"
+    "목": "img_neck_0.svg",
+    "어깨": "img_shoulder_0.svg",
+    "팔꿈치": "img_elbow_0.svg",
+    "골반": "img_hip_0.svg",
+    "무릎": "img_knee_0.svg",
+    "발목": "img_ankle_0.svg"
   }[data.partName]
   return (
-    <div className="flex flex-col h-full w-full rounded-3xl border shadow-sm bg-white relative overflow-hidden">
+    <div className="flex flex-col h-full w-full rounded-3xl border-2 border-sub200 shadow-sm bg-white relative overflow-hidden">
       {/* 제목 - 좌상단 작은 원 배지와 함께 */}
       <div className="flex flex-shrink-0 items-center gap-2 mb-4 p-5 relative">
         {/* eslint-disable-next-line @next/next/no-img-element */}

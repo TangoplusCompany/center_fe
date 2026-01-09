@@ -1,49 +1,90 @@
 import { useMeasureSummaryChartConfig } from "@/hooks/api/measure/useMeasureSummaryChartConfig";
-import { UpperAndLowerMeasureHistory } from "@/types/measure";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { ChartContainer, ChartLegend, ChartTooltip } from "../ui/chart";
+import { FootPressureHistory, UpperAndLowerMeasureHistory } from "@/types/measure";
+import { Card, CardContent } from "../ui/card";
+import { ChartContainer, ChartTooltip } from "../ui/chart";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import React from "react";
 
+type MeasureSummaryGraphProps = 
+  | {
+      dCase: 0 | 1;
+      data: UpperAndLowerMeasureHistory[];
+      legendClick: (sn: number) => void;
+    }
+  | {
+      dCase: 2;
+      data: FootPressureHistory[];
+      legendClick: (sn: number) => void;
+    };
 const MeasureSummaryGraph = ({
   data,
   legendClick,
-}: {
-  data: UpperAndLowerMeasureHistory[];
-  legendClick: (sn: number) => void;
-}) => {
-  
+  dCase,
+}: MeasureSummaryGraphProps) => {
+
   const { chartConfig } = useMeasureSummaryChartConfig(data);
 
+
+
   // 데이터 포인트 클릭 핸들러
-  const handleAreaClick = (point: UpperAndLowerMeasureHistory) => {
+  const handleAreaClick = (
+    point: UpperAndLowerMeasureHistory | FootPressureHistory
+  ) => {
     if (point && point.sn) {
       legendClick(point.sn);
     }
   };
+
   const calculateScore = (riskLevel: string, rangeLevel: string) => {
     const risk = parseInt(riskLevel);
     const range = parseInt(rangeLevel);
-    // 23=9, 22=8, 21=7, 13=6, 12=5, 11=4, 03=3, 02=2, 01=1
     return risk * 3 + range;
   };
+
   const processedData = React.useMemo(() => {
-  const result = data.map(item => {
-    const upper = calculateScore(item.risk_upper_risk_level, item.risk_upper_range_level);
-    const lower = calculateScore(item.risk_lower_risk_level, item.risk_lower_range_level);
-    return {
-      ...item,
-      date: item.measure_date,
-      upper,
-      lower,
+    const isFootPressureHistory = (
+      item: UpperAndLowerMeasureHistory | FootPressureHistory
+    ): item is FootPressureHistory => {
+      return dCase === 2;
     };
-  });
-  return result;
-}, [data]);
-  const yAxisTicks = [4, 7, 10];
+
+    return data.map(item => {
+      let upperScore = 0;
+      let lowerScore = 0;
+      let footScore = 0;
+      if (isFootPressureHistory(item)) {
+        // 족압의 경우
+        footScore = calculateScore(
+          item.mat_static_risk_level,
+          item.mat_static_range_level
+        );
+        lowerScore = 0; // 또는 족압의 다른 값
+      } else {
+        // 상지/하지의 경우
+        upperScore = calculateScore(
+          item.risk_upper_risk_level,
+          item.risk_upper_range_level
+        );
+        lowerScore = calculateScore(
+          item.risk_lower_risk_level,
+          item.risk_lower_range_level
+        );
+      }
+
+      return {
+        ...item,
+        date: item.measure_date,
+        upper: upperScore,  // 👈 이 필드명들이 중요!
+        lower: lowerScore,  // 👈 Area의 dataKey와 일치해야 함
+        foot: footScore
+      };
+    });
+  }, [data, dCase]);
+  const yAxisTicks = [1, 4, 7];
 
   // y축 라벨 포맷터
   const formatYAxis = (value: number) => {
+    if (value <= 1) return '정상';
     if (value <= 4) return '주의'; // 정상은 생략
     if (value <= 7) return '위험';
     return '';
@@ -74,13 +115,13 @@ const MeasureSummaryGraph = ({
   };
 
   return (
-    <Card className="rounded-lg shadow-none border-2 border-toggleAccent-background">
-      <CardHeader className="flex items-center gap-2 space-y-0 border-2 border-toggleAccent-background py-2 sm:flex-row bg-toggleAccent-background">
+    <Card className="shadow-none rounded-xl border-2 border-sub200">
+      {/* <CardHeader className="flex items-center gap-2 space-y-0 border-2 border-toggleAccent-background py-2 sm:flex-row bg-toggleAccent-background">
         <div className="grid flex-1 gap-1 text-center sm:text-left">
           <CardTitle className="text-toggleAccent text-xl">상지·하지 요약 추이</CardTitle>
         </div>
-      </CardHeader>
-      <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+      </CardHeader> */}
+      <CardContent className="px-2 pt-2 sm:px-4 sm:pt-4">
         <ChartContainer
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
@@ -111,7 +152,7 @@ const MeasureSummaryGraph = ({
               }}
             />
             <YAxis
-              domain={[0, 10]}
+              domain={[1, 9]}
               ticks={yAxisTicks}
               tickFormatter={formatYAxis}
               tickLine={false}
@@ -126,71 +167,83 @@ const MeasureSummaryGraph = ({
                 const data = payload[0].payload;
                 
                 return (
-                  <div className="rounded-lg border bg-background p-3 shadow-sm">
+                  <div className="rounded-lg border p-3 shadow-sm">
                     <div className="text-sm font-medium mb-2">
                       {data.measure_date.split(' ')[0]}
                     </div>
                     <div className="space-y-1">
-                      {/* 상체 정보 */}
-                      <div className="flex items-center gap-2 text-sm">
-                        <div 
-                          className="w-3 h-3 rounded-full" 
-                          style={{ backgroundColor: "hsl(150 80.2% 54.5%)" }}
-                        />
-                        <span className={`rounded-full px-2 py-1 ${getTextColor(data.risk_upper_risk_level)} `}>
-                          상체: {getRiskLevelText(data.risk_upper_risk_level)} {getRangeLevelText(data.risk_upper_range_level)}
-                        </span>
-                      </div>
-                      
-                      {/* 하체 정보 */}
-                      <div className="flex items-center gap-2 text-sm">
-                        <div 
-                          className="w-3 h-3 rounded-full" 
-                          style={{ backgroundColor: "hsl(var(--toggle-accent))" }}
-                        />
-                        <span className={`rounded-full px-2 py-1 ${getTextColor(data.risk_lower_risk_level)}`}>
-                          하체: {getRiskLevelText(data.risk_lower_risk_level)} {getRangeLevelText(data.risk_lower_range_level)}
-                        </span>
-                      </div>
+                      {dCase === 2 ? (
+                        // 족압의 경우
+                        <div className="flex items-center gap-2 text-sm">
+                          <span className={`rounded-full px-2 py-1 ${getTextColor(data.mat_static_risk_level)}`}>
+                            족압: {getRiskLevelText(data.mat_static_risk_level)} {getRangeLevelText(data.mat_static_risk_level)}
+                          </span>
+                        </div>
+                      ) : dCase === 0 ? (
+                        // 상지의 경우 - 상체만
+                        <div className="flex items-center gap-2 text-sm">
+                          <span className={`rounded-full px-2 py-1 ${getTextColor(data.risk_upper_risk_level)}`}>
+                            상지: {getRiskLevelText(data.risk_upper_risk_level)} {getRangeLevelText(data.risk_upper_range_level)}
+                          </span>
+                        </div>
+                      ) : (
+                        // 하지의 경우 - 하체만
+                        <div className="flex items-center gap-2 text-sm">
+                          <span className={`rounded-full px-2 py-1 ${getTextColor(data.risk_lower_risk_level)}`}>
+                            하지: {getRiskLevelText(data.risk_lower_risk_level)} {getRangeLevelText(data.risk_lower_range_level)}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 );
               }}
             />
             <defs>
-              <linearGradient id="fill-gradient-upper" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(150 80.2% 54.5%)" stopOpacity={0.6} />
-                <stop offset="100%" stopColor="white" stopOpacity={0.05} />
-              </linearGradient>
-              <linearGradient id="fill-gradient-lower" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="fill-gradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="hsl(var(--toggle-accent))" stopOpacity={0.6} />
                 <stop offset="100%" stopColor="white" stopOpacity={0.05} />
               </linearGradient>
             </defs>
             {/* Area 컴포넌트들 - seriesKeys를 기반으로 생성 */}
-            <Area
-              type="monotone"
-              dataKey="upper"
-              stroke="hsl(150 80.2% 54.5%)"
-              fill="url(#fill-gradient-upper)"
-              fillOpacity={0.4}
-              strokeWidth={2}
-              cursor="pointer"
-              name="상체"
-            />
-
-            <Area
-              type="monotone"
-              dataKey="lower"
-              stroke="hsl(220, 70%, 50%)"
-              fill="url(#fill-gradient-lower)"
-              fillOpacity={0.4}
-              strokeWidth={2}
-              cursor="pointer"
-              name="하체"
-            />
+            {dCase === 0 && (
+              <Area
+                type="monotone"
+                dataKey="upper"
+                stroke="hsl(220, 70%, 50%)"
+                fill="url(#fill-gradient)"
+                fillOpacity={0.4}
+                strokeWidth={2}
+                cursor="pointer"
+                name="상체"
+              />
+            )}
+            {dCase === 1 && (
+              <Area
+                type="monotone"
+                dataKey="lower"
+                stroke="hsl(220, 70%, 50%)"
+                fill="url(#fill-gradient)"
+                fillOpacity={0.4}
+                strokeWidth={2}
+                cursor="pointer"
+                name="하체"
+              />
+            )}
+            {dCase === 2 && (
+              <Area
+                type="monotone"
+                dataKey="foot"
+                stroke="hsl(220, 70%, 50%)"
+                fill="url(#fill-gradient)"
+                fillOpacity={0.4}
+                strokeWidth={2}
+                cursor="pointer"
+                name="하체"
+              />
+            )}
             
-            <ChartLegend
+            {/* <ChartLegend
               content={() => {
                 return (
                   <div className="flex justify-center items-center gap-3 pt-2">
@@ -207,7 +260,7 @@ const MeasureSummaryGraph = ({
                   </div>
                 );
               }}
-            />
+            /> */}
           </AreaChart>
         </ChartContainer>
       </CardContent>

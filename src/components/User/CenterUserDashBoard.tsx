@@ -1,12 +1,12 @@
 
 import MeasureWorst from "@/components/Measure/MeasureWorst";
 import MeasureBest from "@/components/Measure/MeasureBest";
-import MeasureGraph from "@/components/Measure/MeasureGraph";
-import MeasureSummaryContainer from "@/components/Measure/MeasureSummaryContainer";
+import MeasurePartHeatMap from "@/components/Measure/MeasurePartHeatmap";
 import { IUserDashBoard, MeasureHistory } from "@/types/measure";
 import { IDayData } from "@/types/IDayData";
 import { useGetUserDashboard } from "@/hooks/api/user/useGetUserDashboard";
 import { TWorstPart } from "@/types/dashboard";
+import MeasureReportContainer from "../Measure/MeasureReportContainer";
 
 type Mode = "worst" | "best";
 const PARTS = [
@@ -67,7 +67,7 @@ const CenterUserDashBoard = ({
       {/* 왼쪽 */}
       <div className="flex flex-col flex-[2] gap-4">
         {/* Worst + Best */}
-        <div className="flex gap-4">
+        <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1">
             <MeasureWorst data={worstPart} />
           </div>
@@ -78,19 +78,18 @@ const CenterUserDashBoard = ({
 
         <div className="flex-[1]">
           {dashboardData ? (
-            <MeasureSummaryContainer 
+            <MeasureReportContainer 
             userSn={userSn ?? -1} 
             latestSummary={dashboardData?.latest_measure_summary} 
-            graphData={dashboardData?.upper_and_lower_measure_history} 
-            count={dashboardData?.total_measure_count} 
-            
+            summaryData={dashboardData?.upper_and_lower_measure_history} 
+            footData={dashboardData?.foot_pressure_history}
             />
           ) : (
             <p className="text-gray-500">요약 데이터를 불러오는 중이거나 없습니다.</p>
           )}
         </div>
         <div>
-          <MeasureGraph data={measureDate} />
+          <MeasurePartHeatMap data={measureDate} />
         </div>
       </div>
     </div>

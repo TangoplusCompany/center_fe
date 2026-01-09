@@ -1,15 +1,18 @@
 import { useRef, useState } from "react";
-import { IStaticRawDataProps } from "./RawDataResult";
 import RawDataDetailContainer from "./RawDataDetailContainer";
 import RawDataTab from "./RawDataTab";
+import CompareRawDataDetailContainer from "./Compare/CompareRawDataDetailContainer";
+import { IUserMeasureDetailData } from "@/types/measure";
 
 
 const RawDataContainer = ({
-  mergedDetailData,
-  isCompare
+  mergedDetailData0,
+  mergedDetailData1,
+
 } :{
-  mergedDetailData: IStaticRawDataProps[];
-  isCompare: 0 | 1;  
+  mergedDetailData0: IUserMeasureDetailData[];
+  mergedDetailData1?: IUserMeasureDetailData[];
+
 }) => {
   const [selectedPart, setSelectedPart] = useState<0 | 1 | 2 | 3 | 4 | 5 | 6>(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -37,14 +40,21 @@ const RawDataContainer = ({
         <RawDataTab 
           selectedPart={selectedPart} 
           onSelectPart={handleSelectPart} 
-          mergedDetailData={mergedDetailData}
+          mergedDetailData={mergedDetailData0}
         />
         
-        <RawDataDetailContainer 
-          mergedDetailData={mergedDetailData} 
+        {!mergedDetailData1 ? (
+          <RawDataDetailContainer 
+            mergedDetailData={mergedDetailData0} 
+            selectedPart={selectedPart} 
+          />
+        ):(
+          <CompareRawDataDetailContainer 
+          mergedDetailData0={mergedDetailData0} 
+          mergedDetailData1={mergedDetailData1} 
           selectedPart={selectedPart} 
-          isCompare={isCompare}
         />
+        )}
       </div>
     </div>
   );

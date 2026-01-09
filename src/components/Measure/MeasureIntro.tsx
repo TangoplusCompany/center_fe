@@ -3,9 +3,9 @@
 import { IPartDetailData, IUserMeasureInfoResponse } from "@/types/measure";
 import React from "react";
 import SkeletonContainer from "./SkeletonContainer";
-import FootStatic, { IMatStaticPressure } from "./Mat/FootStatic";
-import FootDynamic, { IMatOhsPressure } from "./Mat/FootDynamic";
-import KneeTrajectory from "./Mat/KneeTrajectory";
+import FootStaticContainer, { IMatStaticPressure } from "./Mat/FootStaticContainer";
+import FootDynamicContainer, { IMatOhsPressure } from "./Mat/FootDynamicContainer";
+import KneeTrajectory from "./Mat/KneeTrajectoryContainer";
 import MeasureIntroUpper from "./MeasureIntroUpper";
 import MeasureIntroLower from "./MeasureIntroLower";
 import { riskLevelMap } from "@/utils/riskLevelMap";
@@ -120,7 +120,7 @@ const MeasureIntro = ({
   
   const footer =
     <div className="border border-sub300 rounded-3xl flex gap-4 p-4">
-      <FootStatic
+      <FootStaticContainer
         comment={
           "[좌우 무게 분석]\n" +
           (mat_static_horizontal_ment ?? "\n") +
@@ -133,7 +133,7 @@ const MeasureIntro = ({
         matStatics={staticFourCorners}
         lCase={0}
       />
-      <FootDynamic
+      <FootDynamicContainer
         comment={
           "[좌우 무게 분석]\n" +
           (mat_ohs_horizontal_ment ?? "\n") +

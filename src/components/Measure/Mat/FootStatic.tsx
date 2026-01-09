@@ -1,58 +1,21 @@
-"use client";
-
-import { removeBlackBackground } from "@/utils/removeBlackBackground";
 import { useEffect, useState } from "react";
+import { IMatStaticPressure } from "./FootStaticContainer";
+import { removeBlackBackground } from "@/utils/removeBlackBackground";
 
-export interface IMatStaticPressure {
-  leftTopPressure: number;
-  leftBottomPressure: number;
-  rightTopPressure: number;
-  rightBottomPressure: number;
-  leftPressure: number;
-  rightPressure: number;
-  topPressure: number;
-  bottomPressure: number;
-}
-interface FootStaticProps {
-  comment: string;
-  condition: string;
-  level: number;
+interface FootStaticContainerProps {
   fileName: string;
   matStatics: IMatStaticPressure;
-  lCase: 0 | 1;
 }
-const FootStatic = (
-  { 
-    comment,
-    condition,
-    level,
+
+const FootStatic = ({ 
     fileName,
     matStatics,
-    lCase,
-  }: FootStaticProps
-    
-  ) => {
-  // lCase 0일 때 결과요약 Intro /  1 일 떄 frontMeasurement
+  }: FootStaticContainerProps) => {
+    // lCase 0일 때 결과요약 Intro /  1 일 떄 frontMeasurement
   // 또는 환경변수에서 가져오기
   const baseUrl = process.env.NEXT_PUBLIC_FILE_URL || '';
   const imageUrl = `${baseUrl}/${fileName}`;
   const [processedImageSrc, setProcessedImageSrc] = useState<string>("");
-
-  const bgCondition = {
-    정상: "bg-sub600",
-    주의: "bg-warning",
-    위험: "bg-danger",
-  }[condition] ?? "bg-[#7E7E7E]";
-    const textCondition = {
-    정상: "text-white",
-    주의: "text-warning-foreground",
-    위험: "text-danger-foreground",
-  }[condition] ?? "bg-[#7E7E7E]";
-    const textTitleCondition = {
-    정상: "text-secondary",
-    주의: "text-warningDeep",
-    위험: "text-dangerDeep",
-  }[condition] ?? "bg-primary-foreground";
   useEffect(() => {
     removeBlackBackground(imageUrl)
       .then((result) => {
@@ -62,116 +25,43 @@ const FootStatic = (
         setProcessedImageSrc("/images/measure_default.png");
       });
   }, [imageUrl]);
-  return (
-    <div className="flex-1 p-4">
-      {/* 헤더 */}
-      <div className="flex justify-between items-center mb-4">
-        <h2 className={`text-xl font-semibold ${textTitleCondition}`}>정적 족압</h2>
-        <span className={`px-3 py-1 ${bgCondition} ${textCondition} rounded-xl text-xs`}>
-          {condition} {level}단계
+    return (
+      <div className="relative w-full h-full">
+        {processedImageSrc !== "" && processedImageSrc !== null && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={processedImageSrc}
+            alt="정적 족압 이미지"
+            className="w-full h-full p-1 rounded-md border bg-accent"
+            onError={(e) => {
+              e.currentTarget.src = "/images/measure_default.png";
+            }}
+          />
+        )}
+        <div className="absolute top-1/2 left-[40%] w-1/5 h-[1px] bg-sub300 -translate-y-1/2" />
+        <div className="absolute left-1/2 top-[40%] h-1/5 w-[1px] bg-sub300 -translate-x-1/2" />
+
+        {/* 상단 */}
+        <span className="absolute top-1 left-1/2 -translate-x-1/2 text-sub400 text-sm font-semibold">
+          {matStatics.topPressure}%
+        </span>
+
+        {/* 좌측 */}
+        <span className="absolute top-1/2 left-1 -translate-y-1/2 text-sub400 text-sm font-semibold">
+          {matStatics.leftPressure}%
+        </span>
+
+        {/* 우측 */}
+        <span className="absolute top-1/2 right-1 -translate-y-1/2 text-sub400 text-sm font-semibold">
+          {matStatics.rightPressure}%
+        </span>
+
+        {/* 하단 */}
+        <span className="absolute bottom-1 left-1/2 -translate-x-1/2 text-sub400 text-sm font-semibold">
+          {matStatics.bottomPressure}%
         </span>
       </div>
-      {lCase === 0 ? (
-        <>
-          <div className="flex justify-center gap-4">
-            <div className="flex justify-center mb-4">
-              <div className="flex flex-col items-center w-fit">
-                <div className="w-full rounded-md border text-center py-1 mb-1 invisible">
-                  가려진 타이틀
-                </div>
-                <div className="relative w-32 h-32">
-                  {processedImageSrc !== "" && processedImageSrc !== null && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={processedImageSrc}
-                      alt="정적 족압 이미지"
-                      className="w-full h-full p-1 rounded-md border bg-accent"
-                      onError={(e) => {
-                        e.currentTarget.src = "/images/measure_default.png";
-                      }}
-                    />
-                  )}
-                  <div className="absolute top-1/2 left-[40%] w-1/5 h-[1px] bg-sub300 -translate-y-1/2" />
-                  <div className="absolute left-1/2 top-[40%] h-1/5 w-[1px] bg-sub300 -translate-x-1/2" />
-
-                  {/* 상단 */}
-                  <span className="absolute top-1 left-1/2 -translate-x-1/2 text-sub400 text-sm font-semibold">
-                    {matStatics.topPressure}%
-                  </span>
-
-                  {/* 좌측 */}
-                  <span className="absolute top-1/2 left-1 -translate-y-1/2 text-sub400 text-sm font-semibold">
-                    {matStatics.leftPressure}%
-                  </span>
-
-                  {/* 우측 */}
-                  <span className="absolute top-1/2 right-1 -translate-y-1/2 text-sub400 text-sm font-semibold">
-                    {matStatics.rightPressure}%
-                  </span>
-
-                  {/* 하단 */}
-                  <span className="absolute bottom-1 left-1/2 -translate-x-1/2 text-sub400 text-sm font-semibold">
-                    {matStatics.bottomPressure}%
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* 코멘트 */}
-          <div className="text-base text-gray-700 whitespace-pre-line">
-            {comment}
-          </div>
-        </>
-      ) : (
-        // 새로운 레이아웃 (isDetailStatic === 1)
-        <div className="grid grid-cols-2 gap-6">
-          {/* 왼쪽: 이미지 */}
-          <div className="flex flex-col items-center">
-            <div className="relative w-32 h-32">
-              {processedImageSrc !== "" && processedImageSrc !== null && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={processedImageSrc}
-                  alt="정적 족압 이미지"
-                  className="w-full h-full p-1 rounded-md border bg-accent"
-                  onError={(e) => {
-                    e.currentTarget.src = "/images/measure_default.png";
-                  }}
-                />
-              )}
-              <div className="absolute top-1/2 left-[40%] w-1/5 h-[1px] bg-sub300 -translate-y-1/2" />
-              <div className="absolute left-1/2 top-[40%] h-1/5 w-[1px] bg-sub300 -translate-x-1/2" />
-
-              {/* 상단 */}
-              <span className="absolute top-1 left-1/2 -translate-x-1/2 text-sub400 text-sm font-semibold">
-                {matStatics.topPressure}%
-              </span>
-
-              {/* 좌측 */}
-              <span className="absolute top-1/2 left-1 -translate-y-1/2 text-sub400 text-sm font-semibold">
-                {matStatics.leftPressure}%
-              </span>
-
-              {/* 우측 */}
-              <span className="absolute top-1/2 right-1 -translate-y-1/2 text-sub400 text-sm font-semibold">
-                {matStatics.rightPressure}%
-              </span>
-
-              {/* 하단 */}
-              <span className="absolute bottom-1 left-1/2 -translate-x-1/2 text-sub400 text-sm font-semibold">
-                {matStatics.bottomPressure}%
-              </span>
-            </div>
-          </div>
-
-          {/* 오른쪽: 코멘트 */}
-          <div className="flex items-center text-base text-gray-700 whitespace-pre-line">
-            {comment}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
+    );
+};
 
 export default FootStatic;

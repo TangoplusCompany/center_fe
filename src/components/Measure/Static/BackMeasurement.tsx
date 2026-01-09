@@ -2,11 +2,10 @@
 import React, { useMemo } from "react";
 import MeasureStaticFifth from "./Fifth";
 import MeasureStaticSixth from "./Sixth";
-import { IStaticRawDataProps } from "../RawDataResult";
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
 import RawDataContainer from "../RawDataContainer";
 import StaticDataContainer from "./DataContainer";
-import { IUserMeasureInfoResponse } from "@/types/measure";
+import { IUserMeasureDetailData, IUserMeasureInfoResponse } from "@/types/measure";
 
 const BackMeasurement = ({
   sns,
@@ -38,7 +37,7 @@ const BackMeasurement = ({
     sns.userSn,
     7
   );
-  const mergedDetailData: IStaticRawDataProps[] = useMemo(() => {
+  const mergedDetailData: IUserMeasureDetailData[] = useMemo(() => {
     return [
       ...(measureFifth?.detail_data ?? []),
       ...(measureSixth?.detail_data ?? []),
@@ -72,7 +71,7 @@ if (seq5Error || seq6Error) {
         </div>
       </div>
       <StaticDataContainer measureData={measureInfo} />
-      <RawDataContainer mergedDetailData={mergedDetailData} isCompare={0}/>
+      <RawDataContainer mergedDetailData0={mergedDetailData} />
     </div>
   );
 };
