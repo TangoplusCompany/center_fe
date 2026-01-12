@@ -76,7 +76,7 @@ const FootTrajectoryGridContainer = ({
     주의: "bg-warning",
     위험: "bg-danger",
   } as const)[level as "정상" | "주의" | "위험"] ?? "bg-primary-foreground";
-  const riskString = getRiskString(mat_static_risk_level);
+  const riskString = getRiskString(parseInt(mat_static_risk_level));
   const riskBg = getRiskBgClass(riskString);
   const riskText = getRiskText(riskString)
   

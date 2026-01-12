@@ -8,7 +8,6 @@ import FootDynamicContainer, { IMatOhsPressure } from "./Mat/FootDynamicContaine
 import KneeTrajectory from "./Mat/KneeTrajectoryContainer";
 import MeasureIntroUpper from "./MeasureIntroUpper";
 import MeasureIntroLower from "./MeasureIntroLower";
-import { riskLevelMap } from "@/utils/riskLevelMap";
 import MeasureIntroPart from "./MeasureIntroPart";
 
 const MeasureIntro = ({
@@ -68,10 +67,6 @@ const MeasureIntro = ({
     bottomPressure: Math.round(mat_ohs_bottom_pressure),
   };
 
-  const upperCondition = riskLevelMap[risk_upper_risk_level as 0 | 1 | 2];
-  const lowerCondition = riskLevelMap[risk_lower_risk_level as 0 | 1 | 2];
-  const footStaticCondition = riskLevelMap[mat_static_risk_level as 0 | 1 | 2];
-
   const { 
     measure_server_mat_image_name,
     mat_static_horizontal_ment,
@@ -106,13 +101,13 @@ const MeasureIntro = ({
     <div className="flex h-full flex-col gap-4">
       <MeasureIntroUpper
         comment={risk_upper_ment}
-        condition={upperCondition}
-        level={risk_upper_range_level}
+        risk_level={risk_upper_risk_level}
+        range_level={risk_upper_range_level}
       />
       <MeasureIntroLower
         comment={risk_lower_ment}
-        condition={lowerCondition}
-        level={risk_lower_range_level}
+        risk_level={risk_lower_risk_level}
+        range_level={risk_lower_range_level}
         
       />
     </div>
@@ -127,8 +122,8 @@ const MeasureIntro = ({
           "\n[상하 무게 분석]\n" +
           (mat_static_vertical_ment ?? "\n")
         }
-        condition={footStaticCondition}
-        level={mat_static_range_level}
+        risk_level={mat_static_risk_level}
+        range_level={mat_static_range_level}
         fileName={measure_server_mat_image_name}
         matStatics={staticFourCorners}
         lCase={0}
