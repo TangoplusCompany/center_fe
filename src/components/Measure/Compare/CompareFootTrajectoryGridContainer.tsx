@@ -28,7 +28,7 @@ const CompareFootTrajectoryGridContainer = ({
         <span className="text-base px-4">{isNext ? '최신' : '이전'}</span>
         <span className="flex justify-center items-center text-sm text-sub600">{data.measure_date.slice(0, 11)}</span>
       </div>
-      <div className="grid grid-cols-4 items-center justify-center">
+      <div className="grid grid-cols-4 items-center">
         <div className="flex flex-col items-center justify-start gap-2">
           
           <div className="w-28 h-28 flex-shrink-0">
@@ -70,16 +70,16 @@ const CompareFootTrajectoryGridContainer = ({
     </div>
   );
 
-  const SummaryContainer = (dynamicComment: string, kneeComment: string) => (
+  const SummaryContainer = (dynamicComment: string, kneeComment: string, isNext: boolean) => (
     <div className="flex flex-col gap-2 border-l-2 border-sub200">
       {dynamicComment !== "" && kneeComment !== "" && (
         <div className="flex bg-sub100 border-b-2 border-sub200 text-base px-4 py-1">
-          분석설명
+          분석 설명
         </div>
       )}
-      <div className="flex flex-col justify-center h-full gap-2 px-4">
-        <div className="whitespace-pre-line">{dynamicComment}</div> 
-        <div className="whitespace-pre-line">{kneeComment}</div> 
+      <div className="flex flex-col justify-center h-full gap-2">
+        <div className={`flex items-center justify-start text-sm ${isNext ? 'text-black' : 'text-sub600'} px-4 py-2 whitespace-pre-line`}>{dynamicComment}</div> 
+        <div className={`flex items-center justify-start text-sm ${isNext ? 'text-black' : 'text-sub600'} px-4 py-2 whitespace-pre-line`}>{kneeComment}</div> 
       </div>
     </div>
   );
@@ -100,8 +100,8 @@ const CompareFootTrajectoryGridContainer = ({
         </div>
 
         <div className="flex-1 grid grid-rows-2">
-          {SummaryContainer(data0.dynamicComment, data0.kneeComment)}
-          {data1 && SummaryContainer(data1.dynamicComment, data1.kneeComment)}
+          {SummaryContainer(data0.dynamicComment, data0.kneeComment, false)}
+          {data1 && SummaryContainer(data1.dynamicComment, data1.kneeComment, true)}
         </div>
       </div>
     </div>

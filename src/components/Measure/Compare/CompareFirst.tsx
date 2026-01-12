@@ -100,7 +100,10 @@ const MeasureStaticCompareFirst = React.memo(
         )}
       </div>
     </div>
-    <RawDataContainer mergedDetailData0={measureFirst0?.detail_data ?? []} mergedDetailData1={measureFirst1?.detail_data ?? []}/>
+    <RawDataContainer 
+      mergedDetailData0={measureFirst0?.detail_data ?? []} 
+      mergedDetailData1={measureFirst1?.detail_data ?? []}
+      />
 
     </div>
   );

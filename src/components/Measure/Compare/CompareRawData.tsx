@@ -184,7 +184,34 @@ export const CompareRawData = ({
     위험: "bg-danger",
   }[levelString11 ?? "정상"] ?? "bg-primary-foreground";
 
-  // const widths = [25, 55, 90];
+  // const RawDataContainer = (
+  //   data: IUserMeasureDetailData | IUserMeasureDetailData[],
+    
+  //   isNext: boolean
+  // ) => {
+  //   const isArrayDataTop = Array.isArray(data);
+  //   const dataTop = isArrayDataTop ? data[0] : data;
+  //   const dataBottom = isArrayDataTop && data.length === 2 ? data[1] : undefined;
+    
+  //   (
+  //   <div  className={`flex w-full`}>
+  //     <div className="grid grid-cols-[18%_10%_12%_60%] items-center border-b-2 border-sub200 bg-sub100 py-2">
+  //       <div className="flex gap-4">
+  //         <span className="text-base font-semibold text-black px-4">{isNext ? '①' : '②'}</span>
+  //         <span className="text-base text-sub600">{dataTop.measure_unit}</span>
+  //         {/* TODO 여기다가 날짜를 넣어줘야함  */}
+  //       </div>
+  //       <span className={`flex flex-1 justify-center text-base text-sub600 `}>{!data1 ? '' : '차이값'}</span>
+  //       <span className="flex justify-center text-base text-sub600 ">단계표시</span>
+  //       <span className="text-base text-sub600 px-4">분석설명</span>
+  //     </div>
+
+  //     <div  className={`grid grid-cols-[18%_10%_12%_60%] items-center h-full divide-x-2 divide-sub200`}>
+        
+  //     </div>
+  //   </div>
+  // )};
+
   return (
     <div className={`flex flex-col`}>
       {/* 헤더 영역 */}
@@ -193,9 +220,9 @@ export const CompareRawData = ({
         <span className="text-sm font-semibold text-sub600">{seqString}</span>
       </div>
 
-      <div className="grid grid-cols-[20_80%] ">
-        <div>
-          {/* 이곳에 비교일 떄 좌측 우측이 나옴 */}
+      <div className="grid grid-cols-[20%_80%] ">
+        <div className="">
+          
         </div>
 
         <div className="flex flex-col">

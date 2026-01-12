@@ -36,10 +36,10 @@ body {
     --toggle-accent-foreground: 0 0% 100%;
     --toggle-accent-background: 210 40% 96.1%;
     --danger: 0 100% 64.5%;
-    --danger-foreground: 0 100% 94.9%;
+    --danger-foreground: 0 100% 66.1% / 0.35;
     --danger-deep: 0 100% 23.5%;
     --warning: 33 100% 50%;
-    --warning-foreground: 33 100% 88.6%; 
+    --warning-foreground: 33 100% 61.4% / 0.35; 
     --warning-deep:33 100% 28.2%;
     --sub100: 0 0% 97.3%;
     --sub200: 0 0% 92.9%;

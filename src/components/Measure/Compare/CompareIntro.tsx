@@ -205,8 +205,9 @@ const CompareIntro = ({
 
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col">
       {skeletonBoxes}
+      <div className="h-4"></div>
       {summaryUnits}
       {<CompareSummaryFootStatic static0={footStatic0} static1={footStatic1} />}
       <CompareFootTrajectoryGridContainer data0={footData0} data1={footData1} />
