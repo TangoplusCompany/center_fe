@@ -4,12 +4,15 @@ export interface MeasureSummaryProps {
   ment: string;
   risk_level: string;
   range_level: string;
+  title: string;
+
 }
 
 const MeasureSummaryUnit = ({
   ment,
   risk_level,
-  range_level
+  range_level,
+  title
 }: MeasureSummaryProps) => {
   const getRiskString = (level?: string) => 
   ({
@@ -37,7 +40,7 @@ const MeasureSummaryUnit = ({
   return (
     <div >
       <div className="flex justify-between items-center py-2">
-        <h2 className="text-xl font-semibold">하지 결과</h2>
+        <h2 className="text-xl font-semibold">{title}</h2>
         <span className={`px-3 py-1 ${riskBg} rounded-xl text-sm ${riskText}`}>
           {riskString} {range_level}단계
         </span>

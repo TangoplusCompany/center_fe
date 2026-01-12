@@ -33,12 +33,12 @@ export const CenterUserMeasureList = ({
           {/* ✅ 체크박스 컬럼 */}
           {/* <TableHead className="w-10 text-center"></TableHead> */}
 
-          <TableHead className="text-center">이름</TableHead>
-          <TableHead className="text-center">전화번호</TableHead>
-          <TableHead className="text-center">측정 일자</TableHead>
-          <TableHead className="text-center">측정 기기</TableHead>
-          <TableHead className="text-center">측정 요약</TableHead>
-          <TableHead className="text-right"></TableHead>
+          <TableHead className="text-center text-xs sm:text-sm">이름</TableHead>
+          <TableHead className="text-center text-xs sm:text-sm">전화번호</TableHead>
+          <TableHead className="text-center text-xs sm:text-sm">측정 일자</TableHead>
+          <TableHead className="text-center text-xs sm:text-sm">측정 기기</TableHead>
+          <TableHead className="text-center text-xs sm:text-sm">측정 요약</TableHead>
+          <TableHead className="text-right text-xs sm:text-sm"></TableHead>
         </TableRow>
       </TableHeader>
 
@@ -62,12 +62,12 @@ export const CenterUserMeasureList = ({
                 />
               </TableCell> */}
 
-              <TableCell className="text-center font-medium">
+              <TableCell className="text-center font-medium text-xs sm:text-sm">
                 {measure.user_name}
               </TableCell>
-              <TableCell className="text-center">{phoneHyphen(measure.mobile)}</TableCell>
-              <TableCell className="text-center">{measure.measure_date}</TableCell>
-              <TableCell className="text-center">{measure.device_name}</TableCell>
+              <TableCell className="text-center text-xs sm:text-sm">{phoneHyphen(measure.mobile)}</TableCell>
+              <TableCell className="text-center text-xs sm:text-sm">{measure.measure_date}</TableCell>
+              <TableCell className="text-center text-xs sm:text-sm">{measure.device_name}</TableCell>
               {/* <TableCell className="text-center">
                 <div>
                   <span className={`
@@ -86,7 +86,7 @@ export const CenterUserMeasureList = ({
                   </span>
                 </div>
               </TableCell> */}
-              <TableCell className="flex items-center justify-end gap-4">
+              <TableCell className="flex items-center justify-end gap-2 sm:gap-4">
                 <button
                   type="button"
                   onClick={(e) => {
@@ -94,15 +94,15 @@ export const CenterUserMeasureList = ({
                     onToggleCompareSn?.(sn, 0);
                     onOpenCompareMode();
                   }}
-                  className="flex items-center gap-2 justify-end cursor-pointer"
+                  className="flex items-center gap-1 sm:gap-2 justify-end cursor-pointer"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="/icons/ic_compare.svg"
                     alt="비교하기"
-                    className="w-5 h-5 gap-4"
+                    className="w-4 h-4 sm:w-5 sm:h-5"
                   />
-                  <span>결과비교</span>
+                  <span className="text-xs sm:text-sm">결과비교</span>
                 </button>
 
               </TableCell>

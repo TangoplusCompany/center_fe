@@ -258,32 +258,34 @@ const CompareBody = ({
       {/* ✅ 상단 줄: TabsList (좌측) + Select(우측) */}
       
         <div className="flex items-center justify-between gap-4">
-          <TabsList className="relative z-10 inline-flex w-max gap-1 bg-transparent p-0">
-            <div className="absolute bottom-0 left-0 w-full h-[3px] bg-sub200 rounded-md" />
-    
-            {measureTabs.map((measure, idx) => (
-              <TabsTrigger
-                key={measure.value}
-                value={measure.value}
-                onClick={() => setActiveIdx(idx)}
-                className={cn(
-                  "relative pb-2 text-lg font-semibold transition-colors",
-                  "bg-transparent data-[state=active]:bg-transparent",
-                  "shadow-none data-[state=active]:shadow-none",
-                  "border-none",
-                  "text-sub300",
-                  "hover:text-secondary", 
-                  "data-[state=active]:text-toggleAccent",
-                  "after:absolute after:-bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-md",
-                  "after:bg-transparent after:transition-all",
-                  "data-[state=active]:after:bg-toggleAccent after:z-10"
-                )}
-              >
-                {measure.title}
+          <div className="flex-1 min-w-0 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <TabsList className="relative z-10 inline-flex w-max gap-1 bg-transparent p-0">
+              <div className="absolute bottom-0 left-0 w-full h-[3px] bg-sub200 rounded-md" />
+      
+              {measureTabs.map((measure, idx) => (
+                <TabsTrigger
+                  key={measure.value}
+                  value={measure.value}
+                  onClick={() => setActiveIdx(idx)}
+                  className={cn(
+                    "relative pb-2 text-lg font-semibold transition-colors whitespace-nowrap",
+                    "bg-transparent data-[state=active]:bg-transparent",
+                    "shadow-none data-[state=active]:shadow-none",
+                    "border-none",
+                    "text-sub300",
+                    "hover:text-secondary", 
+                    "data-[state=active]:text-toggleAccent",
+                    "after:absolute after:-bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-md",
+                    "after:bg-transparent after:transition-all",
+                    "data-[state=active]:after:bg-toggleAccent after:z-10"
+                  )}
+                >
+                  {measure.title}
 
-              </TabsTrigger>
-            ))}
-          </TabsList>
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </div>
         </div>
       </Tabs>
       

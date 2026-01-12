@@ -56,6 +56,7 @@ const MeasureReportContainer = ({
         summaryData={summaryData} 
         handleLegendClick={handleLegendClick} 
         dCase={0}
+        title="상지 결과"
       />
       {/* 하지 */}
       <MeasureSummaryContainer 
@@ -65,6 +66,7 @@ const MeasureReportContainer = ({
         summaryData={summaryData} 
         handleLegendClick={handleLegendClick} 
         dCase={1}
+        title="하지 결과"
       />
       {/* 족압 */}
       <div>
