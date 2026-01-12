@@ -109,18 +109,18 @@ export interface IMeasureRangeLevel {
 }
 export interface IMeasureRiskResult {
   risk_upper_ment: string;
-  risk_upper_risk_level: number;
-  risk_upper_range_level: number;
+  risk_upper_risk_level: string;
+  risk_upper_range_level: string;
 
   risk_lower_ment: string;
-  risk_lower_risk_level: number;
-  risk_lower_range_level: number;
+  risk_lower_risk_level: string;
+  risk_lower_range_level: string;
 }
 export interface IMatStatic {
   mat_static_horizontal_ment: string;
   mat_static_vertical_ment: string;
-  mat_static_risk_level: number;
-  mat_static_range_level: number;
+  mat_static_risk_level: string;
+  mat_static_range_level: string;
   mat_static_left_top: number;
   mat_static_left_bottom: number;
   mat_static_right_top: number;

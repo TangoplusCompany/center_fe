@@ -1,5 +1,4 @@
 import { IUserMeasureInfoResponse } from "@/types/measure";
-import { riskLevelMap } from "@/utils/riskLevelMap";
 import FootStaticContainer, { IMatStaticPressure } from "../Mat/FootStaticContainer";
 
 const StaticDataContainer = ({
@@ -37,18 +36,17 @@ const StaticDataContainer = ({
     bottomPressure: Math.round(mat_static_bottom_pressure),
   };
 
-  const footStaticCondition = riskLevelMap[mat_static_risk_level as 0 | 1 | 2];
 
   const borderCondition = {
-    정상: "border-sub300/50",
-    주의: "border-warning/50",
-    위험: "border-danger/50",
-  }[footStaticCondition] ?? "bg-primary-foreground";
+    "0": "border-sub300/50",
+    "1": "border-warning/50",
+    "2": "border-danger/50",
+  }[mat_static_risk_level] ?? "bg-primary-foreground";
   const bgCondition = {
-    정상: "border-sub300/50",
-    주의: "bg-gradient-to-b from-[#FFA73A]/10 from-[2%] to-white to-[40%]",
-    위험: "bg-gradient-to-b from-[#FF5252]/10 from-[2%] to-white to-[50%]",
-  }[footStaticCondition] ?? "bg-primary-foreground";
+    "0": "border-sub300/50",
+    "1": "bg-gradient-to-b from-[#FFA73A]/10 from-[2%] to-white to-[40%]",
+    "2": "bg-gradient-to-b from-[#FF5252]/10 from-[2%] to-white to-[50%]",
+  }[mat_static_risk_level] ?? "bg-primary-foreground";
   // 위아래로 할 경우 flex h-full flex-col gap-4
   
 
@@ -63,8 +61,8 @@ const StaticDataContainer = ({
           "\n[상하 무게 분석]\n" +
           (mat_static_vertical_ment ?? "\n")
         }
-        condition={footStaticCondition}
-        level={mat_static_range_level}
+        risk_level={mat_static_risk_level}
+        range_level={mat_static_range_level}
         fileName={measure_server_mat_image_name}
         matStatics={staticFourCorners}
         lCase={1}
