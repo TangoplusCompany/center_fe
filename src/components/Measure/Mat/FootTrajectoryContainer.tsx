@@ -1,10 +1,10 @@
-import { FootPressureHistory, MeasureSummary } from "@/types/measure";
+import { FootPressureHistory, MeasureFootCOP } from "@/types/measure";
 import MatSummary from "./MatSummary";
 import FootTrajectoryGridContainer from "./FootTrajectoryGridContainer";
 import MeasureSummaryGraph from "../MeasureSummaryGraph";
 
 export interface MatUserDashBoardContainerProps {
-  footOCP: MeasureSummary;
+  footOCP: MeasureFootCOP;
   footData: FootPressureHistory[];
   handleLegendClick: (measureSn: number) => void;
 }

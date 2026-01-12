@@ -21,32 +21,6 @@ type MeasureTab = {
 };
 
 
-// const CompareEmptyCard = ({
-//   className,
-//   text = "비교할 항목을 선택해주세요",
-//   onClick,
-// }: {
-//   className?: string;
-//   text?: string;
-//   onClick?: () => void;
-// }) => {
-//   return (
-//     <button
-//       type="button"
-//       onClick={onClick}
-//       className={[
-//         "w-full h-full rounded-3xl",
-//         "border-sub200 border-dashed bg-white cursor-pointer hover:border-sub400 active:border-sub400",
-//         "flex items-center justify-center",
-//         "text-gray-400 text-sm font-medium",
-//         className ?? "",
-//       ].join(" ")}
-//     >
-//       {text}
-//     </button>
-//   );
-// };
-
 const CompareBody = ({
   userSn,
   comparePair,
