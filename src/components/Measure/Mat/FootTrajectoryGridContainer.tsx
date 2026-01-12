@@ -101,51 +101,51 @@ const FootTrajectoryGridContainer = ({
         {/* 세로 구분선 - 데스크탑에만 표시 */}
         <div className="hidden lg:block absolute top-2 bottom-2 left-1/2 w-0.5 bg-sub200 -translate-x-1/2" />
 
-        {/* 오른쪽: 2x2 그리드 */}
-        <div className="grid grid-cols-2 grid-rows-2 gap-4">
+        {/* 오른쪽: 반응형 그리드 - 모바일: 2x2, 태블릿: 4x1, 데스크톱: 2x2 */}
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 lg:grid-rows-2 gap-4">
           {/* FootDynamic */}
-          <div className="col-span-1 row-span-1 flex items-center justify-center">
-            <div className="flex flex-col items-center w-full">
+          <div className="col-span-1 lg:row-span-1 flex items-center justify-center">
+            <div className="flex flex-col items-center w-full max-w-[200px] lg:max-w-none">
               <div className="w-full rounded-md border text-center py-1 mb-1 text-xs sm:text-sm">
                 동적 족압 분석
               </div>
-              <div className="w-full aspect-square">
+              <div className="w-full aspect-square max-w-[200px] lg:max-w-none mx-auto">
                 <FootDynamic footFileName={mat_hip_down_image_name} matOhs={ohsFourCorners} />
               </div>
             </div>
           </div>
           
           {/* HipTrajectory */}
-          <div className="col-span-1 row-span-1 flex items-center justify-center">
-            <div className="flex flex-col items-center w-full">
+          <div className="col-span-1 lg:row-span-1 flex items-center justify-center">
+            <div className="flex flex-col items-center w-full max-w-[200px] lg:max-w-none">
               <div className="w-full rounded-md border text-center py-1 mb-1 text-xs sm:text-sm">
                 골반 이동 분석
               </div>
-              <div className="w-full aspect-square">
+              <div className="w-full aspect-square max-w-[200px] lg:max-w-none mx-auto">
                 <HipTrajectory hipFileName={mat_hip_trajectory_image_name} />
               </div>
             </div>
           </div>
           
           {/* Left KneeTrajectory */}
-          <div className="col-span-1 row-span-1 flex items-center justify-center">
-            <div className="flex flex-col items-center w-full">
+          <div className="col-span-1 lg:row-span-1 flex items-center justify-center">
+            <div className="flex flex-col items-center w-full max-w-[200px] lg:max-w-none">
               <div className="w-full rounded-md border text-center py-1 mb-1 text-xs sm:text-sm">
                 무릎이동 궤적(L)
               </div>
-              <div className="w-full aspect-square">
+              <div className="w-full aspect-square max-w-[200px] lg:max-w-none mx-auto">
                 <KneeTrajectory kneeFileName={mat_left_knee_trajectory_image_name} />
               </div>
             </div>
           </div>
           
           {/* Right KneeTrajectory */}
-          <div className="col-span-1 row-span-1 flex items-center justify-center">
-            <div className="flex flex-col items-center w-full">
+          <div className="col-span-1 lg:row-span-1 flex items-center justify-center">
+            <div className="flex flex-col items-center w-full max-w-[200px] lg:max-w-none">
               <div className="w-full rounded-md border text-center py-1 mb-1 text-xs sm:text-sm">
                 무릎이동 궤적(R)
               </div>
-              <div className="w-full aspect-square">
+              <div className="w-full aspect-square max-w-[200px] lg:max-w-none mx-auto">
                 <KneeTrajectory kneeFileName={mat_right_knee_trajectory_image_name} />
               </div>
             </div>

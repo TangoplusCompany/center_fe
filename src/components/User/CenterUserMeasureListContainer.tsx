@@ -57,7 +57,7 @@ const CenterUserMeasureListContainer = ({
     };
   const defaultLimit = query.limit || 20;
   
-  const [deleteSelectedSns, ] = useState<number[]>([]); // setDeleteSelectedSns
+  // const [deleteSelectedSns, ] = useState<number[]>([]); // setDeleteSelectedSns
   // const onToggleDeleteSn = (sn: number) => {
   //   setDeleteSelectedSns((prev) =>
   //     prev.includes(sn)
@@ -204,9 +204,9 @@ const CenterUserMeasureListContainer = ({
   return (
   <>
     {/* ✅ 삭제 버튼 영역 (항상 공간 확보) */}
-    <div className="flex items-center justify-between mb-2">
+    <div className="flex items-center justify-end mb-2 w-full">
 
-      <div className="flex items-center gap-4 h-12">
+      {/* <div className="flex items-center gap-4 h-12">
         <button
           type="button"
           className={cn(
@@ -231,14 +231,14 @@ const CenterUserMeasureListContainer = ({
         >
           {deleteSelectedSns.length}개가 선택됨
         </span>
-      </div>
+      </div> */}
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center justify-end gap-4 w-full">
         <Select
           onValueChange={handleSelectChange}
           defaultValue={defaultLimit.toString()}
         >
-          <SelectTrigger className="w-[120px]">
+          <SelectTrigger className="max-w-[120px]">
             <SelectValue placeholder="행 갯수" />
           </SelectTrigger>
           <SelectContent>
@@ -252,7 +252,7 @@ const CenterUserMeasureListContainer = ({
           onValueChange={handleSortChange}
           defaultValue={sort}
         >
-          <SelectTrigger className="w-[120px]">
+          <SelectTrigger className="max-w-[120px]">
             <SelectValue placeholder="최신순" />
           </SelectTrigger>
           <SelectContent>

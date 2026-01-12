@@ -38,7 +38,7 @@ const MeasureWorst = ({ data }: { data: TWorstPart }) => {
         </div>
 
         {/* 설명 박스 */}
-        <div className={`${data.level === 2 ? "bg-danger-foreground" : "bg-warning-foreground"
+        <div className={`w-fit ${data.level === 2 ? "bg-danger-foreground" : "bg-warning-foreground"
         } rounded-lg p-4`}>
           <p className={`text-sm ${
             data.level === 2 ? "text-danger" : "text-warning"

@@ -36,7 +36,7 @@ const MeasureBest = ({ data }: { data: TWorstPart }) => {
         </div>
 
           {/* 설명 박스 */}
-          <div className={`${data.level === 2 ? "bg-toggleAccent-foreground" : "bg-accent"
+          <div className={`w-fit ${data.level === 2 ? "bg-toggleAccent-foreground" : "bg-accent"
           }  rounded-lg p-4`}>
             <p className="text-sm text-primary-foreground leading-relaxed">
               {data.description}
