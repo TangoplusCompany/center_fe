@@ -1,5 +1,6 @@
 "use client";
 
+import { getRiskString } from "@/components/Util/RiskLevel";
 import FootStatic from "./FootStatic";
 
 export interface IMatStaticPressure {
@@ -12,42 +13,38 @@ export interface IMatStaticPressure {
   topPressure: number;
   bottomPressure: number;
 }
-interface FootStaticContainerProps {
+export interface FootStaticContainerProps {
   comment: string;
-  condition: string;
-  level: number;
+  risk_level: string;
+  range_level: string;
   fileName: string;
   matStatics: IMatStaticPressure;
   lCase: 0 | 1;
 }
-const FootStaticContainer = (
-  { 
+const FootStaticContainer = ({ 
     comment,
-    condition,
-    level,
+    risk_level,
+    range_level,
     fileName,
     matStatics,
     lCase,
-  }: FootStaticContainerProps
-    
-  ) => {
-  
-
+}: FootStaticContainerProps) => {
+  const riskString = getRiskString(risk_level)
   const bgCondition = {
-    정상: "bg-sub600",
-    주의: "bg-warning",
-    위험: "bg-danger",
-  }[condition] ?? "bg-[#7E7E7E]";
+    0: "bg-sub600",
+    1: "bg-warning",
+    2: "bg-danger",
+  }[risk_level] ?? "bg-[#7E7E7E]";
     const textCondition = {
-    정상: "text-white",
-    주의: "text-warning-foreground",
-    위험: "text-danger-foreground",
-  }[condition] ?? "bg-[#7E7E7E]";
+    0: "text-white",
+    1: "text-warning-foreground",
+    2: "text-danger-foreground",
+  }[risk_level] ?? "bg-[#7E7E7E]";
     const textTitleCondition = {
-    정상: "text-secondary",
-    주의: "text-warningDeep",
-    위험: "text-dangerDeep",
-  }[condition] ?? "bg-primary-foreground";
+    0: "text-secondary",
+    1: "text-warningDeep",
+    2: "text-dangerDeep",
+  }[risk_level] ?? "bg-primary-foreground";
   
   return (
     <div className="flex-1 p-4">
@@ -55,7 +52,7 @@ const FootStaticContainer = (
       <div className="flex justify-between items-center mb-4">
         <h2 className={`text-xl font-semibold ${textTitleCondition}`}>정적 족압</h2>
         <span className={`px-3 py-1 ${bgCondition} ${textCondition} rounded-xl text-xs`}>
-          {condition} {level}단계
+          {riskString} {range_level}단계
         </span>
       </div>
       {lCase === 0 ? (
