@@ -114,6 +114,7 @@ const MeasureDetail = ({
           measureSn: String(measureData.result_summary_data.sn),
           userSn: userSn
         }}
+        measureInfo={measureData}
         cameraOrientation={data.camera_orientation}
         />
       ),
@@ -127,6 +128,7 @@ const MeasureDetail = ({
           measureSn: String(measureData.result_summary_data.sn),
           userSn: userSn
         }}
+        measureInfo={measureData}
         cameraOrientation={data.camera_orientation}
         />
       ),
@@ -140,6 +142,7 @@ const MeasureDetail = ({
           measureSn: String(measureData.result_summary_data.sn),
           userSn: userSn
         }}
+        measureInfo={measureData}
         cameraOrientation={data.camera_orientation}
         />
       ),
@@ -153,9 +156,9 @@ const MeasureDetail = ({
             measureSn: String(measureData.result_summary_data.sn),
             userSn: userSn
           }} 
-          cameraOrientation={data.camera_orientation}
-          isCompare={0}
-          />,
+        cameraOrientation={data.camera_orientation}
+        isCompare={0}
+        />,
     },
   ];
 
@@ -164,7 +167,7 @@ const MeasureDetail = ({
       {/* ✅ 상단 줄: TabsList (좌측) + Select(우측) */}
       
       <div className="flex items-center justify-between mb-4 gap-4">
-        <TabsList className="relative z-10 inline-flex w-max gap-1 bg-transparent p-0">
+        <TabsList className="relative z-5 inline-flex w-max gap-1 bg-transparent p-0">
           <div className="absolute bottom-0 left-0 w-full h-[3px] bg-sub200 rounded-md" />
   
           {measureTabs.map((measure) => (
@@ -181,7 +184,7 @@ const MeasureDetail = ({
                 "data-[state=active]:text-toggleAccent",
                 "after:absolute after:-bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-md",
                 "after:bg-transparent after:transition-all",
-                "data-[state=active]:after:bg-toggleAccent after:z-10"
+                "data-[state=active]:after:bg-toggleAccent after:z-5"
               )}
             >
               {measure.title}

@@ -27,7 +27,7 @@ const ActivityContainer = () => {
     upDown: (activityResponse?.daily_trend as 0 | 1 | 2) ?? 1
   };
   const weeklyCardData: countDetailCardProps = {
-    case: 0,
+    case: 1,
     count: activityResponse?.weekly_measure_count ?? 0,
     upDown: (activityResponse?.weekly_trend as 0 | 1 | 2) ?? 1
   };

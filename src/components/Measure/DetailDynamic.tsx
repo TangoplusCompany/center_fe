@@ -4,7 +4,10 @@ import React, { useEffect, useRef, useState } from "react";
 // import { useMeasureDynamicJson } from "@/hooks/api/measure/useMeasureDynamicJson";
 // import DataError from "../Util/DataError";
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
-import RawDataContainer from "./RawDataContainer";
+import { IUserMeasureDynamicFileData } from "@/types/measure";
+import DynamicDataContainer from "./Dynamic/DataContainer";
+// import MeasureIntroFooter2 from "./MeasureIntroFooter2";
+// import MeasureIntroFooter3 from "./MeasureIntroFooter3";
 // import MeasureIntroFooter2, { IMatOhsPressure } from "./MeasureIntroFooter2";
 // import MeasureIntroFooter3 from "./MeasureIntroFooter3";
 // import { IUserMeasureDynamicFileData } from "@/types/measure";
@@ -34,32 +37,7 @@ const MeasureDetailDynamic = ({
     );
   
   const data = measureDynamic?.file_data
-  // const fileData = measureDynamic?.file_data as IUserMeasureDynamicFileData;
-  //   const {
-  //   mat_hip_down_image_name,
-  //   mat_hip_trajectory_image_name,
-  //   mat_left_knee_trajectory_image_name,
-  //   mat_right_knee_trajectory_image_name,
-  //   // measure_server_file_name,
-  //   // measure_server_json_name,
-  // } = fileData
-  // const ohsFourCorners: IMatOhsPressure = {
-  //     leftTopPressure: 0,
-  //     leftBottomPressure: 0,
-  //     rightTopPressure: 0,
-  //     rightBottomPressure: 0,
-  //     leftPressure: 0,
-  //     rightPressure: 0,
-  //     topPressure: 0,
-  //     bottomPressure: 0,
-  //   };
-  // const isRotated = cameraOrientation === 1;
-
-  // // 원본(데이터/JSON) 기준
-  // const srcWidth = (data?.measure_overlay_width as number) ?? 1280;
-  // const srcHeight = (data?.measure_overlay_height as number) ?? 720;
-
-
+  const fileData = measureDynamic?.file_data as IUserMeasureDynamicFileData;
   const videoRef = useRef<HTMLVideoElement>(null);
   // const [nowWidth, setNowWidth] = useState(srcWidth);
   // const [nowHeight, setNowHeight] = useState(srcHeight);
@@ -111,6 +89,43 @@ const MeasureDetailDynamic = ({
       v.removeEventListener("timeupdate", onTimeUpdate);
     };
   }, [data]); // data를 dependency에 추가
+
+    if (seq7Loading) {
+    return (
+      <div className="col-span-12">
+        <p>로딩중...</p>
+      </div>
+    );
+  }
+  if (seq7Error) {
+    return (
+      <div className="col-span-12">
+        <p>오류가 발생했습니다</p>
+      </div>
+    );
+  }
+  
+
+
+  
+  // const ohsFourCorners: IMatOhsPressure = {
+  //     leftTopPressure: 0,
+  //     leftBottomPressure: 0,
+  //     rightTopPressure: 0,
+  //     rightBottomPressure: 0,
+  //     leftPressure: 0,
+  //     rightPressure: 0,
+  //     topPressure: 0,
+  //     bottomPressure: 0,
+  //   };
+  // const isRotated = cameraOrientation === 1;
+
+  // // 원본(데이터/JSON) 기준
+  // const srcWidth = (data?.measure_overlay_width as number) ?? 1280;
+  // const srcHeight = (data?.measure_overlay_height as number) ?? 720;
+
+
+
 
   // useEffect(() => {
   //   const video = videoRef.current;
@@ -466,20 +481,7 @@ const MeasureDetailDynamic = ({
   // if (!measureJson) return <div></div>;
   // if (isLoading) return <div>Loading...</div>;
   // if (isError) return <DataError />;
-  if (seq7Loading) {
-    return (
-      <div className="col-span-12">
-        <p>로딩중...</p>
-      </div>
-    );
-  }
-  if (seq7Error) {
-    return (
-      <div className="col-span-12">
-        <p>오류가 발생했습니다</p>
-      </div>
-    );
-  }
+
 
 
   return (
@@ -574,26 +576,11 @@ const MeasureDetailDynamic = ({
           }}
         />
       </div>
-      {/* <div className="flex border border-sub300 rounded-3xl gap-4">
-        <div className="flex-1 p-4">
-          <MeasureIntroFooter2
-            comment={
-              ""
-            }
-            footFileName={mat_hip_down_image_name}
-            hipFileName={mat_hip_trajectory_image_name}
-            matOhs={ohsFourCorners}
-          />
-        </div>
-        <div className="flex-1 p-4">
-          <MeasureIntroFooter3
-            comment={""}
-            leftKneeFileName={mat_left_knee_trajectory_image_name}
-            rightKneeFileName={mat_right_knee_trajectory_image_name}
-          />
-        </div>
-      </div> */}
-      <RawDataContainer mergedDetailData={measureDynamic?.detail_data ?? []} isCompare={isCompare}/>
+      <DynamicDataContainer 
+        fileData={fileData} 
+        detailData={measureDynamic?.detail_data ?? []}
+        isCompare={isCompare}
+        />
     </div>
   );
 

@@ -2,14 +2,19 @@
 
 import { IDayData } from '@/types/IDayData';
 
-type MeasureHeatmapProps = {
+type MeasurePartHeatmapProps = {
   data: IDayData[];
 };
-const MeasureGraph = ({ data }: MeasureHeatmapProps) => {
+const MeasurePartHeatMap = ({ data }: MeasurePartHeatmapProps) => {
   const bodyParts = ['목', '어깨', '팔꿉', '골반', '무릎', '발목'];
   const filledData = Array.from({ length: 10 }, (_, idx) => 
-    data[idx] || { date: "", values: [0, 0, 0, 0, 0, 0] }
+    data[idx] || { 
+      date: "", 
+      riskValues: [0, 0, 0, 0, 0, 0],
+      rangeValues: [0, 0, 0, 0, 0, 0]
+    }
   );
+
   // 0: 정상(회색), 1: 주의(주황), 2: 위험(빨강)
   const getColor = (value: number) => {
     if (value === 0) return 'bg-gray-200';
@@ -66,10 +71,26 @@ const MeasureGraph = ({ data }: MeasureHeatmapProps) => {
                 <div className="w-full grid grid-cols-10 gap-2">
                   {filledData.map((dayData, colIdx) => (
                     <div
-                      key={`${rowIdx}-${colIdx}`}
-                      className={`aspect-square rounded ${getColor(dayData.values[rowIdx])} transition-colors hover:opacity-80`}
-                      title={`${part}: ${dayData.values[rowIdx] === 0 ? '정상' : dayData.values[rowIdx] === 1 ? '주의' : '위험'}`}
-                    />
+                          key={`${rowIdx}-${colIdx}`}
+                          className={`aspect-square rounded ${
+                            dayData.date === "" 
+                              ? 'bg-sub100' 
+                              : getColor(dayData.riskValues[rowIdx])
+                          } transition-colors hover:opacity-80 flex items-center justify-center text-sm font-semibold`}
+                          title={
+                            dayData.date === "" 
+                              ? '측정 데이터 없음' 
+                              : `${part}: ${dayData.riskValues[rowIdx] === 0 ? '정상' : dayData.riskValues[rowIdx] === 1 ? '주의' : '위험'}`
+                          }
+                        >
+                      {dayData.rangeValues[rowIdx] > 0 && (
+                        <span className='text-white text-lg'>
+                          {dayData.rangeValues[rowIdx] === 1 ? '①' : 
+                          dayData.rangeValues[rowIdx] === 2 ? '②' : 
+                          dayData.rangeValues[rowIdx] === 3 ? '③' : ''}
+                        </span>
+                      )}
+                    </div>
                   ))}
                 </div>
               </div>
@@ -78,7 +99,7 @@ const MeasureGraph = ({ data }: MeasureHeatmapProps) => {
         </div>
 
         {/* 두 번째: 내 근골격 유형 체크 (placeholder) */}
-        <div className="p-4 h-full flex flex-col gap-4">
+        <div className="p-4 h-full flex flex-col gap-4 invisible">
           <h3 className="text-lg font-semibold self-start">내 근골격 유형 체크</h3>
           <div className="flex-1 flex flex-col items-center justify-center gap-4">
             <div className="w-32 h-32 bg-gray-300 rounded-2xl flex items-center justify-center">
@@ -105,4 +126,4 @@ const MeasureGraph = ({ data }: MeasureHeatmapProps) => {
     </div>
   );
 };
-export default MeasureGraph
+export default MeasurePartHeatMap;

@@ -1,9 +1,10 @@
-import { IStaticRawDataProps } from "./RawDataResult";
+import { IUserMeasureDetailData } from "@/types/measure";
+
 
 interface RawDataTabProps {
   selectedPart: 0 | 1 | 2 | 3 | 4 | 5 | 6;
   onSelectPart: (part: 0 | 1 | 2 | 3 | 4 | 5 | 6) => void;
-  mergedDetailData:  IStaticRawDataProps[];
+  mergedDetailData:  IUserMeasureDetailData[];
 }
 
 const RawDataTab = ({ selectedPart, onSelectPart, mergedDetailData }: RawDataTabProps) => {

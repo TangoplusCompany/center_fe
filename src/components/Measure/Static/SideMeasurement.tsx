@@ -1,18 +1,22 @@
 import React, { useMemo } from "react";
 import MeasureStaticThird from "./Third";
 import MeasureStaticFourth from "./Fourth";
-import { IStaticRawDataProps } from "../RawDataResult";
+
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
 import RawDataContainer from "../RawDataContainer";
+import { IUserMeasureDetailData, IUserMeasureInfoResponse } from "@/types/measure";
+import StaticDataContainer from "./DataContainer";
 
 const SideMeasurement = ({
   sns,
+  measureInfo,
   cameraOrientation
 }: {
   sns: {
     measureSn: string;
     userSn: string;
   };
+  measureInfo: IUserMeasureInfoResponse;
   cameraOrientation: 0 | 1;
 }) => {
   const {
@@ -33,7 +37,7 @@ const SideMeasurement = ({
         sns.userSn,
         4
       );
-      const mergedDetailData: IStaticRawDataProps[] = useMemo(() => {
+      const mergedDetailData: IUserMeasureDetailData[] = useMemo(() => {
         return [
           ...(measureThird?.detail_data ?? []),
           ...(measureFourth?.detail_data ?? []),
@@ -66,8 +70,8 @@ const SideMeasurement = ({
           <MeasureStaticFourth files={measureFourth?.file_data} cameraOrientation={cameraOrientation} />
         </div>
       </div>
-
-      <RawDataContainer mergedDetailData={mergedDetailData} isCompare={0}/>
+      <StaticDataContainer measureData={measureInfo} />
+      <RawDataContainer mergedDetailData0={mergedDetailData} />
     </div>
   );
 };

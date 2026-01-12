@@ -1,14 +1,13 @@
 import React from "react";
-import RawDataResult, { IStaticRawDataProps } from "./RawDataResult";
+import RawDataResult from "./RawData";
+import { IUserMeasureDetailData } from "@/types/measure";
 
 const RawDataDetailContainer = ({ 
   mergedDetailData, 
   selectedPart,
-  isCompare,
 }: {
-  mergedDetailData: IStaticRawDataProps[];
+  mergedDetailData: IUserMeasureDetailData[];
   selectedPart: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-  isCompare: 0 | 1;
 }) => {
 
   const partLandmarkMap: { [key: number]: number[] } = {
@@ -23,10 +22,11 @@ const RawDataDetailContainer = ({
 
   const filteredData =
     selectedPart === 0
-      ? mergedDetailData // 전체 선택 시 필터링 안 함
+      ? mergedDetailData
       : mergedDetailData.filter((data) =>
           partLandmarkMap[selectedPart]?.includes(data.landmark)
         );
+        
   const sortedData = React.useMemo(() => {
     const order = ['코', '머리', '어깨', '팔꿈치', '몸', '정면', '골반', '무릎', '발목'];
     
@@ -34,58 +34,60 @@ const RawDataDetailContainer = ({
       const aUnit = a.measure_unit ?? '';
       const bUnit = b.measure_unit ?? '';
       
-      // 각 키워드의 인덱스와 문자열 내 위치 찾기
-      let aOrderIndex = -1;
-      let aPosition = Infinity;
-      let bOrderIndex = -1;
-      let bPosition = Infinity;
+      const aOrderIndex = order.findIndex(word => aUnit.includes(word));
+      const bOrderIndex = order.findIndex(word => bUnit.includes(word));
       
-      order.forEach((word, idx) => {
-        const aPosInString = aUnit.indexOf(word);
-        const bPosInString = bUnit.indexOf(word);
-        
-        if (aPosInString !== -1 && (aOrderIndex === -1 || idx < aOrderIndex)) {
-          aOrderIndex = idx;
-          aPosition = aPosInString;
-        }
-        if (bPosInString !== -1 && (bOrderIndex === -1 || idx < bOrderIndex)) {
-          bOrderIndex = idx;
-          bPosition = bPosInString;
-        }
-      });
-      
-      // 둘 다 order에 있으면
       if (aOrderIndex !== -1 && bOrderIndex !== -1) {
-        // 같은 키워드면 위치로 비교
-        if (aOrderIndex === bOrderIndex) {
-          return aPosition - bPosition;
+        if (aOrderIndex !== bOrderIndex) {
+          return aOrderIndex - bOrderIndex;
         }
-        // 다른 키워드면 order 순서로
-        return aOrderIndex - bOrderIndex;
+        return aUnit.localeCompare(bUnit, 'ko');
       }
       
-      // a만 order에 있으면 a를 앞으로
       if (aOrderIndex !== -1) return -1;
-      
-      // b만 order에 있으면 b를 앞으로
       if (bOrderIndex !== -1) return 1;
       
-      // 둘 다 order에 없으면 가나다 순
       return aUnit.localeCompare(bUnit, 'ko');
     });
   }, [filteredData]);
-
+  
   return (
-    <div>
-      <div className={`${
-        isCompare === 0 
-          ? 'grid grid-cols-1 md:grid-cols-2 gap-4' 
-          : 'flex flex-col gap-4'
-      }`}>
-        {sortedData.map((data, idx) => (
-          <RawDataResult key={idx} data={data} />
-        ))}
-      </div>
+    <div className="flex flex-col">
+      {(() => {
+        const grouped: (IUserMeasureDetailData | [IUserMeasureDetailData, IUserMeasureDetailData])[] = [];
+        const processed = new Set<number>();
+
+        sortedData.forEach((data, idx) => {
+          if (processed.has(idx)) return;
+
+          const sameUnit = sortedData.filter(
+            (d, i) => i > idx && d.measure_unit === data.measure_unit && !processed.has(i)
+          );
+
+          if (sameUnit.length === 0) {
+            grouped.push(data);
+            processed.add(idx);
+          } else if (sameUnit.length === 1) {
+            grouped.push([data, sameUnit[0]]);
+            processed.add(idx);
+            processed.add(sortedData.indexOf(sameUnit[0]));
+          } else {
+            const pair = sameUnit.find(d => d.measure_type === data.measure_type);
+            if (pair) {
+              grouped.push([data, pair]);
+              processed.add(idx);
+              processed.add(sortedData.indexOf(pair));
+            } else {
+              grouped.push(data);
+              processed.add(idx);
+            }
+          }
+        });
+        
+        return grouped.map((data, idx) => (
+          <RawDataResult key={idx} data={data}  />
+        ));
+      })()}
     </div>
   );
 };

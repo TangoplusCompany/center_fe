@@ -1,18 +1,18 @@
 import { IUserMeasureInfoResponse } from "@/types/measure";
-import React, { createContext, useCallback, useContext, useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, { useState } from "react";
 import MeasureStaticCompareFirst from "./CompareFirst";
 import MeasureStaticCompareSecond from "./CompareSecond";
 import MeasureStaticCompareThird from "./CompareThird";
 import MeasureStaticCompareFourth from "./CompareFourth";
 import MeasureStaticCompareFifth from "./CompareFifth";
 import MeasureStaticCompareSixth from "./CompareSixth";
-import MeasureDetailDynamic from "../DetailDynamic";
-import MeasureIntro from "../MeasureIntro";
 import CompareDateCard from "./CompareDateCard";
 import { ComparePair, CompareSlot } from "@/types/compare";
 import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
+import CompareIntro from "./CompareIntro";
+import MeasureDynamicCompare from "./CompareSeventh";
 
 type MeasureTab = {
   title: string;
@@ -20,148 +20,32 @@ type MeasureTab = {
   render: (left?: IUserMeasureInfoResponse, right?: IUserMeasureInfoResponse) => React.ReactNode;
 };
 
-type GroupKey = "upper" | "lower";
-type SideKey = "left" | "right";
 
-type HeightSyncCtx = {
-  register: (group: GroupKey, side: SideKey) => (el: HTMLDivElement | null) => void;
-  getMinHeight: (group: GroupKey) => number | undefined;
-};
-
-const HeightSyncContext = createContext<HeightSyncCtx | null>(null);
-
-function useHeightSyncProvider(syncKey?: string | number) {
-  const elsRef = useRef<Record<GroupKey, Record<SideKey, HTMLDivElement | null>>>({
-    upper: { left: null, right: null },
-    lower: { left: null, right: null },
-  });
-
-  const [minHeights, setMinHeights] = useState<Record<GroupKey, number>>({
-    upper: 0,
-    lower: 0,
-  });
-
-  const calcGroup = useCallback((group: GroupKey) => {
-    const leftEl = elsRef.current[group].left;
-    const rightEl = elsRef.current[group].right;
-    if (!leftEl || !rightEl) return;
-
-    // “자연 높이” 기준으로 측정
-    requestAnimationFrame(() => {
-      const lh = leftEl.getBoundingClientRect().height;
-      const rh = rightEl.getBoundingClientRect().height;
-      const maxH = Math.ceil(Math.max(lh, rh));
-      setMinHeights((prev) => (prev[group] === maxH ? prev : { ...prev, [group]: maxH }));
-    });
-  }, []);
-
-  const calcAll = useCallback(() => {
-    calcGroup("upper");
-    calcGroup("lower");
-  }, [calcGroup]);
-
-  const register = useCallback(
-    (group: GroupKey, side: SideKey) => (el: HTMLDivElement | null) => {
-      elsRef.current[group][side] = el;
-      // 엘리먼트가 생기는 순간 바로 재계산
-      calcGroup(group);
-    },
-    [calcGroup]
-  );
-
-  useLayoutEffect(() => {
-    const upperL = elsRef.current.upper.left;
-    const upperR = elsRef.current.upper.right;
-    const lowerL = elsRef.current.lower.left;
-    const lowerR = elsRef.current.lower.right;
-
-    // 아직 다 안 붙었으면 패스
-    if (!upperL || !upperR || !lowerL || !lowerR) return;
-
-    calcAll();
-
-    const ro = new ResizeObserver(() => calcAll());
-    ro.observe(upperL);
-    ro.observe(upperR);
-    ro.observe(lowerL);
-    ro.observe(lowerR);
-
-    window.addEventListener("resize", calcAll);
-
-    return () => {
-      ro.disconnect();
-      window.removeEventListener("resize", calcAll);
-    };
-  }, [calcAll, syncKey]);
-
-  const getMinHeight = useCallback((group: GroupKey) => {
-    const h = minHeights[group];
-    return h > 0 ? h : undefined;
-  }, [minHeights]);
-
-  return useMemo<HeightSyncCtx>(() => ({ register, getMinHeight }), [register, getMinHeight]);
-}
-
-export const HeightSyncProvider = ({
-  children,
-  syncKey,
-}: {
-  children: React.ReactNode;
-  syncKey?: string | number;
-}) => {
-  const value = useHeightSyncProvider(syncKey);
-  return <HeightSyncContext.Provider value={value}>{children}</HeightSyncContext.Provider>;
-};
-
-export function useHeightSync() {
-  const ctx = useContext(HeightSyncContext);
-  return ctx;
-}
-
-export const CompareTwoCol = ({
-  left,
-  right,
-  syncKey,
-}: {
-  left?: React.ReactNode;
-  right?: React.ReactNode;
-  syncKey?: string | number;
-}) => {
-  return (
-    <HeightSyncProvider syncKey={syncKey}>
-      <div className="grid grid-cols-2 gap-4 items-stretch">
-        <div className="min-w-0">{left}</div>
-        <div className="min-w-0">{right}</div>
-      </div>
-    </HeightSyncProvider>
-  );
-};
-
-const CompareEmptyCard = ({
-  className,
-  text = "비교할 항목을 선택해주세요",
-  onClick,
-}: {
-  className?: string;
-  text?: string;
-  onClick?: () => void;
-}) => {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={[
-        "w-full h-full rounded-3xl",
-        "border-sub200 border-dashed bg-white cursor-pointer hover:border-sub400 active:border-sub400",
-        "flex items-center justify-center",
-        "text-gray-400 text-sm font-medium",
-        className ?? "",
-      ].join(" ")}
-    >
-      {text}
-    </button>
-  );
-};
+// const CompareEmptyCard = ({
+//   className,
+//   text = "비교할 항목을 선택해주세요",
+//   onClick,
+// }: {
+//   className?: string;
+//   text?: string;
+//   onClick?: () => void;
+// }) => {
+//   return (
+//     <button
+//       type="button"
+//       onClick={onClick}
+//       className={[
+//         "w-full h-full rounded-3xl",
+//         "border-sub200 border-dashed bg-white cursor-pointer hover:border-sub400 active:border-sub400",
+//         "flex items-center justify-center",
+//         "text-gray-400 text-sm font-medium",
+//         className ?? "",
+//       ].join(" ")}
+//     >
+//       {text}
+//     </button>
+//   );
+// };
 
 const CompareBody = ({
   userSn,
@@ -177,7 +61,6 @@ const CompareBody = ({
   const leftSn = comparePair[0];
   const rightSn = comparePair[1];
   const [activeIdx, setActiveIdx] = useState(0);
-  // ✅ 좌/우 상세 데이터 로딩 (이미 쓰고 계신 훅 재사용)
   const leftEnabled = !!leftSn;
   const rightEnabled = !!rightSn;
   const {
@@ -210,41 +93,27 @@ const CompareBody = ({
       value: "summary",
       
       render: (left, right) => (
-        <CompareTwoCol
-          syncKey={`${leftSn ?? "x"}-${rightSn ?? "y"}-${leftLoading}-${rightLoading}`}
-          left={left ? (
-            <MeasureIntro data={left} layout="stack" currentSlot={0} />
-          ) : (
-            <MeasureIntro layout="stack" onCompareDialogOpen={onCompareDialogOpen} currentSlot={0} />
-          )}
-          right={right ? (
-            <MeasureIntro data={right} layout="stack" currentSlot={1} />
-          ) : (
-            <MeasureIntro layout="stack" onCompareDialogOpen={onCompareDialogOpen} currentSlot={1} />
-          )}
-        />
+        <CompareIntro data0={left} data1={right} onCompareDialogOpen={onCompareDialogOpen} />
       ),
     },
     {
       title: "정면 측정",
       value: "first",
       render: (left, right) => {
-        const renderMeasureCard = (data: typeof left) => 
-          data ? (
+        return (
+          <div className="flex">
             <MeasureStaticCompareFirst 
               sns={{
-                measureSn: String(data.result_summary_data.sn),
+                measureSn0: left ? String(left.result_summary_data.sn) : undefined,
+                measureSn1: right ? String(right.result_summary_data.sn) : undefined,
                 userSn
               }}
-              cameraOrientation={data.result_summary_data.camera_orientation}
+              cameraOrientations={{
+                orient0: left?.result_summary_data.camera_orientation ?? 0,
+                orient1: right?.result_summary_data.camera_orientation ?? 0
+              }}
             />
-          ) : <CompareEmptyCard />;
-
-        return (
-          <CompareTwoCol
-            left={renderMeasureCard(left)}
-            right={renderMeasureCard(right)}
-          />
+          </div>
         );
       },
     },
@@ -252,22 +121,20 @@ const CompareBody = ({
       title: "팔꿉 측정",
       value: "second",
       render: (left, right) => {
-        const renderMeasureCard = (data: typeof left) => 
-          data ? (
+        return (
+          <div className="flex">
             <MeasureStaticCompareSecond
               sns={{
-                measureSn: String(data.result_summary_data.sn),
+                measureSn0: left ? String(left.result_summary_data.sn) : undefined,
+                measureSn1: right ? String(right.result_summary_data.sn) : undefined,
                 userSn
               }}
-              cameraOrientation={data.result_summary_data.camera_orientation}
+              cameraOrientations={{
+                orient0: left?.result_summary_data.camera_orientation ?? 0,
+                orient1: right?.result_summary_data.camera_orientation ?? 0
+              }}
             />
-          ) : <CompareEmptyCard />;
-
-        return (
-          <CompareTwoCol
-            left={renderMeasureCard(left)}
-            right={renderMeasureCard(right)}
-          />
+          </div>
         );
       },
     },
@@ -275,22 +142,20 @@ const CompareBody = ({
       title: "좌측 측정",
       value: "third",
       render: (left, right) => {
-        const renderMeasureCard = (data: typeof left) => 
-          data ? (
+        return (
+          <div className="flex">
             <MeasureStaticCompareThird
               sns={{
-                measureSn: String(data.result_summary_data.sn),
+                measureSn0: left ? String(left.result_summary_data.sn) : undefined,
+                measureSn1: right ? String(right.result_summary_data.sn) : undefined,
                 userSn
               }}
-              cameraOrientation={data.result_summary_data.camera_orientation}
+              cameraOrientations={{
+                orient0: left?.result_summary_data.camera_orientation ?? 0,
+                orient1: right?.result_summary_data.camera_orientation ?? 0
+              }}
             />
-          ) : <CompareEmptyCard />;
-
-        return (
-          <CompareTwoCol
-            left={renderMeasureCard(left)}
-            right={renderMeasureCard(right)}
-          />
+          </div>
         );
       },
     },
@@ -298,22 +163,20 @@ const CompareBody = ({
       title: "우측 측정",
       value: "fourth",
       render: (left, right) => {
-        const renderMeasureCard = (data: typeof left) => 
-          data ? (
+        return (
+          <div className="flex">
             <MeasureStaticCompareFourth
               sns={{
-                measureSn: String(data.result_summary_data.sn),
+                measureSn0: left ? String(left.result_summary_data.sn) : undefined,
+                measureSn1: right ? String(right.result_summary_data.sn) : undefined,
                 userSn
               }}
-              cameraOrientation={data.result_summary_data.camera_orientation}
+              cameraOrientations={{
+                orient0: left?.result_summary_data.camera_orientation ?? 0,
+                orient1: right?.result_summary_data.camera_orientation ?? 0
+              }}
             />
-          ) : <CompareEmptyCard />;
-
-        return (
-          <CompareTwoCol
-            left={renderMeasureCard(left)}
-            right={renderMeasureCard(right)}
-          />
+          </div>
         );
       },
     },
@@ -321,22 +184,20 @@ const CompareBody = ({
       title: "후면 측정",
       value: "fifth",
       render: (left, right) => {
-        const renderMeasureCard = (data: typeof left) => 
-          data ? (
+        return (
+          <div className="flex">
             <MeasureStaticCompareFifth
               sns={{
-                measureSn: String(data.result_summary_data.sn),
+                measureSn0: left ? String(left.result_summary_data.sn) : undefined,
+                measureSn1: right ? String(right.result_summary_data.sn) : undefined,
                 userSn
               }}
-              cameraOrientation={data.result_summary_data.camera_orientation}
+              cameraOrientations={{
+                orient0: left?.result_summary_data.camera_orientation ?? 0,
+                orient1: right?.result_summary_data.camera_orientation ?? 0
+              }}
             />
-          ) : <CompareEmptyCard />;
-
-        return (
-          <CompareTwoCol
-            left={renderMeasureCard(left)}
-            right={renderMeasureCard(right)}
-          />
+          </div>
         );
       },
     },
@@ -344,22 +205,20 @@ const CompareBody = ({
       title: "앉은 후면",
       value: "sixth",
       render: (left, right) => {
-        const renderMeasureCard = (data: typeof left) => 
-          data ? (
+        return (
+          <div className="flex">
             <MeasureStaticCompareSixth
               sns={{
-                measureSn: String(data.result_summary_data.sn),
+                measureSn0: left ? String(left.result_summary_data.sn) : undefined,
+                measureSn1: right ? String(right.result_summary_data.sn) : undefined,
                 userSn
               }}
-              cameraOrientation={data.result_summary_data.camera_orientation}
+              cameraOrientations={{
+                orient0: left?.result_summary_data.camera_orientation ?? 0,
+                orient1: right?.result_summary_data.camera_orientation ?? 0
+              }}
             />
-          ) : <CompareEmptyCard />;
-
-        return (
-          <CompareTwoCol
-            left={renderMeasureCard(left)}
-            right={renderMeasureCard(right)}
-          />
+          </div>
         );
       },
     },
@@ -367,26 +226,27 @@ const CompareBody = ({
       title: "오버헤드 스쿼트",
       value: "squart",
       render: (left, right) => {
-        const renderMeasureCard = (data: typeof left) => 
-          data ? (
-            <MeasureDetailDynamic 
+        return (
+          <div className="flex-1">
+            <MeasureDynamicCompare
               sns={{
-                measureSn: String(data.result_summary_data.sn),
+                measureSn0: left ? String(left.result_summary_data.sn) : undefined,
+                measureSn1: right ? String(right.result_summary_data.sn) : undefined,
                 userSn
               }}
-              cameraOrientation={data.result_summary_data.camera_orientation}
-              isCompare={1}
-            />
-          ) : <CompareEmptyCard />;
-
-        return (
-          <CompareTwoCol
-            left={renderMeasureCard(left)}
-            right={renderMeasureCard(right)}
-          />
+              cameraOrientations={{
+                orient0: left?.result_summary_data.camera_orientation ?? 0,
+                orient1: right?.result_summary_data.camera_orientation ?? 0
+              }}
+              // measureInfo={{
+              //   info0: left,
+              //   info1: right
+              // }}            
+              />
+          </div>
         );
       },
-    },
+    }
   ];
   
   const activeTab = measureTabs[activeIdx];
