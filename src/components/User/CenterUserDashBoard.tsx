@@ -43,16 +43,16 @@ const CenterUserDashBoard = ({
 
   if (dashboardDataLoading) {
     return (
-      <div className="w-full flex items-center justify-center py-20">
-        <p className="text-gray-500">대시보드 데이터를 불러오는 중입니다...</p>
+      <div className="w-full flex items-center justify-center py-10 md:py-20 px-4">
+        <p className="text-sm md:text-base text-gray-500">대시보드 데이터를 불러오는 중입니다...</p>
       </div>
     );
   }
 
   if (dashboardDataError) {
     return (
-      <div className="w-full flex items-center justify-center py-20">
-        <p className="text-red-500">대시보드 데이터를 불러오지 못했습니다.</p>
+      <div className="w-full flex items-center justify-center py-10 md:py-20 px-4">
+        <p className="text-sm md:text-base text-red-500">대시보드 데이터를 불러오지 못했습니다.</p>
       </div>
     );
   }
@@ -62,21 +62,20 @@ const CenterUserDashBoard = ({
   const bestPart = calculateExtremePart(dashboardData ? dashboardData?.measure_history : [], "best");
   const measureDate = calculateIDayData(dashboardData ? dashboardData?.measure_history : []);
   return (
-    
-    <div className="flex w-full gap-4">
-      {/* 왼쪽 */}
-      <div className="flex flex-col flex-[2] gap-4">
+    <div className="w-full px-2 sm:px-4 md:px-0">
+      <div className="flex flex-col w-full gap-2 sm:gap-3 md:gap-4">
         {/* Worst + Best */}
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1">
+        <div className="flex flex-col lg:flex-row w-full gap-2 sm:gap-3 md:gap-4">
+          <div className="w-full lg:flex-1 min-w-0">
             <MeasureWorst data={worstPart} />
           </div>
-          <div className="flex-1">
+          <div className="w-full lg:flex-1 min-w-0">
             <MeasureBest data={bestPart} />
           </div>
         </div>
 
-        <div className="flex-[1]">
+        {/* Measure Report Container */}
+        <div className="w-full min-w-0">
           {dashboardData ? (
             <MeasureReportContainer 
             userSn={userSn ?? -1} 
@@ -85,10 +84,12 @@ const CenterUserDashBoard = ({
             footData={dashboardData?.foot_pressure_history}
             />
           ) : (
-            <p className="text-gray-500">요약 데이터를 불러오는 중이거나 없습니다.</p>
+            <p className="text-sm md:text-base text-gray-500 px-2">요약 데이터를 불러오는 중이거나 없습니다.</p>
           )}
         </div>
-        <div>
+
+        {/* Heat Map */}
+        <div className="w-full min-w-0 overflow-x-auto">
           <MeasurePartHeatMap data={measureDate} />
         </div>
       </div>

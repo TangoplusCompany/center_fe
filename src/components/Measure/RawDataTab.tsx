@@ -33,13 +33,13 @@ const RawDataTab = ({ selectedPart, onSelectPart, mergedDetailData }: RawDataTab
       return mergedDetailData.some((data) => landmarks.includes(data.landmark));
     });
   return (
-    <div className="flex gap-4 overflow-x-auto pb-2">
+    <div className="flex gap-4 overflow-x-auto pb-2 w-full [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
       {availableTabs.map((tab) => (
         <button
           key={tab.id}
           onClick={() => onSelectPart(tab.id)}
           className={`
-            px-4 py-1 rounded-xl font-medium whitespace-nowrap transition-all
+            px-4 py-1 rounded-xl font-medium whitespace-nowrap transition-all flex-shrink-0
             ${
               selectedPart === tab.id
                 ? "border border-toggleAccent text-toggleAccent bg-toggleAccent-background"
