@@ -51,7 +51,7 @@ export const CenterUserMeasureList = ({
             <TableRow 
             key={sn} 
             onClick={() => onRowClick?.(sn)}
-            className="cursor-pointer"
+            className="cursor-pointer hover:bg-sub100"
             >
               {/* ✅ 삭제 선택 체크박스 */}
               {/* <TableCell className="text-center" onClick={(e) => e.stopPropagation()}>

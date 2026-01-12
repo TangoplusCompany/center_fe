@@ -1,6 +1,6 @@
 import { parseString } from "@/utils/parseString";
 
-export interface MeasureSummaryProps {
+export interface MeasureSummaryUnitProps {
   ment: string;
   risk_level: string;
   range_level: string;
@@ -13,7 +13,7 @@ const MeasureSummaryUnit = ({
   risk_level,
   range_level,
   title
-}: MeasureSummaryProps) => {
+}: MeasureSummaryUnitProps) => {
   const getRiskString = (level?: string) => 
   ({
     "0": "정상",
