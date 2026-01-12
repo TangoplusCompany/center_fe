@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import MeasureSummaryContainer from "./MeasureSummaryContainer";
 import FootTrajectoryContainer from "./Mat/FootTrajectoryContainer";
 
-export interface MeasureSummaryProps {
+export interface MeasureReportProps {
   userSn: number;
   latestSummary: MeasureSummary;
   summaryData: UpperAndLowerMeasureHistory[];
@@ -17,7 +17,7 @@ const MeasureReportContainer = ({
   summaryData,
   footData,
 
- }: MeasureSummaryProps 
+ }: MeasureReportProps 
 ) => {
   const [selectedMeasureSn, setSelectedMeasureSn] = useState<number | undefined>();
     

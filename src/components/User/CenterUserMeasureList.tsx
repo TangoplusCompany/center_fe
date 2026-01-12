@@ -37,8 +37,8 @@ export const CenterUserMeasureList = ({
           <TableHead className="text-center">전화번호</TableHead>
           <TableHead className="text-center">측정 일자</TableHead>
           <TableHead className="text-center">측정 기기</TableHead>
-          <TableHead className="text-center">측정 요약</TableHead>
-          <TableHead className="text-right"></TableHead>
+          <TableHead className="text-center"></TableHead>
+
         </TableRow>
       </TableHeader>
 
@@ -51,7 +51,7 @@ export const CenterUserMeasureList = ({
             <TableRow 
             key={sn} 
             onClick={() => onRowClick?.(sn)}
-            className="cursor-pointer"
+            className="cursor-pointer hover:bg-sub100"
             >
               {/* ✅ 삭제 선택 체크박스 */}
               {/* <TableCell className="text-center" onClick={(e) => e.stopPropagation()}>
@@ -68,25 +68,7 @@ export const CenterUserMeasureList = ({
               <TableCell className="text-center">{phoneHyphen(measure.mobile)}</TableCell>
               <TableCell className="text-center">{measure.measure_date}</TableCell>
               <TableCell className="text-center">{measure.device_name}</TableCell>
-              {/* <TableCell className="text-center">
-                <div>
-                  <span className={`
-                    flex inline-flex items-center justify-center mx-auto
-                    px-2 py-1 ${textBgCondition1} ${textLeftRightCondition1}
-                    text-xs rounded-full
-                  `}>
-                    {levelString1} {data1?.range_level}단계
-                  </span>
-                  <span className={`
-                    flex inline-flex items-center justify-center mx-auto
-                    px-2 py-1 ${textBgCondition1} ${textLeftRightCondition1}
-                    text-xs rounded-full
-                  `}>
-                    {levelString1} {data1?.range_level}단계
-                  </span>
-                </div>
-              </TableCell> */}
-              <TableCell className="flex items-center justify-end gap-4">
+              <TableCell className="flex w-full items-center justify-end gap-4">
                 <button
                   type="button"
                   onClick={(e) => {

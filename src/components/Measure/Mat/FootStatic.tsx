@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { IMatStaticPressure } from "./FootStaticContainer";
 import { removeBlackBackground } from "@/utils/removeBlackBackground";
 
-interface FootStaticContainerProps {
+export interface FootStaticProps {
   fileName: string;
   matStatics: IMatStaticPressure;
 }
@@ -10,7 +10,7 @@ interface FootStaticContainerProps {
 const FootStatic = ({ 
     fileName,
     matStatics,
-  }: FootStaticContainerProps) => {
+  }: FootStaticProps) => {
     // lCase 0일 때 결과요약 Intro /  1 일 떄 frontMeasurement
   // 또는 환경변수에서 가져오기
   const baseUrl = process.env.NEXT_PUBLIC_FILE_URL || '';

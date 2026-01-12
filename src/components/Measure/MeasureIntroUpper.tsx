@@ -3,38 +3,38 @@
 import { formatComment } from "@/utils/formatComment";
 import React from "react";
 import { UpperLowerProps } from "./MeasureIntroLower";
+import { getRiskString } from "../Util/RiskLevel";
 
 
 const MeasureIntroUpper = (
   { 
     comment,
-    condition,
-    level,
+    risk_level,
+    range_level,
   }: UpperLowerProps
 ) => {
+  const riskString = getRiskString(risk_level);
   const formattedComment = formatComment(comment);
   const borderCondition = {
-    정상: "border-sub300/50",
-    주의: "border-warning/50",
-    위험: "border-danger/50",
-  }[condition] ?? "bg-primary-foreground";
+    0: "border-sub300/50",
+    1: "border-warning/50",
+    2: "border-danger/50",
+  }[risk_level] ?? "bg-primary-foreground";
   const bgCondition = {
-    정상: "border-sub300/50",
-    주의: "bg-gradient-to-b from-[#FFA73A]/10 from-[2%] to-white to-[40%]",
-    위험: "bg-gradient-to-b from-[#FF5252]/10 from-[2%] to-white to-[50%]",
-  }[condition] ?? "bg-primary-foreground";
-   
-  
+    0: "border-sub300/50",
+    1: "bg-gradient-to-b from-[#FFA73A]/10 from-[2%] to-white to-[40%]",
+    2: "bg-gradient-to-b from-[#FF5252]/10 from-[2%] to-white to-[50%]",
+  }[risk_level] ?? "bg-primary-foreground";
   const textCondition = {
-    정상: "text-secondary",
-    주의: "text-warningDeep",
-    위험: "text-dangerDeep",
-  }[condition] ?? "bg-primary-foreground";
+    0: "text-secondary",
+    1: "text-warningDeep",
+    2: "text-dangerDeep",
+  }[risk_level] ?? "bg-primary-foreground";
   const textBgCondition = {
-    정상: "bg-sub300",
-    주의: "bg-warning",
-    위험: "bg-danger",
-  }[condition] ?? "bg-primary-foreground";
+    0: "bg-sub300",
+    1: "bg-warning",
+    2: "bg-danger",
+  }[risk_level] ?? "bg-primary-foreground";
 
 
 
@@ -45,7 +45,7 @@ const MeasureIntroUpper = (
       <div className="flex justify-between items-center mb-4">
         <h2 className={`text-xl font-semibold ${textCondition}`}>상지 결과</h2>
         <span className={`px-3 py-1 ${textBgCondition} rounded-xl text-sm text-white`}>
-          {condition} {level}단계
+          {riskString} {range_level}단계
         </span>
       </div>
       {/* 코멘트 */}
