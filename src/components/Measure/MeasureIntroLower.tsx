@@ -2,7 +2,7 @@
 
 import { formatComment } from "@/utils/formatComment";
 import React from "react";
-import { getRiskString } from "../Util/RiskLevel";
+import { getRiskString } from "../../utils/RiskLevel";
 
 export interface UpperLowerProps {
   comment: string;

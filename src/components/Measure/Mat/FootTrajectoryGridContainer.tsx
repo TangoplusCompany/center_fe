@@ -1,4 +1,4 @@
-import { MeasureSummary } from "@/types/measure";
+import { MeasureFootCOP } from "@/types/measure";
 import FootStatic from "./FootStatic";
 import FootDynamic from "./FootDynamic";
 import HipTrajectory from "./HipTrajectory";
@@ -9,7 +9,7 @@ import { IMatOhsPressure } from "./FootDynamicContainer";
 const FootTrajectoryGridContainer = ({
   footOCP
 }:{
-  footOCP: MeasureSummary;
+  footOCP: MeasureFootCOP;
 }
 ) => {
   const {

@@ -1,8 +1,9 @@
 import { useGetMeasureSummary } from "@/hooks/api/measure/useGetMeasureSummary";
-import { FootPressureHistory, MeasureSummary, UpperAndLowerMeasureHistory } from "@/types/measure";
+import { FootPressureHistory, MeasureFootCOP, MeasureSummary, UpperAndLowerMeasureHistory } from "@/types/measure";
 import { useEffect, useState } from "react";
 import MeasureSummaryContainer from "./MeasureSummaryContainer";
 import FootTrajectoryContainer from "./Mat/FootTrajectoryContainer";
+import { useGetMeasureFoot } from "@/hooks/api/measure/useGetMeasureFoot";
 
 export interface MeasureReportProps {
   userSn: number;
@@ -29,8 +30,16 @@ const MeasureReportContainer = ({
       selectedMeasureSn?.toString(), // number를 string으로 변환
       `${userSn}`
     );
+    const {
+      data: newFoot,
+      isLoading: footLoading,
+      isError: footError
+    } = useGetMeasureFoot(
+      selectedMeasureSn?.toString(), // number를 string으로 변환
+      `${userSn}`
+    );
     const [selectedSummary, setSelectedSummary] = useState<MeasureSummary>(latestSummary);
-  
+    const [selectedFootOCP, setSelectedFootOCP] = useState<MeasureFootCOP>(latestSummary);
     
     const handleLegendClick = (measureSn: number) => {
       setSelectedMeasureSn(measureSn);
@@ -41,7 +50,10 @@ const MeasureReportContainer = ({
       if (newSummary) {
         setSelectedSummary(newSummary);
       }
-    }, [newSummary]);
+      if (newFoot) {
+        setSelectedFootOCP(newFoot);
+      }
+    }, [newSummary, newFoot]);
     
   return (
     <div className="flex flex-col gap-6">
@@ -68,10 +80,12 @@ const MeasureReportContainer = ({
         dCase={1}
         title="하지 결과"
       />
-      {/* 족압 */}
+            {/* 족압 */}
+      {footLoading && <div>로딩 중...</div>}
+      {footError && <div>데이터를 불러오는데 실패했습니다.</div>}
       <div>
         <FootTrajectoryContainer 
-          footOCP={selectedSummary} 
+          footOCP={selectedFootOCP} 
           footData={footData} 
           handleLegendClick={handleLegendClick} 
           />
