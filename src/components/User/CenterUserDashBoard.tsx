@@ -1,12 +1,12 @@
 
 import MeasureWorst from "@/components/Measure/MeasureWorst";
 import MeasureBest from "@/components/Measure/MeasureBest";
-import MeasureGraph from "@/components/Measure/MeasureGraph";
-import MeasureSummary from "@/components/Measure/MeasureSummary";
+import MeasurePartHeatMap from "@/components/Measure/MeasurePartHeatmap";
 import { IUserDashBoard, MeasureHistory } from "@/types/measure";
 import { IDayData } from "@/types/IDayData";
 import { useGetUserDashboard } from "@/hooks/api/user/useGetUserDashboard";
 import { TWorstPart } from "@/types/dashboard";
+import MeasureReportContainer from "../Measure/MeasureReportContainer";
 
 type Mode = "worst" | "best";
 const PARTS = [
@@ -60,16 +60,14 @@ const CenterUserDashBoard = ({
   // 탭 0에서 쓸 더미/요약용 데이터 (기존 코드 유지)
   const worstPart = calculateExtremePart(dashboardData ? dashboardData?.measure_history : [], "worst");
   const bestPart = calculateExtremePart(dashboardData ? dashboardData?.measure_history : [], "best");
-
   const measureDate = calculateIDayData(dashboardData ? dashboardData?.measure_history : []);
-
   return (
     
     <div className="flex w-full gap-4">
       {/* 왼쪽 */}
       <div className="flex flex-col flex-[2] gap-4">
         {/* Worst + Best */}
-        <div className="flex gap-4">
+        <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1">
             <MeasureWorst data={worstPart} />
           </div>
@@ -80,24 +78,24 @@ const CenterUserDashBoard = ({
 
         <div className="flex-[1]">
           {dashboardData ? (
-            <MeasureSummary data={dashboardData?.latest_measure_summary} count={dashboardData?.total_measure_count} />
+            <MeasureReportContainer 
+            userSn={userSn ?? -1} 
+            latestSummary={dashboardData?.latest_measure_summary} 
+            summaryData={dashboardData?.upper_and_lower_measure_history} 
+            footData={dashboardData?.foot_pressure_history}
+            />
           ) : (
             <p className="text-gray-500">요약 데이터를 불러오는 중이거나 없습니다.</p>
           )}
         </div>
         <div>
-          <MeasureGraph data={measureDate} />
+          <MeasurePartHeatMap data={measureDate} />
         </div>
       </div>
     </div>
   )
 };
-
-
 export default CenterUserDashBoard;
-
-
-
 
 export function calculateExtremePart(
   history: MeasureHistory[],
@@ -167,17 +165,23 @@ function formatDate(dateStr: string) {
     date.getDate()
   ).padStart(2, "0")}`;
 }
+
 export function calculateIDayData(
   history: MeasureHistory[]
 ): IDayData[] {
   return history.map((item) => {
-    const values = RISK_PART_KEYS.map((key) =>
+    const riskValues = RISK_PART_KEYS.map((key) =>
       Number(item[`risk_level_${key}`] ?? 0)
+    );
+
+    const rangeValues = RISK_PART_KEYS.map((key) =>
+      Number(item[`range_level_${key}`] ?? 0)
     );
 
     return {
       date: formatDate(item.measure_date),
-      values,
+      riskValues,
+      rangeValues,
     };
   });
 }

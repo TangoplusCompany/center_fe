@@ -2,45 +2,48 @@
 import React, { useMemo } from "react";
 import MeasureStaticFirst from "./First";
 import MeasureStaticSecond from "./Second";
-import { IStaticRawDataProps } from "../RawDataResult";
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
 import RawDataContainer from "../RawDataContainer";
+import StaticDataContainer from "./DataContainer";
+import { IUserMeasureDetailData, IUserMeasureInfoResponse } from "@/types/measure";
 
 const FrontMeasurement = ({
   sns,
+  measureInfo,
   cameraOrientation
 }: {
   sns: {
     measureSn: string;
     userSn: string;
   };
+  measureInfo: IUserMeasureInfoResponse;
   cameraOrientation: 0 | 1;
 }) => {
 
-    const {
-      data: measureFirst,
-      isLoading: seq1Loading,
-      isError: seq1Error,
-    } = useMeasureSequence(
-      sns.measureSn,
-      sns.userSn,
-      1
-    );
-    const {
-      data: measureSecond,
-      isLoading: seq2Loading,
-      isError: seq2Error,
-    } = useMeasureSequence(
-      sns.measureSn,
-      sns.userSn,
-      5
-    );
-    const mergedDetailData: IStaticRawDataProps[] = useMemo(() => {
-      return [
-        ...(measureFirst?.detail_data ?? []),
-        ...(measureSecond?.detail_data ?? []),
-      ];
-    }, [measureFirst, measureSecond]);
+  const {
+    data: measureFirst,
+    isLoading: seq1Loading,
+    isError: seq1Error,
+  } = useMeasureSequence(
+    sns.measureSn,
+    sns.userSn,
+    1
+  );
+  const {
+    data: measureSecond,
+    isLoading: seq2Loading,
+    isError: seq2Error,
+  } = useMeasureSequence(
+    sns.measureSn,
+    sns.userSn,
+    5
+  );
+  const mergedDetailData: IUserMeasureDetailData[] = useMemo(() => {
+    return [
+      ...(measureFirst?.detail_data ?? []),
+      ...(measureSecond?.detail_data ?? []),
+    ];
+  }, [measureFirst, measureSecond]);
 
   if (seq1Loading || seq2Loading) {
     return (
@@ -67,9 +70,10 @@ const FrontMeasurement = ({
           <MeasureStaticSecond files={measureSecond?.file_data} cameraOrientation={cameraOrientation} />
         </div>
       </div>
-
-      {/* 하단: RawDataCard 3개 */}
-      <RawDataContainer mergedDetailData={mergedDetailData} isCompare={0}/>
+      {/* TODO 이 곳에 족압 이미지를 넣는 컴포넌트가 필요함. */}
+      {/* 하단: RawDataResult*/}
+      <StaticDataContainer measureData={measureInfo} />
+      <RawDataContainer mergedDetailData0={mergedDetailData} />
     </div>
   );
 };

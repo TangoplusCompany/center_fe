@@ -1,24 +1,14 @@
 "use client";
 
 import React from "react";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarFooter,
-  SidebarHeader,
-  useSidebar,
-} from "../ui/sidebar";
+import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarFooter, SidebarHeader, useSidebar } from "../ui/sidebar";
 import { SidebarTrigger } from "../ui/sidebar";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { useLogout } from "@/hooks/api/auth/useLogout";
 import { useAuthStore } from "@/providers/AuthProvider";
-import { usePathname } from 'next/navigation';
+import { usePathname } from "next/navigation";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const dashboard = [
   {
@@ -66,17 +56,14 @@ const dashboard = [
 
 export default function DefaultSidebar() {
   const logoutMutation = useLogout();
-  const { isMobile, setOpenMobile } = useSidebar(); // Sidebar 상태 접근
   const { adminRole } = useAuthStore((state) => state);
   const pathname = usePathname();
   const [indicatorStyle, setIndicatorStyle] = React.useState({ top: 0, height: 0 });
   const menuItemRefs = React.useRef<(HTMLLIElement | null)[]>([]);
-  const { state } = useSidebar();
+  const { state, openMobile } = useSidebar();
+  const isMobile = useIsMobile();
   const handleLogout = () => {
     logoutMutation.mutate();
-    if (isMobile) {
-      setOpenMobile(false);
-    }
   };
   React.useEffect(() => {
     const filteredDashboard = dashboard.filter((item) => {
@@ -95,72 +82,74 @@ export default function DefaultSidebar() {
 
     const activeIndex = filteredDashboard.findIndex((item) => {
       // url이 "/"인 경우는 정확히 pathname도 "/"일 때만 매칭
-      if (item.url === '/') {
-        return pathname === '/';
+      if (item.url === "/") {
+        return pathname === "/";
       }
       // 다른 url들은 startsWith로 매칭
       return pathname.startsWith(item.url);
     });
-    
+
     if (activeIndex >= 0 && menuItemRefs.current[activeIndex]) {
       const element = menuItemRefs.current[activeIndex];
       const rect = element.getBoundingClientRect();
       const parentRect = element.offsetParent?.getBoundingClientRect();
-      
+
       setIndicatorStyle({
         top: rect.top - (parentRect?.top || 0),
-        height: rect.height
+        height: rect.height,
       });
     }
   }, [pathname, adminRole]);
 
   const handleLinkClick = () => {
-    if (isMobile) {
-      setOpenMobile(false);
-    }
+    // Link click handler
   };
   return (
     <Sidebar collapsible="icon" className="bg-[#F1F5F9] dark:bg-black">
       <SidebarHeader className="bg-[#F1F5F9] dark:bg-black h-20 !flex !flex-row !items-center !p-0 px-2">
         <div className="flex items-center w-full">
           {/* 👇 앱로고와 텍스트는 SidebarMenuButton 안에 - 접히면 사라짐 */}
-          <SidebarMenuButton
-            size="lg"
-            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground flex-1 !h-full !flex !items-center !justify-center"
-  >
-          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/icons/app_logo.svg"
-              alt="logout"
-              className="lg:!w-6 lg:!h-6"
-            />
-          </div>
-          <div className="flex flex-col gap-0.5 leading-none">
-            <span className="font-semibold text-xl">탱고바디</span>
-          </div>
-        </SidebarMenuButton>
-          <SidebarTrigger className="mx-4" />
+          <SidebarMenuButton size="lg" className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground flex-1 !h-full !flex !items-center !justify-center">
+            <div
+              className={`flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground transition-all duration-300 ease-in-out ${
+                isMobile && !openMobile ? "opacity-0 scale-0" : "opacity-100 scale-100"
+              }`}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/icons/app_logo.svg" alt="logout" className="lg:!w-6 lg:!h-6" />
+            </div>
+            <div
+              className={`flex flex-col gap-0.5 leading-none transition-all duration-300 ease-in-out overflow-hidden ${
+                isMobile && !openMobile ? "opacity-0 -translate-x-2 scale-95" : "opacity-100 translate-x-0 scale-100"
+              }`}
+            >
+              <span className="font-semibold text-xl whitespace-nowrap">탱고바디</span>
+            </div>
+          </SidebarMenuButton>
+          {isMobile && <SidebarTrigger className="mx-4" />}
         </div>
       </SidebarHeader>
-      <SidebarContent className="bg-[#F1F5F9] dark:bg-black mt-8 !overflow-hidden">
+      <SidebarContent className="bg-[#F1F5F9] dark:bg-black !overflow-hidden">
         <SidebarGroup>
           {/* <SidebarGroupLabel>DASHBOARD</SidebarGroupLabel> */}
           <SidebarGroupContent>
             <SidebarMenu className="gap-4">
-              <div 
+              <div
                 className={`absolute left-0 transition-all duration-300 ease-in-out ${
-                  state === "collapsed" 
+                  state === "collapsed" && !openMobile
                     ? "w-8 h-8 rounded-full left-1/2 -translate-x-1/2" // 👈 접혔을 때: 원형 + 중앙
                     : "w-full bg-[#4169E1] rounded-l-[20px] rounded-r-none ml-4 " // 👈 펼쳤을 때
                 }`}
                 style={{
-                  top: state === "collapsed" 
-                    ? `${indicatorStyle.top + (indicatorStyle.height / 2) - 16}px`  // 👈 (height / 2) - (원크기 / 2)
-                    : `${indicatorStyle.top - 8}px`,
-                  height: state === "collapsed" ? '32px' : `${indicatorStyle.height + 16}px`,
+                  top:
+                    state === "collapsed" && !openMobile
+                      ? `${indicatorStyle.top + indicatorStyle.height / 2 - 16}px`
+                      : openMobile
+                        ? `${indicatorStyle.top + indicatorStyle.height / 2 - 16}px`
+                        : `${indicatorStyle.top - 8}px`, // 👈 (height / 2) - (원크기 / 2)
+                  height: state === "collapsed" && !openMobile ? "32px" : openMobile ? "32px" : `${indicatorStyle.height + 16}px`,
                   opacity: indicatorStyle.height > 0 ? 1 : 0,
-                  backgroundColor: '#4169E1'
+                  backgroundColor: "#4169E1",
                 }}
               />
               {dashboard
@@ -180,41 +169,30 @@ export default function DefaultSidebar() {
                   return true;
                 })
                 .map((item, index) => {
-                  const isActive = item.url === '/' 
-                    ? pathname === item.url
-                    : pathname.startsWith(item.url);
-                  // TODO 여기서 하단 스크롤만 없애고 넣기 
+                  const isActive = item.url === "/" ? pathname === item.url : pathname.startsWith(item.url);
+                  // TODO 여기서 하단 스크롤만 없애고 넣기
                   return (
-                    <SidebarMenuItem 
-                      key={item.title} 
+                    <SidebarMenuItem
+                      key={item.title}
                       className="relative"
-                      ref={(el) => { menuItemRefs.current[index] = el; }}
+                      ref={(el) => {
+                        menuItemRefs.current[index] = el;
+                      }}
                     >
                       <SidebarMenuButton asChild isActive={isActive}>
-                        <Link 
-                          href={item.url} 
-                          onClick={handleLinkClick} 
-                          className={`flex items-center gap-3 py-3 px-4 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:justify-center ${
-                            isActive ? 'bg-transparent' : ''
-                          }`}
+                        <Link
+                          href={item.url}
+                          onClick={handleLinkClick}
+                          className={`flex items-center gap-3 py-3 px-4 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:justify-center ${isActive ? "bg-transparent" : ""}`}
                         >
                           {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={item.icon}
-                            alt={item.title}
-                            className={`lg:!w-5 lg:!h-5 ml-4 transition-all duration-300 ${
-                              isActive ? 'brightness-0 invert' : ''
-                            }`}
-                          />
-                          <span className={`transition-colors duration-300 ${isActive ? 'text-white' : ''}`}>
-                            {item.title}
-                          </span>
+                          <img src={item.icon} alt={item.title} className={`lg:!w-5 lg:!h-5 ml-4 transition-all duration-300 ${isActive ? "brightness-0 invert" : ""}`} />
+                          <span className={`transition-colors duration-300 ${isActive ? "text-white" : ""}`}>{item.title}</span>
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   );
-                })
-              }
+                })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -223,18 +201,9 @@ export default function DefaultSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <Button
-                type="button"
-                onClick={handleLogout}
-                variant="ghost"
-                className="inline-flex justify-start w-full ml-3"
-              >
-                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/icons/ic_logout.svg"
-                    alt="logout"
-                    className="lg:!w-5 lg:!h-5"
-                  />
+              <Button type="button" onClick={handleLogout} variant="ghost" className="inline-flex justify-start w-full ml-3">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/icons/ic_logout.svg" alt="logout" className="lg:!w-5 lg:!h-5" />
                 <p>로그아웃</p>
               </Button>
             </SidebarMenuButton>

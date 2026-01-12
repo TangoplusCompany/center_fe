@@ -2,7 +2,7 @@ import { IDeviceStatusCardProps } from "@/types/device";
 import { RandomHexColor } from "@/utils/RandomHexColor";
 import { useEffect, useState } from "react";
 
-type ChartConfigValue = {
+export type ChartConfigValue = {
   label: string;
   color: string;
 };

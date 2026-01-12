@@ -14,6 +14,8 @@ import { FileText } from "lucide-react";
 import { nameFiltering, phoneFiltering } from "@/utils/regexFiltering";
 import { formatDate } from "@/utils/formatDate";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
 
 export const MeasureDummyList = ({ limit }: { limit: number }) => {
   return (
@@ -67,6 +69,7 @@ export const MeasureList = ({
   useEffect(() => {
     setList(measurements);
   }, [measurements]);
+  const router = useRouter();
   return (
     <Table>
       <TableHeader>
@@ -81,7 +84,11 @@ export const MeasureList = ({
       </TableHeader>
       <TableBody>
         {list.map((measurement, index) => (
-          <TableRow key={measurement.user_uuid + `-${index}`}>
+          <TableRow 
+            key={measurement.user_uuid + `-${index}`}
+            onClick={() => router.push(`/measure/${measurement.measure_sn}?user_sn=${measurement.user_sn}`)}
+            className="cursor-pointer">
+
             <TableCell className="text-center font-medium">
               {measurement.user_name
                 ? nameFiltering(measurement.user_name)
