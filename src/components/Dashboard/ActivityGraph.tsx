@@ -86,7 +86,7 @@ const ActivityGraph = ({
           </defs>
         </svg>
 
-        <div className="flex items-end justify-between gap-2 h-24">
+        <div className="flex items-end justify-between gap-1 h-24">
           {barData.map((item, index) => {
             const heightPercent = (item.value / maxValue) * 100;
             

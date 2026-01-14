@@ -194,7 +194,9 @@ const MeasureDetail = ({
         </TabsList>
 
         <div className="flex items-center gap-4">
-          <Button variant="default"
+          <Button 
+            className="hover:bg-sub200 transition-colors"
+            variant="default"
             onClick={() => {
               if (window.confirm(`${measureData.result_summary_data.user_name}로 카카오톡 결과를 전송하시습니까?`)) {
                 handleKakaoSend()
@@ -210,7 +212,9 @@ const MeasureDetail = ({
             
           </Button>
 
-          <Button variant="default"
+          <Button 
+            className="hover:bg-sub200 transition-colors"
+            variant="default"
             onClick={() => {
               handlePrint()
             }}>

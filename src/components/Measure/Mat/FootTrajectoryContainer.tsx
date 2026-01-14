@@ -25,11 +25,11 @@ const FootTrajectoryContainer = ({
   } = footOCP;
   return (
     <div className="flex flex-col gap-6 sm:gap-8 rounded-3xl border-2 border-sub200 p-3 sm:p-4">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 rounded-3xl transition-all duration-300 ease-in-out">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 rounded-3xl transition-all duration-300 ease-in-out items-center">
         <div className="transition-all duration-300 ease-in-out">
           <FootTrajectoryGridContainer footOCP={footOCP} />
         </div>
-        <div className="transition-all duration-300 ease-in-out">
+        <div className="transition-all duration-300 ease-in-out ">
           <MeasureSummaryGraph data={footData} legendClick={handleLegendClick} dCase={2} />      
         </div>
       </div>

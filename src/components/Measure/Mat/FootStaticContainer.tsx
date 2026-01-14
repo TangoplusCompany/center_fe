@@ -19,7 +19,8 @@ export interface FootStaticContainerProps {
   range_level: string;
   fileName: string;
   matStatics: IMatStaticPressure;
-  lCase: 0 | 1;
+  lCase: 0 | 1; // lcase(layoutCase) : 이미지+설명의 레이아웃 
+  // 0: MeasureIntro의 Top-Down | 1: Static0~6의 Left-Right 
 }
 const FootStaticContainer = ({ 
     comment,
@@ -35,11 +36,11 @@ const FootStaticContainer = ({
     1: "bg-warning",
     2: "bg-danger",
   }[risk_level] ?? "bg-[#7E7E7E]";
-    const textCondition = {
-    0: "text-white",
-    1: "text-warning-foreground",
-    2: "text-danger-foreground",
-  }[risk_level] ?? "bg-[#7E7E7E]";
+  //   const textCondition = {
+  //   0: "text-white",
+  //   1: "text-warning-foreground",
+  //   2: "text-danger-foreground",
+  // }[risk_level] ?? "bg-[#7E7E7E]";
     const textTitleCondition = {
     0: "text-secondary",
     1: "text-warningDeep",
@@ -50,8 +51,8 @@ const FootStaticContainer = ({
     <div className="flex-1 p-4">
       {/* 헤더 */}
       <div className="flex justify-between items-center mb-4">
-        <h2 className={`text-xl font-semibold ${textTitleCondition}`}>정적 족압</h2>
-        <span className={`px-3 py-1 ${bgCondition} ${textCondition} rounded-xl text-xs`}>
+        <h2 className={`text-xl font-semibold ${lCase === 0 ? 'text-black': textTitleCondition}`}>정적 족압</h2>
+        <span className={`px-3 py-1 ${bgCondition} text-white rounded-xl text-xs`}>
           {riskString} {range_level}단계
         </span>
       </div>

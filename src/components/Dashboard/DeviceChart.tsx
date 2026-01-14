@@ -22,16 +22,16 @@ interface TransformedChartData {
 }
 
 const pastelColors = [
-  "#FFD1DC", // Pastel Pink
-  "#AEC6CF", // Pastel Blue
-  "#B39EB5", // Pastel Purple
+  "#ffe4e1", // Pastel Pink
+  "#e0ffff", // Pastel Blue
+  "#d8bfd8", // Pastel Purple
   "#77DD77", // Pastel Green
-  "#FFB347", // Pastel Orange
-  "#FDFD96", // Pastel Yellow
-  "#CFCFC4", // Pastel Gray
-  "#C1E1C1", // Pastel Mint
-  "#F49AC2", // Pastel Rose
-  "#B0E0E6", // Pastel Aqua
+  "#ffdab9", // Pastel Orange
+  "#eee8aa", // Pastel Yellow
+  "#d3d3d3", // Pastel Gray
+  "#bdb76b", // Pastel Mint
+  "#bc8f8f", // Pastel Rose
+  "#b0e0e6 ", // Pastel Aqua
 ];
 const COLOR_ACTIVE = "hsl(var(--toggle-accent))"; // 또는 "#..."로 직접
 const COLOR_INACTIVE = "hsl(var(--sub300))";
@@ -115,8 +115,17 @@ const DeviceChart = ({
         >
           <AreaChart data={transformedData}>
             <defs>
-              {/* 단일 그라데이션 정의 */}
-              <linearGradient id="fill-gradient" x1="0" y1="0" x2="0" y2="1">
+              {/* 각 시리즈마다 고유한 그라데이션 생성 */}
+              {seriesKeys.map((key, index) => {
+                const color = pastelColors[index]; // 또는 적절한 방식으로 색상 가져오기
+                return (
+                  <linearGradient key={`gradient-${key}`} id={`fill-gradient-${key}`} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={color} stopOpacity={0.6} />
+                    <stop offset="100%" stopColor="white" stopOpacity={0.05} />
+                  </linearGradient>
+                );
+              })}
+              <linearGradient id="fill-gradient-accent" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="hsl(var(--toggle-accent))" stopOpacity={0.6} />
                 <stop offset="100%" stopColor="white" stopOpacity={0.05} />
               </linearGradient>
@@ -127,13 +136,20 @@ const DeviceChart = ({
               const isAll = selectedLegend === "all";
               const isActive = isAll || selectedLegend === key;
               const strokeColor = getStroke(key, index);
+              const isSelected = selectedLegend === key;
+              let fillValue = "transparent";
+              if (isSelected) {
+                fillValue = "url(#fill-gradient-accent)"; // 선택된 항목은 accent 색상
+              } else if (isAll) {
+                fillValue = "transparent"; // 전체 보기일 때는 투명
+              }
 
               return (
                 <Area
                   dataKey={key}
                   key={`chart-${key}`}
                   type="natural"
-                  fill={isAll ? "transparent" : "url(#fill-gradient)"} 
+                  fill={fillValue}
                   stroke={strokeColor}
                   strokeOpacity={isActive ? 1 : 0.35}
                   fillOpacity={isActive ? 1 : 0.3}
@@ -194,8 +210,6 @@ const DeviceChart = ({
                           type="button"
                           onClick={() => {
                               setSelectedLegend(key)
-                              console.log("selectedLegend:", selectedLegend);
-                              console.log("seriesKeys:", seriesKeys);
                             }
                           }
                           className={[

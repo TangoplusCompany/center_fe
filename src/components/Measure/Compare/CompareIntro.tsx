@@ -2,9 +2,9 @@ import { CompareSlot } from "@/types/compare";
 import { IUserMeasureInfoResponse } from "@/types/measure";
 import CompareSummaryUnit from "./CompareSummaryUnit";
 import CompareFootTrajectoryGridContainer, { CompareFootTrajectoryGridProps } from "./CompareFootTrajectoryGridContainer";
-import SkeletonBox from "../SkeletonBox";
 import CompareDefault from "./CompareDefault";
 import CompareSummaryFootStatic, { CompareSummaryFootStaticProps } from "./CompareSummaryFootStatic";
+import SkeletonContainer from "../SkeletonContainer";
 
 const CompareIntro = ({
   data0,
@@ -130,15 +130,12 @@ const CompareIntro = ({
   const skeletonBoxes = (
     <div className="grid grid-cols-2 gap-4">
       {data0?.result_summary_data ? 
-      <SkeletonBox data={data0.result_summary_data} /> : 
-      <CompareDefault onCompareDialogOpen={onCompareDialogOpen} 
-      currentSlot={0}
-      />}
+      <SkeletonContainer data={data0.result_summary_data} /> : 
+      <CompareDefault onCompareDialogOpen={onCompareDialogOpen} currentSlot={0}/>
+      }
       {data1?.result_summary_data ? 
-      <SkeletonBox data={data1.result_summary_data} /> : 
-      <CompareDefault onCompareDialogOpen={onCompareDialogOpen} 
-      currentSlot={1}
-      />
+      <SkeletonContainer data={data1.result_summary_data} /> : 
+      <CompareDefault onCompareDialogOpen={onCompareDialogOpen} currentSlot={1}/>
       }
     </div>
   )

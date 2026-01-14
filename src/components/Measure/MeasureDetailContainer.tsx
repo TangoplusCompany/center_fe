@@ -19,7 +19,6 @@ const MeasureDetailContainer = () => {
     Number(measureSn),
     `${user_sn}`
   );
-  console.log(measureData);
   if (measureDataLoading) return <div>Loading...</div>;
   if (measureDataError) return <div>Error...</div>;
   if (!measureData) return <div>No data</div>;

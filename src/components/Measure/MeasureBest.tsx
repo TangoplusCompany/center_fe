@@ -15,7 +15,7 @@ const MeasureBest = ({ data }: { data: TWorstPart }) => {
     "발목": "img_ankle_0.svg"
   }[data.partName]
   return (
-    <div className="flex flex-col h-full w-full rounded-3xl border-2 border-sub200 shadow-sm bg-white relative overflow-hidden">
+    <div className="flex flex-col h-full w-full rounded-3xl border-2 border-sub200 shadow-none bg-white relative overflow-hidden">
       {/* 제목 - 좌상단 작은 원 배지와 함께 */}
       <div className="flex flex-shrink-0 items-center gap-2 mb-4 p-5 relative">
         {/* eslint-disable-next-line @next/next/no-img-element */}

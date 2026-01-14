@@ -26,8 +26,8 @@ const MeasureIntroLower  = (
       2: "border-danger/50",
     }[risk_level] ?? "bg-primary-foreground";
   const bgCondition = {
-    0: "border-sub300/50",
-    1: "bg-gradient-to-b from-[#FFA73A]/10 from-[2%] to-white to-[40%]",
+    0: "bg-gradient-to-b from-[#ededed]/10 from-[2%] to-white to-[40%]",
+    1: "bg-gradient-to-b from-[#ededed]/10 from-[2%] to-white to-[40%]",
     2: "bg-gradient-to-b from-[#FF5252]/10 from-[2%] to-white to-[50%]",
   }[risk_level] ?? "bg-primary-foreground";
   
@@ -38,7 +38,7 @@ const MeasureIntroLower  = (
     2: "text-dangerDeep",
   }[risk_level] ?? "bg-primary-foreground";
   const textBgCondition = {
-    0: "bg-sub300",
+    0: "bg-sub600",
     1: "bg-warning",
     2: "bg-danger",
   }[risk_level] ?? "bg-primary-foreground";

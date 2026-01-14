@@ -4,7 +4,7 @@ import { CompareSlot } from "@/types/compare";
 type CompareCardProps = {
   regDate?: string;
   currentSlot: CompareSlot;
-  onRemove?: (slot: CompareSlot) => void;
+  // onRemove?: (slot: CompareSlot) => void;
   onCardClick?: (slot: CompareSlot) => void;
   
 };

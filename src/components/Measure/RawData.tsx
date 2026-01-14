@@ -57,13 +57,8 @@ export const RawData = (
     주의: "text-warningDeep",
     위험: "text-dangerDeep",
   }[levelString0] ?? "bg-primary-foreground";
-  const textLeftRightCondition0 = {
-    정상: "text-sub600",
-    주의: "text-white",
-    위험: "text-white",
-  }[levelString0] ?? "text-sub600";
   const textBgCondition0 = {
-    정상: "bg-sub200/50",
+    정상: "bg-sub600",
     주의: "bg-warning",
     위험: "bg-danger",
   }[levelString0] ?? "bg-primary-foreground";
@@ -73,13 +68,8 @@ export const RawData = (
     주의: "text-warningDeep",
     위험: "text-dangerDeep",
   }[levelString1 ?? "정상"] ?? "bg-primary-foreground";
-  const textLeftRightCondition1 = {
-    정상: "text-sub600",
-    주의: "text-white",
-    위험: "text-white",
-  }[levelString1 ?? "정상"] ?? "text-sub600";
   const textBgCondition1 = {
-    정상: "bg-sub200/50",
+    정상: "bg-sub600",
     주의: "bg-warning",
     위험: "bg-danger",
   }[levelString1 ?? "정상"] ?? "bg-primary-foreground";
@@ -137,7 +127,7 @@ export const RawData = (
           <div className={`grid items-center h-full relative`}>
             <span className={`
               flex inline-flex items-center justify-center mx-auto
-              px-2 py-1 ${textBgCondition0} ${textLeftRightCondition0} 
+              px-2 py-1 ${textBgCondition0} text-white
               text-xs rounded-full
             `}>
               {levelString0} {data0?.range_level}단계
@@ -145,7 +135,7 @@ export const RawData = (
             {data1 && (
               <span className={`
                 flex inline-flex items-center justify-center mx-auto
-                px-2 py-1 ${textBgCondition1} ${textLeftRightCondition1}
+                px-2 py-1 ${textBgCondition1} text-white
                 text-xs rounded-full
               `}>
                 {levelString1} {data1?.range_level}단계
@@ -157,13 +147,27 @@ export const RawData = (
           </div>
           
           <div className={`grid items-center justify-start w-full h-full relative`}>
-            <div className={`${textCondition0} text-base text-sub600 px-3`}>{data0.ment_all}</div>
-            {data1 && (
-              <div className={`${textCondition1} text-base text-sub600 px-3`}>{data1?.ment_all}</div>
-            )}
-            {/* 정중앙 구분선 */}
-            {data1 && (
-              <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-sub200 -translate-y-1/2" />
+            {data1 && data0.ment_all === data1.ment_all ? (
+              // 두 내용이 같으면 하나만 표시 (구분선 없음)
+              <div className="text-base text-sub600 px-3 place-self-center">
+                {data0.ment_all}
+              </div>
+            ) : (
+              // 두 내용이 다르거나 data1이 없으면 기존 로직
+              <>
+                <div className={`${textCondition0} text-base text-sub600 px-3`}>
+                  {data0.ment_all}
+                </div>
+                {data1 && (
+                  <div className={`${textCondition1} text-base text-sub600 px-3`}>
+                    {data1.ment_all}
+                  </div>
+                )}
+                {/* 정중앙 구분선 */}
+                {data1 && (
+                  <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-sub200 -translate-y-1/2" />
+                )}
+              </>
             )}
           </div>
           

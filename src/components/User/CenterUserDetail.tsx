@@ -49,10 +49,9 @@ const CenterUserDetail = ({
 
   const handleToggleCompareSn = (sn: number, slot: CompareSlot) => {
     setComparePair((prev) => {
-      const next: ComparePair = [...prev]; // ✅ 새 배열 생성
-
-      next[slot] = sn;                     // ✅ 해당 슬롯만 변경
-      return next;                         // ✅ 새로운 참조 반환
+      const next: ComparePair = [...prev]; 
+      next[slot] = sn;                    
+      return next;                         
     });
   };
 
@@ -75,13 +74,13 @@ const CenterUserDetail = ({
     setComparePair([null, null]);
     setIsCompareMode(false); // ✅ 비교 모드도 종료(원하시면 이 줄 빼도 됨)
   };
-  const onRemoveCompare = (slot: CompareSlot) => {
-    setComparePair((prev) => {
-      const next: ComparePair = [...prev] as ComparePair;
-      next[slot] = null;          // ✅ 해당 슬롯만 비움
-      return next;
-    });
-  };
+  // const onRemoveCompare = (slot: CompareSlot) => {
+  //   setComparePair((prev) => {
+  //     const next: ComparePair = [...prev] as ComparePair;
+  //     next[slot] = null;          // ✅ 해당 슬롯만 비움
+  //     return next;
+  //   });
+  // };
   // 비교할 항목 선택하기
   const [isCompareDialogOpen, setIsCompareDialogOpen] = React.useState(false);
   
@@ -91,7 +90,6 @@ const CenterUserDetail = ({
     setActiveSlot(slot);
     setIsCompareDialogOpen(true);
   };
-
   // compare창이 켜질 수 있게 하는 flag
   const [isCompareMode, setIsCompareMode] = React.useState(false);
   const openCompareMode = () => setIsCompareMode(true);
@@ -119,7 +117,7 @@ const CenterUserDetail = ({
           onToggleCompareSn={ handleToggleCompareSn }
           onClearCompare={ onClearCompare }
           userMeasureList={ userMeasureList }
-          onRemoveCompare={ onRemoveCompare }
+          // onRemoveCompare={ onRemoveCompare }
           onCompareDialogOpen= {onCompareDialogOpen}
           onOpenCompareMode={openCompareMode}
           onCloseCompareMode={closeCompareMode}
