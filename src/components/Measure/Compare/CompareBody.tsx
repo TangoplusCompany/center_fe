@@ -24,12 +24,12 @@ type MeasureTab = {
 const CompareBody = ({
   userSn,
   comparePair,
-  onRemoveCompare,
+  // onRemoveCompare,
   onCompareDialogOpen,
 } : {
   userSn: string;
   comparePair: ComparePair;
-  onRemoveCompare: (slot: CompareSlot) => void;
+  // onRemoveCompare: (slot: CompareSlot) => void;
   onCompareDialogOpen: (slot: CompareSlot) => void;
 }) => {
   const leftSn = comparePair[0];
@@ -86,6 +86,11 @@ const CompareBody = ({
                 orient0: left?.result_summary_data.camera_orientation ?? 0,
                 orient1: right?.result_summary_data.camera_orientation ?? 0
               }}
+              onCompareDialogOpen={onCompareDialogOpen}
+              measure_dates={{
+                measure_date0: left?.result_summary_data.measure_date ?? "",
+                measure_date1: right?.result_summary_data.measure_date ?? ""
+              }}
             />
           </div>
         );
@@ -106,6 +111,11 @@ const CompareBody = ({
               cameraOrientations={{
                 orient0: left?.result_summary_data.camera_orientation ?? 0,
                 orient1: right?.result_summary_data.camera_orientation ?? 0
+              }}
+              onCompareDialogOpen={onCompareDialogOpen}
+              measure_dates={{
+                measure_date0: left?.result_summary_data.measure_date ?? "",
+                measure_date1: right?.result_summary_data.measure_date ?? ""
               }}
             />
           </div>
@@ -128,6 +138,11 @@ const CompareBody = ({
                 orient0: left?.result_summary_data.camera_orientation ?? 0,
                 orient1: right?.result_summary_data.camera_orientation ?? 0
               }}
+              onCompareDialogOpen={onCompareDialogOpen}
+              measure_dates={{
+                measure_date0: left?.result_summary_data.measure_date ?? "",
+                measure_date1: right?.result_summary_data.measure_date ?? ""
+              }}
             />
           </div>
         );
@@ -148,6 +163,11 @@ const CompareBody = ({
               cameraOrientations={{
                 orient0: left?.result_summary_data.camera_orientation ?? 0,
                 orient1: right?.result_summary_data.camera_orientation ?? 0
+              }}
+              onCompareDialogOpen={onCompareDialogOpen}
+              measure_dates={{
+                measure_date0: left?.result_summary_data.measure_date ?? "",
+                measure_date1: right?.result_summary_data.measure_date ?? ""
               }}
             />
           </div>
@@ -170,6 +190,11 @@ const CompareBody = ({
                 orient0: left?.result_summary_data.camera_orientation ?? 0,
                 orient1: right?.result_summary_data.camera_orientation ?? 0
               }}
+              onCompareDialogOpen={onCompareDialogOpen}
+              measure_dates={{
+                measure_date0: left?.result_summary_data.measure_date ?? "",
+                measure_date1: right?.result_summary_data.measure_date ?? ""
+              }}
             />
           </div>
         );
@@ -190,6 +215,11 @@ const CompareBody = ({
               cameraOrientations={{
                 orient0: left?.result_summary_data.camera_orientation ?? 0,
                 orient1: right?.result_summary_data.camera_orientation ?? 0
+              }}
+              onCompareDialogOpen={onCompareDialogOpen}
+              measure_dates={{
+                measure_date0: left?.result_summary_data.measure_date ?? "",
+                measure_date1: right?.result_summary_data.measure_date ?? ""
               }}
             />
           </div>
@@ -212,10 +242,11 @@ const CompareBody = ({
                 orient0: left?.result_summary_data.camera_orientation ?? 0,
                 orient1: right?.result_summary_data.camera_orientation ?? 0
               }}
-              // measureInfo={{
-              //   info0: left,
-              //   info1: right
-              // }}            
+              onCompareDialogOpen={onCompareDialogOpen}      
+              measure_dates={{
+                measure_date0: left?.result_summary_data.measure_date ?? "",
+                measure_date1: right?.result_summary_data.measure_date ?? ""
+              }} 
               />
           </div>
         );
@@ -268,14 +299,14 @@ const CompareBody = ({
           <CompareDateCard 
             regDate={leftData ? leftData.result_summary_data.measure_date : ""}
             currentSlot={ leftSlot }
-            onRemove={leftData ? () => onRemoveCompare( leftSlot ) : undefined}
+            // onRemove={leftData ? () => onRemoveCompare( leftSlot ) : undefined}
             onCardClick={onCompareDialogOpen} />
         </div>
         <div className="min-w-0 h-full">
           <CompareDateCard 
             regDate={rightData ? rightData.result_summary_data.measure_date : ""}
             currentSlot={ rightSlot }
-            onRemove={rightData ? () => onRemoveCompare( rightSlot ) : undefined}
+            // onRemove={rightData ? () => onRemoveCompare( rightSlot ) : undefined}
             onCardClick={onCompareDialogOpen} />
         </div>
       </div>

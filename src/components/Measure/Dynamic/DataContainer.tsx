@@ -70,7 +70,7 @@ const DynamicDataContainer = (
           />
         </div>
       </div>
-      <RawDataContainer mergedDetailData0={detailData ?? []} />
+      <RawDataContainer mergedDetailData0={detailData ?? []} measure_date0={""} measure_date1={""} />
     </div>
   );
 }

@@ -18,7 +18,7 @@ const CenterUserMeasureContainer = ({
   onToggleCompareSn,
   onClearCompare,
   userMeasureList,
-  onRemoveCompare,
+  // onRemoveCompare,
   onCompareDialogOpen,
   onOpenCompareMode,
   onCloseCompareMode,
@@ -33,7 +33,7 @@ const CenterUserMeasureContainer = ({
   onToggleCompareSn: (sn: number, slot: CompareSlot) => void; // ✅ 추가
   onClearCompare: () => void;
   userMeasureList: IUserMeasureList;
-  onRemoveCompare: (slot: CompareSlot) => void;
+  // onRemoveCompare: (slot: CompareSlot) => void;
   onCompareDialogOpen: (slot: CompareSlot) => void;
   onOpenCompareMode: () => void;
   onCloseCompareMode: () => void;
@@ -72,7 +72,7 @@ const CenterUserMeasureContainer = ({
               measureList={ userMeasureList?.measurements }
               comparePair={comparePair}
               onClose={onClearCompare}
-              onRemoveCompare={onRemoveCompare}
+              // onRemoveCompare={onRemoveCompare}
               onCompareDialogOpen={onCompareDialogOpen}
               onCloseCompareMode={onCloseCompareMode}
               />

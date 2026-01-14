@@ -155,7 +155,7 @@ const MeasureIntro = ({
         <div className="h-full">{topLeft}</div>
         <div className="h-full">{topRight}</div>
       </div>
-      <div className="rounded-3xl border p-4">
+      <div className="rounded-3xl border-2 border-sub200 p-4">
           {/* 상체 */}
           <div className="text-base font-semibold mb-2">상체 분석</div>
           <div className="grid grid-cols-3 auto-rows-fr gap-4">

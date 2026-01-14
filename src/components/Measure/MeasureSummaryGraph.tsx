@@ -1,6 +1,6 @@
 import { useMeasureSummaryChartConfig } from "@/hooks/api/measure/useMeasureSummaryChartConfig";
 import { FootPressureHistory, UpperAndLowerMeasureHistory } from "@/types/measure";
-import { Card, CardContent } from "../ui/card";
+import { Card, CardContent, CardHeader } from "../ui/card";
 import { ChartContainer, ChartTooltip } from "../ui/chart";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import React from "react";
@@ -23,8 +23,6 @@ const MeasureSummaryGraph = ({
 }: MeasureSummaryGraphProps) => {
 
   const { chartConfig } = useMeasureSummaryChartConfig(data);
-
-
 
   // 데이터 포인트 클릭 핸들러
   const handleAreaClick = (
@@ -108,7 +106,14 @@ const MeasureSummaryGraph = ({
     return levels[riskLevel] || 'text-black';
   }
   
-
+  const getTitle = (dCase: 0 | 1 | 2) => {
+    const levels: { [key: string]: string } = {
+      0: "상지 기간별 추이",
+      1: "하지 기간별 추이",
+      2: "정적 족압 기간별 추이",
+    };
+    return levels[dCase] || 'text-black';
+  }
   // range_level을 단계로 변환하는 함수
   const getRangeLevelText = (rangeLevel: string) => {
     return `${rangeLevel}단계`;
@@ -116,15 +121,15 @@ const MeasureSummaryGraph = ({
 
   return (
     <Card className="shadow-none rounded-xl border-2 border-sub200">
-      {/* <CardHeader className="flex items-center gap-2 space-y-0 border-2 border-toggleAccent-background py-2 sm:flex-row bg-toggleAccent-background">
-        <div className="grid flex-1 gap-1 text-center sm:text-left">
-          <CardTitle className="text-toggleAccent text-xl">상지·하지 요약 추이</CardTitle>
+      <CardHeader className="p-4 py-2">
+        <div className="text-base font-semibold">
+          {getTitle(dCase)}
         </div>
-      </CardHeader> */}
-      <CardContent className="px-2 pt-2 sm:px-4 sm:pt-4">
+      </CardHeader>
+      <CardContent className="p-4">
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
+          className="aspect-auto h-[256px] w-full"
         >
           <AreaChart 
             data={processedData}
@@ -136,7 +141,11 @@ const MeasureSummaryGraph = ({
               }
             }}
           >
-            <CartesianGrid vertical={false} />
+            <CartesianGrid 
+              vertical={false} 
+              stroke="hsl(var(--sub200))"
+              strokeDasharray="4 4"
+            />
             <XAxis
               dataKey="date"
               tickLine={false}
@@ -157,6 +166,7 @@ const MeasureSummaryGraph = ({
               tickFormatter={formatYAxis}
               tickLine={false}
               axisLine={false}
+              width={40}
             />
             
             <ChartTooltip
@@ -167,7 +177,7 @@ const MeasureSummaryGraph = ({
                 const data = payload[0].payload;
                 
                 return (
-                  <div className="rounded-lg border p-3 shadow-sm">
+                  <div className="rounded-lg border p-3 shadow-sm bg-white">
                     <div className="text-sm font-medium mb-2">
                       {data.measure_date.split(' ')[0]}
                     </div>
@@ -242,25 +252,6 @@ const MeasureSummaryGraph = ({
                 name="하체"
               />
             )}
-            
-            {/* <ChartLegend
-              content={() => {
-                return (
-                  <div className="flex justify-center items-center gap-3 pt-2">
-                    {data.map((item, index) => (
-                      <button
-                        key={index}
-                        onClick={() => legendClick(item.sn)}
-                        className="flex items-center gap-2 text-sm hover:opacity-70 transition-opacity cursor-pointer"
-                      >
-                        
-                        <span>✔ {item.measure_date.split(' ')[0]}</span>
-                      </button>
-                    ))}
-                  </div>
-                );
-              }}
-            /> */}
           </AreaChart>
         </ChartContainer>
       </CardContent>

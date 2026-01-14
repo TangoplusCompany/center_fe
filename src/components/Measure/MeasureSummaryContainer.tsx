@@ -35,7 +35,6 @@ const MeasureSummaryContainer = ({
             risk_level={risk_level} 
             range_level={range_level}
             title={title}
-
           />
         </div>
         <div className="transition-all duration-300 ease-in-out">

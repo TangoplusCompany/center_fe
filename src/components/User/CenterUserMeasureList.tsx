@@ -38,7 +38,7 @@ export const CenterUserMeasureList = ({
           <TableHead className="text-center text-xs sm:text-sm">측정 일자</TableHead>
           <TableHead className="text-center text-xs sm:text-sm">측정 기기</TableHead>
           <TableHead className="text-center text-xs sm:text-sm">측정 요약</TableHead>
-          <TableHead className="text-right text-xs sm:text-sm"></TableHead>
+
         </TableRow>
       </TableHeader>
 

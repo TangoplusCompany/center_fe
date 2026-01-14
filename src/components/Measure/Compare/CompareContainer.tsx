@@ -1,13 +1,12 @@
 import { IMeasureList } from "@/types/measure";
 import CompareBody from "./CompareBody";
-
 import { ComparePair, CompareSlot } from "@/types/compare";
 
 const CompareContainer = ({
   userSn,
   comparePair,
   onClose,
-  onRemoveCompare,
+  // onRemoveCompare,
   onCompareDialogOpen,
   onCloseCompareMode
 }: {
@@ -15,7 +14,7 @@ const CompareContainer = ({
   measureList? : IMeasureList[];
   comparePair: ComparePair;
   onClose: () => void;
-  onRemoveCompare: (slot: CompareSlot) => void;
+  // onRemoveCompare: (slot: CompareSlot) => void;
   onCompareDialogOpen: (slot: CompareSlot) => void;
   onCloseCompareMode : () => void;
 }) => {
@@ -42,9 +41,9 @@ const CompareContainer = ({
 
       <div className="flex-1 min-h-0 overflow-y-auto p-4">
         <CompareBody 
-          userSn={userSn} 
+          userSn={userSn}
           comparePair={comparePair}
-          onRemoveCompare={onRemoveCompare}
+          // onRemoveCompare={onRemoveCompare}
           onCompareDialogOpen={onCompareDialogOpen}
            />
       </div>

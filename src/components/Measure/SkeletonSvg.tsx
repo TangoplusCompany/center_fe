@@ -17,8 +17,6 @@ const SkeletonSvg= ({
     return null;
   };
 
-  // 각 부위별 좌표 (SVG viewBox 155x481 기준, 퍼센트로 계산)
-  console.log(data.risk_neck, data.risk_shoulder_left, data.risk_shoulder_right, data.risk_elbow_left, data.risk_elbow_right, data.risk_hip_left, data.risk_hip_right, data.risk_knee_left, data.risk_knee_right, data.risk_ankle_left, data.risk_ankle_right,)
   const ogWidth = 246;
   const ogHeight = 440;
   const positions = {

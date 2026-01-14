@@ -24,7 +24,7 @@ const MeasurePartHeatMap = ({ data }: MeasurePartHeatmapProps) => {
   };
 
   return (
-    <div className="w-full rounded-3xl border p-5 shadow-sm bg-white">
+    <div className="w-full rounded-3xl border border-2 border-sub200 p-5 shadow-none">
       <h2 className="text-xl font-bold mb-4">측정 한눈에 보기</h2>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

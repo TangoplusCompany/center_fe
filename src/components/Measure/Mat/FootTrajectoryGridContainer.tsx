@@ -65,20 +65,14 @@ const FootTrajectoryGridContainer = ({
     1: "주의",
     2: "위험"
   } as const)[level ?? "0"] ?? "정상";
-  const getRiskText = (level?: string) => ({
-    정상: "text-sub600",
-    주의: "text-white",
-    위험: "text-white",
-  } as const)[level as "정상" | "주의" | "위험"] ?? "bg-primary-foreground";
   const getRiskBgClass = (level?: string) =>
   ({
-    정상: "bg-sub200/50",
+    정상: "bg-sub600",
     주의: "bg-warning",
     위험: "bg-danger",
   } as const)[level as "정상" | "주의" | "위험"] ?? "bg-primary-foreground";
   const riskString = getRiskString(parseInt(mat_static_risk_level));
   const riskBg = getRiskBgClass(riskString);
-  const riskText = getRiskText(riskString)
   
   return (
     <div className="flex flex-col gap-2">
@@ -86,8 +80,8 @@ const FootTrajectoryGridContainer = ({
         {/* 왼쪽: FootStatic */}
         <div className="flex flex-col gap-4">
           <div className="flex justify-between items-center py-2">
-            <h2 className="text-xl font-semibold">정적 족압 결과</h2>
-            <span className={`px-3 py-1 ${riskBg} rounded-xl text-sm ${riskText}`}>
+            <h2 className="text-base font-semibold">정적 족압 결과</h2>
+            <span className={`px-3 py-1 ${riskBg} rounded-xl text-sm text-white`}>
               {riskString} {mat_static_range_level}단계
             </span>
           </div>

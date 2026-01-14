@@ -1,6 +1,6 @@
 import { ChartConfigValue } from "@/hooks/device/useDeviceChartConfig";
 import { FootPressureHistory, UpperAndLowerMeasureHistory } from "@/types/measure";
-import { RandomHexColor } from "@/utils/RandomHexColor";
+import { RandomHexColor } from "@/utils/randomHexColor";
 import { useEffect, useState } from "react";
 
 type ChartConfig = Record<string, ChartConfigValue>;
