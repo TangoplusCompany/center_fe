@@ -1,4 +1,4 @@
-export  const getCompareTrendState = (score0: number, score1: number | undefined) => {
+export const compareTrendState = (score0: number, score1: number | undefined) => {
   if (score1 === undefined) return "";
   const diff = score0 - score1;
   if (diff > 0) return `${diff}단계 완화`;
