@@ -62,7 +62,7 @@ const SideMeasurement = ({
   return (
     <div className="flex flex-col gap-5">
       {/* 상단: 이미지 2개 */}
-      <div className="grid grid-cols-2">
+      <div className="grid grid-cols-2 gap-4">
         <div className="col-span-1">
           <MeasureStaticThird files={measureThird?.file_data} cameraOrientation={cameraOrientation} />
         </div>
@@ -71,7 +71,7 @@ const SideMeasurement = ({
         </div>
       </div>
       <StaticDataContainer measureData={measureInfo} />
-      <RawDataContainer mergedDetailData0={mergedDetailData} />
+      <RawDataContainer mergedDetailData0={mergedDetailData} measure_date0={""} measure_date1={""} />
     </div>
   );
 };

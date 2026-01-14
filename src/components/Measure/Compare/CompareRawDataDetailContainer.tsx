@@ -1,31 +1,29 @@
-import React from "react";
+import React, { useMemo } from "react";
 import CompareRawData from "./CompareRawData";
 import { IUserMeasureDetailData } from "@/types/measure";
+import { CompareRawDataProps } from "../RawDataContainer";
+
+const partLandmarkMap: { [key: number]: number[] } = {
+  0: [], 
+  1: [0], 
+  2: [11, 12],
+  3: [13, 14, 15, 16], 
+  4: [23, 24], 
+  5: [25, 26], 
+  6: [27, 28], 
+};
 
 const CompareRawDataDetailContainer = ({ 
-  mergedDetailData0, 
-  mergedDetailData1,
+  mergedDatas,
   selectedPart,
 }: {
-  mergedDetailData0: IUserMeasureDetailData[];
-  mergedDetailData1: IUserMeasureDetailData[];
+  mergedDatas: CompareRawDataProps;
   selectedPart: 0 | 1 | 2 | 3 | 4 | 5 | 6;
 }) => {
-
-  const partLandmarkMap: { [key: number]: number[] } = {
-    0: [], 
-    1: [0], 
-    2: [11, 12],
-    3: [13, 14, 15, 16], 
-    4: [23, 24], 
-    5: [25, 26], 
-    6: [27, 28], 
-  };
-
   const filteredData0 =
     selectedPart === 0
-      ? mergedDetailData0
-      : mergedDetailData0.filter((data) =>
+      ? mergedDatas.mergedDetailData0
+      : mergedDatas.mergedDetailData0.filter((data) =>
           partLandmarkMap[selectedPart]?.includes(data.landmark)
         );
         
@@ -52,12 +50,15 @@ const CompareRawDataDetailContainer = ({
       return aUnit.localeCompare(bUnit, 'ko');
     });
   }, [filteredData0]);
-  const filteredData1 =
-    selectedPart === 0
-      ? mergedDetailData1
-      : mergedDetailData1.filter((data) =>
-          partLandmarkMap[selectedPart]?.includes(data.landmark)
-        );
+    const filteredData1 = useMemo(
+      () =>
+        selectedPart === 0
+          ? (mergedDatas.mergedDetailData1 ?? [])
+          : (mergedDatas.mergedDetailData1 ?? []).filter((data) =>
+              partLandmarkMap[selectedPart]?.includes(data.landmark)
+            ),
+      [mergedDatas.mergedDetailData1, selectedPart]
+    );
         
   const sortedData1 = React.useMemo(() => {
     const order = ['코', '머리', '어깨', '팔꿈치', '몸', '정면', '골반', '무릎', '발목'];
@@ -84,7 +85,7 @@ const CompareRawDataDetailContainer = ({
   }, [filteredData1]);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-4">
       {(() => {
         const grouped0: (IUserMeasureDetailData | [IUserMeasureDetailData, IUserMeasureDetailData])[] = [];
         const processed0 = new Set<number>();
@@ -150,7 +151,9 @@ const CompareRawDataDetailContainer = ({
           <CompareRawData 
             key={idx} 
             data0={grouped0[idx]} 
-            data1={grouped1[idx]} 
+            data1={grouped1[idx]}
+            measure_date0={mergedDatas.measure_date0}
+            measure_date1={mergedDatas.measure_date1}
           />
         ));
       })()}

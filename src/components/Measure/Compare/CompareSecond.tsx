@@ -4,12 +4,16 @@ import DummyStaticContainer from "../DummyStaticContainer";
 import { MeasurementImage } from "../MeasurementImage";
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
 import RawDataContainer from "../RawDataContainer";
+import CompareDefault from "./CompareDefault";
+import { CompareSlot } from "@/types/compare";
 
 const MeasureStaticCompareSecond = React.memo(
   ({
     className,
     sns,
-    cameraOrientations
+    cameraOrientations,
+    measure_dates,
+    onCompareDialogOpen
   }: {
     className?: string;
     sns: {
@@ -18,12 +22,18 @@ const MeasureStaticCompareSecond = React.memo(
       userSn: string;
     };
     cameraOrientations: {
-    orient0 :0 | 1;
-    orient1 : 0 | 1;
-  };
+      orient0 :0 | 1;
+      orient1 : 0 | 1;
+    };
+    measure_dates: {
+      measure_date0: string;
+      measure_date1: string;
+    }
+    onCompareDialogOpen : (slot: CompareSlot) => void;
+    
   }) => {
     const {
-      data: measureSecond0,
+      data: measure0,
       isLoading: seq2Loading0,
       isError: seq2Error0,
     } = useMeasureSequence(
@@ -32,7 +42,7 @@ const MeasureStaticCompareSecond = React.memo(
       5
     );
     const {
-      data: measureSecond1,
+      data: measure1,
       isLoading: seq2Loading1,
       isError: seq2Error1,
     } = useMeasureSequence(
@@ -44,12 +54,12 @@ const MeasureStaticCompareSecond = React.memo(
       data: measureJson0,
       isLoading: isJsonLoading0,
       isError: isJsonError0,
-    } = useMeasureJson(measureSecond0?.file_data?.measure_server_json_name);
+    } = useMeasureJson(measure0?.file_data?.measure_server_json_name);
     const {
       data: measureJson1,
       isLoading: isJsonLoading1,
       isError: isJsonError1,
-    } = useMeasureJson(measureSecond1?.file_data?.measure_server_json_name);
+    } = useMeasureJson(measure1?.file_data?.measure_server_json_name);
 
     const baseUrl = process.env.NEXT_PUBLIC_FILE_URL || '';
 
@@ -57,8 +67,8 @@ const MeasureStaticCompareSecond = React.memo(
     const isLoading = seq2Loading0 || seq2Loading1 || isJsonLoading0 || isJsonLoading1;
     
     const isError = seq2Error0 || seq2Error1 || isJsonError0 || isJsonError1;
-    const hasData0 = measureJson0 && measureSecond0;
-    const hasData1 = measureJson1 && measureSecond1;
+    const hasData0 = measureJson0 && measure0;
+    const hasData1 = measureJson1 && measure1;
     if (isLoading) {
       return <DummyStaticContainer />;
     }
@@ -73,33 +83,42 @@ const MeasureStaticCompareSecond = React.memo(
       <div className="flex flex-col gap-4">
         <div className="grid grid-cols-2 gap-4">
           <div className={`${className ?? ""} flex flex-col gap-4 lg:gap-10`}>
-            {measureJson0 && measureSecond0 && (
+            {measureJson0 && measure0 && (
               <MeasurementImage
                 imageUrl={
                   baseUrl + "/" +
-                  measureSecond0?.file_data?.measure_server_file_name
+                  measure0?.file_data?.measure_server_file_name
                 }
                 measureJson={measureJson0}
-                step="first"
+                step="second"
                 cameraOrientation={cameraOrientations.orient0}
+                compareSlot={0}
               />
             )}
           </div>
           <div className={`${className ?? ""} flex flex-col gap-4 lg:gap-10`}>
-            {measureJson1 && measureSecond1 && (
+            {measureJson1 && measure1 ? (
                 <MeasurementImage
                   imageUrl={
                     baseUrl + "/" +
-                    measureSecond1?.file_data?.measure_server_file_name
+                    measure1?.file_data?.measure_server_file_name
                   }
                   measureJson={measureJson1}
-                  step="first"
+                  step="second"
                   cameraOrientation={cameraOrientations.orient1}
+                  compareSlot={1}
                 />
-              )}
+              ) : (
+              <CompareDefault onCompareDialogOpen={onCompareDialogOpen} currentSlot={1}/>
+            )}
             </div>
         </div>
-      <RawDataContainer mergedDetailData0={measureSecond0?.detail_data ?? []} mergedDetailData1={measureSecond1?.detail_data}/>
+      <RawDataContainer 
+        mergedDetailData0={measure0?.detail_data ?? []}
+        mergedDetailData1={measure1?.detail_data ?? []} 
+        measure_date0={measure_dates.measure_date0} 
+        measure_date1={measure_dates.measure_date1}
+        />
 
       </div>
     );

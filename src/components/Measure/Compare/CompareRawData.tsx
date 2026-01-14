@@ -1,6 +1,9 @@
 "use-client";
 
 import { IUserMeasureDetailData } from "@/types/measure";
+import { getCompareTrendState } from "@/utils/compareTrendState";
+import { getRawDataMark } from "@/utils/getRawDataMark";
+import { getRiskScore } from "@/utils/useRiskScore";
 
 export interface IStaticRawDataProps {
   measure_type: number;
@@ -18,337 +21,270 @@ export interface IStaticRawDataProps {
 export const CompareRawData = ({
   data0,
   data1,
+  measure_date0,
+  measure_date1,
 } : {
   data0: IUserMeasureDetailData | [IUserMeasureDetailData, IUserMeasureDetailData];
   data1?: IUserMeasureDetailData | [IUserMeasureDetailData, IUserMeasureDetailData];
+  measure_date0: string;
+  measure_date1: string;
 }) => {
-  const isArrayData0 = Array.isArray(data0);
-  const data00 = isArrayData0 ? data0[0] : data0;
-  const data01 = isArrayData0 && data0.length === 2 ? data0[1] : undefined;
-  const formattedData00 = (data00.measure_unit?.includes("거리") ? Math.abs(data00.data) : data00.data).toFixed(1);
-  const unit00 = data00.measure_unit?.includes("족압") 
-    ? "%" 
-    : data00.measure_unit?.includes("거리") 
-      ? "cm" 
-      : "°";
-  const leftRightString00 = {
-    0: "좌측",
-    1: "우측"
-  }[data00.left_right] ?? "";
 
-  const seqString = {
-    1 : "정면 측정",
-    51 : "측면 측정",
-    4 : "후면 측정",
-    5 : "앉은 후면",
-    6 : "팔꿉 측정",
-    7 : "오버헤드 스쿼트"
-  }[data00.measure_type] ?? "";
-  const levelString00 = {
-    0: "정상",
-    1: "주의",
-    2: "위험"
-  }[data00.risk_level] ?? "정상";
+  const isArrayDataTop0 = Array.isArray(data0);
+  const dataTop0 = isArrayDataTop0 ? data0[0] : data0;
+  const dataBottom0 = isArrayDataTop0 && data0.length === 2 ? data0[1] : undefined;
+  const unit = getRawDataMark(dataTop0?.measure_unit);
+  const rawData00 = dataTop0?.measure_unit?.includes("거리") 
+    ? Math.abs(dataTop0?.data) 
+    : dataTop0?.data;
+  const rawData01 = dataBottom0?.measure_unit?.includes("거리")
+    ? Math.abs(dataBottom0.data)
+    : (dataBottom0?.data ?? 0);
 
-  // data1용 변수들 (존재할 경우에만)
-  const formattedData01 = data01?.measure_unit?.includes("거리") 
-  ? Math.abs(data01.data).toFixed(1) 
-  : data01?.data?.toFixed(1) ?? null;
-  const unit01 = data01?.measure_unit?.includes("족압") 
-    ? "%" 
-    : data01?.measure_unit?.includes("거리") 
-      ? "cm" 
-      : "°";
-  const leftRightString01 = data01 ? ({
-    0: "좌측",
-    1: "우측"
-  }[data01.left_right] ?? "") : undefined;
+  const isArrayDataTop1 = Array.isArray(data1);
+  const dataTop1 = isArrayDataTop1 ? data1[0] : data1;
+  const dataBottom1 = isArrayDataTop1 && data1.length === 2 ? data1[1] : undefined;
+  const rawData10 = dataTop1?.measure_unit?.includes("거리")
+    ? Math.abs(dataTop1.data)
+    : (dataTop1?.data ?? 0);
+  const rawData11 = dataBottom1?.measure_unit?.includes("거리")
+    ? Math.abs(dataBottom1.data)
+    : (dataBottom1?.data ?? 0);
 
-  const levelString01 = data01 ? ({
-    0: "정상",
-    1: "주의",
-    2: "위험"
-  }[data01.risk_level] ?? "정상") : null;
+  const trendGap0 = Math.abs(rawData00 - rawData10).toFixed(1) + unit
+  const trendGap1 = Math.abs(rawData01 - rawData11).toFixed(1) + unit
 
-  const textCondition00 = {
-    정상: "text-sub600",
-    주의: "text-warningDeep",
-    위험: "text-dangerDeep",
-  }[levelString00] ?? "bg-primary-foreground";
-  const textLeftRightCondition00 = {
-    정상: "text-sub600",
-    주의: "text-white",
-    위험: "text-white",
-  }[levelString00] ?? "text-sub600";
-  const textBgCondition00 = {
-    정상: "bg-sub200/50",
-    주의: "bg-warning",
-    위험: "bg-danger",
-  }[levelString00] ?? "bg-primary-foreground";
-
-  const textCondition01 = {
-    정상: "text-sub600",
-    주의: "text-warningDeep",
-    위험: "text-dangerDeep",
-  }[levelString01 ?? "정상"] ?? "bg-primary-foreground";
-  const textLeftRightCondition01 = {
-    정상: "text-sub600",
-    주의: "text-white",
-    위험: "text-white",
-  }[levelString01 ?? "정상"] ?? "text-sub600";
-  const textBgCondition01 = {
-    정상: "bg-sub200/50",
-    주의: "bg-warning",
-    위험: "bg-danger",
-  }[levelString01 ?? "정상"] ?? "bg-primary-foreground";
-
-  // 비교할 항목 2번
-  const isArrayData1 = Array.isArray(data1);
-  const data10 = isArrayData1 ? data1[0] : data1;
-  const data11 = isArrayData1 && data1.length === 2 ? data1[1] : undefined;
-
-  const formattedData10 = data10 
-    ? (data10.measure_unit?.includes("거리") ? Math.abs(data10.data) : data10.data).toFixed(1)
-    : null;
-
-  const unit10 = data10?.measure_unit?.includes("족압") 
-    ? "%" 
-    : data10?.measure_unit?.includes("거리") 
-      ? "cm" 
-      : "°";
-
-  const leftRightString10 = data10 
-    ? ({
-        0: "좌측",
-        1: "우측"
-      }[data10.left_right] ?? "")
-    : "";
-
-  const levelString10 = data10
-    ? ({
-        0: "정상",
-        1: "주의",
-        2: "위험"
-      }[data10.risk_level] ?? "정상")
-    : "정상";
-
-  // data1용 변수들 (존재할 경우에만)
-  const formattedData11 = data11?.measure_unit?.includes("거리") 
-  ? Math.abs(data11.data).toFixed(1) 
-  : data11?.data?.toFixed(1) ?? null;
-  const unit11 = data11?.measure_unit?.includes("족압") 
-    ? "%" 
-    : data11?.measure_unit?.includes("거리") 
-      ? "cm" 
-      : "°";
-  const leftRightString11 = data11 ? ({
-    0: "좌측",
-    1: "우측"
-  }[data11.left_right] ?? "") : undefined;
-
-  const levelString11 = data11 ? ({
-    0: "정상",
-    1: "주의",
-    2: "위험"
-  }[data11.risk_level] ?? "정상") : null;
-
-  const textCondition10 = {
-    정상: "text-sub600",
-    주의: "text-warningDeep",
-    위험: "text-dangerDeep",
-  }[levelString10] ?? "bg-primary-foreground";
-  const textLeftRightCondition10 = {
-    정상: "text-sub600",
-    주의: "text-white",
-    위험: "text-white",
-  }[levelString10] ?? "text-sub600";
-  const textBgCondition10 = {
-    정상: "bg-sub200/50",
-    주의: "bg-warning",
-    위험: "bg-danger",
-  }[levelString10] ?? "bg-primary-foreground";
-
-  const textCondition11 = {
-    정상: "text-sub600",
-    주의: "text-warningDeep",
-    위험: "text-dangerDeep",
-  }[levelString11 ?? "정상"] ?? "bg-primary-foreground";
-  const textLeftRightCondition11 = {
-    정상: "text-sub600",
-    주의: "text-white",
-    위험: "text-white",
-  }[levelString11 ?? "정상"] ?? "text-sub600";
-  const textBgCondition11 = {
-    정상: "bg-sub200/50",
-    주의: "bg-warning",
-    위험: "bg-danger",
-  }[levelString11 ?? "정상"] ?? "bg-primary-foreground";
-
-  // const RawDataContainer = (
-  //   data: IUserMeasureDetailData | IUserMeasureDetailData[],
+  const RawDataContainer = (
+    dataTop: IUserMeasureDetailData,
+    dataBottom: IUserMeasureDetailData | undefined,
+    isNext: boolean
+  ) => {
+    const formattedData0 = (dataTop.measure_unit?.includes("거리") ? Math.abs(dataTop.data) : dataTop.data).toFixed(1);
+    const unit0 = getRawDataMark(dataTop.measure_unit)
+    const leftRightString0 = {
+      0: "좌측",
+      1: "우측"
+    }[dataTop.left_right] ?? "";
     
-  //   isNext: boolean
-  // ) => {
-  //   const isArrayDataTop = Array.isArray(data);
-  //   const dataTop = isArrayDataTop ? data[0] : data;
-  //   const dataBottom = isArrayDataTop && data.length === 2 ? data[1] : undefined;
+    const levelString0 = {
+      0: "정상",
+      1: "주의",
+      2: "위험"
+    }[dataTop.risk_level] ?? "정상";
+
+
+    const formattedData1 = dataBottom?.measure_unit?.includes("거리") 
+    ? Math.abs(dataBottom.data).toFixed(1) 
+    : dataBottom?.data?.toFixed(1) ?? undefined;
+    const unit1 = getRawDataMark(dataBottom?.measure_unit)
+    const leftRightString1 = dataBottom ? ({
+      0: "좌측",
+      1: "우측"
+    }[dataBottom.left_right] ?? "") : undefined;
+
+    const levelString1 = dataBottom ? ({
+      0: "정상",
+      1: "주의",
+      2: "위험"
+    }[dataBottom.risk_level] ?? "정상") : undefined;
+
+    const textBgCondition0 = {
+      정상: "bg-sub600",
+      주의: "bg-warning",
+      위험: "bg-danger",
+    }[levelString0] ?? "bg-sub600";
+
+    const textBgCondition1 = {
+      정상: "bg-sub600",
+      주의: "bg-warning",
+      위험: "bg-danger",
+    }[levelString1 ?? "정상"] ?? "bg-sub600";
+
+    const data0 = dataTop.measure_unit?.includes("거리") 
+      ? Math.abs(dataTop.data) 
+      : dataTop.data;
+      
+    const data1 = dataBottom?.measure_unit?.includes("거리")
+      ? Math.abs(dataBottom.data)
+      : (dataBottom?.data ?? 0);
+
     
-  //   (
-  //   <div  className={`flex w-full`}>
-  //     <div className="grid grid-cols-[18%_10%_12%_60%] items-center border-b-2 border-sub200 bg-sub100 py-2">
-  //       <div className="flex gap-4">
-  //         <span className="text-base font-semibold text-black px-4">{isNext ? '①' : '②'}</span>
-  //         <span className="text-base text-sub600">{dataTop.measure_unit}</span>
-  //         {/* TODO 여기다가 날짜를 넣어줘야함  */}
-  //       </div>
-  //       <span className={`flex flex-1 justify-center text-base text-sub600 `}>{!data1 ? '' : '차이값'}</span>
-  //       <span className="flex justify-center text-base text-sub600 ">단계표시</span>
-  //       <span className="text-base text-sub600 px-4">분석설명</span>
-  //     </div>
-
-  //     <div  className={`grid grid-cols-[18%_10%_12%_60%] items-center h-full divide-x-2 divide-sub200`}>
-        
-  //     </div>
-  //   </div>
-  // )};
-
-  return (
-    <div className={`flex flex-col`}>
-      {/* 헤더 영역 */}
-      <div className="flex order-t-2 border-b-2 border-sub100 px-4 py-2 bg-sub100 gap-4">
-        <span className="text-sm font-semibold text-black">{data00.measure_unit}</span>
-        <span className="text-sm font-semibold text-sub600">{seqString}</span>
+    
+    return (
+    <div  className={`flex flex-col w-full h-full`}>
+      <div className="grid grid-cols-[18%_10%_12%_60%] items-center border-b-2 border-sub200 bg-sub100 py-2">
+        <div className="flex gap-4 items-center px-4">
+          <span className="text-base font-semibold text-black ">{isNext ? '②' : '①'}</span>
+          <span className="text-xs text-sub600">{isNext ? measure_date1.slice(0, 11) : measure_date0.slice(0, 11)}</span>
+        </div>
+        <span className={`flex flex-1 justify-center text-base text-sub600 `}>{!dataBottom ? '기준값' : '차이값'}</span>
+        <span className="flex justify-center text-base text-sub600 ">단계표시</span>
+        <span className="text-base text-sub600 px-4">분석설명</span>
       </div>
 
-      <div className="grid grid-cols-[20%_80%] ">
-        <div className="">
-          
+      <div  className={`grid grid-cols-[18%_10%_12%_60%] items-center h-full w-full divide-x-2 divide-sub200`}>
+        
+        <div className={`grid items-center h-full`}>
+          <div className="flex">
+            <span className={`flex text-sm items-center justify-center ${isNext ? 'text-black' : 'text-sub600'} px-2 py-1 rounded-full bg-sub100 mx-2 my-2 ${!dataBottom && 'invisible'}`}>
+              {leftRightString0}
+            </span>
+            <span className={`flex items-center text-lg font-medium leading-none px-2 ${isNext ? 'text-black' : 'text-sub600'}`}>
+              {formattedData0} {unit0}
+            </span>
+          </div>
+          {dataBottom && (
+            <div className="flex">
+              <span className={`text-sm flex items-center justify-center ${isNext ? 'text-black' : 'text-sub600'} px-2 py-1 rounded-full bg-sub100 mx-2 my-2`}>
+                {leftRightString1}
+              </span>
+              <span className={`flex items-center text-lg text-black font-medium leading-none px-2 ${isNext ? 'text-black' : 'text-sub600'}`}>
+                {formattedData1} {unit1}
+              </span>
+            </div>
+          )}
+        </div>  
+
+
+        <div className={`grid items-center justify-center h-full ${isNext ? 'text-black' : 'text-sub600'}`}>
+          {!dataBottom 
+            ? (dataTop.measure_unit?.includes("기울기") ? "0º" : "")
+            : (data0 - data1).toFixed(1) + unit0
+          }
+        </div>
+
+        <div className={`grid items-center justify-center h-full`}>
+          <span className={`
+            flex inline-flex items-center justify-center mx-auto
+            px-2 py-1 ${textBgCondition0} 
+            text-xs rounded-full text-white
+          `}>
+            {levelString0} {dataTop?.range_level}단계
+          </span>
+          {dataBottom && (
+            <span className={`
+              flex inline-flex items-center justify-center mx-auto
+              px-2 py-1 ${textBgCondition1}
+              text-xs rounded-full text-white
+            `}>
+              {levelString1} {dataBottom?.range_level}단계
+            </span>
+          )}
+        </div>
+
+        <div className={`grid items-center justify-start h-full px-4`}>
+          <span className={`text-sm ${isNext ? 'text-black' : 'text-sub600'}`}>{dataTop.ment_all}</span>
+          {dataBottom && (
+            <span className={`text-sm ${isNext ? 'text-black' : 'text-sub600'}`}>{dataBottom?.ment_all}</span>
+          )}
+        </div>
+      </div>
+    </div>
+  )};
+  
+  const scoreTop0 = getRiskScore(`${dataTop0.risk_level}`, `${dataTop0?.range_level}`);
+  const scoreTop1 = dataTop1 ? getRiskScore(`${dataTop1?.risk_level}`, `${dataTop1?.range_level}`) : 0;
+  const scoreBottom0 = dataBottom0 ? getRiskScore(`${dataBottom0.risk_level}`, `${dataBottom0?.range_level}`) : 0;
+  const scoreBottom1 = dataBottom1 ? getRiskScore(`${dataBottom1.risk_level}`, `${dataBottom1?.range_level}`) : 0;
+  const trendArrow0 = scoreTop1 === undefined ? "-" : 
+    scoreTop1 < scoreTop0 ? "▲" :  // 점수가 낮아짐 = 좋아짐
+    scoreTop1 > scoreTop0 ? "▼" :  // 점수가 높아짐 = 나빠짐
+    "-";
+  const trendArrow1 = scoreBottom1 === undefined ? "-" : 
+    scoreBottom1 < scoreBottom0 ? "▲" :  // 점수가 낮아짐 = 좋아짐
+    scoreBottom1 > scoreBottom0 ? "▼" :  // 점수가 높아짐 = 나빠짐
+    "-";
+  const trendCount0 = getCompareTrendState(scoreTop0, scoreTop1);
+  const trendCount1 = getCompareTrendState(scoreBottom0, scoreBottom1);
+
+  const trendBgCondition0 = dataTop1 ? {
+    "0": "bg-sub100",
+    "1": "bg-warning-foreground",
+    "2": "bg-danger-foreground",
+  }[dataTop1.risk_level] ?? "bg-sub300" : "bg-sub100";
+  const trendTextCondition0 = dataTop1 ? {
+    "0": "text-sub600",
+    "1": "text-warningDeep",
+    "2": "text-dangerDeep",
+  }[dataTop1.risk_level] ?? "text-sub600" : "text-sub600";
+  const trendBorderCondition0 = dataTop1 ? {
+    "0": "border-2 border-sub600",
+    "1": "border-2 border-warningDeep",
+    "2": "border-2 border-dangerDeep",
+  }[dataTop1.risk_level] ?? "border-2 border-sub600" : "border-2 border-sub600";
+
+  const trendBgCondition1 = dataBottom1 ? {
+    "0": "bg-sub100",
+    "1": "bg-warning-foreground",
+    "2": "bg-danger-foreground",
+  }[dataBottom1.risk_level] ?? "bg-sub300" : "bg-sub100";
+  const trendTextCondition1 = dataBottom1 ? {
+    "0": "text-sub600",
+    "1": "text-warningDeep",
+    "2": "text-dangerDeep",
+  }[dataBottom1.risk_level] ?? "text-sub600" : "text-sub600";
+  const trendBorderCondition1 = dataBottom1 ? {
+    "0": "border-2 border-sub600",
+    "1": "border-2 border-warningDeep",
+    "2": "border-2 border-dangerDeep",
+  }[dataBottom1.risk_level] ?? "border-2 border-sub600" : "border-2 border-sub600";
+  
+  const existedSlot = data1 !== undefined && dataTop1 !== undefined
+  const isLeftRightData = dataTop1 && dataBottom1
+  return (
+    <div className={`flex flex-col h-full w-full border-b-2 border-sub200`}>
+      {/* 헤더 영역 */}
+      <div className="flex border-b-2 border-sub200 px-4 py-2 bg-sub100 gap-4">
+        <span className="text-base font-semibold text-black">{dataTop0.measure_unit}</span>
+      </div>
+
+      <div className="grid grid-cols-[20%_80%] h-full w-full">
+        <div className="flex flex-col h-full border-r-2 border-sub200">
+          <div className={isLeftRightData ? "grid grid-cols-2 bg-sub200 py-2" : "flex w-full  justify-center items-center bg-sub200 py-2"}>
+            <div className="flex justify-center items-center text-base text-sub600">{isLeftRightData ? "좌측" : "비교차이"}</div>
+            {isLeftRightData && <div className="flex justify-center items-center text-base text-sub600">우측</div>}
+          </div>
+                    
+          <div className={isLeftRightData ? "grid grid-cols-2 items-center justify-center h-full w-full" : "grid h-full w-full"}>
+            <div className={`flex flex-col items-center justify-center gap-2 h-full bg-sub100 py-2`}>
+              <div className={`text-2xl font-bold whitespace-nowrap ${trendTextCondition0} ${!existedSlot && 'invisible'}`}>{trendArrow0}</div>
+              <div className={`text-2xl font-bold whitespace-nowrap ${trendTextCondition0} ${!existedSlot && 'invisible'}`}>{trendGap0}</div>
+              <div 
+                className={`
+                ${trendBgCondition0} 
+                ${trendBorderCondition0} 
+                ${trendTextCondition0}
+                 rounded-full px-3 py-1 text-sm whitespace-nowrap 
+                 ${!existedSlot && 'invisible'}`}
+              >
+                {trendCount0}
+              </div>
+            </div>
+            {isLeftRightData && (
+              <div className={`flex flex-col items-center justify-center gap-2 px-8 h-full bg-sub100 py-2`}>
+                <div className={`text-2xl font-bold whitespace-nowrap ${trendTextCondition1}`}>{trendArrow1}</div>
+                <div className={`text-2xl font-bold whitespace-nowrap ${trendTextCondition1}`}>{trendGap1}</div>
+                <div 
+                  className={`
+                  ${trendBgCondition1}
+                  ${trendBorderCondition1} 
+                  ${trendTextCondition1} 
+                  rounded-full px-3 py-1 text-sm whitespace-nowrap`}
+                >
+                  {trendCount1}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="flex flex-col">
-          <div className="grid grid-cols-[7%_9%_9%_10%_65%] items-center border-b-2 border-sub200 ">
-            <span />
-            <span className="flex text-xs text-black bg-sub100 px-2 py-2 ">값</span>
-            <span className={`flex justify-center text-xs bg-sub100 py-2 text-sub600`}>{!data01 ? '' : '좌우차이'}</span>
-            <span className="flex justify-center text-xs text-sub600 bg-sub100 py-2 ">단계표시</span>
-            <span className="text-xs text-sub600 bg-sub100 py-2 ">분석설명</span>
-          </div>
-          <div className="flex flex-col">
-
-            {/* 왼쪽(상단) */}
-            <div className={`grid grid-cols-[7%_18%_10%_65%] items-center h-full`}>
-              <div className={`grid items-center h-full`}>
-                <span className={`flex text-sm items-center justify-center text-sub600 px-2 py-1 rounded-full bg-sub100 mx-2 my-2 ${!data01 && 'invisible'}`}>
-                  {leftRightString00}
-                </span>
-                {data01 && (
-                  <span className={`text-sm flex items-center justify-center text-sub600 px-2 py-1 rounded-full bg-sub100 mx-2 my-2`}>
-                    {leftRightString01}
-                  </span>
-                )}
-
-                <span className={`flex text-sm items-center justify-center text-sub600 px-2 py-1 rounded-full bg-sub100 mx-2 my-2 ${!data11 && 'invisible'}`}>
-                  {leftRightString10}
-                </span>
-                {data01 && (
-                  <span className={`text-sm flex items-center justify-center text-sub600 px-2 py-1 rounded-full bg-sub100 mx-2 my-2`}>
-                    {leftRightString11}
-                  </span>
-                )}
-
-              </div>
-              
-              <div className={`grid items-center justify-start h-full`}>
-                <span className={`flex items-center text-lg font-medium leading-none px-2`}>
-                  {formattedData00} {unit00}
-                </span>
-                {data01 && (
-                  <span className={`flex items-center text-lg font-medium leading-none px-2`}>
-                    {formattedData01} {unit01}
-                  </span>
-                )}
-
-                <span className={`flex items-center text-lg font-medium leading-none px-2`}>
-                  {formattedData10} {unit10}
-                </span>
-                {data01 && (
-                  <span className={`flex items-center text-lg font-medium leading-none px-2`}>
-                    {formattedData11} {unit11}
-                  </span>
-                )}
-
-              </div>
-
-              {/* {(data01 && (
-                <div className={`flex items-center gap-2 h-full`}>
-                  <span className={`text-lg font-medium leading-none`}>
-                    비교데이터
-                  </span>
-                </div>
-              ))} */}
-
-
-              <div className={`grid items-center justify-center h-full`}>
-                <span className={`
-                  flex inline-flex items-center justify-center mx-auto
-                  px-2 py-1 ${textBgCondition00} ${textLeftRightCondition00} 
-                  text-xs rounded-full
-                `}>
-                  {levelString00} {data00?.range_level}단계
-                </span>
-                {data01 && (
-                  <span className={`
-                    flex inline-flex items-center justify-center mx-auto
-                    px-2 py-1 ${textBgCondition01} ${textLeftRightCondition01}
-                    text-xs rounded-full
-                  `}>
-                    {levelString01} {data01?.range_level}단계
-                  </span>
-                )}
-
-                <span className={`
-                  flex inline-flex items-center justify-center mx-auto
-                  px-2 py-1 ${textBgCondition10} ${textLeftRightCondition10} 
-                  text-xs rounded-full
-                `}>
-                  {levelString10} {data10?.range_level}단계
-                </span>
-                {data01 && (
-                  <span className={`
-                    flex inline-flex items-center justify-center mx-auto
-                    px-2 py-1 ${textBgCondition11} ${textLeftRightCondition11}
-                    text-xs rounded-full
-                  `}>
-                    {levelString11} {data11?.range_level}단계
-                  </span>
-                )}
-              </div>
-              
-              <div className={`grid items-center justify-start h-full`}>
-                <span className={`${textCondition00} text-sm text-sub600`}>{data00.ment_all}</span>
-                {data01 && (
-                  <span className={`${textCondition01} text-sm text-sub600 `}>{data01?.ment_all}</span>
-                )}
-
-                <span className={`${textCondition10} text-sm text-sub600`}>{data10?.ment_all}</span>
-                {data11 && (
-                  <span className={`${textCondition11} text-sm text-sub600 `}>{data11?.ment_all}</span>
-                )}
-
-              </div>
-              
-            </div>
-          </div>
+          {RawDataContainer(dataTop0, dataBottom0 , false)}
+          {existedSlot && RawDataContainer(dataTop1, dataBottom1 , true)}
         </div>
       </div>
-
-
-
-
-      
     </div>
   );
 }
-
 
 export default CompareRawData;

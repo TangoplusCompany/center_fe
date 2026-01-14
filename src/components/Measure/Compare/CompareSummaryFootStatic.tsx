@@ -20,15 +20,15 @@ const CompareSummaryFootStatic = ({
   static0: CompareSummaryFootStaticProps;
   static1?: CompareSummaryFootStaticProps;
 }) => {
-  const riskString1 = getRiskString(static1?.risk_level) ?? "-";
+  const riskString1 = getRiskString(static1?.risk_level) ?? " ";
   
   const score0 = getRiskScore(static0.risk_level, static0.range_level);
   const score1 = static1 ? getRiskScore(static1.risk_level, static1.range_level) : undefined;
-  const trendArrow = score1 === undefined ? "-" : 
+  const trendArrow = score1 === undefined ? " " : 
     score1 < score0 ? "▲" :  // 점수가 낮아짐 = 좋아짐
     score1 > score0 ? "▼" :  // 점수가 높아짐 = 나빠짐
-    "-";
-  const trendString = riskString1 === "-" ? "-" : `${riskString1} ${static0?.range_level}단계`
+    " ";
+  const trendString = riskString1 === " " ? " " : `${riskString1} ${static0?.range_level}단계`
 
   const getTrendText = () => {
     if (!static0 || score1 === undefined) return "";
@@ -75,9 +75,9 @@ const CompareSummaryFootStatic = ({
     return (
       <div className="flex-1">
         <div className="flex items-center justify-between border-b-2 border-sub200 px-4 py-1 bg-sub100">
-          <div className="flex gap-4">
-            <span className="text-sm">{isNext ? '최신' : '이전'}</span>
-            <span className="text-sm text-gray-600">{footStatic.measure_date.slice(0, 11)}</span>
+          <div className="flex gap-4 items-center">
+            <span className="text-base">{isNext ? '②' : '①'}</span>
+            <span className={`text-xs ${isNext ? 'text-black' : 'text-sub600'}`}>{footStatic.measure_date.slice(0, 11)}</span>
           </div>
           <span className={`${textBgCondition0} ${textCondition0} text-xs px-2 py-1 rounded-full`}>{riskString} {footStatic.range_level}단계</span>
         </div>
@@ -99,7 +99,7 @@ const CompareSummaryFootStatic = ({
   return (
     <div className="flex flex-col ">
       {/* 상지요약 타이틀 */}
-      <div className="bg-sub100 text-lg text-black px-4 py-2 border-t-2 border-b-2 border-sub200">
+      <div className="bg-sub100 text-base font-semibold text-black px-4 py-2 border-t-2 border-b-2 border-sub200">
         정면 족압
       </div>
 

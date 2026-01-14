@@ -44,7 +44,6 @@ const MeasureReportContainer = ({
     const handleLegendClick = (measureSn: number) => {
       setSelectedMeasureSn(measureSn);
     };
-    
     // newSummary가 로드되면 selectedSummary 업데이트
     useEffect(() => {
       if (newSummary) {
@@ -57,7 +56,7 @@ const MeasureReportContainer = ({
     
   return (
     <div className="flex flex-col gap-6">
-      {/* TODO 그래프 레이아웃 변경 */}
+
       {summaryLoading && <div>로딩 중...</div>}
       {summaryError && <div>데이터를 불러오는데 실패했습니다.</div>}
       {/* 상지 */}

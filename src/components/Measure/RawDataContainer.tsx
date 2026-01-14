@@ -7,17 +7,17 @@ import { IUserMeasureDetailData } from "@/types/measure";
 export interface CompareRawDataProps {
   mergedDetailData0: IUserMeasureDetailData[];
   mergedDetailData1?: IUserMeasureDetailData[];
-  // measure_date0: string;
-  // measure_date1: string
+  measure_date0: string;
+  measure_date1: string
 }
-// TODO date를 compare raw data 까지 내리고 그 다음에 layout잡기
 
 const RawDataContainer = ({
   mergedDetailData0,
   mergedDetailData1,
-  // measure_date0,
-  // measure_date1,
+  measure_date0,
+  measure_date1,
 } :CompareRawDataProps) => {
+
   const [selectedPart, setSelectedPart] = useState<0 | 1 | 2 | 3 | 4 | 5 | 6>(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -31,6 +31,12 @@ const RawDataContainer = ({
       inline: 'nearest'
     });
   };
+  const mergedDatas : CompareRawDataProps = {
+    mergedDetailData0 : mergedDetailData0,
+    mergedDetailData1 : mergedDetailData1,
+    measure_date0 : measure_date0,
+    measure_date1 : measure_date1,
+  }
   return (
     <div>
       <div className="flex flex-col gap-4 mb-64">
@@ -54,8 +60,7 @@ const RawDataContainer = ({
           />
         ):(
           <CompareRawDataDetailContainer 
-          mergedDetailData0={mergedDetailData0} 
-          mergedDetailData1={mergedDetailData1} 
+          mergedDatas={mergedDatas} 
           selectedPart={selectedPart} 
         />
         )}

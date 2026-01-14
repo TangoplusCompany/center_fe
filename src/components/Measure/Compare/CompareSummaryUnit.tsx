@@ -1,4 +1,5 @@
-import { formatText } from "@/utils/FormatSummary";
+import { getCompareTrendState } from "@/utils/compareTrendState";
+import { formatText } from "@/utils/formatSummary";
 import { getRiskScore } from "@/utils/useRiskScore";
 
 
@@ -20,13 +21,13 @@ const CompareSummaryUnit = ({
 }) => {
   const getRiskString = (level?: number | string) => {
     if (level === undefined || level === null) return undefined; 
-    
     const numLevel = Number(level);
     if (numLevel >= 2) return "위험";
     if (numLevel >= 1) return "주의";
     return "정상";
   };
-  const riskString1 = getRiskString(summaryUnit1?.risk_level) ?? "-";
+
+  const riskString1 = getRiskString(summaryUnit1?.risk_level) ?? " ";
 
   const trendBgCondition = summaryUnit1 ? {
     "0": "bg-sub100",
@@ -47,22 +48,13 @@ const CompareSummaryUnit = ({
 
   const score0 = getRiskScore(summaryUnit0.risk_level, summaryUnit0.range_level);
   const score1 = summaryUnit1 ? getRiskScore(summaryUnit1.risk_level, summaryUnit1.range_level) : undefined;
-  const trendArrow = score1 === undefined ? "-" : 
+  const trendArrow = score1 === undefined ? " " : 
     score1 < score0 ? "▲" :  // 점수가 낮아짐 = 좋아짐
     score1 > score0 ? "▼" :  // 점수가 높아짐 = 나빠짐
-    "-";
-  const trendString = riskString1 === "-" ? "-" : riskString1 + " " + summaryUnit1?.range_level + "단계"
+    " ";
+  const trendString = riskString1 === " " ? " " : riskString1 + " " + summaryUnit1?.range_level + "단계"
   
-
-  const getTrendText = () => {
-    if (!summaryUnit1 || score1 === undefined) return "";
-    const diff = score0 - score1;
-    if (diff > 0) return `${diff}단계 완화`;
-    if (diff < 0) return `${Math.abs(diff)}단계 악화`;
-    return "변화 없음";
-  };
-
-  const trendCount = getTrendText();
+  const trendCount = getCompareTrendState(score0, score1);
 
   const summaryMent = (summaryUnit: CompareSummaryUnitProps, isNext: boolean) => {
     const riskString = getRiskString(summaryUnit.risk_level);
@@ -79,14 +71,12 @@ const CompareSummaryUnit = ({
       "2": "bg-danger",
     }[summaryUnit.risk_level] ?? "bg-sub300";
     
-    
-    
     return (
       <div className="flex-1">
         <div className="flex items-center justify-between border-b-2 border-sub200 px-4 py-1 bg-sub100">
-          <div className="flex gap-4">
-            <span className="text-sm">{isNext ? '최신' : '이전'}</span>
-            <span className="text-sm text-gray-600">{summaryUnit.measure_date.slice(0, 11)}</span>
+          <div className="flex gap-4 items-center">
+            <span className="text-base">{isNext ? '②' : '①'}</span>
+            <span className={`text-xs ${isNext ? 'text-black' : 'text-sub600'}`}>{summaryUnit.measure_date.slice(0, 11)}</span>
           </div>
           <span className={`${textBgCondition0} ${textCondition0} text-xs px-2 py-1 rounded-full`}>{riskString} {summaryUnit.range_level}단계</span>
         </div>
@@ -95,12 +85,10 @@ const CompareSummaryUnit = ({
     );
   };
 
-
-
   return (
     <div className="flex flex-col ">
-      {/* 상지요약 타이틀 */}
-      <div className="bg-sub100 text-lg text-black px-4 py-2 border-t-2 border-b-2 border-sub200">
+      {/* 타이틀 */}
+      <div className="bg-sub100 text-base font-semibold text-black px-4 py-2 border-t-2 border-b-2 border-sub200">
         {title}
       </div>
 

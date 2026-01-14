@@ -4,12 +4,16 @@ import { useMeasureJson } from "@/hooks/api/measure/useMeasureJson";
 import { MeasurementImage } from "../MeasurementImage";
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
 import RawDataContainer from "../RawDataContainer";
+import { CompareSlot } from "@/types/compare";
+import CompareDefault from "./CompareDefault";
 
 const MeasureStaticCompareFifth  = React.memo(
 ({
   className,
   sns,
-  cameraOrientations
+  cameraOrientations,
+  measure_dates,
+  onCompareDialogOpen,
 }: {
   className?: string;
   sns: {
@@ -21,6 +25,11 @@ const MeasureStaticCompareFifth  = React.memo(
     orient0 :0 | 1;
     orient1 : 0 | 1;
   };
+  measure_dates: {
+    measure_date0: string;
+    measure_date1: string;
+  }
+  onCompareDialogOpen : (slot: CompareSlot) => void;
 }) => {
   const {
     data: measure0,
@@ -77,26 +86,35 @@ const MeasureStaticCompareFifth  = React.memo(
               measure0?.file_data?.measure_server_file_name
             }
             measureJson={measureJson0}
-            step="first"
+            step="fifth"
             cameraOrientation={cameraOrientations.orient0}
+            compareSlot={0}
           />
         )}
       </div>
       <div className={`${className ?? ""} flex flex-col gap-4 lg:gap-10`}>
-        {measureJson1 && measure1 && (
+        {measureJson1 && measure1 ? (
             <MeasurementImage
               imageUrl={
                 baseUrl + "/" +
                 measure1?.file_data?.measure_server_file_name
               }
               measureJson={measureJson1}
-              step="first"
+              step="fifth"
               cameraOrientation={cameraOrientations.orient1}
+              compareSlot={1}
             />
-          )}
+          ) : (
+          <CompareDefault onCompareDialogOpen={onCompareDialogOpen} currentSlot={1}/>
+        )}
         </div>
       </div>
-      <RawDataContainer mergedDetailData0={measure0?.detail_data ?? []} mergedDetailData1={measure1?.detail_data ?? []}/>
+      <RawDataContainer 
+        mergedDetailData0={measure0?.detail_data ?? []}
+        mergedDetailData1={measure1?.detail_data ?? []} 
+        measure_date0={measure_dates.measure_date0} 
+        measure_date1={measure_dates.measure_date1}
+        />
     </div>
   );
 },

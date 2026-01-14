@@ -1,5 +1,5 @@
 import { IDeviceStatusCardProps } from "@/types/device";
-import { RandomHexColor } from "@/utils/RandomHexColor";
+import { RandomHexColor } from "@/utils/randomHexColor";
 import { useEffect, useState } from "react";
 
 export type ChartConfigValue = {

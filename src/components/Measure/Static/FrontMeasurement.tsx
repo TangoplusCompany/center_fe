@@ -62,7 +62,7 @@ const FrontMeasurement = ({
   return (
     <div className="flex flex-col gap-5">
       {/* 상단: 이미지 2개 */}
-      <div className="grid grid-cols-2">
+      <div className="grid grid-cols-2 gap-4">
         <div className="col-span-1">
           <MeasureStaticFirst files={measureFirst?.file_data} cameraOrientation={cameraOrientation} />
         </div>
@@ -73,7 +73,7 @@ const FrontMeasurement = ({
       {/* TODO 이 곳에 족압 이미지를 넣는 컴포넌트가 필요함. */}
       {/* 하단: RawDataResult*/}
       <StaticDataContainer measureData={measureInfo} />
-      <RawDataContainer mergedDetailData0={mergedDetailData} />
+      <RawDataContainer mergedDetailData0={mergedDetailData} measure_date0={""} measure_date1={""} />
     </div>
   );
 };

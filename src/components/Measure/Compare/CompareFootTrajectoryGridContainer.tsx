@@ -12,8 +12,6 @@ export interface CompareFootTrajectoryGridProps {
   measure_date: string;
 }
 
-
-
 const CompareFootTrajectoryGridContainer = ({
   data0,
   data1
@@ -24,9 +22,9 @@ const CompareFootTrajectoryGridContainer = ({
     
   const footContainer = (data: CompareFootTrajectoryGridProps, isNext: boolean) => (
     <div className="flex flex-col gap-2">
-      <div className="flex gap-4 bg-sub100 border-b-2 border-sub200 py-1">
-        <span className="text-base px-4">{isNext ? '최신' : '이전'}</span>
-        <span className="flex justify-center items-center text-sm text-sub600">{data.measure_date.slice(0, 11)}</span>
+      <div className="flex gap-4 items-center bg-sub100 border-b-2 border-sub200 py-1 px-4">
+        <span className="text-base">{isNext ? '②' : '①'}</span>
+        <span className={`text-xs ${isNext ? 'text-black' : 'text-sub600'}`}>{data.measure_date.slice(0, 11)}</span>
       </div>
       <div className="grid grid-cols-4 items-center">
         <div className="flex flex-col items-center justify-start gap-2">
@@ -87,7 +85,7 @@ const CompareFootTrajectoryGridContainer = ({
   return (
     <div className="flex flex-col">
       {/* 상지요약 타이틀 */}
-      <div className="bg-sub100 text-lg text-black px-4 py-2 border-t-2 border-b-2 border-sub200">
+      <div className="bg-sub100 text-base font-semibold text-black px-4 py-2 border-t-2 border-b-2 border-sub200">
         동적 족압 및 이동 궤적
       </div>
 

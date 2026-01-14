@@ -10,12 +10,12 @@ import MeasureReportContainer from "../Measure/MeasureReportContainer";
 
 type Mode = "worst" | "best";
 const PARTS = [
-  { key: "neck", label: "목" },
-  { key: "shoulder", label: "어깨" },
-  { key: "elbow", label: "팔꿈치" },
-  { key: "hip", label: "엉덩이" },
-  { key: "knee", label: "무릎" },
   { key: "ankle", label: "발목" },
+  { key: "knee", label: "무릎" },
+  { key: "hip", label: "골반" },
+  { key: "elbow", label: "팔꿈치" },
+  { key: "shoulder", label: "어깨" },
+  { key: "neck", label: "목" },
 ] as const;
 const RISK_PART_KEYS = [
   "neck",

@@ -22,11 +22,6 @@ const arrowCondition: Record<0 | 1 | 2, string> = {
   2: "text-black",
 };
 
-const conditionText: Record<0 | 1 | 2, string> = {
-  0: "text-white",
-  1: "text-warning-foreground",
-  2: "text-danger-foreground",
-};
 
 // 각 단계별 셀 색
 const levelCellBg: Record<0 | 1 | 2, string> = {
@@ -74,7 +69,7 @@ const MeasureIntroPart = ({
 }) => {
   const items = Object.entries(cardData);
   const badgeBg = conditionBg[(riskLevel ?? 0) as 0 | 1 | 2];
-  const badgeText = conditionText[(riskLevel ?? 0) as 0 | 1 | 2];
+  
   const levelString = {
     0:"정상",
     1:"주의",
@@ -114,18 +109,16 @@ const MeasureIntroPart = ({
             <div
               key={index}
               className={[
-                "relative flex-1 flex flex-col overflow-hidden", // ✅ 위/아래 분리 + 라운드 클립
+                "relative flex-1 flex flex-col overflow-hidden", 
                 roundClass,
                
                 "border-l border-dashed border-sub-100 first:border-l-0",
               ].join(" ")}
             >
-              {/* ✅ 위 1/3: 화살표 영역(칸별 색 유지) */}
               <div className={["flex-[1] flex items-center justify-center", topBg].join(" ")}>
                 {isActive && <div className={`text-xs ${arrowCondition} leading-none`}>▼</div>}
               </div>
 
-              {/* ✅ 아래 2/3: 단계 텍스트 영역(무조건 흰색) */}
               <div className="flex-[1] bg-white flex items-center justify-center">
                 {isActive && (
                   <div className="text-xs leading-none">{safeRange + 1}단계</div>
@@ -139,15 +132,14 @@ const MeasureIntroPart = ({
   };
 
   return (
-    <div className="flex rounded-xl border bg-white shadow-sm h-full">
+    <div className="flex rounded-xl border-2 border-sub100 bg-white shadow-sm h-full">
       {/* 전체 grid */}
       <div className="flex flex-col w-1/4 items-center justify-center text-base font-semibold gap-1">
         {title}
         <div
           className={cn(
-            "px-3 py-1  rounded-full text-xs",
+            "px-3 py-1  rounded-full text-xs text-white",
             badgeBg,
-            badgeText
           )}
         >
           {`${levelString} ${Number(rangeLevel)}단계`}
@@ -161,8 +153,8 @@ const MeasureIntroPart = ({
             "flex flex-1 min-h-0 items-stretch",
             idx !== items.length - 1 && "border-b "
           )}>
-            <div className="flex w-1/2 text-sm flex items-center justify-center border-r px-2 py-1 text-center">{MEASURE_NAME_MAP[measureName] ?? item.measure_unit ?? measureName}</div>
-            <div className="flex w-1/2 items-stretch">{renderRangeBoxes(item.risk_level, item.range_level, idx, items.length)}</div>
+            <div className="flex w-1/2 text-sm flex items-center justify-center border-r px-2 py-1 text-center">{MEASURE_NAME_MAP[measureName] ?? item?.measure_unit ?? measureName}</div>
+            <div className="flex w-1/2 items-stretch">{renderRangeBoxes(item?.risk_level, item?.range_level, idx, items?.length)}</div>
           </div>
         ))}
       </div>
