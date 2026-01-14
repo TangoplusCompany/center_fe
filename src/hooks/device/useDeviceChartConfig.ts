@@ -1,5 +1,5 @@
 import { IDeviceStatusCardProps } from "@/types/device";
-import { RandomHexColor } from "@/utils/randomHexColor";
+import { randomHexColor } from "@/utils/randomHexColor";
 import { useEffect, useState } from "react";
 
 export type ChartConfigValue = {
@@ -29,7 +29,7 @@ export const useDeviceChartConfig = (
       if (!newConfig[name]) {
         newConfig[name] = {
           label: name,
-          color: RandomHexColor(),
+          color: randomHexColor(),
         };
       }
     });

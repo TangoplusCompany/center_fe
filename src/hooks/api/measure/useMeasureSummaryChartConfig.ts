@@ -1,6 +1,6 @@
 import { ChartConfigValue } from "@/hooks/device/useDeviceChartConfig";
 import { FootPressureHistory, UpperAndLowerMeasureHistory } from "@/types/measure";
-import { RandomHexColor } from "@/utils/randomHexColor";
+import { randomHexColor } from "@/utils/randomHexColor";
 import { useEffect, useState } from "react";
 
 type ChartConfig = Record<string, ChartConfigValue>;
@@ -25,7 +25,7 @@ export const useMeasureSummaryChartConfig = (
       if (!newConfig[name]) {
         newConfig[name] = {
           label: name,
-          color: RandomHexColor(),
+          color: randomHexColor(),
         };
       }
     });
