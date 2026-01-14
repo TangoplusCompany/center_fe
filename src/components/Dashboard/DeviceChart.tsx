@@ -210,8 +210,6 @@ const DeviceChart = ({
                           type="button"
                           onClick={() => {
                               setSelectedLegend(key)
-                              console.log("selectedLegend:", selectedLegend);
-                              console.log("seriesKeys:", seriesKeys);
                             }
                           }
                           className={[

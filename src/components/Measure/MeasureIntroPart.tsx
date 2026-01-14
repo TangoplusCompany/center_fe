@@ -153,8 +153,8 @@ const MeasureIntroPart = ({
             "flex flex-1 min-h-0 items-stretch",
             idx !== items.length - 1 && "border-b "
           )}>
-            <div className="flex w-1/2 text-sm flex items-center justify-center border-r px-2 py-1 text-center">{MEASURE_NAME_MAP[measureName] ?? item.measure_unit ?? measureName}</div>
-            <div className="flex w-1/2 items-stretch">{renderRangeBoxes(item.risk_level, item.range_level, idx, items.length)}</div>
+            <div className="flex w-1/2 text-sm flex items-center justify-center border-r px-2 py-1 text-center">{MEASURE_NAME_MAP[measureName] ?? item?.measure_unit ?? measureName}</div>
+            <div className="flex w-1/2 items-stretch">{renderRangeBoxes(item?.risk_level, item?.range_level, idx, items?.length)}</div>
           </div>
         ))}
       </div>
