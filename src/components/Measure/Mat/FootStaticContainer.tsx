@@ -1,6 +1,6 @@
 "use client";
 
-import { getRiskString } from "@/utils/RiskLevel";
+import { getRiskString } from "@/utils/getRiskString";
 import FootStatic from "./FootStatic";
 
 export interface IMatStaticPressure {

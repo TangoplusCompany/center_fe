@@ -1,7 +1,7 @@
-import { getRiskString } from "@/utils/RiskLevel";
+import { getRiskString } from "@/utils/getRiskString";
 import { IMatStaticPressure } from "../Mat/FootStaticContainer";
 import FootStatic from "../Mat/FootStatic";
-import { getRiskScore } from "@/utils/useRiskScore";
+import { getRiskScore } from "@/utils/getRiskScore";
 
 export interface CompareSummaryFootStaticProps {
   comment: string;
