@@ -1,6 +1,6 @@
-import { getCompareTrendState } from "@/utils/compareTrendState";
-import { formatText } from "@/utils/formatSummary";
-import { getRiskScore } from "@/utils/useRiskScore";
+import { compareTrendState } from "@/utils/compareTrendState";
+import { formatText } from "@/utils/formatText";
+import { getRiskScore } from "@/utils/getRiskScore";
 
 
 export interface CompareSummaryUnitProps {
@@ -54,7 +54,7 @@ const CompareSummaryUnit = ({
     " ";
   const trendString = riskString1 === " " ? " " : riskString1 + " " + summaryUnit1?.range_level + "단계"
   
-  const trendCount = getCompareTrendState(score0, score1);
+  const trendCount = compareTrendState(score0, score1);
 
   const summaryMent = (summaryUnit: CompareSummaryUnitProps, isNext: boolean) => {
     const riskString = getRiskString(summaryUnit.risk_level);

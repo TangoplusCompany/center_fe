@@ -1,9 +1,9 @@
 "use-client";
 
 import { IUserMeasureDetailData } from "@/types/measure";
-import { getCompareTrendState } from "@/utils/compareTrendState";
+import { compareTrendState } from "@/utils/compareTrendState";
 import { getRawDataMark } from "@/utils/getRawDataMark";
-import { getRiskScore } from "@/utils/useRiskScore";
+import { getRiskScore } from "@/utils/getRiskScore";
 
 export interface IStaticRawDataProps {
   measure_type: number;
@@ -194,8 +194,8 @@ export const CompareRawData = ({
     scoreBottom1 < scoreBottom0 ? "▲" :  // 점수가 낮아짐 = 좋아짐
     scoreBottom1 > scoreBottom0 ? "▼" :  // 점수가 높아짐 = 나빠짐
     "-";
-  const trendCount0 = getCompareTrendState(scoreTop0, scoreTop1);
-  const trendCount1 = getCompareTrendState(scoreBottom0, scoreBottom1);
+  const trendCount0 = compareTrendState(scoreTop0, scoreTop1);
+  const trendCount1 = compareTrendState(scoreBottom0, scoreBottom1);
 
   const trendBgCondition0 = dataTop1 ? {
     "0": "bg-sub100",

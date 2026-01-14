@@ -3,7 +3,7 @@
 import { formatComment } from "@/utils/formatComment";
 import React from "react";
 import { UpperLowerProps } from "./MeasureIntroLower";
-import { getRiskString } from "../../utils/RiskLevel";
+import { getRiskString } from "../../utils/getRiskString";
 
 
 const MeasureIntroUpper = (
