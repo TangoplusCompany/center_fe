@@ -80,7 +80,7 @@ export const RawData = (
     return ".";
   };
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col border-b-2 border-sub200">
       <div className="grid grid-cols-[18%_10%_12%_60%] items-center border-b-2 border-sub200 bg-sub100 py-2">
         <span className="text-base font-semibold text-black px-4">{data0.measure_unit}</span>
         <span className={`flex flex-1 justify-center text-base text-sub600 `}>{!data1 ? '' : '기준값'}</span>

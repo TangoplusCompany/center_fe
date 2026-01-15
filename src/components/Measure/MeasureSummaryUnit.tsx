@@ -34,13 +34,13 @@ const MeasureSummaryUnit = ({
   return (
     <div >
       <div className="flex justify-between items-center py-2">
-        <h2 className="text-base font-semibold">{title}</h2>
+        <h2 className="text-xl font-semibold">{title}</h2>
         <span className={`px-3 py-1 ${riskBg} rounded-xl text-sm text-white`}>
           {riskString} {range_level}단계
         </span>
       </div>
 
-      <div className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
+      <div className="text-base text-gray-700 leading-relaxed whitespace-pre-line">
         {parseString(ment).map((el, key) =>
           el === "" ? <br key={key} /> : <p key={key}>{el}</p>
         )}

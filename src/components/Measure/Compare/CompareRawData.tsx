@@ -113,9 +113,9 @@ export const CompareRawData = ({
     return (
     <div  className={`flex flex-col w-full h-full`}>
       <div className="grid grid-cols-[18%_10%_12%_60%] items-center border-b-2 border-sub200 bg-sub100 py-2">
-        <div className="flex gap-4 items-center px-4">
-          <span className="text-base font-semibold text-black ">{isNext ? '②' : '①'}</span>
-          <span className="text-xs text-sub600">{isNext ? measure_date1.slice(0, 11) : measure_date0.slice(0, 11)}</span>
+        <div className="flex gap-4 items-center pl-4">
+          <span className="text-lg font-semibold text-black ">{isNext ? '②' : '①'}</span>
+          <span className="text-base text-sub600">{isNext ? measure_date1.slice(0, 11) : measure_date0.slice(0, 11)}</span>
         </div>
         <span className={`flex flex-1 justify-center text-base text-sub600 `}>{!dataBottom ? '기준값' : '차이값'}</span>
         <span className="flex justify-center text-base text-sub600 ">단계표시</span>
@@ -157,7 +157,7 @@ export const CompareRawData = ({
           <span className={`
             flex inline-flex items-center justify-center mx-auto
             px-2 py-1 ${textBgCondition0} 
-            text-xs rounded-full text-white
+            text-sm rounded-full text-white
           `}>
             {levelString0} {dataTop?.range_level}단계
           </span>
@@ -165,7 +165,7 @@ export const CompareRawData = ({
             <span className={`
               flex inline-flex items-center justify-center mx-auto
               px-2 py-1 ${textBgCondition1}
-              text-xs rounded-full text-white
+              text-sm rounded-full text-white
             `}>
               {levelString1} {dataBottom?.range_level}단계
             </span>
@@ -173,9 +173,13 @@ export const CompareRawData = ({
         </div>
 
         <div className={`grid items-center justify-start h-full px-4`}>
-          <span className={`text-sm ${isNext ? 'text-black' : 'text-sub600'}`}>{dataTop.ment_all}</span>
-          {dataBottom && (
-            <span className={`text-sm ${isNext ? 'text-black' : 'text-sub600'}`}>{dataBottom?.ment_all}</span>
+          <span className={`text-base ${isNext ? 'text-black' : 'text-sub600'}`}>
+            {dataTop.ment_all}
+          </span>
+          {dataBottom && dataBottom.ment_all !== dataTop.ment_all && (
+            <span className={`text-base ${isNext ? 'text-black' : 'text-sub600'}`}>
+              {dataBottom.ment_all}
+            </span>
           )}
         </div>
       </div>
@@ -235,20 +239,20 @@ export const CompareRawData = ({
     <div className={`flex flex-col h-full w-full border-b-2 border-sub200`}>
       {/* 헤더 영역 */}
       <div className="flex border-b-2 border-sub200 px-4 py-2 bg-sub100 gap-4">
-        <span className="text-base font-semibold text-black">{dataTop0.measure_unit}</span>
+        <span className="text-xl font-semibold text-black">{dataTop0.measure_unit}</span>
       </div>
 
       <div className="grid grid-cols-[20%_80%] h-full w-full">
         <div className="flex flex-col h-full border-r-2 border-sub200">
           <div className={isLeftRightData ? "grid grid-cols-2 bg-sub200 py-2" : "flex w-full  justify-center items-center bg-sub200 py-2"}>
-            <div className="flex justify-center items-center text-base text-sub600">{isLeftRightData ? "좌측" : "비교차이"}</div>
+            <div className="flex justify-center items-center text-base text-sub600 py-[3px]">{isLeftRightData ? "좌측" : "비교차이"}</div>
             {isLeftRightData && <div className="flex justify-center items-center text-base text-sub600">우측</div>}
           </div>
                     
           <div className={isLeftRightData ? "grid grid-cols-2 items-center justify-center h-full w-full" : "grid h-full w-full"}>
             <div className={`flex flex-col items-center justify-center gap-2 h-full bg-sub100 py-2`}>
-              <div className={`text-2xl font-bold whitespace-nowrap ${trendTextCondition0} ${!existedSlot && 'invisible'}`}>{trendArrow0}</div>
-              <div className={`text-2xl font-bold whitespace-nowrap ${trendTextCondition0} ${!existedSlot && 'invisible'}`}>{trendGap0}</div>
+              <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition0} ${!existedSlot && 'invisible'}`}>{trendArrow0}</div>
+              <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition0} ${!existedSlot && 'invisible'}`}>{trendGap0}</div>
               <div 
                 className={`
                 ${trendBgCondition0} 
@@ -262,8 +266,8 @@ export const CompareRawData = ({
             </div>
             {isLeftRightData && (
               <div className={`flex flex-col items-center justify-center gap-2 px-8 h-full bg-sub100 py-2`}>
-                <div className={`text-2xl font-bold whitespace-nowrap ${trendTextCondition1}`}>{trendArrow1}</div>
-                <div className={`text-2xl font-bold whitespace-nowrap ${trendTextCondition1}`}>{trendGap1}</div>
+                <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition1}`}>{trendArrow1}</div>
+                <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition1}`}>{trendGap1}</div>
                 <div 
                   className={`
                   ${trendBgCondition1}

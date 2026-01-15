@@ -49,6 +49,7 @@ export function useStaticLandmark(
   measureJson: { pose_landmark: IPoseLandmark[] },
   step: "first" | "second" | "third" | "fourth" | "fifth" | "sixth",
   cameraOrientation: 0 | 1,
+  showLine: boolean = true, // 기본값 true
 ): {
   resultUrl: string | null;
   loading: boolean;
@@ -85,16 +86,19 @@ export function useStaticLandmark(
         }
         ctx.drawImage(image, 0, 0, srcW, srcH);
         ctx.restore(); 
-        ctx.save();
 
-        // 미러
-        ctx.translate(dstW, 0);
-        ctx.scale(-1, 1);
+        // showLine이 true일 때만 랜드마크 그리기
+        if (showLine) {
+          ctx.save();
 
-        drawMap[step](ctx, measureJson);
+          // 미러
+          ctx.translate(dstW, 0);
+          ctx.scale(-1, 1);
+          drawMap[step](ctx, measureJson);
 
-        ctx.restore();
-
+          ctx.restore();
+        }
+        
         // ✅ crop to 3:4 (정방향 기준으로 수행)
         let cropX = 0;
         let cropY = 0;
@@ -143,7 +147,7 @@ export function useStaticLandmark(
     };
 
     draw();
-  }, [imageUrl, loadImage, step, measureJson, cameraOrientation]);
+  }, [imageUrl, loadImage, step, measureJson, cameraOrientation, showLine]);
 
   return { resultUrl, loading };
 }

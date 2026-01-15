@@ -33,6 +33,7 @@ body {
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --toggle-accent: 227 65.1% 49.4%;
+    --toggle-accent-deep: 227 65.1% 40.4%;
     --toggle-accent-foreground: 0 0% 100%;
     --toggle-accent-background: 210 40% 96.1%;
     --danger: 0 100% 64.5%;
@@ -83,9 +84,12 @@ body {
     --warning: 33 100% 50%;
     --warning-foreground: 33 100% 88.6%; 
     --warning-deep:33 100% 28.2%;
-    --sub200: 0 0% 91%;
-    --sub300: 0 0% 85.1%;
-    --sub400: 0 0% 73.3%;
+    --sub100: 0 0% 27.1%;
+    --sub200: 0 0% 49.4%;
+    --sub300: 0 0% 73.3%;
+    --sub400: 0 0% 86.3%;
+    --sub600: 0 0% 92.9%;
+    --sub800: 0 0% 97.3%;
   }
 }
 
@@ -94,7 +98,8 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-sub800;
+    @apply text-sub800;
   }
 }
 
@@ -156,4 +161,40 @@ body {
     margin: 0;
     padding: 0;
   }
+}
+
+@keyframes droplet-ripple {
+  
+  0% {
+    transform: translate(-50%, -35%) scale(0.5); /* 물방울이 바닥에 닿는 느낌 */
+    opacity: 0.55;
+  }
+  100% {
+    transform: translate(-50%, -35%) scale(2.5); /* 퍼지는 크기 (여기 조절) */
+    opacity: 0;
+  }
+}
+
+.ripple-dot {
+  position: absolute;
+  /* left: 0;
+  bottom: 0; */
+  width: 128px;  /* 시작 원 크기 (여기 조절) */
+  height: 128px; /* 시작 원 크기 (여기 조절) */
+  border-radius: 9999px;
+  pointer-events: none;
+
+  /* ✅ 부드러운 링(두껍고 가장자리가 흐림) */
+  background: radial-gradient(
+    circle,
+    transparent 50%,
+    rgba(255,255,255,0.18) 55%,
+    rgba(255,255,255,0.10) 60%,
+    transparent 50%
+  );
+
+  /* ✅ 링을 더 소프트하게 */
+  filter: blur(0.4px);
+
+  animation: droplet-ripple 4s ease-out infinite;
 }

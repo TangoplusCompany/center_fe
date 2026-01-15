@@ -53,8 +53,27 @@ const UserDetailTap = ({
         })}
       </div>
 
-      {/* 오른쪽 영역은 비워두거나, 나중에 다른 글로벌 액션이 필요하면 사용 */}
-      <div className="flex items-center gap-3 ml-auto" />
+      
+      <button className="relative h-full overflow-hidden px-3 py-1 rounded-xl text-white transition-all hover:scale-105 active:scale-95">
+        {/* 메인 컬러 포함 무지개 그라데이션 */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(135deg, hsl(227, 65.1%, 49.4%) 0%, hsl(227, 65.1%, 49.4%) 60%, hsl(150, 80.2%, 54.5%) 95%, hsl(150, 80.2%, 54.5%) 100%)',
+          }}
+          />
+        
+        {/* 물방울 리플 2개 (0.5초 간격) */}
+        <div className="absolute inset-0">
+          <span className="ripple-dot" />
+          <span className="ripple-dot" style={{ animationDelay: "0.5s" }} />
+        </div>
+        
+        {/* 버튼 텍스트 */}
+        <span className="relative z-5 flex items-center gap-2">
+          ✨ AI 운동 추천
+        </span>
+      </button>
     </div>
   );
 };

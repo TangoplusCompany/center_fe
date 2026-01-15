@@ -59,35 +59,29 @@ const CompareSummaryFootStatic = ({
 
   const summaryMent = (footStatic: CompareSummaryFootStaticProps, isNext: boolean) => {
     const riskString = getRiskString(footStatic.risk_level);
-    
-    const textCondition0 = {
-      "0": "text-secondary",
-      "1": "text-white",
-      "2": "text-white",
-    }[footStatic.risk_level] ?? "text-secondary";
-    
+
     const textBgCondition0 = {
-      "0": "bg-sub300",
+      "0": "bg-sub600",
       "1": "bg-warning",
       "2": "bg-danger",
-    }[footStatic.risk_level] ?? "bg-sub300";
+    }[footStatic.risk_level] ?? "bg-sub600";
     
     return (
       <div className="flex-1">
         <div className="flex items-center justify-between border-b-2 border-sub200 px-4 py-1 bg-sub100">
           <div className="flex gap-4 items-center">
-            <span className="text-base">{isNext ? '②' : '①'}</span>
-            <span className={`text-xs ${isNext ? 'text-black' : 'text-sub600'}`}>{footStatic.measure_date.slice(0, 11)}</span>
+            <span className="text-lg">{isNext ? '②' : '①'}</span>
+            <span className={`text-base ${isNext ? 'text-black' : 'text-sub600'}`}>{footStatic.measure_date.slice(0, 11)}</span>
           </div>
-          <span className={`${textBgCondition0} ${textCondition0} text-xs px-2 py-1 rounded-full`}>{riskString} {footStatic.range_level}단계</span>
+          <span className={`${textBgCondition0} text-white text-sm px-2 py-1 rounded-full`}>{riskString} {footStatic.range_level}단계</span>
         </div>
         <div className="flex gap-4 p-2 relative">
-          <div className="w-28 h-28 items-center justify-center ">
+          <div className="w-28 h-28 items-center justify-center">
             <FootStatic fileName={footStatic.fileName} matStatics={footStatic.matStatics} />
           </div>
           <div className="absolute top-0 bottom-0 left-32 w-0.5 bg-sub200" />
 
-          <div className={`flex items-center justify-start text-sm ${isNext ? 'text-black' : 'text-sub600'} px-4 py-2 whitespace-pre-line`}>{footStatic.comment}</div>
+          <div className={`flex items-center justify-start text-base ${isNext ? 'text-black' : 'text-sub600'} px-4 py-2 whitespace-pre-line`}>{footStatic.comment}</div>
         </div>
         
       </div>
@@ -99,7 +93,7 @@ const CompareSummaryFootStatic = ({
   return (
     <div className="flex flex-col ">
       {/* 상지요약 타이틀 */}
-      <div className="bg-sub100 text-base font-semibold text-black px-4 py-2 border-t-2 border-b-2 border-sub200">
+      <div className="bg-sub100 text-xl font-semibold px-4 py-2 border-t-2 border-b-2 border-sub200">
         정면 족압
       </div>
 
@@ -107,8 +101,8 @@ const CompareSummaryFootStatic = ({
       <div className="flex">
         {/* 이전 카드 */}
         <div className={`flex flex-col w-[20%] items-center justify-center gap-2 px-8 ${trendBgCondition}`}>
-          <div className={`text-2xl font-bold whitespace-nowrap ${trendTextCondition}`}>{trendArrow}</div>
-          <div className={`text-2xl font-bold whitespace-nowrap ${trendTextCondition}`}>{trendString}</div>
+          <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition}`}>{trendArrow}</div>
+          <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition}`}>{trendString}</div>
           <div className={`${trendBgCondition} ${trendBorderCondition} ${trendTextCondition} rounded-full px-3 py-1 text-sm whitespace-nowrap`}>{trendCount}</div>
         </div>
 

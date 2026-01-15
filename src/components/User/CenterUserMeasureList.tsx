@@ -86,7 +86,7 @@ export const CenterUserMeasureList = ({
                   </span>
                 </div>
               </TableCell> */}
-              <TableCell className="flex items-center justify-end gap-2 sm:gap-4">
+              <TableCell className="flex items-center justify-center gap-2 sm:gap-4">
                 <button
                   type="button"
                   onClick={(e) => {
@@ -94,7 +94,7 @@ export const CenterUserMeasureList = ({
                     onToggleCompareSn?.(sn, 0);
                     onOpenCompareMode();
                   }}
-                  className="flex items-center gap-1 sm:gap-2 justify-end cursor-pointer"
+                  className="flex items-center gap-1 sm:gap-2 justify-center cursor-pointer"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img

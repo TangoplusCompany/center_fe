@@ -52,7 +52,7 @@ const RawDataDetailContainer = ({
   }, [filteredData]);
   
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-4">
       {(() => {
         const grouped: (IUserMeasureDetailData | [IUserMeasureDetailData, IUserMeasureDetailData])[] = [];
         const processed = new Set<number>();

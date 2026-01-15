@@ -23,10 +23,10 @@ const CompareFootTrajectoryGridContainer = ({
   const footContainer = (data: CompareFootTrajectoryGridProps, isNext: boolean) => (
     <div className="flex flex-col gap-2">
       <div className="flex gap-4 items-center bg-sub100 border-b-2 border-sub200 py-1 px-4">
-        <span className="text-base">{isNext ? '②' : '①'}</span>
-        <span className={`text-xs ${isNext ? 'text-black' : 'text-sub600'}`}>{data.measure_date.slice(0, 11)}</span>
+        <span className="text-lg">{isNext ? '②' : '①'}</span>
+        <span className={`text-base ${isNext ? 'text-black' : 'text-sub600'}`}>{data.measure_date.slice(0, 11)}</span>
       </div>
-      <div className="grid grid-cols-4 items-center">
+      <div className="grid grid-cols-4 h-full items-center justify-center">
         <div className="flex flex-col items-center justify-start gap-2">
           
           <div className="w-28 h-28 flex-shrink-0">
@@ -71,13 +71,13 @@ const CompareFootTrajectoryGridContainer = ({
   const SummaryContainer = (dynamicComment: string, kneeComment: string, isNext: boolean) => (
     <div className="flex flex-col gap-2 border-l-2 border-sub200">
       {dynamicComment !== "" && kneeComment !== "" && (
-        <div className="flex bg-sub100 border-b-2 border-sub200 text-base px-4 py-1">
+        <div className="flex bg-sub100 border-b-2 border-sub200 text-base px-4 py-1.5">
           분석 설명
         </div>
       )}
-      <div className="flex flex-col justify-center h-full gap-2">
-        <div className={`flex items-center justify-start text-sm ${isNext ? 'text-black' : 'text-sub600'} px-4 py-2 whitespace-pre-line`}>{dynamicComment}</div> 
-        <div className={`flex items-center justify-start text-sm ${isNext ? 'text-black' : 'text-sub600'} px-4 py-2 whitespace-pre-line`}>{kneeComment}</div> 
+      <div className="flex flex-col justify-center h-full ">
+        <div className={`flex items-center justify-start text-base ${isNext ? 'text-black' : 'text-sub600'} px-4 whitespace-pre-line`}>{dynamicComment}</div> 
+        <div className={`flex items-center justify-start text-base ${isNext ? 'text-black' : 'text-sub600'} px-4 whitespace-pre-line`}>{kneeComment}</div> 
       </div>
     </div>
   );
@@ -85,7 +85,7 @@ const CompareFootTrajectoryGridContainer = ({
   return (
     <div className="flex flex-col">
       {/* 상지요약 타이틀 */}
-      <div className="bg-sub100 text-base font-semibold text-black px-4 py-2 border-t-2 border-b-2 border-sub200">
+      <div className="bg-sub100 text-xl font-semibold px-4 py-2 border-t-2 border-b-2 border-sub200">
         동적 족압 및 이동 궤적
       </div>
 

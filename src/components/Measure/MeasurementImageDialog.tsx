@@ -1,12 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { X, ZoomIn, ZoomOut } from 'lucide-react';
 import { Dialog, DialogContent } from '../ui/dialog';
+import { Button } from '../ui/button';
 
 interface MeasurementImageDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   imageUrl: string;
   step: "first" | "second" | "third" | "fourth" | "fifth" | "sixth";
+  showGrid: boolean;
+  onGridToggle: (show: boolean) => void;
+  showLine: boolean;
+  onLineToggle: (show: boolean) => void;
 }
 
 const stepLabels = {
@@ -23,6 +28,10 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
   onOpenChange,
   imageUrl,
   step,
+  showGrid,
+  onGridToggle,
+  showLine,
+  onLineToggle
 }) => {
   const [scale, setScale] = useState(1);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -116,7 +125,6 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="p-0 border-none bg-transparent w-fit h-fit [&>button]:hidden">
-
         <div className="relative">
           {/* Header */}
           <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between p-4">
@@ -132,7 +140,8 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
             </button>
           </div>
 
-          <div className="absolute bottom-0 right-0 z-10 mb-4 mr-4 flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm pointer-events-auto">
+          {/* Zoom Controls */}
+          <div className="absolute bottom-0 left-0 z-10 mb-4 mr-4 flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm pointer-events-auto">
             <button
               onClick={handleZoomOut}
               disabled={scale <= 1}
@@ -152,6 +161,25 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
             >
               <ZoomIn className="w-5 h-5" />
             </button>
+          </div>
+
+          <div className="flex flex-col gap-2 absolute bottom-4 right-4 z-10">
+            <Button
+              className="bg-white/10 backdrop-blur-sm hover:bg-white/20"
+              color="white"
+              variant="secondary"
+              onClick={() => onGridToggle(!showGrid)}
+            >
+              {showGrid ? '그리드 끄기' : '그리드 켜기'}
+            </Button>
+            <Button
+              className="z-5 bg-white/10 backdrop-blur-sm hover:bg-white/20"
+              color="white"
+              variant="secondary"
+              onClick={() => onLineToggle(!showLine)}
+            >
+              {showLine ? '랜드마크 끄기' : '랜드마크 켜기'}
+            </Button>
           </div>
 
           <div 
@@ -176,6 +204,22 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
               onMouseDown={handleMouseDown}
               draggable={false}
             />
+            
+            {/* 그리드 오버레이 */}
+            {showGrid && (
+              <div 
+                className="absolute inset-0 pointer-events-none rounded-2xl"
+                style={{
+                  backgroundImage: `
+                    linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px)
+                  `,
+                  backgroundSize: '20px 20px',
+                  transform: `scale(${scale}) translate(${position.x / scale}px, ${position.y / scale}px)`,
+                  transformOrigin: 'center center',
+                }}
+              />
+            )}
           </div>
         </div>
       </DialogContent>
