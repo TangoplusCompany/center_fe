@@ -55,6 +55,11 @@ export const customAxios = axios.create({
 
 // ✅ 요청 인터셉터: 항상 최신 토큰을 헤더에 부착
 customAxios.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  // result-page 경로는 별도의 인증 시스템을 사용하므로 토큰 체크 제외
+  if (typeof window !== "undefined" && window.location.pathname.startsWith("/result-page")) {
+    return config;
+  }
+  
   const token = session.get<{
     state: {
       isLogin: boolean;
@@ -107,8 +112,11 @@ customAxios.interceptors.response.use(
         return customAxios(originalRequest);
       } catch (err) {
         processQueue(err as AxiosError, null);
-        authStore.getState().setLogout(); // 로그아웃 처리
-        window.location.href = "/login";
+        // result-page 경로는 별도의 인증 시스템을 사용하므로 리다이렉트 제외
+        if (typeof window !== "undefined" && !window.location.pathname.startsWith("/result-page")) {
+          authStore.getState().setLogout(); // 로그아웃 처리
+          window.location.href = "/login";
+        }
         return Promise.reject(err);
       } finally {
         isRefreshing = false;
