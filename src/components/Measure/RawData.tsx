@@ -80,36 +80,38 @@ export const RawData = (
     return ".";
   };
   return (
-    <div className="flex flex-col border-b-2 border-sub200">
-      <div className="grid grid-cols-[18%_10%_12%_60%] items-center border-b-2 border-sub200 bg-sub100 py-2">
-        <span className="text-base font-semibold text-black px-4">{data0.measure_unit}</span>
-        <span className={`flex flex-1 justify-center text-base text-sub600 `}>{!data1 ? '' : '기준값'}</span>
-        <span className="flex justify-center text-base text-sub600 ">단계표시</span>
-        <span className="text-base text-sub600 px-4">분석설명</span>
-      </div>
+    <div className="w-full table table-fixed min-w-0 overflow-hidden">
+      <div className="flex flex-col overflow-x-auto overflow-y-hidden w-full min-w-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex flex-col border-b-2 border-sub200 min-w-[800px]">
+          <div className="grid grid-cols-[18%_10%_12%_60%] items-center border-b-2 border-sub200 bg-sub100 py-2">
+            <span className="text-base font-semibold text-black px-4 whitespace-normal break-keep">{data0.measure_unit}</span>
+            <span className={`flex flex-1 justify-center text-base text-sub600 `}>{!data1 ? '' : '기준값'}</span>
+            <span className="flex justify-center text-base text-sub600 ">단계표시</span>
+            <span className="text-base text-sub600 px-4">분석설명</span>
+          </div>
 
-      <div className="flex flex-col">
+          <div className="flex flex-col">
 
-        {/* 왼쪽(상단) */}
-        <div className={`grid grid-cols-[18%_10%_12%_60%] items-center h-full divide-x-2 divide-sub200`}>
+            {/* 왼쪽(상단) */}
+            <div className={`grid grid-cols-[18%_10%_12%_60%] items-center h-full divide-x-2 divide-sub200`}>
           
           <div className={`grid items-center h-full ${data1 && 'divide-y-2 divide-sub200'}`}>
             <div className="flex justify-center">
-              <span className={`flex text-xs items-center justify-center text-sub600 px-2 py-1 rounded-full bg-sub100 my-3 ${!data1 && 'invisible'}`}>
+              <span className={`flex text-xs items-center justify-center text-sub600 px-2 py-1 rounded-full bg-sub100 my-3 whitespace-normal break-keep ${!data1 && 'invisible'}`}>
                 {leftRightString0}
               </span>
-              <span className={`flex items-center text-xl leading-none mx-2`}>
+              <span className={`flex items-center text-xl leading-none mx-2 whitespace-normal break-keep`}>
                 {formattedData0} {unit0}
               </span>
             </div>
             <div className="flex justify-center">
               {data1 && (
-                <span className={`flex text-xs flex items-center justify-center text-sub600 px-2 py-1 rounded-full bg-sub100 my-2 `}>
+                <span className={`flex text-xs items-center justify-center text-sub600 px-2 py-1 rounded-full bg-sub100 my-2 whitespace-normal break-keep`}>
                   {leftRightString1}
                 </span>
               )}
               {data1 && (
-                <span className={`flex items-center text-xl leading-none mx-2 `}>
+                <span className={`flex items-center text-xl leading-none mx-2 whitespace-normal break-keep`}>
                   {formattedData1} {unit1}
                 </span>
               )}
@@ -126,17 +128,17 @@ export const RawData = (
 
           <div className={`grid items-center h-full relative`}>
             <span className={`
-              flex inline-flex items-center justify-center mx-auto
+              inline-flex items-center justify-center mx-auto
               px-2 py-1 ${textBgCondition0} text-white
-              text-xs rounded-full
+              text-xs rounded-full whitespace-normal break-keep text-center
             `}>
               {levelString0} {data0?.range_level}단계
             </span>
             {data1 && (
               <span className={`
-                flex inline-flex items-center justify-center mx-auto
+                inline-flex items-center justify-center mx-auto
                 px-2 py-1 ${textBgCondition1} text-white
-                text-xs rounded-full
+                text-xs rounded-full whitespace-normal break-keep text-center
               `}>
                 {levelString1} {data1?.range_level}단계
               </span>
@@ -149,17 +151,17 @@ export const RawData = (
           <div className={`grid items-center justify-start w-full h-full relative`}>
             {data1 && data0.ment_all === data1.ment_all ? (
               // 두 내용이 같으면 하나만 표시 (구분선 없음)
-              <div className="text-base text-sub600 px-3 place-self-center">
+              <div className="text-base text-sub600 px-3 place-self-center whitespace-normal break-keep">
                 {data0.ment_all}
               </div>
             ) : (
               // 두 내용이 다르거나 data1이 없으면 기존 로직
               <>
-                <div className={`${textCondition0} text-base text-sub600 px-3`}>
+                <div className={`${textCondition0} text-base text-sub600 px-3 whitespace-normal break-keep`}>
                   {data0.ment_all}
                 </div>
                 {data1 && (
-                  <div className={`${textCondition1} text-base text-sub600 px-3`}>
+                  <div className={`${textCondition1} text-base text-sub600 px-3 whitespace-normal break-keep`}>
                     {data1.ment_all}
                   </div>
                 )}
@@ -171,6 +173,8 @@ export const RawData = (
             )}
           </div>
           
+            </div>
+          </div>
         </div>
       </div>
     </div>
