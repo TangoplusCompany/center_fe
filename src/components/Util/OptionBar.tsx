@@ -76,11 +76,11 @@ const OptionBar = ({
           )}
         </div>
       </div>
-      <div className="flex items-center mb-2">
+      <div className="flex items-center gap-2 h-full">
 
         {/* 🔹 항상 start */}
         {!showAddButton && (
-          <div className="flex items-center gap-4 h-12 shrink-0">
+          <div className="flex items-center gap-4">
             <MeasureDeviceTab />
           </div>
         )}

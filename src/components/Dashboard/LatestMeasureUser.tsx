@@ -4,12 +4,13 @@ import { useGetLatestMeasureUser } from "@/hooks/api/user/useGetLatestMeasureUse
 import React from "react";
 import { MainUserList } from "./MainUserList";
 import { IMeasureList } from "@/types/measure";
+import { Skeleton } from "../ui/skeleton";
 
 const LatestMeasureUser = () => {
   const { data: latestMeasureUser, isLoading } =
     useGetLatestMeasureUser<IMeasureList[]>();
   if (isLoading) {
-    return <div className="col-span-1">Loading...</div>;
+    return <Skeleton className="w-full h-[400px]" />;
   }
   if (!latestMeasureUser || latestMeasureUser.length === 0) {
     return <div className="col-span-1">No data available</div>;

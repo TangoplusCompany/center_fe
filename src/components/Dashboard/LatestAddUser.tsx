@@ -4,11 +4,12 @@ import { useGetLatestAddUser } from "@/hooks/api/user/useGetLatestAddUser";
 import { IUserData } from "@/types/user";
 import React from "react";
 import { MainUserList } from "./MainUserList";
+import { Skeleton } from "../ui/skeleton";
 
 const LatestAddUser = () => {
   const { data: latestAddUser, isLoading } = useGetLatestAddUser<IUserData[]>();
   if (isLoading) {
-    return <div className="col-span-1">Loading...</div>;
+    return <Skeleton className="w-full h-[400px]" />;
   }
   if (!latestAddUser || latestAddUser?.length === 0) {
     return <div className="col-span-1">No data available</div>;

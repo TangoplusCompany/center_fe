@@ -141,7 +141,7 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
           </div>
 
           {/* Zoom Controls */}
-          <div className="absolute bottom-0 left-0 z-10 mb-4 mr-4 flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm pointer-events-auto">
+          <div className="absolute bottom-0 left-0 z-10 mb-4 ml-4 flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm pointer-events-auto">
             <button
               onClick={handleZoomOut}
               disabled={scale <= 1}

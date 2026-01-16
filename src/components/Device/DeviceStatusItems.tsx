@@ -17,7 +17,7 @@ export const DeviceStatusItems = React.memo(
     return (
       <div
         key={device.sn}
-        className="flex col-span-1 items-center justify-between rounded-lg p-4 border relative"
+        className="flex col-span-1 items-center justify-between rounded-3xl p-4 border-2 border-sub200 relative"
       >
         <div className="flex flex-col">
           <div className="flex items-center justify-start gap-2">
