@@ -122,7 +122,7 @@ const MeasureSummaryGraph = ({
   return (
     <Card className="shadow-none rounded-xl border-2 border-sub200">
       <CardHeader className="p-4 py-2">
-        <div className="text-base font-semibold">
+        <div className="text-xl font-semibold text-sub800">
           {getTitle(dCase)}
         </div>
       </CardHeader>
@@ -164,6 +164,7 @@ const MeasureSummaryGraph = ({
               domain={[1, 9]}
               ticks={yAxisTicks}
               tickFormatter={formatYAxis}
+              tickSize={20}
               tickLine={false}
               axisLine={false}
               width={40}
@@ -178,7 +179,7 @@ const MeasureSummaryGraph = ({
                 
                 return (
                   <div className="rounded-lg border p-3 shadow-sm bg-white">
-                    <div className="text-sm font-medium mb-2">
+                    <div className="text-base font-medium mb-2">
                       {data.measure_date.split(' ')[0]}
                     </div>
                     <div className="space-y-1">

@@ -77,7 +77,7 @@ export default {
           foreground: "hsl(var(--toggle-accent-foreground))",
           background: "hsl(var(--toggle-accent-background))"
         },
-        
+        toggleAccentDeep: "hsl(var(--toggle-accent-deep))"
       },
       borderRadius: {
         lg: "var(--radius)",

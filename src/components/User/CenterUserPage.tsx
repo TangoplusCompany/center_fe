@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import CustomPagination from "@/components/common/Pagination";
 import OptionBar from "@/components/Util/OptionBar";
 import { useGetUserList } from "@/hooks/api/user/useGetUserList";
@@ -10,10 +9,11 @@ import { Button } from "@/components/ui/button";
 import { UserList } from "@/components/User/UserList";
 import { useAuthStore } from "@/providers/AuthProvider";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
+import { CenterUserAddDialog } from "./CenterUserAddDialog";
 
 const CenterUserPage = () => {
   const { adminRole } = useAuthStore((state) => state);
-  
+  const [dialogOpen, setDialogOpen] = useState(false);
   const { query, setQueryParam } = useQueryParams();
   const deviceSn = query.device_sn || "0";
   const page = parseInt(query.page || "1");
@@ -40,7 +40,12 @@ const CenterUserPage = () => {
     limit,
     search: searchValue,
   });
-
+  const handleDialogClose = (shouldRefetch: boolean) => {
+    setDialogOpen(false);
+    if (shouldRefetch) {
+      refetchUserList(); // 사용자 추가 성공 시 목록 갱신
+    }
+  };
   if (isLoading) {
     return (
       <div className="col-span-12">
@@ -60,8 +65,8 @@ const CenterUserPage = () => {
       <div className="col-span-12 flex flex-col gap-5">
         <div className="col-span-12 flex justify-between">
           <p>사용자가 존재하지 않습니다. 신규 사용자를 추가해주세요.</p>
-          <Button variant="secondary">
-            <Link href={`/user/add`}>신규사용자 등록</Link>
+          <Button variant="secondary" onClick={() => setDialogOpen(true)}>
+            사용자 추가
           </Button>
         </div>
       </div>
@@ -75,7 +80,7 @@ const CenterUserPage = () => {
         search={search} 
         onSearchChange={onChangeSearch}
         showAddButton={adminRole < 3}
-        addButtonHref="/user/add"
+        setDialogOpen={setDialogOpen}
       />
       <UserList
         users={userResponseData.users}
@@ -87,6 +92,10 @@ const CenterUserPage = () => {
         page={userResponseData.page}
         last_page={userResponseData.last_page}
         limit={userResponseData.limit}
+      />
+      <CenterUserAddDialog
+        open={dialogOpen}
+        onClose={handleDialogClose}
       />
     </div>
   );

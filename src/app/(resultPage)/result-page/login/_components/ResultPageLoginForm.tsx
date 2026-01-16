@@ -50,7 +50,18 @@ export default function ResultPageLoginForm({
         // 로그인 성공 시 쿠키 설정
         document.cookie = "resultPageLogin=true; path=/; max-age=86400"; // 24시간
         
-        router.push("/result-page");
+        // 임시 값들을 쿼리 파라미터로 전달
+        const userUUID = "17PRWCXV743ZAEKQ";
+        const key = "2225";
+        const name = "1601";
+        
+        const queryParams = new URLSearchParams({
+          userUUID,
+          key,
+          name,
+        });
+        
+        router.push(`/result-page?${queryParams.toString()}`);
       } else {
         alert("로그인에 실패했습니다. 핸드폰 번호와 PIN 번호를 확인해주세요.");
       }

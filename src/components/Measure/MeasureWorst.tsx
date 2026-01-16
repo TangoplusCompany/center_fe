@@ -33,14 +33,14 @@ const MeasureWorst = ({ data }: { data: TWorstPart }) => {
         {/* 위험 레벨 배지 */}
         <div className={`w-fit px-3 py-1 ${
           data.level === 2 ? "bg-danger" : "bg-warning"
-        } text-white text-sm font-semibold rounded-md`}>
+        } text-white text-lg font-semibold rounded-xl`}>
           {data.partName}
         </div>
 
         {/* 설명 박스 */}
         <div className={`w-fit ${data.level === 2 ? "bg-danger-foreground" : "bg-warning-foreground"
         } rounded-lg p-4`}>
-          <p className={`text-sm ${
+          <p className={`text-base ${
             data.level === 2 ? "text-danger" : "text-warning"
           } leading-relaxed`}>
             {data.description}

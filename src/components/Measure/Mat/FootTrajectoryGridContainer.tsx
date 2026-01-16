@@ -80,7 +80,7 @@ const FootTrajectoryGridContainer = ({
         {/* 왼쪽: FootStatic */}
         <div className="flex flex-col gap-4">
           <div className="flex justify-between items-center py-2">
-            <h2 className="text-base font-semibold">정적 족압 결과</h2>
+            <h2 className="text-xl font-semibold">정적 족압 결과</h2>
             <span className={`px-3 py-1 ${riskBg} rounded-xl text-sm text-white`}>
               {riskString} {mat_static_range_level}단계
             </span>

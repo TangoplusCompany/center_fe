@@ -163,7 +163,7 @@ const MeasureDetail = ({
   ];
 
   return (
-    <Tabs defaultValue="summary" className="w-full">
+    <Tabs defaultValue="summary" className="w-full max-w-full">
       {/* ✅ 상단 줄: TabsList (좌측) + Select(우측) */}
       
       <div className="flex items-center justify-between mb-4 gap-4">

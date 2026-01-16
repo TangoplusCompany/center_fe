@@ -59,49 +59,44 @@ const CompareSummaryUnit = ({
   const summaryMent = (summaryUnit: CompareSummaryUnitProps, isNext: boolean) => {
     const riskString = getRiskString(summaryUnit.risk_level);
     
-    const textCondition0 = {
-      "0": "text-secondary",
-      "1": "text-white",
-      "2": "text-white",
-    }[summaryUnit.risk_level] ?? "text-secondary";
-    
     const textBgCondition0 = {
-      "0": "bg-sub300",
+      "0": "bg-sub600",
       "1": "bg-warning",
       "2": "bg-danger",
-    }[summaryUnit.risk_level] ?? "bg-sub300";
+    }[summaryUnit.risk_level] ?? "bg-sub600";
     
     return (
-      <div className="flex-1">
+      <div className="flex-1 w-full">
         <div className="flex items-center justify-between border-b-2 border-sub200 px-4 py-1 bg-sub100">
           <div className="flex gap-4 items-center">
-            <span className="text-base">{isNext ? '②' : '①'}</span>
-            <span className={`text-xs ${isNext ? 'text-black' : 'text-sub600'}`}>{summaryUnit.measure_date.slice(0, 11)}</span>
+            <span className="text-lg">{isNext ? '②' : '①'}</span>
+            <span className={`text-base ${isNext ? 'text-black' : 'text-sub600'}`}>{summaryUnit.measure_date.slice(0, 11)}</span>
           </div>
-          <span className={`${textBgCondition0} ${textCondition0} text-xs px-2 py-1 rounded-full`}>{riskString} {summaryUnit.range_level}단계</span>
+          <span className={`${textBgCondition0} text-white text-sm px-2 py-1 rounded-full`}>{riskString} {summaryUnit.range_level}단계</span>
         </div>
-        <div className={`flex items-center justify-start text-sm ${isNext ? 'text-black' : 'text-sub600'} px-4 py-2 whitespace-pre-line`}>{formatText(summaryUnit.ment)}</div>
+        <div className={`flex items-center justify-start text-base ${isNext ? 'text-black' : 'text-sub600'} px-4 py-2 whitespace-pre-line`}>{formatText(summaryUnit.ment)}</div>
       </div>
     );
   };
 
   return (
-    <div className="flex flex-col ">
+    <div className="w-full table table-fixed min-w-0 overflow-hidden">
+      <div className="flex flex-col  overflow-x-auto overflow-y-hidden w-full min-w-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
       {/* 타이틀 */}
-      <div className="bg-sub100 text-base font-semibold text-black px-4 py-2 border-t-2 border-b-2 border-sub200">
+      <div className="bg-sub100 min-w-[700px] text-xl font-semibold px-4 py-2 border-t-2 border-b-2 border-sub200">
         {title}
       </div>
 
       {/* 2개의 카드 영역 */}
-      <div className="flex">
+      <div className="flex w-full min-w-[700px]">
         {/* 이전 카드 */}
-        <div className={`flex flex-col w-[20%] items-center justify-center gap-2 px-8 ${trendBgCondition}`}>
-          <div className={`text-2xl font-bold whitespace-nowrap ${trendTextCondition}`}>{trendArrow}</div>
-          <div className={`text-2xl font-bold whitespace-nowrap ${trendTextCondition}`}>{trendString}</div>
+        <div className={`w-[20%] flex flex-col items-center justify-center gap-2 px-8 ${trendBgCondition}`}>
+          <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition}`}>{trendArrow}</div>
+          <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition}`}>{trendString}</div>
           <div className={`${trendBgCondition} ${trendBorderCondition} ${trendTextCondition} rounded-full px-3 py-1 text-sm whitespace-nowrap`}>{trendCount}</div>
         </div>
 
-        <div className="grid grid-raws-2 w-[80%]">
+        <div className="grid grid-raws-2 w-[80%] ">
           {summaryMent(summaryUnit0, false)}
           {summaryUnit1 && (
             summaryMent(summaryUnit1, true)
@@ -109,6 +104,9 @@ const CompareSummaryUnit = ({
         </div>
       </div>
     </div>
+
+    </div>
+    
   );
 };
 

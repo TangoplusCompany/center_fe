@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 import {
   Select,
   SelectContent,
@@ -37,7 +36,7 @@ interface OptionBarProps {
   search: string;
   onSearchChange: (searchValue: string) => void;
   showAddButton?: boolean;
-  addButtonHref?: string;
+  setDialogOpen?: (open: boolean) => void;
 }
 
 const OptionBar = ({ 
@@ -45,7 +44,7 @@ const OptionBar = ({
   search, 
   onSearchChange,
   showAddButton = false,
-  addButtonHref = "/user/add"
+  setDialogOpen 
 }: OptionBarProps) => {
   const { setQueryParam, query } = useQueryParams();
   const defaultLimit = query.limit || 20;
@@ -70,9 +69,9 @@ const OptionBar = ({
             <SearchForm setSearch={onSearchChange} search={search} />
           </div>
 
-          {showAddButton && (
-            <Button variant="secondary">
-              <Link href={addButtonHref}>신규사용자 등록</Link>
+          {showAddButton && setDialogOpen && (
+            <Button variant="secondary" onClick={() => setDialogOpen(true)}>
+              사용자 추가
             </Button>
           )}
         </div>
