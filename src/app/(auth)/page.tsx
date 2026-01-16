@@ -12,8 +12,6 @@ export default function Home() {
       <DeviceInformation />
       <Separator className="w-full" />
       <div className="w-full grid grid-cols-1 gap-5 xl:grid-cols-2">
-
-
         <div className="flex flex-col gap-5">
           <div className="flex items-center gap-3">
             <div className="w-1 h-10 bg-toggleAccent rounded-full"></div>

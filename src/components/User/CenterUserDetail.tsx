@@ -9,6 +9,7 @@ import { useGetUserMeasureList } from "@/hooks/api/user/useGetUserMeasureList";
 import { IUserMeasureList } from "@/types/user";
 import { MeasurePickerDialog } from "../Measure/Compare/CompareMeasurePickerDialog";
 import { ComparePair, CompareSlot } from "@/types/compare";
+import RecommendUserContainer from "./Recommend/UserContainer";
 
 const useTab = () => {
   const [tab, setTab] = useState(0);
@@ -43,7 +44,7 @@ const CenterUserDetail = ({
       }
       handleTab(index);
     };
-
+  const [isAIExerciseActive, setIsAIExerciseActive] = useState(false);
   
   const [comparePair, setComparePair] = React.useState<ComparePair>([null, null]);
 
@@ -101,30 +102,45 @@ const CenterUserDetail = ({
         nowTab={tab}
         userUUID={userUUID}
         update={handleTabWithReset}
+        isAIExerciseActive={isAIExerciseActive}
+        setIsAIExerciseActive={setIsAIExerciseActive}
       />
-      {tab !== 2 &&
-      !userMeasureLoading &&
-      !userMeasureError && 
-      userMeasureList &&
-      (
-        <CenterUserMeasureContainer
-          measureSn={measureSn}
-          userUUID={userUUID}
-          userSn={userSn}
-          tab={tab}
-          onUpdateMeasureSn={handleRecentSn}
-          comparePair={ comparePair }
-          onToggleCompareSn={ handleToggleCompareSn }
-          onClearCompare={ onClearCompare }
-          userMeasureList={ userMeasureList }
-          // onRemoveCompare={ onRemoveCompare }
-          onCompareDialogOpen= {onCompareDialogOpen}
-          onOpenCompareMode={openCompareMode}
-          onCloseCompareMode={closeCompareMode}
-          isCompareMode={ isCompareMode }
+
+      {isAIExerciseActive ? (
+        <RecommendUserContainer 
+          user_uuid={userUUID}
+          user_sn={`${userSn}`}
         />
+      ) : (
+        <>
+          {tab !== 2 &&
+        !userMeasureLoading &&
+        !userMeasureError && 
+        userMeasureList &&
+        (
+          <CenterUserMeasureContainer
+            measureSn={measureSn}
+            userUUID={userUUID}
+            userSn={userSn}
+            tab={tab}
+            onUpdateMeasureSn={handleRecentSn}
+            comparePair={ comparePair }
+            onToggleCompareSn={ handleToggleCompareSn }
+            onClearCompare={ onClearCompare }
+            userMeasureList={ userMeasureList }
+            // onRemoveCompare={ onRemoveCompare }
+            onCompareDialogOpen= {onCompareDialogOpen}
+            onOpenCompareMode={openCompareMode}
+            onCloseCompareMode={closeCompareMode}
+            isCompareMode={ isCompareMode }
+          />
+        )}
+        {tab === 2 && <CenterUserInformation />}
+        </>
       )}
-      {tab === 2 && <CenterUserInformation />}
+
+
+      
 
       <MeasurePickerDialog
         open={isCompareDialogOpen}
@@ -138,6 +154,7 @@ const CenterUserDetail = ({
           setIsCompareDialogOpen(false);
         }}
       />
+      
       
     </div>
   );

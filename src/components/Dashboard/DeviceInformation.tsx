@@ -7,16 +7,6 @@ import { Skeleton } from "../ui/skeleton";
 import DeviceChartContainer from "./DeviceChartContainer";
 import { useRouter } from "next/navigation";
 
-const SkeletonDeviceStatus = () => {
-  return (
-    <div className="grid grid-cols-2 gap-3">
-      <h2 className="text-2xl col-span-2">키오스크 현황</h2>
-      <Skeleton className="flex col-span-1 items-center justify-between rounded-lg h-20"></Skeleton>
-      <Skeleton className="flex col-span-1 items-center justify-between rounded-lg h-20"></Skeleton>
-    </div>
-  );
-};
-
 const DashboardDeviceStatus = ({
   device,
 }: {
@@ -75,18 +65,20 @@ const DashboardDeviceStatus = ({
 
 export const DeviceInformation = () => {
   const { data: deviceStatus, isLoading } = useGetDeviceStatus<IDeviceStatus>();
-
   const [isExpanded, setIsExpanded] = useState(false);
+
+  if (isLoading) return (
+    <div className="flex flex-col gap-4">
+      <Skeleton className="w-full h-[320px]" />
+      <Skeleton className="w-full h-[320px]" />
+    </div>
+  );
+  if (!deviceStatus) return <div>No data</div>;
   if (!deviceStatus?.data) {
     return null; // 또는 로딩 상태 표시
   }
   const displayedDevices = isExpanded ? deviceStatus.data : deviceStatus.data.slice(0, 4);
   const hasMore = deviceStatus.data.length > 4;
-
-
-
-  if (isLoading) return <SkeletonDeviceStatus />;
-  if (!deviceStatus) return <div>No data</div>;
   return (
     <>
       <div className="flex flex-col gap-4">
