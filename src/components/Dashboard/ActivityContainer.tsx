@@ -4,6 +4,8 @@ import { useGetCenterActivity } from "@/hooks/api/center/useGetCenterActivity";
 import ActivityCard from "./ActivityCard";
 import ActivityGraph from "./ActivityGraph";
 import { ICenterActivityAgeGroup, ICenterActivityUsage } from "@/types/center";
+import { Skeleton } from "../ui/skeleton";
+
 
 export type countDetailCardProps = {
   case: 0 | 1;
@@ -19,7 +21,14 @@ export type graphDetailCardProps = GraphData;
 
 const ActivityContainer = () => {
   const { data: activityResponse, isLoading } = useGetCenterActivity();
-  if (isLoading) return <div>is Loading</div>;
+  if (isLoading) return (
+    <div className="grid grid-cols-4 gap-4">
+      <Skeleton className="w-full h-[200px]" />
+      <Skeleton className="w-full h-[200px]" />
+      <Skeleton className="w-full h-[200px]" />
+      <Skeleton className="w-full h-[200px]" />
+    </div>
+  );
   // props 객체 생성
   const dailyCardData: countDetailCardProps = {
     case: 0,
