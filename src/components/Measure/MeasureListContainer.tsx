@@ -6,10 +6,11 @@ import DataError from "@/components/Util/DataError";
 import { useMeasureList } from "@/hooks/api/measure/useMeasureList";
 import { IMeasureData } from "@/types/measure";
 import {
-  MeasureDummyList,
+  
   MeasureList,
 } from "@/components/Measure/MeasureList";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
+import { Skeleton } from "../ui/skeleton";
 
 const MeasureListContainer = ({
   handleTotalItems,
@@ -42,7 +43,24 @@ const MeasureListContainer = ({
   if (isLoading) {
     return (
       <>
-        <MeasureDummyList limit={limit} />
+        <div className="flex flex-col gap-4">
+          <Skeleton className="w-full h-[50px]" />
+          <Skeleton className="w-full h-[36px]" />
+          <Skeleton className="w-full h-[36px]" />
+          <Skeleton className="w-full h-[36px]" />
+          <Skeleton className="w-full h-[36px]" />
+          <Skeleton className="w-full h-[36px]" />
+          <Skeleton className="w-full h-[36px]" />
+          <Skeleton className="w-full h-[36px]" />
+          <Skeleton className="w-full h-[36px]" />
+          <Skeleton className="w-full h-[36px]" />
+          <Skeleton className="w-full h-[36px]" />
+          <Skeleton className="w-full h-[36px]" />
+          <Skeleton className="w-full h-[36px]" />
+          <Skeleton className="w-full h-[36px]" />
+          <Skeleton className="w-full h-[36px]" />
+          <Skeleton className="w-full h-[36px]" />
+        </div>
       </>
     );
   }

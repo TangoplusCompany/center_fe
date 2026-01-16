@@ -57,10 +57,10 @@ const CenterUserSearchContainer = ({
           조회하기
         </Button>
       </form>
-      <div className="flex flex-col w-full rounded-md border border-input bg-transparent text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm">
+      <div className="flex flex-col w-full rounded-xl border-2 border-sub300 bg-transparent text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm">
         {userList.length === 0 ? (
           <div className="w-full flex items-center justify-center py-10">
-            <p className="text-lg font-medium text-red-500">
+            <p className="text-base font-medium text-black">
               조회된 사용자가 없습니다.
             </p>
           </div>

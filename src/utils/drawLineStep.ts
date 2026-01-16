@@ -448,7 +448,7 @@ export function drawLineStepFourth(
   ctx.beginPath();
   ctx.moveTo(measureJson.pose_landmark[12].sx, measureJson.pose_landmark[12].sy);
   ctx.lineTo(
-    measureJson.pose_landmark[27].sx,
+    measureJson.pose_landmark[28].sx,
     measureJson.pose_landmark[12].sy,
   );
   ctx.stroke();
@@ -456,7 +456,7 @@ export function drawLineStepFourth(
   ctx.beginPath();
   ctx.moveTo(measureJson.pose_landmark[14].sx, measureJson.pose_landmark[14].sy);
   ctx.lineTo(
-    measureJson.pose_landmark[27].sx,
+    measureJson.pose_landmark[28].sx,
     measureJson.pose_landmark[14].sy,
   );
   ctx.stroke();

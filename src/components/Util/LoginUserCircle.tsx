@@ -23,12 +23,12 @@ export default function LoginUserCircle({ adminName, adminRole }: LoginUserCircl
   return (
     <div className="flex items-center gap-2">
       <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+        <span className="text-sm font-medium text-sub800">
           {adminName ? adminName.charAt(0).toUpperCase() : "U"}
         </span>
       </div>
       <div className="flex flex-col">
-        <span className="text-sm font-medium">{adminName || "홍길동"}</span>
+        <span className="text-sm font-medium">{adminName || " "}</span>
         <span className="text-xs text-gray-500">{roleText}</span>
       </div>
     </div>

@@ -5,6 +5,7 @@ import { IDeviceStatusCardProps } from "@/types/device";
 import React from "react";
 import DeviceChart from "./DeviceChart";
 import { useDevicePeriodData } from "@/hooks/api/device/useDevicePeriodData";
+import { Skeleton } from "../ui/skeleton";
 
 const DeviceChartContainer = ({
   deviceList,
@@ -14,7 +15,7 @@ const DeviceChartContainer = ({
   const { chartConfig } = useDeviceChartConfig(deviceList);
   const { data: chartData, isLoading } = useDevicePeriodData();
   
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Skeleton className="w-full h-[400px]" />;
   if (!chartData) return <div>No data</div>;
 
   return (

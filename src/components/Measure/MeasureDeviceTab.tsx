@@ -1,22 +1,14 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { useGetDeviceStatus } from "@/hooks/api/device/useDeviceStatus";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import { IDeviceStatus } from "@/types/device";
 import React from "react";
+import { Skeleton } from "../ui/skeleton";
 
 const DummyMeasureDeviceTab = () => {
   return (
-    <div className="flex items-center justify-start gap-3">
-      {Array.from({ length: 3 }).map((_, index) => {
-        return (
-          <Button key={index} className="cursor-pointer" variant="outline">
-            <span className="block w-20"></span>
-          </Button>
-        );
-      })}
-    </div>
+    <Skeleton className="w-[256px] h-[36px]"/>
   );
 };
 
@@ -40,8 +32,8 @@ const MeasureDeviceTab = () => {
   if (isError) return <div>Error...</div>;
   if (!measureDeviceResponse) return <div>No data</div>;
   return (
-    <div className="w-full flex items-center justify-between">
-      <div className="inline-flex rounded-xl bg-gray-100 dark:bg-gray-800 p-1 gap-1">
+    <div className="w-full">
+      <div className="flex flex-wrap rounded-xl bg-gray-100 dark:bg-gray-800 p-1 gap-1">
         {/* 전체 조회 */}
         <button
           type="button"
@@ -49,7 +41,7 @@ const MeasureDeviceTab = () => {
             deviceSn === "0"
               ? "bg-toggleAccent dark:bg-gray-700 text-toggleAccent-foreground dark:text-black shadow-sm"
               : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-          } px-4 py-1 text-sm font-medium rounded-xl transition-all`}
+          } px-4 py-1 text-sm font-medium rounded-xl transition-all whitespace-nowrap`}
           onClick={() => handleDeviceClick(0)}
         >
           전체 보기
@@ -67,7 +59,7 @@ const MeasureDeviceTab = () => {
                 active
                   ? "bg-toggleAccent dark:bg-gray-700 text-toggleAccent-foreground dark:text-black shadow-sm"
                   : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-              } px-4 py-1 text-sm font-medium rounded-xl transition-all`}
+              } px-4 py-1 text-sm font-medium rounded-xl transition-all whitespace-nowrap`}
               onClick={() => handleDeviceClick(device.sn)}
             >
               {device.device_name}

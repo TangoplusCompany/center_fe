@@ -1,15 +1,20 @@
 "use client";
 
 
-// UserDetailTap.tsx
+import { Switch } from '@/components/ui/switch';
+
 const UserDetailTap = ({
   nowTab,
   update,
-
+  isAIExerciseActive,
+  setIsAIExerciseActive
 }: {
   nowTab: number;
   userUUID: string;
   update: (index: number) => void;
+  isAIExerciseActive: boolean;
+  setIsAIExerciseActive : (isActive: boolean) => void;
+  
 }) => {
   const handleClick = (value: number) => {
     update(value);
@@ -42,10 +47,11 @@ const UserDetailTap = ({
                 nowTab === index
                   ? "bg-toggleAccent dark:bg-gray-700 text-toggleAccent-foreground dark:text-black shadow-sm"
                   : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-              } px-4 py-1 text-sm font-medium rounded-xl transition-all`}
-              onClick={() => 
+              } px-2 sm:px-4 py-1 text-xs sm:text-sm font-medium rounded-xl transition-all whitespace-normal sm:whitespace-nowrap text-center leading-tight`}
+              onClick={() => {
                 handleClick(index)
-              }
+                setIsAIExerciseActive(false)
+              }}
             >
               {item}
             </button>
@@ -53,8 +59,42 @@ const UserDetailTap = ({
         })}
       </div>
 
-      {/* 오른쪽 영역은 비워두거나, 나중에 다른 글로벌 액션이 필요하면 사용 */}
-      <div className="flex items-center gap-3 ml-auto" />
+      
+      <button 
+        onClick={() => setIsAIExerciseActive(!isAIExerciseActive)}
+        className="relative h-full overflow-hidden px-3 py-1 rounded-xl text-white transition-all hover:scale-105 active:scale-95 isolate"
+      >
+        {/* 메인 컬러 포함 무지개 그라데이션 */}
+        <div 
+          className="absolute inset-0 z-0"
+          style={{
+            background: 'linear-gradient(135deg, hsl(227, 65.1%, 49.4%) 0%, hsl(227, 65.1%, 49.4%) 60%, hsl(150, 80.2%, 54.5%) 95%, hsl(150, 80.2%, 54.5%) 100%)',
+          }}
+        />
+        
+        {/* 물방울 리플 2개 (0.5초 간격) */}
+        <div className="absolute inset-0">
+          <span className="ripple-dot" />
+          <span className="ripple-dot" style={{ animationDelay: "0.5s" }} />
+        </div>
+        
+        {/* 버튼 내용 */}
+        <span className="relative z-10 flex items-center gap-3">
+          <span className="flex items-center gap-2">
+            ✨ AI 운동 추천
+          </span>
+          
+          {/* Switch */}
+          <Switch 
+            checked={isAIExerciseActive} 
+            onCheckedChange={(checked) => {
+              setIsAIExerciseActive(checked);
+            }}
+            onClick={(e) => e.stopPropagation()} // 버튼 클릭 전파 방지
+            className="pointer-events-auto"
+          />
+        </span>
+      </button>
     </div>
   );
 };

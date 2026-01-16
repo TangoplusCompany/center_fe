@@ -17,12 +17,12 @@ const dashboard = [
     icon: "/icons/ic_dashboard.svg",
   },
   {
-    title: "측정 관리",
+    title: "센터 측정 현황",
     url: "/measure",
     icon: "/icons/ic_measure.svg",
   },
   {
-    title: "사용자 관리",
+    title: "사용자 히스토리 관리",
     url: "/user",
     icon: "/icons/ic_users.svg",
   },
@@ -72,7 +72,7 @@ export default function DefaultSidebar() {
         return !["기기 관리", "매니저 관리", "로그인 기록 관리"].includes(item.title);
       }
       if (adminRole >= 3) {
-        return !["대시보드", "기기 관리", "매니저 관리", "사용자 관리", "측정 관리", "로그인 기록 관리"].includes(item.title);
+        return !["대시보드", "기기 관리", "매니저 관리", "사용자 히스토리 관리", "센터 측정 현황", "로그인 기록 관리"].includes(item.title);
       }
       if (item.title === "로그인 기록 관리" && adminRole > 1) {
         return false;
@@ -160,7 +160,7 @@ export default function DefaultSidebar() {
                     return !["기기 관리", "매니저 관리", "로그인 기록 관리"].includes(item.title);
                   }
                   if (adminRole >= 3) {
-                    return !["대시보드", "기기 관리", "매니저 관리", "사용자 관리", "측정 관리", "로그인 기록 관리"].includes(item.title);
+                    return !["대시보드", "기기 관리", "매니저 관리", "사용자 히스토리 관리", "센터 측정 현황", "로그인 기록 관리"].includes(item.title);
                   }
                   // ADMIN_ROLE이 1 이하인 경우에만 로그인 기록 관리 메뉴 표시
                   if (item.title === "로그인 기록 관리" && adminRole > 1) {
@@ -184,6 +184,7 @@ export default function DefaultSidebar() {
                           href={item.url}
                           onClick={handleLinkClick}
                           className={`flex items-center gap-3 py-3 px-4 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:justify-center ${isActive ? "bg-transparent" : ""}`}
+                          {...(item.external && { target: "_blank", rel: "noopener noreferrer" })}
                         >
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img src={item.icon} alt={item.title} className={`lg:!w-5 lg:!h-5 ml-4 transition-all duration-300 ${isActive ? "brightness-0 invert" : ""}`} />

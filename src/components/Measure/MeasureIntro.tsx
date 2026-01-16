@@ -114,51 +114,62 @@ const MeasureIntro = ({
   );
   
   const footer =
-    <div className="border border-sub300 rounded-3xl flex gap-4 p-4">
-      <FootStaticContainer
-        comment={
-          "[좌우 무게 분석]\n" +
-          (mat_static_horizontal_ment ?? "\n") +
-          "\n[상하 무게 분석]\n" +
-          (mat_static_vertical_ment ?? "\n")
-        }
-        risk_level={mat_static_risk_level}
-        range_level={mat_static_range_level}
-        fileName={measure_server_mat_image_name}
-        matStatics={staticFourCorners}
-        lCase={0}
-      />
-      <FootDynamicContainer
-        comment={
-          "[좌우 무게 분석]\n" +
-          (mat_ohs_horizontal_ment ?? "\n") +
-          "\n[상하 무게 분석]\n" +
-          (mat_ohs_vertical_ment ?? "\n")
-        }
-        footFileName={mat_hip_down_image_name}
-        hipFileName={mat_hip_trajectory_image_name}
-        matOhs={ohsFourCorners}
-        lCase={0}
-      />
-      <KneeTrajectory
-        comment={"무릎 흔들림 분석\n" + (mat_ohs_knee_ment ?? "")}
-        leftKneeFileName={mat_left_knee_trajectory_image_name}
-        rightKneeFileName={mat_right_knee_trajectory_image_name}
-      />
+    <div className="border border-sub300 rounded-3xl flex flex-col md:grid md:grid-cols-2 lg:flex lg:flex-row gap-4 p-4">
+      {/* 정적 족압 - 웹/태블릿: 첫 번째, 모바일: 첫 번째 */}
+      <div className="w-full md:col-span-2 lg:col-span-1">
+        <FootStaticContainer
+          comment={
+            "[좌우 무게 분석]\n" +
+            (mat_static_horizontal_ment ?? "\n") +
+            "\n[상하 무게 분석]\n" +
+            (mat_static_vertical_ment ?? "\n")
+          }
+          risk_level={mat_static_risk_level}
+          range_level={mat_static_range_level}
+          fileName={measure_server_mat_image_name}
+          matStatics={staticFourCorners}
+          lCase={0}
+        />
+      </div>
+      
+      {/* 동적 족압, 관절 이동 - 웹: 두 번째, 태블릿: 세 번째(아래 왼쪽), 모바일: 두 번째 */}
+      <div className="w-full md:col-span-1 lg:col-span-1">
+        <FootDynamicContainer
+          comment={
+            "[좌우 무게 분석]\n" +
+            (mat_ohs_horizontal_ment ?? "\n") +
+            "\n[상하 무게 분석]\n" +
+            (mat_ohs_vertical_ment ?? "\n")
+          }
+          footFileName={mat_hip_down_image_name}
+          hipFileName={mat_hip_trajectory_image_name}
+          matOhs={ohsFourCorners}
+          lCase={0}
+        />
+      </div>
+      
+      {/* 무릎이동 - 웹: 세 번째, 태블릿: 네 번째(아래 오른쪽), 모바일: 세 번째 */}
+      <div className="w-full md:col-span-1 lg:col-span-1">
+        <KneeTrajectory
+          comment={"무릎 흔들림 분석\n" + (mat_ohs_knee_ment ?? "")}
+          leftKneeFileName={mat_left_knee_trajectory_image_name}
+          rightKneeFileName={mat_right_knee_trajectory_image_name}
+        />
+      </div>
     </div>
   type PartKey = "neck" | "shoulder" | "elbow" | "hip" | "knee" | "ankle";
   type RiskLevelKey = `risk_level_${PartKey}`;
   type RangeLevelKey = `range_level_${PartKey}`;
   return (
     <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-[1fr_2fr] gap-4 items-stretch">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-4 items-stretch">
         <div className="h-full">{topLeft}</div>
         <div className="h-full">{topRight}</div>
       </div>
       <div className="rounded-3xl border-2 border-sub200 p-4">
           {/* 상체 */}
           <div className="text-base font-semibold mb-2">상체 분석</div>
-          <div className="grid grid-cols-3 auto-rows-fr gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-4">
             {PART_ORDER.slice(0, 3).map(({ key, label }) => {
               const partData = data.detail_data[key];
               if (!partData) return null;
@@ -183,7 +194,7 @@ const MeasureIntro = ({
 
           {/* 하체 */}
           <div className="text-base font-semibold mt-4 mb-2">하체 분석</div>
-          <div className="grid grid-cols-3 auto-rows-fr gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-4">
             {PART_ORDER.slice(3, 6).map(({ key, label }) => {
               const partData = data.detail_data[key];
               if (!partData) return null;

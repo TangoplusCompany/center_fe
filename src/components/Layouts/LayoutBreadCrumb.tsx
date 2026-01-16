@@ -29,12 +29,12 @@ const Menus: IMenu[] = [
     initial: "",
   },
   {
-    title: "측정 관리",
+    title: "센터 측정 현황",
     url: "/measure",
     initial: "measure",
   },
   {
-    title: "사용자 관리",
+    title: "사용자 히스토리 관리",
     url: "/user",
     initial: "user",
   },
@@ -92,7 +92,7 @@ export function LayoutBreadCrumb() {
                     return !["기기 관리", "매니저 관리"].includes(menu.title);
                   }
                   if (adminRole >= 3) {
-                    return !["대시보드", "기기 관리", "매니저 관리", "사용자 관리", "측정 관리"].includes(menu.title);
+                    return !["대시보드", "기기 관리", "매니저 관리", "사용자 히스토리 관리", "센터 측정 현황"].includes(menu.title);
                   }
                   return true;
                 })

@@ -140,7 +140,7 @@ const CompareIntro = ({
     </div>
   )
   const summaryUnits = (
-    <div className="flex-1 h-full gap-4">
+    <div className="flex flex-col gap-4">
       <CompareSummaryUnit summaryUnit0={measureData0.upper} summaryUnit1={measureData1?.upper} title={"상지요약"} />
       <CompareSummaryUnit summaryUnit0={measureData0.lower} summaryUnit1={measureData1?.lower} title={"하지요약"} />
     </div>
@@ -205,9 +205,11 @@ const CompareIntro = ({
     <div className="flex flex-col">
       {skeletonBoxes}
       <div className="h-4"></div>
-      {summaryUnits}
-      {<CompareSummaryFootStatic static0={footStatic0} static1={footStatic1} />}
-      <CompareFootTrajectoryGridContainer data0={footData0} data1={footData1} />
+      <div className="flex flex-col gap-4">
+        {summaryUnits}
+        {<CompareSummaryFootStatic static0={footStatic0} static1={footStatic1} />}
+        <CompareFootTrajectoryGridContainer data0={footData0} data1={footData1} />
+      </div>
     </div>
   );
 };

@@ -31,14 +31,14 @@ const MeasureBest = ({ data }: { data: TWorstPart }) => {
         {/* 위험 레벨 배지 */}
         <div className={`w-fit px-3 py-1 ${
           data.level === 0 ? "bg-toggleAccent" : "bg-secondary"
-        } text-white text-sm font-semibold rounded-md`}>
+        } text-white text-lg font-semibold rounded-xl`}>
           {data.partName}
         </div>
 
           {/* 설명 박스 */}
           <div className={`w-fit ${data.level === 2 ? "bg-toggleAccent-foreground" : "bg-accent"
           }  rounded-lg p-4`}>
-            <p className="text-sm text-primary-foreground leading-relaxed">
+            <p className="text-base text-primary-foreground leading-relaxed">
               {data.description}
             </p>
           </div>

@@ -7,16 +7,6 @@ import { Skeleton } from "../ui/skeleton";
 import DeviceChartContainer from "./DeviceChartContainer";
 import { useRouter } from "next/navigation";
 
-const SkeletonDeviceStatus = () => {
-  return (
-    <div className="grid grid-cols-2 gap-3">
-      <h2 className="text-2xl col-span-2">키오스크 현황</h2>
-      <Skeleton className="flex col-span-1 items-center justify-between rounded-lg h-20"></Skeleton>
-      <Skeleton className="flex col-span-1 items-center justify-between rounded-lg h-20"></Skeleton>
-    </div>
-  );
-};
-
 const DashboardDeviceStatus = ({
   device,
 }: {
@@ -48,7 +38,7 @@ const DashboardDeviceStatus = ({
           </div>
 
           {/* 일일 측정 건수 */}
-          <div className="flex w-1/5 rounded-xl bg-toggleAccent-background p-2 ml-4 mb-2 justify-center">
+          <div className="flex rounded-xl bg-toggleAccent-background p-2 m-2 w-fit">
               <div className="flex flex-col gap-2">
                 <div className="text-sm text-toggleAccent">
                   일일 측정 건수
@@ -75,18 +65,20 @@ const DashboardDeviceStatus = ({
 
 export const DeviceInformation = () => {
   const { data: deviceStatus, isLoading } = useGetDeviceStatus<IDeviceStatus>();
-
   const [isExpanded, setIsExpanded] = useState(false);
+
+  if (isLoading) return (
+    <div className="flex flex-col gap-4">
+      <Skeleton className="w-full h-[320px]" />
+      <Skeleton className="w-full h-[320px]" />
+    </div>
+  );
+  if (!deviceStatus) return <div>No data</div>;
   if (!deviceStatus?.data) {
     return null; // 또는 로딩 상태 표시
   }
   const displayedDevices = isExpanded ? deviceStatus.data : deviceStatus.data.slice(0, 4);
   const hasMore = deviceStatus.data.length > 4;
-
-
-
-  if (isLoading) return <SkeletonDeviceStatus />;
-  if (!deviceStatus) return <div>No data</div>;
   return (
     <>
       <div className="flex flex-col gap-4">
@@ -95,7 +87,7 @@ export const DeviceInformation = () => {
           <h2 className="text-2xl col-span-2">기기 현황</h2>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {displayedDevices.map((device) => (
             <DashboardDeviceStatus key={device.sn} device={device} />
           ))}
