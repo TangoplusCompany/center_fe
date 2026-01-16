@@ -236,14 +236,15 @@ export const CompareRawData = ({
   const existedSlot = data1 !== undefined && dataTop1 !== undefined
   const isLeftRightData = dataTop1 && dataBottom1
   return (
-    <div className={`flex flex-col h-full w-full border-b-2 border-sub200`}>
-      {/* 헤더 영역 */}
-      <div className="flex border-b-2 border-sub200 px-4 py-2 bg-sub100 gap-4">
-        <span className="text-xl font-semibold text-black">{dataTop0.measure_unit}</span>
-      </div>
+    <div className="w-full table table-fixed min-w-0 overflow-hidden">
+      <div className="flex flex-col overflow-x-auto overflow-y-hidden w-full min-w-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        {/* 헤더 영역 */}
+        <div className="flex border-b-2 border-sub200 px-4 py-2 bg-sub100 gap-4 min-w-[1000px]">
+          <span className="text-xl font-semibold text-black">{dataTop0.measure_unit}</span>
+        </div>
 
-      <div className="grid grid-cols-[20%_80%] h-full w-full">
-        <div className="flex flex-col h-full border-r-2 border-sub200">
+        <div className="grid grid-cols-[20%_80%] h-full w-full min-w-[1000px]">
+        <div className="flex flex-col h-full border-r-2 border-sub200 w-full">
           <div className={isLeftRightData ? "grid grid-cols-2 bg-sub200 py-2" : "flex w-full  justify-center items-center bg-sub200 py-2"}>
             <div className="flex justify-center items-center text-base text-sub600 py-[3px]">{isLeftRightData ? "좌측" : "비교차이"}</div>
             {isLeftRightData && <div className="flex justify-center items-center text-base text-sub600">우측</div>}
@@ -286,6 +287,7 @@ export const CompareRawData = ({
           {RawDataContainer(dataTop0, dataBottom0 , false)}
           {existedSlot && RawDataContainer(dataTop1, dataBottom1 , true)}
         </div>
+      </div>
       </div>
     </div>
   );

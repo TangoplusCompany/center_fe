@@ -47,8 +47,8 @@ const UserDetailTap = ({
                 nowTab === index
                   ? "bg-toggleAccent dark:bg-gray-700 text-toggleAccent-foreground dark:text-black shadow-sm"
                   : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-              } px-4 py-1 text-sm font-medium rounded-xl transition-all`}
-              onClick={() => {
+              } px-2 sm:px-4 py-1 text-xs sm:text-sm font-medium rounded-xl transition-all whitespace-normal sm:whitespace-nowrap text-center leading-tight`}
+              onClick={() => 
                 handleClick(index)
                 setIsAIExerciseActive(false)
               }}

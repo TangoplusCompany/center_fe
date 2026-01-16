@@ -66,7 +66,7 @@ const CompareSummaryUnit = ({
     }[summaryUnit.risk_level] ?? "bg-sub600";
     
     return (
-      <div className="flex-1">
+      <div className="flex-1 w-full">
         <div className="flex items-center justify-between border-b-2 border-sub200 px-4 py-1 bg-sub100">
           <div className="flex gap-4 items-center">
             <span className="text-lg">{isNext ? '②' : '①'}</span>
@@ -80,22 +80,23 @@ const CompareSummaryUnit = ({
   };
 
   return (
-    <div className="flex flex-col ">
+    <div className="w-full table table-fixed min-w-0 overflow-hidden">
+      <div className="flex flex-col  overflow-x-auto overflow-y-hidden w-full min-w-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
       {/* 타이틀 */}
-      <div className="bg-sub100 text-xl font-semibold px-4 py-2 border-t-2 border-b-2 border-sub200">
+      <div className="bg-sub100 min-w-[700px] text-xl font-semibold px-4 py-2 border-t-2 border-b-2 border-sub200">
         {title}
       </div>
 
       {/* 2개의 카드 영역 */}
-      <div className="flex">
+      <div className="flex w-full min-w-[700px]">
         {/* 이전 카드 */}
-        <div className={`flex flex-col w-[20%] items-center justify-center gap-2 px-8 ${trendBgCondition}`}>
+        <div className={`w-[20%] flex flex-col items-center justify-center gap-2 px-8 ${trendBgCondition}`}>
           <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition}`}>{trendArrow}</div>
           <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition}`}>{trendString}</div>
           <div className={`${trendBgCondition} ${trendBorderCondition} ${trendTextCondition} rounded-full px-3 py-1 text-sm whitespace-nowrap`}>{trendCount}</div>
         </div>
 
-        <div className="grid grid-raws-2 w-[80%]">
+        <div className="grid grid-raws-2 w-[80%] ">
           {summaryMent(summaryUnit0, false)}
           {summaryUnit1 && (
             summaryMent(summaryUnit1, true)
@@ -103,6 +104,9 @@ const CompareSummaryUnit = ({
         </div>
       </div>
     </div>
+
+    </div>
+    
   );
 };
 

@@ -33,7 +33,8 @@ const RawDataTab = ({ selectedPart, onSelectPart, mergedDetailData }: RawDataTab
       return mergedDetailData.some((data) => landmarks.includes(data.landmark));
     });
   return (
-    <div className="flex gap-4 overflow-x-auto pb-2 w-full [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+    <div className="w-full table table-fixed min-w-0">
+      <div className="flex gap-4 overflow-x-auto pb-2 w-full [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
       {availableTabs.map((tab) => (
         <button
           key={tab.id}
@@ -51,6 +52,9 @@ const RawDataTab = ({ selectedPart, onSelectPart, mergedDetailData }: RawDataTab
         </button>
       ))}
     </div>
+
+    </div>
+    
   );
 };
 

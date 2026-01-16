@@ -10,6 +10,7 @@ import { UserList } from "@/components/User/UserList";
 import { useAuthStore } from "@/providers/AuthProvider";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import { CenterUserAddDialog } from "./CenterUserAddDialog";
+import CenterUserPageSkeleton from "./CenterUserPageSkeleton";
 
 const CenterUserPage = () => {
   const { adminRole } = useAuthStore((state) => state);
@@ -47,11 +48,7 @@ const CenterUserPage = () => {
     }
   };
   if (isLoading) {
-    return (
-      <div className="col-span-12">
-        <p>로딩중...</p>
-      </div>
-    );
+    return <CenterUserPageSkeleton adminRole={adminRole} />;
   }
   if (isError) {
     return (

@@ -22,7 +22,7 @@ const UserDetailPage = async ({ params, searchParams }: UserDetailPageProps) => 
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 ">
       <div className="flex items-center gap-3">
         <div className="w-1 h-12 bg-toggleAccent rounded-full"></div>
         <h2 className="text-3xl font-semibold text-[#333] dark:text-white">

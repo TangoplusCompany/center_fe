@@ -2,15 +2,19 @@ import React from "react";
 import CenterUserDetail from "@/components/User/CenterUserDetail";
 import { notFound } from "next/navigation";
 
-const ResultPage = async () => {
-  // 임시 값
-  const userUUID = "17PRWCXV743ZAEKQ";
-  const key = "2225";
-  const name = "1601";
+type ResultPageProps = {
+  searchParams: Promise<{ userUUID?: string; key?: string; name?: string }>;
+};
 
-  // const { userUUID, key, name } = await searchParams;
+const ResultPage = async ({ searchParams }: ResultPageProps) => {
+  const params = await searchParams;
+  
+  // 임시 값 (기본값으로 사용)
+  const userUUID = params.userUUID || "17PRWCXV743ZAEKQ";
+  const key = params.key || "2225";
+  const name = params.name || "1601";
 
-  if (!key || !userUUID) {
+  if (!key) {
     notFound();
   }
 

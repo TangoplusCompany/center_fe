@@ -13,6 +13,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import CompareIntro from "./CompareIntro";
 import MeasureDynamicCompare from "./CompareSeventh";
+import CompareBodySkeleton from "./CompareBodySkeleton";
 
 type MeasureTab = {
   title: string;
@@ -51,7 +52,7 @@ const CompareBody = ({
 
   
   if (leftLoading || rightLoading) {
-    return <div>불러오는 중...</div>;
+    return <CompareBodySkeleton />;
   }
 
   if (leftError || rightError) {
@@ -257,64 +258,62 @@ const CompareBody = ({
   const activeTab = measureTabs[activeIdx];
 
   return (
-    <div className="w-full flex flex-col gap-4">
-      {/* ✅ 상단 8개 탭 (4×2) */}
-      <Tabs defaultValue="summary" className="w-full">
-      {/* ✅ 상단 줄: TabsList (좌측) + Select(우측) */}
+    // 1. 최상위 div에 min-w-0을 추가하여 flex 자식일 경우를 대비합니다.
+    <div className="w-full flex flex-col gap-4 min-w-0 max-w-full">
       
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex-1 min-w-0 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-            <TabsList className="relative z-10 inline-flex w-max gap-1 bg-transparent p-0">
+      {/* ✅ 상단 탭 영역 */}
+      <Tabs defaultValue="summary" className="w-full table table-fixed min-w-0"> {/* 부모에서 넘치는 거 일단 차단 */}
+        <div className="w-full">
+          {/* 1. 이 div가 가장 중요합니다. 가로 스크롤 전용 컨테이너입니다. */}
+          <div className="overflow-x-auto overflow-y-hidden w-full min-w-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+            
+            {/* 2. TabsList에 flex-nowrap을 강제로 주고 w-max로 길이를 확보합니다. */}
+            <TabsList className="relative z-10 flex w-max min-w-full flex-nowrap items-center justify-start bg-transparent p-0 border-none shadow-none">
               <div className="absolute bottom-0 left-0 w-full h-[3px] bg-sub200 rounded-md" />
-      
+
               {measureTabs.map((measure, idx) => (
                 <TabsTrigger
                   key={measure.value}
                   value={measure.value}
                   onClick={() => setActiveIdx(idx)}
+                  // 3. whitespace-nowrap이 여기서 글자 줄바꿈을 막아줍니다.
                   className={cn(
-                    "relative pb-2 text-lg font-semibold transition-colors whitespace-nowrap",
+                    "relative pb-2 text-lg font-semibold transition-colors whitespace-nowrap flex-shrink-0",
                     "bg-transparent data-[state=active]:bg-transparent",
                     "shadow-none data-[state=active]:shadow-none",
-                    "border-none",
-                    "text-sub300",
-                    "hover:text-secondary", 
-                    "data-[state=active]:text-toggleAccent",
+                    "text-sub300 hover:text-secondary data-[state=active]:text-toggleAccent",
                     "after:absolute after:-bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-md",
-                    "after:bg-transparent after:transition-all",
-                    "data-[state=active]:after:bg-toggleAccent after:z-10"
+                    "after:bg-transparent data-[state=active]:after:bg-toggleAccent after:z-10"
                   )}
                 >
                   {measure.title}
-
                 </TabsTrigger>
               ))}
             </TabsList>
           </div>
         </div>
       </Tabs>
-      
-      <div className="grid grid-cols-2 gap-4 items-stretch ">
-        <div className="min-w-0 h-full">
+
+      {/* 날짜 카드 영역 */}
+      <div className="grid grid-cols-2 gap-4 items-stretch w-full">
+        <div className="min-w-0">
           <CompareDateCard 
             regDate={leftData ? leftData.result_summary_data.measure_date : ""}
-            currentSlot={ leftSlot }
-            // onRemove={leftData ? () => onRemoveCompare( leftSlot ) : undefined}
+            currentSlot={leftSlot}
             onCardClick={onCompareDialogOpen} />
         </div>
-        <div className="min-w-0 h-full">
+        <div className="min-w-0">
           <CompareDateCard 
             regDate={rightData ? rightData.result_summary_data.measure_date : ""}
-            currentSlot={ rightSlot }
-            // onRemove={rightData ? () => onRemoveCompare( rightSlot ) : undefined}
+            currentSlot={rightSlot}
             onCardClick={onCompareDialogOpen} />
         </div>
       </div>
 
-      <div className="w-full">
+      {/* 하단 컨텐츠 영역 */}
+      <div className="w-full overflow-hidden">
         {activeTab.render(leftData, rightData)}
       </div>
-      
     </div>
   );
 };

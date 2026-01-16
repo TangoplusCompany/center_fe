@@ -76,10 +76,14 @@ const CompareSummaryFootStatic = ({
           <span className={`${textBgCondition0} text-white text-sm px-2 py-1 rounded-full`}>{riskString} {footStatic.range_level}단계</span>
         </div>
         <div className="flex gap-4 p-2 relative">
-          <div className="w-28 h-28 items-center justify-center">
-            <FootStatic fileName={footStatic.fileName} matStatics={footStatic.matStatics} />
+          <div className="w-[20%] flex items-center justify-center border-r-2 border-sub200 pr-2 md:pr-0"  >
+            <div className="w-28 h-28">
+              <FootStatic fileName={footStatic.fileName} matStatics={footStatic.matStatics} />
+            </div>
+
           </div>
-          <div className="absolute top-0 bottom-0 left-32 w-0.5 bg-sub200" />
+         
+          {/* <div className="absolute top-0 bottom-0 left-32 w-0.5 bg-sub200" /> */}
 
           <div className={`flex items-center justify-start text-base ${isNext ? 'text-black' : 'text-sub600'} px-4 py-2 whitespace-pre-line`}>{footStatic.comment}</div>
         </div>
@@ -91,29 +95,32 @@ const CompareSummaryFootStatic = ({
 
 
   return (
-    <div className="flex flex-col ">
-      {/* 상지요약 타이틀 */}
-      <div className="bg-sub100 text-xl font-semibold px-4 py-2 border-t-2 border-b-2 border-sub200">
-        정면 족압
-      </div>
+    <div className="w-full table table-fixed min-w-0 overflow-hidden">
+      <div className="flex flex-col overflow-x-auto overflow-y-hidden w-full min-w-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          {/* 상지요약 타이틀 */}
+          <div className="bg-sub100 min-w-[700px] text-xl font-semibold px-4 py-2 border-t-2 border-b-2 border-sub200">
+            정면 족압
+          </div>
 
-      {/* 2개의 카드 영역 */}
-      <div className="flex">
-        {/* 이전 카드 */}
-        <div className={`flex flex-col w-[20%] items-center justify-center gap-2 px-8 ${trendBgCondition}`}>
-          <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition}`}>{trendArrow}</div>
-          <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition}`}>{trendString}</div>
-          <div className={`${trendBgCondition} ${trendBorderCondition} ${trendTextCondition} rounded-full px-3 py-1 text-sm whitespace-nowrap`}>{trendCount}</div>
-        </div>
+          {/* 2개의 카드 영역 */}
+          <div className="flex w-full min-w-[700px]">
+            {/* 이전 카드 */}
+            <div className={`flex flex-col w-[20%] items-center justify-center gap-2 px-8 ${trendBgCondition}`}>
+              <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition}`}>{trendArrow}</div>
+              <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition}`}>{trendString}</div>
+              <div className={`${trendBgCondition} ${trendBorderCondition} ${trendTextCondition} rounded-full px-3 py-1 text-sm whitespace-nowrap`}>{trendCount}</div>
+            </div>
 
-        <div className="grid grid-raws-2 w-[80%]">
-          {summaryMent(static0, false)}
-          {static1 && (
-            summaryMent(static1, true)
-          )}
+            <div className="grid grid-raws-2 w-[80%]">
+              {summaryMent(static0, false)}
+              {static1 && (
+                summaryMent(static1, true)
+              )}
+            </div>
+          </div>
         </div>
-      </div>
     </div>
+    
   );
 };
 
