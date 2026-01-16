@@ -47,7 +47,7 @@ const DynamicDataContainer = (
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex border border-sub300 rounded-3xl">
+      <div className="flex flex-col md:flex-row border border-sub300 rounded-3xl">
         <div className="flex-1 p-4">
           <FootDynamic
             comment={
@@ -64,7 +64,7 @@ const DynamicDataContainer = (
         </div>
         <div className="flex-1 p-4">
           <MeasureKneeTrajectory
-            comment={"무릎 흔들림 분석\n" + (mat_ohs_knee_ment ?? "")}
+            comment={"[무릎 흔들림 분석]\n" + (mat_ohs_knee_ment ?? "")}
             leftKneeFileName={mat_left_knee_trajectory_image_name}
             rightKneeFileName={mat_right_knee_trajectory_image_name}
           />

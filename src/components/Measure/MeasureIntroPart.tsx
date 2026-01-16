@@ -135,10 +135,10 @@ const MeasureIntroPart = ({
     <div className="flex rounded-xl border-2 border-sub100 bg-white shadow-sm h-full">
       {/* 전체 grid */}
       <div className="flex flex-col w-1/4 items-center justify-center text-base font-semibold gap-1">
-        {title}
+        <div className="text-center whitespace-normal break-keep">{title}</div>
         <div
           className={cn(
-            "px-3 py-1  rounded-full text-xs text-white",
+            "px-3 py-1 rounded-full text-xs text-white text-center whitespace-normal break-keep",
             badgeBg,
           )}
         >
@@ -153,7 +153,7 @@ const MeasureIntroPart = ({
             "flex flex-1 min-h-0 items-stretch",
             idx !== items.length - 1 && "border-b "
           )}>
-            <div className="flex w-1/2 text-sm flex items-center justify-center border-r px-2 py-1 text-center">{MEASURE_NAME_MAP[measureName] ?? item?.measure_unit ?? measureName}</div>
+            <div className="flex w-1/2 text-sm items-center justify-center border-r px-2 py-1 text-center whitespace-normal break-keep">{MEASURE_NAME_MAP[measureName] ?? item?.measure_unit ?? measureName}</div>
             <div className="flex w-1/2 items-stretch">{renderRangeBoxes(item?.risk_level, item?.range_level, idx, items?.length)}</div>
           </div>
         ))}
