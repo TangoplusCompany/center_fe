@@ -12,7 +12,7 @@ export const DeviceMainContainer = () => {
   const { adminRole } = useAuthStore((state) => state);
   const { data: deviceStatus, isLoading } = useGetDeviceStatus<IDeviceStatus>();
 
-  if (isLoading) return <SkeletonDeviceCard />;
+  if (isLoading) return <div className="flex w-full"><SkeletonDeviceCard /></div>;
   if (!deviceStatus) {
     return <p>잘못된 요청입니다. 잠시 후 다시 시도바랍니다.</p>;
   }
@@ -29,7 +29,7 @@ export const DeviceMainContainer = () => {
 
   return (
     <div className="col-span-12 flex flex-col gap-4 items-end justify-center">
-      <div className="grid grid-cols-2 items-start justify-center gap-3 w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
         {deviceStatus.data.map((device, index) => (
           <DeviceStatusItems
             key={device.serial_number + index}

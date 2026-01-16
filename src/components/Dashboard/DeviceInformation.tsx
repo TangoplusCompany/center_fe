@@ -38,7 +38,7 @@ const DashboardDeviceStatus = ({
           </div>
 
           {/* 일일 측정 건수 */}
-          <div className="flex w-1/5 rounded-xl bg-toggleAccent-background p-2 ml-4 mb-2 justify-center">
+          <div className="flex rounded-xl bg-toggleAccent-background p-2 m-2 w-fit">
               <div className="flex flex-col gap-2">
                 <div className="text-sm text-toggleAccent">
                   일일 측정 건수
@@ -87,7 +87,7 @@ export const DeviceInformation = () => {
           <h2 className="text-2xl col-span-2">기기 현황</h2>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {displayedDevices.map((device) => (
             <DashboardDeviceStatus key={device.sn} device={device} />
           ))}

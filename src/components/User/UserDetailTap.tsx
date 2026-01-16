@@ -48,7 +48,7 @@ const UserDetailTap = ({
                   ? "bg-toggleAccent dark:bg-gray-700 text-toggleAccent-foreground dark:text-black shadow-sm"
                   : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
               } px-2 sm:px-4 py-1 text-xs sm:text-sm font-medium rounded-xl transition-all whitespace-normal sm:whitespace-nowrap text-center leading-tight`}
-              onClick={() => 
+              onClick={() => {
                 handleClick(index)
                 setIsAIExerciseActive(false)
               }}
@@ -62,7 +62,7 @@ const UserDetailTap = ({
       
       <button 
         onClick={() => setIsAIExerciseActive(!isAIExerciseActive)}
-        className="relative h-full overflow-hidden px-3 py-1 rounded-xl text-white transition-all hover:scale-105 active:scale-100 isolate"
+        className="relative h-full overflow-hidden px-3 py-1 rounded-xl text-white transition-all hover:scale-105 active:scale-95 isolate"
       >
         {/* 메인 컬러 포함 무지개 그라데이션 */}
         <div 

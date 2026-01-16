@@ -1,7 +1,7 @@
 import { useBoolean } from "@/hooks/utils/useBoolean";
 import { useAuthStore } from "@/providers/AuthProvider";
 import { ICenterUserDetail } from "@/types/center";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -9,10 +9,11 @@ import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { usePatchUserDetail } from "@/hooks/api/user/usePatchUserDetail";
+import { actionDecrypt } from "@/app/actions/getCrypto";
 
 const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
   const { adminRole } = useAuthStore((state) => state);
-
+  const [decryptedBirthday, setDecryptedBirthday] = useState<string>("");
   const { isBoolean: editState, setToggle: setEditState } = useBoolean();
   const handleEditState = () => {
     if (editState) {
@@ -69,10 +70,29 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
   });
+
+    useEffect(() => {
+    const decryptBirthday = async () => {
+      if (userData.birthday) {
+        try {
+          const decrypted = await actionDecrypt(userData.birthday);
+          setDecryptedBirthday(decrypted);
+          setValue("birthday", decrypted); // form에도 설정
+        } catch (error) {
+          console.error("복호화 실패:", error);
+          setDecryptedBirthday("복호화 실패");
+        }
+      }
+    };
+    
+    decryptBirthday();
+  }, [userData.birthday, setValue]);
+
   const mutationPatchUserDetail = usePatchUserDetail(userData.user_sn.toString());
   const submitUserDetailForm = handleSubmit(async (data) => {
     const { userName, gender, height, weight, address, addressDetail } = data;
@@ -89,6 +109,12 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
     });
     setEditState();
   });
+
+
+
+
+
+
   return (
     <form onSubmit={submitUserDetailForm} className="flex flex-col gap-4 sm:gap-5">
       <legend className="sr-only">사용자 정보 수정</legend>
@@ -225,7 +251,7 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
           type="text"
           id="birthday"
           disabled={!editState}
-          defaultValue={userData.birthday}
+          defaultValue={decryptedBirthday}
           placeholder="생년월일"
           className="text-sm sm:text-base"
         />

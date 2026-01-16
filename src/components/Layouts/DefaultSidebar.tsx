@@ -184,6 +184,7 @@ export default function DefaultSidebar() {
                           href={item.url}
                           onClick={handleLinkClick}
                           className={`flex items-center gap-3 py-3 px-4 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:justify-center ${isActive ? "bg-transparent" : ""}`}
+                          {...(item.external && { target: "_blank", rel: "noopener noreferrer" })}
                         >
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img src={item.icon} alt={item.title} className={`lg:!w-5 lg:!h-5 ml-4 transition-all duration-300 ${isActive ? "brightness-0 invert" : ""}`} />
