@@ -17,7 +17,7 @@ const SkeletonContainer = ({ data }: { data: IUserDetailMeasureInfo }) => {
       </div>
 
       {/* ⭐ 기준바: Skeleton 하단 중앙 */}
-      <div className="w-full max-w-xl mx-auto text-center mt-auto">
+      <div className="hidden md:block w-full max-w-xl mx-auto text-center mt-auto">
         <div className="flex items-start">
           <p className="text-sm mb-2" style={{ color: "#9A9A9A" }}>
             * 측정 기준 설명
@@ -32,8 +32,7 @@ const SkeletonContainer = ({ data }: { data: IUserDetailMeasureInfo }) => {
           </div>
           <div className="flex-1 py-1 text-center font-semibold" style={{ backgroundColor: "#F5DDC3", color: "#B5741A" }}>
             주의
-          </div
-  >
+          </div>
           <div className="flex-1 py-1 text-center font-semibold" style={{ backgroundColor: "#C77C82", color: "#81363D" }}>
             위험
           </div>

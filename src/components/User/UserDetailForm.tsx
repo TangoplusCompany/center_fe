@@ -90,22 +90,22 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
     setEditState();
   });
   return (
-    <form onSubmit={submitUserDetailForm} className="flex flex-col gap-5">
+    <form onSubmit={submitUserDetailForm} className="flex flex-col gap-4 sm:gap-5">
       <legend className="sr-only">사용자 정보 수정</legend>
       {adminRole < 3 && (
-        <div className="flex items-center justify-end gap-2">
-          <Button variant="outline" onClick={handleEditState} type="button">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2">
+          <Button variant="outline" onClick={handleEditState} type="button" className="w-full sm:w-auto">
             {editState ? "취소하기" : "수정하기"}
           </Button>
           {editState && (
-            <Button type="submit" variant="default">
+            <Button type="submit" variant="default" className="w-full sm:w-auto">
               저장하기
             </Button>
           )}
         </div>
       )}
       <div className="flex flex-col gap-2">
-        <Label htmlFor="userName">사용자 이름</Label>
+        <Label htmlFor="userName" className="text-sm sm:text-base">사용자 이름</Label>
         <Input
           {...register("userName")}
           type="text"
@@ -114,15 +114,16 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
           defaultValue={userData.user_name}
           placeholder="사용자 이름"
           maxLength={50}
+          className="text-sm sm:text-base"
         />
         {errors.userName && (
-          <p className="text-sm text-red-500">
+          <p className="text-xs sm:text-sm text-red-500">
             {errors.userName.message?.toString()}
           </p>
         )}
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="email">이메일</Label>
+        <Label htmlFor="email" className="text-sm sm:text-base">이메일</Label>
         <Input
           type="email"
           id="email"
@@ -130,10 +131,11 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
           defaultValue={userData.email}
           placeholder="이메일"
           maxLength={30}
+          className="text-sm sm:text-base"
         />
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="mobile">휴대폰 번호</Label>
+        <Label htmlFor="mobile" className="text-sm sm:text-base">휴대폰 번호</Label>
         <Input
           type="tel"
           id="mobile"
@@ -141,11 +143,12 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
           defaultValue={userData.mobile}
           placeholder="휴대폰 번호"
           maxLength={15}
+          className="text-sm sm:text-base"
         />
       </div>
-      <div className="w-full grid grid-cols-2 gap-2">
-        <div className="flex flex-col gap-2 col-span-1">
-          <Label htmlFor="address">주소</Label>
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="address" className="text-sm sm:text-base">주소</Label>
           <Input
             {...register("address")}
             type="text"
@@ -154,15 +157,16 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
             defaultValue={userData.address}
             placeholder="주소"
             maxLength={60}
+            className="text-sm sm:text-base"
           />
           {errors.address && (
-            <p className="text-sm text-red-500">
+            <p className="text-xs sm:text-sm text-red-500">
               {errors.address.message?.toString()}
             </p>
           )}
         </div>
-        <div className="flex flex-col gap-2 col-span-1">
-          <Label htmlFor="addressDetail">상세주소</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="addressDetail" className="text-sm sm:text-base">상세주소</Label>
           <Input
             {...register("addressDetail")}
             type="text"
@@ -171,17 +175,18 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
             defaultValue={userData.address_detail}
             placeholder="상세주소"
             maxLength={30}
+            className="text-sm sm:text-base"
           />
           {errors.addressDetail && (
-            <p className="text-sm text-red-500">
+            <p className="text-xs sm:text-sm text-red-500">
               {errors.addressDetail.message?.toString()}
             </p>
           )}
         </div>
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="gender">성별</Label>
-        <div className="flex gap-4">
+        <Label htmlFor="gender" className="text-sm sm:text-base">성별</Label>
+        <div className="flex gap-4 sm:gap-6">
           <div className="flex items-center gap-2">
             <Input
               {...register("gender")}
@@ -190,8 +195,9 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
               value="male"
               disabled={!editState}
               defaultChecked={userData.gender === "male"}
+              className="w-4 h-4"
             />
-            <label htmlFor="male">남</label>
+            <label htmlFor="male" className="text-sm sm:text-base cursor-pointer">남</label>
           </div>
           <div className="flex items-center gap-2">
             <Input
@@ -201,18 +207,19 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
               value="female"
               disabled={!editState}
               defaultChecked={userData.gender === "female"}
+              className="w-4 h-4"
             />
-            <label htmlFor="female">여</label>
+            <label htmlFor="female" className="text-sm sm:text-base cursor-pointer">여</label>
           </div>
         </div>
         {errors.gender && (
-          <p className="text-sm text-red-500">
+          <p className="text-xs sm:text-sm text-red-500">
             {errors.gender.message?.toString()}
           </p>
         )}
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="birthday">생년월일</Label>
+        <Label htmlFor="birthday" className="text-sm sm:text-base">생년월일</Label>
         <Input
           {...register("birthday")}
           type="text"
@@ -220,16 +227,17 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
           disabled={!editState}
           defaultValue={userData.birthday}
           placeholder="생년월일"
+          className="text-sm sm:text-base"
         />
         {errors.birthday && (
-          <p className="text-sm text-red-500">
+          <p className="text-xs sm:text-sm text-red-500">
             {errors.birthday.message?.toString()}
           </p>
         )}
       </div>
-      <div className="w-full grid grid-cols-2 gap-2">
-        <div className="flex flex-col gap-2 col-span-1">
-          <Label htmlFor="height">키 (cm) </Label>
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="height" className="text-sm sm:text-base">키 (cm)</Label>
           <Input
             {...register("height")}
             type="text"
@@ -238,15 +246,16 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
             defaultValue={userData.height}
             placeholder="키"
             maxLength={6}
+            className="text-sm sm:text-base"
           />
           {errors.height && (
-            <p className="text-sm text-red-500">
+            <p className="text-xs sm:text-sm text-red-500">
               {errors.height.message?.toString()}
             </p>
           )}
         </div>
-        <div className="flex flex-col gap-2 col-span-1">
-          <Label htmlFor="weight">몸무게 (kg)</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="weight" className="text-sm sm:text-base">몸무게 (kg)</Label>
           <Input
             {...register("weight")}
             type="text"
@@ -255,9 +264,10 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
             defaultValue={userData.weight}
             placeholder="몸무게"
             maxLength={6}
+            className="text-sm sm:text-base"
           />
           {errors.weight && (
-            <p className="text-sm text-red-500">
+            <p className="text-xs sm:text-sm text-red-500">
               {errors.weight.message?.toString()}
             </p>
           )}

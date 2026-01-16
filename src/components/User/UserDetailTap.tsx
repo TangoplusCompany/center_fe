@@ -42,7 +42,7 @@ const UserDetailTap = ({
                 nowTab === index
                   ? "bg-toggleAccent dark:bg-gray-700 text-toggleAccent-foreground dark:text-black shadow-sm"
                   : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-              } px-4 py-1 text-sm font-medium rounded-xl transition-all`}
+              } px-2 sm:px-4 py-1 text-xs sm:text-sm font-medium rounded-xl transition-all whitespace-normal sm:whitespace-nowrap text-center leading-tight`}
               onClick={() => 
                 handleClick(index)
               }
@@ -54,7 +54,7 @@ const UserDetailTap = ({
       </div>
 
       
-      <button className="relative h-full overflow-hidden px-3 py-1 rounded-xl text-white transition-all hover:scale-105 active:scale-95">
+      <button className="relative h-full overflow-hidden px-2 sm:px-3 py-1 rounded-xl text-white transition-all hover:scale-105 active:scale-95">
         {/* 메인 컬러 포함 무지개 그라데이션 */}
         <div 
           className="absolute inset-0"
@@ -70,7 +70,7 @@ const UserDetailTap = ({
         </div>
         
         {/* 버튼 텍스트 */}
-        <span className="relative z-5 flex items-center gap-2">
+        <span className="relative z-5 flex items-center gap-2 text-xs sm:text-sm whitespace-normal sm:whitespace-nowrap text-center leading-tight">
           ✨ AI 운동 추천
         </span>
       </button>

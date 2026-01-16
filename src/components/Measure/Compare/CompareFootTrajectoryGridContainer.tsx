@@ -21,12 +21,12 @@ const CompareFootTrajectoryGridContainer = ({
 }) => {
     
   const footContainer = (data: CompareFootTrajectoryGridProps, isNext: boolean) => (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 w-full md:w-[50%]">
       <div className="flex gap-4 items-center bg-sub100 border-b-2 border-sub200 py-1 px-4">
         <span className="text-lg">{isNext ? '②' : '①'}</span>
         <span className={`text-base ${isNext ? 'text-black' : 'text-sub600'}`}>{data.measure_date.slice(0, 11)}</span>
       </div>
-      <div className="grid grid-cols-4 h-full items-center justify-center">
+      <div className="grid grid-cols-2 lg:grid-cols-4 h-full items-center justify-center gap-1 lg:gap-4 px-4">
         <div className="flex flex-col items-center justify-start gap-2">
           
           <div className="w-28 h-28 flex-shrink-0">
@@ -69,7 +69,7 @@ const CompareFootTrajectoryGridContainer = ({
   );
 
   const SummaryContainer = (dynamicComment: string, kneeComment: string, isNext: boolean) => (
-    <div className="flex flex-col gap-2 border-l-2 border-sub200">
+    <div className="flex flex-col gap-2 border-l-0 md:border-l-2 border-sub200 w-full md:w-[50%]">
       {dynamicComment !== "" && kneeComment !== "" && (
         <div className="flex bg-sub100 border-b-2 border-sub200 text-base px-4 py-1.5">
           분석 설명
@@ -83,26 +83,34 @@ const CompareFootTrajectoryGridContainer = ({
   );
 
   return (
-    <div className="flex flex-col">
+    <div className="w-full table table-fixed min-w-0 overflow-hidden">
+      <div className="flex flex-col overflow-x-auto overflow-y-hidden w-full min-w-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
       {/* 상지요약 타이틀 */}
       <div className="bg-sub100 text-xl font-semibold px-4 py-2 border-t-2 border-b-2 border-sub200">
         동적 족압 및 이동 궤적
       </div>
 
       {/* 2개의 카드 영역 */}
-      <div className="flex w-full">
+      <div className="flex flex-col ">
         {/* 족압 이전 전후 */}
-        <div className="flex-1 grid grid-rows-2">
+        <div className="flex flex-col md:flex-row w-full">
           {footContainer(data0, false)}
-          {data1 && footContainer(data1, true)}
+          {SummaryContainer(data0.dynamicComment, data0.kneeComment, false)}
+        </div>
+        <div className="flex flex-col md:flex-row w-full">
+        {data1 && footContainer(data1, true)}
+        {data1 && SummaryContainer(data1.dynamicComment, data1.kneeComment, true)}
         </div>
 
-        <div className="flex-1 grid grid-rows-2">
-          {SummaryContainer(data0.dynamicComment, data0.kneeComment, false)}
-          {data1 && SummaryContainer(data1.dynamicComment, data1.kneeComment, true)}
-        </div>
+        {/* <div className="">
+          
+          
+        </div> */}
       </div>
     </div>
+
+    </div>
+    
   );
 };
 
