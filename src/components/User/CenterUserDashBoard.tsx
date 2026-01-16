@@ -1,3 +1,4 @@
+"use client";
 
 import MeasureWorst from "@/components/Measure/MeasureWorst";
 import MeasureBest from "@/components/Measure/MeasureBest";
@@ -7,6 +8,7 @@ import { IDayData } from "@/types/IDayData";
 import { useGetUserDashboard } from "@/hooks/api/user/useGetUserDashboard";
 import { TWorstPart } from "@/types/dashboard";
 import MeasureReportContainer from "../Measure/MeasureReportContainer";
+import CenterUserDashBoardSkeleton from "./CenterUserDashBoardSkeleton";
 
 type Mode = "worst" | "best";
 const PARTS = [
@@ -42,11 +44,7 @@ const CenterUserDashBoard = ({
   );
 
   if (dashboardDataLoading) {
-    return (
-      <div className="w-full flex items-center justify-center py-10 md:py-20 px-4">
-        <p className="text-sm md:text-base text-gray-500">대시보드 데이터를 불러오는 중입니다...</p>
-      </div>
-    );
+    return <CenterUserDashBoardSkeleton />;
   }
 
   if (dashboardDataError) {
