@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { CenterUserMeasureList } from "@/components/User/CenterUserMeasureList";
+import CenterUserMeasureListSkeleton from "@/components/User/CenterUserMeasureListSkeleton";
 import CustomPagination from "@/components/common/Pagination";
 import { useGetUserMeasureList } from "@/hooks/api/user/useGetUserMeasureList";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
@@ -193,10 +194,6 @@ const CenterUserMeasureListContainer = ({
   };
 
 
-  if (isLoading) {
-    return <p className="text-center py-8">로딩 중...</p>;
-  }
-
   if (isError) {
     return <DataError />;
   }
@@ -318,22 +315,28 @@ const CenterUserMeasureListContainer = ({
       </div>
     </div>
     
-    <CenterUserMeasureList
-      measures={sortedMeasurements}
-      onRowClick={(sn) => onSelectMeasure?.(sn)}
-      // deleteSelectedSns={deleteSelectedSns}
-      // onToggleDeleteSn={onToggleDeleteSn}
-      onToggleCompareSn={onToggleCompareSn}
-      onOpenCompareMode={onOpenCompareMode}
-    />
+    {isLoading ? (
+      <CenterUserMeasureListSkeleton />
+    ) : (
+      <>
+        <CenterUserMeasureList
+          measures={sortedMeasurements}
+          onRowClick={(sn) => onSelectMeasure?.(sn)}
+          // deleteSelectedSns={deleteSelectedSns}
+          // onToggleDeleteSn={onToggleDeleteSn}
+          onToggleCompareSn={onToggleCompareSn}
+          onOpenCompareMode={onOpenCompareMode}
+        />
 
-    {userMeasureList && (
-      <CustomPagination
-        total={userMeasureList.total}
-        page={userMeasureList.page}
-        last_page={userMeasureList.last_page}
-        limit={userMeasureList.limit}
-      />
+        {userMeasureList && (
+          <CustomPagination
+            total={userMeasureList.total}
+            page={userMeasureList.page}
+            last_page={userMeasureList.last_page}
+            limit={userMeasureList.limit}
+          />
+        )}
+      </>
     )}
   </>
 );

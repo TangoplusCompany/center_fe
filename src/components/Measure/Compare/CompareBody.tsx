@@ -13,6 +13,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import CompareIntro from "./CompareIntro";
 import MeasureDynamicCompare from "./CompareSeventh";
+import CompareBodySkeleton from "./CompareBodySkeleton";
 
 type MeasureTab = {
   title: string;
@@ -51,7 +52,7 @@ const CompareBody = ({
 
   
   if (leftLoading || rightLoading) {
-    return <div>불러오는 중...</div>;
+    return <CompareBodySkeleton />;
   }
 
   if (leftError || rightError) {
