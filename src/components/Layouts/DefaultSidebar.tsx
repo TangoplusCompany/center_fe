@@ -2,7 +2,6 @@
 
 import React from "react";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarFooter, SidebarHeader, useSidebar } from "../ui/sidebar";
-import { SidebarTrigger } from "../ui/sidebar";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { useLogout } from "@/hooks/api/auth/useLogout";
@@ -60,14 +59,15 @@ export default function DefaultSidebar() {
   const pathname = usePathname();
   const [indicatorStyle, setIndicatorStyle] = React.useState({ top: 0, height: 0 });
   const menuItemRefs = React.useRef<(HTMLLIElement | null)[]>([]);
-  const { state, openMobile } = useSidebar();
+  const { state, openMobile, setOpenMobile } = useSidebar();
   const isMobile = useIsMobile();
   const handleLogout = () => {
     logoutMutation.mutate();
   };
-  React.useEffect(() => {
-    const filteredDashboard = dashboard.filter((item) => {
-      // 동일한 filter 로직
+
+  // 필터링된 대시보드를 메모이제이션
+  const filteredDashboard = React.useMemo(() => {
+    return dashboard.filter((item) => {
       if (adminRole === 2) {
         return !["기기 관리", "매니저 관리", "로그인 기록 관리"].includes(item.title);
       }
@@ -79,7 +79,9 @@ export default function DefaultSidebar() {
       }
       return true;
     });
+  }, [adminRole]);
 
+  React.useEffect(() => {
     const activeIndex = filteredDashboard.findIndex((item) => {
       // url이 "/"인 경우는 정확히 pathname도 "/"일 때만 매칭
       if (item.url === "/") {
@@ -89,22 +91,44 @@ export default function DefaultSidebar() {
       return pathname.startsWith(item.url);
     });
 
-    if (activeIndex >= 0 && menuItemRefs.current[activeIndex]) {
-      const element = menuItemRefs.current[activeIndex];
-      const rect = element.getBoundingClientRect();
-      const parentRect = element.offsetParent?.getBoundingClientRect();
+    // 모바일에서 사이드바가 열려있을 때만 인디케이터 위치 계산
+    if (activeIndex >= 0 && menuItemRefs.current[activeIndex] && (openMobile || !isMobile)) {
+      // 약간의 지연을 주어 Sheet가 완전히 렌더링된 후 위치 계산
+      const timer = setTimeout(() => {
+        const element = menuItemRefs.current[activeIndex];
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          const parentRect = element.offsetParent?.getBoundingClientRect();
 
-      setIndicatorStyle({
-        top: rect.top - (parentRect?.top || 0),
-        height: rect.height,
-      });
+          setIndicatorStyle({
+            top: rect.top - (parentRect?.top || 0),
+            height: rect.height,
+          });
+        }
+      }, openMobile ? 100 : 50); // 모바일일 때는 더 긴 지연
+
+      return () => clearTimeout(timer);
+    } else if (activeIndex >= 0) {
+      // activeIndex는 있지만 조건이 맞지 않을 때는 기본값 유지
+      setIndicatorStyle({ top: 0, height: 0 });
     }
-  }, [pathname, adminRole]);
+  }, [pathname, adminRole, openMobile, isMobile, filteredDashboard]);
 
   const handleLinkClick = () => {
-    // Link click handler
+    // 모바일에서 링크 클릭 시 사이드바 닫기
+    if (isMobile) {
+      setOpenMobile(false);
+    }
   };
   const router = useRouter();
+  const handleLogoClick = () => {
+    router.push('/');
+    // 모바일에서 로고 클릭 시 사이드바 닫기
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
+
   return (
     <Sidebar collapsible="icon" className="bg-[#F1F5F9] dark:bg-black">
       <SidebarHeader className="bg-[#F1F5F9] dark:bg-black h-20 !flex !flex-row !items-center !p-0 px-2">
@@ -113,7 +137,7 @@ export default function DefaultSidebar() {
           <SidebarMenuButton 
           size="lg" 
           className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground flex-1 !h-full !flex !items-center !justify-center"
-          onClick={() => router.push('/')}
+          onClick={handleLogoClick}
           >
             <div
               className={`flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground transition-all duration-300 ease-in-out ${
@@ -131,7 +155,6 @@ export default function DefaultSidebar() {
               <span className="font-semibold text-xl whitespace-nowrap">탱고바디</span>
             </div>
           </SidebarMenuButton>
-          {isMobile && <SidebarTrigger className="mx-4" />}
         </div>
       </SidebarHeader>
       <SidebarContent className="bg-[#F1F5F9] dark:bg-black !overflow-hidden">
@@ -141,39 +164,21 @@ export default function DefaultSidebar() {
             <SidebarMenu className="gap-4">
               <div
                 className={`absolute left-0 transition-all duration-300 ease-in-out ${
-                  state === "collapsed" && !openMobile
-                    ? "w-8 h-8 rounded-full left-1/2 -translate-x-1/2" // 👈 접혔을 때: 원형 + 중앙
-                    : "w-full bg-[#4169E1] rounded-l-[20px] rounded-r-none ml-4 " // 👈 펼쳤을 때
+                  state === "collapsed" && !openMobile && !isMobile
+                    ? "w-8 h-8 rounded-full left-1/2 -translate-x-1/2" // 👈 접혔을 때: 원형 + 중앙 (데스크톱만)
+                    : "w-full bg-[#4169E1] rounded-l-[20px] rounded-r-none ml-4 " // 👈 펼쳤을 때 (데스크톱 expanded 또는 모바일 openMobile)
                 }`}
                 style={{
                   top:
-                    state === "collapsed" && !openMobile
+                    state === "collapsed" && !openMobile && !isMobile
                       ? `${indicatorStyle.top + indicatorStyle.height / 2 - 16}px`
-                      : openMobile
-                        ? `${indicatorStyle.top + indicatorStyle.height / 2 - 16}px`
-                        : `${indicatorStyle.top - 8}px`, // 👈 (height / 2) - (원크기 / 2)
-                  height: state === "collapsed" && !openMobile ? "32px" : openMobile ? "32px" : `${indicatorStyle.height + 16}px`,
-                  opacity: indicatorStyle.height > 0 ? 1 : 0,
+                      : `${indicatorStyle.top - 8}px`, // 👈 펼쳐졌을 때 (데스크톱 expanded 또는 모바일 openMobile)
+                  height: state === "collapsed" && !openMobile && !isMobile ? "32px" : `${indicatorStyle.height + 16}px`,
+                  opacity: indicatorStyle.height > 0 && (openMobile || !isMobile) ? 1 : 0,
                   backgroundColor: "#4169E1",
                 }}
               />
-              {dashboard
-                .filter((item) => {
-                  // ADMIN_ROLE이 2인 경우: 기기관리와 매니저 관리 메뉴 숨김
-                  // ADMIN_ROLE이 3 이상인 경우: 기기관리, 매니저 관리, 사용자 관리 메뉴 숨김
-                  if (adminRole === 2) {
-                    return !["기기 관리", "매니저 관리", "로그인 기록 관리"].includes(item.title);
-                  }
-                  if (adminRole >= 3) {
-                    return !["대시보드", "기기 관리", "매니저 관리", "사용자 히스토리 관리", "센터 측정 현황", "로그인 기록 관리"].includes(item.title);
-                  }
-                  // ADMIN_ROLE이 1 이하인 경우에만 로그인 기록 관리 메뉴 표시
-                  if (item.title === "로그인 기록 관리" && adminRole > 1) {
-                    return false;
-                  }
-                  return true;
-                })
-                .map((item, index) => {
+              {filteredDashboard.map((item, index) => {
                   const isActive = item.url === "/" ? pathname === item.url : pathname.startsWith(item.url);
                   // TODO 여기서 하단 스크롤만 없애고 넣기
                   return (

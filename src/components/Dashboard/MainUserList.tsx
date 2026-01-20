@@ -29,29 +29,30 @@ export const MainUserList = ({
     setList(users);
   }, [users]);
   return (
-    <Table>
+    <div className="w-full overflow-x-auto">
+      <Table>
       {path === "user" && (
         <>
           <TableHeader>
             <TableRow>
-              <TableHead className="text-center w-[100px]">이름</TableHead>
-              <TableHead className="text-center">전화번호</TableHead>
-              <TableHead className="text-center">이메일</TableHead>
-              <TableHead className="text-right"></TableHead>
+              <TableHead className="text-center w-[100px] whitespace-nowrap">이름</TableHead>
+              <TableHead className="text-center whitespace-nowrap">전화번호</TableHead>
+              <TableHead className="text-center whitespace-nowrap">이메일</TableHead>
+              <TableHead className="text-right whitespace-nowrap"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {(list as IUserData[]).map((user) => (
               <TableRow key={user.user_uuid}>
-                <TableCell className="text-center font-medium">
+                <TableCell className="text-center font-medium whitespace-nowrap">
                   {nameFiltering(user.user_name)}
                 </TableCell>
-                <TableCell className="text-center ">
+                <TableCell className="text-center whitespace-nowrap">
                   {phoneFiltering(user.mobile)}
                 </TableCell>
 
-                <TableCell className="text-center">{emailFiltering(user.email)}</TableCell>
-                <TableCell className="flex items-center justify-end gap-2">
+                <TableCell className="text-center whitespace-nowrap">{emailFiltering(user.email)}</TableCell>
+                <TableCell className="flex items-center justify-end gap-2 whitespace-nowrap">
                   <Link
                     href={`/user/${user.user_uuid}?key=${user.user_sn}`}
                     className="flex items-center gap-2 justify-end cursor-pointer"
@@ -69,25 +70,25 @@ export const MainUserList = ({
         <>
           <TableHeader>
             <TableRow>
-              <TableHead className="text-center w-[100px]">이름</TableHead>
-              <TableHead className="text-center">점수</TableHead>
-              <TableHead className="text-center">측정일</TableHead>
-              <TableHead className="text-right"></TableHead>
+              <TableHead className="text-center w-[100px] whitespace-nowrap">이름</TableHead>
+              <TableHead className="text-center whitespace-nowrap">점수</TableHead>
+              <TableHead className="text-center whitespace-nowrap">측정일</TableHead>
+              <TableHead className="text-right whitespace-nowrap"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {(list as IMeasureList[]).map((measure) => (
-              <TableRow key={measure.user_uuid}>
-                <TableCell className="text-center font-medium">
+              <TableRow key={measure.measure_sn ?? measure.sn}>
+                <TableCell className="text-center font-medium whitespace-nowrap">
                   {nameFiltering(measure.user_name)}
                 </TableCell>
-                <TableCell className="text-center ">
+                <TableCell className="text-center whitespace-nowrap">
                   {measure.t_score}점
                 </TableCell>
-                <TableCell className="text-center">
+                <TableCell className="text-center whitespace-nowrap">
                   {formatDate(measure.measure_date)}
                 </TableCell>
-                <TableCell className="flex items-center justify-end gap-2">
+                <TableCell className="flex items-center justify-end gap-2 whitespace-nowrap">
                   <Link
                     href={`/measure/${measure.measure_sn ?? measure.sn}?user_uuid=${measure.user_uuid}`}
                     className="flex items-center gap-2 justify-end cursor-pointer"
@@ -101,6 +102,7 @@ export const MainUserList = ({
           </TableBody>
         </>
       )}
-    </Table>
+      </Table>
+    </div>
   );
 };
