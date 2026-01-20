@@ -15,11 +15,11 @@ const DashboardDeviceStatus = ({
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/measure?device_sn=${device.sn}&page=1`);
+    router.push(`/measure?device_sn=${device.device_sn}&page=1`);
   };
   return (
     <div
-      key={device.sn}
+      key={device.device_sn}
       onClick={handleClick}
       className="col-span-1 items-center justify-between rounded-xl border-2 border-toggleAccent-background relative cursor-pointer hover:border-toggleAccent transition-colors"
     >
@@ -31,7 +31,7 @@ const DashboardDeviceStatus = ({
         <div className="flex flex-col">
           <div className="px-4 py-2 ">
             <p className="text-sm text-gray-500">
-              {`[ (${device.install_zipcode}) ${device.install_address_1} ${
+              {`[ (${device.install_zipcode ?? ""}) ${device.install_address_1 ?? ""} ${
                 device.install_address_2 ?? ""
               } - ${device.install_location} ]`}
             </p>
@@ -52,7 +52,7 @@ const DashboardDeviceStatus = ({
                     className="w-6 h-6"
                   />
                   <span className="text-sm text-toggleAccent font-semibold">
-                    00건
+                    0건
                   </span>
                 </div>
               </div>
@@ -75,7 +75,7 @@ export const DeviceInformation = () => {
   );
   if (!deviceStatus) return <div>No data</div>;
   if (!deviceStatus?.data) {
-    return null; // 또는 로딩 상태 표시
+    return null; 
   }
   const displayedDevices = isExpanded ? deviceStatus.data : deviceStatus.data.slice(0, 4);
   const hasMore = deviceStatus.data.length > 4;
@@ -89,7 +89,7 @@ export const DeviceInformation = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {displayedDevices.map((device) => (
-            <DashboardDeviceStatus key={device.sn} device={device} />
+            <DashboardDeviceStatus key={device.device_sn} device={device} />
           ))}
         </div>
         

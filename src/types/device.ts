@@ -8,8 +8,8 @@ export interface IDeviceDetail {
 }
 
 export interface IDeviceStatusCardProps {
-  sn: number;
-  serial_number: string;
+  device_sn: number;
+  // serial_number: string;
   install_location: string;
   install_address_1: string;
   install_address_2: string;

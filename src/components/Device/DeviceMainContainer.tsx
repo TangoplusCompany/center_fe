@@ -11,7 +11,7 @@ import SkeletonDeviceCard from "@/components/Device/SkeletonDeviceCard";
 export const DeviceMainContainer = () => {
   const { adminRole } = useAuthStore((state) => state);
   const { data: deviceStatus, isLoading } = useGetDeviceStatus<IDeviceStatus>();
-
+  console.log(deviceStatus)
   if (isLoading) return <div className="flex w-full"><SkeletonDeviceCard /></div>;
   if (!deviceStatus) {
     return <p>잘못된 요청입니다. 잠시 후 다시 시도바랍니다.</p>;
@@ -32,7 +32,7 @@ export const DeviceMainContainer = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
         {deviceStatus.data.map((device, index) => (
           <DeviceStatusItems
-            key={device.serial_number + index}
+            key={device.device_sn + index}
             adminRole={adminRole}
             device={device}
           />

@@ -7,7 +7,7 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { useLogout } from "@/hooks/api/auth/useLogout";
 import { useAuthStore } from "@/providers/AuthProvider";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const dashboard = [
@@ -104,12 +104,17 @@ export default function DefaultSidebar() {
   const handleLinkClick = () => {
     // Link click handler
   };
+  const router = useRouter();
   return (
     <Sidebar collapsible="icon" className="bg-[#F1F5F9] dark:bg-black">
       <SidebarHeader className="bg-[#F1F5F9] dark:bg-black h-20 !flex !flex-row !items-center !p-0 px-2">
         <div className="flex items-center w-full">
           {/* 👇 앱로고와 텍스트는 SidebarMenuButton 안에 - 접히면 사라짐 */}
-          <SidebarMenuButton size="lg" className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground flex-1 !h-full !flex !items-center !justify-center">
+          <SidebarMenuButton 
+          size="lg" 
+          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground flex-1 !h-full !flex !items-center !justify-center"
+          onClick={() => router.push('/')}
+          >
             <div
               className={`flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground transition-all duration-300 ease-in-out ${
                 isMobile && !openMobile ? "opacity-0 scale-0" : "opacity-100 scale-100"

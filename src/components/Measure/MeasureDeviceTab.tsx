@@ -49,7 +49,7 @@ const MeasureDeviceTab = () => {
 
         {/* 디바이스 목록 */}
         {measureDeviceResponse.data.map((device, index) => {
-          const active = deviceSn === device.sn.toString();
+          const active = deviceSn === device.device_sn.toString();
 
           return (
             <button
@@ -60,7 +60,7 @@ const MeasureDeviceTab = () => {
                   ? "bg-toggleAccent dark:bg-gray-700 text-white dark:text-black shadow-sm"
                   : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
               } px-4 py-1 text-sm font-medium rounded-xl transition-all whitespace-nowrap`}
-              onClick={() => handleDeviceClick(device.sn)}
+              onClick={() => handleDeviceClick(device.device_sn)}
             >
               {device.device_name}
             </button>
