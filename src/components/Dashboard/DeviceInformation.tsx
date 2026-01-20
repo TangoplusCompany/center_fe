@@ -45,14 +45,9 @@ const DashboardDeviceStatus = ({
                 </div>
                 
                 <div className="flex items-center justify-end gap-2">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/icons/ic_done.svg"
-                    alt=""
-                    className="w-6 h-6"
-                  />
                   <span className="text-sm text-toggleAccent font-semibold">
-                    0건
+                    {device.trend === 0 ? '▼ ' : (device.trend === 1 ? '- ' : '▲ ')}
+                    {device.today_count} 건
                   </span>
                 </div>
               </div>
@@ -66,7 +61,7 @@ const DashboardDeviceStatus = ({
 export const DeviceInformation = () => {
   const { data: deviceStatus, isLoading } = useGetDeviceStatus<IDeviceStatus>();
   const [isExpanded, setIsExpanded] = useState(false);
-
+  console.log(deviceStatus)
   if (isLoading) return (
     <div className="flex flex-col gap-4">
       <Skeleton className="w-full h-[320px]" />

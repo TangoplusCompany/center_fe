@@ -115,6 +115,19 @@ const MeasureDetailDynamic = ({
     ctx.stroke();
   };
 
+  const clearTrail = useCallback(() => {
+    const ct = canvasTrailRef.current;
+    if (!ct) return;
+    const ctxT = ct.getContext("2d");
+    if (!ctxT) return;
+
+    ctxT.clearRect(0, 0, fit.stageW, fit.stageH);
+    trailPrevRef.current = {}; // 이전 점도 초기화
+  }, [fit.stageW, fit.stageH]);
+
+  const isNearStart = (v: HTMLVideoElement, eps = 0.05) => v.currentTime <= eps;
+  const isNearEnd = (v: HTMLVideoElement, eps = 0.08) =>
+  v.duration > 0 && v.currentTime >= v.duration - eps;
   /**
    * ✅ 1) stage 기준으로 크기 측정 + fit(scale/offset) 계산 + canvas DPR 세팅
    * - ResizeObserver는 video가 아니라 stageRef에 붙입니다.
@@ -156,6 +169,10 @@ const MeasureDetailDynamic = ({
     const sync = () => setFrame(Math.floor(v.currentTime * 30));
 
     const start = () => {
+      if (isNearStart(v) || isNearEnd(v)) {
+        clearTrail();
+      }
+      if (isNearEnd(v)) v.currentTime = 0;
       if (!("requestVideoFrameCallback" in v)) return;
       sync();
       frameLoopActive.current = true;
@@ -197,11 +214,9 @@ const MeasureDetailDynamic = ({
       v.removeEventListener("seeked", seeked);
       v.removeEventListener("loadedmetadata", seeked);
     };
-  }, []);
+  }, [clearTrail]);
 
-  /**
-   * ✅ 3) duration/currentTime 동기화
-   */
+  
   useEffect(() => {
     const v = videoRef.current;
     if (!v || !data) return;
@@ -291,9 +306,11 @@ const MeasureDetailDynamic = ({
 
   useEffect(() => {
     if (!measureJson) return;
+
     const item = measureJson[frame];
-    const lm = item.pose_landmark;
-    if (!item?.pose_landmark) return;
+    if (!item || !item.pose_landmark) return;  // ✅ 먼저 방어
+
+    const lm = item.pose_landmark; 
 
     const cw = canvasWhiteRef.current;
     const cr = canvasRedRef.current;
@@ -307,8 +324,8 @@ const MeasureDetailDynamic = ({
     if (!ctxW || !ctxR || !ctxT) return;
 
     // trajectory
-    ctxT.lineWidth = 2;
-    ctxT.strokeStyle = "#00ffea"; // 원하는 색/투명도
+    ctxT.lineWidth = 1;
+    ctxT.strokeStyle = "#00FF00"; // 원하는 색/투명도
 
     const p15 = toScreen(lm[15].sx, lm[15].sy);
     const p16 = toScreen(lm[16].sx, lm[16].sy);
@@ -329,7 +346,6 @@ const MeasureDetailDynamic = ({
 
     trailPrevRef.current = { p15, p16, pMid, p25, p26 };
 
-
     // clear
     ctxW.clearRect(0, 0, fit.stageW, fit.stageH);
     ctxR.clearRect(0, 0, fit.stageW, fit.stageH);
@@ -338,7 +354,7 @@ const MeasureDetailDynamic = ({
     ctxW.strokeStyle = "#FFF";
     ctxW.lineWidth = 1;
 
-    // ✅ 여기부터는 “좌표 변환 누락 없이” 라인만 정의하면 됨
+    // ✅ 스켈레톤
     drawLine(ctxW, lm, 7, 8);
 
     drawLine(ctxW, lm, 16, 18);

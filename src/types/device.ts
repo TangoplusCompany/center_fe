@@ -15,12 +15,9 @@ export interface IDeviceStatusCardProps {
   install_address_2: string;
   install_zipcode: string;
   device_name: string;
-  reg_date: Date;
-  modify_date: Date;
-  upload_date: Date;
-  uploaded: string;
-  used: string;
-  reg_status: string;
+  today_count: number;
+  yesterday_count: number;
+  trend: 0 | 1 | 2;
 }
 
 export interface IDeviceStatus extends IResponseDefault {

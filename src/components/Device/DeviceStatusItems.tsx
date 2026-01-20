@@ -1,9 +1,8 @@
 import { IDeviceStatusCardProps } from "@/types/device";
 
 import React from "react";
-import Link from "next/link";
-import { PencilLine } from "lucide-react";
 import DeviceRemoveDialog from "@/components/Device/DeviceRemoveDialog";
+import DeviceEditDialog from "./DeviceEditDialog";
 
 export const DeviceStatusItems = React.memo(
   ({
@@ -16,19 +15,13 @@ export const DeviceStatusItems = React.memo(
     return (
       <div
         key={device.device_sn}
-        className="flex col-span-1 items-center justify-between rounded-3xl p-4 border-2 border-sub200 relative"
+        className="flex col-span-1 items-center justify-between rounded-3xl p-4 border-2 border-toggleAccent-background relative"
       >
         <div className="flex flex-col">
           <div className="flex items-center justify-start gap-2">
             <h2 className="text-lg font-semibold">{device.device_name}</h2>
             {adminRole < 3 && (
-              <Link
-                href={`/device/${device.device_sn}`}
-                className="flex items-center gap-0.5 text-sm text-gray-500"
-              >
-                <PencilLine className="w-4 h-4" />
-                <span>수정하기</span>
-              </Link>
+              <DeviceEditDialog deviceSn={device.device_sn} />
             )}
             {adminRole < 2 && <DeviceRemoveDialog deviceInfo={device} />}
           </div>

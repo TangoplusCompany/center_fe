@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { FileText, Trash } from "lucide-react";
-import { phoneHyphen } from "@/utils/regexFiltering";
+import { phoneFiltering, phoneHyphen } from "@/utils/regexFiltering";
 import { useEffect, useState } from "react";
 import { IUserData } from "@/types/user";
 import { useDeleteUser } from "@/hooks/api/user/useDeleteUser";
@@ -51,7 +51,7 @@ export const UserList = ({
               {user.user_name}
             </TableCell>
             <TableCell className="text-center ">
-              {phoneHyphen(user.mobile)}
+              {phoneFiltering(phoneHyphen(user.mobile))}
             </TableCell>
 
             <TableCell className="text-center">{user.email}</TableCell>

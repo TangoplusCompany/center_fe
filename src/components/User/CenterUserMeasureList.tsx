@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { phoneHyphen } from "@/utils/regexFiltering";
+import { phoneFiltering, phoneHyphen } from "@/utils/regexFiltering";
 import { IMeasureList } from "@/types/measure";
 import { CompareSlot } from "@/types/compare";
 
@@ -65,7 +65,7 @@ export const CenterUserMeasureList = ({
               <TableCell className="text-center font-medium text-xs sm:text-sm">
                 {measure.user_name}
               </TableCell>
-              <TableCell className="text-center text-xs sm:text-sm">{phoneHyphen(measure.mobile)}</TableCell>
+              <TableCell className="text-center text-xs sm:text-sm">{phoneFiltering(phoneHyphen(measure.mobile))}</TableCell>
               <TableCell className="text-center text-xs sm:text-sm">{measure.measure_date}</TableCell>
               <TableCell className="text-center text-xs sm:text-sm">{measure.device_name}</TableCell>
               {/* <TableCell className="text-center">

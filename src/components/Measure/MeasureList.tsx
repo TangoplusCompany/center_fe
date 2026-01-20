@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { FileText } from "lucide-react";
-import { nameFiltering, phoneFiltering } from "@/utils/regexFiltering";
+import { nameFiltering, phoneFiltering, phoneHyphen } from "@/utils/regexFiltering";
 import { formatDate } from "@/utils/formatDate";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -95,7 +95,7 @@ export const MeasureList = ({
                 : ""}
             </TableCell>
             <TableCell className="text-center ">
-              {phoneFiltering(measurement.mobile)}
+              {phoneFiltering(phoneHyphen(measurement.mobile))}
             </TableCell>
             <TableCell className="text-center">
               {formatDate(measurement.measure_date)}

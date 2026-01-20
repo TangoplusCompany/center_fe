@@ -38,6 +38,7 @@ body {
     --toggle-accent-background: 210 40% 96.1%;
     --danger: 0 100% 64.5%;
     --danger-foreground: 0 100% 66.1% / 0.35;
+    --danger-background: 0 100% 94.9%;
     --danger-deep: 0 100% 23.5%;
     --warning: 33 100% 50%;
     --warning-foreground: 33 100% 61.4% / 0.35; 
@@ -80,6 +81,7 @@ body {
     --toggle-accent-background: 228 80% 88.2%;
     --danger: 0 100% 64.5%;
     --danger-foreground: 0 100% 94.9%;
+    --danger-background: 0 100% 94.9%;
     --danger-deep: 0 100% 23.5%;
     --warning: 33 100% 50%;
     --warning-foreground: 33 100% 88.6%; 

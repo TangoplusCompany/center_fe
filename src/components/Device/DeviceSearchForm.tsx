@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { UseFormReturn } from "react-hook-form";
 import { IDeviceSearchForm } from "@/schemas/deviceSchema";
+import { Search } from "lucide-react";
 
 export const DeviceSearchForm = ({
   register,
@@ -35,7 +36,10 @@ export const DeviceSearchForm = ({
             </p>
           )}
         </div>
-        <Button type="submit">기기 검색하기</Button>
+        <Button type="submit" className="bg-sub600 shadow-none text-white">
+          <Search className="w-4 h-4" />  
+          기기 검색
+        </Button>
       </div>
     </form>
   );
