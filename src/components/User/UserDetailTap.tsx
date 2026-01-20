@@ -1,8 +1,5 @@
 "use client";
 
-
-import { Switch } from '@/components/ui/switch';
-
 const UserDetailTap = ({
   nowTab,
   update,
@@ -36,7 +33,7 @@ const UserDetailTap = ({
     }
   };
   return (
-    <div className="w-full flex items-center justify-between">
+    <div className="w-full flex items-center justify-between gap-2">
       <div className="inline-flex rounded-xl bg-gray-100 dark:bg-gray-800 p-1">
         {["사용자 측정 요약", "측정 기록", "사용자 정보"].map((item, index) => {
           return (
@@ -45,7 +42,7 @@ const UserDetailTap = ({
               type="button"
               className={`${
                 nowTab === index
-                  ? "bg-toggleAccent dark:bg-gray-700 text-toggleAccent-foreground dark:text-black shadow-sm"
+                  ? "bg-toggleAccent dark:bg-gray-700 text-white dark:text-black shadow-sm"
                   : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
               } px-2 sm:px-4 py-1 text-xs sm:text-sm font-medium rounded-xl transition-all whitespace-normal sm:whitespace-nowrap text-center leading-tight`}
               onClick={() => {
@@ -58,17 +55,18 @@ const UserDetailTap = ({
           );
         })}
       </div>
-
       
       <button 
         onClick={() => setIsAIExerciseActive(!isAIExerciseActive)}
-        className="relative h-full overflow-hidden px-3 py-1 rounded-xl text-white transition-all hover:scale-105 active:scale-95 isolate"
+        className={`relative h-full overflow-hidden px-2 py-1 sm:px-3 rounded-xl text-white transition-all hover:scale-105 active:scale-95 isolate border-2 sm:border-4 ${isAIExerciseActive ? 'border-toggleAccent/25' : 'border-sub600/25'}`}
       >
-        {/* 메인 컬러 포함 무지개 그라데이션 */}
+        {/* 메인 컬러 포함 그라데이션 */}
         <div 
           className="absolute inset-0 z-0"
           style={{
-            background: 'linear-gradient(135deg, hsl(227, 65.1%, 49.4%) 0%, hsl(227, 65.1%, 49.4%) 60%, hsl(150, 80.2%, 54.5%) 95%, hsl(150, 80.2%, 54.5%) 100%)',
+            background: isAIExerciseActive 
+              ? 'radial-gradient(circle, hsl(227, 65.1%, 49.4%) 0%, hsl(227, 65.1%, 49.4%) 50%, hsla(227 65.6% 25.1% / 0.9) 100%)'
+              : 'radial-gradient(circle, hsl(0 0% 92.9%) 0%, hsl(0 0% 86.3%) 50%, hsl(0 0% 73.3%) 100%)',
           }}
         />
         
@@ -79,20 +77,8 @@ const UserDetailTap = ({
         </div>
         
         {/* 버튼 내용 */}
-        <span className="relative z-10 flex items-center gap-3">
-          <span className="flex items-center gap-2">
-            ✨ AI 운동 추천
-          </span>
-          
-          {/* Switch */}
-          <Switch 
-            checked={isAIExerciseActive} 
-            onCheckedChange={(checked) => {
-              setIsAIExerciseActive(checked);
-            }}
-            onClick={(e) => e.stopPropagation()} // 버튼 클릭 전파 방지
-            className="pointer-events-auto"
-          />
+        <span className="relative z-10 flex items-center text-xs sm:text-sm whitespace-nowrap">
+          ✨ AI 운동 추천
         </span>
       </button>
     </div>

@@ -215,7 +215,7 @@ const DeviceChart = ({
                           className={[
                             "flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium transition",
                             pillActive
-                              ? "bg-toggleAccent text-toggleAccent-foreground"
+                              ? "bg-toggleAccent text-white"
                               : "bg-sub300/20 text-sub300 hover:bg-sub300/30",
                           ].join(" ")}
                         >

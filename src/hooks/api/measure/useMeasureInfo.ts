@@ -19,6 +19,6 @@ export const useMeasureInfo = (measure_sn: number | undefined, user_sn: string) 
       });
       return response.data.data;
     },
-    enabled: measure_sn !== undefined && user_sn !== undefined && measure_sn !== 0
+    enabled: measure_sn !== undefined && user_sn !== undefined && measure_sn !== 0 && user_sn !== ""
   });
 };

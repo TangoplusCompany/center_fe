@@ -14,6 +14,7 @@ export default {
         foreground: "hsl(var(--foreground))",
         danger: 'hsl(var(--danger))',
         'danger-foreground': 'hsl(var(--danger-foreground))',
+        'danger-background': 'hsl(var(--danger-background))',
         dangerDeep: "hsl(var(--danger-deep))",
         warning: 'hsl(var(--warning))',
         'warning-foreground': 'hsl(var(--warning-foreground))',

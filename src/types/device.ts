@@ -8,19 +8,16 @@ export interface IDeviceDetail {
 }
 
 export interface IDeviceStatusCardProps {
-  sn: number;
-  serial_number: string;
+  device_sn: number;
+  // serial_number: string;
   install_location: string;
   install_address_1: string;
   install_address_2: string;
   install_zipcode: string;
   device_name: string;
-  reg_date: Date;
-  modify_date: Date;
-  upload_date: Date;
-  uploaded: string;
-  used: string;
-  reg_status: string;
+  today_count: number;
+  yesterday_count: number;
+  trend: 0 | 1 | 2;
 }
 
 export interface IDeviceStatus extends IResponseDefault {

@@ -107,10 +107,33 @@ const CenterUserDetail = ({
       />
 
       {isAIExerciseActive ? (
-        <RecommendUserContainer 
-          user_uuid={userUUID}
-          user_sn={`${userSn}`}
-        />
+        <div className="flex flex-col gap-4">
+          {/* 뒤로가기 버튼 */}
+          <button
+            onClick={() => setIsAIExerciseActive(false)}
+            className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 transition-colors w-fit"
+          >
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="20" 
+              height="20" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+            >
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            <span>뒤로가기</span>
+          </button>
+          
+          <RecommendUserContainer 
+            user_uuid={userUUID}
+            user_sn={`${userSn}`}
+          />
+        </div>
       ) : (
         <>
           {tab !== 2 &&

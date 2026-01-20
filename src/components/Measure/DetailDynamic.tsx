@@ -1,70 +1,225 @@
+"use client";
 
-import React, { useEffect, useRef, useState } from "react";
-// import { useDrawCanvas } from "@/hooks/utils";
-// import { useMeasureDynamicJson } from "@/hooks/api/measure/useMeasureDynamicJson";
-// import DataError from "../Util/DataError";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import DynamicDataContainer from "./Dynamic/DataContainer";
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
 import { IUserMeasureDynamicFileData } from "@/types/measure";
-import DynamicDataContainer from "./Dynamic/DataContainer";
-// import MeasureIntroFooter2 from "./MeasureIntroFooter2";
-// import MeasureIntroFooter3 from "./MeasureIntroFooter3";
-// import MeasureIntroFooter2, { IMatOhsPressure } from "./MeasureIntroFooter2";
-// import MeasureIntroFooter3 from "./MeasureIntroFooter3";
-// import { IUserMeasureDynamicFileData } from "@/types/measure";
+import { useMeasureDynamicJson } from "@/hooks/api/measure/useMeasureDynamicJson";
+
+type Fit = {
+  stageW: number;
+  stageH: number;
+  scale: number;
+  offsetX: number;
+  offsetY: number;
+  dpr: number;
+};
+type PoseLandmark = {
+  sx: number;
+  sy: number;
+};
+
+type PoseLandmarks = PoseLandmark[];
+const DATA_W = 720;   // landmark 좌표계 기준 width
+const DATA_H = 1280;  // landmark 좌표계 기준 height
+
+function computeContain(stageW: number, stageH: number, dataW: number, dataH: number) {
+  const scale = Math.min(stageW / dataW, stageH / dataH);
+  const visualW = dataW * scale;
+  const visualH = dataH * scale;
+  const offsetX = (stageW - visualW) / 2;
+  const offsetY = (stageH - visualH) / 2;
+  return { stageW, stageH, scale, offsetX, offsetY };
+}
+
+function setupHiDPICanvas(canvas: HTMLCanvasElement, cssW: number, cssH: number) {
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = Math.round(cssW * dpr);
+  canvas.height = Math.round(cssH * dpr);
+  canvas.style.width = `${cssW}px`;
+  canvas.style.height = `${cssH}px`;
+
+  const ctx = canvas.getContext("2d");
+  if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  return { ctx, dpr };
+}
+
 
 const MeasureDetailDynamic = ({
   className,
   sns,
   cameraOrientation,
-  isCompare
+  isCompare,
 }: {
-  className? : string;
-  sns: {
-    measureSn: string;
-    userSn: string;
-  };
+  className?: string;
+  sns: { measureSn: string; userSn: string };
   cameraOrientation: number;
   isCompare: 0 | 1;
 }) => {
-  const {
-      data: measureDynamic,
-      isLoading: seq7Loading,
-      isError: seq7Error,
-    } = useMeasureSequence(
-      sns.measureSn,
-      sns.userSn,
-      6
-    );
-  
-  const data = measureDynamic?.file_data
+  const { data: measureDynamic, isLoading: seq7Loading, isError: seq7Error } =
+    useMeasureSequence(sns.measureSn, sns.userSn, 6);
+
+  const data = measureDynamic?.file_data;
   const fileData = measureDynamic?.file_data as IUserMeasureDynamicFileData;
+
+  const { data: measureJson, isLoading, isError } = useMeasureDynamicJson(
+    data?.measure_server_json_name
+  );
+
+  const isRotated = cameraOrientation === 1;
+
+  const stageRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  // const [nowWidth, setNowWidth] = useState(srcWidth);
-  // const [nowHeight, setNowHeight] = useState(srcHeight);
-  // const [scaleWidth, setScaleWidth] = useState(1);
-  // const [scaleHeight, setScaleHeight] = useState(1);
-  // const canvasWhiteRef = useRef<HTMLCanvasElement | null>(null);
-  // const canvasRedRef = useRef<HTMLCanvasElement | null>(null);
-  // const {
-  //   data: measureJson,
-  //   isLoading,
-  //   isError,
-  // } = useMeasureDynamicJson(data?.measure_server_json_name);
-  // const clearAndDraw = useDrawCanvas;
-  // const [frame, setFrame] = useState(0);
-  // const frameLoopActive = useRef(false);
+  const canvasWhiteRef = useRef<HTMLCanvasElement | null>(null);
+  const canvasRedRef = useRef<HTMLCanvasElement | null>(null);
+  const canvasTrailRef = useRef<HTMLCanvasElement | null>(null);
+
+  const [fit, setFit] = useState<Fit>({
+    stageW: 0,
+    stageH: 0,
+    scale: 1,
+    offsetX: 0,
+    offsetY: 0,
+    dpr: 1,
+  });
+
+  const [frame, setFrame] = useState(0);
+  const frameLoopActive = useRef(false);
 
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [, setIsSeeking] = useState(false);
   const isSeekingRef = useRef(false);
+
+  const trailPrevRef = useRef<{
+    p15?: { x:number; y:number };
+    p16?: { x:number; y:number };
+    pMid?: { x:number; y:number };
+    p25?: { x:number; y:number };
+    p26?: { x:number; y:number };
+  }>({});
+  const midPoint = (a: { sx:number; sy:number }, b: { sx:number; sy:number }) => ({
+    sx: (a.sx + b.sx) / 2,
+    sy: (a.sy + b.sy) / 2,
+  });
+  const drawTrailSegment = (
+    ctx: CanvasRenderingContext2D,
+    prev: { x:number; y:number } | undefined,
+    curr: { x:number; y:number },
+  ) => {
+    if (!prev) return;
+    ctx.beginPath();
+    ctx.moveTo(prev.x, prev.y);
+    ctx.lineTo(curr.x, curr.y);
+    ctx.stroke();
+  };
+
+  const clearTrail = useCallback(() => {
+    const ct = canvasTrailRef.current;
+    if (!ct) return;
+    const ctxT = ct.getContext("2d");
+    if (!ctxT) return;
+
+    ctxT.clearRect(0, 0, fit.stageW, fit.stageH);
+    trailPrevRef.current = {}; // 이전 점도 초기화
+  }, [fit.stageW, fit.stageH]);
+
+  const isNearStart = (v: HTMLVideoElement, eps = 0.05) => v.currentTime <= eps;
+  const isNearEnd = (v: HTMLVideoElement, eps = 0.08) =>
+  v.duration > 0 && v.currentTime >= v.duration - eps;
+  /**
+   * ✅ 1) stage 기준으로 크기 측정 + fit(scale/offset) 계산 + canvas DPR 세팅
+   * - ResizeObserver는 video가 아니라 stageRef에 붙입니다.
+   */
   useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+
+    const update = () => {
+      const rect = stage.getBoundingClientRect();
+      const base = computeContain(rect.width, rect.height, DATA_W, DATA_H);
+
+      // 캔버스 DPI 세팅
+      const cw = canvasWhiteRef.current;
+      const cr = canvasRedRef.current;
+      const ct = canvasTrailRef.current;
+      let dpr = 1;
+      if (cw) dpr = setupHiDPICanvas(cw, rect.width, rect.height).dpr;
+      if (cr) setupHiDPICanvas(cr, rect.width, rect.height);
+      if (ct) setupHiDPICanvas(ct, rect.width, rect.height);
+      setFit({ ...base, dpr });
+    };
+
+    const ro = new ResizeObserver(() => update());
+    ro.observe(stage);
+
+    update();
+    return () => ro.disconnect();
+  }, []);
+
+  /**
+   * ✅ 2) frame tracking: requestVideoFrameCallback 기반
+   * - 이벤트 등록은 measureJson이 아니라 video에만 의존하게 분리
+   */
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+
+    const sync = () => setFrame(Math.floor(v.currentTime * 30));
+
+    const start = () => {
+      if (isNearStart(v) || isNearEnd(v)) {
+        clearTrail();
+      }
+      if (isNearEnd(v)) v.currentTime = 0;
+      if (!("requestVideoFrameCallback" in v)) return;
+      sync();
+      frameLoopActive.current = true;
+
+      const loop = () => {
+        if (!frameLoopActive.current) return;
+        setFrame(Math.floor(v.currentTime * 30));
+        v.requestVideoFrameCallback(loop);
+      };
+      v.requestVideoFrameCallback(loop);
+    };
+
+    const pause = () => {
+      frameLoopActive.current = false;
+      sync();
+    };
+
+    const ended = () => {
+      frameLoopActive.current = false;
+      sync();
+    };
+
+    const seeked = () => {
+      frameLoopActive.current = false;
+      sync();
+      if (!v.paused) start();
+    };
+
+    v.addEventListener("play", start);
+    v.addEventListener("pause", pause);
+    v.addEventListener("ended", ended);
+    v.addEventListener("seeked", seeked);
+    v.addEventListener("loadedmetadata", seeked);
+
+    return () => {
+      v.removeEventListener("play", start);
+      v.removeEventListener("pause", pause);
+      v.removeEventListener("ended", ended);
+      v.removeEventListener("seeked", seeked);
+      v.removeEventListener("loadedmetadata", seeked);
+    };
+  }, [clearTrail]);
+
   
-  const v = videoRef.current;
-    if (!v || !data) {
-      return;
-    }
-    
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v || !data) return;
 
     const onLoadedMetadata = () => {
       setDuration(v.duration || 0);
@@ -80,415 +235,176 @@ const MeasureDetailDynamic = ({
     v.addEventListener("loadedmetadata", onLoadedMetadata);
     v.addEventListener("timeupdate", onTimeUpdate);
 
-    if (v.readyState >= 1) {
-      onLoadedMetadata();
-    }
+    if (v.readyState >= 1) onLoadedMetadata();
 
     return () => {
       v.removeEventListener("loadedmetadata", onLoadedMetadata);
       v.removeEventListener("timeupdate", onTimeUpdate);
     };
-  }, [data]); // data를 dependency에 추가
+  }, [data]);
 
-    if (seq7Loading) {
-    return (
-      <div className="col-span-12">
-        <p>로딩중...</p>
-      </div>
-    );
-  }
-  if (seq7Error) {
-    return (
-      <div className="col-span-12">
-        <p>오류가 발생했습니다</p>
-      </div>
-    );
-  }
-  
+  /**
+   * ✅ 4) draw: toScreen()으로 일괄 변환 (offset/scale 누락 방지)
+   */
+  const toScreen = useMemo(() => {
+    return (sx: number, sy: number) => ({
+      x: sx * fit.scale + fit.offsetX,
+      y: sy * fit.scale + fit.offsetY,
+    });
+  }, [fit]);
 
+  const drawLine = useCallback(
+    (
+      ctx: CanvasRenderingContext2D,
+      lm: PoseLandmarks,
+      a: number,
+      b: number,
+      extendAx: number = 0,
+      extendAy: number = 0,
+      extendBx: number = 0,
+      extendBy: number = 0
+    ) => {
+      const A = lm[a];
+      const B = lm[b];
+      if (!A || !B) return;
 
-  
-  // const ohsFourCorners: IMatOhsPressure = {
-  //     leftTopPressure: 0,
-  //     leftBottomPressure: 0,
-  //     rightTopPressure: 0,
-  //     rightBottomPressure: 0,
-  //     leftPressure: 0,
-  //     rightPressure: 0,
-  //     topPressure: 0,
-  //     bottomPressure: 0,
-  //   };
-  // const isRotated = cameraOrientation === 1;
+      const p1 = toScreen(A.sx + extendAx, A.sy + extendAy);
+      const p2 = toScreen(B.sx + extendBx, B.sy + extendBy);
 
-  // // 원본(데이터/JSON) 기준
-  // const srcWidth = (data?.measure_overlay_width as number) ?? 1280;
-  // const srcHeight = (data?.measure_overlay_height as number) ?? 720;
+      ctx.beginPath();
+      ctx.moveTo(p1.x, p1.y);
+      ctx.lineTo(p2.x, p2.y);
+      ctx.stroke();
+    },
+    [toScreen] // ✅ drawLine은 toScreen에만 의존
+  );
 
+  useLayoutEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
 
+    const update = () => {
+      const rect = stage.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return; // ✅ 0이면 스킵
+      const base = computeContain(rect.width, rect.height, DATA_W, DATA_H);
 
+      const cw = canvasWhiteRef.current;
+      const cr = canvasRedRef.current;
 
-  // useEffect(() => {
-  //   const video = videoRef.current;
-  //   if (!video) return;
-  //   const handleResize = (entries: ResizeObserverEntry[]) => {
-  //     const entry = entries[0];
-  //     const { width, height } = entry.contentRect; // 비디오 엘리먼트의 현재 CSS 크기 (w-[75%] 등이 반영된 값)
+      let dpr = 1;
+      if (cw) dpr = setupHiDPICanvas(cw, rect.width, rect.height).dpr;
+      if (cr) setupHiDPICanvas(cr, rect.width, rect.height);
+      setFit({ ...base, dpr });
+    };
 
-  //       let sWidth, sHeight;
+    const ro = new ResizeObserver(update);
+    ro.observe(stage);
+    update();
 
-  //       if (isRotated) {
-  //         sWidth = Number((height / 720).toFixed(4));
-  //         sHeight = Number((width / 1280).toFixed(4));
-  //       } else {
-  //         sWidth = Number((width / srcWidth).toFixed(4));
-  //         sHeight = Number((height / srcHeight).toFixed(4));
-  //       }
-  //     const finalScale = Math.min(sWidth, sHeight);
-  //     setScaleWidth(finalScale);
-  //     setScaleHeight(finalScale);
-  //     setNowWidth(width);
-  //     setNowHeight(height);
-  //   };
+    return () => ro.disconnect();
+  }, [isRotated]);
 
-  //   const observer = new ResizeObserver(handleResize);
-  //   observer.observe(video);
+  useEffect(() => {
+    if (!measureJson) return;
 
-  //   // 초기에 강제 측정
-  //   handleResize([
-  //     { contentRect: video.getBoundingClientRect() } as ResizeObserverEntry,
-  //   ]);
+    const item = measureJson[frame];
+    if (!item || !item.pose_landmark) return;  // ✅ 먼저 방어
 
-  //   const startFrameTracking = () => {
-  //     const video = videoRef.current;
-  //     if (!video || !("requestVideoFrameCallback" in video)) return;
+    const lm = item.pose_landmark; 
 
-  //     syncFrameToCurrentTime(); // 🎯 여기가 중요!
-
-  //     const loop = () => {
-  //       if (!frameLoopActive.current) return;
-  //       const frame = Math.floor(video.currentTime * 30);
-  //       setFrame(frame);
-
-  //       video.requestVideoFrameCallback(loop);
-  //     };
-
-  //     frameLoopActive.current = true;
-  //     video.requestVideoFrameCallback(loop);
-  //   };
-  //   const syncFrameToCurrentTime = () => {
-  //     const video = videoRef.current;
-  //     if (!video) return;
-  //     const currentFrame = Math.floor(video.currentTime * 30);
-  //     setFrame(currentFrame);
-  //   };
-
-  //   const pauseFrameTracking = () => {
-  //     frameLoopActive.current = false;
-  //     syncFrameToCurrentTime();
-  //   };
-  //   const stopFrameTracking = () => {
-  //     setFrame(0);
-  //     frameLoopActive.current = false;
-  //   };
-  //   const endedFrameTracking = () => {
-  //     frameLoopActive.current = false;
-  //   };
-
-  //   const handlePlay = () => startFrameTracking();
-  //   const handlePause = () => pauseFrameTracking();
-  //   const handleEnded = () => endedFrameTracking();
-  //   const handleSeeked = () => {
-  //     stopFrameTracking(); // 기존 루프 제거
-  //     syncFrameToCurrentTime(); // ← currentTime 기반 frame 보정
-  //     if (!videoRef.current?.paused) {
-  //       startFrameTracking(); // 재생 중이면 루프 재시작
-  //     }
-  //   };
-
-  //   video.addEventListener("play", handlePlay);
-  //   video.addEventListener("pause", handlePause);
-  //   video.addEventListener("ended", handleEnded);
-  //   video.addEventListener("seeked", handleSeeked);
-  //   video.addEventListener("loadedmetadata", handleSeeked);
-  //   return () => {
-  //     observer.disconnect();
-  //     video.removeEventListener("play", handlePlay);
-  //     video.removeEventListener("pause", handlePause);
-  //     video.removeEventListener("ended", handleEnded);
-  //     video.removeEventListener("seeked", handleSeeked);
-  //     video.removeEventListener("loadedmetadata", handleSeeked);
-  //   };
-  // }, [measureJson, srcWidth, srcHeight]);
-
-  // useEffect(() => {
-    // if (!measureJson || videoRef.current === null) return;
-    // if (measureJson[frame] === undefined) return;
-    // if (measureJson[frame].pose_landmark === undefined) return;
-    // const canvasWhite = canvasWhiteRef.current as HTMLCanvasElement;
-    // const canvasRed = canvasRedRef.current as HTMLCanvasElement;
-
-    // const contextWhite = canvasWhite.getContext(
-    //   "2d",
-    // ) as CanvasRenderingContext2D;
-    // const contextRed = canvasRed.getContext("2d") as CanvasRenderingContext2D;
-
-    // const drawCanvas = () => {
-    //   clearAndDraw(contextWhite, canvasWhite, "#FFF", () => {
-    //     contextWhite.beginPath();
-    //     contextWhite.moveTo(
-    //       measureJson[frame].pose_landmark[7].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[7].sy * scaleHeight,
-    //     );
-    //     contextWhite.lineTo(
-    //       measureJson[frame].pose_landmark[8].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[8].sy * scaleHeight,
-    //     );
-    //     contextWhite.stroke();
-
-    //     contextWhite.beginPath();
-    //     contextWhite.moveTo(
-    //       measureJson[frame].pose_landmark[16].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[16].sy * scaleHeight,
-    //     );
-    //     contextWhite.lineTo(
-    //       measureJson[frame].pose_landmark[18].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[18].sy * scaleHeight,
-    //     );
-    //     contextWhite.stroke();
-
-    //     contextWhite.beginPath();
-    //     contextWhite.moveTo(
-    //       measureJson[frame].pose_landmark[16].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[16].sy * scaleHeight,
-    //     );
-    //     contextWhite.lineTo(
-    //       measureJson[frame].pose_landmark[20].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[20].sy * scaleHeight,
-    //     );
-    //     contextWhite.stroke();
-
-    //     contextWhite.beginPath();
-    //     contextWhite.moveTo(
-    //       measureJson[frame].pose_landmark[16].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[16].sy * scaleHeight,
-    //     );
-    //     contextWhite.lineTo(
-    //       measureJson[frame].pose_landmark[22].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[22].sy * scaleHeight,
-    //     );
-    //     contextWhite.stroke();
-
-    //     contextWhite.beginPath();
-    //     contextWhite.moveTo(
-    //       measureJson[frame].pose_landmark[15].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[15].sy * scaleHeight,
-    //     );
-    //     contextWhite.lineTo(
-    //       measureJson[frame].pose_landmark[19].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[19].sy * scaleHeight,
-    //     );
-    //     contextWhite.stroke();
-
-    //     contextWhite.beginPath();
-    //     contextWhite.moveTo(
-    //       measureJson[frame].pose_landmark[15].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[15].sy * scaleHeight,
-    //     );
-    //     contextWhite.lineTo(
-    //       measureJson[frame].pose_landmark[21].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[21].sy * scaleHeight,
-    //     );
-    //     contextWhite.stroke();
-
-    //     contextWhite.beginPath();
-    //     contextWhite.moveTo(
-    //       measureJson[frame].pose_landmark[15].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[15].sy * scaleHeight,
-    //     );
-    //     contextWhite.lineTo(
-    //       measureJson[frame].pose_landmark[17].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[17].sy * scaleHeight,
-    //     );
-    //     contextWhite.stroke();
-
-    //     contextWhite.beginPath();
-    //     contextWhite.moveTo(
-    //       measureJson[frame].pose_landmark[11].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[11].sy * scaleHeight,
-    //     );
-    //     contextWhite.lineTo(
-    //       measureJson[frame].pose_landmark[23].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[23].sy * scaleHeight,
-    //     );
-    //     contextWhite.lineTo(
-    //       measureJson[frame].pose_landmark[24].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[24].sy * scaleHeight,
-    //     );
-    //     contextWhite.lineTo(
-    //       measureJson[frame].pose_landmark[12].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[12].sy * scaleHeight,
-    //     );
-    //     contextWhite.lineTo(
-    //       measureJson[frame].pose_landmark[11].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[11].sy * scaleHeight,
-    //     );
-    //     contextWhite.stroke();
-
-    //     contextWhite.beginPath();
-    //     contextWhite.moveTo(
-    //       measureJson[frame].pose_landmark[11].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[11].sy * scaleHeight,
-    //     );
-    //     contextWhite.lineTo(
-    //       measureJson[frame].pose_landmark[13].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[13].sy * scaleHeight,
-    //     );
-    //     contextWhite.lineTo(
-    //       measureJson[frame].pose_landmark[15].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[15].sy * scaleHeight,
-    //     );
-    //     contextWhite.stroke();
-
-    //     contextWhite.beginPath();
-    //     contextWhite.moveTo(
-    //       measureJson[frame].pose_landmark[12].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[12].sy * scaleHeight,
-    //     );
-    //     contextWhite.lineTo(
-    //       measureJson[frame].pose_landmark[14].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[14].sy * scaleHeight,
-    //     );
-    //     contextWhite.lineTo(
-    //       measureJson[frame].pose_landmark[16].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[16].sy * scaleHeight,
-    //     );
-    //     contextWhite.stroke();
-
-    //     contextWhite.beginPath();
-    //     contextWhite.moveTo(
-    //       measureJson[frame].pose_landmark[23].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[23].sy * scaleHeight,
-    //     );
-    //     contextWhite.lineTo(
-    //       measureJson[frame].pose_landmark[25].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[25].sy * scaleHeight,
-    //     );
-    //     contextWhite.lineTo(
-    //       measureJson[frame].pose_landmark[27].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[27].sy * scaleHeight,
-    //     );
-    //     contextWhite.stroke();
-
-    //     contextWhite.beginPath();
-    //     contextWhite.moveTo(
-    //       measureJson[frame].pose_landmark[31].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[31].sy * scaleHeight,
-    //     );
-    //     contextWhite.lineTo(
-    //       measureJson[frame].pose_landmark[27].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[27].sy * scaleHeight,
-    //     );
-    //     contextWhite.stroke();
-
-    //     contextWhite.beginPath();
-    //     contextWhite.moveTo(
-    //       measureJson[frame].pose_landmark[29].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[29].sy * scaleHeight,
-    //     );
-    //     contextWhite.lineTo(
-    //       measureJson[frame].pose_landmark[27].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[27].sy * scaleHeight,
-    //     );
-    //     contextWhite.stroke();
-
-    //     contextWhite.beginPath();
-    //     contextWhite.moveTo(
-    //       measureJson[frame].pose_landmark[24].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[24].sy * scaleHeight,
-    //     );
-    //     contextWhite.lineTo(
-    //       measureJson[frame].pose_landmark[26].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[26].sy * scaleHeight,
-    //     );
-    //     contextWhite.lineTo(
-    //       measureJson[frame].pose_landmark[28].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[28].sy * scaleHeight,
-    //     );
-    //     contextWhite.stroke();
-
-    //     contextWhite.beginPath();
-    //     contextWhite.moveTo(
-    //       measureJson[frame].pose_landmark[30].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[30].sy * scaleHeight,
-    //     );
-    //     contextWhite.lineTo(
-    //       measureJson[frame].pose_landmark[28].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[28].sy * scaleHeight,
-    //     );
-    //     contextWhite.stroke();
-
-    //     contextWhite.beginPath();
-    //     contextWhite.moveTo(
-    //       measureJson[frame].pose_landmark[28].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[28].sy * scaleHeight,
-    //     );
-    //     contextWhite.lineTo(
-    //       measureJson[frame].pose_landmark[32].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[32].sy * scaleHeight,
-    //     );
-    //     contextWhite.stroke();
-    //   });
-
-    //   clearAndDraw(contextRed, canvasRed, "#FF0000", () => {
-    //     contextRed.beginPath();
-    //     contextRed.moveTo(
-    //       measureJson[frame].pose_landmark[20].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[20].sy * scaleHeight,
-    //     );
-    //     contextRed.lineTo(
-    //       measureJson[frame].pose_landmark[19].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[19].sy * scaleHeight,
-    //     );
-    //     contextRed.stroke();
-
-    //     contextRed.beginPath();
-    //     contextRed.moveTo(
-    //       measureJson[frame].pose_landmark[23].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[23].sy * scaleHeight,
-    //     );
-    //     contextRed.lineTo(
-    //       measureJson[frame].pose_landmark[24].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[24].sy * scaleHeight,
-    //     );
-    //     contextRed.stroke();
-
-    //     contextRed.beginPath();
-    //     contextRed.moveTo(
-    //       measureJson[frame].pose_landmark[25].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[25].sy * scaleHeight,
-    //     );
-    //     contextRed.lineTo(
-    //       measureJson[frame].pose_landmark[26].sx * scaleWidth,
-    //       measureJson[frame].pose_landmark[26].sy * scaleHeight,
-    //     );
-    //     contextRed.stroke();
-    //   });
-    // };
-
-    // drawCanvas();
-  // }, [measureJson, scaleWidth, scaleHeight, nowHeight, frame, clearAndDraw]);
-
-  // if (!measureJson) return <div></div>;
-  // if (isLoading) return <div>Loading...</div>;
-  // if (isError) return <DataError />;
+    const cw = canvasWhiteRef.current;
+    const cr = canvasRedRef.current;
+    const ct = canvasTrailRef.current;
+    if (!cw || !cr || !ct) return;
 
 
+    const ctxW = cw.getContext("2d");
+    const ctxR = cr.getContext("2d");
+    const ctxT = ct.getContext("2d");
+    if (!ctxW || !ctxR || !ctxT) return;
+
+    // trajectory
+    ctxT.lineWidth = 1;
+    ctxT.strokeStyle = "#00FF00"; // 원하는 색/투명도
+
+    const p15 = toScreen(lm[15].sx, lm[15].sy);
+    const p16 = toScreen(lm[16].sx, lm[16].sy);
+
+    const mid = midPoint(lm[23], lm[24]);
+    const pMid = toScreen(mid.sx, mid.sy);
+
+    const p25 = toScreen(lm[25].sx, lm[25].sy);
+    const p26 = toScreen(lm[26].sx, lm[26].sy);
+
+    const prev = trailPrevRef.current;
+
+    drawTrailSegment(ctxT, prev.p15, p15);
+    drawTrailSegment(ctxT, prev.p16, p16);
+    drawTrailSegment(ctxT, prev.pMid, pMid);
+    drawTrailSegment(ctxT, prev.p25, p25);
+    drawTrailSegment(ctxT, prev.p26, p26);
+
+    trailPrevRef.current = { p15, p16, pMid, p25, p26 };
+
+    // clear
+    ctxW.clearRect(0, 0, fit.stageW, fit.stageH);
+    ctxR.clearRect(0, 0, fit.stageW, fit.stageH);
+
+    // white
+    ctxW.strokeStyle = "#FFF";
+    ctxW.lineWidth = 1;
+
+    // ✅ 스켈레톤
+    drawLine(ctxW, lm, 7, 8);
+
+    drawLine(ctxW, lm, 16, 18);
+    drawLine(ctxW, lm, 16, 20);
+    drawLine(ctxW, lm, 16, 22);
+
+    drawLine(ctxW, lm, 15, 19);
+    drawLine(ctxW, lm, 15, 21);
+    drawLine(ctxW, lm, 15, 17);
+
+    // torso/hip box
+    drawLine(ctxW, lm, 11, 23);
+    drawLine(ctxW, lm, 23, 24);
+    drawLine(ctxW, lm, 24, 12);
+    drawLine(ctxW, lm, 12, 11);
+
+    // arms
+    drawLine(ctxW, lm, 11, 13);
+    drawLine(ctxW, lm, 13, 15);
+
+    drawLine(ctxW, lm, 12, 14);
+    drawLine(ctxW, lm, 14, 16);
+
+    // legs
+    drawLine(ctxW, lm, 23, 25);
+    drawLine(ctxW, lm, 25, 27);
+    drawLine(ctxW, lm, 27, 31);
+    drawLine(ctxW, lm, 27, 29);
+
+    drawLine(ctxW, lm, 24, 26);
+    drawLine(ctxW, lm, 26, 28);
+    drawLine(ctxW, lm, 28, 30);
+    drawLine(ctxW, lm, 28, 32);
+
+    // red
+    ctxR.strokeStyle = "#FF0000";
+    ctxR.lineWidth = 1;
+
+    drawLine(ctxR, lm, 20, 19, -100, 0, 100 ,0);
+    drawLine(ctxR, lm, 23, 24);
+    drawLine(ctxR, lm, 25, 26);
+
+    
+  }, [measureJson, frame, fit, toScreen, drawLine]);
 
   return (
     <div className={`${className} flex flex-col gap-4 lg:gap-10`}>
-      {/* 🎯 회전 대응 컨테이너 */}
-      <div className="relative mx-auto w-full aspect-video overflow-hidden">
-        {/* 🎥 Video */}
+      {/* stage: scale/offset 계산 기준 */}
+      <div ref={stageRef} className="relative mx-auto w-full aspect-video overflow-hidden">
+        {/* Video (시각적으로만 회전) */}
         <video
           ref={videoRef}
           muted
@@ -497,29 +413,43 @@ const MeasureDetailDynamic = ({
           src={`https://gym.tangoplus.co.kr/data/Results/${data?.measure_server_file_name}`}
           className={`
             absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0
-            ${cameraOrientation === 1 
-              ? "-rotate-90 w-[75%] h-auto" 
-              : "w-full h-full object-contain"
-            }
+            ${isRotated ? "-rotate-90 w-[75%] h-full object-contain" : "w-full h-full"}
           `}
         />
 
-        {/* ⚪ White Skeleton Canvas */}
-        {/* <canvas
+        {/* Canvas overlay (회전 금지, stage에 딱 맞춤) */}
+        <canvas
+          ref={canvasTrailRef}
+          className="absolute inset-0 z-[9] origin-center pointer-events-none"
+          style={{ transform: "scaleX(-1.3) scaleY(1.35)" }}
+        />
+        <canvas
           ref={canvasWhiteRef}
-          width={nowWidth}
-          height={nowHeight}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[9] pointer-events-none"
-        /> */}
+          className="absolute inset-0 z-[9] origin-center pointer-events-none"
+          style={{ transform: "scaleX(-1.3) scaleY(1.35)" }}
+        />
 
-        {/* 🔴 Red Highlight Canvas */}
-        {/* <canvas
+        <canvas
           ref={canvasRedRef}
-          width={nowWidth}
-          height={nowHeight}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[9] pointer-events-none"
-        /> */}
+          className="absolute inset-0 z-[10] origin-center pointer-events-none"
+          style={{ transform: "scaleX(-1.3) scaleY(1.35)" }}
+        />
+
+        {(seq7Loading || isLoading) && (
+          <div className="absolute inset-0 z-[50] flex items-center justify-center bg-black/20">
+            <p className="text-white">로딩중...</p>
+          </div>
+        )}
+
+        {(seq7Error || isError) && (
+          <div className="absolute inset-0 z-[50] flex items-center justify-center bg-black/20">
+            <p className="text-white">오류가 발생했습니다</p>
+          </div>
+        )}
+
       </div>
+
+      {/* Controls */}
       <div className="flex items-center gap-3">
         <button
           type="button"
@@ -547,15 +477,15 @@ const MeasureDetailDynamic = ({
             [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-blue-500
             [&::-moz-range-thumb]:border-0"
           style={{
-            background: `linear-gradient(to right, #7E7E7E 0%, #7E7E7E ${(currentTime / (duration || 1)) * 100}%, #F5F5F5 ${(currentTime / (duration || 1)) * 100}%, #F5F5F5 100%)`
+            background: `linear-gradient(to right, #7E7E7E 0%, #7E7E7E ${(currentTime / (duration || 1)) * 100}%, #F5F5F5 ${(currentTime / (duration || 1)) * 100}%, #F5F5F5 100%)`,
           }}
           onMouseDown={() => {
             setIsSeeking(true);
-            isSeekingRef.current = true; // ✅ ref도 업데이트
+            isSeekingRef.current = true;
           }}
           onTouchStart={() => {
             setIsSeeking(true);
-            isSeekingRef.current = true; // ✅ ref도 업데이트
+            isSeekingRef.current = true;
           }}
           onChange={(e) => {
             setCurrentTime(Number(e.target.value));
@@ -565,25 +495,28 @@ const MeasureDetailDynamic = ({
             if (!v) return;
             v.currentTime = Number(e.currentTarget.value);
             setIsSeeking(false);
-            isSeekingRef.current = false; // ✅ ref도 업데이트
+            isSeekingRef.current = false;
           }}
           onTouchEnd={(e) => {
             const v = videoRef.current;
             if (!v) return;
             v.currentTime = Number(e.currentTarget.value);
             setIsSeeking(false);
-            isSeekingRef.current = false; // ✅ ref도 업데이트
+            isSeekingRef.current = false;
           }}
         />
       </div>
-      <DynamicDataContainer 
-        fileData={fileData} 
-        detailData={measureDynamic?.detail_data ?? []}
-        isCompare={isCompare}
+      {!seq7Loading && !isLoading && !seq7Error && !isError && measureJson && (
+        <>
+          <DynamicDataContainer
+          fileData={fileData}
+          detailData={measureDynamic?.detail_data ?? []}
+          isCompare={isCompare}
         />
+        </>
+      )}
     </div>
   );
-
 };
 
 export default MeasureDetailDynamic;
