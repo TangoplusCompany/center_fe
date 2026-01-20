@@ -25,7 +25,7 @@ const DeviceRemoveDialog = ({
 
   const mutationRemoveDevice = useDeviceRemove(setOpen);
   const handleDeviceRemove = async () => {
-    await mutationRemoveDevice.mutateAsync(deviceInfo.sn);
+    await mutationRemoveDevice.mutateAsync(deviceInfo.device_sn);
   };
 
   return (
@@ -36,18 +36,29 @@ const DeviceRemoveDialog = ({
           <span className="">기기제거</span>
         </button>
       </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>기기 제거하기</DialogTitle>
-          <DialogDescription className="text-red-500 text-base">
-            {`정말로 ${deviceInfo.device_name} 기기를 제거하시겠습니까?`}
+      <DialogContent className="max-w-fit">
+        <DialogHeader className="gap-4">
+          <DialogTitle className="">
+            <div className="flex gap-2 text-xl text-danger items-center">
+              <div className="rounded-full p-2 bg-danger-background"><Trash className="w-4 h-4" /></div>
+              기기 제거하기
+            </div>
+            
+          </DialogTitle>
+          <DialogDescription className="text-base text-sub900 mx-auto max-w-xs">
+            <div className="text-center">
+              {deviceInfo.device_name} 기기의 데이터를 <span className="text-lg text-danger font-semibold">삭제</span>합니다.
+            </div>
+            <div className="text-center">
+              정말로 삭제 하시겠습니까?
+            </div>
           </DialogDescription>
 
-          <div className="flex items-center justify-start gap-3">
+          <div className="grid grid-cols-2 items-center gap-4">
             <DialogClose asChild>
-              <Button>취소하기</Button>
+              <Button className="shadow-none border-sub200 border bg-white hover:sub300">취소하기</Button>
             </DialogClose>
-            <Button variant={"outline"} onClick={handleDeviceRemove}>
+            <Button className="border border-danger bg-danger-background hover:bg-danger-foreground text-danger hover:text-danger" variant={"outline"} onClick={handleDeviceRemove}>
               제거하기
             </Button>
           </div>

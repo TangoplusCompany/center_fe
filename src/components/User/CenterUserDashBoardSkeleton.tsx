@@ -13,6 +13,7 @@ const CenterUserDashBoardSkeleton = () => {
           <div className="w-full lg:flex-1 min-w-0">
             <div className="flex flex-col h-full w-full rounded-3xl border-2 border-sub200 bg-white relative overflow-hidden">
               <div className="flex flex-shrink-0 items-center gap-2 mb-4 p-5">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={`/icons/ic_arrow_315_circle.svg`}
                   alt=""
@@ -31,6 +32,7 @@ const CenterUserDashBoardSkeleton = () => {
           <div className="w-full lg:flex-1 min-w-0">
             <div className="flex flex-col h-full w-full rounded-3xl border-2 border-sub200 bg-white relative overflow-hidden">
               <div className="flex flex-shrink-0 items-center gap-2 mb-4 p-5">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={`/icons/ic_arrow_45_circle.svg`}
                   alt=""

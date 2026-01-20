@@ -59,13 +59,13 @@ const OptionBar = ({
   return (
     <div className="flex flex-col gap-3">
       {/* 첫 번째 줄: 검색결과, SearchForm, 버튼들 */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-0">
         <p className="text-xl shrink-0">
           검색결과: {totalItems ?? 0}건
         </p>
 
         <div className="flex items-center gap-4 flex-1 justify-end">
-          <div className="w-2/3">
+          <div className="w-full md:w-2/3">
             <SearchForm setSearch={onSearchChange} search={search} />
           </div>
 
@@ -76,33 +76,32 @@ const OptionBar = ({
           )}
         </div>
       </div>
-      <div className="flex items-center gap-2 h-full">
-
-        {/* 🔹 항상 start */}
-        {!showAddButton && (
-          <div className="flex items-center gap-4">
-            <MeasureDeviceTab />
-          </div>
-        )}
-
-        {/* 🔹 항상 end */}
-        <div className="flex items-center gap-4 ml-auto">
-          <Select
-            onValueChange={handleSelectChange}
-            defaultValue={defaultLimit.toString()}
-          >
-            <SelectTrigger className="w-[120px]">
-              <SelectValue placeholder="행 갯수" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="10">10건</SelectItem>
-              <SelectItem value="20">20건</SelectItem>
-              <SelectItem value="50">50건</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+      <div className="flex items-center gap-2">
+  {/* 왼쪽: 탭 영역 (남는 공간을 먹고, 줄어들 수 있어야 함) */}
+  {!showAddButton && (
+    <div className="flex-1 min-w-0 ">
+      <MeasureDeviceTab />
     </div>
+  )}
+
+  {/* 오른쪽: Select (줄어들지 않게 고정) */}
+  <div className="shrink-0">
+    <Select
+      onValueChange={handleSelectChange}
+      defaultValue={defaultLimit.toString()}
+    >
+      <SelectTrigger className="w-[120px]">
+        <SelectValue placeholder="행 갯수" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="10">10건</SelectItem>
+        <SelectItem value="20">20건</SelectItem>
+        <SelectItem value="50">50건</SelectItem>
+      </SelectContent>
+    </Select>
+  </div>
+</div>
+</div>
   );
 };
 

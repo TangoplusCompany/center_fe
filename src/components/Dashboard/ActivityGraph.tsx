@@ -10,13 +10,14 @@ const ActivityGraph = ({
 }) => {
   // ICenterActivityGraph 객체를 배열로 변환
   // ICenterActivityGraph 객체를 배열로 변환
+  
   const barData = React.useMemo(() => {
     if (data.case === 0) {
       if (!data.usage) return [];
       
       // 오늘 요일 구하기 (0: 일요일, 1: 월요일, ..., 6: 토요일)
       const today = new Date().getDay();
-      const allDays = ["일", "월", "화", "수", "목", "금", "토"];
+      const allDays = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
       
       // 오늘을 기준으로 7일 재배열 (오늘이 맨 오른쪽)
       const result = [];
@@ -24,7 +25,7 @@ const ActivityGraph = ({
         const dayIndex = (today - i + 7) % 7;
         const dayData = data.usage.find(u => u.day === allDays[dayIndex]);
         result.push({
-          label: allDays[dayIndex],
+          label: allDays[dayIndex].replace("요일", ""),
           value: dayData?.measure_count ?? 0,
         });
       }
@@ -49,7 +50,6 @@ const ActivityGraph = ({
   }, [data]);
 
   const maxValue = Math.max(...barData.map(d => d.value));
-
   // 오늘 날짜 포맷팅
   const todayFormatted = React.useMemo(() => {
     const today = new Date();
@@ -89,8 +89,6 @@ const ActivityGraph = ({
         <div className="flex items-end justify-between gap-1 h-24">
           {barData.map((item, index) => {
             const heightPercent = (item.value / maxValue) * 100;
-            
-            // 그라디언트 시작 지점 계산 (0~100%)
             const gradientStart = ((maxValue - item.value) / maxValue) * 100;
 
             return (

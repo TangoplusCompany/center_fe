@@ -160,27 +160,61 @@ const Sidebar = React.forwardRef<
   return (
     <>
       {isMobile && (
-        <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
-          <SheetContent
-            data-sidebar="sidebar"
-            data-mobile="true"
-            className="w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
-            style={
-              {
-                "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
-              } as React.CSSProperties
-            }
-            side={side}
-          >
-            <div className="flex h-full w-full flex-col">
-              <DialogTitle className="sr-only">sidebar isMobile fix bug</DialogTitle>
-              <DialogDescription className="sr-only"></DialogDescription>
-              {children}
-            </div>
-          </SheetContent>
-        </Sheet>
+        <>
+          <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
+            <SheetContent
+              data-sidebar="sidebar"
+              data-mobile="true"
+              className="w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
+              style={
+                {
+                  "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
+                } as React.CSSProperties
+              }
+              side={side}
+            >
+              <div className="flex h-full w-full flex-col">
+                <DialogTitle className="sr-only">sidebar isMobile fix bug</DialogTitle>
+                <DialogDescription className="sr-only"></DialogDescription>
+                {children}
+              </div>
+            </SheetContent>
+          </Sheet>
+          {/* 모바일일 때 fixed 위치의 unfold 아이콘 버튼 */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="fixed left-4 bottom-24 z-50 h-14 w-14 bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 shadow-xl hover:shadow-2xl hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:border-blue-500 dark:hover:border-blue-400 hover:scale-110 transition-all duration-200"
+                onClick={() => setOpenMobile(true)}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/icons/ic_unfold.svg"
+                  alt="unfold"
+                  className="w-7 h-7 transition-transform duration-200"
+                />
+                <span className="sr-only">Toggle Sidebar</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right" align="center">
+              <p>탭열기</p>
+            </TooltipContent>
+          </Tooltip>
+        </>
       )}
-      <div ref={ref} className="group peer block text-sidebar-foreground" data-state={state} data-collapsible={state === "collapsed" ? collapsible : ""} data-variant={variant} data-side={side}>
+      <div 
+        ref={ref} 
+        className={cn(
+          "group peer block text-sidebar-foreground",
+          isMobile && "hidden", // 모바일일 때 완전히 숨김
+        )}
+        data-state={state} 
+        data-collapsible={state === "collapsed" ? collapsible : ""} 
+        data-variant={variant} 
+        data-side={side}
+      >
         {/* This is what handles the sidebar gap on desktop */}
         <div
           className={cn(

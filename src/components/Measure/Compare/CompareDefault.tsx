@@ -28,7 +28,7 @@ const CompareDefault = ({
             ].join(" ")}
           >
 
-            <div className="absolute inset-0 flex items-center justify-center">
+            <div className="absolute inset-0 flex items-center justify-center text-center">
               비교할 항목을 선택해주세요
             </div>
           </div>

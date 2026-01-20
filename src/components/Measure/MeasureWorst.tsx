@@ -16,8 +16,20 @@ const MeasureWorst = ({ data }: { data: TWorstPart }) => {
 
   return (
     <div className="flex flex-col h-full w-full rounded-3xl border-2 border-sub200 shadow-none bg-white relative overflow-hidden">
+      {/* 배경 이미지 - 제일 뒤로 */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute bottom-0 right-0 w-48 h-full">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={`/images/${imageSrc}`}
+            alt=""
+            className="w-full h-full object-cover object-bottom"
+          />
+        </div>
+      </div>
+
       {/* 제목 - 좌상단 작은 원 배지와 함께 */}
-      <div className="flex flex-shrink-0 items-center gap-2 mb-4 p-5 relative">
+      <div className="flex flex-shrink-0 items-center gap-2 mb-4 p-5 relative z-10">
         {/* TODO 이곳에 아이콘 넣기 */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -29,7 +41,7 @@ const MeasureWorst = ({ data }: { data: TWorstPart }) => {
       </div>
 
       {/* 왼쪽 내용 */}
-      <div className="flex flex-col justify-end flex-1 space-y-3 p-5 mb-6 relative mr-48">
+      <div className="flex flex-col justify-end flex-1 space-y-3 p-5 mb-6 relative  z-10">
         {/* 위험 레벨 배지 */}
         <div className={`w-fit px-3 py-1 ${
           data.level === 2 ? "bg-danger" : "bg-warning"
@@ -46,15 +58,6 @@ const MeasureWorst = ({ data }: { data: TWorstPart }) => {
             {data.description}
           </p>
         </div>
-      </div>
-      {/* 오른쪽 이미지 - 전체 높이, bottom에서 시작 */}
-      <div className="absolute bottom-0 right-0 w-48 h-full">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={`/images/${imageSrc}`}
-          alt=""
-          className="w-full h-full object-cover object-bottom"
-        />
       </div>
     </div>
   );

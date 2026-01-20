@@ -23,11 +23,13 @@ export default function AuthLayout({
     }
   }, [authStore, router]);
   return (
-    <SidebarProvider>
-      <AuthStoreProvider>
-        <DefaultSidebar />
-        <DefaultLayout>{children}</DefaultLayout>
-      </AuthStoreProvider>
-    </SidebarProvider>
+    <div className="w-full overflow-x-hidden">
+      <SidebarProvider>
+        <AuthStoreProvider>
+          <DefaultSidebar />
+          <DefaultLayout>{children}</DefaultLayout>
+        </AuthStoreProvider>
+      </SidebarProvider>
+    </div>
   );
 }

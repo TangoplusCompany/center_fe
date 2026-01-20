@@ -45,3 +45,80 @@ export const actionDecrypt = async (text: string): Promise<string> => {
   decrypted += decipher.final("utf8");
   return decrypted;
 };
+
+// measure_sn, user_sn 암호화용
+export interface IMeasureCryptoProps {
+  measure_sn: number;
+  user_sn: number;
+}
+
+export const actionMeasureEncrypt = async (
+  data: IMeasureCryptoProps,
+): Promise<string> => {
+  if (!secretKey || !secretIvRaw) {
+    return "ERROR";
+  }
+  const cipher = crypto.createCipheriv(algorithm, secretKey, secretIv);
+  let encrypted = cipher.update(JSON.stringify(data), "utf8", "base64");
+  encrypted += cipher.final("base64");
+  // URL safe하게 변환
+  return encodeURIComponent(encrypted);
+};
+
+export const actionMeasureDecrypt = async (
+  text: string,
+): Promise<IMeasureCryptoProps | null> => {
+  if (!secretKey || !secretIvRaw) {
+    return null;
+  }
+  try {
+    // URL decode 후 복호화
+    const decoded = decodeURIComponent(text);
+    const decipher = crypto.createDecipheriv(algorithm, secretKey, secretIv);
+    let decrypted = decipher.update(decoded, "base64", "utf8");
+    decrypted += decipher.final("utf8");
+    return JSON.parse(decrypted) as IMeasureCryptoProps;
+  } catch (error) {
+    console.error("복호화 실패:", error);
+    return null;
+  }
+};
+
+// user_uuid, user_sn, user_name 암호화용
+export interface IUserCryptoProps {
+  user_uuid: string;
+  user_sn: number;
+  user_name: string;
+}
+
+export const actionUserEncrypt = async (
+  data: IUserCryptoProps,
+): Promise<string> => {
+  if (!secretKey || !secretIvRaw) {
+    return "ERROR";
+  }
+  const cipher = crypto.createCipheriv(algorithm, secretKey, secretIv);
+  let encrypted = cipher.update(JSON.stringify(data), "utf8", "base64");
+  encrypted += cipher.final("base64");
+  // URL safe하게 변환
+  return encodeURIComponent(encrypted);
+};
+
+export const actionUserDecrypt = async (
+  text: string,
+): Promise<IUserCryptoProps | null> => {
+  if (!secretKey || !secretIvRaw) {
+    return null;
+  }
+  try {
+    // URL decode 후 복호화
+    const decoded = decodeURIComponent(text);
+    const decipher = crypto.createDecipheriv(algorithm, secretKey, secretIv);
+    let decrypted = decipher.update(decoded, "base64", "utf8");
+    decrypted += decipher.final("utf8");
+    return JSON.parse(decrypted) as IUserCryptoProps;
+  } catch (error) {
+    console.error("복호화 실패:", error);
+    return null;
+  }
+};
