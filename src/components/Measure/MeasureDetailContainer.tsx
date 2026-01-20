@@ -4,21 +4,30 @@ import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
 import { useGetQuery } from "@/hooks/utils/useGetQuery";
 import React from "react";
 import MeasureDetail from "./MeasureDetail";
+import { useMeasureDecrypt } from "@/hooks/auth/useMeasureDecrypt";
 
 
 const MeasureDetailContainer = () => {
-  const { params, query } = useGetQuery();
-  const { measureSn } = params as { measureSn: string };
-  const { user_sn } = query;
+  const { params } = useGetQuery();
+  const { measureSn: encryptedParam } = params as { measureSn: string };
   
+  const {
+    data: decryptedData,
+    isLoading: decryptLoading,
+    isError: decryptError,
+  } = useMeasureDecrypt(encryptedParam);
+
   const {
     data: measureData,
     isLoading: measureDataLoading,
     isError: measureDataError,
   } = useMeasureInfo(
-    Number(measureSn),
-    `${user_sn}`
+    decryptedData?.measure_sn ?? 0,
+    decryptedData?.user_sn ? `${decryptedData.user_sn}` : ""
   );
+
+  if (decryptLoading) return <div>Loading...</div>;
+  if (decryptError) return <div>잘못된 접근입니다.</div>;
   if (measureDataLoading) return <div>Loading...</div>;
   if (measureDataError) return <div>Error...</div>;
   if (!measureData) return <div>No data</div>;
@@ -44,12 +53,13 @@ const MeasureDetailContainer = () => {
       {!measureDataLoading &&
       !measureDataError && 
       measureData &&
+      decryptedData &&
           (
         <MeasureDetail 
         measureData={measureData}
         measureList= { undefined }
-        selectedMeasureSn= { parseInt(measureSn) }
-        userSn = {user_sn}
+        selectedMeasureSn= { decryptedData.measure_sn }
+        userSn = {`${decryptedData.user_sn}`}
           />
       )}
     </div>

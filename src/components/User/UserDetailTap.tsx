@@ -1,8 +1,5 @@
 "use client";
 
-
-import { Switch } from '@/components/ui/switch';
-
 const UserDetailTap = ({
   nowTab,
   update,
@@ -36,7 +33,7 @@ const UserDetailTap = ({
     }
   };
   return (
-    <div className="w-full flex items-center justify-between">
+    <div className="w-full flex items-center justify-between gap-2">
       <div className="inline-flex rounded-xl bg-gray-100 dark:bg-gray-800 p-1">
         {["사용자 측정 요약", "측정 기록", "사용자 정보"].map((item, index) => {
           return (
@@ -58,14 +55,12 @@ const UserDetailTap = ({
           );
         })}
       </div>
-{/*               data-[state=unchecked]:bg-toggleAccent-background
-              data-[state=checked]:bg-toggleAccent */}
       
       <button 
         onClick={() => setIsAIExerciseActive(!isAIExerciseActive)}
-        className={`relative h-full overflow-hidden px-3 py-1 rounded-xl text-white transition-all hover:scale-105 active:scale-95 isolate border-4 ${isAIExerciseActive ? 'border-toggleAccent/25' : 'border-sub600/25'}`}
+        className={`relative h-full overflow-hidden px-2 py-1 sm:px-3 rounded-xl text-white transition-all hover:scale-105 active:scale-95 isolate border-2 sm:border-4 ${isAIExerciseActive ? 'border-toggleAccent/25' : 'border-sub600/25'}`}
       >
-        {/* 메인 컬러 포함 무지개 그라데이션 */}
+        {/* 메인 컬러 포함 그라데이션 */}
         <div 
           className="absolute inset-0 z-0"
           style={{
@@ -82,33 +77,8 @@ const UserDetailTap = ({
         </div>
         
         {/* 버튼 내용 */}
-        <span className="relative z-10 flex items-center gap-3">
-          <span className="flex items-center gap-2">
-            ✨ AI 운동 추천
-          </span>
-          
-          {/* Switch */}
-          <Switch 
-            checked={isAIExerciseActive} 
-            onCheckedChange={setIsAIExerciseActive}
-            onClick={(e) => e.stopPropagation()}
-            className={`
-              pointer-events-auto
-              border-none
-            `}
-            style={{
-              background: isAIExerciseActive 
-                ? 'linear-gradient(120deg, hsl(0, 0%, 100%) 0%, hsl(210, 40%, 96.1%) 60%, hsl(210, 40%, 96.1%) 100%,)'
-                : 'rgb(245 245 245)',
-              boxShadow: 'inset 0 4px 8px 0 rgba(255, 255, 255, 0.3)'
-            }}
-            thumbStyle={{
-              background: isAIExerciseActive
-                ? 'radial-gradient(circle, hsl(220 63.9% 47.8%) 0%, hsl(227, 65.1%, 49.4%) 20%, hsl(227 50.2% 44.9%) 100%)'
-                : 'rgb(188 188 188)',
-              boxShadow: 'inset 0 4px 8px 0 rgba(255, 255, 255, 0.3)'
-            }}
-          />
+        <span className="relative z-10 flex items-center text-xs sm:text-sm whitespace-nowrap">
+          ✨ AI 운동 추천
         </span>
       </button>
     </div>
