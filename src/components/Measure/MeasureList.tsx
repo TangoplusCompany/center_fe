@@ -110,7 +110,7 @@ export const MeasureList = ({
                   : ""}
               </TableCell>
               <TableCell className="text-center whitespace-nowrap">
-                {phoneFiltering(measurement.mobile)}
+                {phoneFiltering(phoneHyphen(measurement.mobile))}
               </TableCell>
               <TableCell className="text-center whitespace-nowrap">
                 {formatDate(measurement.measure_date)}

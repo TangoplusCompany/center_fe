@@ -61,7 +61,6 @@ const DashboardDeviceStatus = ({
 export const DeviceInformation = () => {
   const { data: deviceStatus, isLoading } = useGetDeviceStatus<IDeviceStatus>();
   const [isExpanded, setIsExpanded] = useState(false);
-  console.log(deviceStatus)
   if (isLoading) return (
     <div className="flex flex-col gap-4">
       <Skeleton className="w-full h-[320px]" />

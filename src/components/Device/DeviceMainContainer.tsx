@@ -11,7 +11,6 @@ import SkeletonDeviceCard from "@/components/Device/SkeletonDeviceCard";
 export const DeviceMainContainer = () => {
   const { adminRole } = useAuthStore((state) => state);
   const { data: deviceStatus, isLoading } = useGetDeviceStatus<IDeviceStatus>();
-  console.log(deviceStatus)
   if (isLoading) return <div className="flex w-full"><SkeletonDeviceCard /></div>;
   if (!deviceStatus) {
     return <p>잘못된 요청입니다. 잠시 후 다시 시도바랍니다.</p>;
