@@ -20,16 +20,7 @@ const UserDetailPage = async ({ params, searchParams }: UserDetailPageProps) => 
     const { user_uuid: userUUID, user_sn: userSn, user_name: userName } = decryptedData;
 
     return (
-      <div className="flex flex-col gap-5 ">
-        <div className="flex items-center gap-3">
-          <div className="w-1 h-12 bg-toggleAccent rounded-full"></div>
-          <h2 className="text-3xl font-semibold text-[#333] dark:text-white">
-            {userName ? `${userName}님` : "사용자"} 측정 결과
-          </h2>
-        </div>
-
-        <CenterUserDetail userUUID={userUUID} userSn={userSn} />
-      </div>
+      <CenterUserDetail userUUID={userUUID} userSn={userSn} userName={userName} />
     );
   }
 
@@ -38,16 +29,7 @@ const UserDetailPage = async ({ params, searchParams }: UserDetailPageProps) => 
     const userSn = Number(key);
     if (!Number.isNaN(userSn)) {
       return (
-        <div className="flex flex-col gap-5 ">
-          <div className="flex items-center gap-3">
-            <div className="w-1 h-12 bg-toggleAccent rounded-full"></div>
-            <h2 className="text-3xl font-semibold text-[#333] dark:text-white">
-              {name ? `${name}님` : "사용자"} 측정 결과
-            </h2>
-          </div>
-
-          <CenterUserDetail userUUID={encryptedParam} userSn={userSn} />
-        </div>
+        <CenterUserDetail userUUID={encryptedParam} userSn={userSn} userName={name} />
       );
     }
   }
