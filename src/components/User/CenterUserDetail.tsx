@@ -158,12 +158,9 @@ const CenterUserDetail = ({
             isCompareMode={ isCompareMode }
           />
         )}
-        {tab === 2 && <CenterUserInformation />}
+        {tab === 2 && <CenterUserInformation userSn={userSn} />}
         </>
       )}
-
-
-      
 
       <MeasurePickerDialog
         open={isCompareDialogOpen}
