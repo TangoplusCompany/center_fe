@@ -269,7 +269,6 @@ const CompareBody = ({
             
             {/* 2. TabsList에 flex-nowrap을 강제로 주고 w-max로 길이를 확보합니다. */}
             <TabsList className="relative z-10 flex w-max min-w-full flex-nowrap items-center justify-start bg-transparent p-0 border-none shadow-none">
-              <div className="absolute bottom-0 left-0 w-full h-[3px] bg-sub200 rounded-md" />
 
               {measureTabs.map((measure, idx) => (
                 <TabsTrigger
@@ -283,7 +282,7 @@ const CompareBody = ({
                     "shadow-none data-[state=active]:shadow-none",
                     "text-sub300 hover:text-secondary data-[state=active]:text-toggleAccent",
                     "after:absolute after:-bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-md",
-                    "after:bg-transparent data-[state=active]:after:bg-toggleAccent after:z-10"
+                    "after:bg-sub200 data-[state=active]:after:bg-toggleAccent after:z-10"
                   )}
                 >
                   {measure.title}
