@@ -87,6 +87,7 @@ export const MainUserList = ({
           <TableHeader>
             <TableRow>
               <TableHead className="text-center w-[100px] whitespace-nowrap">이름</TableHead>
+              <TableHead className="text-center whitespace-nowrap">디바이스 이름</TableHead>
               <TableHead className="text-center whitespace-nowrap">측정일</TableHead>
               <TableHead className="text-right whitespace-nowrap"></TableHead>
             </TableRow>
@@ -96,6 +97,9 @@ export const MainUserList = ({
               <TableRow key={measure.measure_sn ?? measure.sn}>
                 <TableCell className="text-center font-medium whitespace-nowrap">
                   {nameFiltering(measure.user_name)}
+                </TableCell>
+                <TableCell className="text-center whitespace-nowrap">
+                  {measure.device_name}
                 </TableCell>
                 <TableCell className="text-center whitespace-nowrap">
                   {formatDate(measure.measure_date)}
