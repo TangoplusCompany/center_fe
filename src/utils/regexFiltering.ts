@@ -8,13 +8,15 @@ export const phoneHyphen = (phone: string) => {
 }
 
 /**
- * 전화번호에서 하이픈 추가
+ * 전화번호 가운데 부분 마스킹
  * @param phone 전화번호
- * @returns 하이픈이 추가된 전화번호
+ * @returns 마스킹된 전화번호 (010****9173)
  */
 export const phoneFiltering = (phone: string) => {
-  // 010-1234-5678 -> 010-12**-**78
-  return phone.replace(/(\d{3})-(\d{2})\d{2}-\d{2}(\d{2})/, '$1-$2**-**$3');
+  // 하이픈 제거 후 마스킹
+  const cleaned = phone.replaceAll("-", "");
+  // 010-1234-5678 또는 01012345678 -> 010****5678
+  return cleaned.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
 };
 
 /**
