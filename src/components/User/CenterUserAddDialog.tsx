@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import CenterUserSearchContainer from './CenterUserSearchContainer';
 import { IUnregisterUserData } from '@/types/user';
@@ -27,15 +27,21 @@ const useUsers = (list: IUnregisterUserData[]) => {
       }
     });
   };
-  return { users, getUserData };
+  return { users, setUsers, getUserData };
 };
 
 export const CenterUserAddDialog: React.FC<CenterUserAddDialogProps> = ({
   open,
   onClose,
 }) => {
-  const { users, getUserData } = useUsers([]);
+  const { users, setUsers, getUserData } = useUsers([]);
   const mutationAddUser = useAddUser();
+
+  // Dialog가 다시 열릴 때(재오픈) 선택된 사용자 목록 초기화
+  useEffect(() => {
+    if (!open) return;
+    setUsers([]);
+  }, [open, setUsers]);
 
   const handleAddUser = async () => {
     try {

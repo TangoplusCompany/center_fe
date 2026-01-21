@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import ManagerRoleChangeDialog from "@/components/Manager/ManagerRoleChangeDialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useGetManagerDetail } from "@/hooks/api/manager/useGetManagerDetail";
@@ -25,12 +24,34 @@ const CenterManagerDetailContainer = ({ sn }: { sn: string }) => {
   return (
     <>
       <div className="flex items-center justify-between w-full">
-        <h2 className="text-xl">매니저 정보</h2>
-        {/* ADMIN_ROLE이 1 이하인 경우 자기 자신은 권한 변경할 수 없음 */}
+        <div className="flex flex-col gap-4">
+        {/* 뒤로가기 버튼 */}
+        <button
+          onClick={() => router.back()}
+          className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 transition-colors w-fit"
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            width="20" 
+            height="20" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+          >
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          <span>뒤로가기</span>
+        </button>
+      </div>
         {adminRole < 3 && adminSn !== managerDetail.sn && (
           <ManagerRoleChangeDialog manager={managerDetail} />
         )}
       </div>
+      
+
       <div className="flex flex-col gap-4 w-full">
         <div className="flex flex-col gap-2 w-full">
           <Label htmlFor="managerName">이름</Label>
@@ -59,11 +80,7 @@ const CenterManagerDetailContainer = ({ sn }: { sn: string }) => {
           />
         </div>
       </div>
-      <div className="w-full flex justify-center">
-        <Button variant="outline" className="" onClick={() => router.back()}>
-          뒤로가기
-        </Button>
-      </div>
+      
     </>
   );
 };

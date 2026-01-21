@@ -9,7 +9,7 @@ import { useGetUserMeasureList } from "@/hooks/api/user/useGetUserMeasureList";
 import { IUserMeasureList } from "@/types/user";
 import { MeasurePickerDialog } from "../Measure/Compare/CompareMeasurePickerDialog";
 import { ComparePair, CompareSlot } from "@/types/compare";
-import RecommendUserContainer from "./Recommend/UserContainer";
+import AIUserContainer from "./ai/UserContainer";
 import { useGetUserDashboard } from "@/hooks/api/user/useGetUserDashboard";
 import { IUserDashBoard } from "@/types/measure";
 import { formatDate } from "@/utils/formatDate";
@@ -150,7 +150,7 @@ const CenterUserDetail = ({
             <span>뒤로가기</span>
           </button>
           
-          <RecommendUserContainer 
+          <AIUserContainer 
             user_uuid={userUUID}
             user_sn={`${userSn}`}
           />
