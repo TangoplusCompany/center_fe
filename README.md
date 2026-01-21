@@ -29,6 +29,12 @@ src/              # 루트 디렉토리
 └── middleware    # 미들웨어
 ```
 
+## 20260121 Vercel Actions 연동 배포 순서
+1. 각 작업 branch에 push (ex: feature)
+2. develop에 1차 pull request ( merge 오류 검수 목적)
+3. main에 최종 pull request (검수 후 실제 vercel에 자동화 배포)
+> 추후 AWS 로 이전 시 변경될 수 있음
+
 ## 설치 및 실행 방법
 탱고바디 관리자 페이지 프로젝트는 ```npm``` 과 ```pnpm``` 을 이용하여 ```modules``` 를 설치하고 실행할 수 있습니다.
 

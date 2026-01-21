@@ -10,7 +10,7 @@ export const phoneHyphen = (phone: string) => {
 /**
  * 전화번호 가운데 부분 마스킹
  * @param phone 전화번호
- * @returns 마스킹된 전화번호 (010****9173)
+ * @returns 마스킹된 전화번호 (010-41**-**73)
  */
 export const phoneFiltering = (phone: string) => {
   // 하이픈 제거 후 마스킹

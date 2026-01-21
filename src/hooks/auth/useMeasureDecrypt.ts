@@ -29,9 +29,7 @@ export const useMeasureDecrypt = (encryptedParam: string): UseMeasureDecryptResu
 
       try {
         setIsLoading(true);
-        console.log("암호화된 파라미터:", encryptedParam);
         const result = await actionMeasureDecrypt(encryptedParam);
-        console.log("복호화 결과:", result);
         if (result) {
           setData(result);
           setIsError(false);

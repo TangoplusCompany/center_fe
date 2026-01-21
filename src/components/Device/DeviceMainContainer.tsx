@@ -28,7 +28,7 @@ export const DeviceMainContainer = () => {
 
   return (
     <div className="col-span-12 flex flex-col gap-4 items-end justify-center">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
         {deviceStatus.data.map((device, index) => (
           <DeviceStatusItems
             key={device.device_sn + index}

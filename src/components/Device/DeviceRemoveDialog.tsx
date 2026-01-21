@@ -36,10 +36,10 @@ const DeviceRemoveDialog = ({
           <span className="">기기제거</span>
         </button>
       </DialogTrigger>
-      <DialogContent className="max-w-fit">
+      <DialogContent className="max-w-fit rounded-2xl sm:rounded-xl">
         <DialogHeader className="gap-4">
           <DialogTitle className="">
-            <div className="flex gap-2 text-xl text-danger items-center">
+            <div className="flex gap-2 text-xl text-danger items-center whitespace-nowrap">
               <div className="rounded-full p-2 bg-danger-background"><Trash className="w-4 h-4" /></div>
               기기 제거하기
             </div>

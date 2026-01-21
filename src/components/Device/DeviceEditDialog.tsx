@@ -24,15 +24,13 @@ const DeviceEditDialog = ({
 }: {
   deviceSn: number;
 }) => {
-  const { isBoolean: open, setToggle: setOpen } = useBoolean(false);
+  const { isBoolean: open, setToggle, setFalse } = useBoolean(false);
   const { data: deviceDetail } = useGetDeviceDetail<IDeviceDetail>(deviceSn);
   const mutationDeviceUpdate = useDeviceUpdate();
-
   const methods = useForm<IDeviceDetailForm>({
     resolver: zodResolver(deviceDetailSchema),
   });
 
-  // Dialog가 열릴 때 데이터를 form에 설정
   useEffect(() => {
     if (deviceDetail && open) {
       methods.reset({
@@ -54,17 +52,17 @@ const DeviceEditDialog = ({
       install_location: data.install_location,
     };
     await mutationDeviceUpdate.mutateAsync(deviceUpdateInfo);
-    setOpen();
+    setFalse(); // Dialog 닫기
   });
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setToggle}>
       <DialogTrigger asChild>
         <button className="flex items-center gap-0.5 text-sm text-gray-500">
           <PencilLine className="w-4 h-4 text-toggleAccent" />
           <span className="text-toggleAccent">수정하기</span>
         </button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl rounded-2xl sm:rounded-xl">
         <DialogHeader className="gap-4">
           <DialogTitle className="text-xl font-semibold">
             <div className="flex gap-2 text-xl items-center">
