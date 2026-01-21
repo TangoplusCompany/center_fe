@@ -5,16 +5,16 @@ import React from "react";
 import UserDetailForm from "./UserDetailForm";
 import DataError from "../Util/DataError";
 
-const CenterUserInformation = ({
-  userSn
-}: {
+interface CenterUserInformationProps {
   userSn: number;
-}) => {
+}
+
+const CenterUserInformation = ({ userSn }: CenterUserInformationProps) => {
   const {
     data: userDetailData,
     isLoading: userDetailDataLoading,
     isError: userDetailError,
-  } = useGetUserDetail({ userSn: `${userSn}` });
+  } = useGetUserDetail({ userSn: userSn.toString() });
 
   if (userDetailDataLoading) {
     return (

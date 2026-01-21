@@ -24,7 +24,7 @@ const MeasureMainContainer = () => {
       ]);
     };
   return (
-    <>
+    <div className="w-full min-w-0 flex flex-col gap-5">
       <OptionBar totalItems={totalItems}
         search={searchValue} 
         onSearchChange={onChangeSearch}
@@ -32,7 +32,7 @@ const MeasureMainContainer = () => {
 
       
       <MeasureListContainer handleTotalItems={handleTotalItems} searchValue={searchValue} />
-    </>
+    </div>
   );
 };
 
