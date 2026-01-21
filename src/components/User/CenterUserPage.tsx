@@ -66,6 +66,10 @@ const CenterUserPage = () => {
             사용자 추가
           </Button>
         </div>
+        <CenterUserAddDialog
+          open={dialogOpen}
+          onClose={handleDialogClose}
+        />
       </div>
     );
   }

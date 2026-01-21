@@ -35,7 +35,7 @@ export interface IDeviceInfo {
 
 export interface IDeviceSearch extends IResponseDefault {
   data: {
-    sn: number;
+    device_sn: number;
     serial_number: string;
     install_location: string;
     install_address_1: string;

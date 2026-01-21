@@ -55,18 +55,18 @@ const UserDetailTap = ({
           );
         })}
       </div>
-      
       <button 
-        onClick={() => setIsAIExerciseActive(!isAIExerciseActive)}
-        className={`relative h-full overflow-hidden px-2 py-1 sm:px-3 rounded-xl text-white transition-all hover:scale-105 active:scale-95 isolate border-2 sm:border-4 ${isAIExerciseActive ? 'border-toggleAccent/25' : 'border-sub600/25'}`}
+        onClick={() => setIsAIExerciseActive(true)}
+        className={`relative h-full overflow-hidden px-2 py-1 sm:px-3 rounded-xl text-white transition-all duration-500 hover:scale-105 active:scale-95 isolate border-2 sm:border-4 border-toggleAccent/25 ${
+          isAIExerciseActive ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'
+        }`}
       >
         {/* 메인 컬러 포함 그라데이션 */}
         <div 
           className="absolute inset-0 z-0"
           style={{
-            background: isAIExerciseActive 
-              ? 'radial-gradient(circle, hsl(227, 65.1%, 49.4%) 0%, hsl(227, 65.1%, 49.4%) 50%, hsla(227 65.6% 25.1% / 0.9) 100%)'
-              : 'radial-gradient(circle, hsl(0 0% 92.9%) 0%, hsl(0 0% 86.3%) 50%, hsl(0 0% 73.3%) 100%)',
+            background: 'radial-gradient(circle, #6BA0EF 45%, #2C4FD0 100%)',
+            boxShadow: 'inset 0 0 16px rgba(255, 255, 255, 0.25)'
           }}
         />
         
@@ -78,7 +78,16 @@ const UserDetailTap = ({
         
         {/* 버튼 내용 */}
         <span className="relative z-10 flex items-center text-xs sm:text-sm whitespace-nowrap">
-          ✨ AI 운동 추천
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={`/icons/ic_ai_analysis_bubble.svg`}
+            alt="measureDefault"
+            className="w-4 h-4"
+            onError={(e) => {
+              e.currentTarget.src = "/images/measure_default.png";
+            }}
+          />
+          <span className="hidden sm:inline">AI 운동 추천</span>
         </span>
       </button>
     </div>

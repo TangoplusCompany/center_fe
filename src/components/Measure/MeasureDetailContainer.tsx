@@ -5,7 +5,24 @@ import { useGetQuery } from "@/hooks/utils/useGetQuery";
 import React from "react";
 import MeasureDetail from "./MeasureDetail";
 import { useMeasureDecrypt } from "@/hooks/auth/useMeasureDecrypt";
+import { Skeleton } from "../ui/skeleton";
 
+const MeasureDetailSkeleton = () => {
+  return (
+    <div className="flex flex-col gap-4 w-full">
+      <Skeleton className="w-64 h-12" />
+      <Skeleton className="w-full h-12" />
+      <div className="flex gap-4 h-[620px]">
+        <Skeleton className="w-[512px] h-full" />
+        <div className="flex flex-col gap-4 w-full">
+          <Skeleton className="w-full flex-1" />
+          <Skeleton className="w-full flex-1" />
+        </div>
+      </div>
+      <Skeleton className="w-full h-[300px]" />
+    </div>
+  );
+}
 
 const MeasureDetailContainer = () => {
   const { params } = useGetQuery();
@@ -26,9 +43,9 @@ const MeasureDetailContainer = () => {
     decryptedData?.user_sn ? `${decryptedData.user_sn}` : ""
   );
 
-  if (decryptLoading) return <div>Loading...</div>;
+  if (decryptLoading) return <MeasureDetailSkeleton />;
   if (decryptError) return <div>잘못된 접근입니다.</div>;
-  if (measureDataLoading) return <div>Loading...</div>;
+  if (measureDataLoading) return <MeasureDetailSkeleton />;
   if (measureDataError) return <div>Error...</div>;
   if (!measureData) return <div>No data</div>;
 
@@ -41,7 +58,7 @@ const MeasureDetailContainer = () => {
         </h2>
       </div>
       {measureDataLoading && (
-        <p className="py-8 text-center">측정내역 불러오는 중입니다...</p>
+        <MeasureDetailSkeleton />
       )}
 
       {measureDataError && (

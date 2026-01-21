@@ -178,6 +178,22 @@ body {
   animation: shimmer-slide 2s ease-in-out infinite;
 }
 
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slideDown {
+  animation: slideDown 0.5s ease-out forwards;
+  opacity: 0;
+}
+
 @keyframes droplet-ripple {
   
   0% {

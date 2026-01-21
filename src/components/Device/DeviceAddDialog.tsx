@@ -41,7 +41,7 @@ const DeviceAddDialog = () => {
             </div>
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-fit">
+      <DialogContent className="max-w-fit rounded-2xl sm:rounded-xl">
         <DialogHeader>
           <DialogTitle className="">
             <div className="flex gap-2 text-xl font-semibold items-center">
@@ -60,7 +60,7 @@ const DeviceAddDialog = () => {
             </div>
             
           </DialogTitle>
-          <DialogDescription className="text-sm">
+          <DialogDescription className="text-sm whitespace-nowrap">
             기기를 등록하기 위해서는 기기의 시리얼 넘버를 입력해야 합니다.
           </DialogDescription>
         </DialogHeader>
@@ -91,7 +91,8 @@ const DeviceAddContainer = ({ deviceInfo }: { deviceInfo: IDeviceSearch }) => {
             `설치 주소: ${deviceInfo.data.install_address_1} ${deviceInfo.data.install_address_2}`}
         </p>
       </div>
-      <Button onClick={() => handlePostDeviceAdd(deviceInfo.data.sn)}>
+      <Button onClick={() => 
+        handlePostDeviceAdd(deviceInfo.data.device_sn)}>
         등록하기
       </Button>
     </div>
@@ -100,7 +101,6 @@ const DeviceAddContainer = ({ deviceInfo }: { deviceInfo: IDeviceSearch }) => {
 
 const DeviceSearchContainer = () => {
   const { deviceInfo, methods, handleSubmitDeviceAdd } = useDeviceSearchForm();
-
   return (
     <div className="w-full">
       <DeviceSearchForm
