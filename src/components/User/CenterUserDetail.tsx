@@ -183,9 +183,6 @@ const CenterUserDetail = ({
         </>
       )}
 
-
-      
-
       <MeasurePickerDialog
         open={isCompareDialogOpen}
         items={userMeasureList?.measurements ?? []} 

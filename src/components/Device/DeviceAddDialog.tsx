@@ -33,7 +33,7 @@ const DeviceAddDialog = () => {
                 />
                 <path 
                   d="M16 4H20M18 2V6" 
-                  stroke="#2c4fd0" 
+                  stroke="#2c4fd0"
                   strokeLinecap="round"
                 />
               </svg>
@@ -88,7 +88,7 @@ const DeviceAddContainer = ({ deviceInfo }: { deviceInfo: IDeviceSearch }) => {
         <p>설치 장소: {deviceInfo.data.install_location}</p>
         <p>
           {deviceInfo.data.install_address_1 &&
-            `설치 주소: ${deviceInfo.data.install_zipcode} - ${deviceInfo.data.install_address_1} ${deviceInfo.data.install_address_2}`}
+            `설치 주소: ${deviceInfo.data.install_address_1} ${deviceInfo.data.install_address_2}`}
         </p>
       </div>
       <Button onClick={() => handlePostDeviceAdd(deviceInfo.data.sn)}>
