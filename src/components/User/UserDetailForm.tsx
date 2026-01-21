@@ -79,13 +79,23 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
     useEffect(() => {
     const decryptBirthday = async () => {
       if (userData.birthday) {
+        // 이미 YYYY-MM-DD 형식이면 복호화 불필요
+        const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+        if (datePattern.test(userData.birthday)) {
+          setDecryptedBirthday(userData.birthday);
+          setValue("birthday", userData.birthday);
+          return;
+        }
+        
         try {
           const decrypted = await actionDecrypt(userData.birthday);
           setDecryptedBirthday(decrypted);
           setValue("birthday", decrypted); // form에도 설정
         } catch (error) {
           console.error("복호화 실패:", error);
-          setDecryptedBirthday("복호화 실패");
+          // 복호화 실패 시 원본 값 사용
+          setDecryptedBirthday(userData.birthday);
+          setValue("birthday", userData.birthday);
         }
       }
     };

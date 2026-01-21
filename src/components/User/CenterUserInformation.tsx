@@ -1,19 +1,20 @@
 "use client";
 
 import { useGetUserDetail } from "@/hooks/api/user/useGetUserDetail";
-import { useGetQuery } from "@/hooks/utils/useGetQuery";
 import React from "react";
 import UserDetailForm from "./UserDetailForm";
 import DataError from "../Util/DataError";
 
-const CenterUserInformation = () => {
-  const { query } = useGetQuery();
-  const { key } = query as { key: string };
+interface CenterUserInformationProps {
+  userSn: number;
+}
+
+const CenterUserInformation = ({ userSn }: CenterUserInformationProps) => {
   const {
     data: userDetailData,
     isLoading: userDetailDataLoading,
     isError: userDetailError,
-  } = useGetUserDetail({ userSn: key });
+  } = useGetUserDetail({ userSn: userSn.toString() });
 
   if (userDetailDataLoading) {
     return (
