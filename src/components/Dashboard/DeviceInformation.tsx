@@ -28,19 +28,28 @@ const DashboardDeviceStatus = ({
           {device.device_name}
         </div>
         
-        <div className="flex flex-col">
-          <div className="px-4 py-2 ">
-            <p className="text-sm text-gray-500">
-              {`[ (${device.install_zipcode ?? ""}) ${device.install_address_1 ?? ""} ${
-                device.install_address_2 ?? ""
-              } - ${device.install_location} ]`}
-            </p>
+        <div className="flex w-full min-h-32 justify-between">
+
+          <div className="flex flex-col">
+            <div className="flex flex-col justify-between">
+              <div className="text-base px-4 py-2">
+                Tango Body Pro
+              </div>
+              <div className="flex flex-col gap-1 px-4 py-2">
+                <p className="text-base ">
+                  {`[${device.install_location.trim()}]`}
+                </p>
+                <p className="text-base ">
+                  {`주소: ${device.install_address_1 ?? ""} ${device.install_address_2 ?? ""}`}
+                </p>
+              </div>
+            </div>
           </div>
 
-          {/* 일일 측정 건수 */}
-          <div className="flex rounded-xl bg-toggleAccent-background p-2 m-2 w-fit">
+          <div className="flex items-end">
+            <div className="flex rounded-xl bg-toggleAccent-background p-2 m-2 w-fit h-fit">
               <div className="flex flex-col gap-2">
-                <div className="text-sm text-toggleAccent">
+                <div className="text-sm text-toggleAccent whitespace-nowrap">
                   일일 측정 건수
                 </div>
                 
@@ -51,6 +60,16 @@ const DashboardDeviceStatus = ({
                   </span>
                 </div>
               </div>
+            </div>
+
+            <div className="flex-shrink-0 overflow-hidden w-32 h-32">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img 
+                src="/images/img_tangobody_pro.svg" 
+                alt="tangobody_pro_img" 
+                className="scale-250 object-cover object-top w-full h-full" 
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -81,7 +100,7 @@ export const DeviceInformation = () => {
           <h2 className="text-2xl col-span-2">기기 현황</h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {displayedDevices.map((device) => (
             <DashboardDeviceStatus key={device.device_sn} device={device} />
           ))}
