@@ -16,7 +16,7 @@ export const phoneFiltering = (phone: string) => {
   // 하이픈 제거 후 마스킹
   const cleaned = phone.replaceAll("-", "");
   // 010-1234-5678 또는 01012345678 -> 010****5678
-  return cleaned.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+  return cleaned.replace(/(\d{3})(\d{2})\d{2}(\d{2})(\d{2})/, '$1-$2**-**$4');
 };
 
 /**

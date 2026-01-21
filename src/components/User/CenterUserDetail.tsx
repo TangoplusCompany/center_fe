@@ -10,6 +10,9 @@ import { IUserMeasureList } from "@/types/user";
 import { MeasurePickerDialog } from "../Measure/Compare/CompareMeasurePickerDialog";
 import { ComparePair, CompareSlot } from "@/types/compare";
 import RecommendUserContainer from "./Recommend/UserContainer";
+import { useGetUserDashboard } from "@/hooks/api/user/useGetUserDashboard";
+import { IUserDashBoard } from "@/types/measure";
+import { formatDate } from "@/utils/formatDate";
 
 const useTab = () => {
   const [tab, setTab] = useState(0);
@@ -29,13 +32,18 @@ const useMeasureSn = () => {
 
 const CenterUserDetail = ({ 
   userUUID,
-  userSn
+  userSn,
+  userName
 }: {
   userUUID: string;
   userSn: number;
+  userName?: string;
 }) => {
   const { tab, handleTab } = useTab();
   const { measureSn, handleRecentSn } = useMeasureSn();
+  
+  // 측정일을 가져오기 위한 대시보드 데이터
+  const { data: dashboardData } = useGetUserDashboard<IUserDashBoard>(userSn);
   const handleTabWithReset = (index: number) => {
       // 1번 탭(측정 기록)에서 벗어나는 경우에만 리셋할지,
       // 또는 "언제든 탭을 바꿀 때마다" 리셋할지 선택
@@ -98,6 +106,19 @@ const CenterUserDetail = ({
 
   return (
     <div className="w-full h-full flex flex-col gap-4 lg:gap-4">
+      {/* 타이틀 */}
+      <div className="flex items-center gap-3">
+        <div className="w-1 h-12 bg-toggleAccent rounded-full"></div>
+        <h2 className="text-3xl font-semibold text-[#333] dark:text-white">
+          {userName ? `${userName}님` : "사용자"} 측정 결과
+          {dashboardData?.latest_measure_summary?.measure_date && (
+            <span className="text-sm text-sub300 dark:text-sub200 pl-2">
+              {formatDate(dashboardData.latest_measure_summary.measure_date)}
+            </span>
+          )}
+        </h2>
+      </div>
+
       <UserDetailTap
         nowTab={tab}
         userUUID={userUUID}
