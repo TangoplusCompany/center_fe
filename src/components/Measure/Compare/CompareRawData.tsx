@@ -51,42 +51,42 @@ export const CompareRawData = ({
     ? Math.abs(dataBottom1.data)
     : (dataBottom1?.data ?? 0);
 
-  const trendGap0 = Math.abs(rawData00 - rawData10).toFixed(1) + unit
-  const trendGap1 = Math.abs(rawData01 - rawData11).toFixed(1) + unit
+  const trendGap0 = Math.abs(rawData00 - rawData10)?.toFixed(1) + unit
+  const trendGap1 = Math.abs(rawData01 - rawData11)?.toFixed(1) + unit
 
   const RawDataContainer = (
     dataTop: IUserMeasureDetailData,
     dataBottom: IUserMeasureDetailData | undefined,
     isNext: boolean
   ) => {
-    const formattedData0 = (dataTop.measure_unit?.includes("거리") ? Math.abs(dataTop.data) : dataTop.data).toFixed(1);
-    const unit0 = getRawDataMark(dataTop.measure_unit)
+    const formattedData0 = (dataTop?.measure_unit?.includes("거리") ? Math.abs(dataTop?.data) : dataTop?.data)?.toFixed(1);
+    const unit0 = getRawDataMark(dataTop?.measure_unit)
     const leftRightString0 = {
       0: "좌측",
       1: "우측"
-    }[dataTop.left_right] ?? "";
+    }[dataTop?.left_right] ?? "";
     
     const levelString0 = {
       0: "정상",
       1: "주의",
       2: "위험"
-    }[dataTop.risk_level] ?? "정상";
+    }[dataTop?.risk_level] ?? "정상";
 
 
     const formattedData1 = dataBottom?.measure_unit?.includes("거리") 
-    ? Math.abs(dataBottom.data).toFixed(1) 
+    ? Math.abs(dataBottom.data)?.toFixed(1) 
     : dataBottom?.data?.toFixed(1) ?? undefined;
     const unit1 = getRawDataMark(dataBottom?.measure_unit)
     const leftRightString1 = dataBottom ? ({
       0: "좌측",
       1: "우측"
-    }[dataBottom.left_right] ?? "") : undefined;
+    }[dataBottom?.left_right] ?? "") : undefined;
 
     const levelString1 = dataBottom ? ({
       0: "정상",
       1: "주의",
       2: "위험"
-    }[dataBottom.risk_level] ?? "정상") : undefined;
+    }[dataBottom?.risk_level] ?? "정상") : undefined;
 
     const textBgCondition0 = {
       정상: "bg-sub600",
@@ -186,7 +186,7 @@ export const CompareRawData = ({
     </div>
   )};
   
-  const scoreTop0 = getRiskScore(`${dataTop0.risk_level}`, `${dataTop0?.range_level}`);
+  const scoreTop0 = getRiskScore(`${dataTop0?.risk_level}`, `${dataTop0?.range_level}`);
   const scoreTop1 = dataTop1 ? getRiskScore(`${dataTop1?.risk_level}`, `${dataTop1?.range_level}`) : 0;
   const scoreBottom0 = dataBottom0 ? getRiskScore(`${dataBottom0.risk_level}`, `${dataBottom0?.range_level}`) : 0;
   const scoreBottom1 = dataBottom1 ? getRiskScore(`${dataBottom1.risk_level}`, `${dataBottom1?.range_level}`) : 0;
@@ -240,7 +240,7 @@ export const CompareRawData = ({
       <div className="flex flex-col overflow-x-auto overflow-y-hidden w-full min-w-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         {/* 헤더 영역 */}
         <div className="flex border-b-2 border-sub200 px-4 py-2 bg-sub100 gap-4 min-w-[1000px]">
-          <span className="text-xl font-semibold text-black">{dataTop0.measure_unit}</span>
+          <span className="text-xl font-semibold text-black">{dataTop0?.measure_unit ?? ""}</span>
         </div>
 
         <div className="grid grid-cols-[20%_80%] h-full w-full min-w-[1000px]">
