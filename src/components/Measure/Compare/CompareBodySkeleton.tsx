@@ -24,8 +24,6 @@ const CompareBodySkeleton = () => {
         <div className="w-full">
           <div className="overflow-x-auto overflow-y-hidden w-full min-w-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             <TabsList className="relative z-10 flex w-max min-w-full flex-nowrap items-center justify-start bg-transparent p-0 border-none shadow-none">
-              <div className="absolute bottom-0 left-0 w-full h-[3px] bg-sub200 rounded-md" />
-
               {measureTabs.map((measure) => (
                 <TabsTrigger
                   key={measure.value}
@@ -36,7 +34,7 @@ const CompareBodySkeleton = () => {
                     "shadow-none data-[state=active]:shadow-none",
                     "text-sub300 hover:text-secondary data-[state=active]:text-toggleAccent",
                     "after:absolute after:-bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-md",
-                    "after:bg-transparent data-[state=active]:after:bg-toggleAccent after:z-10"
+                    "after:bg-sub200 data-[state=active]:after:bg-toggleAccent after:z-10"
                   )}
                 >
                   {measure.title}
