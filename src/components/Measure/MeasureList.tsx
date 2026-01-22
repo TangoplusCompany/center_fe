@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { FileText } from "lucide-react";
-import { nameFiltering, phoneFiltering, phoneHyphen } from "@/utils/regexFiltering";
+import { phoneFiltering, phoneHyphen } from "@/utils/regexFiltering";
 import { formatDate } from "@/utils/formatDate";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -106,7 +106,7 @@ export const MeasureList = ({
 
               <TableCell className="text-center font-medium whitespace-nowrap">
                 {measurement.user_name
-                  ? nameFiltering(measurement.user_name)
+                  ? measurement.user_name
                   : ""}
               </TableCell>
               <TableCell className="text-center whitespace-nowrap">

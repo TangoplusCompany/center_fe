@@ -21,7 +21,7 @@ const dashboard = [
     icon: "/icons/ic_measure.svg",
   },
   {
-    title: "사용자 히스토리 관리",
+    title: "사용자 회원 관리",
     url: "/user",
     icon: "/icons/ic_users.svg",
   },

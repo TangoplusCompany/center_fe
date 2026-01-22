@@ -4,9 +4,7 @@ import React, { useCallback, useState } from "react";
 import UserDetailTap from "@/components/User/UserDetailTap";
 import CenterUserMeasureContainer from "./CenterUserContainer";
 import CenterUserInformation from "@/components/User/CenterUserInformation";
-import { useGetQuery } from "@/hooks/utils/useGetQuery";
-import { useGetUserMeasureList } from "@/hooks/api/user/useGetUserMeasureList";
-import { IUserMeasureList } from "@/types/user";
+import { useMeasureListForCompare } from "@/hooks/api/user/useMeasureListForCompare";
 import { MeasurePickerDialog } from "../Measure/Compare/CompareMeasurePickerDialog";
 import { ComparePair, CompareSlot } from "@/types/compare";
 import AIUserContainer from "./ai/UserContainer";
@@ -64,20 +62,14 @@ const CenterUserDetail = ({
     });
   };
 
-   const { query } = useGetQuery();
-  const { page = "1", limit = "100" } = query as {
-    page: string;
-    limit: string;
-  };
+  // 비교 분석용 측정 목록 (독립적인 API 호출)
+  // - useMeasureListForDetail과 완전히 독립적으로 작동
+  // - limit: 20, 독립적인 page state 관리
   const {
-      data: userMeasureList,
-      isLoading: userMeasureLoading,
-      error: userMeasureError,
-    } = useGetUserMeasureList<IUserMeasureList>({
-      page,
-      limit,
-      user_uuid: userUUID,
-    });
+    data: compareMeasureList,
+    measureList: compareMeasureListItems,
+    pagination: comparePagination,
+  } = useMeasureListForCompare(userUUID);
     
   const onClearCompare = () => {
     setComparePair([null, null]);
@@ -157,11 +149,8 @@ const CenterUserDetail = ({
         </div>
       ) : (
         <>
-          {tab !== 2 &&
-        !userMeasureLoading &&
-        !userMeasureError && 
-        userMeasureList &&
-        (
+          {tab !== 3 &&
+        compareMeasureList && (
           <CenterUserMeasureContainer
             measureSn={measureSn}
             userUUID={userUUID}
@@ -171,7 +160,7 @@ const CenterUserDetail = ({
             comparePair={ comparePair }
             onToggleCompareSn={ handleToggleCompareSn }
             onClearCompare={ onClearCompare }
-            userMeasureList={ userMeasureList }
+            userMeasureList={ compareMeasureList }
             // onRemoveCompare={ onRemoveCompare }
             onCompareDialogOpen= {onCompareDialogOpen}
             onOpenCompareMode={openCompareMode}
@@ -179,13 +168,13 @@ const CenterUserDetail = ({
             isCompareMode={ isCompareMode }
           />
         )}
-        {tab === 2 && <CenterUserInformation userSn={userSn} />}
+        {tab === 3 && <CenterUserInformation userSn={userSn} />}
         </>
       )}
 
       <MeasurePickerDialog
         open={isCompareDialogOpen}
-        items={userMeasureList?.measurements ?? []} 
+        items={compareMeasureListItems} 
         comparePair={comparePair}
         activeSlot={ activeSlot }
         onOpenChange={setIsCompareDialogOpen}
@@ -194,6 +183,7 @@ const CenterUserDetail = ({
           handleToggleCompareSn(sn, slot);
           setIsCompareDialogOpen(false);
         }}
+        pagination={comparePagination}
       />
       
       

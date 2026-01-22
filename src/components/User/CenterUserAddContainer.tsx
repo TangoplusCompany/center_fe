@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
 import { IUnregisterUserData } from "@/types/user";
 import {
-  nameFiltering,
   phoneFiltering,
   emailFiltering,
 } from "@/utils/regexFiltering";
@@ -60,7 +59,7 @@ const CenterUserAddContainer = () => {
                     className="grid grid-cols-6 items-center px-3 py-2 hover:bg-gray-100 border-b last:border-none border-solid border-gray-300"
                   >
                     <p className="col-span-1 text-center">
-                      {nameFiltering(user.user_name)}
+                      {user.user_name}
                     </p>
                     <p className="col-span-1 text-center">
                       {emailFiltering(user.email)}

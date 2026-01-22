@@ -13,15 +13,10 @@ import { cn } from "@/lib/utils";
 import { actionKakaoEncrypt, actionPrintEncrypt } from "@/app/actions/getCrypto";
 import { postKakaoSend } from "@/app/actions/postKakaoSend";
 
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
 import { formatDate } from "@/utils/formatDate";
+import { MeasureDetailDatePickerDialog } from "./MeasureDetailDatePickerDialog";
 import { Button } from "../ui/button";
+import type { DetailPagination } from "@/hooks/api/user/useMeasureListForDetail";
 import { getResultReportUrl } from "@/app/actions/openPrintPage";
 type MeasureListType = {
   title: string;
@@ -31,10 +26,11 @@ type MeasureListType = {
 
 type CenterUserMeasureProps = {
   measureData: IUserMeasureInfoResponse;
-  measureList?: IMeasureList[];              // 전체 측정 리스트
+  measureList?: IMeasureList[];              // 전체 측정 리스트 (현재 페이지)
   selectedMeasureSn?: number | null;         // 현재 선택된 sn
   onChangeMeasureSn?: (sn: number) => void;  // 다른 sn 선택 시 호출
   userSn: string;
+  pagination?: DetailPagination;             // useMeasureListForDetail 연동
 };
 
 // intro, front, side, back, dynamic 등 여러 탭이 들어가는 detail화면
@@ -44,11 +40,9 @@ const MeasureDetail = ({
   selectedMeasureSn,
   onChangeMeasureSn,
   userSn,
+  pagination,
 }: CenterUserMeasureProps) => {
-  const handleSelect = (value: string) => {
-    const sn = parseInt(value, 10);
-    onChangeMeasureSn?.(sn);
-  };
+  const [isDatePickerOpen, setIsDatePickerOpen] = React.useState(false);
   const selectedMeasure =
     measureList && selectedMeasureSn != null
       ? measureList.find((item) => item.measure_sn === selectedMeasureSn)
@@ -226,62 +220,40 @@ const MeasureDetail = ({
           </Button>
 
           {measureList && onChangeMeasureSn && (
-            <Select onValueChange={handleSelect}>
-              <SelectTrigger
+            <>
+              <button
+                type="button"
+                onClick={() => setIsDatePickerOpen(true)}
                 className="
-                  w-auto 
-                  border border-sub200
-                  rounded-xl
-                  px-3 py-2 
-                  text-sm
-                  shadow-sm
-                  hover:border-gray-400 
-                  focus:outline-none 
-                  focus:ring-2 
-                  focus:ring-blue-500 
-                  focus:border-blue-500
+                  w-auto flex items-center gap-2
+                  border border-sub200 rounded-xl
+                  px-3 py-2 text-sm shadow-sm
+                  hover:border-gray-400
+                  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
                   transition
-                  [&>svg:last-child]:hidden
                 "
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/icons/ic_calendar.svg"
                   alt="date_select"
-                  className="lg:!w-5 lg:!h-5 mr-2"
+                  className="lg:!w-5 lg:!h-5"
                 />
-                <SelectValue
-                  placeholder={
-                    selectedMeasure
-                      ? formatDate(selectedMeasure.measure_date)
-                      : "측정일 선택"
-                  }
-                />
-              </SelectTrigger>
-              <SelectContent
-                className="
-                  border border-gray-200 
-                  dark:border-gray-700 
-                  rounded-xl 
-                  shadow-lg
-                "
-              >
-                {measureList.map((item) => (
-                  <SelectItem
-                    key={item.measure_sn}
-                    value={item.measure_sn.toString()}
-                    className="
-                      cursor-pointer 
-                      hover:bg-gray-100 
-                      dark:hover:bg-gray-800
-                      px-3 py-2
-                    "
-                  >
-                    {formatDate(item.measure_date)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+                <span>
+                  {selectedMeasure
+                    ? formatDate(selectedMeasure.measure_date)
+                    : "측정일 선택"}
+                </span>
+              </button>
+              <MeasureDetailDatePickerDialog
+                open={isDatePickerOpen}
+                onOpenChange={setIsDatePickerOpen}
+                items={measureList}
+                selectedMeasureSn={selectedMeasureSn}
+                onSelect={(sn) => onChangeMeasureSn?.(sn)}
+                pagination={pagination}
+              />
+            </>
           )}
 
         </div>

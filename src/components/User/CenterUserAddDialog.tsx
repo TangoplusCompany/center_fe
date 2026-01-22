@@ -3,7 +3,7 @@ import { X } from 'lucide-react';
 import CenterUserSearchContainer from './CenterUserSearchContainer';
 import { IUnregisterUserData } from '@/types/user';
 import { useAddUser } from '@/hooks/api/user/useAddUser';
-import { emailFiltering, nameFiltering, phoneFiltering } from '@/utils/regexFiltering';
+import { emailFiltering, phoneFiltering } from '@/utils/regexFiltering';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '../ui/dialog';
 
 interface CenterUserAddDialogProps {
@@ -111,7 +111,7 @@ export const CenterUserAddDialog: React.FC<CenterUserAddDialogProps> = ({
                       className="grid grid-cols-6 items-center px-3 py-3 hover:bg-sub200 border-b last:border-none border-sub200 transition-colors"
                     >
                       <p className="col-span-1 text-center">
-                        {nameFiltering(user.user_name)}
+                        {user.user_name}
                       </p>
                       <p className="col-span-1 text-center">
                         {emailFiltering(user.email)}

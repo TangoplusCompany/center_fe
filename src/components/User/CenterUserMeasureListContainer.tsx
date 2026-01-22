@@ -321,9 +321,7 @@ const CenterUserMeasureListContainer = ({
       <>
         <CenterUserMeasureList
           measures={sortedMeasurements}
-          onRowClick={(sn) => onSelectMeasure?.(sn)}
-          // deleteSelectedSns={deleteSelectedSns}
-          // onToggleDeleteSn={onToggleDeleteSn}
+          onRowClick={onSelectMeasure ? (sn) => onSelectMeasure(sn) : undefined}
           onToggleCompareSn={onToggleCompareSn}
           onOpenCompareMode={onOpenCompareMode}
         />
