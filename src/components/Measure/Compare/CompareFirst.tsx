@@ -5,41 +5,28 @@ import { MeasurementImage } from "../MeasurementImage";
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
 import RawDataContainer from "../RawDataContainer";
 import CompareDefault from "./CompareDefault";
-import { CompareSlot } from "@/types/compare";
+import CompareSummaryFootStatic, { CompareSummaryFootStaticProps } from "./CompareSummaryFootStatic";
+import { extractMeasureData } from "./CompareIntro";
+import { CompareStaticProps } from "./CompareBody";
 
 
 const MeasureStaticCompareFirst = React.memo(
 ({
-  className,
-  sns,
-  cameraOrientations,
-  measure_dates,
-  onCompareDialogOpen,
-}: {
-  className?: string;
-  sns: {
-    measureSn0?: string;
-    measureSn1?: string;
-    userSn: string;
-  };
-  cameraOrientations: {
-    orient0 :0 | 1;
-    orient1 : 0 | 1;
-  };
-  measure_dates: {
-    measure_date0: string;
-    measure_date1: string;
-  }
-  onCompareDialogOpen : (slot: CompareSlot) => void;
-}) => {
+  left,
+  right,
+  userSn,
+  onCompareDialogOpen
+}: CompareStaticProps) => {
   // TODO 정적 조회하는 api를 사용 + 하단의 useMeasureJson을 써야함 (+ Raw Data card도 넣어줘야함)
+  const leftSummaryData = left?.result_summary_data
+  const rightSummaryData = right?.result_summary_data
   const {
     data: measure0,
     isLoading: seq1Loading0,
     isError: seq1Error0,
   } = useMeasureSequence(
-    sns.measureSn0,
-    sns.userSn,
+    leftSummaryData?.sn ? String(leftSummaryData.sn) : undefined,
+    String(userSn),
     1
   );
   const {
@@ -47,9 +34,9 @@ const MeasureStaticCompareFirst = React.memo(
     isLoading: seq1Loading1,
     isError: seq1Error1,
   } = useMeasureSequence(
-    sns.measureSn1,
-    sns.userSn,
-    1
+    rightSummaryData?.sn ? String(rightSummaryData.sn) : undefined,
+    String(userSn),
+    1,
   );
   const {
     data: measureJson0,
@@ -60,7 +47,9 @@ const MeasureStaticCompareFirst = React.memo(
     data: measureJson1,
     isLoading: isJsonLoading1,
     isError: isJsonError1,
-  } = useMeasureJson(measure1?.file_data?.measure_server_json_name);
+  } = useMeasureJson(
+    measure1?.file_data?.measure_server_json_name,
+  );
   const baseUrl = process.env.NEXT_PUBLIC_FILE_URL || '';
 
 
@@ -69,6 +58,31 @@ const MeasureStaticCompareFirst = React.memo(
   const isError = seq1Error0 || seq1Error1 || isJsonError0 || isJsonError1;
   const hasData0 = measureJson0 && measure0;
   const hasData1 = measureJson1 && measure1;
+  const measureData0 = extractMeasureData(left);
+  if (!measureData0) {
+    return <div>데이터가 없습니다.</div>; // 또는 null, 로딩 UI 등
+  }
+  const measureData1 = extractMeasureData(right);
+
+  const footStatic0 : CompareSummaryFootStaticProps = {
+    comment: `[좌우 무게 분석]\n${measureData0.mat_static_horizontal_ment ?? ""}\n[상하 무게 분석]\n${measureData0.mat_static_vertical_ment ?? ""}`,
+    risk_level: measureData0.mat_static_risk_level,
+    range_level: measureData0.mat_static_range_level,
+    fileName: measureData0.measure_server_mat_image_name,
+    matStatics: measureData0.staticFourCorners,
+    measure_date: measureData0.measure_date
+  }
+
+  const footStatic1 = measureData1 ? {
+    comment: `[좌우 무게 분석]\n${measureData1.mat_static_horizontal_ment ?? ""}\n[상하 무게 분석]\n${measureData1.mat_static_vertical_ment ?? ""}`,
+    risk_level: measureData1.mat_static_risk_level,
+    range_level: measureData1.mat_static_range_level,
+    fileName: measureData1.measure_server_mat_image_name,
+    matStatics: measureData1.staticFourCorners,
+    measure_date: measureData1.measure_date
+  } : undefined;
+
+
   if (isLoading) {
     return <DummyStaticContainer />;
   }
@@ -82,7 +96,7 @@ const MeasureStaticCompareFirst = React.memo(
   return (
     <div className="flex flex-col gap-4">
       <div className="grid grid-cols-2 gap-4">
-        <div className={`${className ?? ""} flex flex-col gap-4 lg:gap-10`}>
+        <div className={`flex flex-col gap-4 lg:gap-10`}>
           {measureJson0 && measure0 && (
             <MeasurementImage
               imageUrl={
@@ -91,12 +105,12 @@ const MeasureStaticCompareFirst = React.memo(
               }
               measureJson={measureJson0}
               step="first"
-              cameraOrientation={cameraOrientations.orient0}
+              cameraOrientation={leftSummaryData?.camera_orientation ?? 0}
               compareSlot={0}
             />
           )}
         </div>
-        <div className={`${className ?? ""} flex flex-col gap-4 lg:gap-10`}>
+        <div className={`flex flex-col gap-4 lg:gap-10`}>
           {measureJson1 && measure1 ? (
             <MeasurementImage
               imageUrl={
@@ -105,7 +119,7 @@ const MeasureStaticCompareFirst = React.memo(
               }
               measureJson={measureJson1}
               step="first"
-              cameraOrientation={cameraOrientations.orient1}
+              cameraOrientation={rightSummaryData?.camera_orientation ?? 0}
               compareSlot={1}
             />
           ) : (
@@ -113,11 +127,13 @@ const MeasureStaticCompareFirst = React.memo(
           )}
         </div>
       </div>
+
+      <CompareSummaryFootStatic static0={footStatic0} static1={footStatic1} />
       <RawDataContainer 
         mergedDetailData0={measure0?.detail_data ?? []}
         mergedDetailData1={measure1?.detail_data ?? []} 
-        measure_date0={measure_dates.measure_date0} 
-        measure_date1={measure_dates.measure_date1}
+        measure_date0={leftSummaryData?.measure_date ?? ""} 
+        measure_date1={rightSummaryData?.measure_date ?? ""}
         />
 
     </div>
@@ -128,3 +144,4 @@ const MeasureStaticCompareFirst = React.memo(
 MeasureStaticCompareFirst.displayName = "MeasureStaticFirst";
 
 export default MeasureStaticCompareFirst;
+

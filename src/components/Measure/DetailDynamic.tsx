@@ -6,7 +6,7 @@ import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
 import { IUserMeasureDynamicFileData } from "@/types/measure";
 import { useMeasureDynamicJson } from "@/hooks/api/measure/useMeasureDynamicJson";
 
-type Fit = {
+export type Fit = {
   stageW: number;
   stageH: number;
   scale: number;
@@ -14,16 +14,16 @@ type Fit = {
   offsetY: number;
   dpr: number;
 };
-type PoseLandmark = {
+export type PoseLandmark = {
   sx: number;
   sy: number;
 };
 
-type PoseLandmarks = PoseLandmark[];
+export type PoseLandmarks = PoseLandmark[];
 const DATA_W = 720;   // landmark 좌표계 기준 width
 const DATA_H = 1280;  // landmark 좌표계 기준 height
 
-function computeContain(stageW: number, stageH: number, dataW: number, dataH: number) {
+export function computeContain(stageW: number, stageH: number, dataW: number, dataH: number) {
   const scale = Math.min(stageW / dataW, stageH / dataH);
   const visualW = dataW * scale;
   const visualH = dataH * scale;
@@ -32,7 +32,7 @@ function computeContain(stageW: number, stageH: number, dataW: number, dataH: nu
   return { stageW, stageH, scale, offsetX, offsetY };
 }
 
-function setupHiDPICanvas(canvas: HTMLCanvasElement, cssW: number, cssH: number) {
+export function setupHiDPICanvas(canvas: HTMLCanvasElement, cssW: number, cssH: number) {
   const dpr = window.devicePixelRatio || 1;
   canvas.width = Math.round(cssW * dpr);
   canvas.height = Math.round(cssH * dpr);

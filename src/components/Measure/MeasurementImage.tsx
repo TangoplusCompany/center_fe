@@ -24,6 +24,7 @@ export const MeasurementImage = ({
   const [showLine, setShowLine] = useState(true);
 
   const { resultUrl, loading } = useStaticLandmark(imageUrl, measureJson, step, cameraOrientation, showLine);
+  const RadialGradientShadow = 'inset 0 0 12px rgba(255, 255, 255, 0.75)'
 
   if (loading) return <Skeleton className="w-full h-[720px]" />;
   if (!resultUrl) return <Skeleton className="w-full h-[720px]" />;
@@ -79,6 +80,7 @@ export const MeasurementImage = ({
           color="white"
           variant="secondary"
           onClick={() => setShowGrid(!showGrid)}
+          style={{boxShadow: RadialGradientShadow}}
         >
           {showGrid ? '그리드 끄기' : '그리드 켜기'}
         </Button>
@@ -87,6 +89,7 @@ export const MeasurementImage = ({
           color="white"
           variant="secondary"
           onClick={() => setShowLine(!showLine)}
+          style={{boxShadow: RadialGradientShadow}}
         >
           {showLine ? '랜드마크 끄기' : '랜드마크 켜기'}
         </Button>

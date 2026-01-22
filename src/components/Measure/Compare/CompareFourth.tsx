@@ -5,40 +5,25 @@ import DummyStaticContainer from "../DummyStaticContainer";
 import { MeasurementImage } from "../MeasurementImage";
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
 import RawDataContainer from "../RawDataContainer";
-import { CompareSlot } from "@/types/compare";
 import CompareDefault from "./CompareDefault";
+import { CompareStaticProps } from "./CompareBody";
 
 const MeasureStaticCompareFourth = React.memo(
 ({
-  className,
-  sns,
-  cameraOrientations,
-  measure_dates,
-  onCompareDialogOpen,
-}: {
-  className?: string;
-  sns: {
-    measureSn0?: string;
-    measureSn1?: string;
-    userSn: string;
-  };
-  cameraOrientations: {
-    orient0 :0 | 1;
-    orient1 : 0 | 1;
-  };
-  measure_dates: {
-    measure_date0: string;
-    measure_date1: string;
-  }
-  onCompareDialogOpen : (slot: CompareSlot) => void;
-}) => {
+  left,
+  right,
+  userSn,
+  onCompareDialogOpen
+}: CompareStaticProps) => {
+  const leftSummaryData = left?.result_summary_data
+  const rightSummaryData = right?.result_summary_data
   const {
     data: measure0,
     isLoading: seqLoading0,
     isError: seqError0,
   } = useMeasureSequence(
-    sns.measureSn0,
-    sns.userSn,
+    leftSummaryData?.sn ? String(leftSummaryData.sn) : undefined,
+    String(userSn),
     4
   );
   const {
@@ -46,8 +31,8 @@ const MeasureStaticCompareFourth = React.memo(
     isLoading: seqLoading1,
     isError: seqError1,
   } = useMeasureSequence(
-    sns.measureSn1,
-    sns.userSn,
+    rightSummaryData?.sn ? String(rightSummaryData.sn) : undefined,
+    String(userSn),
     4
   );
   const {
@@ -79,7 +64,7 @@ const MeasureStaticCompareFourth = React.memo(
   return (
     <div className="flex flex-col gap-4">
       <div className="grid grid-cols-2 gap-4">
-      <div className={`${className ?? ""} flex flex-col gap-4 lg:gap-10`}>
+      <div className={`flex flex-col gap-4 lg:gap-10`}>
         {measureJson0 && measure0 && (
           <MeasurementImage
             imageUrl={
@@ -88,12 +73,12 @@ const MeasureStaticCompareFourth = React.memo(
             }
             measureJson={measureJson0}
             step="fourth"
-            cameraOrientation={cameraOrientations.orient0}
+            cameraOrientation={leftSummaryData?.camera_orientation ?? 0}
             compareSlot={0}
           />
         )}
       </div>
-      <div className={`${className ?? ""} flex flex-col gap-4 lg:gap-10`}>
+      <div className={`flex flex-col gap-4 lg:gap-10`}>
         {measureJson1 && measure1 ? (
             <MeasurementImage
               imageUrl={
@@ -102,7 +87,7 @@ const MeasureStaticCompareFourth = React.memo(
               }
               measureJson={measureJson1}
               step="fourth"
-              cameraOrientation={cameraOrientations.orient1}
+              cameraOrientation={rightSummaryData?.camera_orientation ?? 0}
               compareSlot={1}
             />
           ): (
@@ -113,8 +98,8 @@ const MeasureStaticCompareFourth = React.memo(
       <RawDataContainer 
         mergedDetailData0={measure0?.detail_data ?? []}
         mergedDetailData1={measure1?.detail_data ?? []} 
-        measure_date0={measure_dates.measure_date0} 
-        measure_date1={measure_dates.measure_date1}
+        measure_date0={leftSummaryData?.measure_date ?? ""} 
+        measure_date1={rightSummaryData?.measure_date ?? ""}
         />
     </div>
   );

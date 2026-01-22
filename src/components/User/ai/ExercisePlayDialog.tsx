@@ -16,7 +16,6 @@ const ExercisePlayDialog = ({
   onOpenChange,
   videoUrl,
 }: ExercisePlayDialogProps) => {
-  console.log(videoUrl)
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-5xl w-full p-0 overflow-hidden [&>button]:hidden">
