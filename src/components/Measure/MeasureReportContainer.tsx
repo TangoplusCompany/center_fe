@@ -10,6 +10,7 @@ export interface MeasureReportProps {
   latestSummary: MeasureSummary;
   summaryData: UpperAndLowerMeasureHistory[];
   footData: FootPressureHistory[];
+  isResultPage: boolean;
 }
 
 const MeasureReportContainer = ({
@@ -17,27 +18,30 @@ const MeasureReportContainer = ({
   latestSummary,
   summaryData,
   footData,
-
+  isResultPage = false,
  }: MeasureReportProps 
 ) => {
+
   const [selectedMeasureSn, setSelectedMeasureSn] = useState<number | undefined>();
     
     const {
       data: newSummary,
       isLoading: summaryLoading,
       isError: summaryError
-    } = useGetMeasureSummary(
-      selectedMeasureSn?.toString(), // number를 string으로 변환
-      `${userSn}`
-    );
+    } = useGetMeasureSummary({
+      measure_sn: selectedMeasureSn?.toString(),
+      user_sn: `${userSn}`,
+      isResultPage,
+    });
     const {
       data: newFoot,
       isLoading: footLoading,
       isError: footError
-    } = useGetMeasureFoot(
-      selectedMeasureSn?.toString(), // number를 string으로 변환
-      `${userSn}`
-    );
+    } = useGetMeasureFoot({
+      measure_sn: selectedMeasureSn?.toString(),
+      user_sn: `${userSn}`,
+      isResultPage,
+    });
     const [selectedSummary, setSelectedSummary] = useState<MeasureSummary>(latestSummary);
     const [selectedFootOCP, setSelectedFootOCP] = useState<MeasureFootCOP>(latestSummary);
     
@@ -53,7 +57,7 @@ const MeasureReportContainer = ({
         setSelectedFootOCP(newFoot);
       }
     }, [newSummary, newFoot]);
-    
+
   return (
     <div className="flex flex-col gap-6">
 
@@ -68,6 +72,7 @@ const MeasureReportContainer = ({
         handleLegendClick={handleLegendClick} 
         dCase={0}
         title="상지 결과"
+        isResultPage={isResultPage}
       />
       {/* 하지 */}
       <MeasureSummaryContainer 
@@ -78,6 +83,7 @@ const MeasureReportContainer = ({
         handleLegendClick={handleLegendClick} 
         dCase={1}
         title="하지 결과"
+        isResultPage={isResultPage}
       />
             {/* 족압 */}
       {footLoading && <div>로딩 중...</div>}
@@ -86,7 +92,7 @@ const MeasureReportContainer = ({
         <FootTrajectoryContainer 
           footOCP={selectedFootOCP} 
           footData={footData} 
-          handleLegendClick={handleLegendClick} 
+          handleLegendClick={handleLegendClick}
           />
       </div>
     </div>

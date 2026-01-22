@@ -9,6 +9,7 @@ import { ComparePair, CompareSlot } from "@/types/compare";
 import CenterUserDashBoard from "./CenterUserDashBoard";
 import { useMeasureListForDetail } from "@/hooks/api/user/useMeasureListForDetail";
 
+
 const CenterUserMeasureContainer = ({
   measureSn,
   userUUID,
@@ -23,7 +24,8 @@ const CenterUserMeasureContainer = ({
   onCompareDialogOpen,
   onOpenCompareMode,
   onCloseCompareMode,
-  isCompareMode
+  isCompareMode,
+  isResultPage = false,
 }: {
   measureSn: number;
   userUUID: string;
@@ -39,6 +41,7 @@ const CenterUserMeasureContainer = ({
   onOpenCompareMode: () => void;
   onCloseCompareMode: () => void;
   isCompareMode: boolean;
+  isResultPage: boolean;
 }) => {
   const {
     data: latestMeasureListData,
@@ -69,6 +72,7 @@ const CenterUserMeasureContainer = ({
 
   const hasCompare = comparePair[0] !== null || comparePair[1] !== null;
   const shouldShowCompare = isCompareMode || hasCompare;
+
   return (
     <>
       {/* ✅ 탭 0: 유저 전체 요약/그래프 화면 */}
@@ -119,6 +123,7 @@ const CenterUserMeasureContainer = ({
       {tab === 1 && (
         <CenterUserDashBoard
           userSn={userSn}
+          isResultPage={isResultPage}
         />
       )}
 

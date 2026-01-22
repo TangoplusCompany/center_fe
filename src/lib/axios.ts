@@ -1,5 +1,6 @@
 import { refreshAccessToken } from "@/services/auth/postRefreshAccessToken";
 import { createAuthStore } from "@/stores/AuthStore";
+import { createResultPageUserStore } from "@/stores/ResultPageUserStore";
 import { session } from "@/utils/helperSessionStorage";
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
@@ -26,6 +27,7 @@ export const customJsonAxios = axios.create({
 });
 
 const authStore = createAuthStore();
+const resultPageUserStore = createResultPageUserStore();
 
 let isRefreshing = false;
 let failedQueue: {
@@ -120,6 +122,54 @@ customAxios.interceptors.response.use(
         return Promise.reject(err);
       } finally {
         isRefreshing = false;
+      }
+    }
+
+    return Promise.reject(error);
+  },
+);
+
+/**
+ * 사용자 전용 Axios 인스턴스
+ * result-page에서 사용하는 사용자 API 호출용
+ */
+export const customUserAxios = axios.create({
+  baseURL: "https://gym.tangoplus.co.kr/user_api/v1",
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
+});
+
+// ✅ 요청 인터셉터: result-page 경로에서만 사용자 토큰을 헤더에 부착
+customUserAxios.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  // result-page 경로에서만 사용자 토큰 사용
+  if (typeof window !== "undefined" && window.location.pathname.startsWith("/result-page")) {
+    const userStore = resultPageUserStore.getState();
+    
+    if (userStore.isLogin && userStore.accessToken) {
+      config.headers = config.headers || {};
+      config.headers.Authorization = `Bearer ${userStore.accessToken}`;
+    } else {
+      // 토큰이 없으면 로그인 페이지로 리다이렉트
+      window.location.href = "/result-page/login";
+    }
+  }
+  
+  return config;
+});
+
+// ✅ 응답 인터셉터: 401 에러 발생 시 로그인 페이지로 리다이렉트
+customUserAxios.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    // 401 에러 발생 시 로그인 페이지로 리다이렉트
+    if (error.response?.status === 401) {
+      const userStore = resultPageUserStore.getState();
+      userStore.setLogout();
+      
+      if (typeof window !== "undefined" && window.location.pathname.startsWith("/result-page")) {
+        window.location.href = "/result-page/login";
       }
     }
 
