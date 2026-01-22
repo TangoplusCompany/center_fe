@@ -23,7 +23,6 @@ const AIUserContainer = ({
     parseInt(user_sn) 
   );
   const data = aiResult?.data;
-  console.log(data)
   if (aiResultLoading) {
     return <AILoadingScreen />;
   }

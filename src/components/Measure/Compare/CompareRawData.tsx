@@ -100,9 +100,9 @@ export const CompareRawData = ({
       위험: "bg-danger",
     }[levelString1 ?? "정상"] ?? "bg-sub600";
 
-    const data0 = dataTop.measure_unit?.includes("거리") 
-      ? Math.abs(dataTop.data) 
-      : dataTop.data;
+    const data0 = dataTop?.measure_unit?.includes("거리") 
+      ? Math.abs(dataTop?.data) 
+      : dataTop?.data;
       
     const data1 = dataBottom?.measure_unit?.includes("거리")
       ? Math.abs(dataBottom.data)
@@ -148,7 +148,7 @@ export const CompareRawData = ({
 
         <div className={`grid items-center justify-center h-full ${isNext ? 'text-black' : 'text-sub600'}`}>
           {!dataBottom 
-            ? (dataTop.measure_unit?.includes("기울기") ? "0º" : "")
+            ? (dataTop?.measure_unit?.includes("기울기") ? "0º" : "")
             : (data0 - data1).toFixed(1) + unit0
           }
         </div>
@@ -174,9 +174,9 @@ export const CompareRawData = ({
 
         <div className={`grid items-center justify-start h-full px-4`}>
           <span className={`text-base ${isNext ? 'text-black' : 'text-sub600'}`}>
-            {dataTop.ment_all}
+            {dataTop?.ment_all}
           </span>
-          {dataBottom && dataBottom.ment_all !== dataTop.ment_all && (
+          {dataBottom && dataBottom.ment_all !== dataTop?.ment_all && (
             <span className={`text-base ${isNext ? 'text-black' : 'text-sub600'}`}>
               {dataBottom.ment_all}
             </span>

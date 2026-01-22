@@ -1,47 +1,31 @@
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
-import { CompareSlot } from "@/types/compare";
-// import { IUserMeasureInfoResponse } from "@/types/measure";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import CompareDefault from "./CompareDefault";
 import RawDataContainer from "../RawDataContainer";
 import { useMeasureDynamicJson } from "@/hooks/api/measure/useMeasureDynamicJson";
 import { computeContain, Fit, PoseLandmarks, setupHiDPICanvas } from "../DetailDynamic";
+import { CompareStaticProps } from "./CompareBody";
+import CompareFootTrajectoryGridContainer, { CompareFootTrajectoryGridProps } from "./CompareFootTrajectoryGridContainer";
+import { extractMeasureData } from "./CompareIntro";
 
 const DATA_W = 720;   // landmark 좌표계 기준 width
 const DATA_H = 1280;  // landmark 좌표계 기준 height
 
 const MeasureDynamicCompare = ({
-  className,
-  sns,
-  // measureInfos,
-  cameraOrientations,
-  measure_dates,
-  onCompareDialogOpen,
-}: {
-  className? : string;
-  sns: {
-    measureSn0?: string;
-    measureSn1?: string;
-    userSn: string;
-  };
-  
-  cameraOrientations: {
-    orient0 :0 | 1;
-    orient1 : 0 | 1;
-  };
-  measure_dates: {
-    measure_date0: string;
-    measure_date1: string;
-  }
-  onCompareDialogOpen? : (slot: CompareSlot) => void;
-}) => {
+  left,
+  right,
+  userSn,
+  onCompareDialogOpen
+}: CompareStaticProps) => {
+  const leftSummaryData = left?.result_summary_data
+  const rightSummaryData = right?.result_summary_data
   const {
     data: measure0,
     isLoading: seqLoading0,
     isError: seqError0,
   } = useMeasureSequence(
-    sns.measureSn0,
-    sns.userSn,
+    leftSummaryData?.sn ? String(leftSummaryData.sn) : undefined,
+    String(userSn),
     6
   );
 
@@ -50,8 +34,8 @@ const MeasureDynamicCompare = ({
     isLoading: seqLoading1,
     isError: seqError1,
   } = useMeasureSequence(
-    sns.measureSn1,
-    sns.userSn,
+    rightSummaryData?.sn ? String(rightSummaryData.sn) : undefined,
+    String(userSn),
     6
   );
   const data0 = measure0?.file_data
@@ -62,8 +46,8 @@ const MeasureDynamicCompare = ({
   const { data: measureJson1, isLoading: jsonLoading1, isError: jsonError1 } = useMeasureDynamicJson(
     data1?.measure_server_json_name
   );
-  const isRotated0 = cameraOrientations.orient0 === 1;
-  const isRotated1 = cameraOrientations.orient1 === 1;
+  const isRotated0 = leftSummaryData?.camera_orientation === 1;
+  const isRotated1 = rightSummaryData?.camera_orientation === 1;
 
   const stageRef0 = useRef<HTMLDivElement>(null);
   const videoRef0 = useRef<HTMLVideoElement>(null);
@@ -77,8 +61,9 @@ const MeasureDynamicCompare = ({
   const canvasRedRef1 = useRef<HTMLCanvasElement | null>(null);
   const canvasTrailRef1 = useRef<HTMLCanvasElement | null>(null);
 
-  const VIDEO_SCALE = 1.75; // 지금 고정으로 쓰는 값
+  const VIDEO_SCALE = 1.75; // 내가 비디오를 확대할 scale
 
+  // ★★★ canvas에 곱할 X, Y의 scale 관리 변수
   const [canvasTransform0, setCanvasTransform0] = useState<string>(
     `scaleX(${-VIDEO_SCALE}) scaleY(${VIDEO_SCALE})`
   );
@@ -520,11 +505,19 @@ const MeasureDynamicCompare = ({
           setCanvasTransform(`scaleX(-1) scaleY(1)`);
           return;
         }
-
+        // ★★★★★
+        //  현재 렌더링 된 video의 화면 크기를 가져옴 
+        // canvas는 scale을 직접 계산해줘야 함. => scale 결정하는 계산 하단 ↓
+        // 회전안했을 떄 : 예를 들어 width : height = 1190 : 895.75 
+        // 회전했을 때: width : height = 895.75 : 1190 = 0.7527310924369748 
+        // 약 0.752731을 scale하려는 값과 곱함 (현재 VIDEO_SCALE = 1.75) 
+        // 결과 canvas에 곱할 scale
+        // X scale은 좌우반전 추가 / Y scale은 기존 계산
+        // ★★★★★
         const vRect = video.getBoundingClientRect();
         if (vRect.width === 0 || vRect.height === 0) return;
 
-        const videoAspect = vRect.height / vRect.width; // ★★ video가 회전됐기 떄문에 height가 분모로 와야 함.
+        const videoAspect = vRect.height / vRect.width; 
         
         const sx = -VIDEO_SCALE * videoAspect;               
         const sy = VIDEO_SCALE * videoAspect ;   // 비율 보정 포함
@@ -547,11 +540,10 @@ const MeasureDynamicCompare = ({
         ctRef: canvasTrailRef0,
         isRotated: isRotated0,
       });
-
       ro0 = new ResizeObserver(update0);
       ro0.observe(stage0);
-      if (video0) ro0.observe(video0); // ✅ video도 observe
-      requestAnimationFrame(update0);  // ✅ 첫 렌더 타이밍 안전
+      if (video0) ro0.observe(video0); 
+      requestAnimationFrame(update0);  
       video0?.addEventListener("loadedmetadata", update0);
     }
 
@@ -566,10 +558,9 @@ const MeasureDynamicCompare = ({
         ctRef: canvasTrailRef1,
         isRotated: isRotated1,
       });
-
       ro1 = new ResizeObserver(update1);
       ro1.observe(stage1);
-      if (video1) ro1.observe(video1); // ✅ video도 observe
+      if (video1) ro1.observe(video1); 
       requestAnimationFrame(update1);
       video1?.addEventListener("loadedmetadata", update1);
     }
@@ -684,7 +675,7 @@ const MeasureDynamicCompare = ({
 
   }, [measureJson0, frame0, fit0, toScreen0, drawLine0]);
 
-useEffect(() => {
+  useEffect(() => {
     if (!measureJson1) return;
 
     const item = measureJson1[frame1];
@@ -779,16 +770,54 @@ useEffect(() => {
     
   }, [measureJson1, frame1, fit1, toScreen1, drawLine1]);
 
+  const measureData0 = extractMeasureData(left);
+  if (!measureData0) {
+    return <div>데이터가 없습니다.</div>; // 또는 null, 로딩 UI 등
+  }
+  const measureData1 = extractMeasureData(right);
+  const footData0: CompareFootTrajectoryGridProps = {
+    dynamic: {
+      footFileName: measureData0.mat_hip_down_image_name,
+      matOhs: measureData0.ohsFourCorners,
+    },
+    hipFileName: measureData0.mat_hip_trajectory_image_name,
+    kneeFileNames: [
+      measureData0.mat_left_knee_trajectory_image_name, 
+      measureData0.mat_right_knee_trajectory_image_name
+    ],
+    dynamicComment: `[좌우 무게 분석]\n${measureData0.mat_ohs_horizontal_ment ?? ""}\n[상하 무게 분석]\n${measureData0.mat_ohs_vertical_ment ?? ""}`,
+    kneeComment: `[무릎 흔들림 분석]\n${measureData0.mat_ohs_knee_ment ?? ""}`,
+    measure_date: measureData0.measure_date,
+  };
+  const footData1: CompareFootTrajectoryGridProps | undefined = measureData1 
+  ? {
+      dynamic: {
+        footFileName: measureData1.mat_hip_down_image_name,
+        matOhs: measureData1.ohsFourCorners,
+      },
+      hipFileName: measureData1.mat_hip_trajectory_image_name,
+      kneeFileNames: [
+        measureData1.mat_left_knee_trajectory_image_name, 
+        measureData1.mat_right_knee_trajectory_image_name
+      ],
+      dynamicComment: `[좌우 무게 분석]\n${measureData1.mat_ohs_horizontal_ment ?? ""}\n[상하 무게 분석]\n${measureData1.mat_ohs_vertical_ment ?? ""}`,
+      kneeComment: `[무릎 흔들림 분석]\n${measureData1.mat_ohs_knee_ment ?? ""}`,
+      measure_date: measureData1.measure_date,
+    } 
+  : undefined;
+
+
+
   return (
     <div className="flex flex-col w-full h-full gap-4">
       <div className="grid grid-cols-2 gap-2 h-full">
         {/* ★★★ 좌측 1번 비디오 div ★★★ */}
-        <div className={`${className ?? ""} flex flex-col justify-between gap-2 lg:gap-4`}>
+        <div className={`flex flex-col justify-between gap-2 lg:gap-4`}>
           <div
             ref={stageRef0}
             className="relative mx-auto w-full h-[480px] md:h-[560px] lg:h-[680px] overflow-hidden"
           >
-
+            {/* 회전된 video 회전후 가운데 정렬 */}
             <video
               ref={videoRef0}
               muted
@@ -801,7 +830,7 @@ useEffect(() => {
               `}
             />
 
-            {/* Canvas overlay (회전 금지, stage에 딱 맞춤) */}
+            {/* 방향 맞는 canvas 비율이 안맞아서 scale을 적용 */}
             <canvas
               ref={canvasTrailRef0}
               className="absolute inset-0 z-[9] origin-center pointer-events-none"
@@ -892,7 +921,7 @@ useEffect(() => {
         </div>
 
         {data1 ? 
-        <div className={`${className ?? ""} flex flex-col justify-between gap-2 lg:gap-4`}>
+        <div className={`flex flex-col justify-between gap-2 lg:gap-4`}>
           <div
             ref={stageRef1}
             className="relative mx-auto w-full h-[480px] md:h-[560px] lg:h-[680px] overflow-hidden"
@@ -909,7 +938,6 @@ useEffect(() => {
               `}
             />
 
-            {/* Canvas overlay (회전 금지, stage에 딱 맞춤) */}
             <canvas
               ref={canvasTrailRef1}
               className="absolute inset-0 z-[9] origin-center pointer-events-none"
@@ -1000,11 +1028,14 @@ useEffect(() => {
         <CompareDefault onCompareDialogOpen={onCompareDialogOpen} currentSlot={1}/>
         }
       </div>
+
+      <CompareFootTrajectoryGridContainer data0={footData0} data1={footData1} />
+
       <RawDataContainer 
         mergedDetailData0={measure0?.detail_data ?? []}
         mergedDetailData1={measure1?.detail_data ?? []} 
-        measure_date0={measure_dates.measure_date0} 
-        measure_date1={measure_dates.measure_date1}
+        measure_date0={leftSummaryData?.measure_date ?? ""} 
+        measure_date1={rightSummaryData?.measure_date ?? ""}
         />
     </div>
   );
