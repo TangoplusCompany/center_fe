@@ -39,7 +39,7 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
-
+  const RadialGradientShadow = 'inset 0 0 12px rgba(255, 255, 255, 0.75)'
   const handleZoomIn = () => {
     setScale(prev => Math.min(prev + 0.25, 2));
   };
@@ -141,7 +141,10 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
           </div>
 
           {/* Zoom Controls */}
-          <div className="absolute bottom-0 left-0 z-10 mb-4 ml-4 flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm pointer-events-auto">
+          <div 
+            style= {{boxShadow: RadialGradientShadow}}
+            className="absolute bottom-0 left-0 z-10 mb-4 ml-4 flex items-center gap-2 px-4 py-2 rounded-xl bg-black/10 backdrop-blur-sm pointer-events-auto"
+          >
             <button
               onClick={handleZoomOut}
               disabled={scale <= 1}
@@ -169,6 +172,7 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
               color="white"
               variant="secondary"
               onClick={() => onGridToggle(!showGrid)}
+              style={{boxShadow: RadialGradientShadow}}
             >
               {showGrid ? '그리드 끄기' : '그리드 켜기'}
             </Button>
@@ -177,6 +181,7 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
               color="white"
               variant="secondary"
               onClick={() => onLineToggle(!showLine)}
+              style={{boxShadow: RadialGradientShadow}}
             >
               {showLine ? '랜드마크 끄기' : '랜드마크 켜기'}
             </Button>

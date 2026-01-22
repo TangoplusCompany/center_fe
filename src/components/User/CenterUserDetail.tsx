@@ -4,15 +4,14 @@ import React, { useCallback, useState } from "react";
 import UserDetailTap from "@/components/User/UserDetailTap";
 import CenterUserMeasureContainer from "./CenterUserContainer";
 import CenterUserInformation from "@/components/User/CenterUserInformation";
-import { useGetQuery } from "@/hooks/utils/useGetQuery";
-import { useGetUserMeasureList } from "@/hooks/api/user/useGetUserMeasureList";
-import { IUserMeasureList } from "@/types/user";
+import { useMeasureListForCompare } from "@/hooks/api/user/useMeasureListForCompare";
 import { MeasurePickerDialog } from "../Measure/Compare/CompareMeasurePickerDialog";
 import { ComparePair, CompareSlot } from "@/types/compare";
 import AIUserContainer from "./ai/UserContainer";
 import { useGetUserDashboard } from "@/hooks/api/user/useGetUserDashboard";
 import { IUserDashBoard } from "@/types/measure";
 import { formatDate } from "@/utils/formatDate";
+import { useGetUserDetail } from "@/hooks/api/user/useGetUserDetail";
 
 const useTab = () => {
   const [tab, setTab] = useState(0);
@@ -42,8 +41,14 @@ const CenterUserDetail = ({
   const { tab, handleTab } = useTab();
   const { measureSn, handleRecentSn } = useMeasureSn();
   
+  // 사용자 정보를 가져와서 최신 이름 표시 (사용자 정보 수정 시 자동 업데이트)
+  const { data: userDetailData } = useGetUserDetail({ userSn: userSn.toString() });
+  
   // 측정일을 가져오기 위한 대시보드 데이터
   const { data: dashboardData } = useGetUserDashboard<IUserDashBoard>(userSn);
+  
+  // 사용자 이름: userDetailData가 있으면 우선 사용, 없으면 userName prop 사용
+  const displayUserName = userDetailData?.user_name || userName;
   const handleTabWithReset = (index: number) => {
       // 1번 탭(측정 기록)에서 벗어나는 경우에만 리셋할지,
       // 또는 "언제든 탭을 바꿀 때마다" 리셋할지 선택
@@ -64,20 +69,14 @@ const CenterUserDetail = ({
     });
   };
 
-   const { query } = useGetQuery();
-  const { page = "1", limit = "100" } = query as {
-    page: string;
-    limit: string;
-  };
+  // 비교 분석용 측정 목록 (독립적인 API 호출)
+  // - useMeasureListForDetail과 완전히 독립적으로 작동
+  // - limit: 20, 독립적인 page state 관리
   const {
-      data: userMeasureList,
-      isLoading: userMeasureLoading,
-      error: userMeasureError,
-    } = useGetUserMeasureList<IUserMeasureList>({
-      page,
-      limit,
-      user_uuid: userUUID,
-    });
+    data: compareMeasureList,
+    measureList: compareMeasureListItems,
+    pagination: comparePagination,
+  } = useMeasureListForCompare(userUUID);
     
   const onClearCompare = () => {
     setComparePair([null, null]);
@@ -110,7 +109,7 @@ const CenterUserDetail = ({
       <div className="flex items-center gap-3">
         <div className="w-1 h-12 bg-toggleAccent rounded-full"></div>
         <h2 className="text-3xl font-semibold text-[#333] dark:text-white">
-          {userName ? `${userName}님` : "사용자"} 측정 결과
+          {displayUserName ? `${displayUserName}님` : "사용자"} 측정 결과
           {dashboardData?.latest_measure_summary?.measure_date && (
             <span className="text-sm text-sub300 dark:text-sub200 pl-2">
               {formatDate(dashboardData.latest_measure_summary.measure_date)}
@@ -157,11 +156,8 @@ const CenterUserDetail = ({
         </div>
       ) : (
         <>
-          {tab !== 2 &&
-        !userMeasureLoading &&
-        !userMeasureError && 
-        userMeasureList &&
-        (
+          {tab !== 3 &&
+        compareMeasureList && (
           <CenterUserMeasureContainer
             measureSn={measureSn}
             userUUID={userUUID}
@@ -171,7 +167,7 @@ const CenterUserDetail = ({
             comparePair={ comparePair }
             onToggleCompareSn={ handleToggleCompareSn }
             onClearCompare={ onClearCompare }
-            userMeasureList={ userMeasureList }
+            userMeasureList={ compareMeasureList }
             // onRemoveCompare={ onRemoveCompare }
             onCompareDialogOpen= {onCompareDialogOpen}
             onOpenCompareMode={openCompareMode}
@@ -179,13 +175,13 @@ const CenterUserDetail = ({
             isCompareMode={ isCompareMode }
           />
         )}
-        {tab === 2 && <CenterUserInformation userSn={userSn} />}
+        {tab === 3 && <CenterUserInformation userSn={userSn} />}
         </>
       )}
 
       <MeasurePickerDialog
         open={isCompareDialogOpen}
-        items={userMeasureList?.measurements ?? []} 
+        items={compareMeasureListItems} 
         comparePair={comparePair}
         activeSlot={ activeSlot }
         onOpenChange={setIsCompareDialogOpen}
@@ -194,6 +190,7 @@ const CenterUserDetail = ({
           handleToggleCompareSn(sn, slot);
           setIsCompareDialogOpen(false);
         }}
+        pagination={comparePagination}
       />
       
       

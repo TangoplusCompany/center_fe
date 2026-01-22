@@ -35,7 +35,7 @@ const UserDetailTap = ({
   return (
     <div className="w-full flex items-center justify-between gap-2">
       <div className="inline-flex rounded-xl bg-gray-100 dark:bg-gray-800 p-1">
-        {["사용자 측정 요약", "측정 기록", "사용자 정보"].map((item, index) => {
+        {["RECENT","측정 요약", "비교 분석", "사용자 정보"].map((item, index) => {
           return (
             <button
               key={item + index}
