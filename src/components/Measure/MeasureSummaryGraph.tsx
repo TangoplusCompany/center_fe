@@ -28,8 +28,9 @@ const MeasureSummaryGraph = ({
   const handleAreaClick = (
     point: UpperAndLowerMeasureHistory | FootPressureHistory
   ) => {
-    if (point && point.sn) {
-      legendClick(point.sn);
+    // measure_sn으로 통일됨
+    if (point && point.measure_sn) {
+      legendClick(point.measure_sn);
     }
   };
 

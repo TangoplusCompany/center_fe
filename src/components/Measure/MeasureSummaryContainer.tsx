@@ -13,6 +13,7 @@ export interface MeasureSummaryProps {
   handleLegendClick: (measureSn: number) => void;
   dCase: 0 | 1;
   title: string;
+  isResultPage?: boolean;
 }
 
 
@@ -23,7 +24,8 @@ const MeasureSummaryContainer = ({
   summaryData,
   handleLegendClick,
   dCase,
-  title
+  title,
+  isResultPage = false,
  }: MeasureSummaryProps 
 ) => {
   return (
