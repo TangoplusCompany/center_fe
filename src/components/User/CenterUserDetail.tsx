@@ -32,11 +32,13 @@ const useMeasureSn = () => {
 const CenterUserDetail = ({ 
   userUUID,
   userSn,
-  userName
+  userName,
+  isResultPage = false,
 }: {
   userUUID: string;
   userSn: number;
   userName?: string;
+  isResultPage?: boolean;
 }) => {
   const { tab, handleTab } = useTab();
   const { measureSn, handleRecentSn } = useMeasureSn();
@@ -45,7 +47,10 @@ const CenterUserDetail = ({
   const { data: userDetailData } = useGetUserDetail({ userSn: userSn.toString() });
   
   // 측정일을 가져오기 위한 대시보드 데이터
-  const { data: dashboardData } = useGetUserDashboard<IUserDashBoard>(userSn);
+  const { data: dashboardData } = useGetUserDashboard<IUserDashBoard>({
+    user_sn: userSn,
+    isResultPage,
+  });
   
   // 사용자 이름: userDetailData가 있으면 우선 사용, 없으면 userName prop 사용
   const displayUserName = userDetailData?.user_name || userName;
@@ -108,10 +113,10 @@ const CenterUserDetail = ({
       {/* 타이틀 */}
       <div className="flex items-center gap-3">
         <div className="w-1 h-12 bg-toggleAccent rounded-full"></div>
-        <h2 className="text-3xl font-semibold text-[#333] dark:text-white">
-          {displayUserName ? `${displayUserName}님` : "사용자"} 측정 결과
+        <h2 className="text-3xl font-semibold text-[#333] dark:text-white flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+          <span>{displayUserName ? `${displayUserName}님` : "사용자"} 측정 결과</span>
           {dashboardData?.latest_measure_summary?.measure_date && (
-            <span className="text-sm text-sub300 dark:text-sub200 pl-2">
+            <span className="text-sm text-sub300 dark:text-sub200 sm:pl-2">
               {formatDate(dashboardData.latest_measure_summary.measure_date)}
             </span>
           )}
@@ -157,7 +162,7 @@ const CenterUserDetail = ({
       ) : (
         <>
           {tab !== 3 &&
-        compareMeasureList && (
+        (
           <CenterUserMeasureContainer
             measureSn={measureSn}
             userUUID={userUUID}
@@ -167,12 +172,13 @@ const CenterUserDetail = ({
             comparePair={ comparePair }
             onToggleCompareSn={ handleToggleCompareSn }
             onClearCompare={ onClearCompare }
-            userMeasureList={ compareMeasureList }
+            userMeasureList={ compareMeasureList || { page: 1, measurements: [], total: 0, limit: 10, last_page: 1 } }
             // onRemoveCompare={ onRemoveCompare }
             onCompareDialogOpen= {onCompareDialogOpen}
             onOpenCompareMode={openCompareMode}
             onCloseCompareMode={closeCompareMode}
             isCompareMode={ isCompareMode }
+            isResultPage={isResultPage}
           />
         )}
         {tab === 3 && <CenterUserInformation userSn={userSn} />}

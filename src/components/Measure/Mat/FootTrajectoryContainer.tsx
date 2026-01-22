@@ -7,6 +7,7 @@ export interface MatUserDashBoardContainerProps {
   footOCP: MeasureFootCOP;
   footData: FootPressureHistory[];
   handleLegendClick: (measureSn: number) => void;
+
 }
 
 
@@ -14,7 +15,8 @@ export interface MatUserDashBoardContainerProps {
 const FootTrajectoryContainer = ({
   footOCP,
   footData,
-  handleLegendClick
+  handleLegendClick,
+
 }: MatUserDashBoardContainerProps) => {
   const {
     mat_static_horizontal_ment,

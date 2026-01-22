@@ -8,7 +8,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReactNode } from "react";
-import { useRouter } from "next/navigation";
+import { useUserLogin } from "@/hooks/api/ResultUser/useUserLogin";
 
 const resultPageLoginSchema = z.object({
   phone: z
@@ -31,44 +31,22 @@ export default function ResultPageLoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm({
     resolver: zodResolver(resultPageLoginSchema),
   });
 
-  const loginHandleSubmit = handleSubmit(async (data) => {
-    try {
-      // 임의 값으로 로그인 처리
-      const validPhone = "01012345678";
-      const validPin = "1234";
-      
-      if (data.phone === validPhone && data.pin === validPin) {
-        // 로그인 성공 시 쿠키 설정
-        document.cookie = "resultPageLogin=true; path=/; max-age=86400"; // 24시간
-        
-        // 임시 값들을 쿼리 파라미터로 전달
-        const userUUID = "17PRWCXV743ZAEKQ";
-        const key = "2225";
-        const name = "1601";
-        
-        const queryParams = new URLSearchParams({
-          userUUID,
-          key,
-          name,
-        });
-        
-        router.push(`/result-page?${queryParams.toString()}`);
-      } else {
-        alert("로그인에 실패했습니다. 핸드폰 번호와 PIN 번호를 확인해주세요.");
-      }
-    } catch (error) {
-      console.error("로그인 실패:", error);
-      alert("로그인에 실패했습니다. 핸드폰 번호와 PIN 번호를 확인해주세요.");
-    }
+  const { mutate: login, isPending } = useUserLogin(setError);
+
+  const loginHandleSubmit = handleSubmit((data) => {
+    login({
+      mobile: data.phone,
+      pin_password: data.pin,
+    });
   });
 
   return (
@@ -92,6 +70,7 @@ export default function ResultPageLoginForm({
             placeholder="하이픈(-)없이 입력해주세요"
             maxLength={15}
             required
+            autoComplete="off"
             {...register("phone")}
             className="bg-white dark:bg-border"
           />
@@ -107,6 +86,7 @@ export default function ResultPageLoginForm({
             placeholder="PIN 번호를 입력해주세요"
             maxLength={8}
             required
+            autoComplete="off"
             className="bg-white dark:bg-border"
             {...register("pin")}
           />
@@ -114,8 +94,13 @@ export default function ResultPageLoginForm({
             <ErrorText>{String(errors.pin?.message)}</ErrorText>
           )}
         </div>
-        <Button variant="outline" type="submit" className="w-full">
-          로그인
+        <Button 
+          variant="outline" 
+          type="submit" 
+          className="w-full"
+          disabled={isPending}
+        >
+          {isPending ? "로그인 중..." : "로그인"}
         </Button>
       </div>
     </form>
