@@ -41,10 +41,8 @@ const ActivityGraph = ({
         { label: "30대", value: ageData.thirties },
         { label: "40대", value: ageData.forties },
         { label: "50대", value: ageData.fifties },
-        { label: "60대", value: ageData.sixties },
-        { label: "70대", value: ageData.seventies },
-        { label: "80대", value: ageData.eighties },
-        { label: "90대", value: ageData.nineties },
+        { label: "60+대", value: ageData.sixties + ageData.seventies + ageData.eighties + ageData.nineties },
+
       ];
     }
   }, [data]);

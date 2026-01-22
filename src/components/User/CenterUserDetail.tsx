@@ -11,6 +11,7 @@ import AIUserContainer from "./ai/UserContainer";
 import { useGetUserDashboard } from "@/hooks/api/user/useGetUserDashboard";
 import { IUserDashBoard } from "@/types/measure";
 import { formatDate } from "@/utils/formatDate";
+import { useGetUserDetail } from "@/hooks/api/user/useGetUserDetail";
 
 const useTab = () => {
   const [tab, setTab] = useState(0);
@@ -40,8 +41,14 @@ const CenterUserDetail = ({
   const { tab, handleTab } = useTab();
   const { measureSn, handleRecentSn } = useMeasureSn();
   
+  // 사용자 정보를 가져와서 최신 이름 표시 (사용자 정보 수정 시 자동 업데이트)
+  const { data: userDetailData } = useGetUserDetail({ userSn: userSn.toString() });
+  
   // 측정일을 가져오기 위한 대시보드 데이터
   const { data: dashboardData } = useGetUserDashboard<IUserDashBoard>(userSn);
+  
+  // 사용자 이름: userDetailData가 있으면 우선 사용, 없으면 userName prop 사용
+  const displayUserName = userDetailData?.user_name || userName;
   const handleTabWithReset = (index: number) => {
       // 1번 탭(측정 기록)에서 벗어나는 경우에만 리셋할지,
       // 또는 "언제든 탭을 바꿀 때마다" 리셋할지 선택
@@ -102,7 +109,7 @@ const CenterUserDetail = ({
       <div className="flex items-center gap-3">
         <div className="w-1 h-12 bg-toggleAccent rounded-full"></div>
         <h2 className="text-3xl font-semibold text-[#333] dark:text-white">
-          {userName ? `${userName}님` : "사용자"} 측정 결과
+          {displayUserName ? `${displayUserName}님` : "사용자"} 측정 결과
           {dashboardData?.latest_measure_summary?.measure_date && (
             <span className="text-sm text-sub300 dark:text-sub200 pl-2">
               {formatDate(dashboardData.latest_measure_summary.measure_date)}

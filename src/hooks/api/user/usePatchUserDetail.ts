@@ -13,6 +13,8 @@ export const usePatchUserDetail = (userSn: string) => {
     onSuccess: () => {
       alert("성공적으로 사용자의 데이터가 수정되었습니다.");
       queryClient.invalidateQueries({ queryKey: ["userDetail", userSn] });
+      // 측정 상세 데이터도 무효화하여 사용자 이름이 업데이트되도록 함
+      queryClient.invalidateQueries({ queryKey: ["measureDetail"] });
     },
     onError: (error) => {
       console.error(error);

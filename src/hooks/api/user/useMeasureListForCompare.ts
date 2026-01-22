@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import { useGetUserMeasureList } from "./useGetUserMeasureList";
 import { IUserMeasureList } from "@/types/user";
 
-const LIMIT = "2";
+const LIMIT = "10";
 
 export type ComparePagination = {
   page: number;
