@@ -36,11 +36,6 @@ const FootStaticContainer = ({
     1: "bg-warning",
     2: "bg-danger",
   }[risk_level] ?? "bg-[#7E7E7E]";
-  //   const textCondition = {
-  //   0: "text-white",
-  //   1: "text-warning-foreground",
-  //   2: "text-danger-foreground",
-  // }[risk_level] ?? "bg-[#7E7E7E]";
     const textTitleCondition = {
     0: "text-secondary",
     1: "text-warningDeep",

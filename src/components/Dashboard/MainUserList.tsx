@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { FileText } from "lucide-react";
-import { emailFiltering, nameFiltering, phoneFiltering } from "@/utils/regexFiltering";
+import { emailFiltering, phoneFiltering } from "@/utils/regexFiltering";
 import { useEffect, useState } from "react";
 import { IUserData } from "@/types/user";
 import { IMeasureList } from "@/types/measure";
@@ -61,7 +61,7 @@ export const MainUserList = ({
             {(list as IUserData[]).map((user) => (
               <TableRow key={user.user_uuid}>
                 <TableCell className="text-center font-medium whitespace-nowrap">
-                  {nameFiltering(user.user_name)}
+                  {user.user_name}
                 </TableCell>
                 <TableCell className="text-center whitespace-nowrap">
                   {phoneFiltering(user.mobile)}
@@ -96,7 +96,7 @@ export const MainUserList = ({
             {(list as IMeasureList[]).map((measure) => (
               <TableRow key={measure.measure_sn ?? measure.sn}>
                 <TableCell className="text-center font-medium whitespace-nowrap">
-                  {nameFiltering(measure.user_name)}
+                  {measure.user_name}
                 </TableCell>
                 <TableCell className="text-center whitespace-nowrap">
                   {measure.device_name}

@@ -28,7 +28,6 @@ const ResultSheetContainer = ({
   //   isLoading,
   //   isError,
   // } = usePostUserReport(DUMMY_UUID, DUMMY_SN);
-  // console.log(user_uuid, sn);
   const {
     data: reportData,
     isLoading,

@@ -21,6 +21,12 @@ type MeasureTab = {
   render: (left?: IUserMeasureInfoResponse, right?: IUserMeasureInfoResponse) => React.ReactNode;
 };
 
+export interface CompareStaticProps {
+  left ?: IUserMeasureInfoResponse
+  right ?: IUserMeasureInfoResponse
+  userSn: string;
+  onCompareDialogOpen: (slot: CompareSlot) => void;
+}
 
 const CompareBody = ({
   userSn,
@@ -78,20 +84,10 @@ const CompareBody = ({
         return (
           <div className="flex">
             <MeasureStaticCompareFirst 
-              sns={{
-                measureSn0: left ? String(left.result_summary_data.sn) : undefined,
-                measureSn1: right ? String(right.result_summary_data.sn) : undefined,
-                userSn
-              }}
-              cameraOrientations={{
-                orient0: left?.result_summary_data.camera_orientation ?? 0,
-                orient1: right?.result_summary_data.camera_orientation ?? 0
-              }}
+              left={left}
+              right={right}
+              userSn={userSn}
               onCompareDialogOpen={onCompareDialogOpen}
-              measure_dates={{
-                measure_date0: left?.result_summary_data.measure_date ?? "",
-                measure_date1: right?.result_summary_data.measure_date ?? ""
-              }}
             />
           </div>
         );
@@ -104,20 +100,10 @@ const CompareBody = ({
         return (
           <div className="flex">
             <MeasureStaticCompareSecond
-              sns={{
-                measureSn0: left ? String(left.result_summary_data.sn) : undefined,
-                measureSn1: right ? String(right.result_summary_data.sn) : undefined,
-                userSn
-              }}
-              cameraOrientations={{
-                orient0: left?.result_summary_data.camera_orientation ?? 0,
-                orient1: right?.result_summary_data.camera_orientation ?? 0
-              }}
+              left={left}
+              right={right}
+              userSn={userSn}
               onCompareDialogOpen={onCompareDialogOpen}
-              measure_dates={{
-                measure_date0: left?.result_summary_data.measure_date ?? "",
-                measure_date1: right?.result_summary_data.measure_date ?? ""
-              }}
             />
           </div>
         );
@@ -130,20 +116,10 @@ const CompareBody = ({
         return (
           <div className="flex">
             <MeasureStaticCompareThird
-              sns={{
-                measureSn0: left ? String(left.result_summary_data.sn) : undefined,
-                measureSn1: right ? String(right.result_summary_data.sn) : undefined,
-                userSn
-              }}
-              cameraOrientations={{
-                orient0: left?.result_summary_data.camera_orientation ?? 0,
-                orient1: right?.result_summary_data.camera_orientation ?? 0
-              }}
+              left={left}
+              right={right}
+              userSn={userSn}
               onCompareDialogOpen={onCompareDialogOpen}
-              measure_dates={{
-                measure_date0: left?.result_summary_data.measure_date ?? "",
-                measure_date1: right?.result_summary_data.measure_date ?? ""
-              }}
             />
           </div>
         );
@@ -156,20 +132,10 @@ const CompareBody = ({
         return (
           <div className="flex">
             <MeasureStaticCompareFourth
-              sns={{
-                measureSn0: left ? String(left.result_summary_data.sn) : undefined,
-                measureSn1: right ? String(right.result_summary_data.sn) : undefined,
-                userSn
-              }}
-              cameraOrientations={{
-                orient0: left?.result_summary_data.camera_orientation ?? 0,
-                orient1: right?.result_summary_data.camera_orientation ?? 0
-              }}
+              left={left}
+              right={right}
+              userSn={userSn}
               onCompareDialogOpen={onCompareDialogOpen}
-              measure_dates={{
-                measure_date0: left?.result_summary_data.measure_date ?? "",
-                measure_date1: right?.result_summary_data.measure_date ?? ""
-              }}
             />
           </div>
         );
@@ -182,20 +148,10 @@ const CompareBody = ({
         return (
           <div className="flex">
             <MeasureStaticCompareFifth
-              sns={{
-                measureSn0: left ? String(left.result_summary_data.sn) : undefined,
-                measureSn1: right ? String(right.result_summary_data.sn) : undefined,
-                userSn
-              }}
-              cameraOrientations={{
-                orient0: left?.result_summary_data.camera_orientation ?? 0,
-                orient1: right?.result_summary_data.camera_orientation ?? 0
-              }}
+              left={left}
+              right={right}
+              userSn={userSn}
               onCompareDialogOpen={onCompareDialogOpen}
-              measure_dates={{
-                measure_date0: left?.result_summary_data.measure_date ?? "",
-                measure_date1: right?.result_summary_data.measure_date ?? ""
-              }}
             />
           </div>
         );
@@ -208,20 +164,10 @@ const CompareBody = ({
         return (
           <div className="flex">
             <MeasureStaticCompareSixth
-              sns={{
-                measureSn0: left ? String(left.result_summary_data.sn) : undefined,
-                measureSn1: right ? String(right.result_summary_data.sn) : undefined,
-                userSn
-              }}
-              cameraOrientations={{
-                orient0: left?.result_summary_data.camera_orientation ?? 0,
-                orient1: right?.result_summary_data.camera_orientation ?? 0
-              }}
+              left={left}
+              right={right}
+              userSn={userSn}
               onCompareDialogOpen={onCompareDialogOpen}
-              measure_dates={{
-                measure_date0: left?.result_summary_data.measure_date ?? "",
-                measure_date1: right?.result_summary_data.measure_date ?? ""
-              }}
             />
           </div>
         );
@@ -234,20 +180,10 @@ const CompareBody = ({
         return (
           <div className="flex-1">
             <MeasureDynamicCompare
-              sns={{
-                measureSn0: left ? String(left.result_summary_data.sn) : undefined,
-                measureSn1: right ? String(right.result_summary_data.sn) : undefined,
-                userSn
-              }}
-              cameraOrientations={{
-                orient0: left?.result_summary_data.camera_orientation ?? 0,
-                orient1: right?.result_summary_data.camera_orientation ?? 0
-              }}
-              onCompareDialogOpen={onCompareDialogOpen}      
-              measure_dates={{
-                measure_date0: left?.result_summary_data.measure_date ?? "",
-                measure_date1: right?.result_summary_data.measure_date ?? ""
-              }} 
+              left={left}
+              right={right}
+              userSn={userSn}
+              onCompareDialogOpen={onCompareDialogOpen} 
               />
           </div>
         );

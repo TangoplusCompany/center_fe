@@ -11,56 +11,47 @@ import {
   PaginationButtonPrevious,
   PaginationButtonNext,
 } from "@/components/ui/pagination";
-import { ComparePair, CompareSlot } from "@/types/compare";
 import { IMeasureList } from "@/types/measure";
 import { formatDate } from "@/utils/formatDate";
-import type { ComparePagination } from "@/hooks/api/user/useMeasureListForCompare";
+import { cn } from "@/lib/utils";
+import type { DetailPagination } from "@/hooks/api/user/useMeasureListForDetail";
 
-type MeasurePickerDialogProps = {
+const ITEMS_PER_PAGE = 10;
+
+type MeasureDetailDatePickerDialogProps = {
   open: boolean;
   items: IMeasureList[];
-  comparePair: ComparePair;
-  activeSlot: CompareSlot;
+  selectedMeasureSn?: number | null;
   onOpenChange: (v: boolean) => void;
-  onToggleCompareSn: (measureSn : number, slot: CompareSlot) => void;
-  /** useMeasureListForCompare 연동 시 전달. 있으면 API 페이지네이션 사용 */
-  pagination?: ComparePagination;
+  onSelect: (measureSn: number) => void;
+  /** useMeasureListForDetail 연동 시 전달. 있으면 API 페이지네이션 사용 */
+  pagination?: DetailPagination;
 };
 
-export const MeasurePickerDialog = ({
+export const MeasureDetailDatePickerDialog = ({
   open,
   items,
-  comparePair,
-  activeSlot,
+  selectedMeasureSn,
   onOpenChange,
-  onToggleCompareSn,
+  onSelect,
   pagination: apiPagination,
-}: MeasurePickerDialogProps) => {
+}: MeasureDetailDatePickerDialogProps) => {
   const [localPage, setLocalPage] = useState(1);
 
   const useApiPagination = !!apiPagination;
-  
-  // comparePair에 포함된 항목 제외
-  const filteredItems = items.filter((it) =>
-    !comparePair.includes(it.measure_sn)
-  );
-
   const page = useApiPagination ? (apiPagination?.page ?? 1) : localPage;
-  // API 페이지네이션 사용 시: API limit 사용, 로컬 페이지네이션 사용 시: 10개씩
-  const itemsPerPage = useApiPagination ? (apiPagination?.limit ?? 2) : 10;
   const lastPage = useApiPagination
     ? (apiPagination?.last_page ?? 1)
-    : Math.max(1, Math.ceil(filteredItems.length / itemsPerPage));
-  
+    : Math.max(1, Math.ceil(items.length / ITEMS_PER_PAGE));
   const setPage = useApiPagination
     ? (p: number) => apiPagination?.setPage(Math.max(1, p))
     : (p: number) => setLocalPage(Math.max(1, Math.min(p, lastPage)));
 
   const displayItems = useApiPagination
-    ? filteredItems
-    : filteredItems.slice(
-        (localPage - 1) * itemsPerPage,
-        (localPage - 1) * itemsPerPage + itemsPerPage
+    ? items
+    : items.slice(
+        (localPage - 1) * ITEMS_PER_PAGE,
+        (localPage - 1) * ITEMS_PER_PAGE + ITEMS_PER_PAGE
       );
 
   useEffect(() => {
@@ -70,16 +61,14 @@ export const MeasurePickerDialog = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-full max-w-md rounded-2xl bg-white p-4">
-        {/* 헤더 */}
         <DialogTitle className="text-base font-semibold mb-3">
           측정 목록 선택
         </DialogTitle>
 
-        {/* 내용 영역 */}
         <div className="max-h-[360px] overflow-auto">
-          {filteredItems.length === 0 ? (
+          {items.length === 0 ? (
             <div className="flex items-center justify-center h-[200px] text-sm text-gray-400">
-              비교할 항목이 없습니다.
+              측정 목록이 없습니다.
             </div>
           ) : (
             <div className="space-y-2">
@@ -87,9 +76,14 @@ export const MeasurePickerDialog = ({
                 <button
                   key={it.measure_sn}
                   type="button"
-                  className="w-full text-left rounded-xl border px-3 py-2 hover:bg-gray-50 transition-colors"
+                  className={cn(
+                    "w-full text-left rounded-xl border px-3 py-2 hover:bg-gray-50 transition-colors",
+                    selectedMeasureSn != null &&
+                      selectedMeasureSn === it.measure_sn &&
+                      "border-toggleAccent bg-sub100/50"
+                  )}
                   onClick={() => {
-                    onToggleCompareSn(it.measure_sn, activeSlot);
+                    onSelect(it.measure_sn);
                     onOpenChange(false);
                   }}
                 >
@@ -105,7 +99,7 @@ export const MeasurePickerDialog = ({
           )}
         </div>
 
-        {filteredItems.length > 0 && (
+        {items.length > 0  && (
           <div className="mt-3 pt-3 border-t border-sub200">
             <Pagination>
               <PaginationContent className="flex-wrap gap-1 justify-center">
