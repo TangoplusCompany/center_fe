@@ -55,9 +55,9 @@ const MeasureDetailContainer = () => {
     <div className="w-full h-full flex flex-col gap-4">
       <div className="flex items-center gap-3">
         <div className="w-1 h-12 bg-toggleAccent rounded-full"></div>
-        <h2 className="text-3xl font-semibold text-[#333] dark:text-white">
-          {measureData.result_summary_data.user_name}님 측정 결과
-          <span className="text-sm text-sub300 dark:text-sub200 pl-2"> {formatDate(measureData.result_summary_data.measure_date)}</span>
+        <h2 className="text-3xl font-semibold text-[#333] dark:text-white flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+          <span>{measureData.result_summary_data.user_name}님 측정 결과</span>
+          <span className="text-sm text-sub300 dark:text-sub200 sm:pl-2"> {formatDate(measureData.result_summary_data.measure_date)}</span>
         </h2>
       </div>
       {measureDataLoading && (

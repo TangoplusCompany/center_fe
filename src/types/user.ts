@@ -65,3 +65,33 @@ export interface IUserDetail {
 
 
 export type UserAccessStatus = "pending" | "request" | "approved" | "rejected";
+
+// ResultPage 사용자 로그인 관련 타입
+export interface IResultPageLoginUser {
+  user_sn: number;
+  user_name: string;
+  user_uuid: string;
+  mobile: string;
+  pin_login_fail_count: number;
+  pin_account_locked: number;
+  pin_login_last_date: string;
+}
+
+export interface IResultPageLoginSuccessResponse extends IResponseDefault {
+  status: 200;
+  success: true;
+  data: {
+    user: IResultPageLoginUser;
+    access_token: string;
+  };
+}
+
+export interface IResultPageLoginErrorResponse extends IResponseDefault {
+  status: 400 | 401 | 422 | 423;
+  success: false;
+  data: {
+    remaining_attempts?: number;
+  } | [] | undefined;
+}
+
+export type IResultPageLoginResponse = IResultPageLoginSuccessResponse | IResultPageLoginErrorResponse;

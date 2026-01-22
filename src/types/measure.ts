@@ -564,7 +564,7 @@ export interface MeasureHistory {
 }
 
 export interface UpperAndLowerMeasureHistory {
-  sn: number;
+  measure_sn: number;
   user_name: string;
   risk_upper_risk_level: string;
   risk_upper_range_level: string; 
@@ -574,7 +574,7 @@ export interface UpperAndLowerMeasureHistory {
 }
 
 export interface FootPressureHistory {
-  sn: number;
+  measure_sn: number;
   user_name: string;
   mat_static_risk_level: string;
   mat_static_range_level: string; 

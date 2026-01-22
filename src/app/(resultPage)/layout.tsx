@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createAuthStore } from "@/stores/AuthStore";
+import ResultPageUserProvider from "@/providers/ResultPageUserProvider";
 
 export default function ResultPageLayout({
   children,
@@ -33,8 +34,10 @@ export default function ResultPageLayout({
 
   return (
     <div className="min-h-screen w-full">
-      {/* 결과 페이지 전용 레이아웃 */}
-      {children}
+      <ResultPageUserProvider>
+        {/* 결과 페이지 전용 레이아웃 */}
+        {children}
+      </ResultPageUserProvider>
     </div>
   );
 }
