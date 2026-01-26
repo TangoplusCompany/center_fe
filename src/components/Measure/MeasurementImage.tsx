@@ -20,7 +20,7 @@ export const MeasurementImage = ({
   compareSlot,
 }: MeasurementImageProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [showGrid, setShowGrid] = useState(false);
+  const [showGrid, setShowGrid] = useState(true);
   const [showLine, setShowLine] = useState(true);
 
   const { resultUrl, loading } = useStaticLandmark(imageUrl, measureJson, step, cameraOrientation, showLine);

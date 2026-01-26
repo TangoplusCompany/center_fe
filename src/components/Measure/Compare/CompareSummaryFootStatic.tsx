@@ -20,7 +20,7 @@ const CompareSummaryFootStatic = ({
   static0: CompareSummaryFootStaticProps;
   static1?: CompareSummaryFootStaticProps;
 }) => {
-  const riskString1 = getRiskString(static1?.risk_level) ?? " ";
+  const riskString1 = getRiskString(static0?.risk_level) ?? " ";
   
   const score0 = getRiskScore(static0.risk_level, static0.range_level);
   const score1 = static1 ? getRiskScore(static1.risk_level, static1.range_level) : undefined;
@@ -32,7 +32,7 @@ const CompareSummaryFootStatic = ({
 
   const getTrendText = () => {
     if (!static0 || score1 === undefined) return "";
-    const diff = score0 - score1;
+    const diff = score1 - score0 ;
     if (diff > 0) return `${diff}단계 완화`;
     if (diff < 0) return `${Math.abs(diff)}단계 악화`;
     return "변화 없음";
@@ -40,24 +40,24 @@ const CompareSummaryFootStatic = ({
   
 
   const trendCount = getTrendText();
-  const trendBgCondition = static1 ? {
+  const trendBgCondition = static0 ? {
     "0": "bg-sub100",
     "1": "bg-warning-foreground",
     "2": "bg-danger-foreground",
-  }[static1.risk_level] ?? "bg-sub300" : "bg-sub100";
-  const trendTextCondition = static1 ? {
+  }[static0.risk_level] ?? "bg-sub300" : "bg-sub100";
+  const trendTextCondition = static0 ? {
     "0": "text-sub600",
     "1": "text-warningDeep",
     "2": "text-dangerDeep",
-  }[static1.risk_level] ?? "text-sub600" : "text-sub600";
+  }[static0.risk_level] ?? "text-sub600" : "text-sub600";
 
-  const trendBorderCondition = static1 ? {
+  const trendBorderCondition = static0 ? {
     "0": "border-2 border-sub600",
     "1": "border-2 border-warningDeep",
     "2": "border-2 border-dangerDeep",
-  }[static1.risk_level] ?? "" : "";
+  }[static0.risk_level] ?? "" : "";
 
-  const summaryMent = (footStatic: CompareSummaryFootStaticProps, isNext: boolean) => {
+  const summaryMent = (footStatic: CompareSummaryFootStaticProps, isRight: boolean) => {
     const riskString = getRiskString(footStatic.risk_level);
 
     const textBgCondition0 = {
@@ -70,8 +70,8 @@ const CompareSummaryFootStatic = ({
       <div className="flex-1">
         <div className="flex items-center justify-between border-b-2 border-sub200 px-4 py-1 bg-sub100">
           <div className="flex gap-4 items-center">
-            <span className="text-lg">{isNext ? '②' : '①'}</span>
-            <span className={`text-base ${isNext ? 'text-black' : 'text-sub600'}`}>{footStatic.measure_date.slice(0, 11)}</span>
+            <span className="text-lg">{isRight ? '②' : '①'}</span>
+            <span className={`text-base ${isRight ? 'text-sub600' : 'text-black'}`}>{footStatic.measure_date.slice(0, 11)}</span>
           </div>
           <span className={`${textBgCondition0} text-white text-sm px-2 py-1 rounded-full`}>{riskString} {footStatic.range_level}단계</span>
         </div>
@@ -85,7 +85,7 @@ const CompareSummaryFootStatic = ({
          
           {/* <div className="absolute top-0 bottom-0 left-32 w-0.5 bg-sub200" /> */}
 
-          <div className={`flex items-center justify-start text-base ${isNext ? 'text-black' : 'text-sub600'} px-4 py-2 whitespace-pre-line`}>{footStatic.comment}</div>
+          <div className={`flex items-center justify-start text-base ${isRight ? 'text-sub600' : 'text-black'} px-4 py-2 whitespace-pre-line`}>{footStatic.comment}</div>
         </div>
         
       </div>
@@ -105,10 +105,14 @@ const CompareSummaryFootStatic = ({
           {/* 2개의 카드 영역 */}
           <div className="flex w-full min-w-[700px]">
             {/* 이전 카드 */}
-            <div className={`flex flex-col w-[20%] items-center justify-center gap-2 px-8 ${trendBgCondition}`}>
-              <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition}`}>{trendArrow}</div>
-              <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition}`}>{trendString}</div>
-              <div className={`${trendBgCondition} ${trendBorderCondition} ${trendTextCondition} rounded-full px-3 py-1 text-sm whitespace-nowrap`}>{trendCount}</div>
+            <div className={`flex flex-col w-[20%] items-center justify-center gap-2 px-8 ${static1 ? trendBgCondition : 'bg-sub100'}`}>
+              {static1 && (
+                <>
+                  <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition}`}>{trendArrow}</div>
+                  <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition}`}>{trendString}</div>
+                  <div className={`${trendBgCondition} ${trendBorderCondition} ${trendTextCondition} rounded-full px-3 py-1 text-sm whitespace-nowrap`}>{trendCount}</div>
+                </>
+              )}
             </div>
 
             <div className="grid grid-raws-2 w-[80%]">

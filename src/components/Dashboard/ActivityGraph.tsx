@@ -106,9 +106,15 @@ const ActivityGraph = ({
                 </div>
                 
                 {/* 라벨 */}
-                <div className="text-xs font-medium text-gray-600">
-                  {item.label}
-                </div>
+                { data.case === 0 ? (
+                  <div className={`px-2 py-1 text-xs font-medium  ${index == barData.length -1 ? 'rounded-full bg-toggleAccent text-white': 'text-sub600'}` }>
+                    {item.label}
+                  </div>
+                ) : (
+                  <div className={`text-xs font-medium text-sub600` }>
+                    {item.label}
+                  </div>
+                )}
               </div>
             );
           })}
