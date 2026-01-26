@@ -12,14 +12,13 @@ import { useMeasureListForDetail } from "@/hooks/api/user/useMeasureListForDetai
 
 const CenterUserMeasureContainer = ({
   measureSn,
-  userUUID,
   userSn,
   tab,
   onUpdateMeasureSn,
   comparePair,
   onToggleCompareSn,
   onClearCompare,
-  userMeasureList,
+  userMeasureList, // eslint-disable-line @typescript-eslint/no-unused-vars
   // onRemoveCompare,
   onCompareDialogOpen,
   onOpenCompareMode,
@@ -28,7 +27,7 @@ const CenterUserMeasureContainer = ({
   isResultPage = false,
 }: {
   measureSn: number;
-  userUUID: string;
+
   userSn: number;
   tab: number;
   onUpdateMeasureSn: (sn: number) => void;
@@ -49,12 +48,15 @@ const CenterUserMeasureContainer = ({
     isError: latestMeasureError,
     measureList: detailMeasureList,
     pagination: detailPagination,
-  } = useMeasureListForDetail(userUUID);
+  } = useMeasureListForDetail({
+    user_sn: userSn,
+    isResultPage,
+  });
 
   // tab === 0: 날짜(측정일) 선택 시 사용할 measure_sn
   // - 다이얼로그에서 선택한 경우 measureSn, 아니면 리스트 첫 번째(최신)
-  const latestMeasureSn = latestMeasureListData?.measurements?.[0]?.measure_sn;
-  const latestUserSn = latestMeasureListData?.measurements?.[0]?.user_sn;
+  const latestMeasureSn = latestMeasureListData?.measurement_list?.[0]?.measure_sn;
+  const latestUserSn = latestMeasureListData?.measurement_list?.[0]?.user_sn;
   const effectiveMeasureSn = measureSn > 0 ? measureSn : latestMeasureSn;
 
   // tab === 0일 때 선택된 측정 상세 데이터 가져오기 (날짜 변경 시 effectiveMeasureSn 바뀜 → refetch)
@@ -65,10 +67,11 @@ const CenterUserMeasureContainer = ({
     data: latestMeasureData,
     isLoading: latestMeasureDataLoading,
     isError: latestMeasureDataError,
-  } = useMeasureInfo(
-    shouldFetchDetail ? effectiveMeasureSn : undefined,
-    shouldFetchDetail ? `${detailUserSn}` : ""
-  );
+  } = useMeasureInfo({
+    measure_sn: shouldFetchDetail ? effectiveMeasureSn : undefined,
+    user_sn: shouldFetchDetail ? `${detailUserSn}` : "",
+    isResultPage,
+  });
 
   const hasCompare = comparePair[0] !== null || comparePair[1] !== null;
   const shouldShowCompare = isCompareMode || hasCompare;
@@ -116,6 +119,7 @@ const CenterUserMeasureContainer = ({
           onChangeMeasureSn={onUpdateMeasureSn}
           userSn={String(detailUserSn)}
           pagination={detailPagination}
+          isResultPage={isResultPage}
             />
           )}
         </div>
@@ -133,19 +137,19 @@ const CenterUserMeasureContainer = ({
           { shouldShowCompare ? (
             <CompareContainer
               userSn={String(userSn)}
-              measureList={ userMeasureList?.measurements }
               comparePair={comparePair}
               onClose={onClearCompare}
-              // onRemoveCompare={onRemoveCompare}
               onCompareDialogOpen={onCompareDialogOpen}
               onCloseCompareMode={onCloseCompareMode}
+              isResultPage={isResultPage}
               />
           ) : (
             /* 비교 분석: row 클릭 시 상세 미노출, 결과비교 버튼으로만 비교 모드 진입 */
             <CenterUserMeasureListContainer
-              userUUID={userUUID}
+              userSn={userSn}
               onToggleCompareSn={onToggleCompareSn}
               onOpenCompareMode={onOpenCompareMode}
+              isResultPage={isResultPage}
             />
           )}
         </>

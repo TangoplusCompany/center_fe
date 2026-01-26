@@ -15,29 +15,34 @@ const MeasureStaticCompareFirst = React.memo(
   left,
   right,
   userSn,
-  onCompareDialogOpen
+  onCompareDialogOpen,
+  isResultPage = false,
 }: CompareStaticProps) => {
   // TODO 정적 조회하는 api를 사용 + 하단의 useMeasureJson을 써야함 (+ Raw Data card도 넣어줘야함)
+
+
   const leftSummaryData = left?.result_summary_data
   const rightSummaryData = right?.result_summary_data
   const {
     data: measure0,
     isLoading: seq1Loading0,
     isError: seq1Error0,
-  } = useMeasureSequence(
-    leftSummaryData?.sn ? String(leftSummaryData.sn) : undefined,
-    String(userSn),
-    1
-  );
+  } = useMeasureSequence({
+    measure_sn: leftSummaryData?.measure_sn ? String(leftSummaryData.measure_sn) : undefined,
+    user_sn: String(userSn),
+    sequence_number: 1,
+    isResultPage,
+  });
   const {
     data: measure1,
     isLoading: seq1Loading1,
     isError: seq1Error1,
-  } = useMeasureSequence(
-    rightSummaryData?.sn ? String(rightSummaryData.sn) : undefined,
-    String(userSn),
-    1,
-  );
+  } = useMeasureSequence({
+    measure_sn: rightSummaryData?.measure_sn ? String(rightSummaryData.measure_sn) : undefined,
+    user_sn: String(userSn),
+    sequence_number: 1,
+    isResultPage,
+  });
   const {
     data: measureJson0,
     isLoading: isJsonLoading0,

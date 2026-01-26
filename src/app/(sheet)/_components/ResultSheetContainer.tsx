@@ -1449,6 +1449,9 @@ const ResultSheetContainer = ({
               <div className="w-[192px] h-[260px] relative z-0 bg-[#F6F6F6] rounded overflow-hidden">
                 <PoseImageResult
                   imageUrl={`https://gym.tangoplus.co.kr/data/Results/${value}`}
+                  width={192}
+                  height={260}
+                  className="w-full h-full block"
                 />
               </div>
             </div>

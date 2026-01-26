@@ -40,10 +40,10 @@ const MeasureDetailContainer = () => {
     data: measureData,
     isLoading: measureDataLoading,
     isError: measureDataError,
-  } = useMeasureInfo(
-    decryptedData?.measure_sn ?? 0,
-    decryptedData?.user_sn ? `${decryptedData.user_sn}` : ""
-  );
+  } = useMeasureInfo({
+    measure_sn: decryptedData?.measure_sn ?? 0,
+    user_sn: decryptedData?.user_sn ? `${decryptedData.user_sn}` : "",
+  });
 
   if (decryptLoading) return <MeasureDetailSkeleton />;
   if (decryptError) return <div>잘못된 접근입니다.</div>;
@@ -79,7 +79,8 @@ const MeasureDetailContainer = () => {
         measureData={measureData}
         measureList= { undefined }
         selectedMeasureSn= { decryptedData.measure_sn }
-        userSn = {`${decryptedData.user_sn}`}
+        userSn= {`${decryptedData.user_sn}`}
+        isResultPage={false}
           />
       )}
     </div>

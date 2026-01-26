@@ -1,5 +1,5 @@
 import { IResponseDefault } from "./default";
-import { IMeasureList, IUserMeasurement } from "./measure";
+import { IUserMeasurement } from "./measure";
 
 export interface IUnregisterUserResponse extends IResponseDefault {
   data: {
@@ -48,11 +48,24 @@ export interface IUserData {
 }
 
 export interface IUserMeasureList {
-  page: number;
+  current_page: number;
+  per_page: number;
   total: number;
-  limit: number;
-  last_page: number;
-  measurements: IMeasureList[];
+  total_pages: number;
+  has_next_page: boolean;
+  has_prev_page: boolean;
+  sort: string;
+  measurement_list: IUserMeasureListItem[];
+}
+
+export interface IUserMeasureListItem {
+  measure_sn: number;
+  user_sn: number;
+  user_name: string;
+  measure_date: string;
+  device_name: string;
+  center_name: string;
+  mobile: string;
 }
 
 export interface IUserDetail {
