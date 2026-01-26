@@ -24,6 +24,21 @@ export const useUserLogin = (setError: UseFormSetError<FieldValues>) => {
       // 로그인 성공 시 쿠키 설정
       document.cookie = "resultPageLogin=true; path=/; max-age=86400"; // 24시간
 
+      // sessionStorage에 직접 저장 (persist가 비동기적으로 저장하므로 직접 저장하여 확실히 함)
+      try {
+        const storeData = {
+          state: {
+            isLogin: true,
+            user: data.user,
+            accessToken: data.access_token,
+          },
+          version: 0,
+        };
+        sessionStorage.setItem("result-page-user", JSON.stringify(storeData));
+      } catch (error) {
+        console.error("sessionStorage 저장 실패:", error);
+      }
+
       // 사용자 정보를 암호화하여 쿼리 파라미터로 전달
       const encrypted = await actionUserEncrypt({
         user_uuid: data.user.user_uuid,
@@ -32,7 +47,11 @@ export const useUserLogin = (setError: UseFormSetError<FieldValues>) => {
       });
       
       if (encrypted !== "ERROR") {
-        router.push(`/result-page?key=${encrypted}`);
+        // sessionStorage 저장과 쿠키 설정이 완료될 시간을 주기 위해 딜레이
+        // React 상태 업데이트, 쿠키 반영, sessionStorage 저장이 완료되도록 보장
+        setTimeout(() => {
+          router.push(`/result-page?key=${encrypted}`);
+        }, 200);
       } else {
         alert("암호화 중 오류가 발생했습니다.");
       }
