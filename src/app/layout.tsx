@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
       ? "탱고바디 측정 결과 확인 페이지입니다."
       : "탱고바디 센터 관리자 페이지 입니다.",
     icons: {
-      icon: isMy ? "/favicon-admin.svg" : "/favicon-admin.svg",
+      icon: isMy ? "/favicon_my.ico" : "/favicon_admin.ico",
     },
   };
 }
