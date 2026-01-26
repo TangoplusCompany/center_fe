@@ -97,7 +97,7 @@ export const DeviceInformation = () => {
           <h2 className="text-2xl col-span-2">기기 현황</h2>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
           {displayedDevices.map((device) => (
             <DashboardDeviceStatus key={device.device_sn} device={device} />
           ))}

@@ -39,7 +39,6 @@ const MeasureSummaryGraph = ({
     const range = parseInt(rangeLevel);
     return risk * 3 + range;
   };
-
   const processedData = React.useMemo(() => {
     const isFootPressureHistory = (
       item: UpperAndLowerMeasureHistory | FootPressureHistory
@@ -47,7 +46,7 @@ const MeasureSummaryGraph = ({
       return dCase === 2;
     };
 
-    return data.map(item => {
+    const mapped = data.map(item => {
       let upperScore = 0;
       let lowerScore = 0;
       let footScore = 0;
@@ -73,12 +72,18 @@ const MeasureSummaryGraph = ({
       return {
         ...item,
         date: item.measure_date,
-        upper: upperScore,  // 👈 이 필드명들이 중요!
-        lower: lowerScore,  // 👈 Area의 dataKey와 일치해야 함
+        upper: upperScore,
+        lower: lowerScore,
         foot: footScore
       };
     });
+
+    // 날짜 기준 오름차순 정렬 (가장 오래된 것 → 가장 최근 것)
+    return mapped.sort((a, b) => {
+      return new Date(a.measure_date).getTime() - new Date(b.measure_date).getTime();
+    });
   }, [data, dCase]);
+
   const yAxisTicks = [1, 4, 7];
 
   // y축 라벨 포맷터

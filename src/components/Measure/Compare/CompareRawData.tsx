@@ -57,7 +57,7 @@ export const CompareRawData = ({
   const RawDataContainer = (
     dataTop: IUserMeasureDetailData,
     dataBottom: IUserMeasureDetailData | undefined,
-    isNext: boolean
+    isRight: boolean
   ) => {
     const formattedData0 = (dataTop?.measure_unit?.includes("거리") ? Math.abs(dataTop?.data) : dataTop?.data)?.toFixed(1);
     const unit0 = getRawDataMark(dataTop?.measure_unit)
@@ -114,8 +114,8 @@ export const CompareRawData = ({
     <div  className={`flex flex-col w-full h-full`}>
       <div className="grid grid-cols-[18%_10%_12%_60%] items-center border-b-2 border-sub200 bg-sub100 py-2">
         <div className="flex gap-4 items-center pl-4">
-          <span className="text-lg font-semibold text-black ">{isNext ? '②' : '①'}</span>
-          <span className="text-base text-sub600">{isNext ? measure_date1.slice(0, 11) : measure_date0.slice(0, 11)}</span>
+          <span className="text-lg font-semibold text-black ">{isRight ? '②' : '①'}</span>
+          <span className={`text-base ${isRight ? 'text-sub600' : 'text-black'}`}>{isRight ? measure_date1.slice(0, 11) : measure_date0.slice(0, 11)}</span>
         </div>
         <span className={`flex flex-1 justify-center text-base text-sub600 `}>{!dataBottom ? '기준값' : '차이값'}</span>
         <span className="flex justify-center text-base text-sub600 ">단계표시</span>
@@ -126,19 +126,19 @@ export const CompareRawData = ({
         
         <div className={`grid items-center h-full`}>
           <div className="flex">
-            <span className={`flex text-sm items-center justify-center ${isNext ? 'text-black' : 'text-sub600'} px-2 py-1 rounded-full bg-sub100 mx-2 my-2 ${!dataBottom && 'invisible'}`}>
+            <span className={`flex text-sm items-center justify-center ${isRight ? 'text-sub600' : 'text-black'} px-2 py-1 rounded-full bg-sub100 mx-2 my-2 ${!dataBottom && 'invisible'}`}>
               {leftRightString0}
             </span>
-            <span className={`flex items-center text-lg font-medium leading-none px-2 ${isNext ? 'text-black' : 'text-sub600'}`}>
+            <span className={`flex items-center text-lg font-medium leading-none px-2 ${isRight ? 'text-sub600' : 'text-black'}`}>
               {formattedData0} {unit0}
             </span>
           </div>
           {dataBottom && (
             <div className="flex">
-              <span className={`text-sm flex items-center justify-center ${isNext ? 'text-black' : 'text-sub600'} px-2 py-1 rounded-full bg-sub100 mx-2 my-2`}>
+              <span className={`text-sm flex items-center justify-center ${isRight ? 'text-sub600' : 'text-black'} px-2 py-1 rounded-full bg-sub100 mx-2 my-2`}>
                 {leftRightString1}
               </span>
-              <span className={`flex items-center text-lg text-black font-medium leading-none px-2 ${isNext ? 'text-black' : 'text-sub600'}`}>
+              <span className={`flex items-center text-lg text-black font-medium leading-none px-2 ${isRight ? 'text-sub600' : 'text-black'}`}>
                 {formattedData1} {unit1}
               </span>
             </div>
@@ -146,7 +146,7 @@ export const CompareRawData = ({
         </div>  
 
 
-        <div className={`grid items-center justify-center h-full ${isNext ? 'text-black' : 'text-sub600'}`}>
+        <div className={`grid items-center justify-center h-full ${isRight ? 'text-sub600' : 'text-black'}`}>
           {!dataBottom 
             ? (dataTop?.measure_unit?.includes("기울기") ? "0º" : "")
             : (data0 - data1).toFixed(1) + unit0
@@ -173,11 +173,11 @@ export const CompareRawData = ({
         </div>
 
         <div className={`grid items-center justify-start h-full px-4`}>
-          <span className={`text-base ${isNext ? 'text-black' : 'text-sub600'}`}>
+          <span className={`text-base ${isRight ? 'text-black' : 'text-sub600'}`}>
             {dataTop?.ment_all}
           </span>
           {dataBottom && dataBottom.ment_all !== dataTop?.ment_all && (
-            <span className={`text-base ${isNext ? 'text-black' : 'text-sub600'}`}>
+            <span className={`text-base ${isRight ? 'text-black' : 'text-sub600'}`}>
               {dataBottom.ment_all}
             </span>
           )}
@@ -201,37 +201,37 @@ export const CompareRawData = ({
   const trendCount0 = compareTrendState(scoreTop0, scoreTop1);
   const trendCount1 = compareTrendState(scoreBottom0, scoreBottom1);
 
-  const trendBgCondition0 = dataTop1 ? {
+  const trendBgCondition0 = dataTop0 ? {
     "0": "bg-sub100",
     "1": "bg-warning-foreground",
     "2": "bg-danger-foreground",
-  }[dataTop1.risk_level] ?? "bg-sub300" : "bg-sub100";
-  const trendTextCondition0 = dataTop1 ? {
+  }[dataTop0.risk_level] ?? "bg-sub300" : "bg-sub100";
+  const trendTextCondition0 = dataTop0 ? {
     "0": "text-sub600",
     "1": "text-warningDeep",
     "2": "text-dangerDeep",
-  }[dataTop1.risk_level] ?? "text-sub600" : "text-sub600";
-  const trendBorderCondition0 = dataTop1 ? {
+  }[dataTop0.risk_level] ?? "text-sub600" : "text-sub600";
+  const trendBorderCondition0 = dataTop0 ? {
     "0": "border-2 border-sub600",
     "1": "border-2 border-warningDeep",
     "2": "border-2 border-dangerDeep",
-  }[dataTop1.risk_level] ?? "border-2 border-sub600" : "border-2 border-sub600";
+  }[dataTop0.risk_level] ?? "border-2 border-sub600" : "border-2 border-sub600";
 
-  const trendBgCondition1 = dataBottom1 ? {
+  const trendBgCondition1 = dataBottom0 ? {
     "0": "bg-sub100",
     "1": "bg-warning-foreground",
     "2": "bg-danger-foreground",
-  }[dataBottom1.risk_level] ?? "bg-sub300" : "bg-sub100";
-  const trendTextCondition1 = dataBottom1 ? {
+  }[dataBottom0.risk_level] ?? "bg-sub300" : "bg-sub100";
+  const trendTextCondition1 = dataBottom0 ? {
     "0": "text-sub600",
     "1": "text-warningDeep",
     "2": "text-dangerDeep",
-  }[dataBottom1.risk_level] ?? "text-sub600" : "text-sub600";
-  const trendBorderCondition1 = dataBottom1 ? {
+  }[dataBottom0.risk_level] ?? "text-sub600" : "text-sub600";
+  const trendBorderCondition1 = dataBottom0 ? {
     "0": "border-2 border-sub600",
     "1": "border-2 border-warningDeep",
     "2": "border-2 border-dangerDeep",
-  }[dataBottom1.risk_level] ?? "border-2 border-sub600" : "border-2 border-sub600";
+  }[dataBottom0.risk_level] ?? "border-2 border-sub600" : "border-2 border-sub600";
   
   const existedSlot = data1 !== undefined && dataTop1 !== undefined
   const isLeftRightData = dataTop1 && dataBottom1
