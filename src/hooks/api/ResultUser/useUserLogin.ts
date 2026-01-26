@@ -18,26 +18,82 @@ export const useUserLogin = (setError: UseFormSetError<FieldValues>) => {
   return useMutation({
     mutationFn: postUserLogin,
     onSuccess: async (data: IResultPageLoginSuccessResponse["data"]) => {
-      // zustand store에 저장
+      // zustand store에 저장 (persist가 자동으로 sessionStorage에 저장함)
       setLoginFromResponse(data);
 
       // 로그인 성공 시 쿠키 설정
       document.cookie = "resultPageLogin=true; path=/; max-age=86400"; // 24시간
 
-      // sessionStorage에 직접 저장 (persist가 비동기적으로 저장하므로 직접 저장하여 확실히 함)
-      try {
-        const storeData = {
-          state: {
-            isLogin: true,
-            user: data.user,
-            accessToken: data.access_token,
-          },
-          version: 0,
-        };
-        sessionStorage.setItem("result-page-user", JSON.stringify(storeData));
-      } catch (error) {
-        console.error("sessionStorage 저장 실패:", error);
-      }
+      // persist가 sessionStorage에 저장될 때까지 기다리는 헬퍼 함수
+      const waitForPersist = (): Promise<void> => {
+        return new Promise((resolve) => {
+          // sessionStorage에 이미 저장되어 있으면 즉시 resolve
+          const stored = sessionStorage.getItem("result-page-user");
+          if (stored) {
+            try {
+              const parsed = JSON.parse(stored);
+              if (parsed?.state?.isLogin && parsed?.state?.user) {
+                resolve();
+                return;
+              }
+            } catch {
+              // 파싱 실패는 무시하고 계속 진행
+            }
+          }
+          
+          // persist가 저장할 때까지 polling
+          let attempts = 0;
+          const maxAttempts = 30; // 최대 3초 (100ms * 30)
+          const interval = setInterval(() => {
+            attempts++;
+            const stored = sessionStorage.getItem("result-page-user");
+            if (stored) {
+              try {
+                const parsed = JSON.parse(stored);
+                if (parsed?.state?.isLogin && parsed?.state?.user) {
+                  clearInterval(interval);
+                  resolve();
+                  return;
+                }
+              } catch {
+                // 파싱 실패는 무시하고 계속 진행
+              }
+            }
+            
+            if (attempts >= maxAttempts) {
+              clearInterval(interval);
+              // 타임아웃이어도 진행 (persist는 저장되었을 가능성이 높음)
+              resolve();
+            }
+          }, 100);
+        });
+      };
+
+      // 쿠키 설정 확인을 위한 헬퍼 함수
+      const waitForCookie = (): Promise<void> => {
+        return new Promise((resolve) => {
+          // 쿠키가 이미 설정되어 있으면 즉시 resolve
+          if (document.cookie.includes("resultPageLogin=true")) {
+            resolve();
+            return;
+          }
+          
+          // 쿠키가 설정될 때까지 polling
+          let attempts = 0;
+          const maxAttempts = 20; // 최대 2초 (100ms * 20)
+          const interval = setInterval(() => {
+            attempts++;
+            if (document.cookie.includes("resultPageLogin=true")) {
+              clearInterval(interval);
+              resolve();
+            } else if (attempts >= maxAttempts) {
+              clearInterval(interval);
+              // 타임아웃이어도 진행 (쿠키는 설정되었을 가능성이 높음)
+              resolve();
+            }
+          }, 100);
+        });
+      };
 
       // 사용자 정보를 암호화하여 쿼리 파라미터로 전달
       const encrypted = await actionUserEncrypt({
@@ -47,11 +103,9 @@ export const useUserLogin = (setError: UseFormSetError<FieldValues>) => {
       });
       
       if (encrypted !== "ERROR") {
-        // sessionStorage 저장과 쿠키 설정이 완료될 시간을 주기 위해 딜레이
-        // React 상태 업데이트, 쿠키 반영, sessionStorage 저장이 완료되도록 보장
-        setTimeout(() => {
-          router.push(`/result-page?key=${encrypted}`);
-        }, 200);
+        // persist가 sessionStorage에 저장되고 쿠키가 설정될 때까지 기다린 후 페이지 이동
+        await Promise.all([waitForPersist(), waitForCookie()]);
+        router.push(`/result-page?key=${encrypted}`);
       } else {
         alert("암호화 중 오류가 발생했습니다.");
       }

@@ -44,7 +44,10 @@ const CenterUserDetail = ({
   const { measureSn, handleRecentSn } = useMeasureSn();
   
   // 사용자 정보를 가져와서 최신 이름 표시 (사용자 정보 수정 시 자동 업데이트)
-  const { data: userDetailData } = useGetUserDetail({ userSn: userSn.toString() });
+  const { data: userDetailData } = useGetUserDetail({ 
+    userSn: userSn.toString(),
+    isResultPage 
+  });
   
   // 측정일을 가져오기 위한 대시보드 데이터
   const { data: dashboardData } = useGetUserDashboard<IUserDashBoard>({
@@ -185,7 +188,9 @@ const CenterUserDetail = ({
             isResultPage={isResultPage}
           />
         )}
-        {tab === 3 && <CenterUserInformation userSn={userSn} />}
+        {tab === 3 && <CenterUserInformation 
+        userSn={userSn} 
+        isResultPage={isResultPage} />}
         </>
       )}
 
