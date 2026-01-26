@@ -28,6 +28,7 @@ type SidebarContext = {
   openMobile: boolean;
   setOpenMobile: (open: boolean) => void;
   isMobile: boolean;
+  isXl: boolean;
   toggleSidebar: () => void;
 };
 
@@ -51,6 +52,17 @@ const SidebarProvider = React.forwardRef<
   }
 >(({ defaultOpen = true, open: openProp, onOpenChange: setOpenProp, className, style, children, ...props }, ref) => {
   const isMobile = useIsMobile();
+  const [isXl, setIsXl] = React.useState(false);
+
+  // xl 사이즈 체크
+  React.useEffect(() => {
+    const checkXl = () => {
+      setIsXl(window.innerWidth >= 1280);
+    };
+    checkXl();
+    window.addEventListener("resize", checkXl);
+    return () => window.removeEventListener("resize", checkXl);
+  }, []);
 
   // This is the internal state of the sidebar.
   // We use openProp and setOpenProp for control from outside the component.
@@ -72,14 +84,14 @@ const SidebarProvider = React.forwardRef<
     [setOpenProp, open],
   );
 
-  // Automatically open/close sidebar based on mobile state
+  // Automatically open/close sidebar based on mobile state and xl breakpoint
   React.useEffect(() => {
-    if (isMobile) {
-      setOpen(false); // 모바일일 때 사이드바 닫기
+    if (isMobile || !isXl) {
+      setOpen(false); // 모바일이거나 xl 미만일 때 사이드바 닫기
     } else {
-      setOpen(true); // 모바일이 아닐 때 사이드바 열기
+      setOpen(true); // xl 사이즈일 때 사이드바 열기
     }
-  }, [isMobile, setOpen]);
+  }, [isMobile, isXl, setOpen]);
 
   // Helper to toggle the sidebar.
   const toggleSidebar = React.useCallback(() => {
@@ -108,12 +120,13 @@ const SidebarProvider = React.forwardRef<
       state,
       open,
       setOpen,
-      isMobile,
+      isMobile: isMobile || !isXl, // xl 미만이면 모바일처럼 처리
+      isXl,
       openMobile,
       setOpenMobile,
       toggleSidebar,
     }),
-    [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar],
+    [state, open, setOpen, isMobile, isXl, openMobile, setOpenMobile, toggleSidebar],
   );
 
   return (
@@ -147,7 +160,7 @@ const Sidebar = React.forwardRef<
     collapsible?: "offcanvas" | "icon" | "none";
   }
 >(({ side = "left", variant = "sidebar", collapsible = "offcanvas", className, children, ...props }, ref) => {
-  const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
+  const { isMobile, isXl, state, openMobile, setOpenMobile } = useSidebar();
 
   if (collapsible === "none") {
     return (
@@ -159,7 +172,7 @@ const Sidebar = React.forwardRef<
 
   return (
     <>
-      {isMobile && (
+      {(isMobile || !isXl) && (
         <>
           <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
             <SheetContent
@@ -180,7 +193,7 @@ const Sidebar = React.forwardRef<
               </div>
             </SheetContent>
           </Sheet>
-          {/* 모바일일 때 fixed 위치의 unfold 아이콘 버튼 */}
+          {/* 모바일이거나 xl 미만일 때 fixed 위치의 unfold 아이콘 버튼 */}
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -208,7 +221,8 @@ const Sidebar = React.forwardRef<
         ref={ref} 
         className={cn(
           "group peer block text-sidebar-foreground",
-          isMobile && "hidden", // 모바일일 때 완전히 숨김
+          (isMobile || !isXl) && "hidden", // 모바일이거나 xl 미만일 때 완전히 숨김
+          "hidden xl:block", // xl 사이즈(1280px) 이상에서만 보이도록 설정
         )}
         data-state={state} 
         data-collapsible={state === "collapsed" ? collapsible : ""} 
