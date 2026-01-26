@@ -13,7 +13,6 @@ export interface MeasureSummaryProps {
   handleLegendClick: (measureSn: number) => void;
   dCase: 0 | 1;
   title: string;
-  isResultPage?: boolean;
 }
 
 
@@ -25,8 +24,7 @@ const MeasureSummaryContainer = ({
   handleLegendClick,
   dCase,
   title,
-  isResultPage = false,
- }: MeasureSummaryProps 
+}: MeasureSummaryProps 
 ) => {
   return (
     <div className="rounded-3xl border-2 border-sub200 p-3 sm:p-4">

@@ -72,7 +72,6 @@ const MeasureReportContainer = ({
         handleLegendClick={handleLegendClick} 
         dCase={0}
         title="상지 결과"
-        isResultPage={isResultPage}
       />
       {/* 하지 */}
       <MeasureSummaryContainer 
@@ -83,7 +82,6 @@ const MeasureReportContainer = ({
         handleLegendClick={handleLegendClick} 
         dCase={1}
         title="하지 결과"
-        isResultPage={isResultPage}
       />
             {/* 족압 */}
       {footLoading && <div>로딩 중...</div>}
