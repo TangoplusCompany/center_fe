@@ -9,9 +9,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReactNode } from "react";
 import Link from "next/link";
-import { postLogin } from "@/services/auth/postLogin";
-import { LoginOtpDialog } from "@/components/auth/LoginOtpDialog";
-import { useOtpDialog } from "@/hooks/api/auth/useOtpDialog";
+// TODO: 2차 인증(OTP) API가 준비되면 주석 해제하여 사용
+// import { postLogin } from "@/services/auth/postLogin";
+// import { LoginOtpDialog } from "@/components/auth/LoginOtpDialog";
+// import { useOtpDialog } from "@/hooks/api/auth/useOtpDialog";
+import { useLogin } from "@/hooks/api/auth/useLogin";
 
 const loginSchema = z.object({
   email: z
@@ -43,13 +45,16 @@ export default function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
-  const {
-    isOtpDialogOpen,
-    phone,
-    loginData,
-    openDialog,
-    closeDialog,
-  } = useOtpDialog();
+  // TODO: 2차 인증(OTP) API가 준비되면 주석 해제하여 사용
+  // const {
+  //   isOtpDialogOpen,
+  //   phone,
+  //   loginData,
+  //   openDialog,
+  //   closeDialog,
+  // } = useOtpDialog();
+
+  const { mutate: login, isPending } = useLogin();
 
   const {
     register,
@@ -59,23 +64,30 @@ export default function LoginForm({
     resolver: zodResolver(loginSchema),
   });
 
-  const loginHandleSubmit = handleSubmit(async (data) => {
-    try {
-      // 로그인 API 호출하여 핸드폰 번호 받기
-      const response = await postLogin({
-        email: data.email,
-        password: data.password,
-      });
-      
-      // 핸드폰 번호 받아서 OTP 다이얼로그 표시
-      openDialog(response.admin_info.mobile, {
-        email: data.email,
-        password: data.password,
-      });
-    } catch (error) {
-      // 에러 처리는 postLogin 내부에서 처리될 것
-      console.error("Login error:", error);
-    }
+  const loginHandleSubmit = handleSubmit((data) => {
+    // 바로 로그인 처리 (2차 인증 없이)
+    login({
+      email: data.email,
+      password: data.password,
+    });
+
+    // TODO: 2차 인증(OTP) API가 준비되면 주석 해제하여 사용
+    // try {
+    //   // 로그인 API 호출하여 핸드폰 번호 받기
+    //   const response = await postLogin({
+    //     email: data.email,
+    //     password: data.password,
+    //   });
+    //   
+    //   // 핸드폰 번호 받아서 OTP 다이얼로그 표시
+    //   openDialog(response.admin_info.mobile, {
+    //     email: data.email,
+    //     password: data.password,
+    //   });
+    // } catch (error) {
+    //   // 에러 처리는 postLogin 내부에서 처리될 것
+    //   console.error("Login error:", error);
+    // }
   });
   return (
     <form
@@ -127,8 +139,13 @@ export default function LoginForm({
             <ErrorText>{String(errors.password?.message)}</ErrorText>
           )}
         </div>
-        <Button variant="outline" type="submit" className="w-full">
-          로그인
+        <Button 
+          variant="outline" 
+          type="submit" 
+          className="w-full"
+          disabled={isPending}
+        >
+          {isPending ? "로그인 중..." : "로그인"}
         </Button>
       </div>
       <div className="text-center text-sm">
@@ -138,7 +155,8 @@ export default function LoginForm({
         </Link>
       </div>
       
-      {loginData && (
+      {/* TODO: 2차 인증(OTP) API가 준비되면 주석 해제하여 사용 */}
+      {/* {loginData && (
         <LoginOtpDialog
           open={isOtpDialogOpen}
           onOpenChange={(open) => {
@@ -147,7 +165,7 @@ export default function LoginForm({
           phone={phone}
           loginData={loginData}
         />
-      )}
+      )} */}
     </form>
   );
 }
