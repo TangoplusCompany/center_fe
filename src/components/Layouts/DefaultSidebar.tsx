@@ -112,7 +112,7 @@ export default function DefaultSidebar() {
       // activeIndex는 있지만 조건이 맞지 않을 때는 기본값 유지
       setIndicatorStyle({ top: 0, height: 0 });
     }
-  }, [pathname, adminRole, openMobile, isMobile, filteredDashboard]);
+  }, [pathname, adminRole, openMobile, isMobile, filteredDashboard, state]);
 
   const handleLinkClick = () => {
     // 모바일에서 링크 클릭 시 사이드바 닫기
