@@ -9,6 +9,7 @@ import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import { IUserMeasureList } from "@/types/user";
 import DataError from "@/components/Util/DataError";
 import { CompareSlot } from "@/types/compare";
+import { IMeasureList } from "@/types/measure";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -20,16 +21,20 @@ import { DateRange } from "react-day-picker";
 import { cn } from "@/lib/utils";
 
 const CenterUserMeasureListContainer = ({ 
-  userUUID,
+  // userUUID,
+  userSn,
   onSelectMeasure,
   onToggleCompareSn, 
   onOpenCompareMode,
+  isResultPage = false,
   
 }: { 
-  userUUID: string;
+  // userUUID: string;
+  userSn: number;
   onSelectMeasure?: (measureSn: number) => void;
   onToggleCompareSn: (sn: number, slot: CompareSlot) => void;
   onOpenCompareMode: () => void;
+  isResultPage: boolean;
 }) => {
   const { setQueryParam, query } = useQueryParams();
   const page = query.page || "1";
@@ -45,9 +50,11 @@ const CenterUserMeasureListContainer = ({
   } = useGetUserMeasureList<IUserMeasureList>({
     page,
     limit,
-    user_uuid: userUUID,
+    // user_uuid: userUUID,
+    user_sn: userSn,
     from,
-    to
+    to,
+    isResultPage,
   });
 
   const handleSelectChange = (value: string) => {
@@ -168,10 +175,24 @@ const CenterUserMeasureListContainer = ({
     to: new Date(to),
   } : undefined;
 
-  const sortedMeasurements = useMemo(() => {
-    if (!userMeasureList?.measurements) return [];
+  const sortedMeasurements: IMeasureList[] = useMemo(() => {
+    if (!userMeasureList?.measurement_list) return [];
     
-    const sorted = [...userMeasureList.measurements];
+    // IUserMeasureListItem[]를 IMeasureList[]로 변환
+    const converted = userMeasureList.measurement_list.map((item) => ({
+      sn: item.measure_sn,
+      measure_sn: item.measure_sn,
+      user_name: item.user_name,
+      device_name: item.device_name,
+      measure_date: item.measure_date,
+      mobile: item.mobile,
+      user_sn: item.user_sn,
+      user_uuid: "",
+      device_sn: 0,
+      t_score: 0,
+    }));
+    
+    const sorted = [...converted];
     
     if (sort === "asc") {
       // 오래된순 (날짜 오름차순)
@@ -184,7 +205,7 @@ const CenterUserMeasureListContainer = ({
         new Date(b.measure_date).getTime() - new Date(a.measure_date).getTime()
       );
     }
-  }, [userMeasureList?.measurements, sort]);
+  }, [userMeasureList?.measurement_list, sort]);
   
   const handleSortChange = (value: string) => {
     setQueryParam([
@@ -230,40 +251,42 @@ const CenterUserMeasureListContainer = ({
         </span>
       </div> */}
 
-      <div className="flex items-center justify-end gap-4 w-full">
-        <Select
-          onValueChange={handleSelectChange}
-          defaultValue={defaultLimit.toString()}
-        >
-          <SelectTrigger className="max-w-[120px]">
-            <SelectValue placeholder="행 갯수" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="10">10건</SelectItem>
-            <SelectItem value="20">20건</SelectItem>
-            <SelectItem value="50">50건</SelectItem>
-          </SelectContent>
-        </Select>
+      <div className="flex flex-col sm:flex-row items-end sm:items-center justify-end gap-2 sm:gap-4 w-full">
+        <div className="flex items-center gap-4 justify-end sm:justify-start">
+          <Select
+            onValueChange={handleSelectChange}
+            defaultValue={defaultLimit.toString()}
+          >
+            <SelectTrigger className="max-w-[120px]">
+              <SelectValue placeholder="행 갯수" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="10">10건</SelectItem>
+              <SelectItem value="20">20건</SelectItem>
+              <SelectItem value="50">50건</SelectItem>
+            </SelectContent>
+          </Select>
 
-        <Select
-          onValueChange={handleSortChange}
-          defaultValue={sort}
-        >
-          <SelectTrigger className="max-w-[120px]">
-            <SelectValue placeholder="최신순" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="desc">최신순</SelectItem>
-            <SelectItem value="asc">오래된순</SelectItem>
-          </SelectContent>
-        </Select>
+          <Select
+            onValueChange={handleSortChange}
+            defaultValue={sort}
+          >
+            <SelectTrigger className="max-w-[120px]">
+              <SelectValue placeholder="최신순" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="desc">최신순</SelectItem>
+              <SelectItem value="asc">오래된순</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
         <Popover open={isPopoverOpen} onOpenChange={handlePopoverOpenChange}>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
               className={cn(
-                "w-auto justify-start text-left font-normal",
+                "w-fit justify-start text-left font-normal",
                 !appliedDateRange && "text-muted-foreground"
               )}
             >
@@ -329,9 +352,9 @@ const CenterUserMeasureListContainer = ({
         {userMeasureList && (
           <CustomPagination
             total={userMeasureList.total}
-            page={userMeasureList.page}
-            last_page={userMeasureList.last_page}
-            limit={userMeasureList.limit}
+            page={userMeasureList.current_page}
+            last_page={userMeasureList.total_pages}
+            limit={userMeasureList.per_page}
           />
         )}
       </>

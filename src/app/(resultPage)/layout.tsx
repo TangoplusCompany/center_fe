@@ -35,8 +35,8 @@ export default function ResultPageLayout({
   return (
     <div className="min-h-screen w-full">
       <ResultPageUserProvider>
-        {/* 결과 페이지 전용 레이아웃 */}
-        {children}
+      {/* 결과 페이지 전용 레이아웃 */}
+      {children}
       </ResultPageUserProvider>
     </div>
   );

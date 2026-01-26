@@ -1,6 +1,6 @@
 import React from "react";
 import { useVideoPlayer } from "../hooks/useVideoPlayer";
-import { PoseLandmarks } from "../../DetailDynamic";
+import { PoseLandmarks, setupHiDPICanvas } from "../../DetailDynamic";
 import { drawSkeleton, drawTrailSegment, midPoint } from "../utils/compareUtils";
 import { IMeasureJson } from "@/types/measure";
 import { cn } from "@/lib/utils";
@@ -55,6 +55,19 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     onFrameChange,
   });
 
+  // Update canvas size when fit changes
+  React.useEffect(() => {
+    const cw = canvasWhiteRef.current;
+    const cr = canvasRedRef.current;
+    const ct = canvasTrailRef.current;
+    if (!cw || !cr || !ct || fit.stageW === 0 || fit.stageH === 0) return;
+
+    // Update canvas size when fit changes
+    setupHiDPICanvas(cw, fit.stageW, fit.stageH);
+    setupHiDPICanvas(cr, fit.stageW, fit.stageH);
+    setupHiDPICanvas(ct, fit.stageW, fit.stageH);
+  }, [fit.stageW, fit.stageH, fit.dpr, canvasWhiteRef, canvasRedRef, canvasTrailRef]);
+
   // Draw skeleton and trail
   React.useEffect(() => {
     if (!measureJson) return;
@@ -67,7 +80,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const cw = canvasWhiteRef.current;
     const cr = canvasRedRef.current;
     const ct = canvasTrailRef.current;
-    if (!cw || !cr || !ct) return;
+    if (!cw || !cr || !ct || fit.stageW === 0 || fit.stageH === 0) return;
 
     const ctxW = cw.getContext("2d");
     const ctxR = cr.getContext("2d");

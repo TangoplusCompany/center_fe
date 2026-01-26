@@ -53,7 +53,7 @@ export default function ResultPage() {
     // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
     if (!isDecrypting && (!isLogin || !user)) {
       router.replace("/result-page/login");
-    }
+  }
   }, [isLogin, user, router, isDecrypting]);
 
   // 복호화 중이거나 로그인하지 않았거나 사용자 정보가 없으면 아무것도 렌더링하지 않음

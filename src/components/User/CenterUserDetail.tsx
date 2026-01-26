@@ -81,7 +81,11 @@ const CenterUserDetail = ({
     data: compareMeasureList,
     measureList: compareMeasureListItems,
     pagination: comparePagination,
-  } = useMeasureListForCompare(userUUID);
+  } = useMeasureListForCompare({
+    // userUUID: isResultPage ? undefined : userUUID, // eslint-disable-line @typescript-eslint/no-unused-vars
+    user_sn: userSn,
+    isResultPage,
+  });
     
   const onClearCompare = () => {
     setComparePair([null, null]);
@@ -165,14 +169,14 @@ const CenterUserDetail = ({
         (
           <CenterUserMeasureContainer
             measureSn={measureSn}
-            userUUID={userUUID}
+            // userUUID={userUUID}
             userSn={userSn}
             tab={tab}
             onUpdateMeasureSn={handleRecentSn}
             comparePair={ comparePair }
             onToggleCompareSn={ handleToggleCompareSn }
             onClearCompare={ onClearCompare }
-            userMeasureList={ compareMeasureList || { page: 1, measurements: [], total: 0, limit: 10, last_page: 1 } }
+            userMeasureList={ compareMeasureList || { current_page: 1, per_page: 10, total: 0, total_pages: 1, has_next_page: false, has_prev_page: false, sort: "", measurement_list: [] } }
             // onRemoveCompare={ onRemoveCompare }
             onCompareDialogOpen= {onCompareDialogOpen}
             onOpenCompareMode={openCompareMode}

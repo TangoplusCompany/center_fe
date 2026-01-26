@@ -10,7 +10,8 @@ import { IUserMeasureDetailData, IUserMeasureInfoResponse } from "@/types/measur
 const BackMeasurement = ({
   sns,
   measureInfo,
-  cameraOrientation
+  cameraOrientation,
+  isResultPage = false,
 }: {
   sns: {
     measureSn: string;
@@ -18,25 +19,28 @@ const BackMeasurement = ({
   };
   measureInfo: IUserMeasureInfoResponse;
   cameraOrientation: 0 | 1;
+  isResultPage: boolean;
 }) => {
   const {
     data: measureFifth,
     isLoading: seq5Loading,
     isError: seq5Error,
-  } = useMeasureSequence(
-    sns.measureSn,
-    sns.userSn,
-    3
-  );
+  } = useMeasureSequence({
+    measure_sn: sns.measureSn,
+    user_sn: sns.userSn,
+    sequence_number: 3,
+    isResultPage,
+  });
   const {
     data: measureSixth,
     isLoading: seq6Loading,
     isError: seq6Error,
-  } = useMeasureSequence(
-    sns.measureSn,
-    sns.userSn,
-    7
-  );
+  } = useMeasureSequence({
+    measure_sn: sns.measureSn,
+    user_sn: sns.userSn,
+    sequence_number: 7,
+    isResultPage,
+  });
   const mergedDetailData: IUserMeasureDetailData[] = useMemo(() => {
     return [
       ...(measureFifth?.detail_data ?? []),

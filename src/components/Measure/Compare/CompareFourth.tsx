@@ -13,7 +13,8 @@ const MeasureStaticCompareFourth = React.memo(
   left,
   right,
   userSn,
-  onCompareDialogOpen
+  onCompareDialogOpen,
+  isResultPage = false,
 }: CompareStaticProps) => {
   const leftSummaryData = left?.result_summary_data
   const rightSummaryData = right?.result_summary_data
@@ -21,20 +22,22 @@ const MeasureStaticCompareFourth = React.memo(
     data: measure0,
     isLoading: seqLoading0,
     isError: seqError0,
-  } = useMeasureSequence(
-    leftSummaryData?.sn ? String(leftSummaryData.sn) : undefined,
-    String(userSn),
-    4
-  );
+  } = useMeasureSequence({
+    measure_sn: leftSummaryData?.measure_sn ? String(leftSummaryData.measure_sn) : undefined,
+    user_sn: String(userSn),
+    sequence_number: 4,
+    isResultPage,
+  });
   const {
     data: measure1,
     isLoading: seqLoading1,
     isError: seqError1,
-  } = useMeasureSequence(
-    rightSummaryData?.sn ? String(rightSummaryData.sn) : undefined,
-    String(userSn),
-    4
-  );
+  } = useMeasureSequence({
+    measure_sn: rightSummaryData?.measure_sn ? String(rightSummaryData.measure_sn) : undefined,
+    user_sn: String(userSn),
+    sequence_number: 4,
+    isResultPage,
+  });
   const {
     data: measureJson0,
     isLoading: jsonLoading0,

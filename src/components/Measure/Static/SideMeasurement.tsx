@@ -10,7 +10,8 @@ import StaticDataContainer from "./DataContainer";
 const SideMeasurement = ({
   sns,
   measureInfo,
-  cameraOrientation
+  cameraOrientation,
+  isResultPage = false,
 }: {
   sns: {
     measureSn: string;
@@ -18,25 +19,28 @@ const SideMeasurement = ({
   };
   measureInfo: IUserMeasureInfoResponse;
   cameraOrientation: 0 | 1;
+  isResultPage: boolean;
 }) => {
   const {
         data: measureThird,
         isLoading: seq3Loading,
         isError: seq3Error,
-      } = useMeasureSequence(
-        sns.measureSn,
-        sns.userSn,
-        2
-      );
+      } = useMeasureSequence({
+        measure_sn: sns.measureSn,
+        user_sn: sns.userSn,
+        sequence_number: 2,
+        isResultPage,
+      });
       const {
         data: measureFourth,
         isLoading: seq4Loading,
         isError: seq4Error,
-      } = useMeasureSequence(
-        sns.measureSn,
-        sns.userSn,
-        4
-      );
+      } = useMeasureSequence({
+        measure_sn: sns.measureSn,
+        user_sn: sns.userSn,
+        sequence_number: 4,
+        isResultPage,
+      });
       const mergedDetailData: IUserMeasureDetailData[] = useMemo(() => {
         return [
           ...(measureThird?.detail_data ?? []),

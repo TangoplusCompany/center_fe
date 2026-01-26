@@ -60,7 +60,7 @@ export interface IUserDetailMeasureInfo
     IMeasureRiskResult,
     IMatStatic,
     IMatOhs {
-  sn: number | string; // sn
+  user_sn: number | string; // sn
   device_sn: number | string; // 장치 sn
   measure_sn: number | string; // t_measure_info_sn
   user_name: string; // 유저 이름
