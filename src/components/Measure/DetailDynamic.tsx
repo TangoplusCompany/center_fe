@@ -49,14 +49,16 @@ const MeasureDetailDynamic = ({
   sns,
   cameraOrientation,
   isCompare,
+  isResultPage = false,
 }: {
   className?: string;
   sns: { measureSn: string; userSn: string };
   cameraOrientation: number;
   isCompare: 0 | 1;
+  isResultPage: boolean;
 }) => {
   const { data: measureDynamic, isLoading: seq7Loading, isError: seq7Error } =
-    useMeasureSequence(sns.measureSn, sns.userSn, 6);
+    useMeasureSequence({ measure_sn: sns.measureSn, user_sn: sns.userSn, sequence_number: 6, isResultPage });
 
   const data = measureDynamic?.file_data;
   const fileData = measureDynamic?.file_data as IUserMeasureDynamicFileData;
@@ -77,7 +79,7 @@ const MeasureDetailDynamic = ({
         isError={!!(seq7Error || isError)}
         customCanvasTransform="scaleX(-1.3) scaleY(1.35)"
         videoClassName={isRotated ? "-rotate-90 w-[75%] h-full object-contain" : "w-full h-full"}
-        stageClassName="relative mx-auto w-full aspect-video overflow-hidden"
+        stageClassName="relative mx-auto w-full h-[300px] sm:h-[400px] md:h-[480px] lg:h-[560px] xl:h-[680px] overflow-hidden"
         containerClassName="flex flex-col gap-4 lg:gap-10"
       >
         {!seq7Loading && !isLoading && !seq7Error && !isError && measureJson && (

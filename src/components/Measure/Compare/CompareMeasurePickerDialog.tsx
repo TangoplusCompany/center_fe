@@ -12,13 +12,13 @@ import {
   PaginationButtonNext,
 } from "@/components/ui/pagination";
 import { ComparePair, CompareSlot } from "@/types/compare";
-import { IMeasureList } from "@/types/measure";
+import { IUserMeasureListItem } from "@/types/user";
 import { formatDate } from "@/utils/formatDate";
 import type { ComparePagination } from "@/hooks/api/user/useMeasureListForCompare";
 
 type MeasurePickerDialogProps = {
   open: boolean;
-  items: IMeasureList[];
+  items: IUserMeasureListItem[];
   comparePair: ComparePair;
   activeSlot: CompareSlot;
   onOpenChange: (v: boolean) => void;

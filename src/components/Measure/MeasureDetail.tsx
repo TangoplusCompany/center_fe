@@ -30,7 +30,8 @@ type CenterUserMeasureProps = {
   selectedMeasureSn?: number | null;         // 현재 선택된 sn
   onChangeMeasureSn?: (sn: number) => void;  // 다른 sn 선택 시 호출
   userSn: string;
-  pagination?: DetailPagination;             // useMeasureListForDetail 연동
+  pagination?: DetailPagination;  
+  isResultPage: boolean;
 };
 
 // intro, front, side, back, dynamic 등 여러 탭이 들어가는 detail화면
@@ -41,6 +42,7 @@ const MeasureDetail = ({
   onChangeMeasureSn,
   userSn,
   pagination,
+  isResultPage = false,
 }: CenterUserMeasureProps) => {
   const [isDatePickerOpen, setIsDatePickerOpen] = React.useState(false);
   const selectedMeasure =
@@ -48,17 +50,20 @@ const MeasureDetail = ({
       ? measureList.find((item) => item.measure_sn === selectedMeasureSn)
       : undefined;
   const data = measureData.result_summary_data
+
+
   const handleKakaoSend = async () => {
     
     const cryptoData = {
       device_sn: Number(data.device_sn),
-      sn: Number(data.sn),
+      sn: Number(data.measure_sn),
       measure_sn: Number(data.measure_sn),
       user_uuid: data.user_uuid,
       receiver: data.mobile,
       receiver_name: data.user_name,
       measure_date: data.measure_date
     };
+    
     const encryptData = await actionKakaoEncrypt(cryptoData);
     try {
       await postKakaoSend(encryptData);
@@ -71,13 +76,14 @@ const MeasureDetail = ({
   
   const handlePrint = async () => {
     const cryptoData = {
-      sn: Number(data.sn),
+      sn: Number(data.measure_sn),
       user_uuid: data.user_uuid,
       receiver: data.mobile,
     };
+    console.log("cryptoData", cryptoData);
 
     const encryptData = await actionPrintEncrypt(cryptoData);
-
+    console.log("encryptData", encryptData);
     try {
       const url = await getResultReportUrl(encryptData);
       // 🔗 크롬(브라우저) 새 창/새 탭으로 리포트 페이지 열기
@@ -105,11 +111,13 @@ const MeasureDetail = ({
       component: () => (
         <FrontMeasurement
           sns={{
-          measureSn: String(measureData.result_summary_data.sn),
+          measureSn: String(measureData.result_summary_data.measure_sn),
           userSn: userSn
+          
         }}
         measureInfo={measureData}
         cameraOrientation={data.camera_orientation}
+        isResultPage={isResultPage}
         />
       ),
     },
@@ -119,11 +127,13 @@ const MeasureDetail = ({
       component: () => (
         <SideMeasurement
           sns={{
-          measureSn: String(measureData.result_summary_data.sn),
+          measureSn: String(measureData.result_summary_data.measure_sn),
           userSn: userSn
+          
         }}
         measureInfo={measureData}
         cameraOrientation={data.camera_orientation}
+        isResultPage={isResultPage}
         />
       ),
     },
@@ -133,11 +143,13 @@ const MeasureDetail = ({
       component: () => (
         <BackMeasurement
           sns={{
-          measureSn: String(measureData.result_summary_data.sn),
+          measureSn: String(measureData.result_summary_data.measure_sn),
           userSn: userSn
+          
         }}
         measureInfo={measureData}
         cameraOrientation={data.camera_orientation}
+        isResultPage={isResultPage}
         />
       ),
     },
@@ -147,11 +159,12 @@ const MeasureDetail = ({
       component: () => 
       <MeasureDetailDynamic 
         sns={{
-            measureSn: String(measureData.result_summary_data.sn),
+            measureSn: String(measureData.result_summary_data.measure_sn),
             userSn: userSn
           }} 
         cameraOrientation={data.camera_orientation}
         isCompare={0}
+        isResultPage={isResultPage}
         />,
     },
   ];
