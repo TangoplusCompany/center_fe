@@ -27,24 +27,24 @@ const CompareSummaryUnit = ({
     return "정상";
   };
 
-  const riskString1 = getRiskString(summaryUnit1?.risk_level) ?? " ";
+  const riskString1 = getRiskString(summaryUnit0?.risk_level) ?? " ";
 
-  const trendBgCondition = summaryUnit1 ? {
+  const trendBgCondition = summaryUnit0 ? {
     "0": "bg-sub100",
     "1": "bg-warning-foreground",
     "2": "bg-danger-foreground",
-  }[summaryUnit1.risk_level] ?? "bg-sub300" : "bg-sub100";
-  const trendTextCondition = summaryUnit1 ? {
+  }[summaryUnit0.risk_level] ?? "bg-sub300" : "bg-sub100";
+  const trendTextCondition = summaryUnit0 ? {
     "0": "text-sub600",
     "1": "text-warningDeep",
     "2": "text-dangerDeep",
-  }[summaryUnit1.risk_level] ?? "text-sub600" : "text-sub600";
+  }[summaryUnit0.risk_level] ?? "text-sub600" : "text-sub600";
 
-  const trendBorderCondition = summaryUnit1 ? {
+  const trendBorderCondition = summaryUnit0 ? {
     "0": "border-2 border-sub600",
     "1": "border-2 border-warningDeep",
     "2": "border-2 border-dangerDeep",
-  }[summaryUnit1.risk_level] ?? "" : "";
+  }[summaryUnit0.risk_level] ?? "" : "";
 
   const score0 = getRiskScore(summaryUnit0.risk_level, summaryUnit0.range_level);
   const score1 = summaryUnit1 ? getRiskScore(summaryUnit1.risk_level, summaryUnit1.range_level) : undefined;
@@ -52,11 +52,11 @@ const CompareSummaryUnit = ({
     score1 < score0 ? "▲" :  // 점수가 낮아짐 = 좋아짐
     score1 > score0 ? "▼" :  // 점수가 높아짐 = 나빠짐
     " ";
-  const trendString = riskString1 === " " ? " " : riskString1 + " " + summaryUnit1?.range_level + "단계"
-  
+  const trendString = riskString1 === " " ? " " : riskString1 + " " + summaryUnit0?.range_level + "단계"
+
   const trendCount = compareTrendState(score0, score1);
 
-  const summaryMent = (summaryUnit: CompareSummaryUnitProps, isNext: boolean) => {
+  const summaryMent = (summaryUnit: CompareSummaryUnitProps, isRight: boolean) => {
     const riskString = getRiskString(summaryUnit.risk_level);
     
     const textBgCondition0 = {
@@ -69,12 +69,12 @@ const CompareSummaryUnit = ({
       <div className="flex-1 w-full">
         <div className="flex items-center justify-between border-b-2 border-sub200 px-4 py-1 bg-sub100">
           <div className="flex gap-4 items-center">
-            <span className="text-lg">{isNext ? '②' : '①'}</span>
-            <span className={`text-base ${isNext ? 'text-black' : 'text-sub600'}`}>{summaryUnit.measure_date.slice(0, 11)}</span>
+            <span className="text-lg">{isRight ? '②' : '①'}</span>
+            <span className={`text-base ${isRight ? 'text-sub600' : 'text-black'}`}>{summaryUnit.measure_date.slice(0, 11)}</span>
           </div>
           <span className={`${textBgCondition0} text-white text-sm px-2 py-1 rounded-full`}>{riskString} {summaryUnit.range_level}단계</span>
         </div>
-        <div className={`flex items-center justify-start text-base ${isNext ? 'text-black' : 'text-sub600'} px-4 py-2 whitespace-pre-line`}>{formatText(summaryUnit.ment)}</div>
+        <div className={`flex items-center justify-start text-base ${isRight ? 'text-sub600' : 'text-black'} px-4 py-2 whitespace-pre-line`}>{formatText(summaryUnit.ment)}</div>
       </div>
     );
   };
@@ -90,10 +90,14 @@ const CompareSummaryUnit = ({
       {/* 2개의 카드 영역 */}
       <div className="flex w-full min-w-[700px]">
         {/* 이전 카드 */}
-        <div className={`w-[20%] flex flex-col items-center justify-center gap-2 px-8 ${trendBgCondition}`}>
-          <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition}`}>{trendArrow}</div>
-          <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition}`}>{trendString}</div>
-          <div className={`${trendBgCondition} ${trendBorderCondition} ${trendTextCondition} rounded-full px-3 py-1 text-sm whitespace-nowrap`}>{trendCount}</div>
+        <div className={`w-[20%] flex flex-col items-center justify-center gap-2 px-8 ${summaryUnit1 ? trendBgCondition : 'bg-sub100'}`}>
+          {summaryUnit1 && (
+            <>
+              <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition}`}>{trendArrow}</div>
+              <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition}`}>{trendString}</div>
+              <div className={`${trendBgCondition} ${trendBorderCondition} ${trendTextCondition} rounded-full px-3 py-1 text-sm whitespace-nowrap`}>{trendCount}</div>
+            </>
+          )}
         </div>
 
         <div className="grid grid-raws-2 w-[80%] ">
