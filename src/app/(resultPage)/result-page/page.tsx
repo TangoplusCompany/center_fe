@@ -9,104 +9,111 @@ import { actionUserDecrypt } from "@/app/actions/getCrypto";
 export default function ResultPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  
+  // Store 상태
   const user = useResultPageUserStore((state) => state.user);
   const isLogin = useResultPageUserStore((state) => state.isLogin);
   const setLoginFromResponse = useResultPageUserStore((state) => state.setLoginFromResponse);
+
   const [decryptedData, setDecryptedData] = useState<{
     user_uuid: string;
     user_sn: number;
     user_name: string;
   } | null>(null);
-  const [isDecrypting, setIsDecrypting] = useState(true);
+
+  // 로딩 및 검증 상태 통합
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isStoreInitialized, setIsStoreInitialized] = useState(false);
 
   useEffect(() => {
-    const decryptParams = async () => {
+    const initAuthAndData = async () => {
       const encryptedKey = searchParams.get("key");
       
-      if (encryptedKey) {
-        try {
-          const decrypted = await actionUserDecrypt(encryptedKey);
-          if (decrypted) {
-            setDecryptedData({
-              user_uuid: decrypted.user_uuid,
-              user_sn: decrypted.user_sn,
-              user_name: decrypted.user_name,
-            });
+      if (!encryptedKey) {
+        router.replace("/result-page/login");
+        return;
+      }
 
-            // sessionStorage에 데이터가 없으면 쿼리 파라미터의 정보로 store 초기화
-            // (로그인 직후 sessionStorage에 저장되기 전에 페이지가 이동했을 수 있음)
-            try {
-              const storedData = sessionStorage.getItem("result-page-user");
-              if (!storedData) {
-                // sessionStorage에 데이터가 없으면 쿠키와 쿼리 파라미터로 임시 초기화
-                const hasResultPageLogin = document.cookie.includes("resultPageLogin=true");
-                if (hasResultPageLogin) {
-                  // 쿠키가 있으면 로그인 상태로 간주하고 store 초기화
-                  // access_token은 없지만, 쿠키가 있으면 로그인 상태로 간주
-                  setLoginFromResponse({
-                    user: {
-                      user_sn: decrypted.user_sn,
-                      user_name: decrypted.user_name,
-                      user_uuid: decrypted.user_uuid,
-                      mobile: "", // 쿼리 파라미터에 없음
-                      pin_login_fail_count: 0,
-                      pin_account_locked: 0,
-                      pin_login_last_date: "",
-                    },
-                    access_token: "", // 쿼리 파라미터에 없지만 쿠키가 있으면 로그인 상태로 간주
-                  });
-                }
-              }
-            } catch (error) {
-              console.error("sessionStorage 확인 실패:", error);
-            }
-          } else {
-            // 복호화 실패 시 로그인 페이지로 리다이렉트
-            router.replace("/result-page/login");
-          }
-        } catch (error) {
-          console.error("복호화 실패:", error);
-          router.replace("/result-page/login");
+      try {
+        // 1. 파라미터 복호화
+        const decrypted = await actionUserDecrypt(encryptedKey);
+        
+        if (!decrypted) {
+          throw new Error("Decryption failed");
         }
-      } else {
-        // 쿼리 파라미터가 없으면 로그인 페이지로 리다이렉트
+
+        setDecryptedData({
+          user_uuid: decrypted.user_uuid,
+          user_sn: decrypted.user_sn,
+          user_name: decrypted.user_name,
+        });
+
+        // 2. Store에 이미 데이터가 있으면 쿠키 체크 건너뛰기
+        if (isLogin && user) {
+          // 이미 로그인 상태이므로 추가 처리 불필요
+          setIsStoreInitialized(true);
+        } else {
+          // 3. 쿠키 확인 및 Store 데이터 복구
+          const hasCookie = document.cookie.includes("resultPageLogin=true");
+          
+          if (hasCookie) {
+            setLoginFromResponse({
+              user: {
+                user_sn: decrypted.user_sn,
+                user_name: decrypted.user_name,
+                user_uuid: decrypted.user_uuid,
+                mobile: "",
+                pin_login_fail_count: 0,
+                pin_account_locked: 0,
+                pin_login_last_date: "",
+              },
+              access_token: "", 
+            });
+            // Store 초기화 완료 표시 (상태 업데이트는 다음 useEffect에서 감지)
+            setIsStoreInitialized(true);
+          } else {
+            // 쿠키조차 없으면 튕겨냄
+            router.replace("/result-page/login");
+            return;
+          }
+        }
+      } catch (error) {
+        console.error("인증 초기화 실패:", error);
         router.replace("/result-page/login");
       }
-      setIsDecrypting(false);
     };
 
-    decryptParams();
+    initAuthAndData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, router, setLoginFromResponse]);
 
+  // Store 상태가 실제로 업데이트될 때까지 기다리기
   useEffect(() => {
-    // 복호화가 완료된 후에만 체크
-    if (!isDecrypting) {
-      // 쿠키 체크 (추가 안전장치)
-      const hasResultPageLogin = document.cookie.includes("resultPageLogin=true");
-      
-      // 쿠키가 없거나 로그인 상태가 아니면 로그인 페이지로 리다이렉트
-      // 단, 상태 업데이트를 기다리기 위해 약간의 딜레이를 둠
-      if (!hasResultPageLogin || !isLogin || !user) {
-        // 상태 업데이트가 완료될 시간을 주기 위해 약간의 딜레이
-        // React 상태 업데이트와 쿠키 반영이 완료되도록 보장
-        const timeoutId = setTimeout(() => {
-          // 다시 한 번 체크 (상태가 업데이트되었을 수 있음)
-          const recheckCookie = document.cookie.includes("resultPageLogin=true");
-          
-          // 쿠키와 상태를 다시 확인
-          if (!recheckCookie || !isLogin || !user) {
-            router.replace("/result-page/login");
-          }
-        }, 150);
-        
-        return () => clearTimeout(timeoutId);
-      }
-    }
-  }, [isLogin, user, router, isDecrypting]);
+    if (!isStoreInitialized || !decryptedData) return;
 
-  // 복호화 중이거나 로그인하지 않았거나 사용자 정보가 없으면 아무것도 렌더링하지 않음
-  if (isDecrypting || !isLogin || !user || !decryptedData) {
-    return null;
+    if (isLogin && user) {
+      setIsInitialLoading(false);
+    } else {
+      // 만약 쿠키는 있는데 스토어 반영이 늦어지는 경우를 대비해 
+      // 강제로 한 번 더 스토어 확인을 하거나 리다이렉트 시점을 명확히 함
+      const timer = setTimeout(() => {
+        if (!isLogin) {
+          // 1초 뒤에도 로그인이 안 되어 있다면 세션이 끊긴 것으로 간주
+          router.replace("/result-page/login");
+        }
+        setIsInitialLoading(false);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [isStoreInitialized, isLogin, user, decryptedData, router]);
+
+  // 최종 렌더링 전 방어막
+  if (isInitialLoading || !isLogin || !user || !decryptedData) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-sm text-muted-foreground">인증 정보를 확인 중입니다...</p>
+      </div>
+    );
   }
 
   return (
@@ -120,4 +127,3 @@ export default function ResultPage() {
     </div>
   );
 }
-

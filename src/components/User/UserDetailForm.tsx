@@ -1,5 +1,5 @@
 import { useBoolean } from "@/hooks/utils/useBoolean";
-import { useAuthStore } from "@/providers/AuthProvider";
+// import { useAuthStore } from "@/providers/AuthProvider";
 import { ICenterUserDetail } from "@/types/center";
 import React, { useEffect, useState } from "react";
 import { z } from "zod";
@@ -10,10 +10,23 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { usePatchUserDetail } from "@/hooks/api/user/usePatchUserDetail";
 import { actionDecrypt } from "@/app/actions/getCrypto";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import dayjs from "dayjs";
 
-const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
-  const { adminRole } = useAuthStore((state) => state);
+const UserDetailForm = ({ 
+  userData, 
+  isResultPage = false,
+  adminRole = 0
+}: { 
+  userData: ICenterUserDetail;
+  isResultPage?: boolean;
+  adminRole?: number;
+}) => {
   const [decryptedBirthday, setDecryptedBirthday] = useState<string>("");
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const { isBoolean: editState, setToggle: setEditState } = useBoolean();
   const handleEditState = () => {
     if (editState) {
@@ -79,44 +92,71 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
     useEffect(() => {
     const decryptBirthday = async () => {
       if (userData.birthday) {
+        let birthdayString = "";
+        
         // 이미 YYYY-MM-DD 형식이면 복호화 불필요
         const datePattern = /^\d{4}-\d{2}-\d{2}$/;
         if (datePattern.test(userData.birthday)) {
-          setDecryptedBirthday(userData.birthday);
-          setValue("birthday", userData.birthday);
-          return;
+          birthdayString = userData.birthday;
+        } else if (isResultPage) {
+          // result-page에서는 API가 이미 복호화된 데이터를 반환하므로 복호화 시도하지 않음
+          birthdayString = userData.birthday;
+        } else {
+          try {
+            birthdayString = await actionDecrypt(userData.birthday);
+          } catch (error) {
+            console.error("복호화 실패:", error);
+            birthdayString = userData.birthday;
+          }
         }
         
-        try {
-          const decrypted = await actionDecrypt(userData.birthday);
-          setDecryptedBirthday(decrypted);
-          setValue("birthday", decrypted); // form에도 설정
-        } catch (error) {
-          console.error("복호화 실패:", error);
-          // 복호화 실패 시 원본 값 사용
-          setDecryptedBirthday(userData.birthday);
-          setValue("birthday", userData.birthday);
+        setDecryptedBirthday(birthdayString);
+        setValue("birthday", birthdayString);
+        
+        // dayjs로 Date 객체 생성
+        if (birthdayString && datePattern.test(birthdayString)) {
+          const date = dayjs(birthdayString, "YYYY-MM-DD").toDate();
+          setSelectedDate(date);
         }
       }
     };
     
     decryptBirthday();
-  }, [userData.birthday, setValue]);
+  }, [userData.birthday, setValue, isResultPage]);
 
-  const mutationPatchUserDetail = usePatchUserDetail(userData.user_sn.toString());
+  const mutationPatchUserDetail = usePatchUserDetail(userData.user_sn.toString(), isResultPage);
   const submitUserDetailForm = handleSubmit(async (data) => {
-    const { userName, gender, height, weight, address, addressDetail } = data;
-    await mutationPatchUserDetail.mutateAsync({
-      sn: userData.user_sn.toString(),
-      userData: {
-        user_name: userName,
-        gender: gender,
-        height: height,
-        weight: weight,
-        address: address,
-        address_detail: addressDetail,
-      },
-    });
+    const { userName, gender, height, weight, address, addressDetail, birthday } = data;
+    
+    if (isResultPage) {
+      // result-page용 요청 데이터 (birthday, mobile 포함)
+      await mutationPatchUserDetail.mutateAsync({
+        sn: userData.user_sn.toString(),
+        userData: {
+          user_name: userName,
+          gender: gender,
+          height: height,
+          weight: weight,
+          address: address,
+          address_detail: addressDetail,
+          birthday: birthday,
+          mobile: userData.mobile,
+        },
+      } as Parameters<typeof mutationPatchUserDetail.mutateAsync>[0]);
+    } else {
+      // 일반 페이지용 요청 데이터
+      await mutationPatchUserDetail.mutateAsync({
+        sn: userData.user_sn.toString(),
+        userData: {
+          user_name: userName,
+          gender: gender,
+          height: height,
+          weight: weight,
+          address: address,
+          address_detail: addressDetail,
+        },
+      } as Parameters<typeof mutationPatchUserDetail.mutateAsync>[0]);
+    }
     setEditState();
   });
 
@@ -209,6 +249,7 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
             id="addressDetail"
             disabled={!editState}
             defaultValue={userData.address_detail}
+            
             placeholder="상세주소"
             maxLength={30}
             className="text-sm sm:text-base"
@@ -228,24 +269,26 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
               {...register("gender")}
               type="radio"
               id="male"
-              value="male"
+              value="남성"
               disabled={!editState}
-              defaultChecked={userData.gender === "male"}
+              defaultChecked={userData.gender === "남성"}
+              checked={userData.gender === "남성"}
               className="w-4 h-4"
             />
-            <label htmlFor="male" className="text-sm sm:text-base cursor-pointer">남</label>
+            <label htmlFor="male" className="text-sm sm:text-base cursor-pointer">남성</label>
           </div>
           <div className="flex items-center gap-2">
             <Input
               {...register("gender")}
               type="radio"
               id="female"
-              value="female"
+              value="여성"
               disabled={!editState}
-              defaultChecked={userData.gender === "female"}
+              defaultChecked={userData.gender == "여성"}
+              checked={userData.gender === "여성"}
               className="w-4 h-4"
             />
-            <label htmlFor="female" className="text-sm sm:text-base cursor-pointer">여</label>
+            <label htmlFor="female" className="text-sm sm:text-base cursor-pointer">여성</label>
           </div>
         </div>
         {errors.gender && (
@@ -256,15 +299,47 @@ const UserDetailForm = ({ userData }: { userData: ICenterUserDetail }) => {
       </div>
       <div className="flex flex-col gap-2">
         <Label htmlFor="birthday" className="text-sm sm:text-base">생년월일</Label>
-        <Input
-          {...register("birthday")}
-          type="text"
-          id="birthday"
-          disabled={!editState}
-          defaultValue={decryptedBirthday}
-          placeholder="생년월일"
-          className="text-sm sm:text-base"
-        />
+        {editState ? (
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className={cn(
+                  "w-full justify-start text-left font-normal text-sm sm:text-base",
+                  !selectedDate && "text-muted-foreground"
+                )}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {selectedDate ? dayjs(selectedDate).format("YYYY-MM-DD") : "생년월일 선택"}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={selectedDate}
+                onSelect={(date) => {
+                  setSelectedDate(date);
+                  if (date) {
+                    const formattedDate = dayjs(date).format("YYYY-MM-DD");
+                    setValue("birthday", formattedDate);
+                    setDecryptedBirthday(formattedDate);
+                  }
+                }}
+                initialFocus
+                disabled={(date) => date > new Date()}
+              />
+            </PopoverContent>
+          </Popover>
+        ) : (
+          <Input
+            type="text"
+            id="birthday"
+            disabled
+            value={decryptedBirthday}
+            placeholder="생년월일"
+            className="text-sm sm:text-base"
+          />
+        )}
         {errors.birthday && (
           <p className="text-xs sm:text-sm text-red-500">
             {errors.birthday.message?.toString()}
