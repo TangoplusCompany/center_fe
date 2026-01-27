@@ -74,6 +74,7 @@ const MeasureDetailDynamic = ({
       <VideoPlayer
         videoSrc={data?.measure_server_file_name}
         isRotated={isRotated}
+        isCompare={false}
         measureJson={measureJson}
         isLoading={seq7Loading || isLoading}
         isError={!!(seq7Error || isError)}

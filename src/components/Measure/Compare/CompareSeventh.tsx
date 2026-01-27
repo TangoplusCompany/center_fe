@@ -48,7 +48,7 @@ const MeasureDynamicCompare = ({
   );
   const isRotated0 = leftSummaryData?.camera_orientation === 1;
   const isRotated1 = rightSummaryData?.camera_orientation === 1;
-
+  console.log(isRotated0, isRotated1)
   const measureData0 = extractMeasureData(left);
   if (!measureData0) {
     return <div>데이터가 없습니다.</div>; // 또는 null, 로딩 UI 등
@@ -94,6 +94,7 @@ const MeasureDynamicCompare = ({
         <VideoPlayer
           videoSrc={data0?.measure_server_file_name}
           isRotated={isRotated0}
+          isCompare={true}
           measureJson={measureJson0}
           isLoading={seqLoading0 || jsonLoading0}
           isError={!!(seqError0 || jsonError0)}
@@ -104,9 +105,14 @@ const MeasureDynamicCompare = ({
           <VideoPlayer
             videoSrc={data1?.measure_server_file_name}
             isRotated={isRotated1}
+            isCompare={true}
             measureJson={measureJson1}
             isLoading={seqLoading1 || jsonLoading1}
             isError={!!(seqError1 || jsonError1)}
+            // customCanvasTransform={isRotated1 ? undefined : "scaleX(-1.25) scaleY(1.25)"}
+            // videoClassName={isRotated1 ? undefined : "-rotate-90 w-[75%] h-full object-contain"}
+            // stageClassName={isRotated1 ? undefined : "relative mx-auto w-full h-[300px] sm:h-[400px] md:h-[480px] lg:h-[560px] xl:h-[680px] overflow-hidden" }
+            // containerClassName={isRotated1 ? undefined: "flex flex-col gap-4 lg:gap-10"}
           />
         ) : (
           <CompareDefault onCompareDialogOpen={onCompareDialogOpen} currentSlot={1} />
