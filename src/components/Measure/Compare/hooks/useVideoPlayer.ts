@@ -2,6 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { computeContain, Fit, setupHiDPICanvas } from "../../DetailDynamic";
 import { isNearEnd, isNearStart } from "../utils/compareUtils";
 import { IMeasureJson } from "@/types/measure";
+import { compareCropScale } from "../components/VideoPlayer";
 
 const DATA_W = 720;
 const DATA_H = 1280;
@@ -10,6 +11,7 @@ const VIDEO_SCALE = 1.75;
 export interface UseVideoPlayerProps {
   videoSrc: string | undefined;
   isRotated: boolean;
+  isCompare: boolean;
   measureJson: IMeasureJson[] | undefined;
   onFrameChange?: (frame: number) => void;
 }
@@ -47,6 +49,7 @@ export interface UseVideoPlayerReturn {
 export const useVideoPlayer = ({
   videoSrc,
   isRotated,
+  isCompare,
   measureJson: _measureJson, // eslint-disable-line @typescript-eslint/no-unused-vars
   onFrameChange,
 }: UseVideoPlayerProps): UseVideoPlayerReturn => {
@@ -254,8 +257,12 @@ export const useVideoPlayer = ({
           offsetY,
           dpr,
         });
-
-        setCanvasTransform(`scaleX(-1) scaleY(1)`); // transform은 완전히 제거
+        if (isCompare && !isRotated) {
+          setCanvasTransform(`scaleX(-${compareCropScale}) scaleY(${compareCropScale})`);
+        } else {
+          setCanvasTransform(`scaleX(-1) scaleY(1)`);
+        }
+         // transform은 완전히 제거
         return;
       }
 
