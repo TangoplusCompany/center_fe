@@ -15,6 +15,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import dayjs from "dayjs";
+import { ko } from "date-fns/locale";
 
 const UserDetailForm = ({ 
   userData, 
@@ -28,6 +29,7 @@ const UserDetailForm = ({
   const [decryptedBirthday, setDecryptedBirthday] = useState<string>("");
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const { isBoolean: editState, setToggle: setEditState } = useBoolean();
+  const editableFieldClass = editState ? "bg-background border border-input shadow-sm" : undefined;
   const handleEditState = () => {
     if (editState) {
       reset();
@@ -87,9 +89,28 @@ const UserDetailForm = ({
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
+    defaultValues: {
+      userName: userData.user_name,
+      gender: userData.gender || null,
+      address: userData.address || "",
+      addressDetail: userData.address_detail || "",
+      height: userData.height || "",
+      weight: userData.weight || "",
+      birthday: "",
+    },
   });
 
-    useEffect(() => {
+  useEffect(() => {
+    // userData 변경 시 form 값 업데이트
+    setValue("userName", userData.user_name);
+    setValue("gender", userData.gender || null);
+    setValue("address", userData.address || "");
+    setValue("addressDetail", userData.address_detail || "");
+    setValue("height", userData.height || "");
+    setValue("weight", userData.weight || "");
+  }, [userData, setValue]);
+
+  useEffect(() => {
     const decryptBirthday = async () => {
       if (userData.birthday) {
         let birthdayString = "";
@@ -190,7 +211,7 @@ const UserDetailForm = ({
           defaultValue={userData.user_name}
           placeholder="사용자 이름"
           maxLength={50}
-          className="text-sm sm:text-base"
+          className={cn("text-sm sm:text-base", editableFieldClass)}
         />
         {errors.userName && (
           <p className="text-xs sm:text-sm text-red-500">
@@ -233,7 +254,7 @@ const UserDetailForm = ({
             defaultValue={userData.address}
             placeholder="주소"
             maxLength={60}
-            className="text-sm sm:text-base"
+            className={cn("text-sm sm:text-base", editableFieldClass)}
           />
           {errors.address && (
             <p className="text-xs sm:text-sm text-red-500">
@@ -252,7 +273,7 @@ const UserDetailForm = ({
             
             placeholder="상세주소"
             maxLength={30}
-            className="text-sm sm:text-base"
+            className={cn("text-sm sm:text-base", editableFieldClass)}
           />
           {errors.addressDetail && (
             <p className="text-xs sm:text-sm text-red-500">
@@ -271,8 +292,6 @@ const UserDetailForm = ({
               id="male"
               value="남성"
               disabled={!editState}
-              defaultChecked={userData.gender === "남성"}
-              checked={userData.gender === "남성"}
               className="w-4 h-4"
             />
             <label htmlFor="male" className="text-sm sm:text-base cursor-pointer">남성</label>
@@ -284,8 +303,6 @@ const UserDetailForm = ({
               id="female"
               value="여성"
               disabled={!editState}
-              defaultChecked={userData.gender == "여성"}
-              checked={userData.gender === "여성"}
               className="w-4 h-4"
             />
             <label htmlFor="female" className="text-sm sm:text-base cursor-pointer">여성</label>
@@ -317,6 +334,11 @@ const UserDetailForm = ({
               <Calendar
                 mode="single"
                 selected={selectedDate}
+                defaultMonth={selectedDate}
+                captionLayout="dropdown"
+                fromYear={1900}
+                toYear={new Date().getFullYear()}
+                locale={ko}
                 onSelect={(date) => {
                   setSelectedDate(date);
                   if (date) {
@@ -357,7 +379,7 @@ const UserDetailForm = ({
             defaultValue={userData.height}
             placeholder="키"
             maxLength={6}
-            className="text-sm sm:text-base"
+            className={cn("text-sm sm:text-base", editableFieldClass)}
           />
           {errors.height && (
             <p className="text-xs sm:text-sm text-red-500">
@@ -375,7 +397,7 @@ const UserDetailForm = ({
             defaultValue={userData.weight}
             placeholder="몸무게"
             maxLength={6}
-            className="text-sm sm:text-base"
+            className={cn("text-sm sm:text-base", editableFieldClass)}
           />
           {errors.weight && (
             <p className="text-xs sm:text-sm text-red-500">
