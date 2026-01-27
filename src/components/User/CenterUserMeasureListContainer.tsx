@@ -54,6 +54,7 @@ const CenterUserMeasureListContainer = ({
     user_sn: userSn,
     from,
     to,
+    sort,
     isResultPage,
   });
 
@@ -328,6 +329,13 @@ const CenterUserMeasureListContainer = ({
       <CenterUserMeasureListSkeleton />
     ) : (
       <>
+        {/* 총 갯수 표시 */}
+        {userMeasureList && (
+          <div className="mb-4 text-sm text-muted-foreground">
+            총 <span className="font-semibold text-foreground">{userMeasureList.total}</span>건
+          </div>
+        )}
+        
         <CenterUserMeasureList
           measures={measurements}
           onRowClick={onSelectMeasure ? (sn) => onSelectMeasure(sn) : undefined}

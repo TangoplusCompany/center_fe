@@ -19,11 +19,13 @@ function Calendar({
   buttonVariant = "ghost",
   formatters,
   components,
+  locale,
   ...props
 }: React.ComponentProps<typeof DayPicker> & {
   buttonVariant?: React.ComponentProps<typeof Button>["variant"]
 }) {
   const defaultClassNames = getDefaultClassNames()
+  const intlLocale = locale?.code === "ko" ? "ko-KR" : undefined
 
   return (
     <DayPicker
@@ -36,10 +38,15 @@ function Calendar({
       )}
       captionLayout={captionLayout}
       formatters={{
-        formatMonthDropdown: (date) =>
-          date.toLocaleString("default", { month: "short" }),
+        formatCaption: (month) =>
+          new Intl.DateTimeFormat(intlLocale, { year: "numeric", month: "long" }).format(month),
+        formatMonthDropdown: (month) =>
+          new Intl.DateTimeFormat(intlLocale, { month: "long" }).format(month),
+        formatYearDropdown: (year) =>
+          intlLocale === "ko-KR" ? `${year.getFullYear()}년` : String(year.getFullYear()),
         ...formatters,
       }}
+      locale={locale}
       classNames={{
         root: cn("w-fit", defaultClassNames.root),
         months: cn(

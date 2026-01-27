@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
  * @param isResultPage result-page에서 사용하는지 여부
  * @param from 시작 날짜 (선택)
  * @param to 종료 날짜 (선택)
+ * @param sort 정렬 순서 (asc/desc)
  * @returns 유저 측정 목록 데이터
  */
 export const useGetUserMeasureList = <T>({
@@ -20,6 +21,7 @@ export const useGetUserMeasureList = <T>({
   isResultPage = false,
   from,
   to,
+  sort,
 }: {
   page: string;
   limit: string;
@@ -28,6 +30,7 @@ export const useGetUserMeasureList = <T>({
   isResultPage?: boolean;
   from?: string;
   to?: string;
+  sort?: string;
 }) => {
   const axiosInstance = isResultPage ? customUserAxios : customAxios;
   const apiPath = isResultPage
@@ -36,20 +39,43 @@ export const useGetUserMeasureList = <T>({
 
   return useQuery<T>({
     queryKey: isResultPage
-      ? ["userResultMeasureList", page, limit, user_sn, from, to]
-      : ["UserMeasureList", page, limit, user_sn, from, to],
+      ? ["userResultMeasureList", page, limit, user_sn, from, to, sort]
+      : ["UserMeasureList", page, limit, user_sn, from, to, sort],
     queryFn: async () => {
-      const params: Record<string, string> = {
-        page,
-        limit,
-      };
-
-      if (from) {
-        params.from = from;
-      }
-
-      if (to) {
-        params.to = to;
+      const params: Record<string, string> = {};
+      
+      if (isResultPage) {
+        // result-page용 파라미터
+        params.page = page;
+        params.per_page = limit;
+        
+        if (from) {
+          params.start_date = from;
+        }
+        
+        if (to) {
+          params.end_date = to;
+        }
+        
+        if (sort) {
+          params.sort = sort;
+        }
+      } else {
+        // 관리자 페이지용 파라미터
+        params.page = page;
+        params.limit = limit;
+        
+        if (from) {
+          params.from = from;
+        }
+        
+        if (to) {
+          params.to = to;
+        }
+        
+        if (sort) {
+          params.sort = sort;
+        }
       }
 
       const response = await axiosInstance.get(apiPath, {
