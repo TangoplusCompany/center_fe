@@ -62,7 +62,7 @@ const MeasureDetailDynamic = ({
 
   const data = measureDynamic?.file_data;
   const fileData = measureDynamic?.file_data as IUserMeasureDynamicFileData;
-
+  console.log(cameraOrientation)
   const { data: measureJson, isLoading, isError } = useMeasureDynamicJson(
     data?.measure_server_json_name
   );
@@ -77,7 +77,7 @@ const MeasureDetailDynamic = ({
         measureJson={measureJson}
         isLoading={seq7Loading || isLoading}
         isError={!!(seq7Error || isError)}
-        customCanvasTransform="scaleX(-1.25) scaleY(1.25)"
+        customCanvasTransform={isRotated ? "scaleX(-1.25) scaleY(1.25)" : undefined}
         videoClassName={isRotated ? "-rotate-90 w-[75%] h-full object-contain" : "w-full h-full"}
         stageClassName="relative mx-auto w-full h-[300px] sm:h-[400px] md:h-[480px] lg:h-[560px] xl:h-[680px] overflow-hidden"
         containerClassName="flex flex-col gap-4 lg:gap-10"

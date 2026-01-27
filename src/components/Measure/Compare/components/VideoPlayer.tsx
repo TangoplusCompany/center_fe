@@ -138,7 +138,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const finalCanvasTransform = customCanvasTransform ?? canvasTransform;
   
   // 기본 video className과 커스텀 className 병합 (cn 사용으로 tailwind 충돌 방지)
-  const defaultVideoBaseClasses = "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0";
+  const defaultVideoBaseClasses = isRotated 
+    ? "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" 
+    : "w-full h-full";
   const defaultVideoRotatedClasses = isRotated 
     ? "-rotate-90 h-full w-auto scale-[1.75]" 
     : "w-full h-full";
@@ -148,7 +150,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   );
   
   // 기본 stage className과 커스텀 className 병합
-  const defaultStageClasses = "relative mx-auto w-full h-[480px] md:h-[560px] lg:h-[680px] overflow-hidden";
+  const defaultStageClasses = isRotated  ? "relative mx-auto w-full h-[480px] md:h-[560px] lg:h-[680px] overflow-hidden" : "w-full h-full";
   const finalStageClassName = cn(defaultStageClasses, stageClassName);
   
   // 기본 container className과 커스텀 className 병합
@@ -174,6 +176,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           ref={canvasTrailRef}
           className="absolute inset-0 z-[9] origin-center pointer-events-none"
           style={{ transform: finalCanvasTransform }}
+          // style={isRotated ? { transform: finalCanvasTransform } : {}}
         />
         <canvas
           ref={canvasWhiteRef}
