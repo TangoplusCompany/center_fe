@@ -1,10 +1,10 @@
 "use client";
 
-import { type ReactNode, createContext, useRef, useContext } from "react";
+import { type ReactNode, createContext, useContext } from "react";
 import { useStore } from "zustand";
-import { type ResultPageUserStore, createResultPageUserStore } from "@/stores/ResultPageUserStore";
+import { type ResultPageUserStore, resultPageUserStore } from "@/stores/ResultPageUserStore";
 
-export type ResultPageUserStoreApi = ReturnType<typeof createResultPageUserStore>;
+export type ResultPageUserStoreApi = typeof resultPageUserStore;
 
 export const ResultPageUserContext = createContext<ResultPageUserStoreApi | null>(null);
 
@@ -24,11 +24,8 @@ export const useResultPageUserStore = <T,>(selector: (store: ResultPageUserStore
 };
 
 const ResultPageUserProvider = ({ children }: { children: ReactNode }) => {
-  const storeRef = useRef<ResultPageUserStoreApi>(null);
-  if (!storeRef.current) {
-    storeRef.current = createResultPageUserStore();
-  }
-  return <ResultPageUserContext.Provider value={storeRef.current}>{children}</ResultPageUserContext.Provider>;
+  // 전역 store 인스턴스를 사용하여 Provider와 axios가 동일한 store 공유
+  return <ResultPageUserContext.Provider value={resultPageUserStore}>{children}</ResultPageUserContext.Provider>;
 };
 
 export default ResultPageUserProvider;
