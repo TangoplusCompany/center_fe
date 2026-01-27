@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useState } from "react";
+import { useRouter } from "next/navigation";
 import UserDetailTap from "@/components/User/UserDetailTap";
 import CenterUserMeasureContainer from "./CenterUserContainer";
 import CenterUserInformation from "@/components/User/CenterUserInformation";
@@ -12,6 +13,7 @@ import { useGetUserDashboard } from "@/hooks/api/user/useGetUserDashboard";
 import { IUserDashBoard } from "@/types/measure";
 import { formatDate } from "@/utils/formatDate";
 import { useGetUserDetail } from "@/hooks/api/user/useGetUserDetail";
+import { resultPageUserStore } from "@/stores/ResultPageUserStore";
 
 const useTab = () => {
   const [tab, setTab] = useState(0);
@@ -40,6 +42,7 @@ const CenterUserDetail = ({
   userName?: string;
   isResultPage?: boolean;
 }) => {
+  const router = useRouter();
   const { tab, handleTab } = useTab();
   const { measureSn, handleRecentSn } = useMeasureSn();
   
@@ -115,19 +118,46 @@ const CenterUserDetail = ({
   const openCompareMode = () => setIsCompareMode(true);
   const closeCompareMode = () => setIsCompareMode(false);
 
+  // 로그아웃 핸들러 (isResultPage일 때만 사용)
+  const handleLogout = () => {
+    if (!isResultPage) return;
+    if (confirm("로그아웃 하시겠습니까?")) {
+      // 전역 store 인스턴스를 직접 사용 (Provider 없이도 사용 가능)
+      resultPageUserStore.getState().setLogout();
+      router.push("/result-page/login");
+    }
+  };
+
   return (
     <div className="w-full h-full flex flex-col gap-4 lg:gap-4">
       {/* 타이틀 */}
-      <div className="flex items-center gap-3">
-        <div className="w-1 h-12 bg-toggleAccent rounded-full"></div>
-        <h2 className="text-3xl font-semibold text-[#333] dark:text-white flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-          <span>{displayUserName ? `${displayUserName}님` : "사용자"} 측정 결과</span>
-          {dashboardData?.latest_measure_summary?.measure_date && (
-            <span className="text-sm text-sub300 dark:text-sub200 sm:pl-2">
-              {formatDate(dashboardData.latest_measure_summary.measure_date)}
-            </span>
-          )}
-        </h2>
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3 flex-1">
+          <div className="w-1 h-12 bg-toggleAccent rounded-full"></div>
+          <h2 className="text-3xl font-semibold text-[#333] dark:text-white flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+            <span>{displayUserName ? `${displayUserName}님` : "사용자"} 측정 결과</span>
+            {dashboardData?.latest_measure_summary?.measure_date && (
+              <span className="text-sm text-sub300 dark:text-sub200 sm:pl-2">
+                {formatDate(dashboardData.latest_measure_summary.measure_date)}
+              </span>
+            )}
+          </h2>
+        </div>
+        {isResultPage && (
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-2 sm:px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors"
+            type="button"
+            aria-label="로그아웃"
+          >
+            <img 
+              src="/icons/ic_logout.svg" 
+              alt="로그아웃" 
+              className="w-5 h-5" 
+            />
+            <span className="hidden sm:inline">로그아웃</span>
+          </button>
+        )}
       </div>
 
       <UserDetailTap

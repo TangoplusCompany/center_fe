@@ -32,9 +32,9 @@ export function middleware(request: NextRequest) {
   }
 
   // =========================
-  // 3) my 도메인에서는 로그인 강제하지 않음(원하시는 흐름에 맞춤)
+  // 3) my 도메인 또는 로컬에서 /result-page 접근 시 로그인 강제하지 않음
   // =========================
-  if (isMyDomain) {
+  if (isMyDomain || (isLocalhost(host) && pathname.startsWith("/result-page"))) {
     return NextResponse.next();
   }
 

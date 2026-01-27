@@ -14,8 +14,8 @@ export default function ResultPageLayout({
 }>) {
   return (
     <div className="min-h-screen w-full">
-      <ResultPageAuthCheck />
       <ResultPageUserProvider>
+        <ResultPageAuthCheck />
         {/* 결과 페이지 전용 레이아웃 */}
         {children}
       </ResultPageUserProvider>
