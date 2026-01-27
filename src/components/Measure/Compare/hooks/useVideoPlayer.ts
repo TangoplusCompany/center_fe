@@ -2,6 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { computeContain, Fit, setupHiDPICanvas } from "../../DetailDynamic";
 import { isNearEnd, isNearStart } from "../utils/compareUtils";
 import { IMeasureJson } from "@/types/measure";
+import { compareCropScale } from "../components/VideoPlayer";
 
 const DATA_W = 720;
 const DATA_H = 1280;
@@ -10,6 +11,7 @@ const VIDEO_SCALE = 1.75;
 export interface UseVideoPlayerProps {
   videoSrc: string | undefined;
   isRotated: boolean;
+  isCompare: boolean;
   measureJson: IMeasureJson[] | undefined;
   onFrameChange?: (frame: number) => void;
 }
@@ -47,6 +49,7 @@ export interface UseVideoPlayerReturn {
 export const useVideoPlayer = ({
   videoSrc,
   isRotated,
+  isCompare,
   measureJson: _measureJson, // eslint-disable-line @typescript-eslint/no-unused-vars
   onFrameChange,
 }: UseVideoPlayerProps): UseVideoPlayerReturn => {
@@ -218,8 +221,6 @@ export const useVideoPlayer = ({
       const rect = stage.getBoundingClientRect();
       if (rect.width === 0 || rect.height === 0) return;
 
-      const base = computeContain(rect.width, rect.height, DATA_W, DATA_H);
-
       const cw = canvasWhiteRef.current;
       const cr = canvasRedRef.current;
       const ct = canvasTrailRef.current;
@@ -228,13 +229,48 @@ export const useVideoPlayer = ({
       if (cw) dpr = setupHiDPICanvas(cw, rect.width, rect.height).dpr;
       if (cr) setupHiDPICanvas(cr, rect.width, rect.height);
       if (ct) setupHiDPICanvas(ct, rect.width, rect.height);
+      const baseW = 1280;
+      const baseH = 720;
 
-      setFit({ ...base, dpr });
+      const widthScale = Number((rect.width / baseW).toFixed(4));
+      const heightScale = Number((rect.height / baseH).toFixed(4));
 
-      if (!video || !isRotated) {
-        setCanvasTransform(`scaleX(-1) scaleY(1)`);
+      console.log(widthScale, heightScale)
+      // ✅ 회전 아닌 경우: fit/transform을 완전 1로 고정
+      if (!isRotated) {
+        const scale = Math.min(widthScale, heightScale);
+
+        const visualW = baseW * scale;
+        const visualH = baseH * scale;
+
+        let offsetX = (rect.width - visualW) / 2;
+        const offsetY = (rect.height - visualH) / 2;
+
+        // ✅ 좌우 반전 보정
+        offsetX = rect.width - visualW - offsetX;
+
+        setFit({
+          stageW: rect.width,
+          stageH: rect.height,
+          scale: scale,   // 🔥 X축 반전
+          offsetX,
+          offsetY,
+          dpr,
+        });
+        if (isCompare && !isRotated) {
+          setCanvasTransform(`scaleX(-${compareCropScale}) scaleY(${compareCropScale})`);
+        } else {
+          setCanvasTransform(`scaleX(-1) scaleY(1)`);
+        }
+         // transform은 완전히 제거
         return;
       }
+
+      // ✅ 회전인 경우: 기존 로직 유지(단, fit은 computeContain로 계속 사용)
+      const base = computeContain(rect.width, rect.height, DATA_W, DATA_H);
+      setFit({ ...base, dpr });
+
+      if (!video) return;
 
       const vRect = video.getBoundingClientRect();
       if (vRect.width === 0 || vRect.height === 0) return;
@@ -258,6 +294,7 @@ export const useVideoPlayer = ({
       video?.removeEventListener("loadedmetadata", update);
     };
   }, [isRotated, videoSrc]);
+
 
   const toScreen = useMemo(() => {
     return (sx: number, sy: number) => ({

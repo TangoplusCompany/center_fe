@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 interface VideoPlayerProps {
   videoSrc: string | undefined;
   isRotated: boolean;
+  isCompare: boolean;
   measureJson: IMeasureJson[] | undefined;
   isLoading: boolean;
   isError: boolean;
@@ -18,10 +19,11 @@ interface VideoPlayerProps {
   containerClassName?: string; // 커스텀 container className (선택적)
   children?: React.ReactNode; // 추가 컨텐츠 (예: DynamicDataContainer)
 }
-
+export const compareCropScale = 2.35; 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({
   videoSrc,
   isRotated,
+  isCompare,
   measureJson,
   isLoading,
   isError,
@@ -51,6 +53,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   } = useVideoPlayer({
     videoSrc,
     isRotated,
+    isCompare,
     measureJson,
     onFrameChange,
   });
@@ -136,9 +139,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   const finalCanvasTransform = customCanvasTransform ?? canvasTransform;
-  
+  const isCompareCrop = isCompare && !isRotated;
   // 기본 video className과 커스텀 className 병합 (cn 사용으로 tailwind 충돌 방지)
-  const defaultVideoBaseClasses = "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0";
+  const defaultVideoBaseClasses = isRotated 
+    ? "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" 
+    : isCompareCrop
+      ? `absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 h-full w-auto scale-[${compareCropScale}]`// 좌우 crop을 위한 확대
+      : "w-full h-full";
   const defaultVideoRotatedClasses = isRotated 
     ? "-rotate-90 h-full w-auto scale-[1.75]" 
     : "w-full h-full";
@@ -155,6 +162,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const defaultContainerClasses = "flex flex-col justify-between gap-2 lg:gap-4";
   const finalContainerClassName = cn(defaultContainerClasses, containerClassName);
 
+  
   return (
     <div className={finalContainerClassName}>
       <div
@@ -174,6 +182,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           ref={canvasTrailRef}
           className="absolute inset-0 z-[9] origin-center pointer-events-none"
           style={{ transform: finalCanvasTransform }}
+          // style={isRotated ? { transform: finalCanvasTransform } : {}}
         />
         <canvas
           ref={canvasWhiteRef}
