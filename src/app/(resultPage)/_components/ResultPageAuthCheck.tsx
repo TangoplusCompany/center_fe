@@ -1,12 +1,18 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useResultPageUserStore, ResultPageUserContext } from "@/providers/ResultPageUserProvider";
 
 export default function ResultPageAuthCheck() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  
+  // zustand store 상태 확인 (persist가 자동으로 sessionStorage에서 복원)
+  const isLogin = useResultPageUserStore((state) => state.isLogin);
+  const user = useResultPageUserStore((state) => state.user);
+  const store = useContext(ResultPageUserContext);
 
   useEffect(() => {
     // 로그인 페이지 자체에서는 체크 안 함 (무한 리다이렉트 방지)
@@ -21,10 +27,9 @@ export default function ResultPageAuthCheck() {
       return;
     }
 
-    const hasResultPageLogin = document.cookie.includes("resultPageLogin=true");
-    
-    if (!hasResultPageLogin) {
-      // 쿠키가 없으면 쿠키가 설정될 때까지 polling
+    // Store 상태 확인 (persist가 자동으로 복원하므로 store 상태만 확인)
+    if (!isLogin || !user) {
+      // Store에 데이터가 없으면 설정될 때까지 polling
       let attempts = 0;
       const maxAttempts = 30; // 최대 3초 (100ms * 30)
       const interval = setInterval(() => {
@@ -37,13 +42,16 @@ export default function ResultPageAuthCheck() {
           return;
         }
         
-        // 쿠키 확인
-        if (document.cookie.includes("resultPageLogin=true")) {
-          clearInterval(interval);
-          return;
+        // Store 상태 재확인 (persist가 복원되었을 수 있음)
+        if (store) {
+          const state = store.getState();
+          if (state.isLogin && state.user) {
+            clearInterval(interval);
+            return;
+          }
         }
         
-        // 최대 시도 횟수에 도달했고 쿠키도 없으면 리다이렉트
+        // 최대 시도 횟수에 도달했고 Store에도 없으면 리다이렉트
         if (attempts >= maxAttempts) {
           clearInterval(interval);
           router.replace("/result-page/login");
@@ -52,7 +60,7 @@ export default function ResultPageAuthCheck() {
       
       return () => clearInterval(interval);
     }
-  }, [router, pathname, searchParams]);
+  }, [router, pathname, searchParams, isLogin, user, store]);
 
   return null;
 }

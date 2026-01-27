@@ -1,6 +1,6 @@
 import { refreshAccessToken } from "@/services/auth/postRefreshAccessToken";
 import { createAuthStore } from "@/stores/AuthStore";
-import { createResultPageUserStore } from "@/stores/ResultPageUserStore";
+import { resultPageUserStore } from "@/stores/ResultPageUserStore";
 import { session } from "@/utils/helperSessionStorage";
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
@@ -27,7 +27,7 @@ export const customJsonAxios = axios.create({
 });
 
 const authStore = createAuthStore();
-const resultPageUserStore = createResultPageUserStore();
+// 전역 resultPageUserStore 인스턴스 사용 (Provider와 동일한 인스턴스)
 
 let isRefreshing = false;
 let failedQueue: {
@@ -145,6 +145,7 @@ export const customUserAxios = axios.create({
 customUserAxios.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   // result-page 경로에서만 사용자 토큰 사용
   if (typeof window !== "undefined" && window.location.pathname.startsWith("/result-page")) {
+    // 전역 store 인스턴스에서 직접 상태 읽기 (Provider와 동일한 인스턴스이므로 동기화됨)
     const userStore = resultPageUserStore.getState();
     
     if (userStore.isLogin && userStore.accessToken) {
@@ -165,8 +166,8 @@ customUserAxios.interceptors.response.use(
   async (error) => {
     // 401 에러 발생 시 로그인 페이지로 리다이렉트
     if (error.response?.status === 401) {
-      const userStore = resultPageUserStore.getState();
-      userStore.setLogout();
+      // 전역 store에서 로그아웃 처리 (persist가 자동으로 sessionStorage도 업데이트)
+      resultPageUserStore.getState().setLogout();
       
       if (typeof window !== "undefined" && window.location.pathname.startsWith("/result-page")) {
         window.location.href = "/result-page/login";

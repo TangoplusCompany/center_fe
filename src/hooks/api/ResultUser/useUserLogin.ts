@@ -19,81 +19,13 @@ export const useUserLogin = (setError: UseFormSetError<FieldValues>) => {
     mutationFn: postUserLogin,
     onSuccess: async (data: IResultPageLoginSuccessResponse["data"]) => {
       // zustand store에 저장 (persist가 자동으로 sessionStorage에 저장함)
+      // 전역 store 인스턴스를 사용하므로 axios 인터셉터와 동일한 store
       setLoginFromResponse(data);
 
-      // 로그인 성공 시 쿠키 설정
-      document.cookie = "resultPageLogin=true; path=/; max-age=86400"; // 24시간
-
-      // persist가 sessionStorage에 저장될 때까지 기다리는 헬퍼 함수
-      const waitForPersist = (): Promise<void> => {
-        return new Promise((resolve) => {
-          // sessionStorage에 이미 저장되어 있으면 즉시 resolve
-          const stored = sessionStorage.getItem("result-page-user");
-          if (stored) {
-            try {
-              const parsed = JSON.parse(stored);
-              if (parsed?.state?.isLogin && parsed?.state?.user) {
-                resolve();
-                return;
-              }
-            } catch {
-              // 파싱 실패는 무시하고 계속 진행
-            }
-          }
-          
-          // persist가 저장할 때까지 polling
-          let attempts = 0;
-          const maxAttempts = 30; // 최대 3초 (100ms * 30)
-          const interval = setInterval(() => {
-            attempts++;
-            const stored = sessionStorage.getItem("result-page-user");
-            if (stored) {
-              try {
-                const parsed = JSON.parse(stored);
-                if (parsed?.state?.isLogin && parsed?.state?.user) {
-                  clearInterval(interval);
-                  resolve();
-                  return;
-                }
-              } catch {
-                // 파싱 실패는 무시하고 계속 진행
-              }
-            }
-            
-            if (attempts >= maxAttempts) {
-              clearInterval(interval);
-              // 타임아웃이어도 진행 (persist는 저장되었을 가능성이 높음)
-              resolve();
-            }
-          }, 100);
-        });
-      };
-
-      // 쿠키 설정 확인을 위한 헬퍼 함수
-      const waitForCookie = (): Promise<void> => {
-        return new Promise((resolve) => {
-          // 쿠키가 이미 설정되어 있으면 즉시 resolve
-          if (document.cookie.includes("resultPageLogin=true")) {
-            resolve();
-            return;
-          }
-          
-          // 쿠키가 설정될 때까지 polling
-          let attempts = 0;
-          const maxAttempts = 20; // 최대 2초 (100ms * 20)
-          const interval = setInterval(() => {
-            attempts++;
-            if (document.cookie.includes("resultPageLogin=true")) {
-              clearInterval(interval);
-              resolve();
-            } else if (attempts >= maxAttempts) {
-              clearInterval(interval);
-              // 타임아웃이어도 진행 (쿠키는 설정되었을 가능성이 높음)
-              resolve();
-            }
-          }, 100);
-        });
-      };
+      // zustand의 getState()는 동기적으로 즉시 반환되므로
+      // persist가 sessionStorage에 저장되는 것과 관계없이 store 상태는 즉시 업데이트됨
+      // 따라서 별도의 대기 시간이 필요 없음
+      // persist는 백그라운드에서 자동으로 sessionStorage에 저장됨
 
       // 사용자 정보를 암호화하여 쿼리 파라미터로 전달
       const encrypted = await actionUserEncrypt({
@@ -103,8 +35,9 @@ export const useUserLogin = (setError: UseFormSetError<FieldValues>) => {
       });
       
       if (encrypted !== "ERROR") {
-        // persist가 sessionStorage에 저장되고 쿠키가 설정될 때까지 기다린 후 페이지 이동
-        await Promise.all([waitForPersist(), waitForCookie()]);
+        // store 상태는 이미 업데이트되었으므로 바로 페이지 이동
+        // persist는 백그라운드에서 sessionStorage에 저장 중
+        // axios 인터셉터는 같은 전역 store를 사용하므로 최신 토큰을 읽을 수 있음
         router.push(`/result-page?key=${encrypted}`);
       } else {
         alert("암호화 중 오류가 발생했습니다.");

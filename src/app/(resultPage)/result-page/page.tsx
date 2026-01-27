@@ -13,7 +13,7 @@ export default function ResultPage() {
   // Store 상태
   const user = useResultPageUserStore((state) => state.user);
   const isLogin = useResultPageUserStore((state) => state.isLogin);
-  const setLoginFromResponse = useResultPageUserStore((state) => state.setLoginFromResponse);
+  const hasHydrated = useResultPageUserStore((state) => state._hasHydrated);
 
   const [decryptedData, setDecryptedData] = useState<{
     user_uuid: string;
@@ -25,7 +25,13 @@ export default function ResultPage() {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isStoreInitialized, setIsStoreInitialized] = useState(false);
 
+  // persist 복원 완료 대기
   useEffect(() => {
+    if (!hasHydrated) {
+      // persist가 복원될 때까지 기다림
+      return;
+    }
+
     const initAuthAndData = async () => {
       const encryptedKey = searchParams.get("key");
       
@@ -48,34 +54,14 @@ export default function ResultPage() {
           user_name: decrypted.user_name,
         });
 
-        // 2. Store에 이미 데이터가 있으면 쿠키 체크 건너뛰기
+        // 2. persist 복원 완료 후 Store 상태 확인
         if (isLogin && user) {
           // 이미 로그인 상태이므로 추가 처리 불필요
           setIsStoreInitialized(true);
         } else {
-          // 3. 쿠키 확인 및 Store 데이터 복구
-          const hasCookie = document.cookie.includes("resultPageLogin=true");
-          
-          if (hasCookie) {
-            setLoginFromResponse({
-              user: {
-                user_sn: decrypted.user_sn,
-                user_name: decrypted.user_name,
-                user_uuid: decrypted.user_uuid,
-                mobile: "",
-                pin_login_fail_count: 0,
-                pin_account_locked: 0,
-                pin_login_last_date: "",
-              },
-              access_token: "", 
-            });
-            // Store 초기화 완료 표시 (상태 업데이트는 다음 useEffect에서 감지)
-            setIsStoreInitialized(true);
-          } else {
-            // 쿠키조차 없으면 튕겨냄
-            router.replace("/result-page/login");
-            return;
-          }
+          // Store에 데이터가 없으면 로그인 페이지로 리다이렉트
+          router.replace("/result-page/login");
+          return;
         }
       } catch (error) {
         console.error("인증 초기화 실패:", error);
@@ -84,8 +70,7 @@ export default function ResultPage() {
     };
 
     initAuthAndData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams, router, setLoginFromResponse]);
+  }, [hasHydrated, searchParams, router, isLogin, user]);
 
   // Store 상태가 실제로 업데이트될 때까지 기다리기
   useEffect(() => {
@@ -94,7 +79,7 @@ export default function ResultPage() {
     if (isLogin && user) {
       setIsInitialLoading(false);
     } else {
-      // 만약 쿠키는 있는데 스토어 반영이 늦어지는 경우를 대비해 
+      // Store 상태 반영이 늦어지는 경우를 대비해 
       // 강제로 한 번 더 스토어 확인을 하거나 리다이렉트 시점을 명확히 함
       const timer = setTimeout(() => {
         if (!isLogin) {
