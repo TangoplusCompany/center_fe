@@ -48,7 +48,6 @@ const MeasureDynamicCompare = ({
   );
   const isRotated0 = leftSummaryData?.camera_orientation === 1;
   const isRotated1 = rightSummaryData?.camera_orientation === 1;
-  console.log(isRotated0, isRotated1)
   const measureData0 = extractMeasureData(left);
   if (!measureData0) {
     return <div>데이터가 없습니다.</div>; // 또는 null, 로딩 UI 등
