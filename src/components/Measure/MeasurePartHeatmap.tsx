@@ -17,7 +17,7 @@ const limitedData = data.slice(0, 10);
 const padding = Array(10 - limitedData.length).fill(defaultItem);
 
 // 데이터를 뒤집어서(...reverse) 패딩 뒤에 붙임
-const filledData = [...padding, ...[...limitedData].reverse()];
+const filledData = [...[...limitedData].reverse(), ...padding];
 
   // 0: 정상(회색), 1: 주의(주황), 2: 위험(빨강)
   const getColor = (value: number) => {
