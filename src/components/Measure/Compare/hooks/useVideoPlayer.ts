@@ -235,7 +235,6 @@ export const useVideoPlayer = ({
       const widthScale = Number((rect.width / baseW).toFixed(4));
       const heightScale = Number((rect.height / baseH).toFixed(4));
 
-      console.log(widthScale, heightScale)
       // ✅ 회전 아닌 경우: fit/transform을 완전 1로 고정
       if (!isRotated) {
         const scale = Math.min(widthScale, heightScale);
@@ -252,7 +251,7 @@ export const useVideoPlayer = ({
         setFit({
           stageW: rect.width,
           stageH: rect.height,
-          scale: scale,   // 🔥 X축 반전
+          scale: scale,   
           offsetX,
           offsetY,
           dpr,

@@ -17,7 +17,6 @@ const ResultSheetPage = async ({ searchParams }: { searchParams: searchParams })
   const decryptedSecretKey = await actionDecrypt(secretKey);
   const keyData: keyProps = JSON.parse(decryptedSecretKey);
 
-  console.log("keyData", keyData);
   return (
     <>
       <ResultSheetContainer sn={keyData.sn} user_uuid={keyData.user_uuid} />
