@@ -144,7 +144,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const defaultVideoBaseClasses = isRotated 
     ? "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" 
     : isCompareCrop
-      ? `absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 h-full w-auto scale-[${compareCropScale}]`// 좌우 crop을 위한 확대
+      ? "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 h-full w-auto scale-[2.35]" // 좌우 crop을 위한 확대
       : "w-full h-full";
   const defaultVideoRotatedClasses = isRotated 
     ? "-rotate-90 h-full w-auto scale-[1.75]" 
