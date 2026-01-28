@@ -13,6 +13,7 @@ export interface MeasureSummaryProps {
   handleLegendClick: (measureSn: number) => void;
   dCase: 0 | 1;
   title: string;
+  selectedMeasureSn?: number;
 }
 
 
@@ -24,8 +25,25 @@ const MeasureSummaryContainer = ({
   handleLegendClick,
   dCase,
   title,
+  selectedMeasureSn,
 }: MeasureSummaryProps 
 ) => {
+  const latestMeasureDate =
+    summaryData && summaryData.length > 0
+      ? summaryData.reduce<string | undefined>((latest, cur) => {
+          if (!latest) return cur.measure_date;
+          return new Date(cur.measure_date).getTime() > new Date(latest).getTime()
+            ? cur.measure_date
+            : latest;
+        }, undefined)
+      : undefined;
+
+  const selectedMeasureDate = selectedMeasureSn
+    ? summaryData.find((x) => x.measure_sn === selectedMeasureSn)?.measure_date
+    : undefined;
+
+  const displayMeasureDate = selectedMeasureDate ?? latestMeasureDate;
+
   return (
     <div className="rounded-3xl border-2 border-sub200 p-3 sm:p-4">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 transition-all duration-300 ease-in-out">
@@ -35,6 +53,7 @@ const MeasureSummaryContainer = ({
             risk_level={risk_level} 
             range_level={range_level}
             title={title}
+            measureDate={displayMeasureDate}
           />
         </div>
         <div className="transition-all duration-300 ease-in-out">

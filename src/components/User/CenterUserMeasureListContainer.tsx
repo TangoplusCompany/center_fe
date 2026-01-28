@@ -54,6 +54,7 @@ const CenterUserMeasureListContainer = ({
     user_sn: userSn,
     from,
     to,
+    sort,
     isResultPage,
   });
 
@@ -175,11 +176,11 @@ const CenterUserMeasureListContainer = ({
     to: new Date(to),
   } : undefined;
 
-  const sortedMeasurements: IMeasureList[] = useMemo(() => {
+  const measurements: IMeasureList[] = useMemo(() => {
     if (!userMeasureList?.measurement_list) return [];
     
     // IUserMeasureListItem[]를 IMeasureList[]로 변환
-    const converted = userMeasureList.measurement_list.map((item) => ({
+    return userMeasureList.measurement_list.map((item) => ({
       sn: item.measure_sn,
       measure_sn: item.measure_sn,
       user_name: item.user_name,
@@ -191,21 +192,7 @@ const CenterUserMeasureListContainer = ({
       device_sn: 0,
       t_score: 0,
     }));
-    
-    const sorted = [...converted];
-    
-    if (sort === "asc") {
-      // 오래된순 (날짜 오름차순)
-      return sorted.sort((a, b) => 
-        new Date(a.measure_date).getTime() - new Date(b.measure_date).getTime()
-      );
-    } else {
-      // 최신순 (날짜 내림차순)
-      return sorted.sort((a, b) => 
-        new Date(b.measure_date).getTime() - new Date(a.measure_date).getTime()
-      );
-    }
-  }, [userMeasureList?.measurement_list, sort]);
+  }, [userMeasureList?.measurement_list]);
   
   const handleSortChange = (value: string) => {
     setQueryParam([
@@ -342,8 +329,15 @@ const CenterUserMeasureListContainer = ({
       <CenterUserMeasureListSkeleton />
     ) : (
       <>
+        {/* 총 갯수 표시 */}
+        {userMeasureList && (
+          <div className="mb-4 text-sm text-muted-foreground">
+            총 <span className="font-semibold text-foreground">{userMeasureList.total}</span>건
+          </div>
+        )}
+        
         <CenterUserMeasureList
-          measures={sortedMeasurements}
+          measures={measurements}
           onRowClick={onSelectMeasure ? (sn) => onSelectMeasure(sn) : undefined}
           onToggleCompareSn={onToggleCompareSn}
           onOpenCompareMode={onOpenCompareMode}

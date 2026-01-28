@@ -1,18 +1,20 @@
 import { parseString } from "@/utils/parseString";
+import { formatDate } from "@/utils/formatDate";
 
 export interface MeasureSummaryUnitProps {
   ment: string;
   risk_level: string;
   range_level: string;
   title: string;
-
+  measureDate?: string;
 }
 
 const MeasureSummaryUnit = ({
   ment,
   risk_level,
   range_level,
-  title
+  title,
+  measureDate,
 }: MeasureSummaryUnitProps) => {
   const getRiskString = (level?: string) => 
   ({
@@ -34,7 +36,14 @@ const MeasureSummaryUnit = ({
   return (
     <div >
       <div className="flex justify-between items-center py-2">
-        <h2 className="text-xl font-semibold">{title}</h2>
+        <div className="flex items-center gap-2">
+          <h2 className="text-xl font-semibold">{title}</h2>
+          {measureDate && (
+            <span className="text-sm text-sub300">
+              {formatDate(measureDate)}
+            </span>
+          )}
+        </div>
         <span className={`px-3 py-1 ${riskBg} rounded-xl text-sm text-white`}>
           {riskString} {range_level}단계
         </span>
