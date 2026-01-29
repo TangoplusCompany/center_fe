@@ -62,7 +62,7 @@ export const patchResultUserDetail = async ({
   }
 
   // 디버깅: 요청 데이터 로깅
-  console.log("patchResultUserDetail 요청 데이터:", requestData);
+  // console.log("patchResultUserDetail 요청 데이터:", requestData);
   
   const { data } = await customUserAxios.patch<IResponseDefault>(`/users/${sn}`, requestData);
   return data;

@@ -62,7 +62,6 @@ const MeasureDetailDynamic = ({
 
   const data = measureDynamic?.file_data;
   const fileData = measureDynamic?.file_data as IUserMeasureDynamicFileData;
-  console.log(cameraOrientation)
   const { data: measureJson, isLoading, isError } = useMeasureDynamicJson(
     data?.measure_server_json_name
   );
