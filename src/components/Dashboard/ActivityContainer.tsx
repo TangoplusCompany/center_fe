@@ -59,12 +59,12 @@ const graphData_1: graphDetailCardProps  = {
 
   
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex items-center gap-3">
+    <div className="w-full flex flex-col gap-6">
+      <div className="w-full flex items-center gap-3">
         <div className="w-1 h-10 bg-toggleAccent rounded-full"></div>
         <h2 className="text-2xl col-span-2">활동 요약</h2>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4  gap-4">
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4  gap-4">
         <ActivityCard data={dailyCardData} />
         <ActivityCard data={weeklyCardData} />
         <ActivityGraph data={graphData_0} />

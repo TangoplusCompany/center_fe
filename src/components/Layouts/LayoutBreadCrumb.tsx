@@ -68,16 +68,16 @@ export function LayoutBreadCrumb() {
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink className="text-xl" href="/">탱고플러스 센터</BreadcrumbLink>
+          <BreadcrumbLink className="text-base xl:text-xl" href="/">탱고플러스 센터</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center gap-1">
               {pathName === "/" ? (
-                <p className="text-slate-950 text-xl dark:text-foreground">대시보드</p>
+                <p className="text-slate-950 text-base xl:text-xl dark:text-foreground">대시보드</p>
               ) : (
-                <p className="text-slate-950 text-xl dark:text-foreground">
+                <p className="text-slate-950 text-base xl:text-xl dark:text-foreground">
                   {Menus.filter((el) => el.url !== "/").find((menu) => pathName.includes(menu.url))
                     ?.title || "Not Found"}
                 </p>
