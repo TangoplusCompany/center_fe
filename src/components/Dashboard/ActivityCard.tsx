@@ -25,7 +25,7 @@ const ActivityCard = ({
   const centerY = 15; // 원 중앙 고정
 
   return (
-    <div className="flex flex-col border-2 border-toggleAccent-background rounded-xl gap-6 bg-gradient-to-b from-[#2c4fd0]/10 from-[2%] to-white to-[40%]">
+    <div className="w-full flex flex-col border-2 border-toggleAccent-background rounded-xl gap-6 bg-gradient-to-b from-[#2c4fd0]/10 from-[2%] to-white to-[40%]">
       <div className="p-4 text-xl font-semibold text-toggleAccent">
         {data.case === 0 && "센터 일간 측정"}
         {data.case === 1 && "센터 주간 측정"}

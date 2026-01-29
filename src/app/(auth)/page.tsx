@@ -7,7 +7,7 @@ import React from "react";
 
 export default function Home() {
   return (
-    <div className="flex flex-col gap-5">
+    <div className="w-full min-w-0 flex flex-col gap-5">
       <ActivityContainer />
       <div className="w-full ">
         {/* <div className="flex flex-col gap-5">
