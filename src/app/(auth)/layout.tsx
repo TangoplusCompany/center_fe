@@ -23,7 +23,7 @@ export default function AuthLayout({
     }
   }, [authStore, router]);
   return (
-    <div className="w-full overflow-x-hidden">
+    <div className="w-full min-w-0 overflow-x-hidden">
       <SidebarProvider>
         <AuthStoreProvider>
           <DefaultSidebar />

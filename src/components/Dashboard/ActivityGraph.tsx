@@ -58,8 +58,8 @@ const ActivityGraph = ({
   }, []);
   
   return (
-    <div className="flex flex-col border-2 border-toggleAccent-background rounded-xl gap-6 bg-gradient-to-b from-[#2c4fd0]/10 from-[2%] to-white to-[40%]">
-      <div className="p-4 flex justify-between items-center">
+    <div className="w-full flex flex-col border-2 border-toggleAccent-background rounded-xl gap-6 bg-gradient-to-b from-[#2c4fd0]/10 from-[2%] to-white to-[40%]">
+      <div className="w-full p-4 flex justify-between items-center">
         <div className="text-xl font-semibold text-toggleAccent">
           {data.case === 0 && "요일별 사용량"}
           {data.case === 1 && "회원 연령대"}

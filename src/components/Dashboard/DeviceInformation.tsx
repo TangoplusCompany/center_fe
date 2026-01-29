@@ -21,9 +21,9 @@ const DashboardDeviceStatus = ({
     <div
       key={device.device_sn}
       onClick={handleClick}
-      className="col-span-1 items-center justify-between rounded-xl border-2 border-toggleAccent-background relative cursor-pointer hover:border-toggleAccent transition-colors"
+      className="w-full col-span-1 items-center justify-between rounded-xl border-2 border-toggleAccent-background relative cursor-pointer hover:border-toggleAccent transition-colors"
     >
-      <div className="flex flex-col">
+      <div className="w-full flex flex-col">
         <div className="flex items-center justify-start rounded-t-xl text-xl text-toggleAccent font-semibold bg-toggleAccent-background px-4 py-2 w-full">
           {device.device_name}
         </div>
@@ -78,7 +78,7 @@ export const DeviceInformation = () => {
   const { data: deviceStatus, isLoading } = useGetDeviceStatus<IDeviceStatus>();
   const [isExpanded, setIsExpanded] = useState(false);
   if (isLoading) return (
-    <div className="flex flex-col gap-4">
+    <div className="w-full flex flex-col gap-4">
       <Skeleton className="w-full h-[320px]" />
       <Skeleton className="w-full h-[320px]" />
     </div>
@@ -91,13 +91,13 @@ export const DeviceInformation = () => {
   const hasMore = deviceStatus.data.length > 4;
   return (
     <>
-      <div className="flex flex-col gap-4">
-        <div className="flex items-center gap-3">
+      <div className="w-full flex flex-col gap-4">
+        <div className="w-full flex items-center gap-3">
           <div className="w-1 h-10 bg-toggleAccent rounded-full"></div>
           <h2 className="text-2xl col-span-2">기기 현황</h2>
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+        <div className="w-full grid grid-cols-1 xl:grid-cols-2 gap-4">
           {displayedDevices.map((device) => (
             <DashboardDeviceStatus key={device.device_sn} device={device} />
           ))}

@@ -140,7 +140,7 @@ const SidebarProvider = React.forwardRef<
               ...style,
             } as React.CSSProperties
           }
-          className={cn("group/sidebar-wrapper flex min-h-svh w-full has-[[data-variant=inset]]:bg-sidebar", className)}
+          className={cn("group/sidebar-wrapper flex min-h-svh w-full min-w-0 has-[[data-variant=inset]]:bg-sidebar", className)}
           ref={ref}
           {...props}
         >
@@ -193,28 +193,6 @@ const Sidebar = React.forwardRef<
               </div>
             </SheetContent>
           </Sheet>
-          {/* 모바일이거나 xl 미만일 때 fixed 위치의 unfold 아이콘 버튼 */}
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="fixed left-4 bottom-24 z-50 h-14 w-14 bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 shadow-xl hover:shadow-2xl hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:border-blue-500 dark:hover:border-blue-400 hover:scale-110 transition-all duration-200"
-                onClick={() => setOpenMobile(true)}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/icons/ic_unfold.svg"
-                  alt="unfold"
-                  className="w-7 h-7 transition-transform duration-200"
-                />
-                <span className="sr-only">Toggle Sidebar</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right" align="center">
-              <p>탭열기</p>
-            </TooltipContent>
-          </Tooltip>
         </>
       )}
       <div 
