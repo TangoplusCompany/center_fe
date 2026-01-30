@@ -29,9 +29,16 @@ export const useLogout = () => {
         success: boolean;
       }>,
     ) => {
-      console.error(data);
-      alert("로그아웃에 실패했습니다. 잠시 후 다시 시도해주세요.");
-      return;
+      // Safari/iPhone: 쿠키·CORS 이슈로 로그아웃 API가 실패해도 클라이언트에서 로그아웃 후 로그인 페이지로 이동
+      console.warn("로그아웃 API 실패(클라이언트 로그아웃 처리):", data?.response?.status, data?.message);
+      setLogout();
+      document.cookie = `isLogin=false; path=/; max-age=${60 * 60 * 3}`;
+      // Safari에서 router.push만으로는 즉시 이탈이 안 될 수 있어, 전체 페이지 이동 사용
+      if (typeof window !== "undefined") {
+        window.location.href = "/login";
+      } else {
+        router.push("/login");
+      }
     },
   });
 };
