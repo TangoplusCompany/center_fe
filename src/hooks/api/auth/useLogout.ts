@@ -16,8 +16,8 @@ export const useLogout = () => {
     onSuccess: () => {
       // Handle successful login, e.g., redirect to dashboard
       setLogout();
-      document.cookie = `isLogin=false; path=/; max-age=${60 * 60 * 3}`;
-      router.push("/login");
+      document.cookie = "isLogin=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax";
+  router.push("/login");
     },
     onError: (
       data: AxiosError<{
