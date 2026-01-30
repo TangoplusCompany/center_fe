@@ -9,6 +9,7 @@ export const postLogout = async () => {
   const response = await customAxios.post<IResponseDefault>("/auth/logout", null, {
     withCredentials: true,
   });
-  document.cookie = "isLogin=false; path=/; max-age=0";
+  document.cookie = "isLogin=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax";
+  
   return response.data;
 };
