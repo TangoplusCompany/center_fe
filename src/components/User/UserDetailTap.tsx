@@ -35,7 +35,7 @@ const UserDetailTap = ({
   return (
     <div className="w-full flex items-center justify-between gap-2">
       <div className="inline-flex rounded-xl bg-gray-100 dark:bg-gray-800 p-1">
-        {["최근","측정 요약", "비교 분석", "사용자 정보"].map((item, index) => {
+        {["최근", "기록 요약", "기록 비교", "사용자 정보"].map((item, index) => {
           return (
             <button
               key={item + index}
@@ -55,6 +55,7 @@ const UserDetailTap = ({
           );
         })}
       </div>
+      {nowTab !== 3 && (
       <button 
         onClick={() => setIsAIExerciseActive(true)}
         className={`relative h-full overflow-hidden px-2 py-1 sm:px-3 rounded-xl text-white transition-all duration-500 hover:scale-105 active:scale-95 isolate border-2 sm:border-4 border-toggleAccent/25 ${
@@ -90,6 +91,7 @@ const UserDetailTap = ({
           <span className="hidden sm:inline">AI 운동 추천</span>
         </span>
       </button>
+      )}
     </div>
   );
 };

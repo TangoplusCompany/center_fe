@@ -1,5 +1,5 @@
-type Type = "email" | "mobile";
-type Purpose = "account" | "password";
+export type Type = "email" | "mobile";
+export type Purpose = "account" | "password";
 
 export interface IOtpProps {
   email_or_mobile: string;

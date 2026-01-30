@@ -6,7 +6,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { phoneFiltering, phoneHyphen } from "@/utils/regexFiltering";
 import { IMeasureList } from "@/types/measure";
 import { CompareSlot } from "@/types/compare";
 
@@ -35,8 +34,7 @@ export const CenterUserMeasureList = ({
             {/* ✅ 체크박스 컬럼 */}
             {/* <TableHead className="w-10 text-center"></TableHead> */}
 
-            <TableHead className="text-center text-xs sm:text-sm whitespace-nowrap">이름</TableHead>
-            <TableHead className="text-center text-xs sm:text-sm whitespace-nowrap">전화번호</TableHead>
+            <TableHead className="text-center text-xs sm:text-sm whitespace-nowrap">측정 위치</TableHead>
             <TableHead className="text-center text-xs sm:text-sm whitespace-nowrap">측정 일자</TableHead>
             <TableHead className="text-center text-xs sm:text-sm whitespace-nowrap">측정 기기</TableHead>
             <TableHead className="text-center text-xs sm:text-sm whitespace-nowrap">측정 요약</TableHead>
@@ -65,9 +63,8 @@ export const CenterUserMeasureList = ({
                 </TableCell> */}
 
                 <TableCell className="text-center font-medium text-xs sm:text-sm whitespace-nowrap">
-                  {measure.user_name}
+                  {measure.center_name ?? "-"}
                 </TableCell>
-                <TableCell className="text-center text-xs sm:text-sm whitespace-nowrap">{phoneFiltering(phoneHyphen(measure.mobile))}</TableCell>
                 <TableCell className="text-center text-xs sm:text-sm whitespace-nowrap">{measure.measure_date}</TableCell>
                 <TableCell className="text-center text-xs sm:text-sm whitespace-nowrap">{measure.device_name}</TableCell>
                 {/* <TableCell className="text-center">

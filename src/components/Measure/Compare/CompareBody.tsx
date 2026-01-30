@@ -210,13 +210,21 @@ const CompareBody = ({
   ];
   
   const activeTab = measureTabs[activeIdx];
+  const activeValue = measureTabs[activeIdx].value;
 
   return (
     // 1. 최상위 div에 min-w-0을 추가하여 flex 자식일 경우를 대비합니다.
     <div className="w-full flex flex-col gap-4 min-w-0 max-w-full">
       
-      {/* ✅ 상단 탭 영역 */}
-      <Tabs defaultValue="summary" className="w-full table table-fixed min-w-0"> {/* 부모에서 넘치는 거 일단 차단 */}
+      {/* ✅ 상단 탭 영역: value/onValueChange로 제어해 다이얼로그 열림 후에도 선택 탭이 유지되도록 함 */}
+      <Tabs
+        value={activeValue}
+        onValueChange={(value) => {
+          const idx = measureTabs.findIndex((m) => m.value === value);
+          if (idx >= 0) setActiveIdx(idx);
+        }}
+        className="w-full table table-fixed min-w-0"
+      >
         <div className="w-full">
           {/* 1. 이 div가 가장 중요합니다. 가로 스크롤 전용 컨테이너입니다. */}
           <div className="overflow-x-auto overflow-y-hidden w-full min-w-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
@@ -224,11 +232,10 @@ const CompareBody = ({
             {/* 2. TabsList에 flex-nowrap을 강제로 주고 w-max로 길이를 확보합니다. */}
             <TabsList className="relative z-10 flex w-max min-w-full flex-nowrap items-center justify-start bg-transparent p-0 border-none shadow-none">
 
-              {measureTabs.map((measure, idx) => (
+              {measureTabs.map((measure) => (
                 <TabsTrigger
                   key={measure.value}
                   value={measure.value}
-                  onClick={() => setActiveIdx(idx)}
                   // 3. whitespace-nowrap이 여기서 글자 줄바꿈을 막아줍니다.
                   className={cn(
                     "relative pb-2 text-lg font-semibold transition-colors whitespace-nowrap flex-shrink-0",

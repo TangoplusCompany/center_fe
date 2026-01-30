@@ -1,5 +1,4 @@
 import { IPoseLandmark } from "@/types/pose";
-import { Skeleton } from "../ui/skeleton";
 import { useStaticLandmark } from "@/hooks/landmark/useStaticLandmark";
 import { useState } from "react";
 import MeasurementImageDialog from "./MeasurementImageDialog";
@@ -26,8 +25,20 @@ export const MeasurementImage = ({
   const { resultUrl, loading } = useStaticLandmark(imageUrl, measureJson, step, cameraOrientation, showLine);
   const RadialGradientShadow = 'inset 0 0 12px rgba(255, 255, 255, 0.75)'
 
-  if (loading) return <Skeleton className="w-full h-[720px]" />;
-  if (!resultUrl) return <Skeleton className="w-full h-[720px]" />;
+  const loadingPlaceholder = (
+    <div className="w-full h-[720px] rounded-2xl bg-sub100 animate-pulse flex flex-col items-center justify-center gap-4">
+      <div
+        className="w-12 h-12 rounded-full border-4 border-sub200 border-t-toggleAccent animate-spin"
+        aria-hidden
+      />
+      <p className="text-sub400 dark:text-sub300 text-sm font-medium animate-pulse">
+        로딩중입니다
+      </p>
+    </div>
+  );
+
+  if (loading) return loadingPlaceholder;
+  if (!resultUrl) return loadingPlaceholder;
   
   return (
     <div className="relative w-full mx-auto">

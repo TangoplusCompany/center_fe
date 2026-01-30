@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { usePathname } from "next/navigation";
 import { Slot } from "@radix-ui/react-slot";
 import { VariantProps, cva } from "class-variance-authority";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -161,6 +162,14 @@ const Sidebar = React.forwardRef<
   }
 >(({ side = "left", variant = "sidebar", collapsible = "offcanvas", className, children, ...props }, ref) => {
   const { isMobile, isXl, state, openMobile, setOpenMobile } = useSidebar();
+  const pathname = usePathname();
+
+  // 모바일/태블릿: 경로가 바뀌면 Sheet 닫기 (메뉴 링크 클릭 후 확실히 닫히도록)
+  React.useEffect(() => {
+    if (isMobile || !isXl) {
+      setOpenMobile(false);
+    }
+  }, [pathname, isMobile, isXl, setOpenMobile]);
 
   if (collapsible === "none") {
     return (

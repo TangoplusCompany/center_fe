@@ -60,7 +60,7 @@ export const MeasureDetailDatePickerDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-full max-w-md rounded-2xl bg-white p-4">
+      <DialogContent className="w-full max-w-md rounded-2xl bg-white p-4" aria-describedby={undefined}>
         <DialogTitle className="text-base font-semibold mb-3">
           측정 목록 선택
         </DialogTitle>

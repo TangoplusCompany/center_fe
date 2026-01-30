@@ -16,8 +16,7 @@ const CenterUserMeasureListSkeleton = () => {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="text-center text-xs sm:text-sm">이름</TableHead>
-          <TableHead className="text-center text-xs sm:text-sm">전화번호</TableHead>
+          <TableHead className="text-center text-xs sm:text-sm">측정 위치</TableHead>
           <TableHead className="text-center text-xs sm:text-sm">측정 일자</TableHead>
           <TableHead className="text-center text-xs sm:text-sm">측정 기기</TableHead>
           <TableHead className="text-center text-xs sm:text-sm">측정 요약</TableHead>
@@ -27,9 +26,6 @@ const CenterUserMeasureListSkeleton = () => {
       <TableBody>
         {Array.from({ length: 5 }).map((_, index) => (
           <TableRow key={index}>
-            <TableCell className="text-center">
-              <div className="h-5 w-16 mx-auto bg-gray-200 rounded" />
-            </TableCell>
             <TableCell className="text-center">
               <div className="h-5 w-24 mx-auto bg-gray-200 rounded" />
             </TableCell>

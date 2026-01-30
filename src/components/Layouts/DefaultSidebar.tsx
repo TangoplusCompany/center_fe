@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { flushSync } from "react-dom";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarFooter, SidebarHeader, useSidebar } from "../ui/sidebar";
 import Link from "next/link";
 import { Button } from "../ui/button";
@@ -115,11 +116,19 @@ export default function DefaultSidebar() {
   }, [pathname, adminRole, openMobile, isMobile, filteredDashboard, state]);
 
   const handleLinkClick = () => {
-    // 모바일에서 링크 클릭 시 사이드바 닫기
+    if (isMobile) {
+      // 네비게이션 전에 즉시 Sheet 닫기 (동기 처리)
+      flushSync(() => setOpenMobile(false));
+    }
+  };
+
+  // 모바일: 경로가 바뀌면 사이드바 팝업(Sheet) 닫기 (메뉴 탭 클릭 후 확실히 닫히도록)
+  React.useEffect(() => {
     if (isMobile) {
       setOpenMobile(false);
     }
-  };
+  }, [pathname, isMobile, setOpenMobile]);
+
   const router = useRouter();
   const handleLogoClick = () => {
     router.push('/');
@@ -190,16 +199,26 @@ export default function DefaultSidebar() {
                       }}
                     >
                       <SidebarMenuButton asChild isActive={isActive}>
-                        <Link
-                          href={item.url}
-                          onClick={handleLinkClick}
+                        <div
                           className={`flex items-center gap-3 py-3 px-4 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:justify-center ${isActive ? "bg-transparent" : ""}`}
-                          {...(item.external && { target: "_blank", rel: "noopener noreferrer" })}
+                          onClick={handleLinkClick}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              handleLinkClick();
+                            }
+                          }}
+                          role="presentation"
                         >
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={item.icon} alt={item.title} className={`lg:!w-5 lg:!h-5 ml-4 transition-all duration-300 ${isActive ? "brightness-0 invert" : ""}`} />
-                          <span className={`transition-colors duration-300 ${isActive ? "text-white" : ""}`}>{item.title}</span>
-                        </Link>
+                          <Link
+                            href={item.url}
+                            className="flex items-center gap-3 w-full"
+                            {...(item.external && { target: "_blank", rel: "noopener noreferrer" })}
+                          >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={item.icon} alt={item.title} className={`lg:!w-5 lg:!h-5 ml-4 transition-all duration-300 ${isActive ? "brightness-0 invert" : ""}`} />
+                            <span className={`transition-colors duration-300 ${isActive ? "text-white" : ""}`}>{item.title}</span>
+                          </Link>
+                        </div>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   );

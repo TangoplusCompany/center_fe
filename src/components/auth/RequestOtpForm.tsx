@@ -10,19 +10,27 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { useOtpVerify } from "@/hooks/api/auth/useOtpVerify";
+import type { Purpose, Type } from "@/types/admin";
 
 const FormSchema = z.object({
   otp: z.string().min(6, {
-    message: "Your one-time password must be 6 characters.",
+    message: "OTP는 6자리입니다.",
   }),
 });
 
 export const RequestOtpForm = ({
-  email,
+  email_or_mobile,
   handleRequestOtp,
+  purpose = "password",
+  type = "email",
 }: {
-  email: string;
+  /** OTP 받을 이메일 또는 전화번호 (t_admin_info에 등록된 값) */
+  email_or_mobile: string;
   handleRequestOtp: (jwt: string) => void;
+  /** account: 계정해제, password: 비밀번호 찾기 */
+  purpose?: Purpose;
+  /** OTP 전달 매개체: email | mobile */
+  type?: Type;
 }) => {
   const { mutate: otpVerify } = useOtpVerify({ handleRequestOtp });
 
@@ -35,9 +43,9 @@ export const RequestOtpForm = ({
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     otpVerify({
-      email_or_mobile: email,
-      type: "email",
-      purpose: "password",
+      email_or_mobile,
+      type,
+      purpose,
       otp: data.otp,
     });
   }
@@ -47,7 +55,9 @@ export const RequestOtpForm = ({
       onSubmit={form.handleSubmit(onSubmit)}
       className="w-full flex flex-col gap-2"
     >
-      <legend className="text-lg">OTP 입력</legend>
+      <legend className="text-lg">
+        {purpose === "account" ? "잠긴 계정 해제용 OTP 입력" : "OTP 입력"}
+      </legend>
       <div className="flex gap-2">
         <InputOTP
           maxLength={6}

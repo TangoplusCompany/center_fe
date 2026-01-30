@@ -201,47 +201,52 @@ const UserDetailForm = ({
           )}
         </div>
       )}
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="userName" className="text-sm sm:text-base">사용자 이름</Label>
-        <Input
-          {...register("userName")}
-          type="text"
-          id="userName"
-          disabled={!editState}
-          defaultValue={userData.user_name}
-          placeholder="사용자 이름"
-          maxLength={50}
-          className={cn("text-sm sm:text-base", editableFieldClass)}
-        />
-        {errors.userName && (
-          <p className="text-xs sm:text-sm text-red-500">
-            {errors.userName.message?.toString()}
-          </p>
-        )}
-      </div>
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="email" className="text-sm sm:text-base">이메일</Label>
-        <Input
-          type="email"
-          id="email"
-          disabled
-          defaultValue={userData.email}
-          placeholder="이메일"
-          maxLength={30}
-          className="text-sm sm:text-base"
-        />
-      </div>
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="mobile" className="text-sm sm:text-base">휴대폰 번호</Label>
-        <Input
-          type="tel"
-          id="mobile"
-          disabled
-          defaultValue={userData.mobile}
-          placeholder="휴대폰 번호"
-          maxLength={15}
-          className="text-sm sm:text-base"
-        />
+      {/* 웹: 이름·휴대폰 한 줄, 이메일 밑에 / 태블릿·모바일: 세로 배치 */}
+      <div className="w-full flex flex-col gap-2 sm:gap-3">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 sm:gap-3">
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="userName" className="text-sm sm:text-base">사용자 이름</Label>
+            <Input
+              {...register("userName")}
+              type="text"
+              id="userName"
+              disabled={!editState}
+              defaultValue={userData.user_name}
+              placeholder="사용자 이름"
+              maxLength={50}
+              className={cn("text-sm sm:text-base", editableFieldClass)}
+            />
+            {errors.userName && (
+              <p className="text-xs sm:text-sm text-red-500">
+                {errors.userName.message?.toString()}
+              </p>
+            )}
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="mobile" className="text-sm sm:text-base">휴대폰 번호</Label>
+            <Input
+              type="tel"
+              id="mobile"
+              disabled
+              defaultValue={userData.mobile}
+              placeholder="휴대폰 번호"
+              maxLength={15}
+              className="text-sm sm:text-base"
+            />
+          </div>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="email" className="text-sm sm:text-base">이메일</Label>
+          <Input
+            type="email"
+            id="email"
+            disabled
+            defaultValue={userData.email}
+            placeholder="이메일"
+            maxLength={30}
+            className="text-sm sm:text-base"
+          />
+        </div>
       </div>
       <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3">
         <div className="flex flex-col gap-2">
@@ -314,61 +319,62 @@ const UserDetailForm = ({
           </p>
         )}
       </div>
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="birthday" className="text-sm sm:text-base">생년월일</Label>
-        {editState ? (
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className={cn(
-                  "w-full justify-start text-left font-normal text-sm sm:text-base",
-                  !selectedDate && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {selectedDate ? dayjs(selectedDate).format("YYYY-MM-DD") : "생년월일 선택"}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                mode="single"
-                selected={selectedDate}
-                defaultMonth={selectedDate}
-                captionLayout="dropdown"
-                fromYear={1900}
-                toYear={new Date().getFullYear()}
-                locale={ko}
-                onSelect={(date) => {
-                  setSelectedDate(date);
-                  if (date) {
-                    const formattedDate = dayjs(date).format("YYYY-MM-DD");
-                    setValue("birthday", formattedDate);
-                    setDecryptedBirthday(formattedDate);
-                  }
-                }}
-                initialFocus
-                disabled={(date) => date > new Date()}
-              />
-            </PopoverContent>
-          </Popover>
-        ) : (
-          <Input
-            type="text"
-            id="birthday"
-            disabled
-            value={decryptedBirthday}
-            placeholder="생년월일"
-            className="text-sm sm:text-base"
-          />
-        )}
-        {errors.birthday && (
-          <p className="text-xs sm:text-sm text-red-500">
-            {errors.birthday.message?.toString()}
-          </p>
-        )}
-      </div>
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3">
+      {/* 웹: 생년월일·키·몸무게 한 줄 / 태블릿·모바일: 세로 배치 */}
+      <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-2 sm:gap-3">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="birthday" className="text-sm sm:text-base">생년월일</Label>
+          {editState ? (
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "w-full justify-start text-left font-normal text-sm sm:text-base",
+                    !selectedDate && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {selectedDate ? dayjs(selectedDate).format("YYYY-MM-DD") : "생년월일 선택"}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  defaultMonth={selectedDate}
+                  captionLayout="dropdown"
+                  fromYear={1900}
+                  toYear={new Date().getFullYear()}
+                  locale={ko}
+                  onSelect={(date) => {
+                    setSelectedDate(date);
+                    if (date) {
+                      const formattedDate = dayjs(date).format("YYYY-MM-DD");
+                      setValue("birthday", formattedDate);
+                      setDecryptedBirthday(formattedDate);
+                    }
+                  }}
+                  initialFocus
+                  disabled={(date) => date > new Date()}
+                />
+              </PopoverContent>
+            </Popover>
+          ) : (
+            <Input
+              type="text"
+              id="birthday"
+              disabled
+              value={decryptedBirthday}
+              placeholder="생년월일"
+              className="text-sm sm:text-base"
+            />
+          )}
+          {errors.birthday && (
+            <p className="text-xs sm:text-sm text-red-500">
+              {errors.birthday.message?.toString()}
+            </p>
+          )}
+        </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="height" className="text-sm sm:text-base">키 (cm)</Label>
           <Input

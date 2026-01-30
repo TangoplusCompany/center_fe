@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { X, ZoomIn, ZoomOut } from 'lucide-react';
-import { Dialog, DialogContent } from '../ui/dialog';
+import { Dialog, DialogContent, DialogTitle } from '../ui/dialog';
 import { Button } from '../ui/button';
 
 interface MeasurementImageDialogProps {
@@ -124,7 +124,8 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
   }, [open]);
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="p-0 border-none bg-transparent w-fit h-fit [&>button]:hidden">
+      <DialogContent className="p-0 border-none bg-transparent w-fit h-fit [&>button]:hidden" aria-describedby={undefined}>
+        <DialogTitle className="sr-only">{stepLabels[step]} 이미지 확대</DialogTitle>
         <div className="relative">
           {/* Header */}
           <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between p-4">

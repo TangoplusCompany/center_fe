@@ -28,7 +28,7 @@ const DashboardDeviceStatus = ({
           {device.device_name}
         </div>
         
-        <div className="flex w-full min-h-32 justify-between">
+        <div className="flex flex-col xl:flex-row xl:min-h-32 xl:justify-between gap-4 xl:gap-0">
           <div className="flex flex-col justify-between">
             <div className="text-base px-4 py-2">
               Tango Body Pro
@@ -43,13 +43,12 @@ const DashboardDeviceStatus = ({
             </div>
           </div>
 
-          <div className="flex items-end">
-            <div className="flex rounded-xl bg-toggleAccent-background p-2 m-2 w-fit h-fit">
+          <div className="flex flex-row items-end justify-between px-4 pb-2 xl:px-0 xl:pb-0">
+            <div className="flex rounded-xl bg-toggleAccent-background p-2 m-0 xl:m-2 w-fit h-fit shrink-0">
               <div className="flex flex-col gap-2">
                 <div className="text-sm text-toggleAccent whitespace-nowrap">
                   일일 측정 건수
                 </div>
-                
                 <div className="flex items-center justify-end gap-2">
                   <span className="text-sm text-toggleAccent font-semibold">
                     {device.trend === 0 ? '▼ ' : (device.trend === 1 ? '- ' : '▲ ')}
@@ -58,7 +57,6 @@ const DashboardDeviceStatus = ({
                 </div>
               </div>
             </div>
-
             <div className="flex-shrink-0 overflow-hidden w-32 h-32">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img 

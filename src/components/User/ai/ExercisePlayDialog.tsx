@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
 } from '@/components/ui/dialog';
 
 interface ExercisePlayDialogProps {
@@ -18,8 +19,8 @@ const ExercisePlayDialog = ({
 }: ExercisePlayDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-5xl w-full p-0 overflow-hidden [&>button]:hidden">
-
+      <DialogContent className="max-w-5xl w-full p-0 overflow-hidden [&>button]:hidden" aria-describedby={undefined}>
+        <DialogTitle className="sr-only">AI 운동 영상 재생</DialogTitle>
         <div className="w-full aspect-video bg-transparent">
           <video
             className="w-full h-full"

@@ -191,6 +191,7 @@ const CenterUserMeasureListContainer = ({
       user_uuid: "",
       device_sn: 0,
       t_score: 0,
+      center_name: item.center_name,
     }));
   }, [userMeasureList?.measurement_list]);
   

@@ -25,12 +25,14 @@ export class UserLoginError extends Error {
       this.remainingAttempts = errorResponse.data.remaining_attempts;
     }
 
-    // 에러 상태에 따라 사용자 메시지와 필드 에러 설정
+    // API 응답 상태코드별 한글 메시지 및 필드 에러 설정
     switch (errorResponse.status) {
       case 400:
+        // 필수 파라미터 없을 경우
         this.userMessage = "필수 정보가 누락되었습니다. 다시 확인해주세요.";
         break;
       case 422:
+        // 전화번호 등 유효하지 않은 입력 형식
         this.userMessage = "전화번호 형식이 올바르지 않습니다.";
         this.shouldSetFieldError = {
           field: "phone",
@@ -38,20 +40,18 @@ export class UserLoginError extends Error {
         };
         break;
       case 401:
-        // 메시지에 이미 남은 시도 횟수가 포함되어 있는지 확인
-        if (message.includes("Remaining attempts")) {
-          this.userMessage = message;
-        } else if (this.remainingAttempts !== undefined) {
-          this.userMessage = `${message} (남은 시도 횟수: ${this.remainingAttempts}회)`;
-        } else {
-          this.userMessage = message;
-        }
+        // 전화번호 또는 비밀번호 오류 (존재하지 않는 번호 / 또는 남은 시도 횟수 있음)
+        this.userMessage =
+          this.remainingAttempts !== undefined
+            ? `전화번호 또는 비밀번호가 일치하지 않습니다. (남은 시도 횟수: ${this.remainingAttempts}회)`
+            : "전화번호 또는 비밀번호가 일치하지 않습니다.";
         break;
       case 423:
+        // 로그인 5회 이상 실패로 계정 잠금
         this.userMessage = "로그인 시도가 5번 이상 실패하여 계정이 잠겼습니다.";
         break;
       default:
-        this.userMessage = message || "로그인에 실패했습니다. 잠시 후 다시 시도해주세요.";
+        this.userMessage = "로그인에 실패했습니다. 잠시 후 다시 시도해주세요.";
     }
   }
 }
@@ -93,25 +93,17 @@ export const postUserLogin = async ({
 
     return data.data;
   } catch (error) {
-    // Axios 에러인 경우 (네트워크 에러 등)
+    // Axios 에러(네트워크 오류 등)
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError<IResultPageLoginErrorResponse>;
-      
-      // 서버에서 응답을 받은 경우
       if (axiosError.response?.data) {
         throw new UserLoginError(axiosError.response.data);
       }
-      
-      // 네트워크 에러 등
       throw new Error("서버와 연결할 수 없습니다. 잠시 후 다시 시도해주세요.");
     }
-    
-    // 이미 UserLoginError인 경우 그대로 throw
     if (error instanceof UserLoginError) {
       throw error;
     }
-    
-    // 기타 에러
     throw new Error("로그인에 실패했습니다. 잠시 후 다시 시도해주세요.");
   }
 };

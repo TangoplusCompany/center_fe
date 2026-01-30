@@ -29,7 +29,9 @@ export default function DefaultHeaderLayout() {
         </div>
       </div>
       <div className="flex items-center gap-1 md:gap-5 shrink-0">
-        <LoginUserCircle adminName={adminName} adminRole={adminRole} />
+        <div className="hidden md:block">
+          <LoginUserCircle adminName={adminName} adminRole={adminRole} />
+        </div>
         <div className="flex items-center gap-2 shrink-0">
           <UpdateSessionButton />
           <Button

@@ -66,7 +66,7 @@ export const CenterUserAddDialog: React.FC<CenterUserAddDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
-      <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col p-0 [&>button]:hidden">
+      <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col p-0 [&>button]:hidden" aria-describedby={undefined}>
         {/* Header */}
         <DialogHeader className="p-6 border-b">
           <div className="flex items-center justify-between">

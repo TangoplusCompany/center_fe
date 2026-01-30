@@ -9,10 +9,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReactNode } from "react";
 import Link from "next/link";
-// TODO: 2차 인증(OTP) API가 준비되면 주석 해제하여 사용
-// import { postLogin } from "@/services/auth/postLogin";
-// import { LoginOtpDialog } from "@/components/auth/LoginOtpDialog";
-// import { useOtpDialog } from "@/hooks/api/auth/useOtpDialog";
+import { useRouter } from "next/navigation";
 import { useLogin } from "@/hooks/api/auth/useLogin";
 
 const loginSchema = z.object({
@@ -53,8 +50,11 @@ export default function LoginForm({
   //   openDialog,
   //   closeDialog,
   // } = useOtpDialog();
-
+  const router = useRouter();
   const { mutate: login, isPending } = useLogin();
+  // 테스트: true 로 두면 "계정이 잠기셨나요?" 링크 항시 표시. 운영 시 아래 주석으로 교체
+  const showUnlockLink = true;
+  // const showUnlockLink = Boolean(error && error instanceof AxiosError && error.response?.status === 423);
 
   const {
     register,
@@ -89,6 +89,7 @@ export default function LoginForm({
     //   console.error("Login error:", error);
     // }
   });
+
   return (
     <form
       className={cn("flex flex-col gap-6", className)}
@@ -139,15 +140,28 @@ export default function LoginForm({
             <ErrorText>{String(errors.password?.message)}</ErrorText>
           )}
         </div>
-        <Button 
-          variant="outline" 
-          type="submit" 
-          className="w-full"
-          disabled={isPending}
-        >
-          {isPending ? "로그인 중..." : "로그인"}
-        </Button>
+        <div className="flex flex-col gap-2">
+          <Button 
+            variant="outline" 
+            type="submit" 
+            className="w-full"
+            disabled={isPending}
+          >
+            {isPending ? "로그인 중..." : "로그인"}
+          </Button>
+        </div>
       </div>
+      {showUnlockLink && (
+        <div className="text-center text-sm">
+          <button
+            type="button"
+            onClick={() => router.push("/unlock")}
+            className="text-sm underline-offset-4 hover:underline text-foreground dark:text-white"
+          >
+            계정이 잠기셨나요?
+          </button>
+        </div>
+      )}
       <div className="text-center text-sm">
         신규 관리자 이신가요?{" "}
         <Link href="/register" className="underline underline-offset-4">

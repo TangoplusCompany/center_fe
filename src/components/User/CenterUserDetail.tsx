@@ -61,10 +61,13 @@ const CenterUserDetail = ({
   // 사용자 이름: userDetailData가 있으면 우선 사용, 없으면 userName prop 사용
   const displayUserName = userDetailData?.user_name || userName;
   const handleTabWithReset = (index: number) => {
-      // 1번 탭(측정 기록)에서 벗어나는 경우에만 리셋할지,
-      // 또는 "언제든 탭을 바꿀 때마다" 리셋할지 선택
       if (tab === 1 && index !== 1 && measureSn !== 0) {
         handleRecentSn(0);
+      }
+      // 비교분석 탭으로 들어올 때마다 비교 모드/선택 초기화 → 항상 리스트 화면
+      if (index === 2) {
+        setIsCompareMode(false);
+        setComparePair([null, null]);
       }
       handleTab(index);
     };

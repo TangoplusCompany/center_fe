@@ -41,6 +41,8 @@ export interface IMeasureList {
   device_name: string;
   measure_date: string;
   t_score: number;
+  /** 기록 비교 리스트 등에서 표시용 (측정 위치/센터명) */
+  center_name?: string;
 }
 
 export interface IUserMeasurement {

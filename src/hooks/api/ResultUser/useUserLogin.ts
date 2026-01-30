@@ -45,12 +45,11 @@ export const useUserLogin = (setError: UseFormSetError<FieldValues>) => {
     },
     onError: (error: unknown) => {
       console.error("로그인 실패:", error);
-      
-      // UserLoginError인 경우 - 서비스 레이어에서 처리된 에러
+
+      // 서비스에서 변환된 API 에러 분기: 400 필수값 누락, 422 전화번호 형식 오류, 401 비밀번호 오류, 423 계정 잠금
       if (error instanceof UserLoginError) {
         alert(error.userMessage);
-        
-        // 필드 에러 설정이 필요한 경우
+
         if (error.shouldSetFieldError) {
           setError(error.shouldSetFieldError.field, {
             type: "manual",
@@ -59,8 +58,8 @@ export const useUserLogin = (setError: UseFormSetError<FieldValues>) => {
         }
         return;
       }
-      
-      // 일반 에러 (네트워크 에러 등)
+
+      // 네트워크 에러 등
       alert(error instanceof Error ? error.message : "서버와 연결할 수 없습니다. 잠시 후 다시 시도해주세요.");
     },
   });
