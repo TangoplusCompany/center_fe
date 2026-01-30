@@ -16,7 +16,7 @@ export const useLogout = () => {
     onSuccess: () => {
       // Handle successful login, e.g., redirect to dashboard
       setLogout();
-      document.cookie = "isLogin=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax";
+      // document.cookie = "isLogin=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax";
   router.push("/login");
     },
     onError: (
