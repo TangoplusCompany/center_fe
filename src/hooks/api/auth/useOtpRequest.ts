@@ -3,9 +3,7 @@ import { postOtpRequest } from "@/services/auth/postOtpRequest";
 import type { Purpose } from "@/types/admin";
 
 export const useOtpRequest = ({
-  value,
   setEmail,
-  purpose = "password",
 }: {
   value: string;
   setEmail: (email: string) => void;

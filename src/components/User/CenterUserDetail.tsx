@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import UserDetailTap from "@/components/User/UserDetailTap";
 import CenterUserMeasureContainer from "./CenterUserContainer";
@@ -153,10 +154,12 @@ const CenterUserDetail = ({
             type="button"
             aria-label="로그아웃"
           >
-            <img 
-              src="/icons/ic_logout.svg" 
-              alt="로그아웃" 
-              className="w-5 h-5" 
+            <Image
+              src="/icons/ic_logout.svg"
+              alt="로그아웃"
+              width={20}
+              height={20}
+              className="w-5 h-5"
             />
             <span className="hidden sm:inline">로그아웃</span>
           </button>

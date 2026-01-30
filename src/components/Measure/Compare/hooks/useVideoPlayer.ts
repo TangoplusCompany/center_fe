@@ -292,7 +292,7 @@ export const useVideoPlayer = ({
       ro.disconnect();
       video?.removeEventListener("loadedmetadata", update);
     };
-  }, [isRotated, videoSrc]);
+  }, [isRotated, videoSrc, isCompare]);
 
 
   const toScreen = useMemo(() => {
