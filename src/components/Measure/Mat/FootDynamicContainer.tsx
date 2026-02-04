@@ -70,7 +70,7 @@ const FootDynamicContainer = (
               </div>
             </div>
               {/* 코멘트 */}
-            <div className="text-base text-gray-700 whitespace-pre-line">
+            <div className="text-base text-gray-700 dark:text-muted-foreground whitespace-pre-line">
               {comment}
             </div>
           </div>
@@ -89,7 +89,7 @@ const FootDynamicContainer = (
           </div>
 
           {/* 오른쪽: 코멘트 */}
-          <div className="flex items-center text-base text-gray-700 whitespace-pre-line">
+          <div className="flex items-center text-base text-gray-700 dark:text-muted-foreground whitespace-pre-line">
             {comment}
           </div>
         </div>

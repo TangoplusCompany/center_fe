@@ -32,7 +32,7 @@ const ManagerRemoveDialog = ({ manager }: { manager: ICenterManagerData }) => {
       <DialogTrigger asChild>
         <button className="flex items-center gap-0.5 text-sm text-red-500">
           <Trash className="w-4 h-4" />
-          <span className="">매니저 제거</span>
+          <span className="">삭제</span>
         </button>
       </DialogTrigger>
       <DialogContent>

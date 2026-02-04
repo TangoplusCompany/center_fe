@@ -2,6 +2,7 @@ export interface ICenterInformation {
   center_name: string;
   center_address: string;
   center_address_detail: string;
+  center_phone?: string;
 }
 
 export interface ICenterUserDetail {
@@ -54,4 +55,16 @@ export interface ICenterActivityAgeGroup {
     eighties: number;
     nineties: number;
   };
+}
+
+/** 센터 목록 카드용 - 기존 타입과 분리 */
+export interface ICenterCardProps {
+  centerId: number;
+  centerName: string;
+  /** 1: 센터 주관리자, 2: 부관리자, 3: 기본 */
+  managerType: 1 | 2 | 3;
+  address: string;
+  phone: string;
+  managerCount: number;
+  imageSrc?: string;
 }

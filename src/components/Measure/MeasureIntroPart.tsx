@@ -5,29 +5,28 @@ import { cn } from "@/lib/utils";
 import { IPartDetail } from "@/types/measure";
 
 const conditionBg: Record<0 | 1 | 2, string> = {
-  0: "bg-sub600",
+  0: "bg-sub600 dark:bg-gray-600",
   1: "bg-warning",
   2: "bg-danger",
 };
 
 const cellConditionBg: Record<0 | 1 | 2, string> = {
-  0: "bg-sub100",
+  0: "bg-sub100 dark:bg-muted",
   1: "bg-warning",
   2: "bg-danger",
 };
 
 const arrowCondition: Record<0 | 1 | 2, string> = {
-  0: "text-sub400",
-  1: "text-black",
-  2: "text-black",
+  0: "text-sub400 dark:text-gray-300",
+  1: "text-black dark:text-white",
+  2: "text-black dark:text-white",
 };
-
 
 // 각 단계별 셀 색
 const levelCellBg: Record<0 | 1 | 2, string> = {
-  0: "bg-sub100", // 정상
-  1: "bg-sub200", // 주의
-  2: "bg-sub300", // 위험
+  0: "bg-sub100 dark:bg-muted", // 정상
+  1: "bg-sub200 dark:bg-muted", // 주의
+  2: "bg-sub300 dark:bg-muted", // 위험
 };
 
 export const MEASURE_NAME_MAP: Record<string, string> = {
@@ -112,16 +111,16 @@ const MeasureIntroPart = ({
                 "relative flex-1 flex flex-col overflow-hidden", 
                 roundClass,
                
-                "border-l border-dashed border-sub-100 first:border-l-0",
+                "border-l border-dashed border-sub300 dark:border-border first:border-l-0",
               ].join(" ")}
             >
               <div className={["flex-[1] flex items-center justify-center", topBg].join(" ")}>
-                {isActive && <div className={`text-xs ${arrowCondition} leading-none`}>▼</div>}
+                {isActive && <div className={`text-xs ${arrowCondition[safeRisk]} leading-none`}>▼</div>}
               </div>
 
-              <div className="flex-[1] bg-white flex items-center justify-center">
+              <div className="flex-[1] bg-white dark:bg-card flex items-center justify-center">
                 {isActive && (
-                  <div className="text-xs leading-none">{safeRange + 1}단계</div>
+                  <div className="text-xs leading-none text-foreground">{safeRange + 1}단계</div>
                 )}
               </div>
             </div>
@@ -132,9 +131,9 @@ const MeasureIntroPart = ({
   };
 
   return (
-    <div className="flex rounded-xl border-2 border-sub100 bg-white shadow-sm h-full">
+    <div className="flex rounded-xl border-2 border-sub100 dark:border-border bg-white dark:bg-card shadow-sm h-full">
       {/* 전체 grid */}
-      <div className="flex flex-col w-1/4 items-center justify-center text-base font-semibold gap-1">
+      <div className="flex flex-col w-1/4 items-center justify-center text-base font-semibold gap-1 text-foreground">
         <div className="text-center whitespace-normal break-keep">{title}</div>
         <div
           className={cn(
@@ -147,13 +146,13 @@ const MeasureIntroPart = ({
       </div>
       
       {/* 오른쪽 영역 */}
-      <div className="flex flex-col w-3/4 h-full border-l">
+      <div className="flex flex-col w-3/4 h-full border-l dark:border-border">
         {items.map(([measureName, item], idx) => (
           <div key={idx} className={cn(
             "flex flex-1 min-h-0 items-stretch",
-            idx !== items.length - 1 && "border-b "
+            idx !== items.length - 1 && "border-b dark:border-border"
           )}>
-            <div className="flex w-1/2 text-sm items-center justify-center border-r px-2 py-1 text-center whitespace-normal break-keep">{MEASURE_NAME_MAP[measureName] ?? item?.measure_unit ?? measureName}</div>
+            <div className="flex w-1/2 text-sm items-center justify-center border-r dark:border-border px-2 py-1 text-center whitespace-normal break-keep text-foreground">{MEASURE_NAME_MAP[measureName] ?? item?.measure_unit ?? measureName}</div>
             <div className="flex w-1/2 items-stretch">{renderRangeBoxes(item?.risk_level, item?.range_level, idx, items?.length)}</div>
           </div>
         ))}

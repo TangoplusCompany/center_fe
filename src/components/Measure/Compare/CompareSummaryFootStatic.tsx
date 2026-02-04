@@ -46,10 +46,10 @@ const CompareSummaryFootStatic = ({
     "2": "bg-danger-foreground",
   }[static0.risk_level] ?? "bg-sub300" : "bg-sub100";
   const trendTextCondition = static0 ? {
-    "0": "text-sub600",
-    "1": "text-warningDeep",
-    "2": "text-dangerDeep",
-  }[static0.risk_level] ?? "text-sub600" : "text-sub600";
+    "0": "text-sub600 dark:text-muted-foreground",
+    "1": "text-warningDeep dark:text-black",
+    "2": "text-dangerDeep dark:text-black",
+  }[static0.risk_level] ?? "text-sub600 dark:text-muted-foreground" : "text-sub600 dark:text-muted-foreground";
 
   const trendBorderCondition = static0 ? {
     "0": "border-2 border-sub600",
@@ -61,22 +61,22 @@ const CompareSummaryFootStatic = ({
     const riskString = getRiskString(footStatic.risk_level);
 
     const textBgCondition0 = {
-      "0": "bg-sub600",
+      "0": "bg-sub600 dark:bg-gray-600",
       "1": "bg-warning",
       "2": "bg-danger",
-    }[footStatic.risk_level] ?? "bg-sub600";
+    }[footStatic.risk_level] ?? "bg-sub600 dark:bg-gray-600";
     
     return (
       <div className="flex-1">
-        <div className="flex items-center justify-between border-b-2 border-sub200 px-4 py-1 bg-sub100">
+        <div className="flex items-center justify-between border-b-2 border-sub200 dark:border-border px-4 py-1 bg-sub100 dark:bg-muted">
           <div className="flex gap-4 items-center">
             <span className="text-lg">{isRight ? '②' : '①'}</span>
-            <span className={`text-base ${isRight ? 'text-sub600' : 'text-black'}`}>{footStatic.measure_date.slice(0, 11)}</span>
+            <span className={`text-base ${isRight ? 'text-sub600 dark:text-muted-foreground' : 'text-black dark:text-foreground'}`}>{footStatic.measure_date.slice(0, 11)}</span>
           </div>
           <span className={`${textBgCondition0} text-white text-sm px-2 py-1 rounded-full`}>{riskString} {footStatic.range_level}단계</span>
         </div>
         <div className="flex gap-4 p-2 relative">
-          <div className="w-[20%] flex items-center justify-center border-r-2 border-sub200 pr-2 md:pr-0"  >
+          <div className="w-[20%] flex items-center justify-center border-r-2 border-sub200 dark:border-border pr-2 md:pr-0"  >
             <div className="w-28 h-28">
               <FootStatic fileName={footStatic.fileName} matStatics={footStatic.matStatics} />
             </div>
@@ -85,7 +85,7 @@ const CompareSummaryFootStatic = ({
          
           {/* <div className="absolute top-0 bottom-0 left-32 w-0.5 bg-sub200" /> */}
 
-          <div className={`flex items-center justify-start text-base ${isRight ? 'text-sub600' : 'text-black'} px-4 py-2 whitespace-pre-line`}>{footStatic.comment}</div>
+          <div className={`flex items-center justify-start text-base ${isRight ? 'text-sub600 dark:text-muted-foreground' : 'text-black dark:text-foreground'} px-4 py-2 whitespace-pre-line`}>{footStatic.comment}</div>
         </div>
         
       </div>
@@ -98,14 +98,14 @@ const CompareSummaryFootStatic = ({
     <div className="w-full table table-fixed min-w-0 overflow-hidden">
       <div className="flex flex-col overflow-x-auto overflow-y-hidden w-full min-w-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {/* 상지요약 타이틀 */}
-          <div className="bg-sub100 min-w-[700px] text-xl font-semibold px-4 py-2 border-t-2 border-b-2 border-sub200">
+          <div className="bg-sub100 dark:bg-muted min-w-[700px] text-xl font-semibold text-black dark:text-foreground px-4 py-2 border-t-2 border-b-2 border-sub200 dark:border-border">
             정면 족압
           </div>
 
           {/* 2개의 카드 영역 */}
           <div className="flex w-full min-w-[700px]">
             {/* 이전 카드 */}
-            <div className={`flex flex-col w-[20%] items-center justify-center gap-2 px-8 ${static1 ? trendBgCondition : 'bg-sub100'}`}>
+            <div className={`flex flex-col w-[20%] items-center justify-center gap-2 px-8 ${static1 ? trendBgCondition : 'bg-sub100 dark:bg-muted'}`}>
               {static1 && (
                 <>
                   <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition}`}>{trendArrow}</div>

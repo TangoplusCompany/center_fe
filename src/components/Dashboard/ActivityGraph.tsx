@@ -58,7 +58,7 @@ const ActivityGraph = ({
   }, []);
   
   return (
-    <div className="w-full flex flex-col border-2 border-toggleAccent-background rounded-xl gap-6 bg-gradient-to-b from-[#2c4fd0]/10 from-[2%] to-white to-[40%]">
+    <div className="w-full flex flex-col border-2 border-toggleAccent-background rounded-xl gap-6 bg-gradient-to-b from-[#2c4fd0]/10 from-[2%] to-white to-[40%] dark:from-[#2c4fd0]/20 dark:to-background">
       <div className="w-full p-4 flex justify-between items-center">
         <div className="text-xl font-semibold text-toggleAccent">
           {data.case === 0 && "요일별 사용량"}
@@ -66,7 +66,7 @@ const ActivityGraph = ({
         </div>
         {/* case 0일 때만 날짜 표시 */}
         {data.case === 0 && (
-          <div className="text-sm font-medium text-gray-500">
+          <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
             {todayFormatted}
           </div>
         )}
@@ -78,7 +78,7 @@ const ActivityGraph = ({
         <svg width="0" height="0" style={{ position: 'absolute' }}>
           <defs>
             <linearGradient id="masterGradient" x1="0%" y1="100%" x2="0%" y2="0%">
-              <stop offset="0%" stopColor="white" />
+              <stop offset="0%" className="[stop-color:hsl(var(--background))]" />
               <stop offset="100%" className="[stop-color:hsl(var(--toggle-accent))]" />
             </linearGradient>
           </defs>
@@ -99,7 +99,7 @@ const ActivityGraph = ({
                       height: `${heightPercent}%`,
                       background: `linear-gradient(to bottom, 
                         hsl(var(--toggle-accent)) ${gradientStart}%, 
-                        white 100%
+                        hsl(var(--background)) 100%
                       )`
                     }}
                   />
@@ -107,7 +107,7 @@ const ActivityGraph = ({
                 
                 {/* 라벨 */}
                 { data.case === 0 ? (
-                  <div className={`px-2 py-1 text-xs font-medium  ${index == barData.length -1 ? 'rounded-full bg-toggleAccent text-white': 'text-sub600'}` }>
+                  <div className={`px-2 py-1 text-xs font-medium  ${index == barData.length -1 ? 'rounded-full bg-chartLegendActive text-chartLegendActive-foreground': 'text-sub600'}` }>
                     {item.label}
                   </div>
                 ) : (

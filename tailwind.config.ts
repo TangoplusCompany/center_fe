@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
@@ -78,7 +79,11 @@ export default {
           foreground: "hsl(var(--toggle-accent-foreground))",
           background: "hsl(var(--toggle-accent-background))"
         },
-        toggleAccentDeep: "hsl(var(--toggle-accent-deep))"
+        toggleAccentDeep: "hsl(var(--toggle-accent-deep))",
+        chartLegendActive: {
+          DEFAULT: "hsl(var(--chart-legend-active))",
+          foreground: "hsl(var(--chart-legend-active-foreground))"
+        }
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -87,5 +92,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindcssAnimate],
 } satisfies Config;

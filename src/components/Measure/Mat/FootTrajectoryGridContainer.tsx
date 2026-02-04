@@ -68,7 +68,7 @@ const FootTrajectoryGridContainer = ({
   } as const)[level ?? "0"] ?? "정상";
   const getRiskBgClass = (level?: string) =>
   ({
-    정상: "bg-sub600",
+    정상: "bg-sub600 dark:bg-gray-600",
     주의: "bg-warning",
     위험: "bg-danger",
   } as const)[level as "정상" | "주의" | "위험"] ?? "bg-primary-foreground";

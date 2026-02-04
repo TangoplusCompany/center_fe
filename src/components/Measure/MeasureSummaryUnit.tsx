@@ -24,7 +24,7 @@ const MeasureSummaryUnit = ({
   } as const)[level ?? "0"] ?? "정상";
   const getRiskBgClass = (level?: string) =>
   ({
-    정상: "bg-sub600",
+    정상: "bg-sub600 dark:bg-gray-600",
     주의: "bg-warning",
     위험: "bg-danger",
   } as const)[level as "정상" | "주의" | "위험"] ?? "bg-primary-foreground";
@@ -37,9 +37,9 @@ const MeasureSummaryUnit = ({
     <div >
       <div className="flex justify-between items-center py-2">
         <div className="flex items-center gap-2">
-          <h2 className="text-xl font-semibold">{title}</h2>
+          <h2 className="text-xl font-semibold text-foreground dark:text-foreground">{title}</h2>
           {measureDate && (
-            <span className="text-sm text-sub300">
+            <span className="text-sm text-sub300 dark:text-gray-400">
               {formatDate(measureDate)}
             </span>
           )}
@@ -49,7 +49,7 @@ const MeasureSummaryUnit = ({
         </span>
       </div>
 
-      <div className="text-base text-gray-700 leading-relaxed whitespace-pre-line">
+      <div className="text-base text-gray-700 dark:text-gray-200 leading-relaxed whitespace-pre-line">
         {parseString(ment).map((el, key) =>
           el === "" ? <br key={key} /> : <p key={key}>{el}</p>
         )}

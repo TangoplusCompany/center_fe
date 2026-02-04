@@ -45,7 +45,7 @@ const MeasureSummaryContainer = ({
   const displayMeasureDate = selectedMeasureDate ?? latestMeasureDate;
 
   return (
-    <div className="rounded-3xl border-2 border-sub200 p-3 sm:p-4">
+    <div className="rounded-3xl border-2 border-sub200 p-3 sm:p-4 dark:bg-card dark:border-sub200">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 transition-all duration-300 ease-in-out">
         <div className="transition-all duration-300 ease-in-out">
           <MeasureSummaryUnit 

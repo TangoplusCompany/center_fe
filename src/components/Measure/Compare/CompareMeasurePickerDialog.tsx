@@ -69,16 +69,16 @@ export const MeasurePickerDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-full max-w-md rounded-2xl bg-white p-4" aria-describedby={undefined}>
+      <DialogContent className="w-full max-w-md rounded-2xl bg-white dark:bg-card p-4" aria-describedby={undefined}>
         {/* 헤더 */}
-        <DialogTitle className="text-base font-semibold mb-3">
+        <DialogTitle className="text-base font-semibold mb-3 text-foreground">
           측정 목록 선택
         </DialogTitle>
 
         {/* 내용 영역 */}
         <div className="max-h-[360px] overflow-auto">
           {filteredItems.length === 0 ? (
-            <div className="flex items-center justify-center h-[200px] text-sm text-gray-400">
+            <div className="flex items-center justify-center h-[200px] text-sm text-gray-400 dark:text-gray-500">
               비교할 항목이 없습니다.
             </div>
           ) : (
@@ -87,7 +87,7 @@ export const MeasurePickerDialog = ({
                 <button
                   key={it.measure_sn}
                   type="button"
-                  className="w-full text-left rounded-xl border px-3 py-2 hover:bg-gray-50 transition-colors"
+                  className="w-full text-left rounded-xl border border-border px-3 py-2 hover:bg-gray-50 dark:hover:bg-white/10 transition-colors text-foreground"
                   onClick={() => {
                     onToggleCompareSn(it.measure_sn, activeSlot);
                     onOpenChange(false);
@@ -96,7 +96,7 @@ export const MeasurePickerDialog = ({
                   <div className="text-sm font-medium">
                     {formatDate(it.measure_date)}
                   </div>
-                  <div className="text-xs text-gray-500">
+                  <div className="text-xs text-gray-500 dark:text-gray-400">
                     장치이름: {it.device_name}
                   </div>
                 </button>
@@ -106,7 +106,7 @@ export const MeasurePickerDialog = ({
         </div>
 
         {filteredItems.length > 0 && (
-          <div className="mt-3 pt-3 border-t border-sub200">
+          <div className="mt-3 pt-3 border-t border-sub200 dark:border-border">
             <Pagination>
               <PaginationContent className="flex-wrap gap-1 justify-center">
                 {page > 1 && (

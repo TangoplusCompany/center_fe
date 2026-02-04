@@ -35,10 +35,10 @@ const CompareSummaryUnit = ({
     "2": "bg-danger-foreground",
   }[summaryUnit0.risk_level] ?? "bg-sub300" : "bg-sub100";
   const trendTextCondition = summaryUnit0 ? {
-    "0": "text-sub600",
-    "1": "text-warningDeep",
-    "2": "text-dangerDeep",
-  }[summaryUnit0.risk_level] ?? "text-sub600" : "text-sub600";
+    "0": "text-sub600 dark:text-muted-foreground",
+    "1": "text-warningDeep dark:text-black",
+    "2": "text-dangerDeep dark:text-black",
+  }[summaryUnit0.risk_level] ?? "text-sub600 dark:text-muted-foreground" : "text-sub600 dark:text-muted-foreground";
 
   const trendBorderCondition = summaryUnit0 ? {
     "0": "border-2 border-sub600",
@@ -60,21 +60,21 @@ const CompareSummaryUnit = ({
     const riskString = getRiskString(summaryUnit.risk_level);
     
     const textBgCondition0 = {
-      "0": "bg-sub600",
+      "0": "bg-sub600 dark:bg-gray-600",
       "1": "bg-warning",
       "2": "bg-danger",
-    }[summaryUnit.risk_level] ?? "bg-sub600";
+    }[summaryUnit.risk_level] ?? "bg-sub600 dark:bg-gray-600";
     
     return (
       <div className="flex-1 w-full">
-        <div className="flex items-center justify-between border-b-2 border-sub200 px-4 py-1 bg-sub100">
+        <div className="flex items-center justify-between border-b-2 border-sub200 dark:border-border px-4 py-1 bg-sub100 dark:bg-muted">
           <div className="flex gap-4 items-center">
             <span className="text-lg">{isRight ? '②' : '①'}</span>
-            <span className={`text-base ${isRight ? 'text-sub600' : 'text-black'}`}>{summaryUnit.measure_date.slice(0, 11)}</span>
+            <span className={`text-base ${isRight ? 'text-sub600 dark:text-muted-foreground' : 'text-black dark:text-foreground'}`}>{summaryUnit.measure_date.slice(0, 11)}</span>
           </div>
           <span className={`${textBgCondition0} text-white text-sm px-2 py-1 rounded-full`}>{riskString} {summaryUnit.range_level}단계</span>
         </div>
-        <div className={`flex items-center justify-start text-base ${isRight ? 'text-sub600' : 'text-black'} px-4 py-2 whitespace-pre-line`}>{formatText(summaryUnit.ment)}</div>
+        <div className={`flex items-center justify-start text-base ${isRight ? 'text-sub600 dark:text-muted-foreground' : 'text-black dark:text-foreground'} px-4 py-2 whitespace-pre-line`}>{formatText(summaryUnit.ment)}</div>
       </div>
     );
   };
@@ -83,7 +83,7 @@ const CompareSummaryUnit = ({
     <div className="w-full table table-fixed min-w-0 overflow-hidden">
       <div className="flex flex-col  overflow-x-auto overflow-y-hidden w-full min-w-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
       {/* 타이틀 */}
-      <div className="bg-sub100 min-w-[700px] text-xl font-semibold px-4 py-2 border-t-2 border-b-2 border-sub200">
+      <div className="bg-sub100 dark:bg-muted min-w-[700px] text-xl font-semibold text-black dark:text-foreground px-4 py-2 border-t-2 border-b-2 border-sub200 dark:border-border">
         {title}
       </div>
 

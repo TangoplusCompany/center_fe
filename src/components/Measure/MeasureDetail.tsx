@@ -198,7 +198,7 @@ const MeasureDetail = ({
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 flex-shrink-0">
           <Button 
-            className="hover:bg-sub200 transition-colors"
+            className="hover:bg-sub200 transition-colors text-primary-foreground dark:text-white"
             variant="default"
             onClick={() => {
               if (window.confirm(`${measureData.result_summary_data.user_name}로 카카오톡 결과를 전송하시습니까?`)) {
@@ -209,14 +209,14 @@ const MeasureDetail = ({
             <img
               src="/icons/ic_send.svg"
               alt="카카오톡 결과 전송"
-              className="gap-4"
+              className="gap-4 size-4 dark:[filter:brightness(0)_invert(1)]"
             />
             결과전송
             
           </Button>
 
           <Button 
-            className="hover:bg-sub200 transition-colors"
+            className="hover:bg-sub200 transition-colors text-primary-foreground dark:text-white"
             variant="default"
             onClick={() => {
               handlePrint()
@@ -225,7 +225,7 @@ const MeasureDetail = ({
             <img
               src="/icons/ic_print.svg"
               alt="인쇄하기"
-              className="gap-4"
+              className="gap-4 size-4 dark:[filter:brightness(0)_invert(1)]"
             />
             인쇄하기
           </Button>

@@ -5,17 +5,10 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { usePathname } from "next/navigation";
-import { useAuthStore } from "@/providers/AuthProvider";
 
+/* 기존 BreadCrumb용 Menus - 주석 해제 시 사용
 interface IMenu {
   title: string;
   url: string;
@@ -59,15 +52,16 @@ const Menus: IMenu[] = [
     initial: "setting",
   },
 ];
+*/
 
 export function LayoutBreadCrumb() {
   const pathName = usePathname();
-  const { adminRole } = useAuthStore((state) => state);
 
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        <BreadcrumbItem>
+        {/* 기존 BreadCrumb 헤더 주석처리 - 센터목록으로 대체 */}
+        {/* <BreadcrumbItem>
           <BreadcrumbLink className="text-base xl:text-xl" href="/">탱고플러스 센터</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
@@ -86,8 +80,6 @@ export function LayoutBreadCrumb() {
             <DropdownMenuContent align="start">
               {Menus
                 .filter((menu) => {
-                  // ADMIN_ROLE이 2인 경우: 기기관리와 매니저 관리 메뉴 숨김
-                  // ADMIN_ROLE이 3 이상인 경우: 기기관리, 매니저 관리, 사용자 관리 메뉴 숨김
                   if (adminRole === 2) {
                     return !["기기 관리", "매니저 관리"].includes(menu.title);
                   }
@@ -103,6 +95,14 @@ export function LayoutBreadCrumb() {
                 ))}
             </DropdownMenuContent>
           </DropdownMenu>
+        </BreadcrumbItem> */}
+        <BreadcrumbItem>
+          <BreadcrumbLink
+            className={`text-base xl:text-xl ${pathName === "/center" ? "font-semibold text-toggleAccent" : "text-slate-950 dark:text-foreground"}`}
+            href="/center"
+          >
+            센터목록
+          </BreadcrumbLink>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>

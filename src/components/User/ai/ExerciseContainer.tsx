@@ -55,7 +55,7 @@ const AIExerciseContainer = ( {
   });
 
   return (
-    <div className="flex flex-col h-full rounded-2xl border-2 border-sub100 overflow-hidden">
+    <div className="flex flex-col h-full rounded-2xl border-2 border-sub100 dark:border-border overflow-hidden">
       {/* 헤더 - Radial Gradient */}
       <div 
         style={{
@@ -69,7 +69,7 @@ const AIExerciseContainer = ( {
       </div>
 
       {/* 운동 목록 카드 - 위로 올라온 느낌 */}
-      <div className="flex flex-col bg-white shadow-lg rounded-xl p-4 gap-4 -mt-4">
+      <div className="flex flex-col bg-white dark:bg-muted shadow-lg rounded-xl p-4 gap-4 -mt-4">
         <ExerciseDataTab 
           selectedPart={selectedPart} 
           onSelectPart={handleSelectPart} 
@@ -79,7 +79,7 @@ const AIExerciseContainer = ( {
           <div key={key}>
             <AIExerciseUnit ed={exerciseDetail} />
             {index < filteredExercises.length - 1 && (
-              <div className="border-b border-sub200 mt-4" />
+              <div className="border-b border-sub200 dark:border-border mt-4" />
             )}
           </div>
         ))}

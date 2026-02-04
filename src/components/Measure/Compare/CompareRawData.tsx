@@ -89,16 +89,27 @@ export const CompareRawData = ({
     }[dataBottom?.risk_level] ?? "정상") : undefined;
 
     const textBgCondition0 = {
-      정상: "bg-sub600",
+      정상: "bg-sub600 dark:bg-gray-600",
       주의: "bg-warning",
       위험: "bg-danger",
-    }[levelString0] ?? "bg-sub600";
+    }[levelString0] ?? "bg-sub600 dark:bg-gray-600";
 
     const textBgCondition1 = {
-      정상: "bg-sub600",
+      정상: "bg-sub600 dark:bg-gray-600",
       주의: "bg-warning",
       위험: "bg-danger",
-    }[levelString1 ?? "정상"] ?? "bg-sub600";
+    }[levelString1 ?? "정상"] ?? "bg-sub600 dark:bg-gray-600";
+
+    const textCondition0 = {
+      정상: "text-sub600 dark:text-muted-foreground",
+      주의: "text-warningDeep dark:text-warning-foreground",
+      위험: "text-dangerDeep dark:text-danger",
+    }[levelString0] ?? "text-sub600 dark:text-muted-foreground";
+    const textCondition1 = {
+      정상: "text-sub600 dark:text-muted-foreground",
+      주의: "text-warningDeep dark:text-warning-foreground",
+      위험: "text-dangerDeep dark:text-danger",
+    }[levelString1 ?? "정상"] ?? "text-sub600 dark:text-muted-foreground";
 
     const data0 = dataTop?.measure_unit?.includes("거리") 
       ? Math.abs(dataTop?.data) 
@@ -112,33 +123,33 @@ export const CompareRawData = ({
     
     return (
     <div  className={`flex flex-col w-full h-full`}>
-      <div className="grid grid-cols-[18%_10%_12%_60%] items-center border-b-2 border-sub200 bg-sub100 py-2">
+      <div className="grid grid-cols-[18%_10%_12%_60%] items-center border-b-2 border-sub200 dark:border-border bg-sub100 dark:bg-muted py-2">
         <div className="flex gap-4 items-center pl-4">
-          <span className="text-lg font-semibold text-black ">{isRight ? '②' : '①'}</span>
-          <span className={`text-base ${isRight ? 'text-sub600' : 'text-black'}`}>{isRight ? measure_date1.slice(0, 11) : measure_date0.slice(0, 11)}</span>
+          <span className="text-lg font-semibold text-black dark:text-foreground">{isRight ? '②' : '①'}</span>
+          <span className={`text-base ${isRight ? 'text-sub600 dark:text-muted-foreground' : 'text-black dark:text-foreground'}`}>{isRight ? measure_date1.slice(0, 11) : measure_date0.slice(0, 11)}</span>
         </div>
-        <span className={`flex flex-1 justify-center text-base text-sub600 `}>{!dataBottom ? '기준값' : '차이값'}</span>
-        <span className="flex justify-center text-base text-sub600 ">단계표시</span>
-        <span className="text-base text-sub600 px-4">분석설명</span>
+        <span className={`flex flex-1 justify-center text-base text-sub600 dark:text-muted-foreground`}>{!dataBottom ? '기준값' : '차이값'}</span>
+        <span className="flex justify-center text-base text-sub600 dark:text-muted-foreground">단계표시</span>
+        <span className="text-base text-sub600 dark:text-muted-foreground px-4">분석설명</span>
       </div>
 
-      <div  className={`grid grid-cols-[18%_10%_12%_60%] items-center h-full w-full divide-x-2 divide-sub200`}>
+      <div  className={`grid grid-cols-[18%_10%_12%_60%] items-center h-full w-full divide-x-2 divide-sub200 dark:divide-border`}>
         
         <div className={`grid items-center h-full`}>
           <div className="flex">
-            <span className={`flex text-sm items-center justify-center ${isRight ? 'text-sub600' : 'text-black'} px-2 py-1 rounded-full bg-sub100 mx-2 my-2 ${!dataBottom && 'invisible'}`}>
+            <span className={`flex text-sm items-center justify-center ${isRight ? 'text-sub600 dark:text-muted-foreground' : 'text-black dark:text-foreground'} px-2 py-1 rounded-full bg-sub100 dark:bg-muted mx-2 my-2 ${!dataBottom && 'invisible'}`}>
               {leftRightString0}
             </span>
-            <span className={`flex items-center text-lg font-medium leading-none px-2 ${isRight ? 'text-sub600' : 'text-black'}`}>
+            <span className={`flex items-center text-lg font-medium leading-none px-2 ${isRight ? 'text-sub600 dark:text-muted-foreground' : 'text-black dark:text-foreground'}`}>
               {formattedData0} {unit0}
             </span>
           </div>
           {dataBottom && (
             <div className="flex">
-              <span className={`text-sm flex items-center justify-center ${isRight ? 'text-sub600' : 'text-black'} px-2 py-1 rounded-full bg-sub100 mx-2 my-2`}>
+              <span className={`text-sm flex items-center justify-center ${isRight ? 'text-sub600 dark:text-muted-foreground' : 'text-black dark:text-foreground'} px-2 py-1 rounded-full bg-sub100 dark:bg-muted mx-2 my-2`}>
                 {leftRightString1}
               </span>
-              <span className={`flex items-center text-lg text-black font-medium leading-none px-2 ${isRight ? 'text-sub600' : 'text-black'}`}>
+              <span className={`flex items-center text-lg text-black dark:text-foreground font-medium leading-none px-2 ${isRight ? 'text-sub600 dark:text-muted-foreground' : 'text-black dark:text-foreground'}`}>
                 {formattedData1} {unit1}
               </span>
             </div>
@@ -146,7 +157,7 @@ export const CompareRawData = ({
         </div>  
 
 
-        <div className={`grid items-center justify-center h-full ${isRight ? 'text-sub600' : 'text-black'}`}>
+        <div className={`grid items-center justify-center h-full ${isRight ? 'text-sub600 dark:text-muted-foreground' : 'text-black dark:text-foreground'}`}>
           {!dataBottom 
             ? (dataTop?.measure_unit?.includes("기울기") ? "0º" : "")
             : (data0 - data1).toFixed(1) + unit0
@@ -173,11 +184,11 @@ export const CompareRawData = ({
         </div>
 
         <div className={`grid items-center justify-start h-full px-4`}>
-          <span className={`text-base ${isRight ? 'text-black' : 'text-sub600'}`}>
+          <span className={`text-base ${textCondition0}`}>
             {dataTop?.ment_all}
           </span>
           {dataBottom && dataBottom.ment_all !== dataTop?.ment_all && (
-            <span className={`text-base ${isRight ? 'text-black' : 'text-sub600'}`}>
+            <span className={`text-base ${textCondition1}`}>
               {dataBottom.ment_all}
             </span>
           )}
@@ -207,10 +218,10 @@ export const CompareRawData = ({
     "2": "bg-danger-foreground",
   }[dataTop0.risk_level] ?? "bg-sub300" : "bg-sub100";
   const trendTextCondition0 = dataTop0 ? {
-    "0": "text-sub600",
-    "1": "text-warningDeep",
-    "2": "text-dangerDeep",
-  }[dataTop0.risk_level] ?? "text-sub600" : "text-sub600";
+    "0": "text-sub600 dark:text-muted-foreground",
+    "1": "text-warningDeep dark:text-black",
+    "2": "text-dangerDeep dark:text-black",
+  }[dataTop0.risk_level] ?? "text-sub600 dark:text-muted-foreground" : "text-sub600 dark:text-muted-foreground";
   const trendBorderCondition0 = dataTop0 ? {
     "0": "border-2 border-sub600",
     "1": "border-2 border-warningDeep",
@@ -223,10 +234,10 @@ export const CompareRawData = ({
     "2": "bg-danger-foreground",
   }[dataBottom0.risk_level] ?? "bg-sub300" : "bg-sub100";
   const trendTextCondition1 = dataBottom0 ? {
-    "0": "text-sub600",
-    "1": "text-warningDeep",
-    "2": "text-dangerDeep",
-  }[dataBottom0.risk_level] ?? "text-sub600" : "text-sub600";
+    "0": "text-sub600 dark:text-muted-foreground",
+    "1": "text-warningDeep dark:text-black",
+    "2": "text-dangerDeep dark:text-black",
+  }[dataBottom0.risk_level] ?? "text-sub600 dark:text-muted-foreground" : "text-sub600 dark:text-muted-foreground";
   const trendBorderCondition1 = dataBottom0 ? {
     "0": "border-2 border-sub600",
     "1": "border-2 border-warningDeep",
@@ -239,19 +250,19 @@ export const CompareRawData = ({
     <div className="w-full table table-fixed min-w-0 overflow-hidden">
       <div className="flex flex-col overflow-x-auto overflow-y-hidden w-full min-w-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         {/* 헤더 영역 */}
-        <div className="flex border-b-2 border-sub200 px-4 py-2 bg-sub100 gap-4 min-w-[1000px]">
-          <span className="text-xl font-semibold text-black">{dataTop0?.measure_unit ?? ""}</span>
+        <div className="flex border-b-2 border-sub200 dark:border-border px-4 py-2 bg-sub100 dark:bg-muted gap-4 min-w-[1000px]">
+          <span className="text-xl font-semibold text-black dark:text-foreground">{dataTop0?.measure_unit ?? ""}</span>
         </div>
 
         <div className="grid grid-cols-[20%_80%] h-full w-full min-w-[1000px]">
-        <div className="flex flex-col h-full border-r-2 border-sub200 w-full">
-          <div className={isLeftRightData ? "grid grid-cols-2 bg-sub200 py-2" : "flex w-full  justify-center items-center bg-sub200 py-2"}>
-            <div className="flex justify-center items-center text-base text-sub600 py-[3px]">{isLeftRightData ? "좌측" : "비교차이"}</div>
-            {isLeftRightData && <div className="flex justify-center items-center text-base text-sub600">우측</div>}
+        <div className="flex flex-col h-full border-r-2 border-sub200 dark:border-border w-full">
+          <div className={isLeftRightData ? "grid grid-cols-2 bg-sub200 dark:bg-muted py-2" : "flex w-full  justify-center items-center bg-sub200 dark:bg-muted py-2"}>
+            <div className="flex justify-center items-center text-base text-sub600 dark:text-muted-foreground py-[3px]">{isLeftRightData ? "좌측" : "비교차이"}</div>
+            {isLeftRightData && <div className="flex justify-center items-center text-base text-sub600 dark:text-muted-foreground">우측</div>}
           </div>
                     
           <div className={isLeftRightData ? "grid grid-cols-2 items-center justify-center h-full w-full" : "grid h-full w-full"}>
-            <div className={`flex flex-col items-center justify-center gap-2 h-full bg-sub100 py-2`}>
+            <div className={`flex flex-col items-center justify-center gap-2 h-full py-2 ${existedSlot ? trendBgCondition0 : 'bg-sub100 dark:bg-muted'}`}>
               <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition0} ${!existedSlot && 'invisible'}`}>{trendArrow0}</div>
               <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition0} ${!existedSlot && 'invisible'}`}>{trendGap0}</div>
               <div 
@@ -266,7 +277,7 @@ export const CompareRawData = ({
               </div>
             </div>
             {isLeftRightData && (
-              <div className={`flex flex-col items-center justify-center gap-2 px-8 h-full bg-sub100 py-2`}>
+              <div className={`flex flex-col items-center justify-center gap-2 px-8 h-full py-2 ${trendBgCondition1}`}>
                 <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition1}`}>{trendArrow1}</div>
                 <div className={`text-xl font-bold whitespace-nowrap ${trendTextCondition1}`}>{trendGap1}</div>
                 <div 

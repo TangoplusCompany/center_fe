@@ -215,8 +215,8 @@ const DeviceChart = ({
                           className={[
                             "flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium transition",
                             pillActive
-                              ? "bg-toggleAccent text-white"
-                              : "bg-sub300/20 text-sub300 hover:bg-sub300/30",
+                              ? "bg-chartLegendActive text-chartLegendActive-foreground"
+                              : "bg-sub300/20 text-sub300 hover:bg-sub300/30 dark:bg-white/10 dark:text-gray-300 dark:hover:bg-white/15",
                           ].join(" ")}
                         >
                           {/* ✅ 색상 dot */}

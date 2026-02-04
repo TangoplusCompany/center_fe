@@ -189,7 +189,8 @@ const UserDetailForm = ({
   return (
     <form onSubmit={submitUserDetailForm} className="flex flex-col gap-4 sm:gap-5">
       <legend className="sr-only">사용자 정보 수정</legend>
-      {adminRole < 3 && (
+      {/* isResultPage가 false이고 admin_role이 3일 때는 수정 버튼 숨김 */}
+      {(isResultPage || adminRole !== 3) && (
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2">
           <Button variant="outline" onClick={handleEditState} type="button" className="w-full sm:w-auto">
             {editState ? "취소하기" : "수정하기"}

@@ -24,7 +24,7 @@ export default function DefaultHeaderLayout() {
           className="xl:hidden shrink-0 h-9 w-9"
           aria-label="사이드바 열기"
         />
-        <div className="hidden xl:block pl-[10px]">
+        <div className="block pl-[10px] min-w-0">
           <LayoutBreadCrumb />
         </div>
       </div>

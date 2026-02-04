@@ -25,6 +25,13 @@ export const centerEditSchema = z.object({
       message: "한글, 영어, 숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
     })
     .optional(),
+  centerPhone: z
+    .string()
+    .max(20, { message: "센터 번호는 최대 20자까지 입력 가능합니다." })
+    .regex(/^[0-9\s-]*$/, {
+      message: "숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
+    })
+    .optional(),
 });
 
 export type ICenterEditForm = z.infer<typeof centerEditSchema>;

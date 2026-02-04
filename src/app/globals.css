@@ -36,6 +36,9 @@ body {
     --toggle-accent-deep: 227 65.1% 40.4%;
     --toggle-accent-foreground: 0 0% 100%;
     --toggle-accent-background: 210 40% 96.1%;
+    /* 차트 범례 선택 배경/글자 (라이트: toggleAccent와 동일, 다크: 더 밝게 보이는 블루) */
+    --chart-legend-active: 227 65.1% 49.4%;
+    --chart-legend-active-foreground: 0 0% 100%;
     --danger: 0 100% 64.5%;
     --danger-foreground: 0 100% 66.1% / 0.35;
     --danger-background: 0 100% 94.9%;
@@ -78,7 +81,11 @@ body {
     --chart-5: 340 75% 55%;
     --toggle-accent: 210 40% 96.1%;
     --toggle-accent-foreground: 0 0% 0%;
-    --toggle-accent-background: 228 80% 88.2%;
+    /* 다크 모드: 어두운 배경과 어울리는 블루-그레이 톤 */
+    --toggle-accent-background: 228 22% 22%;
+    /* 차트 범례 선택: 다크에서 잘 보이도록 밝은 블루 */
+    --chart-legend-active: 227 60% 52%;
+    --chart-legend-active-foreground: 0 0% 100%;
     --danger: 0 100% 64.5%;
     --danger-foreground: 0 100% 94.9%;
     --danger-background: 0 100% 94.9%;

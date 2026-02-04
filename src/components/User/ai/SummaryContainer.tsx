@@ -26,14 +26,14 @@ const AISummaryContainer = ({
   
   const AISummaryPart = ({ partKey, pa }: { partKey: string; pa: ProblemArea }) => {
     const textBgCondition = {
-      '정상': "bg-sub600",
+      '정상': "bg-sub600 dark:bg-gray-600",
       '주의': "bg-warning",
       '위험': "bg-danger",
-    }[pa.status] ?? "bg-sub600";
+    }[pa.status] ?? "bg-sub600 dark:bg-gray-600";
     return (
-      <div className="flex flex-col gap-2 rounded-xl bg-sub100 p-4">
+      <div className="flex flex-col gap-2 rounded-xl bg-sub100 dark:bg-zinc-800 p-4">
         <div className="flex justify-between">
-          <div>
+          <div className="text-black dark:text-foreground font-medium">
             {partString(partKey)}
           </div>
           <div className={`${textBgCondition} rounded-xl px-2 py-1 text-sm text-white`}>
@@ -41,7 +41,7 @@ const AISummaryContainer = ({
           </div>
         </div>
 
-        <div className="flex">
+        <div className="flex text-sub600 dark:text-muted-foreground text-sm">
           {pa.message}
         </div>
       </div>
@@ -65,12 +65,12 @@ const AISummaryContainer = ({
 
   return (
     <div style={{background: RadialGradientColor, boxShadow: RadialGradientShadow}} 
-        className="flex flex-col h-full rounded-2xl border-2 border-sub100">
+        className="flex flex-col h-full rounded-2xl border-2 border-sub100 dark:border-border">
       <div className="flex items-center text-white text-lg font-semibold px-4 py-2">
         <SparkleSvg />
         AI 골격 상태 요약
       </div>
-      <div className="flex flex-col bg-white shadow-sm rounded-xl p-4 gap-4">
+      <div className="flex flex-col bg-white dark:bg-muted shadow-sm rounded-xl p-4 gap-4">
         <div className="grid gric-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {problem_areas && (
             Object.entries(problem_areas)
@@ -95,7 +95,7 @@ const AISummaryContainer = ({
 
         <div 
           style={{background: RadialGradientColor, boxShadow: RadialGradientShadow}} 
-          className="flex flex-col gap-4 w-full p-2 gap-4 rounded-xl">
+          className="flex flex-col gap-4 w-full p-2 rounded-xl">
           <div className="flex items-center text-white text-lg font-semibold">
             <SparkleSvg />
             AI 결과 요약

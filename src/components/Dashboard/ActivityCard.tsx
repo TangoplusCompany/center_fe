@@ -25,7 +25,7 @@ const ActivityCard = ({
   const centerY = 15; // 원 중앙 고정
 
   return (
-    <div className="w-full flex flex-col border-2 border-toggleAccent-background rounded-xl gap-6 bg-gradient-to-b from-[#2c4fd0]/10 from-[2%] to-white to-[40%]">
+    <div className="w-full flex flex-col border-2 border-toggleAccent-background rounded-xl gap-6 bg-gradient-to-b from-[#2c4fd0]/10 from-[2%] to-white to-[40%] dark:from-[#2c4fd0]/20 dark:to-background">
       <div className="p-4 text-xl font-semibold text-toggleAccent">
         {data.case === 0 && "센터 일간 측정"}
         {data.case === 1 && "센터 주간 측정"}
@@ -45,10 +45,10 @@ const ActivityCard = ({
               <stop offset="100%" className="[stop-color:hsl(var(--toggle-accent))]" />
             </linearGradient>
 
-            {/* 수직 그라데이션 (영역 채우기용: toggleAccent-background -> white) */}
+            {/* 수직 그라데이션 (영역 채우기: 라이트 to white, 다크 to background) */}
             <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" className="[stop-color:hsl(var(--toggle-accent))]" />
-              <stop offset="100%" stopColor="white" />
+              <stop offset="100%" className="[stop-color:hsl(var(--background))]" />
             </linearGradient>
           </defs>
 
@@ -88,12 +88,12 @@ const ActivityCard = ({
           className="absolute top-0 left-0 overflow-visible pointer-events-none"
           style={{ paddingLeft: 'inherit', paddingRight: 'inherit' }}
         >
-          {/* 외곽 원 - 항상 중앙에 고정 */}
+          {/* 외곽 원 - 항상 중앙에 고정 (다크 모드에서도 구분되도록) */}
           <circle
             cx="50"
             cy={centerY}
             r="4"
-            className="stroke-toggleAccent fill-white"
+            className="stroke-toggleAccent fill-white dark:fill-background"
           />
 
           {/* 내부 원 */}

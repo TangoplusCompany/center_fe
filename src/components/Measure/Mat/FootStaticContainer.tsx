@@ -32,21 +32,22 @@ const FootStaticContainer = ({
 }: FootStaticContainerProps) => {
   const riskString = getRiskString(risk_level)
   const bgCondition = {
-    0: "bg-sub600",
+    0: "bg-sub600 dark:bg-gray-600",
     1: "bg-warning",
     2: "bg-danger",
   }[risk_level] ?? "bg-[#7E7E7E]";
-    const textTitleCondition = {
-    0: "text-secondary",
-    1: "text-warningDeep",
-    2: "text-dangerDeep",
-  }[risk_level] ?? "bg-primary-foreground";
+  // 제목 텍스트는 다크 모드에서 가독성 있게 보이도록 별도 지정
+  const textTitleCondition = {
+    0: "text-sub600 dark:text-muted-foreground",
+    1: "text-warningDeep dark:text-warning-foreground",
+    2: "text-dangerDeep dark:text-danger",
+  }[risk_level] ?? "text-sub600 dark:text-muted-foreground";
   
   return (
     <div className="flex-1 p-4">
       {/* 헤더 */}
       <div className="flex justify-between items-center mb-4">
-        <h2 className={`text-xl font-semibold ${lCase === 0 ? 'text-black': textTitleCondition}`}>정적 족압</h2>
+        <h2 className={`text-xl font-semibold ${lCase === 0 ? 'text-black dark:text-foreground' : textTitleCondition}`}>정적 족압</h2>
         <span className={`px-3 py-1 ${bgCondition} text-white rounded-xl text-xs`}>
           {riskString} {range_level}단계
         </span>
@@ -66,7 +67,7 @@ const FootStaticContainer = ({
             </div>
           </div>
           {/* 코멘트 */}
-          <div className="text-base text-gray-700 whitespace-pre-line">
+          <div className="text-base text-gray-700 dark:text-muted-foreground whitespace-pre-line">
             {comment}
           </div>
         </>
@@ -81,7 +82,7 @@ const FootStaticContainer = ({
           </div>
 
           {/* 오른쪽: 코멘트 */}
-          <div className="flex items-center text-base text-gray-700 whitespace-pre-line">
+          <div className="flex items-center text-base text-gray-700 dark:text-muted-foreground whitespace-pre-line">
             {comment}
           </div>
         </div>

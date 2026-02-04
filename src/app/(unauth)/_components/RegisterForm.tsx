@@ -8,8 +8,10 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReactNode, useState } from "react";
-import { useRegister } from "@/hooks/api/auth/useRegister";
+// import { useRegister } from "@/hooks/api/auth/useRegister";
 import RegisterCenterCheckForm from "./RegisterCenterCheckForm";
+import { RegisterOtpDialog } from "@/components/auth/RegisterOtpDialog";
+import { RegisterCenterInfoDialog } from "./RegisterCenterInfoDialog";
 
 const registerSchema = z
   .object({
@@ -63,29 +65,50 @@ export const RegisterContainer = () => {
   const {
     register,
     handleSubmit,
-    setError,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(registerSchema),
   });
 
+  const emailValue = watch("email") ?? "";
+  const isEmailValid =
+    emailValue.trim().length > 0 &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue.trim());
+
   const [isCheckCenter, setIsCheckCenter] = useState(false);
-  const [isCenterId, setIsCenterId] = useState("");
+  const [, setIsCenterId] = useState("");
+  const [isOtpDialogOpen, setIsOtpDialogOpen] = useState(false);
+  const [otpStatus, setOtpStatus] = useState<"required" | "verified" | "failed">("required");
+  const [centerInfoDialogOpen, setCenterInfoDialogOpen] = useState(false);
+
   const eventCenterCheck = (centerId: string) => {
     setIsCenterId(centerId);
     setIsCheckCenter(true);
   };
 
-  const registerMutation = useRegister(setError);
-  const registerHandleSubmit = handleSubmit(async (data) => {
-    registerMutation.mutateAsync({
-      center_id: isCenterId,
-      email: data.email,
-      password: data.password,
-      name: data.name,
-      mobile: data.phone,
-    });
+  const handleOtpVerified = (verified: boolean) => {
+    setOtpStatus(verified ? "verified" : "failed");
+  };
+
+  // 테스트용: API 연결 주석 처리, 회원가입 클릭 시 센터 정보 팝업만 오픈
+  // const registerMutation = useRegister(setError);
+  const registerHandleSubmit = handleSubmit(async () => {
+    // 이메일 OTP 인증이 완료된 경우에만 진행 (Enter 키 등으로 제출되어도 검사)
+    if (otpStatus !== "verified") {
+      return;
+    }
+    // 테스트용: API 연결 주석 처리
+    // await registerMutation.mutateAsync({
+    //   center_id: isCenterId,
+    //   email: data.email,
+    //   password: data.password,
+    //   name: data.name,
+    //   mobile: data.phone,
+    // });
+    setCenterInfoDialogOpen(true);
   });
+
   return (
     <form
       className={cn("flex flex-col gap-6 w-full")}
@@ -104,17 +127,40 @@ export const RegisterContainer = () => {
               <Label htmlFor="email" className="lg:text-lg">
                 이메일
               </Label>
-              <Input
-                id="email"
-                type="text"
-                placeholder="email@example.com"
-                required
-                maxLength={30}
-                {...register("email")}
-                className="bg-white dark:bg-border"
-              />
+              <div className="flex gap-2 w-full items-stretch">
+                <Input
+                  id="email"
+                  type="text"
+                  placeholder="email@example.com"
+                  required
+                  maxLength={30}
+                  {...register("email")}
+                  className="bg-white dark:bg-border flex-1 h-9"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsOtpDialogOpen(true)}
+                  disabled={otpStatus === "verified" || !isEmailValid}
+                  className="shrink-0 h-9 px-4"
+                >
+                  {otpStatus === "verified" ? "인증완료" : "OTP 인증"}
+                </Button>
+              </div>
               {errors.email?.message && (
                 <ErrorText>{String(errors.email?.message)}</ErrorText>
+              )}
+              {(otpStatus === "verified" || otpStatus === "failed") && (
+                <p
+                  className={cn(
+                    "text-sm",
+                    otpStatus === "verified" && "text-green-600 font-medium",
+                    otpStatus === "failed" && "text-red-500"
+                  )}
+                >
+                  {otpStatus === "verified" && "인증완료"}
+                  {otpStatus === "failed" && "인증번호가 맞지 않습니다."}
+                </p>
               )}
             </div>
             <div className="flex flex-col items-start gap-2">
@@ -191,12 +237,22 @@ export const RegisterContainer = () => {
               type="submit"
               variant={"outline"}
               className="w-full lg:text-lg"
+              disabled={otpStatus !== "verified"}
             >
               회원가입
             </Button>
           </div>
         )}
       </div>
+      <RegisterOtpDialog
+        open={isOtpDialogOpen}
+        onOpenChange={setIsOtpDialogOpen}
+        onVerified={handleOtpVerified}
+      />
+      <RegisterCenterInfoDialog
+        open={centerInfoDialogOpen}
+        onOpenChange={setCenterInfoDialogOpen}
+      />
     </form>
   );
 };

@@ -15,7 +15,7 @@ const MeasureWorst = ({ data }: { data: TWorstPart }) => {
   }[data.partName]
 
   return (
-    <div className="flex flex-col h-full w-full rounded-3xl border-2 border-sub200 shadow-none bg-white relative overflow-hidden">
+    <div className="flex flex-col h-full w-full rounded-3xl border-2 border-sub200 dark:border-border shadow-none bg-white dark:bg-muted relative overflow-hidden">
       {/* 배경 이미지 - 제일 뒤로 */}
       <div className="absolute inset-0 z-0">
         <div className="absolute bottom-0 right-0 w-48 h-full">
@@ -37,7 +37,7 @@ const MeasureWorst = ({ data }: { data: TWorstPart }) => {
           alt=""
           className="w-10 h-10 rounded-full"
         />
-        <h2 className="text-xl font-bold">가장 취약 부위</h2>
+        <h2 className="text-xl font-bold text-black dark:text-foreground">가장 취약 부위</h2>
       </div>
 
       {/* 왼쪽 내용 */}
@@ -53,7 +53,7 @@ const MeasureWorst = ({ data }: { data: TWorstPart }) => {
         <div className={`w-fit ${data.level === 2 ? "bg-danger-foreground" : "bg-warning-foreground"
         } rounded-lg p-4`}>
           <p className={`text-base ${
-            data.level === 2 ? "text-danger" : "text-warning"
+            data.level === 2 ? "text-danger dark:text-black" : "text-warning dark:text-black"
           } leading-relaxed`}>
             {data.description}
           </p>

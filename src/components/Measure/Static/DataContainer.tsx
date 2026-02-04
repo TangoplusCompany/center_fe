@@ -38,14 +38,14 @@ const StaticDataContainer = ({
 
 
   const borderCondition = {
-    "0": "border-sub300/50",
-    "1": "border-warning/50",
-    "2": "border-danger/50",
+    "0": "border-sub300/50 dark:border-border",
+    "1": "border-warning/50 dark:border-border",
+    "2": "border-danger/50 dark:border-border",
   }[mat_static_risk_level] ?? "bg-primary-foreground";
   const bgCondition = {
-    "0": "border-sub300/50",
-    "1": "bg-gradient-to-b from-[#FFA73A]/10 from-[2%] to-white to-[40%]",
-    "2": "bg-gradient-to-b from-[#FF5252]/10 from-[2%] to-white to-[50%]",
+    "0": "border-sub300/50 dark:bg-muted",
+    "1": "bg-gradient-to-b from-[#FFA73A]/10 from-[2%] to-white to-[40%] dark:from-[#FFA73A]/20 dark:to-muted",
+    "2": "bg-gradient-to-b from-[#FF5252]/10 from-[2%] to-white to-[50%] dark:from-[#FF5252]/20 dark:to-muted",
   }[mat_static_risk_level] ?? "bg-primary-foreground";
   // 위아래로 할 경우 flex h-full flex-col gap-4
   
@@ -53,7 +53,7 @@ const StaticDataContainer = ({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className={`rounded-2xl border-2 border-sub200 ${borderCondition} ${bgCondition}`}>
+      <div className={`rounded-2xl border-2 border-sub200 dark:border-border ${borderCondition} ${bgCondition}`}>
         <FootStaticContainer
         comment={
           "[좌우 무게 분석]\n" +

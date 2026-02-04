@@ -40,11 +40,11 @@ const AILoadingScreen = () => {
   }, [displayedText, isTyping, currentMessageIndex]);
 
   return (
-    <div className="h-[512px] rounded-3xl flex flex-col items-center justify-center bg-gradient-to-b from-toggleAccent/10 to-white p-8">
+    <div className="h-[512px] rounded-3xl flex flex-col items-center justify-center bg-gradient-to-b from-toggleAccent/10 to-white dark:from-toggleAccent/20 dark:to-muted p-8">
       {/* 회전하는 원형 로더 */}
       <div className="relative mb-12">
         {/* 외곽 원 */}
-        <div className="w-32 h-32 rounded-full border-4 border-sub200"></div>
+        <div className="w-32 h-32 rounded-full border-4 border-sub200 dark:border-border"></div>
         
         {/* 회전하는 그라데이션 원 */}
         <div className="absolute top-0 left-0 w-32 h-32 rounded-full border-4 border-transparent border-t-toggleAccent border-r-toggleAccent animate-spin"></div>
@@ -53,13 +53,13 @@ const AILoadingScreen = () => {
       {/* 타이핑 텍스트 */}
       <div className="h-16 flex items-center justify-center">
         <p 
-          className={`text-lg font-medium transition-all duration-500 ${
+          className={`text-lg font-medium text-black dark:text-foreground transition-all duration-500 ${
             isTyping ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
           }`}
         >
           {displayedText}
           {isTyping && displayedText.length < messages[currentMessageIndex].length && (
-            <span className="inline-block w-0.5 h-5 bg-sub600 ml-1 animate-pulse"></span>
+            <span className="inline-block w-0.5 h-5 bg-sub600 dark:bg-muted-foreground ml-1 animate-pulse"></span>
           )}
         </p>
       </div>

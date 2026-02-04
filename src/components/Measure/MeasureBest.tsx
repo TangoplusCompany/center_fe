@@ -15,7 +15,7 @@ const MeasureBest = ({ data }: { data: TWorstPart }) => {
     "발목": "img_ankle_0.svg"
   }[data.partName]
   return (
-    <div className="flex flex-col h-full w-full rounded-3xl border-2 border-sub200 shadow-none bg-white relative overflow-hidden">
+    <div className="flex flex-col h-full w-full rounded-3xl border-2 border-sub200 dark:border-border shadow-none bg-white dark:bg-muted relative overflow-hidden">
       {/* 배경 이미지 - 제일 뒤로 */}
       <div className="absolute inset-0 z-0">
         <div className="absolute bottom-0 right-0 w-48 h-full">
@@ -36,15 +36,19 @@ const MeasureBest = ({ data }: { data: TWorstPart }) => {
           alt=""
           className="w-10 h-10 rounded-full"
         />
-        <h2 className="text-xl font-bold">유지 추천 부위</h2>
+        <h2 className="text-xl font-bold text-black dark:text-foreground">유지 추천 부위</h2>
       </div>
 
       {/* 왼쪽 내용 */}
       <div className="flex flex-col justify-end flex-1 space-y-3 p-5 mb-6 relative z-10">
         {/* 위험 레벨 배지 */}
-        <div className={`w-fit px-3 py-1 ${
-          data.level === 0 ? "bg-toggleAccent" : "bg-secondary"
-        } text-white text-lg font-semibold rounded-xl`}>
+        <div
+          className={`w-fit px-3 py-1 ${
+            data.level === 0
+              ? "bg-toggleAccent text-toggleAccent-foreground"
+              : "bg-secondary text-secondary-foreground"
+          } text-lg font-semibold rounded-xl`}
+        >
           {data.partName}
         </div>
 
