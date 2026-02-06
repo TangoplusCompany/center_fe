@@ -1,5 +1,6 @@
 import { customAxios, customUserAxios } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
+import { useAuthStore } from "@/providers/AuthProvider";
 
 /**
  * 유저 측정 목록 조회
@@ -32,15 +33,16 @@ export const useGetUserMeasureList = <T>({
   to?: string;
   sort?: string;
 }) => {
+  const centerSn = useAuthStore((state) => state.centerSn);
   const axiosInstance = isResultPage ? customUserAxios : customAxios;
   const apiPath = isResultPage
     ? `/users/${user_sn}/measurement`
-    : `/measurement/members/${user_sn}`;
+    : `/measurement/centers/${centerSn}/members/${user_sn}`;
 
   return useQuery<T>({
     queryKey: isResultPage
       ? ["userResultMeasureList", page, limit, user_sn, from, to, sort]
-      : ["UserMeasureList", page, limit, user_sn, from, to, sort],
+      : ["UserMeasureList", page, limit, user_sn, from, to, sort, centerSn],
     queryFn: async () => {
       const params: Record<string, string> = {};
       
@@ -83,6 +85,6 @@ export const useGetUserMeasureList = <T>({
       });
       return response.data.data;
     },
-    enabled: user_sn !== undefined,
+    enabled: user_sn !== undefined && (isResultPage || centerSn > 0),
   });
 };

@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import { Trash, Building2 } from "lucide-react";
+import { Building2 } from "lucide-react";
 import { IAdminCenterListItem } from "@/types/center";
+import { phoneHyphen } from "@/utils/regexFiltering";
 import { useAuthStore } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 
@@ -31,7 +32,7 @@ export const CenterCard = ({ center }: { center: IAdminCenterListItem }) => {
       onClick={handleCenterClick}
     >
       <div className="flex flex-col">
-        <div className="flex items-center justify-between rounded-t-xl text-xl text-toggleAccent dark:text-toggleAccent font-semibold bg-toggleAccent-background dark:bg-toggleAccent-background px-4 py-2 w-full">
+        <div className="flex items-center rounded-t-xl text-xl text-toggleAccent dark:text-toggleAccent font-semibold bg-toggleAccent-background dark:bg-toggleAccent-background px-4 py-2 w-full">
           <div className="flex items-center gap-2 min-w-0">
             <span className="truncate">{center.center_name}</span>
             {managerLabel != null && (
@@ -40,17 +41,6 @@ export const CenterCard = ({ center }: { center: IAdminCenterListItem }) => {
               </span>
             )}
           </div>
-          <button
-            type="button"
-            className="flex items-center gap-0.5 text-sm text-danger shrink-0 hover:opacity-80"
-            onClick={(e) => {
-              e.stopPropagation();
-              // TODO: 삭제 기능 구현
-            }}
-          >
-            <Trash className="w-4 h-4" />
-            <span>삭제</span>
-          </button>
         </div>
 
         {/* 건물 SVG(왼쪽) | 내용(오른쪽) */}
@@ -60,6 +50,11 @@ export const CenterCard = ({ center }: { center: IAdminCenterListItem }) => {
           </div>
           <div className="flex flex-col justify-center gap-1 text-base text-black dark:text-foreground">
             <p>{fullAddress || "-"}</p>
+            {center.center_phone && (
+              <p className="text-sm text-muted-foreground">
+                {phoneHyphen(center.center_phone)}
+              </p>
+            )}
           </div>
         </div>
       </div>

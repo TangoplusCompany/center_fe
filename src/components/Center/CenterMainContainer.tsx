@@ -2,6 +2,7 @@
 
 import React from "react";
 import { CenterCard } from "./CenterCard";
+import CenterCardSkeleton from "./CenterCardSkeleton";
 import { useAuthStore } from "@/providers/AuthProvider";
 import { getAdminCenters } from "@/services/auth/getAdminCenters";
 import { useQuery } from "@tanstack/react-query";
@@ -16,18 +17,14 @@ export const CenterMainContainer = () => {
     enabled: adminSn > 0,
   });
 
-  if (adminSn <= 0) {
+  if (adminSn <= 0 || isLoading) {
     return (
       <div className="col-span-12 flex flex-col gap-4">
-        <p className="text-muted-foreground">로그인 정보를 확인할 수 없습니다.</p>
-      </div>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <div className="col-span-12 flex flex-col gap-4">
-        <p className="text-muted-foreground">센터 목록을 불러오는 중...</p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
+          {[1, 2, 3, 4].map((i) => (
+            <CenterCardSkeleton key={i} />
+          ))}
+        </div>
       </div>
     );
   }
@@ -36,6 +33,14 @@ export const CenterMainContainer = () => {
     return (
       <div className="col-span-12 flex flex-col gap-4">
         <p className="text-destructive">센터 목록을 불러오는데 실패했습니다.</p>
+      </div>
+    );
+  }
+
+  if (centers.length === 0) {
+    return (
+      <div className="col-span-12 flex flex-col gap-4">
+        <p className="text-muted-foreground">센터 목록이 없습니다.</p>
       </div>
     );
   }

@@ -8,12 +8,19 @@ type CenterUserDetailResponse = {
 
 /**
  * 사용자 상세 조회 API
- * @param sn 사용자 번호
+ * @param user_sn 사용자 번호
+ * @param center_sn 센터 번호
  * @returns 사용자 상세 조회 응답
  */
-export const getUserDetail = async ({ sn }: { sn: string }) => {
+export const getUserDetail = async ({
+  user_sn,
+  center_sn,
+}: {
+  user_sn: string;
+  center_sn: number;
+}) => {
   const { data } = await customAxios.get<CenterUserDetailResponse>(
-    `/members/${sn}`,
+    `/members/${user_sn}/centers/${center_sn}`,
   );
   return data;
 };

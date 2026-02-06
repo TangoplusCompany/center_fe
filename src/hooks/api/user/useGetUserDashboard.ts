@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { customAxios, customUserAxios } from "@/lib/axios";
+import { useAuthStore } from "@/providers/AuthProvider";
 
 /**
  * 사용자 측정 데이터 JSON GET Hooks
@@ -14,20 +15,23 @@ export const useGetUserDashboard = <T>({
   user_sn: number | undefined;
   isResultPage?: boolean;
 }) => {
+  const centerSn = useAuthStore((state) => state.centerSn);
   const axiosInstance = isResultPage ? customUserAxios : customAxios;
-  const apiPath = isResultPage 
+  const apiPath = isResultPage
     ? `/users/${user_sn}/measure-summary`
-    : `/members/${user_sn}/measure-summary`;
+    : `/members/${user_sn}/centers/${centerSn}/measure-summary`;
 
   return useQuery<T>({
-    queryKey: isResultPage 
+    queryKey: isResultPage
       ? ["userResultMeasureSummary", user_sn]
-      : ["userMeasureSummary", user_sn],
+      : ["userMeasureSummary", user_sn, centerSn],
     queryFn: async () => {
       const response = await axiosInstance.get(apiPath);
-
       return response.data.data;
     },
-    enabled: user_sn !== undefined && user_sn !== 0,
+    enabled:
+      user_sn !== undefined &&
+      user_sn !== 0 &&
+      (isResultPage || centerSn > 0),
   });
 };

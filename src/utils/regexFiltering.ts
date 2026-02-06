@@ -1,11 +1,38 @@
 /**
- * 전화번호에서 하이픈 제거
- * @param phone 전화번호
- * @returns 하이픈이 제거된 전화번호
+ * 전화번호에 하이픈 추가 (핸드폰·유선 공통)
+ * @param phone 전화번호 (숫자 또는 하이픈 포함)
+ * @returns 하이픈이 적용된 전화번호
+ * - 핸드폰: 010-XXXX-XXXX, 010-XXX-XXXX
+ * - 유선(서울): 02-XXX-XXXX, 02-XXXX-XXXX
+ * - 유선(지방): 031-XXX-XXXX, 051-XXX-XXXX 등
  */
 export const phoneHyphen = (phone: string) => {
-  return phone.replaceAll("-", "").replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
-}
+  const cleaned = phone.replaceAll("-", "").replace(/\D/g, "");
+  if (!cleaned) return phone;
+
+  // 핸드폰: 010으로 시작 (10자리: 010-XXX-XXXX, 11자리: 010-XXXX-XXXX)
+  if (cleaned.startsWith("010")) {
+    if (cleaned.length === 11) return cleaned.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+    if (cleaned.length === 10) return cleaned.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+  }
+
+  // 유선(서울): 02로 시작 (9자리: 02-XXX-XXXX, 10자리: 02-XXXX-XXXX)
+  if (cleaned.startsWith("02")) {
+    if (cleaned.length === 9) return cleaned.replace(/(\d{2})(\d{3})(\d{4})/, "$1-$2-$3");
+    if (cleaned.length === 10) return cleaned.replace(/(\d{2})(\d{4})(\d{4})/, "$1-$2-$3");
+  }
+
+  // 유선(지방): 031, 032, 051 등 0XX (10자리: 0XX-XXX-XXXX)
+  if (cleaned.length === 10 && cleaned.startsWith("0")) {
+    return cleaned.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+  }
+
+  // 기본: 11자리 (3-4-4) 또는 10자리 (3-3-4)
+  if (cleaned.length === 11) return cleaned.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+  if (cleaned.length === 10) return cleaned.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+
+  return phone;
+};
 
 /**
  * 전화번호 가운데 부분 마스킹

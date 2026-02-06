@@ -1,6 +1,7 @@
 import { customAxios, customUserAxios } from "@/lib/axios";
 import { IUserMeasureInfoResponse } from "@/types/measure";
 import { useQuery } from "@tanstack/react-query";
+import { useAuthStore } from "@/providers/AuthProvider";
 
 /**
  * 측정 상세 조회
@@ -18,25 +19,31 @@ export const useMeasureInfo = ({
   user_sn: string;
   isResultPage?: boolean;
 }) => {
+  const centerSn = useAuthStore((state) => state.centerSn);
   const axiosInstance = isResultPage ? customUserAxios : customAxios;
   const apiPath = isResultPage
     ? `/users/${user_sn}/measurement/${measure_sn}`
-    : `/measurement/${measure_sn}/members/${user_sn}`;
+    : `/measurement/${measure_sn}/centers/${centerSn}/members/${user_sn}`;
 
   return useQuery<IUserMeasureInfoResponse>({
     queryKey: isResultPage
       ? ["userResultMeasureDetail", measure_sn, user_sn]
-      : ["measureDetail", measure_sn, user_sn],
+      : ["measureDetail", measure_sn, user_sn, centerSn],
     queryFn: async () => {
       const response = isResultPage
         ? await axiosInstance.get(apiPath)
         : await axiosInstance.get(apiPath, {
-        params: {
-          user_sn,
-        },
-      });
+            params: {
+              user_sn,
+            },
+          });
       return response.data.data;
     },
-    enabled: measure_sn !== undefined && user_sn !== undefined && measure_sn !== 0 && user_sn !== "",
+    enabled:
+      measure_sn !== undefined &&
+      user_sn !== undefined &&
+      measure_sn !== 0 &&
+      user_sn !== "" &&
+      (isResultPage || centerSn > 0),
   });
 };

@@ -7,7 +7,7 @@ export const postUnlockAccount = async ({
   type,
   purpose,
 }: IOtpProps) => {
-  await customUnAuthAxios.post<IResponseDefault>(
+  const { data } = await customUnAuthAxios.post<IResponseDefault>(
     "/otp/unlock-account",
     {
       email_or_mobile,
@@ -15,4 +15,5 @@ export const postUnlockAccount = async ({
       purpose,
     },
   );
+  return data;
 };

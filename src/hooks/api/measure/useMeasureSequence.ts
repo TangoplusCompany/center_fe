@@ -1,6 +1,7 @@
 import { customAxios, customUserAxios } from "@/lib/axios";
 import { IUserMeasureSequence, IUserMeasureSequenceDynamic } from "@/types/measure";
 import { useQuery } from "@tanstack/react-query";
+import { useAuthStore } from "@/providers/AuthProvider";
 
 /**
  * 측정 시퀀스 조회
@@ -10,12 +11,10 @@ import { useQuery } from "@tanstack/react-query";
  * @param isResultPage result-page에서 사용하는지 여부
  * @returns 측정 시퀀스 데이터
  */
-
 type MeasureSequenceResponse<T extends number> = T extends 6
   ? IUserMeasureSequenceDynamic
   : IUserMeasureSequence;
 
-  
 export const useMeasureSequence = <T extends number>({
   measure_sn,
   user_sn,
@@ -27,15 +26,16 @@ export const useMeasureSequence = <T extends number>({
   sequence_number: T;
   isResultPage?: boolean;
 }) => {
+  const centerSn = useAuthStore((state) => state.centerSn);
   const axiosInstance = isResultPage ? customUserAxios : customAxios;
   const apiPath = isResultPage
     ? `/users/${user_sn}/measurement/${measure_sn}/sequences/${sequence_number}`
-    : `/measurement/${measure_sn}/members/${user_sn}/sequences/${sequence_number}`;
+    : `/measurement/${measure_sn}/centers/${centerSn}/members/${user_sn}/sequences/${sequence_number}`;
 
   return useQuery<MeasureSequenceResponse<T>>({
     queryKey: isResultPage
       ? ["userResultMeasureSequence", measure_sn, user_sn, sequence_number]
-      : ["measureSequence", measure_sn, user_sn, sequence_number],
+      : ["measureSequence", measure_sn, user_sn, sequence_number, centerSn],
     queryFn: async () => {
       const response = await axiosInstance.get(apiPath);
       return response.data.data;
@@ -43,6 +43,7 @@ export const useMeasureSequence = <T extends number>({
     enabled:
       measure_sn !== undefined &&
       user_sn !== undefined &&
-      sequence_number !== undefined,
+      sequence_number !== undefined &&
+      (isResultPage || centerSn > 0),
   });
 };

@@ -10,8 +10,11 @@ export const useOtpRequest = ({
   purpose?: Purpose;
 }) => {
   return useMutation({
-    mutationFn: (params: { email_or_mobile: string; type: "email" | "mobile"; purpose: Purpose }) =>
-      postOtpRequest(params),
+    mutationFn: (params: {
+      email_or_mobile: string;
+      type: "email" | "mobile";
+      purpose: Purpose;
+    }) => postOtpRequest(params),
     onSuccess: (_data, variables) => {
       alert("OTP 요청이 완료되었습니다.");
       setEmail(variables.email_or_mobile);

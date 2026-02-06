@@ -65,6 +65,7 @@ export interface IAdminCenterListItem {
   center_name: string;
   center_address: string;
   center_address_detail: string;
+  center_phone?: string;
   /** 1: 주관리자, 2: 부관리자 (없으면 라벨 미표시) */
   admin_role?: 1 | 2;
 }

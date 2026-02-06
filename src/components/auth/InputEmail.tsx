@@ -3,6 +3,7 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useOtpRequest } from "@/hooks/api/auth/useOtpRequest";
+import { useUnlockAccount } from "@/hooks/api/auth/useUnlockAccount";
 
 type OtpPurpose = "password" | "account";
 
@@ -15,6 +16,7 @@ const InputEmail = ({
 }) => {
   const [value, setValue] = useState("");
   const { mutate: otpRequest } = useOtpRequest({ value, setEmail, purpose });
+  const { mutate: unlockAccountRequest } = useUnlockAccount(setEmail);
 
   const changeCenterCode = (e: React.ChangeEvent<HTMLInputElement>) => {
     const filteredValue = e.target.value.replace(/[^a-zA-Z0-9@._-]/g, "");
@@ -23,6 +25,14 @@ const InputEmail = ({
   const handleEmailCheck = () => {
     if (!value) {
       alert("이메일을 입력해주세요.");
+      return;
+    }
+    if (purpose === "account") {
+      unlockAccountRequest({
+        email_or_mobile: value,
+        type: "email",
+        purpose: "account",
+      });
       return;
     }
     otpRequest({
