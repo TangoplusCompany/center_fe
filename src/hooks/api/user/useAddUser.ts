@@ -2,6 +2,7 @@ import { postAddUser } from "@/services/user/postAddUser";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/providers/AuthProvider";
 
 /**
  * 사용자 추가 Hooks
@@ -9,8 +10,10 @@ import { useRouter } from "next/navigation";
  */
 export const useAddUser = () => {
   const router = useRouter();
+  const centerSn = useAuthStore((state) => state.centerSn);
   return useMutation({
-    mutationFn: postAddUser,
+    mutationFn: ({ memberList }: { memberList: string[] }) =>
+      postAddUser({ center_sn: centerSn, memberList }),
     onSuccess: () => {
       alert("사용자 추가에 성공했습니다.");
       router.push("/user");
