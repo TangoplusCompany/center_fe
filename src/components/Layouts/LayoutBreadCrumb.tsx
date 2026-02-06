@@ -7,6 +7,8 @@ import {
   BreadcrumbList,
 } from "@/components/ui/breadcrumb";
 import { usePathname } from "next/navigation";
+import { useAuthStore } from "@/providers/AuthProvider";
+import Link from "next/link";
 
 /* 기존 BreadCrumb용 Menus - 주석 해제 시 사용
 interface IMenu {
@@ -54,55 +56,42 @@ const Menus: IMenu[] = [
 ];
 */
 
+const breadcrumbLinkClass =
+  "text-base xl:text-xl transition-all duration-200 rounded-md px-1.5 py-0.5 -mx-1.5 -my-0.5 hover:opacity-80 hover:bg-muted/60";
+
 export function LayoutBreadCrumb() {
   const pathName = usePathname();
+  const centerSn = useAuthStore((state) => state.centerSn);
+  const centerName = useAuthStore((state) => state.centerName);
+
+  const isCenterPage = pathName === "/center";
+  const displayLabel = isCenterPage
+    ? "센터목록"
+    : centerSn && centerName
+      ? centerName
+      : "센터목록";
 
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        {/* 기존 BreadCrumb 헤더 주석처리 - 센터목록으로 대체 */}
-        {/* <BreadcrumbItem>
-          <BreadcrumbLink className="text-base xl:text-xl" href="/">탱고플러스 센터</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center gap-1">
-              {pathName === "/" ? (
-                <p className="text-slate-950 text-base xl:text-xl dark:text-foreground">대시보드</p>
-              ) : (
-                <p className="text-slate-950 text-base xl:text-xl dark:text-foreground">
-                  {Menus.filter((el) => el.url !== "/").find((menu) => pathName.includes(menu.url))
-                    ?.title || "Not Found"}
-                </p>
-              )}
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
-              {Menus
-                .filter((menu) => {
-                  if (adminRole === 2) {
-                    return !["기기 관리", "매니저 관리"].includes(menu.title);
-                  }
-                  if (adminRole >= 3) {
-                    return !["대시보드", "기기 관리", "매니저 관리", "사용자 히스토리 관리", "센터 측정 현황"].includes(menu.title);
-                  }
-                  return true;
-                })
-                .map((menu, index) => (
-                  <DropdownMenuItem key={menu.title + menu.initial + index}>
-                    <BreadcrumbLink href={menu.url}>{menu.title}</BreadcrumbLink>
-                  </DropdownMenuItem>
-                ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </BreadcrumbItem> */}
-        <BreadcrumbItem>
-          <BreadcrumbLink
-            className={`text-base xl:text-xl ${pathName === "/center" ? "font-semibold text-toggleAccent" : "text-slate-950 dark:text-foreground"}`}
-            href="/center"
-          >
-            센터목록
-          </BreadcrumbLink>
+          {isCenterPage ? (
+            <span
+              className={`${breadcrumbLinkClass} font-semibold text-toggleAccent cursor-default hover:opacity-90`}
+              aria-current="page"
+            >
+              센터목록
+            </span>
+          ) : (
+            <BreadcrumbLink asChild>
+              <Link
+                href="/center"
+                className={`${breadcrumbLinkClass} ${centerSn && centerName ? "font-medium text-slate-950 dark:text-foreground" : "text-slate-950 dark:text-foreground"}`}
+              >
+                {displayLabel}
+              </Link>
+            </BreadcrumbLink>
+          )}
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>

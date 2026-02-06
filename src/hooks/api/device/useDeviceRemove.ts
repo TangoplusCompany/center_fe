@@ -1,4 +1,5 @@
 import { deleteDeviceCenter } from "@/services/device/deleteDeviceCenter";
+import { useAuthStore } from "@/providers/AuthProvider";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
@@ -11,8 +12,10 @@ export const useDeviceRemove = (
   setOpen: (value: React.SetStateAction<boolean>) => void,
 ) => {
   const queryClient = useQueryClient();
+  const centerSn = useAuthStore((state) => state.centerSn);
+
   return useMutation({
-    mutationFn: deleteDeviceCenter,
+    mutationFn: (sn: number) => deleteDeviceCenter(sn, centerSn),
     onSuccess: () => {
       alert("성공적으로 기기를 해제하였습니다.");
       queryClient.invalidateQueries({ queryKey: ["deviceStatusList"] });

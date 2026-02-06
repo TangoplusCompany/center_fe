@@ -8,6 +8,8 @@ interface IAuthProps {
   adminMobile: string;
   adminRole: number;
   adminSn: number;
+  centerSn: number;
+  centerName: string;
   accessJwt: string;
 }
 
@@ -15,6 +17,7 @@ interface IAuthActions {
   initAuthorization: () => void;
   setLogin: (userData: IAuthProps) => void;
   setAccessToken: (accessJwt: string) => void;
+  setCenterSn: (centerSn: number, centerName?: string) => void;
   setLogout: () => void;
 }
 
@@ -32,6 +35,8 @@ export const createAuthStore = (initialState?: IAuthProps) => {
     adminMobile: "",
     adminRole: 0,
     adminSn: 0,
+    centerSn: 0,
+    centerName: "",
     accessJwt: "",
   };
   return createStore<AuthStore>()(
@@ -42,6 +47,11 @@ export const createAuthStore = (initialState?: IAuthProps) => {
         initAuthorization: () => set({ ...DEFAULT_STATE }),
         setLogin: (userData: IAuthProps) => set({ ...userData }),
         setAccessToken: (accessJwt: string) => set({ accessJwt }),
+        setCenterSn: (centerSn: number, centerName?: string) =>
+          set((state) => ({
+            centerSn,
+            centerName: centerSn === 0 ? "" : (centerName ?? state.centerName),
+          })),
         setLogout: () => {
           set({ ...DEFAULT_STATE });
           sessionStorage.removeItem("login-user");

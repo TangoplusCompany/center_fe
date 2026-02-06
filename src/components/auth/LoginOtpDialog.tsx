@@ -17,7 +17,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useState, useEffect } from "react";
-import { useLogin } from "@/hooks/api/auth/useLogin";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/providers/AuthProvider";
+import { postVerifyLoginOtp, Verify2FAError } from "@/services/auth/postVerifyLoginOtp";
+import { postRequestLogin2FAOtp } from "@/services/auth/postRequestLogin2FAOtp";
 
 const FormSchema = z.object({
   otp: z.string().min(6, {
@@ -31,20 +34,24 @@ type LoginOtpDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   phone: string;
-  loginData: {
-    email: string;
-    password: string;
-  };
+  /** 2차 인증 플로우: request-2fa 이후 받은 temp_token */
+  tempJwt: string;
+  /** request-2fa 재전송 등으로 토큰이 갱신될 수 있어 외부에 반영 */
+  onTempJwtChange?: (jwt: string) => void;
 };
 
 export const LoginOtpDialog = ({
   open,
   onOpenChange,
   phone,
-  loginData,
+  tempJwt,
+  onTempJwtChange,
 }: LoginOtpDialogProps) => {
-  const loginMutation = useLogin();
+  const router = useRouter();
+  const setLogin = useAuthStore((state) => state.setLogin);
   const [timeLeft, setTimeLeft] = useState(INITIAL_TIME);
+  const [verifyPending, setVerifyPending] = useState(false);
+  const [resendPending, setResendPending] = useState(false);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -86,38 +93,59 @@ export const LoginOtpDialog = ({
   };
 
   // 재전송 핸들러
-  const handleResend = () => {
+  const handleResend = async () => {
     setTimeLeft(INITIAL_TIME);
-    // TODO: 재전송 API 호출
+    // 현재는 휴대폰 라디오가 비활성화라 사실상 email만 사용됨
+    const type = phone === "휴대폰" ? "mobile" : "email";
+
+    setResendPending(true);
+    try {
+      const res = await postRequestLogin2FAOtp({ type, tempJwt });
+      // 재전송 성공 시 서버가 새 temp_token을 주므로 갱신
+      onTempJwtChange?.(res.temp_token);
+    } catch {
+      alert("재전송에 실패했습니다. 잠시 후 다시 시도해주세요.");
+    } finally {
+      setResendPending(false);
+    }
   };
 
   const handleOtpSuccess = async (data: z.infer<typeof FormSchema>) => {
-    // API 미구현 상태: 기본값 123456으로 통과
-    if (data.otp === "123456") {
-      // OTP 검증 성공 후 실제 로그인 API 호출
-      // 로그인 성공 시 useLogin의 onSuccess에서 router.push로 페이지 이동하므로
-      // 팝업은 자동으로 닫히게 됨
-      loginMutation.mutate(
-        {
-          email: loginData.email,
-          password: loginData.password,
-        },
-        {
-          onSuccess: () => {
-            // 로그인 성공 시 팝업 닫기 및 폼 리셋 (페이지 이동 전에 실행됨)
-            onOpenChange(false);
-            form.reset();
-          },
-          onError: () => {
-            // 에러 발생 시 팝업은 열려있도록 유지
-          },
-        }
-      );
-    } else {
+    // 2차 인증 플로우: temp_token으로 OTP 검증 API 호출 (성공해야만 로그인 완료)
+    setVerifyPending(true);
+    try {
+      const type = phone === "휴대폰" ? "mobile" : "email";
+      const loginDataRes = await postVerifyLoginOtp({
+        otp: data.otp,
+        type,
+        tempJwt,
+      });
+      setLogin({
+        isLogin: true,
+        adminName: loginDataRes.admin_info.admin_name,
+        adminEmail: loginDataRes.admin_info.admin_email,
+        adminMobile: loginDataRes.admin_info.mobile,
+        adminRole: loginDataRes.admin_info.admin_role,
+        adminSn: loginDataRes.admin_info.sn,
+        centerSn: 0,
+        centerName: "",
+        accessJwt: loginDataRes.access_jwt,
+      });
+      document.cookie = `isLogin=true; path=/; max-age=${60 * 60 * 3}`;
+      onOpenChange(false);
+      form.reset();
+      router.push("/center");
+    } catch (error) {
+      const message =
+        error instanceof Verify2FAError
+          ? error.userMessage
+          : "OTP가 올바르지 않습니다.";
       form.setError("otp", {
         type: "manual",
-        message: "OTP가 올바르지 않습니다.",
+        message,
       });
+    } finally {
+      setVerifyPending(false);
     }
   };
 
@@ -127,7 +155,9 @@ export const LoginOtpDialog = ({
         <DialogHeader>
           <DialogTitle>이중 인증</DialogTitle>
           <DialogDescription>
-            등록된 핸드폰 번호({phone})로 OTP를 전송했습니다.
+            {phone === "이메일" || phone === "휴대폰"
+              ? `등록된 ${phone}(으)로 OTP를 전송했습니다.`
+              : `등록된 핸드폰 번호(${phone})로 OTP를 전송했습니다.`}
             <br />
             OTP를 입력해주세요.
           </DialogDescription>
@@ -152,8 +182,11 @@ export const LoginOtpDialog = ({
                   <InputOTPSlot className="bg-white" index={5} />
                 </InputOTPGroup>
               </InputOTP>
-              <Button type="submit" disabled={loginMutation.isPending}>
-                {loginMutation.isPending ? "확인 중..." : "확인"}
+              <Button
+                type="submit"
+                disabled={verifyPending}
+              >
+                {verifyPending ? "확인 중..." : "확인"}
               </Button>
             </div>
 
@@ -176,8 +209,9 @@ export const LoginOtpDialog = ({
               size="sm"
               onClick={handleResend}
               className="text-sm"
+              disabled={resendPending}
             >
-              재전송
+              {resendPending ? "재전송 중..." : "재전송"}
             </Button>
           </div>
         </form>

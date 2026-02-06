@@ -1,10 +1,11 @@
 import React from "react";
 import ManagerContainer from "@/components/Manager/ManagerContainer";
+import { ManagerPageHeader } from "@/components/Manager/ManagerPageHeader";
 
 const CenterManagerPage = () => {
   return (
     <div className="flex flex-col gap-5">
-      <h1 className="text-2xl">매니저 관리</h1>
+      <ManagerPageHeader />
       <ManagerContainer />
     </div>
   );

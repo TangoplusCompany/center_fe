@@ -57,6 +57,18 @@ export interface ICenterActivityAgeGroup {
   };
 }
 
+/** auth/admins/{admin_sn}/centers 응답의 data 항목 */
+export interface IAdminCenterListItem {
+  center_sn: number;
+  admin_sn: number;
+  center_id: string;
+  center_name: string;
+  center_address: string;
+  center_address_detail: string;
+  /** 1: 주관리자, 2: 부관리자 (없으면 라벨 미표시) */
+  admin_role?: 1 | 2;
+}
+
 /** 센터 목록 카드용 - 기존 타입과 분리 */
 export interface ICenterCardProps {
   centerId: number;

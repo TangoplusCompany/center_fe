@@ -6,7 +6,7 @@ import DefaultSidebar from "@/components/Layouts/DefaultSidebar";
 import AuthStoreProvider from "@/providers/AuthProvider";
 import { useEffect } from "react";
 import { createAuthStore } from "@/stores/AuthStore";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function AuthLayout({
   children,
@@ -15,6 +15,8 @@ export default function AuthLayout({
 }>) {
   const authStore = createAuthStore();
   const router = useRouter();
+  const pathname = usePathname();
+  const hideSidebar = pathname === "/center";
   useEffect(() => {
     const hasLogin = document.cookie.includes("isLogin=true");
     if (!hasLogin) {
@@ -26,7 +28,7 @@ export default function AuthLayout({
     <div className="w-full min-w-0 overflow-x-hidden">
       <SidebarProvider>
         <AuthStoreProvider>
-          <DefaultSidebar />
+          {!hideSidebar && <DefaultSidebar />}
           <DefaultLayout>{children}</DefaultLayout>
         </AuthStoreProvider>
       </SidebarProvider>

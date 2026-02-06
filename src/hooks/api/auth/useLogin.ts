@@ -20,13 +20,15 @@ export const useLogin = () => {
         isLogin: true,
         adminName: data.admin_info.admin_name,
         adminEmail: data.admin_info.admin_email,
-        adminMobile: data.admin_info.mobile, 
+        adminMobile: data.admin_info.mobile,
         adminRole: data.admin_info.admin_role,
         adminSn: data.admin_info.sn,
+        centerSn: 0,
+        centerName: "",
         accessJwt: data.access_jwt,
       });
       document.cookie = `isLogin=true; path=/; max-age=${60 * 60 * 3}`;
-      router.push("/");
+      router.push("/center");
     },
     onError: (
       data: AxiosError<{

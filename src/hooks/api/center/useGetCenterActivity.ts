@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getCenterActivity } from "@/services/center/getCenterActivity";
+import { useAuthStore } from "@/providers/AuthProvider";
 import { ICenterActivityResponse } from "@/types/center";
 
 /**
@@ -7,8 +8,11 @@ import { ICenterActivityResponse } from "@/types/center";
  * @returns 센터 대시보드 데이터 조회 쿼리
  */
 export const useGetCenterActivity = () => {
+  const centerSn = useAuthStore((state) => state.centerSn);
+
   return useQuery<ICenterActivityResponse>({
-    queryKey: ['centerActivity'],
-    queryFn: async () => await getCenterActivity(),
+    queryKey: ["centerActivity", centerSn],
+    queryFn: async () => await getCenterActivity(centerSn),
+    enabled: centerSn > 0,
   });
 };

@@ -7,11 +7,14 @@ import { useAuthStore } from "@/providers/AuthProvider";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useLogout } from "@/hooks/api/auth/useLogout";
 import { Button } from "@/components/ui/button";
+import { usePathname } from "next/navigation";
 
 export default function DefaultHeaderLayout() {
   const adminName = useAuthStore((state) => state.adminName);
   const adminRole = useAuthStore((state) => state.adminRole);
   const logoutMutation = useLogout();
+  const pathname = usePathname();
+  const hideSidebarTrigger = pathname === "/center";
 
   const handleLogout = () => {
     logoutMutation.mutate();
@@ -20,10 +23,12 @@ export default function DefaultHeaderLayout() {
   return (
     <header className="sticky top-0 left-0 right-0 z-10 bg-white dark:bg-black flex w-full h-auto min-h-16 md:h-20 px-4 md:px-12 py-2 md:py-5 justify-between items-center">
       <div className="flex items-center min-w-0">
-        <SidebarTrigger
-          className="xl:hidden shrink-0 h-9 w-9"
-          aria-label="사이드바 열기"
-        />
+        {!hideSidebarTrigger && (
+          <SidebarTrigger
+            className="xl:hidden shrink-0 h-9 w-9"
+            aria-label="사이드바 열기"
+          />
+        )}
         <div className="block pl-[10px] min-w-0">
           <LayoutBreadCrumb />
         </div>

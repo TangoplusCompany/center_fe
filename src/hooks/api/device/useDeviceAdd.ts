@@ -1,6 +1,7 @@
 import { postDeviceAdd } from "@/services/device/postDeviceAdd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { useAuthStore } from "@/providers/AuthProvider";
 
 /**
  * 센터 기기 추가 Hooks
@@ -8,8 +9,11 @@ import { AxiosError } from "axios";
  */
 export const useDeviceAdd = () => {
   const queryClient = useQueryClient();
+  const centerSn = useAuthStore((state) => state.centerSn);
+
   return useMutation({
-    mutationFn: postDeviceAdd,
+    mutationFn: ({ deviceSn }: { deviceSn: number }) =>
+      postDeviceAdd({ centerSn, deviceSn }),
     onSuccess: () => {
       alert("성공적으로 기기가 추가되었습니다.");
       queryClient.invalidateQueries({ queryKey: ["deviceStatusList"] });

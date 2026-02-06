@@ -1,5 +1,6 @@
 import { IDeviceSearchForm } from "@/schemas/deviceSchema";
 import { getDeviceSearch } from "@/services/device/getDeviceSearch";
+import { useAuthStore } from "@/providers/AuthProvider";
 import { IDeviceSearch } from "@/types/device";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -15,8 +16,11 @@ export const useGetDeviceSearch = (
   setError: UseFormSetError<IDeviceSearchForm>,
   getDeviceInfo: (data: IDeviceSearch | null) => void,
 ) => {
+  const centerSn = useAuthStore((state) => state.centerSn);
+
   return useMutation({
-    mutationFn: getDeviceSearch,
+    mutationFn: ({ deviceId }: { deviceId: string }) =>
+      getDeviceSearch({ centerSn, deviceId }),
     onSuccess: (data: IDeviceSearch) => {
       getDeviceInfo(data);
     },

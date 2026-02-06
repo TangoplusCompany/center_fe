@@ -13,30 +13,36 @@ export const useOtpDialog = () => {
   const [isOtpDialogOpen, setIsOtpDialogOpen] = useState(false);
   const [phone, setPhone] = useState("");
   const [loginData, setLoginData] = useState<LoginData | null>(null);
+  const [tempJwt, setTempJwt] = useState<string | null>(null);
 
-  const openDialog = (phoneNumber: string, loginInfo: LoginData) => {
+  const openDialog = (
+    phoneNumber: string,
+    loginInfo: LoginData,
+    jwt?: string | null,
+  ) => {
     setPhone(phoneNumber);
     setLoginData(loginInfo);
+    setTempJwt(jwt ?? null);
     setIsOtpDialogOpen(true);
   };
 
   const closeDialog = () => {
     setIsOtpDialogOpen(false);
-    // 다이얼로그가 닫힐 때 상태 초기화 (선택사항)
-    // setPhone("");
-    // setLoginData(null);
   };
 
   const resetDialog = () => {
     setIsOtpDialogOpen(false);
     setPhone("");
     setLoginData(null);
+    setTempJwt(null);
   };
 
   return {
     isOtpDialogOpen,
     phone,
     loginData,
+    tempJwt,
+    updateTempJwt: (jwt: string | null) => setTempJwt(jwt),
     openDialog,
     closeDialog,
     resetDialog,
