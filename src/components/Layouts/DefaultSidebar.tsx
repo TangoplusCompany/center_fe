@@ -140,7 +140,7 @@ export default function DefaultSidebar() {
 
   return (
     <Sidebar collapsible="icon" className="bg-[#F1F5F9] dark:bg-black">
-      <SidebarHeader className="bg-[#F1F5F9] dark:bg-black h-20 !flex !flex-row !items-center !p-0 px-2">
+      <SidebarHeader className="bg-toggleAccent-background h-20 !flex !flex-row !items-center !p-0 px-2">
         <div className="flex items-center w-full">
           {/* 👇 앱로고와 텍스트는 SidebarMenuButton 안에 - 접히면 사라짐 */}
           <SidebarMenuButton 
@@ -166,7 +166,7 @@ export default function DefaultSidebar() {
           </SidebarMenuButton>
         </div>
       </SidebarHeader>
-      <SidebarContent className="bg-[#F1F5F9] dark:bg-black !overflow-hidden">
+      <SidebarContent className="bg-toggleAccent-background !overflow-hidden">
         <SidebarGroup>
           {/* <SidebarGroupLabel>DASHBOARD</SidebarGroupLabel> */}
           <SidebarGroupContent>
@@ -227,7 +227,7 @@ export default function DefaultSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="bg-[#F1F5F9] dark:bg-black">
+      <SidebarFooter className="bg-toggleAccent-background">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>

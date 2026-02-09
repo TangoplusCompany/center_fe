@@ -34,7 +34,7 @@ const UserDetailTap = ({
   };
   return (
     <div className="w-full flex items-center justify-between gap-2">
-      <div className="inline-flex rounded-xl bg-gray-100 dark:bg-gray-800 p-1">
+      <div className="inline-flex rounded-xl bg-sub200 p-1 gap-1 w-max">
         {["최근", "기록 요약", "기록 비교", "사용자 정보"].map((item, index) => {
           return (
             <button
@@ -42,8 +42,8 @@ const UserDetailTap = ({
               type="button"
               className={`${
                 nowTab === index
-                  ? "bg-toggleAccent dark:bg-gray-700 text-white dark:text-gray-100 shadow-sm"
-                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                  ? "bg-toggleAccent text-white shadow-sm"
+                  : "text-sub600 hover:text-sub700"
               } px-2 sm:px-4 py-1 text-xs sm:text-sm font-medium rounded-xl transition-all whitespace-normal sm:whitespace-nowrap text-center leading-tight`}
               onClick={() => {
                 handleClick(index)

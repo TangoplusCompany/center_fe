@@ -128,7 +128,7 @@ const MeasureSummaryGraph = ({
   return (
     <Card className="shadow-none rounded-xl border-2 border-sub200">
       <CardHeader className="p-4 py-2">
-        <div className="text-xl font-semibold text-sub800">
+        <div className="text-xl font-semibold text-sub700">
           {getTitle(dCase)}
         </div>
       </CardHeader>

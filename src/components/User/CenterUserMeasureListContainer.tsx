@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { CenterUserMeasureList } from "@/components/User/CenterUserMeasureList";
 import CenterUserMeasureListSkeleton from "@/components/User/CenterUserMeasureListSkeleton";
 import CustomPagination from "@/components/common/Pagination";
@@ -11,14 +11,14 @@ import DataError from "@/components/Util/DataError";
 import { CompareSlot } from "@/types/compare";
 import { IMeasureList } from "@/types/measure";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
-import { ko } from "date-fns/locale";
-import { DateRange } from "react-day-picker";
-import { cn } from "@/lib/utils";
+// import { Calendar } from "@/components/ui/calendar";
+// import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+// import { Button } from "@/components/ui/button";
+// import { CalendarIcon } from "lucide-react";
+// import { format } from "date-fns";
+// import { ko } from "date-fns/locale";
+// import { DateRange } from "react-day-picker";
+// import { cn } from "@/lib/utils";
 
 const CenterUserMeasureListContainer = ({ 
   // userUUID,
@@ -77,104 +77,104 @@ const CenterUserMeasureListContainer = ({
 
   // query에서 날짜 범위 가져오기
   // 달력 범위 (임시 상태)
-  const [tempDateRange, setTempDateRange] = useState<DateRange | undefined>(() => {
-    if (from && to) {
-      return {
-        from: new Date(from),
-        to: new Date(to),
-      };
-    }
-    return undefined;
-  });
+  // const [tempDateRange, setTempDateRange] = useState<DateRange | undefined>(() => {
+  //   if (from && to) {
+  //     return {
+  //       from: new Date(from),
+  //       to: new Date(to),
+  //     };
+  //   }
+  //   return undefined;
+  // });
 
   // Popover 열림 상태
-  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-  const [isNewSelection, setIsNewSelection] = useState(false);
-  const handleDateSelect = (range: DateRange | undefined) => {
-    // range가 undefined면 그냥 설정
-    if (!range) {
-      setTempDateRange(undefined);
-      setIsNewSelection(false);
-      return;
-    }
+  // const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  // const [isNewSelection, setIsNewSelection] = useState(false);
+  // const handleDateSelect = (range: DateRange | undefined) => {
+  //   // range가 undefined면 그냥 설정
+  //   if (!range) {
+  //     setTempDateRange(undefined);
+  //     setIsNewSelection(false);
+  //     return;
+  //   }
 
-    if (range.from && !range.to) {
-      // ✅ 이미 완성된 범위가 있고, 새로운 날짜를 클릭한 경우
-      if (tempDateRange?.from && tempDateRange?.to && !isNewSelection) {
-        // 기존 범위를 초기화하고 새로 시작
-        setTempDateRange({ from: range.from, to: undefined });
-        setIsNewSelection(true);
-      } else {
-        setTempDateRange(range);
-      }
-      return;
-    }
+  //   if (range.from && !range.to) {
+  //     // ✅ 이미 완성된 범위가 있고, 새로운 날짜를 클릭한 경우
+  //     if (tempDateRange?.from && tempDateRange?.to && !isNewSelection) {
+  //       // 기존 범위를 초기화하고 새로 시작
+  //       setTempDateRange({ from: range.from, to: undefined });
+  //       setIsNewSelection(true);
+  //     } else {
+  //       setTempDateRange(range);
+  //     }
+  //     return;
+  //   }
 
-    // from과 to가 모두 있는 경우 (범위 선택 완료)
-    if (range.from && range.to) {
-      setTempDateRange(range);
-      setIsNewSelection(false); // 선택 완료되면 플래그 리셋
-      return;
-    }
+  //   // from과 to가 모두 있는 경우 (범위 선택 완료)
+  //   if (range.from && range.to) {
+  //     setTempDateRange(range);
+  //     setIsNewSelection(false); // 선택 완료되면 플래그 리셋
+  //     return;
+  //   }
 
-    setTempDateRange(range);
-  };
+  //   setTempDateRange(range);
+  // };
 
     // ✅ Popover가 열릴 때 적용된 날짜로 초기화
-  const handlePopoverOpenChange = (open: boolean) => {
-    if (open) {
-      // Popover 열 때 현재 적용된 날짜로 초기화
-      if (from && to) {
-        setTempDateRange({
-          from: new Date(from),
-          to: new Date(to),
-        });
-      }
-      setIsNewSelection(false); // 새 선택 플래그 리셋
-    }
-    setIsPopoverOpen(open);
-  };
+  // const handlePopoverOpenChange = (open: boolean) => {
+  //   if (open) {
+  //     // Popover 열 때 현재 적용된 날짜로 초기화
+  //     if (from && to) {
+  //       setTempDateRange({
+  //         from: new Date(from),
+  //         to: new Date(to),
+  //       });
+  //     }
+  //     setIsNewSelection(false); // 새 선택 플래그 리셋
+  //   }
+  //   setIsPopoverOpen(open);
+  // };
 
-  // 날짜 범위 적용
-  const handleApplyDateRange = () => {
-    if (tempDateRange?.from && tempDateRange?.to) {
-      setQueryParam([
-        ["from", format(tempDateRange.from, "yyyy-MM-dd")],
-        ["to", format(tempDateRange.to, "yyyy-MM-dd")],
-        ["page", "1"],
-      ]);
-    } else if (tempDateRange?.from) {
-      // 시작일만 선택된 경우
-      setQueryParam([
-        ["from", format(tempDateRange.from, "yyyy-MM-dd")],
-        ["page", "1"],
-      ]);
-    }
-    setIsPopoverOpen(false);
-    setIsNewSelection(false);
-  };
+  // // 날짜 범위 적용
+  // const handleApplyDateRange = () => {
+  //   if (tempDateRange?.from && tempDateRange?.to) {
+  //     setQueryParam([
+  //       ["from", format(tempDateRange.from, "yyyy-MM-dd")],
+  //       ["to", format(tempDateRange.to, "yyyy-MM-dd")],
+  //       ["page", "1"],
+  //     ]);
+  //   } else if (tempDateRange?.from) {
+  //     // 시작일만 선택된 경우
+  //     setQueryParam([
+  //       ["from", format(tempDateRange.from, "yyyy-MM-dd")],
+  //       ["page", "1"],
+  //     ]);
+  //   }
+  //   setIsPopoverOpen(false);
+  //   setIsNewSelection(false);
+  // };
 
-  // 날짜 범위 초기화
-  const handleResetDateRange = () => {
-    setTempDateRange(undefined);
-    setIsNewSelection(false);
-    const currentParams = new URLSearchParams(window.location.search);
-    currentParams.delete("from");
-    currentParams.delete("to");
+  // // 날짜 범위 초기화
+  // const handleResetDateRange = () => {
+  //   setTempDateRange(undefined);
+  //   setIsNewSelection(false);
+  //   const currentParams = new URLSearchParams(window.location.search);
+  //   currentParams.delete("from");
+  //   currentParams.delete("to");
     
-    window.history.replaceState(
-      {},
-      "",
-      `${window.location.pathname}?${currentParams.toString()}`
-    );
-    setIsPopoverOpen(false);
-  };
+  //   window.history.replaceState(
+  //     {},
+  //     "",
+  //     `${window.location.pathname}?${currentParams.toString()}`
+  //   );
+  //   setIsPopoverOpen(false);
+  // };
 
-  // 현재 적용된 날짜 범위 (표시용)
-  const appliedDateRange = from && to ? {
-    from: new Date(from),
-    to: new Date(to),
-  } : undefined;
+  // // 현재 적용된 날짜 범위 (표시용)
+  // const appliedDateRange = from && to ? {
+  //   from: new Date(from),
+  //   to: new Date(to),
+  // } : undefined;
 
   const measurements: IMeasureList[] = useMemo(() => {
     if (!userMeasureList?.measurement_list) return [];
@@ -269,8 +269,8 @@ const CenterUserMeasureListContainer = ({
           </Select>
         </div>
 
-        <Popover open={isPopoverOpen} onOpenChange={handlePopoverOpenChange}>
-          <PopoverTrigger asChild>
+        {/* <Popover open={isPopoverOpen} onOpenChange={handlePopoverOpenChange}> */}
+          {/* <PopoverTrigger asChild>
             <Button
               variant="outline"
               className={cn(
@@ -292,8 +292,8 @@ const CenterUserMeasureListContainer = ({
                 <span>날짜 범위 선택</span>
               )}
             </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
+          </PopoverTrigger> */}
+          {/* <PopoverContent className="w-auto p-0" align="start">
             <Calendar
               initialFocus
               mode="range"
@@ -302,9 +302,8 @@ const CenterUserMeasureListContainer = ({
               onSelect={handleDateSelect}  // ✅ 커스텀 핸들러 사용
               numberOfMonths={2}
               locale={ko}
-            />
-            {/* 하단 버튼 영역 */}
-            <div className="flex justify-end gap-2 p-3 border-t">
+            /> */}
+            {/* <div className="flex justify-end gap-2 p-3 border-t">
               <Button
                 variant="outline"
                 size="sm"
@@ -320,9 +319,9 @@ const CenterUserMeasureListContainer = ({
               >
                 적용
               </Button>
-            </div>
-          </PopoverContent>
-        </Popover>
+            </div> */}
+          {/* </PopoverContent> */}
+        {/* </Popover> */}
       </div>
     </div>
     

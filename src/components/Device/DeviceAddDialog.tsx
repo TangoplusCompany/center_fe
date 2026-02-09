@@ -21,24 +21,26 @@ const DeviceAddDialog = () => {
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="outline" className="w-full bg-toggleAccent-background border-none shadow-none">
-          <div className="flex gap-2 text-base text-toggleAccent items-center">
-              <svg 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path 
-                  d="M14.5986 7C15.3718 7 15.999 7.62719 15.999 8.40039V20.2998C15.999 20.6864 15.6854 21 15.2988 21H5.49902C5.11256 20.9998 4.79883 20.6863 4.79883 20.2998V8.40039C4.79883 7.62727 5.42613 7.00013 6.19922 7H14.5986ZM10.5 18.5C9.94772 18.5 9.5 18.9477 9.5 19.5C9.5 20.0523 9.94772 20.5 10.5 20.5C11.0523 20.5 11.5 20.0523 11.5 19.5C11.5 18.9477 11.0523 18.5 10.5 18.5ZM7.59961 9.10059C7.21312 9.10072 6.89941 9.41426 6.89941 9.80078V17.5C6.89941 17.8865 7.21312 18.2001 7.59961 18.2002H13.1992C13.5858 18.2002 13.8994 17.8866 13.8994 17.5V9.80078C13.8994 9.41418 13.5858 9.10059 13.1992 9.10059H7.59961Z" 
-                  fill="#2c4fd0"
-                />
-                <path 
-                  d="M16 4H20M18 2V6" 
-                  stroke="#2c4fd0"
-                  strokeLinecap="round"
-                />
-              </svg>
-              기기 추가
-            </div>
+          <div className="flex gap-2 text-base text-toggleAccent dark:text-white items-center">
+            <svg 
+              className="text-toggleAccent dark:text-white"
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path 
+                d="M14.5986 7C15.3718 7 15.999 7.62719 15.999 8.40039V20.2998C15.999 20.6864 15.6854 21 15.2988 21H5.49902C5.11256 20.9998 4.79883 20.6863 4.79883 20.2998V8.40039C4.79883 7.62727 5.42613 7.00013 6.19922 7H14.5986ZM10.5 18.5C9.94772 18.5 9.5 18.9477 9.5 19.5C9.5 20.0523 9.94772 20.5 10.5 20.5C11.0523 20.5 11.5 20.0523 11.5 19.5C11.5 18.9477 11.0523 18.5 10.5 18.5ZM7.59961 9.10059C7.21312 9.10072 6.89941 9.41426 6.89941 9.80078V17.5C6.89941 17.8865 7.21312 18.2001 7.59961 18.2002H13.1992C13.5858 18.2002 13.8994 17.8866 13.8994 17.5V9.80078C13.8994 9.41418 13.5858 9.10059 13.1992 9.10059H7.59961Z" 
+                className="fill-current"
+              />
+              <path 
+                d="M16 4H20M18 2V6" 
+                className="stroke-current" /* 3. stroke 속성 대신 className에 넣기 */
+                strokeWidth="2"           /* 4. 선이 얇다면 두께를 지정하세요 */
+                strokeLinecap="round"
+              />
+            </svg>
+            기기 추가
+          </div>
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-fit rounded-2xl sm:rounded-xl">

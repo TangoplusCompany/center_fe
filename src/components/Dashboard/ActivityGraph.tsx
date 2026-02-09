@@ -41,7 +41,7 @@ const ActivityGraph = ({
         { label: "30대", value: ageData.thirties },
         { label: "40대", value: ageData.forties },
         { label: "50대", value: ageData.fifties },
-        { label: "60+대", value: ageData.sixties + ageData.seventies + ageData.eighties + ageData.nineties },
+        { label: "60대+", value: ageData.sixties + ageData.seventies + ageData.eighties + ageData.nineties },
 
       ];
     }
@@ -60,7 +60,7 @@ const ActivityGraph = ({
   return (
     <div className="w-full flex flex-col border-2 border-toggleAccent-background rounded-xl gap-6 bg-gradient-to-b from-[#2c4fd0]/10 from-[2%] to-white to-[40%] dark:from-[#2c4fd0]/20 dark:to-background">
       <div className="w-full p-4 flex justify-between items-center">
-        <div className="text-xl font-semibold text-toggleAccent">
+        <div className="text-xl font-semibold text-toggleAccent dark:text-white">
           {data.case === 0 && "요일별 사용량"}
           {data.case === 1 && "회원 연령대"}
         </div>

@@ -105,7 +105,7 @@ const DeviceChart = ({
     <Card className="rounded-lg shadow-none border-2 border-toggleAccent-background">
       <CardHeader className="flex items-center gap-2 space-y-0 border-2 border-toggleAccent-background py-2 sm:flex-row bg-toggleAccent-background">
         <div className="grid flex-1 gap-1 text-center sm:text-left">
-          <CardTitle className="text-toggleAccent text-xl">센터 키오스크 사용자 추이</CardTitle>
+          <CardTitle className="text-toggleAccent text-xl dark:text-white">센터 키오스크 사용자 추이</CardTitle>
         </div>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">

@@ -36,7 +36,7 @@ const MeasureBest = ({ data }: { data: TWorstPart }) => {
           alt=""
           className="w-10 h-10 rounded-full"
         />
-        <h2 className="text-xl font-bold text-black dark:text-foreground">유지 추천 부위</h2>
+        <h2 className="text-xl font-bold text-sub700">유지 추천 부위</h2>
       </div>
 
       {/* 왼쪽 내용 */}
@@ -45,7 +45,7 @@ const MeasureBest = ({ data }: { data: TWorstPart }) => {
         <div
           className={`w-fit px-3 py-1 ${
             data.level === 0
-              ? "bg-toggleAccent text-toggleAccent-foreground"
+              ? "bg-toggleAccent text-white"
               : "bg-secondary text-secondary-foreground"
           } text-lg font-semibold rounded-xl`}
         >

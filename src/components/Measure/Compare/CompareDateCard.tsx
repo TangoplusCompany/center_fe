@@ -24,10 +24,10 @@ const CompareDateCard = ({ regDate, currentSlot, onCardClick }: CompareCardProps
       <div className="flex items-center justify-center min-h-[24px]">
         {regDate ? (
           <div className="flex flex-col items-center gap-1">
-            <span className="text-base text-sub800 dark:text-foreground font-semibold hover:text-toggleAccent">{regDate}</span>
+            <span className="text-base text-sub700 dark:text-foreground font-semibold hover:text-toggleAccent">{regDate}</span>
           </div>
         ) : (
-          <button className="text-base text-sub800 dark:text-muted-foreground font-medium">
+          <button className="text-base text-sub700 dark:text-muted-foreground font-medium">
             비교할 항목을 선택해주세요
           </button>
         )}

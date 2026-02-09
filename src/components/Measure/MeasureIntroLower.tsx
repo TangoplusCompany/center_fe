@@ -52,7 +52,7 @@ const MeasureIntroLower  = (
         </span>
       </div>
       {/* 코멘트 */}
-      <div className="text-base text-sub800 dark:text-gray-200 whitespace-pre-line mb-4">
+      <div className="text-base text-sub700 dark:text-gray-200 whitespace-pre-line mb-4">
         {formattedComment}
       </div>
     </div>
