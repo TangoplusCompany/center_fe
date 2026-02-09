@@ -47,6 +47,7 @@ body {
     --warning-foreground: 33 100% 61.4% / 0.35; 
     --warning-deep:33 100% 28.2%;
     --sub100: 0 0% 97.3%;
+    --sub150: 0 0% 96.1%;
     --sub200: 0 0% 92.9%;
     --sub300: 0 0% 86.3%;
     --sub400: 0 0% 73.3%;
@@ -80,10 +81,9 @@ body {
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
     --toggle-accent: 210 40% 96.1%;
+    --toggle-accent-deep: 227 65.1% 49.4%;
     --toggle-accent-foreground: 0 0% 0%;
-    /* 다크 모드: 어두운 배경과 어울리는 블루-그레이 톤 */
-    --toggle-accent-background: 228 22% 22%;
-    /* 차트 범례 선택: 다크에서 잘 보이도록 밝은 블루 */
+    --toggle-accent-background: 227 65.1% 40.4%;
     --chart-legend-active: 227 60% 52%;
     --chart-legend-active-foreground: 0 0% 100%;
     --danger: 0 100% 64.5%;
@@ -94,10 +94,11 @@ body {
     --warning-foreground: 33 100% 88.6%; 
     --warning-deep:33 100% 28.2%;
     --sub100: 0 0% 27.1%;
-    --sub200: 0 0% 49.4%;
-    --sub300: 0 0% 73.3%;
-    --sub400: 0 0% 86.3%;
-    --sub600: 0 0% 92.9%;
+    --sub150: 0 0% 49.4%;
+    --sub200: 0 0% 73.3%;
+    --sub300: 0 0% 86.3%;
+    --sub400: 0 0% 92.9%;
+    --sub600: 0 0% 96.1%;
     --sub800: 0 0% 97.3%;
   }
 }

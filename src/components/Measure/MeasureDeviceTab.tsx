@@ -36,13 +36,13 @@ const MeasureDeviceTab = () => {
       className="overflow-x-auto overflow-y-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
       style={{ maxWidth: '100%' }}
     >
-      <div className="inline-flex rounded-xl bg-gray-100 dark:bg-gray-800 p-1 gap-1 w-max">
+      <div className="inline-flex rounded-xl bg-sub200 p-1 gap-1 w-max">
         {/* 전체 조회 */}
         <button
           type="button"
           className={`${
             deviceSn === "0"
-              ? "bg-toggleAccent dark:bg-gray-700 text-white dark:text-gray-100 shadow-sm"
+              ? "bg-toggleAccent dark:bg-toggleAccent text-white shadow-sm"
               : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
           } px-4 py-1 text-sm font-medium rounded-xl transition-all whitespace-nowrap`}
           onClick={() => handleDeviceClick(0)}

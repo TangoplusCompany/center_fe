@@ -24,7 +24,7 @@ const DashboardDeviceStatus = ({
       className="w-full col-span-1 items-center justify-between rounded-xl border-2 border-toggleAccent-background relative cursor-pointer hover:border-toggleAccent transition-colors"
     >
       <div className="w-full flex flex-col">
-        <div className="flex items-center justify-start rounded-t-xl text-xl text-toggleAccent font-semibold bg-toggleAccent-background px-4 py-2 w-full">
+        <div className="flex items-center justify-start rounded-t-lg text-xl text-toggleAccent font-semibold bg-toggleAccent-background px-4 py-2 w-full">
           {device.device_name}
         </div>
         
