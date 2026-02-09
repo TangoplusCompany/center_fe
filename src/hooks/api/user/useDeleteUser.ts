@@ -1,6 +1,7 @@
 import { deleteUser } from "@/services/user/deleteUser";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { useAuthStore } from "@/providers/AuthProvider";
 
 /**
  * 사용자 삭제 Hooks
@@ -8,8 +9,10 @@ import { AxiosError } from "axios";
  * @returns 사용자 삭제 뮤테이션
  */
 export const useDeleteUser = (refetch: () => void) => {
+  const centerSn = useAuthStore((state) => state.centerSn);
   return useMutation({
-    mutationFn: deleteUser,
+    mutationFn: ({ sn }: { sn: number }) =>
+      deleteUser({ sn, center_sn: centerSn }),
     onSuccess: (data) => {
       console.log(data.message);
       alert("사용자 제거에 성공했습니다.");
