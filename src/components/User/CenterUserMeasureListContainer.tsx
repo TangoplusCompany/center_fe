@@ -57,7 +57,7 @@ const CenterUserMeasureListContainer = ({
     sort,
     isResultPage,
   });
-
+  console.log(userMeasureList)
   const handleSelectChange = (value: string) => {
       setQueryParam([
         ["limit", value],
@@ -240,33 +240,41 @@ const CenterUserMeasureListContainer = ({
       </div> */}
 
       <div className="flex flex-col sm:flex-row items-end sm:items-center justify-end gap-2 sm:gap-4 w-full">
-        <div className="flex items-center gap-4 justify-end sm:justify-start">
-          <Select
-            onValueChange={handleSelectChange}
-            defaultValue={defaultLimit.toString()}
-          >
-            <SelectTrigger className="max-w-[120px]">
-              <SelectValue placeholder="행 갯수" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="10">10건</SelectItem>
-              <SelectItem value="20">20건</SelectItem>
-              <SelectItem value="50">50건</SelectItem>
-            </SelectContent>
-          </Select>
+        <div className="flex flex-1 justify-between items-center">
+          {/* 총 갯수 표시 */}
+          {userMeasureList && (
+            <div className="text-base text-muted-foreground ">
+              총 <span className="font-semibold text-foreground">{userMeasureList.total}</span>건
+            </div>
+          )}
+          <div className="flex items-center gap-4 ">
+            <Select
+              onValueChange={handleSelectChange}
+              defaultValue={defaultLimit.toString()}
+            >
+              <SelectTrigger className="max-w-[120px]">
+                <SelectValue placeholder="행 갯수" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="10">10건</SelectItem>
+                <SelectItem value="20">20건</SelectItem>
+                <SelectItem value="50">50건</SelectItem>
+              </SelectContent>
+            </Select>
 
-          <Select
-            onValueChange={handleSortChange}
-            defaultValue={sort}
-          >
-            <SelectTrigger className="max-w-[120px]">
-              <SelectValue placeholder="최신순" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="desc">최신순</SelectItem>
-              <SelectItem value="asc">오래된순</SelectItem>
-            </SelectContent>
-          </Select>
+            <Select
+              onValueChange={handleSortChange}
+              defaultValue={sort}
+            >
+              <SelectTrigger className="max-w-[120px]">
+                <SelectValue placeholder="최신순" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="desc">최신순</SelectItem>
+                <SelectItem value="asc">오래된순</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         {/* <Popover open={isPopoverOpen} onOpenChange={handlePopoverOpenChange}> */}
@@ -329,12 +337,7 @@ const CenterUserMeasureListContainer = ({
       <CenterUserMeasureListSkeleton />
     ) : (
       <>
-        {/* 총 갯수 표시 */}
-        {userMeasureList && (
-          <div className="mb-4 text-sm text-muted-foreground">
-            총 <span className="font-semibold text-foreground">{userMeasureList.total}</span>건
-          </div>
-        )}
+        
         
         <CenterUserMeasureList
           measures={measurements}

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { computeContain, Fit, setupHiDPICanvas } from "../../DetailDynamic";
 import { isNearEnd, isNearStart } from "../utils/compareUtils";
 import { IMeasureJson } from "@/types/measure";
-import { compareCropScale } from "../components/VideoPlayer";
+import { compareCropScale } from "../../VideoPlayer";
 
 const DATA_W = 720;
 const DATA_H = 1280;

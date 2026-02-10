@@ -8,6 +8,7 @@ import { IUserMeasureList } from "@/types/user";
 import { ComparePair, CompareSlot } from "@/types/compare";
 import CenterUserDashBoard from "./CenterUserDashBoard";
 import { useMeasureListForDetail } from "@/hooks/api/user/useMeasureListForDetail";
+import CenterUserROMContainer from "./CenterUserROMContainer";
 
 
 const CenterUserMeasureContainer = ({
@@ -154,6 +155,10 @@ const CenterUserMeasureContainer = ({
           )}
         </>
       )}
+      {tab === 3 && (
+        <CenterUserROMContainer userSn={`${userSn}`} />
+      )}
+
     </>
   );
 };

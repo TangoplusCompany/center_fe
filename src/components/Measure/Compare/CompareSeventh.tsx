@@ -5,7 +5,7 @@ import { useMeasureDynamicJson } from "@/hooks/api/measure/useMeasureDynamicJson
 import { CompareStaticProps } from "./CompareBody";
 import CompareFootTrajectoryGridContainer, { CompareFootTrajectoryGridProps } from "./CompareFootTrajectoryGridContainer";
 import { extractMeasureData } from "./CompareIntro";
-import VideoPlayer from "./components/VideoPlayer";
+import VideoPlayer from "../VideoPlayer";
 
 const MeasureDynamicCompare = ({
   left,

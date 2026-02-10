@@ -4,7 +4,7 @@ import DynamicDataContainer from "./Dynamic/DataContainer";
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
 import { IUserMeasureDynamicFileData } from "@/types/measure";
 import { useMeasureDynamicJson } from "@/hooks/api/measure/useMeasureDynamicJson";
-import VideoPlayer from "./Compare/components/VideoPlayer";
+import VideoPlayer from "./VideoPlayer";
 
 export type Fit = {
   stageW: number;

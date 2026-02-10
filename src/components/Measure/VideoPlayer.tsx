@@ -1,7 +1,7 @@
 import React from "react";
-import { useVideoPlayer } from "../hooks/useVideoPlayer";
-import { PoseLandmarks, setupHiDPICanvas } from "../../DetailDynamic";
-import { drawSkeleton, drawTrailSegment, midPoint } from "../utils/compareUtils";
+import { useVideoPlayer } from "./Compare/hooks/useVideoPlayer";
+import { PoseLandmarks, setupHiDPICanvas } from "./DetailDynamic";
+import { drawSkeleton, drawTrailSegment, midPoint } from "./Compare/utils/compareUtils";
 import { IMeasureJson } from "@/types/measure";
 import { cn } from "@/lib/utils";
 

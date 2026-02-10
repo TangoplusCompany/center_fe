@@ -1,5 +1,4 @@
 import { IResponseDefault } from "./default";
-import { IUserMeasurement } from "./measure";
 
 export interface IUnregisterUserResponse extends IResponseDefault {
   data: {
@@ -66,13 +65,6 @@ export interface IUserMeasureListItem {
   device_name: string;
   center_name: string;
   mobile: string;
-}
-
-export interface IUserDetail {
-  isLogin: boolean;
-  sn: number | string;
-  userName: string;
-  userData: { count: number | string } & IUserMeasurement;
 }
 
 

@@ -184,7 +184,7 @@ const MeasureDetail = ({
                   "relative pb-2 text-lg font-semibold transition-colors whitespace-nowrap flex-shrink-0",
                   "bg-transparent data-[state=active]:bg-transparent",
                   "shadow-none data-[state=active]:shadow-none",
-                  "text-sub600 hover:text-800 data-[state=active]:text-toggleAccent",
+                  "text-sub600 hover:text-sub800 data-[state=active]:text-toggleAccent",
                   "after:absolute after:-bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-md",
                   "after:bg-sub200 data-[state=active]:after:bg-toggleAccent after:z-10"
                 )}
