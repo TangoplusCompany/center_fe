@@ -9,6 +9,7 @@
 // } from "@/components/ui/breadcrumb";
 import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/providers/AuthProvider";
+import Link from "next/link";
 
 /* 기존 BreadCrumb용 Menus - 주석 해제 시 사용
 interface IMenu {
@@ -61,7 +62,6 @@ const breadcrumbLinkClass =
 
 export function LayoutBreadCrumb() {
   const pathName = usePathname();
-  const router = useRouter();
   const centerSn = useAuthStore((state) => state.centerSn);
   const centerName = useAuthStore((state) => state.centerName);
 
@@ -72,21 +72,20 @@ export function LayoutBreadCrumb() {
       {/* 센터목록 링크 */}
       <Link
         href="/center"
-        className={`${breadcrumbLinkClass} text-slate-950 dark:text-foreground`}
+        className={`${breadcrumbLinkClass} text-base xl:text-sn text-slate-950 dark:text-foreground`}
       >
         센터 목록
       </Link>
 
-      {/* 센터 이름 - 있을 때만 표시 */}
+      {/* 센터 이름 - xs에서는 숨김, 있을 때만 표시 */}
       {centerSn && centerName && (
         <span
-          className={`text-base xl:text-xl dark:text-white `}
+          className={`hidden sm:block text-base xl:text-xl dark:text-white`}
         >
           {centerName}
         </span>
       )}
     </div>
-  );
 //   return (
 //   <Breadcrumb>
 //     <BreadcrumbList>
@@ -128,5 +127,5 @@ export function LayoutBreadCrumb() {
 //       )}
 //     </BreadcrumbList>
 //   </Breadcrumb>
-// );
+  );
 }
