@@ -174,12 +174,12 @@ export const LoginOtpDialog = ({
                 onChange={(value) => form.setValue("otp", value)}
               >
                 <InputOTPGroup>
-                  <InputOTPSlot className="bg-white" index={0} />
-                  <InputOTPSlot className="bg-white" index={1} />
-                  <InputOTPSlot className="bg-white" index={2} />
-                  <InputOTPSlot className="bg-white" index={3} />
-                  <InputOTPSlot className="bg-white" index={4} />
-                  <InputOTPSlot className="bg-white" index={5} />
+                  <InputOTPSlot className="bg-white dark:bg-black" index={0} />
+                  <InputOTPSlot className="bg-white dark:bg-black" index={1} />
+                  <InputOTPSlot className="bg-white dark:bg-black" index={2} />
+                  <InputOTPSlot className="bg-white dark:bg-black" index={3} />
+                  <InputOTPSlot className="bg-white dark:bg-black" index={4} />
+                  <InputOTPSlot className="bg-white dark:bg-black" index={5} />
                 </InputOTPGroup>
               </InputOTP>
               <Button
@@ -208,7 +208,7 @@ export const LoginOtpDialog = ({
               variant="ghost"
               size="sm"
               onClick={handleResend}
-              className="text-sm"
+              className="text-sm bg-sub150"
               disabled={resendPending}
             >
               {resendPending ? "재전송 중..." : "재전송"}

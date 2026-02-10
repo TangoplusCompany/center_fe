@@ -119,12 +119,12 @@ export const RegisterOtpDialog = ({
                 onChange={(value) => form.setValue("otp", value)}
               >
                 <InputOTPGroup>
-                  <InputOTPSlot className="bg-white" index={0} />
-                  <InputOTPSlot className="bg-white" index={1} />
-                  <InputOTPSlot className="bg-white" index={2} />
-                  <InputOTPSlot className="bg-white" index={3} />
-                  <InputOTPSlot className="bg-white" index={4} />
-                  <InputOTPSlot className="bg-white" index={5} />
+                  <InputOTPSlot className="bg-white dark:bg-black" index={0} />
+                  <InputOTPSlot className="bg-white dark:bg-black" index={1} />
+                  <InputOTPSlot className="bg-white dark:bg-black" index={2} />
+                  <InputOTPSlot className="bg-white dark:bg-black" index={3} />
+                  <InputOTPSlot className="bg-white dark:bg-black" index={4} />
+                  <InputOTPSlot className="bg-white dark:bg-black" index={5} />
                 </InputOTPGroup>
               </InputOTP>
               <Button type="submit">확인</Button>
@@ -148,7 +148,7 @@ export const RegisterOtpDialog = ({
               variant="ghost"
               size="sm"
               onClick={handleResend}
-              className="text-sm"
+              className="text-sm bg-sub700"
             >
               재전송
             </Button>

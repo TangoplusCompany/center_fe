@@ -32,7 +32,7 @@ export const CenterCard = ({ center }: { center: IAdminCenterListItem }) => {
       onClick={handleCenterClick}
     >
       <div className="flex flex-col">
-        <div className="flex items-center rounded-t-xl text-xl text-toggleAccent dark:text-toggleAccent font-semibold bg-toggleAccent-background dark:bg-toggleAccent-background px-4 py-2 w-full">
+        <div className="flex items-center rounded-t-xl text-xl text-toggleAccent dark:text-white font-semibold bg-toggleAccent-background dark:bg-toggleAccent-background px-4 py-2 w-full">
           <div className="flex items-center gap-2 min-w-0">
             <span className="truncate">{center.center_name}</span>
             {managerLabel != null && (

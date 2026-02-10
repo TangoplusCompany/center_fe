@@ -35,7 +35,7 @@ const UserDetailTap = ({
   return (
     <div className="w-full flex items-center justify-between gap-2">
       <div className="inline-flex rounded-xl bg-sub200 p-1 gap-1 w-max">
-        {["최근", "기록 요약", "기록 비교", "사용자 정보"].map((item, index) => {
+        {["최근", "기록 요약", "기록 비교", "사용자 정보"].map((item, index) => { // "ROM 결과",
           return (
             <button
               key={item + index}
