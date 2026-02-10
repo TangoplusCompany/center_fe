@@ -1,7 +1,7 @@
 import { customAxios, customUserAxios } from "@/lib/axios";
 import { MeasureFootCOP } from "@/types/measure";
 import { useQuery } from "@tanstack/react-query";
-import { useAuthStore } from "@/providers/AuthProvider";
+import { useAuthStoreOptional } from "@/providers/AuthProvider";
 
 export const useGetMeasureFoot = ({
   measure_sn,
@@ -12,7 +12,8 @@ export const useGetMeasureFoot = ({
   user_sn: string;
   isResultPage?: boolean;
 }) => {
-  const centerSn = useAuthStore((state) => state.centerSn);
+  // result-page에서는 AuthStoreProvider가 없으므로 optional 사용
+  const centerSn = useAuthStoreOptional((state) => state.centerSn, 0);
   const axiosInstance = isResultPage ? customUserAxios : customAxios;
   const apiPath = isResultPage
     ? `/users/${user_sn}/measurement/${measure_sn}/foot-cop`

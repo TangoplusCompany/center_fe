@@ -14,6 +14,7 @@ const FindPasswordPage = () => {
     setStep(1);
   };
   const handleRequestOtp = (jwt: string) => {
+    if (!jwt?.trim()) return;
     setJwt(jwt);
     setStep(2);
   };

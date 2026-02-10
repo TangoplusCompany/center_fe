@@ -1,7 +1,7 @@
 import { customAxios, customUserAxios } from "@/lib/axios";
 import { IUserMeasureInfoResponse } from "@/types/measure";
 import { useQuery } from "@tanstack/react-query";
-import { useAuthStore } from "@/providers/AuthProvider";
+import { useAuthStoreOptional } from "@/providers/AuthProvider";
 
 /**
  * 측정 상세 조회
@@ -19,7 +19,8 @@ export const useMeasureInfo = ({
   user_sn: string;
   isResultPage?: boolean;
 }) => {
-  const centerSn = useAuthStore((state) => state.centerSn);
+  // result-page에서는 AuthStoreProvider가 없으므로 optional 사용
+  const centerSn = useAuthStoreOptional((state) => state.centerSn, 0);
   const axiosInstance = isResultPage ? customUserAxios : customAxios;
   const apiPath = isResultPage
     ? `/users/${user_sn}/measurement/${measure_sn}`

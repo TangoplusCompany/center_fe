@@ -3,6 +3,7 @@
 import React from "react";
 import { UseFormRegister, FieldErrors } from "react-hook-form";
 import { useDaumPostcodePopup } from "react-daum-postcode";
+import { KAKAO_POSTCODE_SCRIPT_URL } from "@/lib/postcode";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -25,7 +26,7 @@ const CenterInfoFields = ({
   setValue,
   disabled = false,
 }: CenterInfoFieldsProps) => {
-  const open = useDaumPostcodePopup();
+  const open = useDaumPostcodePopup(KAKAO_POSTCODE_SCRIPT_URL);
 
   const handleAddressSearch = () => {
     open({

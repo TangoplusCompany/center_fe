@@ -7,11 +7,27 @@ import { Label } from "@/components/ui/label";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ReactNode, useState } from "react";
-// import { useRegister } from "@/hooks/api/auth/useRegister";
+import { ReactNode, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useDaumPostcodePopup } from "react-daum-postcode";
+import { KAKAO_POSTCODE_SCRIPT_URL } from "@/lib/postcode";
 import RegisterCenterCheckForm from "./RegisterCenterCheckForm";
 import { RegisterOtpDialog } from "@/components/auth/RegisterOtpDialog";
-import { RegisterCenterInfoDialog } from "./RegisterCenterInfoDialog";
+import { centerEditSchema } from "@/schemas/centerSchema";
+import {
+  postRequestEmailVerificationOtp,
+  getRequestEmailVerificationOtpErrorMessage,
+} from "@/services/auth/postRequestEmailVerificationOtp";
+import {
+  postRegisterAdmin,
+  getRegisterAdminErrorMessage,
+} from "@/services/auth/postRegisterAdmin";
+import {
+  getCheckDevice,
+  getCheckDeviceErrorMessage,
+} from "@/services/auth/getCheckDevice";
+import { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
 
 const registerSchema = z
   .object({
@@ -46,6 +62,7 @@ const registerSchema = z
       .max(15, "전화번호는 최대 15글자 이하여야 합니다.")
       .regex(/^\d{10,15}$/, "전화번호는 숫자만 10~15자 입력 가능합니다."),
   })
+  .merge(centerEditSchema)
   .superRefine((arg, ctx) => {
     if (arg.password !== arg.passwordConfirm) {
       return ctx.addIssue({
@@ -56,19 +73,32 @@ const registerSchema = z
     }
   });
 
+type RegisterFormValues = z.infer<typeof registerSchema>;
+
 // 에러메시지 커스텀
 const ErrorText = ({ children }: { children: ReactNode }) => {
   return <p className="text-sm text-red-500 text-start">{children}</p>;
 };
 
 export const RegisterContainer = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const deviceIdFromUrl = searchParams.get("device_id")?.trim() ?? "";
+
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
-  } = useForm({
+  } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
+    defaultValues: {
+      centerName: "",
+      centerAddress: "",
+      centerAddressDetail: "",
+      centerPhone: "",
+    },
   });
 
   const emailValue = watch("email") ?? "";
@@ -77,36 +107,168 @@ export const RegisterContainer = () => {
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue.trim());
 
   const [isCheckCenter, setIsCheckCenter] = useState(false);
-  const [, setIsCenterId] = useState("");
+  const [tempToken, setTempToken] = useState<string | null>(null);
+  /** 이메일 OTP 검증 성공 시 받은 토큰 (주관리자 회원가입 API Authorization에 사용) */
+  const [emailVerificationTempToken, setEmailVerificationTempToken] =
+    useState<string | null>(null);
   const [isOtpDialogOpen, setIsOtpDialogOpen] = useState(false);
   const [otpStatus, setOtpStatus] = useState<"required" | "verified" | "failed">("required");
-  const [centerInfoDialogOpen, setCenterInfoDialogOpen] = useState(false);
+  const [isOtpRequesting, setIsOtpRequesting] = useState(false);
+  const [isAutoCheckingDevice, setIsAutoCheckingDevice] = useState(false);
 
-  const eventCenterCheck = (centerId: string) => {
-    setIsCenterId(centerId);
+  // URL에 device_id가 있으면 기기 검증 자동 실행 후 회원가입 폼으로 이동
+  useEffect(() => {
+    if (!deviceIdFromUrl) return;
+    setIsAutoCheckingDevice(true);
+    getCheckDevice({ device_id: deviceIdFromUrl })
+      .then((res) => {
+        const token = res?.data?.temp_token;
+        if (token != null) {
+          setTempToken(token);
+          setIsCheckCenter(true);
+        }
+      })
+      .catch((err) => {
+        const status =
+          err instanceof AxiosError ? err.response?.status : undefined;
+        alert(getCheckDeviceErrorMessage(status));
+      })
+      .finally(() => {
+        setIsAutoCheckingDevice(false);
+      });
+  }, [deviceIdFromUrl]);
+
+  const eventCenterCheck = (
+    _centerId: string,
+    token: string,
+    deviceSn: number,
+  ) => {
+    setTempToken(token);
+    void deviceSn; // 기기 검증 응답; 회원가입 API는 서버에서 처리
     setIsCheckCenter(true);
   };
 
-  const handleOtpVerified = (verified: boolean) => {
+  const handleOtpVerified = (
+    verified: boolean,
+    emailVerificationToken?: string,
+  ) => {
     setOtpStatus(verified ? "verified" : "failed");
+    if (verified && emailVerificationToken) {
+      setEmailVerificationTempToken(emailVerificationToken);
+    }
   };
 
-  // 테스트용: API 연결 주석 처리, 회원가입 클릭 시 센터 정보 팝업만 오픈
-  // const registerMutation = useRegister(setError);
-  const registerHandleSubmit = handleSubmit(async () => {
-    // 이메일 OTP 인증이 완료된 경우에만 진행 (Enter 키 등으로 제출되어도 검사)
+  /** 주관리자 이메일 인증 OTP 요청 (temp_token 사용) - 최초 요청 시 다이얼로그 오픈 */
+  const requestEmailVerificationOtp = async () => {
+    if (!tempToken?.trim()) {
+      alert("기기 확인 후 이메일 인증을 진행해주세요.");
+      return;
+    }
+    const email = emailValue.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      alert("이메일을 올바르게 입력해주세요.");
+      return;
+    }
+    setIsOtpRequesting(true);
+    try {
+      const res = await postRequestEmailVerificationOtp({ email, tempToken });
+      setIsOtpDialogOpen(true);
+      const remaining =
+        typeof res?.data?.remaining_issue_count === "number"
+          ? res.data.remaining_issue_count
+          : null;
+      alert(
+        remaining != null
+          ? `이메일로 인증번호가 전송되었습니다. (남은 발송 횟수: ${remaining}회)`
+          : "이메일로 인증번호가 전송되었습니다.",
+      );
+    } catch (e) {
+      const msg =
+        e instanceof AxiosError
+          ? getRequestEmailVerificationOtpErrorMessage(e.response?.status)
+          : e && typeof e === "object" && "message" in e
+            ? String((e as { message: unknown }).message)
+            : "OTP 요청에 실패했습니다.";
+      alert(msg);
+    } finally {
+      setIsOtpRequesting(false);
+    }
+  };
+
+  /** 다이얼로그 내 재전송 시 호출 (다이얼로그는 이미 열린 상태) */
+  const resendEmailVerificationOtp = async () => {
+    if (!tempToken?.trim()) return;
+    const email = emailValue.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
+    try {
+      const res = await postRequestEmailVerificationOtp({ email, tempToken });
+      const remaining =
+        typeof res?.data?.remaining_issue_count === "number"
+          ? res.data.remaining_issue_count
+          : null;
+      alert(
+        remaining != null
+          ? `OTP가 재전송되었습니다. (남은 발송 횟수: ${remaining}회)`
+          : "OTP가 재전송되었습니다.",
+      );
+    } catch (e) {
+      const msg =
+        e instanceof AxiosError
+          ? getRequestEmailVerificationOtpErrorMessage(e.response?.status)
+          : e && typeof e === "object" && "message" in e
+            ? String((e as { message: unknown }).message)
+            : "OTP 재전송에 실패했습니다.";
+      alert(msg);
+    }
+  };
+
+  const openPostcode = useDaumPostcodePopup(KAKAO_POSTCODE_SCRIPT_URL);
+  const handleAddressSearch = () => {
+    openPostcode({
+      onComplete: (data) => {
+        setValue("centerAddress", data.address, { shouldValidate: true });
+      },
+    });
+  };
+
+  const [registerPending, setRegisterPending] = useState(false);
+
+  const registerHandleSubmit = handleSubmit(async (values) => {
     if (otpStatus !== "verified") {
       return;
     }
-    // 테스트용: API 연결 주석 처리
-    // await registerMutation.mutateAsync({
-    //   center_id: isCenterId,
-    //   email: data.email,
-    //   password: data.password,
-    //   name: data.name,
-    //   mobile: data.phone,
-    // });
-    setCenterInfoDialogOpen(true);
+    if (!emailVerificationTempToken?.trim()) {
+      alert("이메일 인증을 완료해주세요.");
+      return;
+    }
+    setRegisterPending(true);
+    try {
+      await postRegisterAdmin(
+        {
+          admin_email: values.email,
+          password: values.password,
+          admin_name: values.name,
+          admin_mobile: values.phone,
+          center_name: values.centerName,
+          center_address: values.centerAddress,
+          center_address_detail: values.centerAddressDetail ?? "",
+          center_phone: values.centerPhone ?? "",
+        },
+        emailVerificationTempToken,
+      );
+      alert("회원가입이 완료되었습니다. 로그인해주세요.");
+      router.push("/login");
+    } catch (e) {
+      const msg =
+        e instanceof AxiosError
+          ? getRegisterAdminErrorMessage(e.response?.status)
+          : e && typeof e === "object" && "message" in e
+            ? String((e as { message: unknown }).message)
+            : "회원가입에 실패했습니다.";
+      alert(msg);
+    } finally {
+      setRegisterPending(false);
+    }
   });
 
   return (
@@ -117,10 +279,14 @@ export const RegisterContainer = () => {
       <div className="flex flex-col items-center gap-5 text-center">
         <legend className="sr-only">센터관리자 회원가입</legend>
         <h1 className="text-2xl font-bold mb-3 lg:mb-5">
-          탱고플러스 센터관리자 회원가입
+          탱고플러스 센터주관리자 회원가입
         </h1>
         {!isCheckCenter ? (
-          <RegisterCenterCheckForm onCenterCheck={eventCenterCheck} />
+          isAutoCheckingDevice ? (
+            <p className="text-muted-foreground">기기 확인 중...</p>
+          ) : (
+            <RegisterCenterCheckForm onCenterCheck={eventCenterCheck} />
+          )
         ) : (
           <div className="flex flex-col gap-6 w-full">
             <div className="flex flex-col items-start gap-2">
@@ -140,11 +306,19 @@ export const RegisterContainer = () => {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => setIsOtpDialogOpen(true)}
-                  disabled={otpStatus === "verified" || !isEmailValid}
+                  onClick={requestEmailVerificationOtp}
+                  disabled={
+                    otpStatus === "verified" ||
+                    !isEmailValid ||
+                    isOtpRequesting
+                  }
                   className="shrink-0 h-9 px-4"
                 >
-                  {otpStatus === "verified" ? "인증완료" : "OTP 인증"}
+                  {otpStatus === "verified"
+                    ? "인증완료"
+                    : isOtpRequesting
+                      ? "전송중..."
+                      : "OTP 인증"}
                 </Button>
               </div>
               {errors.email?.message && (
@@ -233,13 +407,83 @@ export const RegisterContainer = () => {
                 <ErrorText>{String(errors.phone?.message)}</ErrorText>
               )}
             </div>
+            <div className="flex flex-col items-start gap-2">
+              <Label htmlFor="centerName" className="lg:text-lg">
+                센터 이름
+              </Label>
+              <Input
+                id="centerName"
+                type="text"
+                placeholder="센터 이름"
+                maxLength={30}
+                {...register("centerName")}
+                className="bg-white dark:bg-border"
+              />
+              {errors.centerName?.message && (
+                <ErrorText>{String(errors.centerName?.message)}</ErrorText>
+              )}
+            </div>
+            <div className="flex flex-col items-start gap-2">
+              <Label htmlFor="centerAddress" className="lg:text-lg">
+                센터 주소
+              </Label>
+              <div className="flex gap-2 w-full">
+                <Input
+                  id="centerAddress"
+                  type="text"
+                  readOnly
+                  placeholder="주소 검색으로 입력"
+                  maxLength={60}
+                  {...register("centerAddress")}
+                  className="flex-1 min-w-0 bg-white dark:bg-border"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleAddressSearch}
+                  className="shrink-0"
+                >
+                  주소 검색
+                </Button>
+              </div>
+              <Input
+                id="centerAddressDetail"
+                type="text"
+                placeholder="센터 상세 주소"
+                maxLength={30}
+                {...register("centerAddressDetail")}
+                className="w-full bg-white dark:bg-border"
+              />
+              {errors.centerAddress?.message && (
+                <ErrorText>{String(errors.centerAddress?.message)}</ErrorText>
+              )}
+              {errors.centerAddressDetail?.message && (
+                <ErrorText>{String(errors.centerAddressDetail?.message)}</ErrorText>
+              )}
+            </div>
+            <div className="flex flex-col items-start gap-2">
+              <Label htmlFor="centerPhone" className="lg:text-lg">
+                센터 번호
+              </Label>
+              <Input
+                id="centerPhone"
+                type="tel"
+                placeholder="센터 번호"
+                maxLength={20}
+                {...register("centerPhone")}
+                className="bg-white dark:bg-border"
+              />
+              {errors.centerPhone?.message && (
+                <ErrorText>{String(errors.centerPhone?.message)}</ErrorText>
+              )}
+            </div>
             <Button
               type="submit"
               variant={"outline"}
               className="w-full lg:text-lg"
-              disabled={otpStatus !== "verified"}
+              disabled={otpStatus !== "verified" || registerPending}
             >
-              회원가입
+              {registerPending ? "가입 중..." : "회원가입"}
             </Button>
           </div>
         )}
@@ -248,10 +492,9 @@ export const RegisterContainer = () => {
         open={isOtpDialogOpen}
         onOpenChange={setIsOtpDialogOpen}
         onVerified={handleOtpVerified}
-      />
-      <RegisterCenterInfoDialog
-        open={centerInfoDialogOpen}
-        onOpenChange={setCenterInfoDialogOpen}
+        onRequestOtp={resendEmailVerificationOtp}
+        email={emailValue.trim() || undefined}
+        tempToken={tempToken}
       />
     </form>
   );

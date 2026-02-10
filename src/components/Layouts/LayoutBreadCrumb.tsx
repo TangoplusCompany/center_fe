@@ -9,7 +9,6 @@
 // } from "@/components/ui/breadcrumb";
 import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/providers/AuthProvider";
-import Link from "next/link";
 
 /* 기존 BreadCrumb용 Menus - 주석 해제 시 사용
 interface IMenu {
@@ -62,6 +61,7 @@ const breadcrumbLinkClass =
 
 export function LayoutBreadCrumb() {
   const pathName = usePathname();
+  const router = useRouter();
   const centerSn = useAuthStore((state) => state.centerSn);
   const centerName = useAuthStore((state) => state.centerName);
 
