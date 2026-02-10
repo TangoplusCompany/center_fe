@@ -29,9 +29,7 @@ export const DeviceStatusItems = React.memo(
           </div>
           <div className="flex w-full min-h-32 justify-between">
             <div className="flex flex-col justify-between">
-              <div className="text-base px-4 py-2">
-                Tango Body Pro
-              </div>
+              <div className="text-base px-4 py-2">Tango Body Pro</div>
               <div className="flex flex-col gap-1 px-4 py-2">
                 <p className="text-base ">
                   {`[${device.install_location.trim()}]`}
@@ -44,10 +42,10 @@ export const DeviceStatusItems = React.memo(
 
             <div className="flex-shrink-0 overflow-hidden w-32 h-32">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img 
-                src="/images/img_tangobody_pro.svg" 
-                alt="tangobody_pro_img" 
-                className="scale-250 object-cover object-top w-full h-full" 
+              <img
+                src="/images/img_tangobody_pro.svg"
+                alt="tangobody_pro_img"
+                className="scale-250 object-cover object-top w-full h-full"
               />
             </div>
           </div>
