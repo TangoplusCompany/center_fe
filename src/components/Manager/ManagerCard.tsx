@@ -24,7 +24,7 @@ export const ManagerCard = React.memo(({ manager }: ManagerCardProps) => {
       className="col-span-1 items-center justify-between rounded-xl border-2 border-toggleAccent-background relative transition-colors overflow-hidden"
     >
       <div className="flex flex-col">
-        <div className="flex items-center justify-between rounded-t-xl text-xl text-toggleAccent font-semibold bg-toggleAccent-background px-4 py-2 w-full">
+        <div className="flex items-center justify-between rounded-t-xl text-xl text-toggleAccent dark:text-white font-semibold bg-toggleAccent-background px-4 py-2 w-full">
           {manager.admin_name}
           <div className="flex items-center gap-2">
             {canChangeRole && <ManagerRoleChangeDialog manager={manager} />}

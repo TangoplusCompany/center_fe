@@ -184,7 +184,7 @@ const MeasureDetail = ({
                   "relative pb-2 text-lg font-semibold transition-colors whitespace-nowrap flex-shrink-0",
                   "bg-transparent data-[state=active]:bg-transparent",
                   "shadow-none data-[state=active]:shadow-none",
-                  "text-sub300 hover:text-secondary data-[state=active]:text-toggleAccent",
+                  "text-sub600 hover:text-800 data-[state=active]:text-toggleAccent",
                   "after:absolute after:-bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-md",
                   "after:bg-sub200 data-[state=active]:after:bg-toggleAccent after:z-10"
                 )}
@@ -198,7 +198,7 @@ const MeasureDetail = ({
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 flex-shrink-0">
           <Button 
-            className="hover:bg-sub200 transition-colors text-primary-foreground dark:text-white"
+            className="hover:bg-sub200 bg-sub150 transition-colors text-primary-foreground text-sub700"
             variant="default"
             onClick={() => {
               if (window.confirm(`${measureData.result_summary_data.user_name}로 카카오톡 결과를 전송하시습니까?`)) {
@@ -216,7 +216,7 @@ const MeasureDetail = ({
           </Button>
 
           <Button 
-            className="hover:bg-sub200 transition-colors text-primary-foreground dark:text-white"
+            className="hover:bg-sub200 bg-sub150 transition-colors text-primary-foreground text-sub700"
             variant="default"
             onClick={() => {
               handlePrint()

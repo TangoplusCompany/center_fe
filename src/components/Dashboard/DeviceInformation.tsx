@@ -24,7 +24,7 @@ const DashboardDeviceStatus = ({
       className="w-full col-span-1 items-center justify-between rounded-xl border-2 border-toggleAccent-background relative cursor-pointer hover:border-toggleAccent transition-colors"
     >
       <div className="w-full flex flex-col">
-        <div className="flex items-center justify-start rounded-t-xl text-xl text-toggleAccent font-semibold bg-toggleAccent-background px-4 py-2 w-full">
+        <div className="flex items-center justify-start rounded-t-lg text-xl text-toggleAccent dark:text-white font-semibold bg-toggleAccent-background px-4 py-2 w-full">
           {device.device_name}
         </div>
         
@@ -46,11 +46,11 @@ const DashboardDeviceStatus = ({
           <div className="flex flex-row items-end justify-between px-4 pb-2 xl:px-0 xl:pb-0">
             <div className="flex rounded-xl bg-toggleAccent-background p-2 m-0 xl:m-2 w-fit h-fit shrink-0">
               <div className="flex flex-col gap-2">
-                <div className="text-sm text-toggleAccent whitespace-nowrap">
+                <div className="text-sm text-toggleAccent dark:text-white whitespace-nowrap">
                   일일 측정 건수
                 </div>
                 <div className="flex items-center justify-end gap-2">
-                  <span className="text-sm text-toggleAccent font-semibold">
+                  <span className="text-sm text-toggleAccent dark:text-white font-semibold">
                     {device.trend === 0 ? '▼ ' : (device.trend === 1 ? '- ' : '▲ ')}
                     {device.today_count} 건
                   </span>
@@ -104,7 +104,7 @@ export const DeviceInformation = () => {
         {hasMore && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="w-full py-2 px-4 text-sm text-toggleAccent rounded-xl hover:bg-toggleAccent-background transition-colors"
+            className="w-full py-2 px-4 text-sm text-toggleAccent dark:text-white rounded-xl hover:bg-toggleAccent-background transition-colors"
           >
             {isExpanded ? '접기' : `더보기`}
           </button>

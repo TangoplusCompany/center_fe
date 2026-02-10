@@ -58,8 +58,8 @@ const DeviceEditDialog = ({
     <Dialog open={open} onOpenChange={setToggle}>
       <DialogTrigger asChild>
         <button className="flex items-center gap-0.5 text-sm text-gray-500">
-          <PencilLine className="w-4 h-4 text-toggleAccent" />
-          <span className="text-toggleAccent">수정하기</span>
+          <PencilLine className="w-4 h-4 text-toggleAccent dark:text-white" />
+          <span className="text-toggleAccent dark:text-white">수정하기</span>
         </button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl rounded-2xl sm:rounded-xl">

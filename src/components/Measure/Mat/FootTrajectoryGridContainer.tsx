@@ -79,19 +79,21 @@ const FootTrajectoryGridContainer = ({
     <div className="flex flex-col gap-2">
       <div className="grid lg:grid-cols-2 grid-cols-1 gap-8 h-full relative">
         {/* 왼쪽: FootStatic */}
-        <div className="flex flex-col gap-4">
-          <div className="flex justify-between items-center py-2">
-            <div className="flex items-center gap-2">
-              <h2 className="text-xl font-semibold">정적 족압 결과</h2>
-              {footOCP.measure_date && (
-                <span className="text-sm text-sub300">
-                  {formatDate(footOCP.measure_date)}
-                </span>
-              )}
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-col">
+            <div className="flex justify-between items-center py-2">
+              <div className="flex items-center gap-2">
+                <h2 className="text-xl font-semibold">정적 족압 결과</h2>
+              </div>
+              <span className={`px-3 py-1 ${riskBg} rounded-xl text-sm text-white`}>
+                {riskString} {mat_static_range_level}단계
+              </span>
             </div>
-            <span className={`px-3 py-1 ${riskBg} rounded-xl text-sm text-white`}>
-              {riskString} {mat_static_range_level}단계
-            </span>
+            {footOCP.measure_date && (
+              <span className="text-sm text-sub300">
+                {formatDate(footOCP.measure_date)}
+              </span>
+            )}
           </div>
           <div className="flex items-center justify-center">
             <div className="w-full max-w-xs aspect-square">

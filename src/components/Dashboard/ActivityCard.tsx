@@ -26,7 +26,7 @@ const ActivityCard = ({
 
   return (
     <div className="w-full flex flex-col border-2 border-toggleAccent-background rounded-xl gap-6 bg-gradient-to-b from-[#2c4fd0]/10 from-[2%] to-white to-[40%] dark:from-[#2c4fd0]/20 dark:to-background">
-      <div className="p-4 text-xl font-semibold text-toggleAccent">
+      <div className="p-4 text-xl font-semibold text-toggleAccent dark:text-white">
         {data.case === 0 && "센터 일간 측정"}
         {data.case === 1 && "센터 주간 측정"}
       </div>    
@@ -104,7 +104,7 @@ const ActivityCard = ({
             className="fill-toggleAccent"
           />
         </svg>
-        <div className="absolute left-1/2 top-0 transform translate-x-2 -translate-y-1 flex items-center gap-1 text-base font-semibold text-toggleAccent">
+        <div className="absolute left-1/2 top-0 transform translate-x-2 -translate-y-1 flex items-center gap-1 text-base font-semibold text-toggleAccent dark:text-white">
         <span>
           {data.upDown === 2 && "▲"}
           {data.upDown === 1 && "―"}

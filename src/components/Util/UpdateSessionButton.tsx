@@ -16,7 +16,7 @@ const UpdateSessionButton = () => {
       <p className="hidden md:block w-28 md:w-32">
         남은 시간: <strong>{formatTime(remainingSeconds)}</strong>
       </p>
-      <Button onClick={handleUpdateSession} variant="outline" className="text-sm md:text-base">
+      <Button onClick={handleUpdateSession} variant="outline" className="text-sm md:text-base dark:bg-sub100 hover:bg-sub150">
         로그인 연장
       </Button>
     </div>

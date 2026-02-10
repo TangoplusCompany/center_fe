@@ -69,8 +69,8 @@ const ManagerRoleChangeDialog = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <button className="flex items-center gap-0.5 text-sm">
-          <UserRoundPen className="w-4 h-4" />
-          <span className="">매니저 등급 수정</span>
+          <UserRoundPen className="w-4 h-4 text-toggleAccent dark:text-white" />
+          <span className="text-toggleAccent dark:text-white">매니저 등급 수정</span>
         </button>
       </DialogTrigger>
       <DialogContent className="gap-4">
