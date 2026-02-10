@@ -93,7 +93,7 @@ const ActivityCard = ({
             cx="50"
             cy={centerY}
             r="4"
-            className="stroke-toggleAccent fill-white dark:fill-background"
+            className="stroke-toggleAccent fill-white dark:fill-black dark:fill-background"
           />
 
           {/* 내부 원 */}
