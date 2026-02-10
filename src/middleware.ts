@@ -56,6 +56,6 @@ export const config = {
     // ✅ /result-page 접근도 잡아야 admin→my 리다이렉트가 동작합니다.
     "/result-page/:path*",
     // ✅ 기존 matcher 유지
-    "/((?!login|find|unlock|result-sheet|result-page|api|register|_next|favicon.ico|.*\\.png$|.*\\.jpg$).*)",
+    "/((?!login|find|unlock|result-sheet|result-page|api|register|subRegister|_next|favicon.ico|.*\\.png$|.*\\.jpg$).*)",
   ],
 };

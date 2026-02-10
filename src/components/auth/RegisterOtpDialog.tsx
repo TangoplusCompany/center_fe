@@ -17,6 +17,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useState, useEffect } from "react";
+import { AxiosError } from "axios";
+import {
+  postVerifyEmailOtp,
+  getVerifyEmailOtpErrorMessage,
+} from "@/services/auth/postVerifyEmailOtp";
 
 const OTP_FORM_SCHEMA = z.object({
   otp: z.string().length(6, { message: "OTP는 6자리 숫자여야 합니다." }),
@@ -29,15 +34,27 @@ const DEFAULT_PASS_CODE = "123456";
 export type RegisterOtpDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onVerified: (verified: boolean) => void;
+  /** verified, 성공 시 email_verification_temp_token 전달 (주관리자 회원가입 API용) */
+  onVerified: (verified: boolean, emailVerificationTempToken?: string) => void;
+  /** 재전송 클릭 시 호출 (주관리자 회원가입 시 temp_token으로 OTP 재요청) */
+  onRequestOtp?: () => Promise<void>;
+  /** 주관리자 플로우: 이메일 + temp_token 있으면 auth/verify-email-otp 호출 */
+  email?: string;
+  tempToken?: string | null;
 };
 
 export const RegisterOtpDialog = ({
   open,
   onOpenChange,
   onVerified,
+  onRequestOtp,
+  email,
+  tempToken,
 }: RegisterOtpDialogProps) => {
   const [timeLeft, setTimeLeft] = useState(INITIAL_TIME);
+  const [resendPending, setResendPending] = useState(false);
+  const [verifyPending, setVerifyPending] = useState(false);
+  const useVerifyApi = Boolean(email?.trim() && tempToken?.trim());
 
   const form = useForm<z.infer<typeof OTP_FORM_SCHEMA>>({
     resolver: zodResolver(OTP_FORM_SCHEMA),
@@ -73,15 +90,64 @@ export const RegisterOtpDialog = ({
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
-  const handleResend = () => {
-    setTimeLeft(INITIAL_TIME);
-    form.setValue("otp", "");
-    form.clearErrors("otp");
+  const handleResend = async () => {
+    if (onRequestOtp) {
+      setResendPending(true);
+      try {
+        await onRequestOtp();
+        setTimeLeft(INITIAL_TIME);
+        form.setValue("otp", "");
+        form.clearErrors("otp");
+      } finally {
+        setResendPending(false);
+      }
+    } else {
+      setTimeLeft(INITIAL_TIME);
+      form.setValue("otp", "");
+      form.clearErrors("otp");
+    }
   };
 
-  const onSubmit = (data: z.infer<typeof OTP_FORM_SCHEMA>) => {
+  const onSubmit = async (data: z.infer<typeof OTP_FORM_SCHEMA>) => {
     if (timeLeft <= 0) {
       form.setError("otp", { message: "시간이 만료되었습니다. 재전송해주세요." });
+      return;
+    }
+
+    if (useVerifyApi && email && tempToken) {
+      setVerifyPending(true);
+      try {
+        const res = await postVerifyEmailOtp(
+          {
+            email_or_mobile: email.trim(),
+            otp: data.otp,
+            type: "email",
+            purpose: "verify_email",
+          },
+          tempToken,
+        );
+        const token = res?.data?.email_verification_temp_token;
+        onVerified(true, token);
+        onOpenChange(false);
+        form.reset();
+      } catch (err) {
+        if (err instanceof AxiosError) {
+          const message = getVerifyEmailOtpErrorMessage(
+            err.response?.status,
+            err.response?.data,
+          );
+          alert(message);
+        } else {
+          alert("OTP 인증에 실패했습니다.");
+        }
+        onVerified(false);
+        form.setError("otp", {
+          type: "manual",
+          message: "인증번호가 맞지 않습니다.",
+        });
+      } finally {
+        setVerifyPending(false);
+      }
       return;
     }
 
@@ -127,7 +193,9 @@ export const RegisterOtpDialog = ({
                   <InputOTPSlot className="bg-white" index={5} />
                 </InputOTPGroup>
               </InputOTP>
-              <Button type="submit">확인</Button>
+              <Button type="submit" disabled={verifyPending}>
+                {verifyPending ? "확인 중..." : "확인"}
+              </Button>
             </div>
 
             {form.formState.errors.otp && (
@@ -148,9 +216,10 @@ export const RegisterOtpDialog = ({
               variant="ghost"
               size="sm"
               onClick={handleResend}
+              disabled={resendPending}
               className="text-sm"
             >
-              재전송
+              {resendPending ? "전송 중..." : "재전송"}
             </Button>
           </div>
         </form>

@@ -1,7 +1,7 @@
 import { getUserDetail } from "@/services/user/getUserDetail";
 import { getResultUserDetail } from "@/services/user/getResultUserDetail";
 import { useQuery } from "@tanstack/react-query";
-import { useAuthStore } from "@/providers/AuthProvider";
+import { useAuthStoreOptional } from "@/providers/AuthProvider";
 
 /**
  * 사용자 상세 정보 조회
@@ -16,7 +16,8 @@ export const useGetUserDetail = ({
   userSn: string;
   isResultPage?: boolean;
 }) => {
-  const centerSn = useAuthStore((state) => state.centerSn);
+  // result-page에서는 AuthStoreProvider가 없으므로 optional 사용
+  const centerSn = useAuthStoreOptional((state) => state.centerSn, 0);
 
   return useQuery({
     queryKey: isResultPage

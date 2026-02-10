@@ -2,8 +2,8 @@ import { customUnAuthAxios } from "@/lib/axios";
 import { IResponseDefault } from "@/types/default";
 import { IOtpVerifyProps } from "@/types/admin";
 
-type IOtpVerifyResponse = {
-  data: string[];
+export type IOtpVerifyResponse = {
+  data: { otp_jwt: string };
 } & IResponseDefault;
 
 export const postOtpVerify = async ({

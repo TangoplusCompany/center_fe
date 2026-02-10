@@ -3,12 +3,11 @@
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
 } from "@/components/ui/breadcrumb";
-import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/providers/AuthProvider";
-import Link from "next/link";
 
 /* 기존 BreadCrumb용 Menus - 주석 해제 시 사용
 interface IMenu {
@@ -61,20 +60,17 @@ const breadcrumbLinkClass =
 
 export function LayoutBreadCrumb() {
   const pathName = usePathname();
+  const router = useRouter();
   const centerSn = useAuthStore((state) => state.centerSn);
   const centerName = useAuthStore((state) => state.centerName);
 
   const isCenterPage = pathName === "/center";
-  const displayLabel = isCenterPage
-    ? "센터목록"
-    : centerSn && centerName
-      ? centerName
-      : "센터목록";
+  const nameLabel = centerSn && centerName ? centerName : "센터목록";
 
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        <BreadcrumbItem>
+        <BreadcrumbItem className="flex items-center gap-1.5">
           {isCenterPage ? (
             <span
               className={`${breadcrumbLinkClass} font-semibold text-toggleAccent cursor-default hover:opacity-90`}
@@ -83,14 +79,22 @@ export function LayoutBreadCrumb() {
               센터목록
             </span>
           ) : (
-            <BreadcrumbLink asChild>
-              <Link
-                href="/center"
-                className={`${breadcrumbLinkClass} ${centerSn && centerName ? "font-medium text-slate-950 dark:text-foreground" : "text-slate-950 dark:text-foreground"}`}
+            <>
+              <span
+                className={`${breadcrumbLinkClass} font-medium text-slate-950 dark:text-foreground cursor-default max-md:hidden`}
               >
-                {displayLabel}
-              </Link>
-            </BreadcrumbLink>
+                {nameLabel}
+              </span>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => router.push("/center")}
+                className="border-input bg-background text-blue-600 dark:text-blue-400 font-bold hover:bg-accent hover:text-accent-foreground text-base"
+              >
+                센터목록
+              </Button>
+            </>
           )}
         </BreadcrumbItem>
       </BreadcrumbList>

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { patchUserDetail } from "@/services/user/patchUserDetail";
 import { patchResultUserDetail } from "@/services/user/patchResultUserDetail";
-import { useAuthStore } from "@/providers/AuthProvider";
+import { useAuthStoreOptional } from "@/providers/AuthProvider";
 
 type PatchUserDetailParams = Parameters<typeof patchUserDetail>[0];
 type PatchResultUserDetailParams = Parameters<typeof patchResultUserDetail>[0];
@@ -14,7 +14,8 @@ type PatchResultUserDetailParams = Parameters<typeof patchResultUserDetail>[0];
  */
 export const usePatchUserDetail = (userSn: string, isResultPage = false) => {
   const queryClient = useQueryClient();
-  const centerSn = useAuthStore((state) => state.centerSn);
+  // result-page에서는 AuthStoreProvider가 없으므로 optional 사용
+  const centerSn = useAuthStoreOptional((state) => state.centerSn, 0);
   return useMutation({
     mutationFn: isResultPage
       ? (params: PatchResultUserDetailParams) => patchResultUserDetail(params)
