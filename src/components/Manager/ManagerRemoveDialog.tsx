@@ -38,11 +38,11 @@ const ManagerRemoveDialog = ({ manager }: { manager: ICenterManagerData }) => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>매니저 제거하기</DialogTitle>
-          <DialogDescription className="text-red-500 text-base">
+          <DialogDescription className="text-red-500 text-sm">
             {`정말로 ${manager.admin_name}님을 제거하시겠습니까?`}
           </DialogDescription>
 
-          <div className="flex items-center justify-start gap-3">
+          <div className="flex items-center justify-end gap-3 mt-4">
             <DialogClose asChild>
               <Button>취소하기</Button>
             </DialogClose>

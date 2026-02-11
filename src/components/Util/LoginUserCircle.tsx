@@ -7,13 +7,13 @@ interface LoginUserCircleProps {
 const getRoleText = (role?: number): string => {
   switch (role) {
     case 0:
-      return "매니저";
+      return "";
     case 1:
-      return "센터관리자";
+      return "주관리자";
     case 2:
-      return "직원"; // 2에 해당하는 역할을 추가하시면 됩니다
+      return "부관리자"; // 2에 해당하는 역할을 추가하시면 됩니다
     default:
-      return "매니저";
+      return "센터직원";
   }
 };
 

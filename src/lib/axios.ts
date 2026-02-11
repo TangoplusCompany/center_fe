@@ -88,6 +88,14 @@ customAxios.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    // 비밀번호 변경 API의 401(현재 비밀번호 오류)은 토큰 갱신/로그아웃 제외하고 호출부에서 처리
+    const isPasswordUpdateRequest =
+      typeof originalRequest?.url === "string" &&
+      /\/auth\/update\/\d+\/passwords/.test(originalRequest.url);
+    if (isPasswordUpdateRequest && error.response?.status === 401) {
+      return Promise.reject(error);
+    }
+
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 

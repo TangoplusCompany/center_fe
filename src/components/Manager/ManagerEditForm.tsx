@@ -30,19 +30,23 @@ const ManagerEditForm = ({
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm<IManagerInformationForm>({
     resolver: zodResolver(managerInformationSchema),
     mode: "onChange",
     defaultValues: {
-      managerName: managerData.admin_name,
-      managerMobile: managerData.mobile,
+      managerName: managerData.admin_name ?? "",
+      managerMobile: managerData.mobile ?? "",
     },
   });
 
   const handleEditState = () => {
     if (editState) {
-      reset();
+      reset({
+        managerName: managerData.admin_name ?? "",
+        managerMobile: managerData.mobile ?? "",
+      });
       setEditState();
       return;
     }
@@ -94,6 +98,7 @@ const ManagerEditForm = ({
           disabled={!editState}
           placeholder="이름"
           maxLength={50}
+          value={watch("managerName") ?? ""}
         />
         {errors.managerName && (
           <p className="text-sm text-red-500">
@@ -110,14 +115,16 @@ const ManagerEditForm = ({
             id="managerMobile"
             placeholder="전화번호"
             maxLength={15}
+            value={watch("managerMobile") ?? ""}
           />
         ) : (
           <Input
             type="text"
             id="managerMobile"
             disabled
-            value={phoneHyphen(managerData.mobile)}
+            value={phoneHyphen(managerData.mobile ?? "") ?? ""}
             placeholder="전화번호"
+            readOnly
           />
         )}
         {errors.managerMobile && (
@@ -132,8 +139,9 @@ const ManagerEditForm = ({
           type="email"
           id="managerEmail"
           disabled
-          defaultValue={managerData.admin_email}
+          value={managerData.admin_email ?? ""}
           placeholder="이메일"
+          readOnly
         />
       </div>
       <div className="flex flex-col gap-2">
@@ -142,10 +150,11 @@ const ManagerEditForm = ({
           type="text"
           id="managerGrade"
           disabled
-          defaultValue={
-            ADMIN_ROLE[managerData.admin_role as keyof typeof ADMIN_ROLE]
+          value={
+            ADMIN_ROLE[managerData.admin_role as keyof typeof ADMIN_ROLE] ?? ""
           }
           placeholder="등급"
+          readOnly
         />
       </div>
     </form>

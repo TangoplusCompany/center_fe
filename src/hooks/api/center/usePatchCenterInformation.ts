@@ -9,6 +9,7 @@ import { useAuthStore } from "@/providers/AuthProvider";
 export const usePatchCenterInformation = () => {
   const queryClient = useQueryClient();
   const centerSn = useAuthStore((state) => state.centerSn);
+  const setCenterSn = useAuthStore((state) => state.setCenterSn);
 
   return useMutation({
     mutationFn: (data: {
@@ -17,7 +18,8 @@ export const usePatchCenterInformation = () => {
       center_address_detail: string;
       center_phone?: string;
     }) => patchCenterInformation({ center_sn: centerSn, ...data }),
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
+      setCenterSn(centerSn, variables.center_name);
       alert("정상적으로 센터 정보를 수정하였습니다.");
       queryClient.invalidateQueries({ queryKey: ["getCenterInformation"] });
     },

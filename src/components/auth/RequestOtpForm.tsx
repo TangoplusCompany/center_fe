@@ -124,7 +124,7 @@ export const RequestOtpForm = ({
   return (
     <form
       onSubmit={form.handleSubmit(onSubmit)}
-      className="w-full flex flex-col gap-2"
+      className="w-full flex flex-col gap-4"
     >
       <legend className="text-lg">
         {isAccountUnlock ? "잠긴 계정 해제용 OTP 입력" : "OTP 입력"}
@@ -152,10 +152,11 @@ export const RequestOtpForm = ({
         </span>
         <Button
           type="button"
-          variant="outline"
+          variant="ghost"
           size="sm"
           onClick={handleResend}
           disabled={resendPending}
+          className="text-sm bg-sub150 text-sub700 hover:bg-sub200 hover:text-sub800"
         >
           {resendPending ? "전송 중..." : "재전송"}
         </Button>

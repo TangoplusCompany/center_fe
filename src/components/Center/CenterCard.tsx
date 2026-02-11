@@ -17,7 +17,7 @@ export const CenterCard = ({ center }: { center: IAdminCenterListItem }) => {
   const router = useRouter();
 
   const handleCenterClick = () => {
-    setCenterSn(center.center_sn, center.center_name);
+    setCenterSn(center.center_sn, center.center_name, center.admin_role);
     router.push("/");
   };
 

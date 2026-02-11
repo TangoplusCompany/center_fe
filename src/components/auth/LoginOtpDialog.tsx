@@ -208,7 +208,7 @@ export const LoginOtpDialog = ({
               variant="ghost"
               size="sm"
               onClick={handleResend}
-              className="text-sm bg-sub150"
+              className="text-sm bg-sub150 text-sub700 hover:bg-sub200 hover:text-sub800"
               disabled={resendPending}
             >
               {resendPending ? "재전송 중..." : "재전송"}

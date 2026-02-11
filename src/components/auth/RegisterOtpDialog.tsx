@@ -217,7 +217,7 @@ export const RegisterOtpDialog = ({
               size="sm"
               onClick={handleResend}
               disabled={resendPending}
-              className="text-sm bg-sub700"
+              className="text-sm bg-sub700 text-sub150 hover:bg-sub600 hover:text-sub100"
             >
               {resendPending ? "전송 중..." : "재전송"}
             </Button>

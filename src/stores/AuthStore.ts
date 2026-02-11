@@ -17,7 +17,13 @@ interface IAuthActions {
   initAuthorization: () => void;
   setLogin: (userData: IAuthProps) => void;
   setAccessToken: (accessJwt: string) => void;
-  setCenterSn: (centerSn: number, centerName?: string) => void;
+  setCenterSn: (centerSn: number, centerName?: string, adminRole?: number) => void;
+  /** 설정에서 개인 정보(이름, 이메일, 전화번호) 수정 시 스토어 반영 */
+  setAdminProfile: (data: {
+    adminName?: string;
+    adminEmail?: string;
+    adminMobile?: string;
+  }) => void;
   setLogout: () => void;
 }
 
@@ -47,10 +53,18 @@ export const createAuthStore = (initialState?: IAuthProps) => {
         initAuthorization: () => set({ ...DEFAULT_STATE }),
         setLogin: (userData: IAuthProps) => set({ ...userData }),
         setAccessToken: (accessJwt: string) => set({ accessJwt }),
-        setCenterSn: (centerSn: number, centerName?: string) =>
+        setCenterSn: (centerSn: number, centerName?: string, adminRole?: number) =>
           set((state) => ({
             centerSn,
             centerName: centerSn === 0 ? "" : (centerName ?? state.centerName),
+            ...(adminRole !== undefined && { adminRole }),
+          })),
+        setAdminProfile: (data) =>
+          set((prev) => ({
+            ...prev,
+            ...(data.adminName !== undefined && { adminName: data.adminName }),
+            ...(data.adminEmail !== undefined && { adminEmail: data.adminEmail }),
+            ...(data.adminMobile !== undefined && { adminMobile: data.adminMobile }),
           })),
         setLogout: () => {
           set({ ...DEFAULT_STATE });
