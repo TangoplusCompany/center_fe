@@ -9,7 +9,27 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReactNode, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
 import { postRegisterSubAdmin } from "@/services/auth/postRegisterSubAdmin";
+
+/** 부관리자 회원가입 API 실패 시 상태별 안내 메시지 */
+function getRegisterSubAdminErrorMessage(error: unknown): string {
+  if (error instanceof AxiosError && error.response?.status) {
+    switch (error.response.status) {
+      case 400:
+        return "필수 정보가 누락되었거나 올바르지 않습니다.";
+      case 401:
+        return "유효하지 않은 초대 링크입니다. 링크를 다시 확인하거나 재발급 요청해주세요.";
+      case 409:
+        return "이미 해당 센터에 등록된 부관리자입니다.";
+      case 500:
+        return "회원가입 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
+      default:
+        break;
+    }
+  }
+  return "회원가입에 실패했습니다. 다시 시도해주세요.";
+}
 
 const subRegisterSchema = z
   .object({
@@ -123,8 +143,8 @@ export const SubRegisterContainer = ({
       });
       alert("회원가입이 완료되었습니다. 로그인해주세요.");
       router.push("/login");
-    } catch {
-      alert("회원가입에 실패했습니다. 다시 시도해주세요.");
+    } catch (error) {
+      alert(getRegisterSubAdminErrorMessage(error));
     } finally {
       setSubmitPending(false);
     }
