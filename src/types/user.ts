@@ -1,4 +1,5 @@
 import { IResponseDefault } from "./default";
+import { IMeasureRangeLevel, IMeasureRiskLevel, IMeasureUpperLowerLevel } from "./measure";
 
 export interface IUnregisterUserResponse extends IResponseDefault {
   data: {
@@ -57,7 +58,10 @@ export interface IUserMeasureList {
   measurement_list: IUserMeasureListItem[];
 }
 
-export interface IUserMeasureListItem {
+export interface IUserMeasureListItem 
+  extends IMeasureRiskLevel, 
+  IMeasureRangeLevel,
+  IMeasureUpperLowerLevel {
   measure_sn: number;
   user_sn: number;
   user_name: string;
@@ -65,6 +69,7 @@ export interface IUserMeasureListItem {
   device_name: string;
   center_name: string;
   mobile: string;
+  rom_exist: boolean;
 }
 
 
