@@ -7,7 +7,33 @@ import { Label } from "@/components/ui/label";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ReactNode, useMemo } from "react";
+import { ReactNode, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
+import { postRegisterSubAdmin } from "@/services/auth/postRegisterSubAdmin";
+import {
+  isValidKoreanPhone,
+  KOREAN_PHONE_ERROR_MESSAGE,
+} from "@/utils/validateKoreanPhone";
+
+/** 부관리자 회원가입 API 실패 시 상태별 안내 메시지 */
+function getRegisterSubAdminErrorMessage(error: unknown): string {
+  if (error instanceof AxiosError && error.response?.status) {
+    switch (error.response.status) {
+      case 400:
+        return "필수 정보가 누락되었거나 올바르지 않습니다.";
+      case 401:
+        return "유효하지 않은 초대 링크입니다. 링크를 다시 확인하거나 재발급 요청해주세요.";
+      case 409:
+        return "이미 해당 센터에 등록된 부관리자입니다.";
+      case 500:
+        return "회원가입 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
+      default:
+        break;
+    }
+  }
+  return "회원가입에 실패했습니다. 다시 시도해주세요.";
+}
 
 const subRegisterSchema = z
   .object({
@@ -38,9 +64,20 @@ const subRegisterSchema = z
       .regex(/^[가-힣]+$/, "이름은 한글(낱말)만 입력 가능합니다."),
     phone: z
       .string()
-      .min(10, "전화번호는 최소 10글자 이상이여야 합니다.")
-      .max(15, "전화번호는 최대 15글자 이하여야 합니다.")
-      .regex(/^\d{10,15}$/, "전화번호는 숫자만 10~15자 입력 가능합니다."),
+      .trim()
+      .min(1, "전화번호를 입력해주세요.")
+      .refine((val) => /^[0-9\s-]+$/.test(val), {
+        message: "숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
+      })
+      .transform((val) => val.replace(/\D/g, ""))
+      .pipe(
+        z
+          .string()
+          .min(9, "전화번호는 지역번호(9~10자리) 또는 휴대폰(10~11자리) 형식이어야 합니다.")
+          .max(11, "전화번호는 지역번호(9~10자리) 또는 휴대폰(10~11자리) 형식이어야 합니다.")
+          .regex(/^\d+$/, "전화번호는 숫자만 입력 가능합니다.")
+          .refine(isValidKoreanPhone, { message: KOREAN_PHONE_ERROR_MESSAGE }),
+      ),
   })
   .superRefine((arg, ctx) => {
     if (arg.password !== arg.passwordConfirm) {
@@ -58,7 +95,16 @@ const ErrorText = ({ children }: { children: ReactNode }) => {
   return <p className="text-sm text-red-500 text-start">{children}</p>;
 };
 
-export const SubRegisterContainer = ({ email }: { email?: string }) => {
+export const SubRegisterContainer = ({
+  token,
+  email,
+}: {
+  token: string;
+  email?: string;
+}) => {
+  const router = useRouter();
+  const [submitPending, setSubmitPending] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -68,16 +114,20 @@ export const SubRegisterContainer = ({ email }: { email?: string }) => {
     resolver: zodResolver(subRegisterSchema),
     defaultValues: {
       email: email || "",
+      password: "",
+      passwordConfirm: "",
+      name: "",
+      phone: "",
     },
-    mode: "onChange", // 실시간 유효성 검사
+    mode: "onChange",
   });
 
   const password = watch("password");
   const passwordConfirm = watch("passwordConfirm");
   const name = watch("name");
   const phone = watch("phone");
+  const emailValue = watch("email") ?? "";
 
-  // 모든 필수 필드가 입력되고 유효성 체크가 통과되었는지 확인
   const isFormValid = useMemo(() => {
     return (
       isValid &&
@@ -88,7 +138,7 @@ export const SubRegisterContainer = ({ email }: { email?: string }) => {
       password.length >= 8 &&
       passwordConfirm.length >= 8 &&
       name.length >= 2 &&
-      phone.length >= 10 &&
+      /^\d{9,11}$/.test(phone.replace(/\D/g, "")) &&
       !errors.password &&
       !errors.passwordConfirm &&
       !errors.name &&
@@ -96,8 +146,27 @@ export const SubRegisterContainer = ({ email }: { email?: string }) => {
     );
   }, [isValid, password, passwordConfirm, name, phone, errors]);
 
-  const registerHandleSubmit = handleSubmit(async () => {
-    // API 연동 시 사용
+  const registerHandleSubmit = handleSubmit(async (data) => {
+    if (!token?.trim()) {
+      alert("유효한 초대 링크가 아닙니다. 링크를 다시 확인해주세요.");
+      return;
+    }
+    setSubmitPending(true);
+    try {
+      await postRegisterSubAdmin({
+        sub_admin_invitation_token: token,
+        invitee_email: data.email.trim() || emailValue.trim(),
+        mobile: data.phone,
+        admin_name: data.name,
+        password: data.password,
+      });
+      alert("회원가입이 완료되었습니다. 로그인해주세요.");
+      router.push("/login");
+    } catch (error) {
+      alert(getRegisterSubAdminErrorMessage(error));
+    } finally {
+      setSubmitPending(false);
+    }
   });
 
   return (
@@ -108,7 +177,8 @@ export const SubRegisterContainer = ({ email }: { email?: string }) => {
       <div className="flex flex-col items-center gap-5 text-center">
         <legend className="sr-only">회원가입</legend>
         <h1 className="text-2xl font-bold mb-3 lg:mb-5">
-          탱고플러스 센터 부관리자 회원가입
+          <span className="block sm:inline">탱고플러스 센터 부관리자</span>{" "}
+          <span className="block sm:inline">회원가입</span>
         </h1>
         <div className="flex flex-col gap-6 w-full">
           <div className="flex flex-col items-start gap-2">
@@ -187,10 +257,13 @@ export const SubRegisterContainer = ({ email }: { email?: string }) => {
             </Label>
             <Input
               id="phone"
-              type="text"
-              placeholder="하이픈(-)없이 입력해주세요."
+              type="tel"
+              inputMode="numeric"
+              autoComplete="tel"
+              pattern="[0-9\\s-]*"
+              placeholder="전화번호"
               required
-              maxLength={15}
+              maxLength={20}
               {...register("phone")}
               className="bg-white dark:bg-border"
             />
@@ -202,9 +275,9 @@ export const SubRegisterContainer = ({ email }: { email?: string }) => {
             type="submit"
             variant="outline"
             className="w-full lg:text-lg"
-            disabled={!isFormValid}
+            disabled={!isFormValid || submitPending}
           >
-            회원가입
+            {submitPending ? "가입 중..." : "회원가입"}
           </Button>
         </div>
       </div>

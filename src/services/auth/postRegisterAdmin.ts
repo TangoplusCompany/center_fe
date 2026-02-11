@@ -1,12 +1,20 @@
 import { customUnAuthAxios } from "@/lib/axios";
 import type { IResponseDefault } from "@/types/default";
 
-/** auth/register-admin 요청 body */
+/** auth/register-admin 요청 body (최초 가입) */
 export interface IRegisterAdminRequest {
   admin_email: string;
   password: string;
   admin_name: string;
   admin_mobile: string;
+  center_name: string;
+  center_address: string;
+  center_address_detail: string;
+  center_phone: string;
+}
+
+/** auth/register-admin 요청 body (이미 존재하는 관리자: 센터 정보만) */
+export interface IRegisterAdminExistingAdminRequest {
   center_name: string;
   center_address: string;
   center_address_detail: string;
@@ -46,13 +54,14 @@ export function getRegisterAdminErrorMessage(
 
 /**
  * 주관리자 회원가입
- * 이메일 OTP 검증에서 받은 email_verification_temp_token을 Authorization: Bearer 로 전달
+ * - 최초 가입: email_verification_temp_token 사용, 전체 body 전달
+ * - 이미 존재하는 관리자: existing_admin_before_registering_temp_token 사용, 센터 정보만 전달
  */
 export const postRegisterAdmin = async (
-  body: IRegisterAdminRequest,
-  emailVerificationTempToken: string,
+  body: IRegisterAdminRequest | IRegisterAdminExistingAdminRequest,
+  token: string,
 ) => {
-  if (!emailVerificationTempToken?.trim()) {
+  if (!token?.trim()) {
     throw new Error("이메일 인증이 필요합니다. OTP 인증을 완료해주세요.");
   }
   const { data } = await customUnAuthAxios.post<IRegisterAdminResponse>(
@@ -61,7 +70,7 @@ export const postRegisterAdmin = async (
     {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${emailVerificationTempToken}`,
+        Authorization: `Bearer ${token}`,
       },
     },
   );

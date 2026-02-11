@@ -17,6 +17,7 @@ export const CenterMainContainer = () => {
     enabled: adminSn > 0,
   });
 
+  // 로딩 중
   if (adminSn <= 0 || isLoading) {
     return (
       <div className="col-span-12 flex flex-col gap-4">
@@ -29,6 +30,7 @@ export const CenterMainContainer = () => {
     );
   }
 
+  // 로딩은 끝났으나 API 에러(잘못 불러온 경우)
   if (isError) {
     return (
       <div className="col-span-12 flex flex-col gap-4">
@@ -37,6 +39,7 @@ export const CenterMainContainer = () => {
     );
   }
 
+  // 로딩이 끝났고, 에러가 아니며 목록이 비어 있는 경우
   if (centers.length === 0) {
     return (
       <div className="col-span-12 flex flex-col gap-4">

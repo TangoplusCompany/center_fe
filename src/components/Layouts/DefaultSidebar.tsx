@@ -66,17 +66,21 @@ export default function DefaultSidebar() {
     logoutMutation.mutate();
   };
 
-  // 필터링된 대시보드를 메모이제이션
+  // 필터링된 대시보드 (기기 관리, 로그인 기록 관리, 매니저 관리 = 주관리자(1)만 표시)
   const filteredDashboard = React.useMemo(() => {
     return dashboard.filter((item) => {
+      if (
+        item.title === "기기 관리" ||
+        item.title === "로그인 기록 관리" ||
+        item.title === "매니저 관리"
+      ) {
+        return adminRole === 1;
+      }
       if (adminRole === 2) {
-        return !["기기 관리", "매니저 관리", "로그인 기록 관리"].includes(item.title);
+        return true;
       }
       if (adminRole >= 3) {
-        return !["대시보드", "기기 관리", "매니저 관리", "사용자 히스토리 관리", "센터 측정 현황", "로그인 기록 관리"].includes(item.title);
-      }
-      if (item.title === "로그인 기록 관리" && adminRole > 1) {
-        return false;
+        return !["대시보드", "사용자 히스토리 관리", "센터 측정 현황"].includes(item.title);
       }
       return true;
     });

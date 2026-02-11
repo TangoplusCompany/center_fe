@@ -6,12 +6,13 @@ import { useSearchParams } from "next/navigation";
 
 const SubRegisterPage = () => {
   const searchParams = useSearchParams();
-  const email = searchParams.get("email") || "";
+  const token = searchParams.get("token")?.trim() ?? "";
+  const email = searchParams.get("email")?.trim() ?? "";
 
   return (
     <div className="flex flex-1 items-center justify-center">
       <div className="w-full max-w-[480px]">
-        <SubRegisterContainer email={email} />
+        <SubRegisterContainer token={token} email={email} />
       </div>
     </div>
   );

@@ -1,4 +1,8 @@
 import * as z from "zod";
+import {
+  isValidKoreanPhone,
+  KOREAN_PHONE_ERROR_MESSAGE,
+} from "@/utils/validateKoreanPhone";
 
 /**
  * 센터 정보 수정 스키마
@@ -27,10 +31,11 @@ export const centerEditSchema = z.object({
     .optional(),
   centerPhone: z
     .string()
-    .max(20, { message: "센터 번호는 최대 20자까지 입력 가능합니다." })
-    .regex(/^[0-9\s-]*$/, {
-      message: "숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
-    })
+    .regex(/^\d*$/, { message: "숫자만 입력해주세요. 띄어쓰기·하이픈은 입력할 수 없습니다." })
+    .refine(
+      (val) => !val || val.length === 0 || isValidKoreanPhone(val),
+      { message: "센터 전화 번호는 " + KOREAN_PHONE_ERROR_MESSAGE.replace("전화번호는 ", "") },
+    )
     .optional(),
 });
 

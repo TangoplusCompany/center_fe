@@ -11,13 +11,13 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useGetDeviceDetail } from "@/hooks/api/device/useDeviceDetail";
 import { useEffect } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "../ui/select";
 
 const DeviceEditDialog = ({
   deviceSn,
@@ -62,7 +62,7 @@ const DeviceEditDialog = ({
           <span className="text-toggleAccent dark:text-white">수정하기</span>
         </button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl rounded-2xl sm:rounded-xl">
+      <DialogContent className="w-[calc(100%-2rem)] sm:w-full max-w-2xl rounded-2xl sm:rounded-xl">
         <DialogHeader className="gap-4">
           <DialogTitle className="text-xl font-semibold">
             <div className="flex gap-2 text-xl items-center">
@@ -74,6 +74,8 @@ const DeviceEditDialog = ({
             Tango Body에 대한 정보를 수정합니다.
           </DialogDescription>
           <form onSubmit={handleDeviceUpdate} className="flex flex-col gap-4">
+            {/* TODO: 기기 타입 연동 전까지 드롭다운 숨김 처리 */}
+            {/*
             <div className="w-full flex flex-col gap-1">
               <Select
                 value={"0"} // deviceDetail?.data?.device_type?.toString() TODO 여기서 이제 Device Type에 맞게 변환 필요함
@@ -89,6 +91,7 @@ const DeviceEditDialog = ({
                 </SelectContent>
               </Select>
             </div>
+            */}
 
             <Label className="w-full flex flex-col gap-1" htmlFor="device_name">
               <h3 className="text-sm">키오스크 명칭</h3>

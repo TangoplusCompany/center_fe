@@ -2,6 +2,7 @@ import { patchCenterManagerInformation } from "@/services/center/patchCenterMana
 import { IResponseDefault } from "@/types/default";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { useAuthStore } from "@/providers/AuthProvider";
 
 /**
  * 센터 관리자 정보 수정 Hooks
@@ -9,10 +10,15 @@ import { AxiosError } from "axios";
  */
 export const usePatchManagerInformation = () => {
   const queryClient = useQueryClient();
+  const setAdminProfile = useAuthStore((state) => state.setAdminProfile);
+
   return useMutation({
     mutationFn: patchCenterManagerInformation,
-    onSuccess: () => {
-      // Handle successful login, e.g., redirect to dashboard
+    onSuccess: (_data, variables) => {
+      setAdminProfile({
+        adminName: variables.admin_name,
+        adminMobile: variables.mobile,
+      });
       alert("센터 매니저 정보가 수정되었습니다.");
       queryClient.invalidateQueries({ queryKey: ["ManagerDetails"] });
     },

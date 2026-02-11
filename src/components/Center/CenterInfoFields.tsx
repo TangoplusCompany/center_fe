@@ -100,13 +100,13 @@ const CenterInfoFields = ({
         )}
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="centerPhone">센터 번호</Label>
+        <Label htmlFor="centerPhone">센터 전화 번호</Label>
         <Input
           {...register("centerPhone")}
           type="tel"
           id="centerPhone"
           disabled={disabled}
-          placeholder="센터 번호"
+          placeholder="센터 전화 번호"
           maxLength={20}
         />
         {errors.centerPhone && (

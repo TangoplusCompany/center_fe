@@ -66,16 +66,18 @@ export const CenterUserAddDialog: React.FC<CenterUserAddDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
-      <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col p-0 [&>button]:hidden" aria-describedby={undefined}>
+      <DialogContent className="w-[calc(100%-2rem)] sm:w-full max-w-4xl max-h-[90vh] flex flex-col p-0 [&>button]:hidden overflow-hidden" aria-describedby={undefined}>
         {/* Header */}
-        <DialogHeader className="p-6 border-b">
-          <div className="flex items-center justify-between">
-            <DialogTitle className="text-2xl font-semibold">
+        <DialogHeader className="p-4 sm:p-6 border-b shrink-0 min-w-0">
+          <div className="flex items-center justify-between gap-2">
+            <DialogTitle className="text-lg sm:text-2xl font-semibold truncate">
               센터 사용자 추가
             </DialogTitle>
             <button
+              type="button"
               onClick={handleClose}
-              className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-sub200 transition-colors shrink-0"
+              aria-label="닫기"
             >
               <X className="w-5 h-5" />
             </button>
@@ -83,47 +85,48 @@ export const CenterUserAddDialog: React.FC<CenterUserAddDialogProps> = ({
         </DialogHeader>
 
         {/* Content - Scrollable */}
-        <div className="flex-1 overflow-y-auto p-6">
-          <div className="flex flex-col gap-6">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 min-h-0">
+          <div className="flex flex-col gap-6 min-w-0">
             {/* 유저 검색 컴포넌트 */}
-            <div className="p-4 border-2 border-sub200 rounded-xl bg-sub100">
+            <div className="p-4 border-2 border-sub200 rounded-xl bg-sub100 min-w-0">
               <CenterUserSearchContainer updateUser={getUserData} />
             </div>
 
             {/* 추가된 사용자 목록 */}
-            <div className="flex flex-col gap-4">
-              <h2 className="text-xl font-semibold">추가된 사용자</h2>
-              
+            <div className="flex flex-col gap-4 min-w-0">
+              <h2 className="text-lg sm:text-xl font-semibold">추가된 사용자</h2>
+
               {users.length > 0 ? (
-                <div className="flex flex-col rounded-xl border-2 border-sub200 bg-transparent shadow-sm">
-                  {/* Table Header */}
-                  <div className="grid grid-cols-6 px-3 py-3 bg-sub100 border-b border-sub200 ">
-                    <p className="col-span-1 text-center">이름</p>
-                    <p className="col-span-1 text-center">이메일</p>
-                    <p className="col-span-1 text-center">전화번호</p>
-                    <p className="col-span-1" />
-                  </div>
-                  
-                  {/* Table Body */}
-                  {users.map((user) => (
-                    <div
-                      key={user.user_uuid + user.user_name}
-                      className="grid grid-cols-6 items-center px-3 py-3 hover:bg-sub200 border-b last:border-none border-sub200 transition-colors"
-                    >
-                      <p className="col-span-1 text-center">
-                        {user.user_name}
-                      </p>
-                      <p className="col-span-1 text-center">
-                        {emailFiltering(user.email)}
-                      </p>
-                      <p className="col-span-1 text-center">
-                        {phoneFiltering(user.mobile)}
-                      </p>
+                <div className="rounded-xl border-2 border-sub200 bg-transparent shadow-sm overflow-hidden min-w-0">
+                  {/* Table - horizontal scroll on narrow screens */}
+                  <div className="overflow-x-auto">
+                    <div className="min-w-[280px]">
+                      <div className="grid grid-cols-3 gap-2 px-3 py-3 bg-sub100 border-b border-sub200">
+                        <p className="text-center text-sm font-medium">이름</p>
+                        <p className="text-center text-sm font-medium">이메일</p>
+                        <p className="text-center text-sm font-medium">전화번호</p>
+                      </div>
+                      {users.map((user) => (
+                        <div
+                          key={user.user_uuid + user.user_name}
+                          className="grid grid-cols-3 gap-2 items-center px-3 py-3 hover:bg-sub200 border-b last:border-none border-sub200 transition-colors"
+                        >
+                          <p className="text-center text-sm truncate" title={user.user_name}>
+                            {user.user_name}
+                          </p>
+                          <p className="text-center text-sm truncate" title={emailFiltering(user.email)}>
+                            {emailFiltering(user.email)}
+                          </p>
+                          <p className="text-center text-sm truncate">
+                            {phoneFiltering(user.mobile)}
+                          </p>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  </div>
                 </div>
               ) : (
-                <div className="text-center py-8 text-sub600">
+                <div className="text-center py-8 text-sub600 text-sm sm:text-base">
                   추가된 사용자가 없습니다
                 </div>
               )}
@@ -133,18 +136,20 @@ export const CenterUserAddDialog: React.FC<CenterUserAddDialogProps> = ({
 
         {/* Footer */}
         {users.length > 0 && (
-          <DialogFooter className="p-6 border-t">
-            <div className="flex justify-end gap-3 w-full">
+          <DialogFooter className="p-4 sm:p-6 border-t shrink-0">
+            <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 w-full">
               <button
+                type="button"
                 onClick={handleClose}
-                className="px-4 py-2 rounded-xl bg-sub200 hover:bg-sub300 transition-colors"
+                className="w-full sm:w-auto px-4 py-2 rounded-xl bg-sub200 hover:bg-sub300 transition-colors"
               >
                 취소
               </button>
               <button
+                type="button"
                 onClick={handleAddUser}
                 disabled={mutationAddUser.isPending}
-                className="px-4 py-2 rounded-xl bg-toggleAccent text-white hover:bg-toggleAccentDeep transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full sm:w-auto px-4 py-2 rounded-xl bg-toggleAccent text-white hover:bg-toggleAccentDeep transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {mutationAddUser.isPending ? '추가 중...' : '사용자 추가'}
               </button>
