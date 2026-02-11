@@ -58,9 +58,15 @@ const registerSchema = z
       .regex(/^[가-힣]+$/, "이름은 한글(낱말)만 입력 가능합니다."),
     phone: z
       .string()
-      .min(10, "전화번호는 최소 10글자 이상이여야 합니다.")
-      .max(15, "전화번호는 최대 15글자 이하여야 합니다.")
-      .regex(/^\d{10,15}$/, "전화번호는 숫자만 10~15자 입력 가능합니다."),
+      .min(1, "전화번호를 입력해주세요.")
+      .transform((val) => val.trim().replace(/\D/g, ""))
+      .pipe(
+        z
+          .string()
+          .min(9, "전화번호는 지역번호(9~10자리) 또는 휴대폰(10~11자리) 형식이어야 합니다.")
+          .max(11, "전화번호는 지역번호(9~10자리) 또는 휴대폰(10~11자리) 형식이어야 합니다.")
+          .regex(/^\d+$/, "전화번호는 숫자만 입력 가능합니다."),
+      ),
   })
   .merge(centerEditSchema)
   .superRefine((arg, ctx) => {
@@ -94,6 +100,11 @@ export const RegisterContainer = () => {
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
+      email: "",
+      password: "",
+      passwordConfirm: "",
+      name: "",
+      phone: "",
       centerName: "",
       centerAddress: "",
       centerAddressDetail: "",
