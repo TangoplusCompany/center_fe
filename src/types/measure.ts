@@ -47,8 +47,10 @@ export interface IMeasureList {
 
 export interface IUserDetailMeasureInfo
   extends IMeasureUserRisk,
+    IMeasureRiskLevel,
     IMeasureRangeLevel,
-    IMeasureRiskResult,
+    IMeasureUpperLowerMent,
+    IMeasureUpperLowerLevel,
     IMatStatic,
     IMatOhs {
   user_sn: number | string; // sn
@@ -82,6 +84,9 @@ export interface IMeasureUserRisk {
   risk_knee_right: number; // 통증부위 무릎
   risk_ankle_right: number; // 통증부위 발목
   risk_ankle_left: number; // 통증부위 발목
+}
+
+export interface IMeasureRiskLevel {
   risk_level_neck: number;
   risk_level_shoulder: number; 
   risk_level_elbow: number; 
@@ -89,6 +94,7 @@ export interface IMeasureUserRisk {
   risk_level_knee: number; 
   risk_level_ankle: number; 
 }
+
 
 export interface IMeasureRangeLevel {
   range_level_neck: number;
@@ -98,12 +104,14 @@ export interface IMeasureRangeLevel {
   range_level_knee: number;
   range_level_ankle: number;
 }
-export interface IMeasureRiskResult {
+export interface IMeasureUpperLowerMent {
   risk_upper_ment: string;
+  risk_lower_ment: string;
+}
+
+export interface IMeasureUpperLowerLevel {
   risk_upper_risk_level: string;
   risk_upper_range_level: string;
-
-  risk_lower_ment: string;
   risk_lower_risk_level: string;
   risk_lower_range_level: string;
 }
