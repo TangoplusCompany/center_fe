@@ -6,7 +6,7 @@ const MOCK_DELAY_MS = 800;
 
 export const postManagerInviteSubmit = async (payload: {
   email: string;
-  otp: string;
+  role: number; // 2: 부관리자, 3: 일반
 }) => {
   void payload; // Mock: 실제 API 연동 시 사용
   await new Promise((resolve) => setTimeout(resolve, MOCK_DELAY_MS));

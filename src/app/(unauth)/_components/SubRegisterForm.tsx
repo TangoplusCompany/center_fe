@@ -7,7 +7,9 @@ import { Label } from "@/components/ui/label";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ReactNode, useMemo } from "react";
+import { ReactNode, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { postRegisterSubAdmin } from "@/services/auth/postRegisterSubAdmin";
 
 const subRegisterSchema = z
   .object({
@@ -58,7 +60,16 @@ const ErrorText = ({ children }: { children: ReactNode }) => {
   return <p className="text-sm text-red-500 text-start">{children}</p>;
 };
 
-export const SubRegisterContainer = ({ email }: { email?: string }) => {
+export const SubRegisterContainer = ({
+  token,
+  email,
+}: {
+  token: string;
+  email?: string;
+}) => {
+  const router = useRouter();
+  const [submitPending, setSubmitPending] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -69,15 +80,15 @@ export const SubRegisterContainer = ({ email }: { email?: string }) => {
     defaultValues: {
       email: email || "",
     },
-    mode: "onChange", // 실시간 유효성 검사
+    mode: "onChange",
   });
 
   const password = watch("password");
   const passwordConfirm = watch("passwordConfirm");
   const name = watch("name");
   const phone = watch("phone");
+  const emailValue = watch("email") ?? "";
 
-  // 모든 필수 필드가 입력되고 유효성 체크가 통과되었는지 확인
   const isFormValid = useMemo(() => {
     return (
       isValid &&
@@ -96,8 +107,27 @@ export const SubRegisterContainer = ({ email }: { email?: string }) => {
     );
   }, [isValid, password, passwordConfirm, name, phone, errors]);
 
-  const registerHandleSubmit = handleSubmit(async () => {
-    // API 연동 시 사용
+  const registerHandleSubmit = handleSubmit(async (data) => {
+    if (!token?.trim()) {
+      alert("유효한 초대 링크가 아닙니다. 링크를 다시 확인해주세요.");
+      return;
+    }
+    setSubmitPending(true);
+    try {
+      await postRegisterSubAdmin({
+        sub_admin_invitation_token: token,
+        invitee_email: data.email.trim() || emailValue.trim(),
+        mobile: data.phone,
+        admin_name: data.name,
+        password: data.password,
+      });
+      alert("회원가입이 완료되었습니다. 로그인해주세요.");
+      router.push("/login");
+    } catch {
+      alert("회원가입에 실패했습니다. 다시 시도해주세요.");
+    } finally {
+      setSubmitPending(false);
+    }
   });
 
   return (
@@ -202,9 +232,9 @@ export const SubRegisterContainer = ({ email }: { email?: string }) => {
             type="submit"
             variant="outline"
             className="w-full lg:text-lg"
-            disabled={!isFormValid}
+            disabled={!isFormValid || submitPending}
           >
-            회원가입
+            {submitPending ? "가입 중..." : "회원가입"}
           </Button>
         </div>
       </div>

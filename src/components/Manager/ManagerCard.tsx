@@ -14,9 +14,9 @@ type ManagerCardProps = {
 };
 
 export const ManagerCard = React.memo(({ manager }: ManagerCardProps) => {
-  const { adminRole, adminSn } = useAuthStore((state) => state);
-  const canChangeRole = adminRole < 3 && adminSn !== manager.sn;
-  const canRemove = adminRole < 2 && adminSn !== manager.sn;
+  const { adminSn } = useAuthStore((state) => state);
+  const canChangeRole = adminSn !== manager.sn;
+  const canRemove = adminSn !== manager.sn;
 
   return (
     <div

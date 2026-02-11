@@ -25,10 +25,12 @@ const CenterManagerList = ({
 }: {
   managerList: ICenterManagerData[];
 }) => {
-  // 카드 뷰
+  // 주관리자(admin_role === 1)가 먼저 오도록 정렬
+  const sortedList = [...managerList].sort((a, b) => a.admin_role - b.admin_role);
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
-      {managerList.map((manager) => (
+      {sortedList.map((manager) => (
         <ManagerCard key={manager.sn} manager={manager} />
       ))}
     </div>

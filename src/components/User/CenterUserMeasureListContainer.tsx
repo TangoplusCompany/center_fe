@@ -57,7 +57,6 @@ const CenterUserMeasureListContainer = ({
     sort,
     isResultPage,
   });
-  console.log(userMeasureList)
   const handleSelectChange = (value: string) => {
       setQueryParam([
         ["limit", value],

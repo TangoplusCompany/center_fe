@@ -10,7 +10,7 @@ import { phoneHyphen } from "@/utils/regexFiltering";
 import { useRouter } from "next/navigation";
 
 const CenterManagerDetailContainer = ({ sn }: { sn: string }) => {
-  const { adminRole, adminSn } = useAuthStore((state) => state);
+  const { adminSn } = useAuthStore((state) => state);
 
   const router = useRouter();
   const {
@@ -46,7 +46,7 @@ const CenterManagerDetailContainer = ({ sn }: { sn: string }) => {
           <span>뒤로가기</span>
         </button>
       </div>
-        {adminRole < 3 && adminSn !== managerDetail.sn && (
+        {adminSn !== managerDetail.sn && (
           <ManagerRoleChangeDialog manager={managerDetail} />
         )}
       </div>
