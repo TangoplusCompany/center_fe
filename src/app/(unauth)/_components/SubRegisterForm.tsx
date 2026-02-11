@@ -177,7 +177,8 @@ export const SubRegisterContainer = ({
       <div className="flex flex-col items-center gap-5 text-center">
         <legend className="sr-only">회원가입</legend>
         <h1 className="text-2xl font-bold mb-3 lg:mb-5">
-          탱고플러스 센터 부관리자 회원가입
+          <span className="block sm:inline">탱고플러스 센터 부관리자</span>{" "}
+          <span className="block sm:inline">회원가입</span>
         </h1>
         <div className="flex flex-col gap-6 w-full">
           <div className="flex flex-col items-start gap-2">
@@ -256,10 +257,13 @@ export const SubRegisterContainer = ({
             </Label>
             <Input
               id="phone"
-              type="text"
-              placeholder="하이픈(-)없이 입력해주세요."
+              type="tel"
+              inputMode="numeric"
+              autoComplete="tel"
+              pattern="[0-9\\s-]*"
+              placeholder="전화번호"
               required
-              maxLength={15}
+              maxLength={20}
               {...register("phone")}
               className="bg-white dark:bg-border"
             />
