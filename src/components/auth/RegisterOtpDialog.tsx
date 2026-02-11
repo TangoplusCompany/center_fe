@@ -166,7 +166,7 @@ export const RegisterOtpDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="w-[calc(100%-2rem)] sm:w-full sm:max-w-md">
         <DialogHeader>
           <DialogTitle>OTP 인증</DialogTitle>
           <DialogDescription>

@@ -30,9 +30,9 @@ const DashboardDeviceStatus = ({
         
         <div className="flex flex-col xl:flex-row xl:min-h-32 xl:justify-between gap-4 xl:gap-0">
           <div className="flex flex-col justify-between">
-            <div className="text-base px-4 py-2">
+            {/* <div className="text-base px-4 py-2">
               Tango Body Pro
-            </div>
+            </div> */}
             <div className="flex flex-col gap-1 px-4 py-2">
               <p className="text-base ">
                 {`[${device.install_location.trim()}]`}

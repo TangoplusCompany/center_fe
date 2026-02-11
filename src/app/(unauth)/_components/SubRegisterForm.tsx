@@ -11,6 +11,10 @@ import { ReactNode, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import { postRegisterSubAdmin } from "@/services/auth/postRegisterSubAdmin";
+import {
+  isValidKoreanPhone,
+  KOREAN_PHONE_ERROR_MESSAGE,
+} from "@/utils/validateKoreanPhone";
 
 /** 부관리자 회원가입 API 실패 시 상태별 안내 메시지 */
 function getRegisterSubAdminErrorMessage(error: unknown): string {
@@ -60,14 +64,19 @@ const subRegisterSchema = z
       .regex(/^[가-힣]+$/, "이름은 한글(낱말)만 입력 가능합니다."),
     phone: z
       .string()
+      .trim()
       .min(1, "전화번호를 입력해주세요.")
-      .transform((val) => val.trim().replace(/\D/g, ""))
+      .refine((val) => /^[0-9\s-]+$/.test(val), {
+        message: "숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
+      })
+      .transform((val) => val.replace(/\D/g, ""))
       .pipe(
         z
           .string()
           .min(9, "전화번호는 지역번호(9~10자리) 또는 휴대폰(10~11자리) 형식이어야 합니다.")
           .max(11, "전화번호는 지역번호(9~10자리) 또는 휴대폰(10~11자리) 형식이어야 합니다.")
-          .regex(/^\d+$/, "전화번호는 숫자만 입력 가능합니다."),
+          .regex(/^\d+$/, "전화번호는 숫자만 입력 가능합니다.")
+          .refine(isValidKoreanPhone, { message: KOREAN_PHONE_ERROR_MESSAGE }),
       ),
   })
   .superRefine((arg, ctx) => {

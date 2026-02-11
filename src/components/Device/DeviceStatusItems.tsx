@@ -29,7 +29,7 @@ export const DeviceStatusItems = React.memo(
           </div>
           <div className="flex w-full min-h-32 justify-between">
             <div className="flex flex-col justify-between">
-              <div className="text-base px-4 py-2">Tango Body Pro</div>
+              {/* <div className="text-base px-4 py-2">Tango Body Pro</div> */}
               <div className="flex flex-col gap-1 px-4 py-2">
                 <p className="text-base ">
                   {`[${device.install_location.trim()}]`}

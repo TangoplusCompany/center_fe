@@ -2,9 +2,19 @@ import { customUnAuthAxios } from "@/lib/axios";
 import type { IResponseDefault } from "@/types/default";
 
 /** auth/request-email-verification-otp 응답 data */
-export interface IRequestEmailVerificationOtpData {
+export interface IRequestEmailVerificationOtpSentData {
   remaining_issue_count: number;
 }
+
+/** 기존 관리자 존재(200) 응답 data */
+export interface IRequestEmailVerificationOtpExistingAdminData {
+  existing_admin_before_registering_temp_token: string;
+  admin_sn: number;
+}
+
+export type IRequestEmailVerificationOtpData =
+  | IRequestEmailVerificationOtpSentData
+  | IRequestEmailVerificationOtpExistingAdminData;
 
 export type IRequestEmailVerificationOtpResponse = IResponseDefault & {
   data: IRequestEmailVerificationOtpData;

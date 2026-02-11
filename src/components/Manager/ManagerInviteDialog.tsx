@@ -105,11 +105,11 @@ export const ManagerInviteDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="w-[calc(100%-2rem)] sm:w-full sm:max-w-md">
         <DialogHeader>
           <DialogTitle>매니저 초대</DialogTitle>
           <DialogDescription>
-            초대할 매니저의 이메일과 역할을 선택한 뒤 전송해주세요.
+            초대할 매니저의 이메일과 역할을 선택한 뒤 <span className="whitespace-nowrap">전송해주세요.</span>
           </DialogDescription>
         </DialogHeader>
 
@@ -119,6 +119,8 @@ export const ManagerInviteDialog = ({
             <Input
               id="invite-email"
               type="email"
+              inputMode="email"
+              autoComplete="email"
               placeholder="example@email.com"
               {...form.register("email")}
             />

@@ -22,9 +22,10 @@ const UnlockAccountPage = () => {
   return (
     <div className="flex flex-1 items-center justify-center">
       <div className="w-full max-w-[480px]">
-        <div className="w-full flex flex-col items-start gap-2">
+        <div className="w-full flex flex-col items-center gap-2">
           <h1 className="text-2xl font-bold mb-3 lg:mb-5 text-center">
-            탱고플러스 센터관리자 잠긴 계정 해제
+            <span className="block sm:inline">탱고플러스 센터관리자 잠긴</span>{" "}
+            <span className="block sm:inline">계정 해제</span>
           </h1>
           {step === 0 && <InputEmail purpose="account" setEmail={handleInputEmail} />}
           {step === 1 && (

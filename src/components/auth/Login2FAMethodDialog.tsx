@@ -47,7 +47,7 @@ export const Login2FAMethodDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="w-[calc(100%-2rem)] sm:w-full sm:max-w-md">
         <DialogHeader>
           <DialogTitle>2차 인증이 필요합니다</DialogTitle>
           <DialogDescription>

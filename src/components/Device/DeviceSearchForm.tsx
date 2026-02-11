@@ -15,17 +15,18 @@ export const DeviceSearchForm = ({
   errors: UseFormReturn<IDeviceSearchForm>["formState"]["errors"];
 }) => {
   return (
-    <form className="my-5" onSubmit={handleSubmitDeviceAdd}>
+    <form className="my-5 min-w-0" onSubmit={handleSubmitDeviceAdd}>
       <legend className="sr-only">센터 기기 등록</legend>
-      <div className="flex items-start justify-center gap-4">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-3 min-w-0">
         <Label htmlFor="serial_number" className="text-sm font-medium sr-only">
           기기 시리얼 넘버
         </Label>
-        <div className="w-full">
+        <div className="min-w-0 flex-1">
           <Input
             id="serial_number"
             type="text"
             placeholder="기기 시리얼 넘버를 입력하세요."
+            className="min-w-0"
             {...register("serial_number")}
             maxLength={50}
           />
@@ -36,8 +37,11 @@ export const DeviceSearchForm = ({
             </p>
           )}
         </div>
-        <Button type="submit" className="bg-sub600 shadow-none text-white hover:bg-black">
-          <Search className="w-4 h-4" />  
+        <Button
+          type="submit"
+          className="bg-sub600 shadow-none text-white hover:bg-black shrink-0"
+        >
+          <Search className="w-4 h-4" />
           기기 검색
         </Button>
       </div>

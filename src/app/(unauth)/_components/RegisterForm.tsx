@@ -15,6 +15,10 @@ import RegisterCenterCheckForm from "./RegisterCenterCheckForm";
 import { RegisterOtpDialog } from "@/components/auth/RegisterOtpDialog";
 import { centerEditSchema } from "@/schemas/centerSchema";
 import {
+  isValidKoreanPhone,
+  KOREAN_PHONE_ERROR_MESSAGE,
+} from "@/utils/validateKoreanPhone";
+import {
   postRequestEmailVerificationOtp,
   getRequestEmailVerificationOtpErrorMessage,
 } from "@/services/auth/postRequestEmailVerificationOtp";
@@ -29,49 +33,56 @@ import {
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 
+/** 최초 가입 시에만 검사 (기존 관리자일 땐 빈 문자열 허용) */
+const passwordSchema = z
+  .string()
+  .min(8, "비밀번호는 최소 8글자 이상이여야 합니다.")
+  .max(16, "비밀번호는 최대 16글자 이하여야 합니다.")
+  .regex(
+    /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]+$/i,
+    "비밀번호는 영문, 숫자, ! ~ * 특수문자를 최소 1자리 이상 입력해야합니다.",
+  );
+const nameSchema = z
+  .string()
+  .min(2, "이름은 최소 2글자 이상이여야 합니다.")
+  .max(50, "이름은 최대 50글자 이하이여야 합니다.")
+  .regex(/^[가-힣]+$/, "이름은 한글(낱말)만 입력 가능합니다.");
+const phoneSchema = z
+  .string()
+  .trim()
+  .min(1, "전화번호를 입력해주세요.")
+  .refine((val) => /^[0-9\s-]+$/.test(val), {
+    message: "숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
+  })
+  .transform((val) => val.replace(/\D/g, ""))
+  .pipe(
+    z
+      .string()
+      .min(9, "전화번호는 지역번호(9~10자리) 또는 휴대폰(10~11자리) 형식이어야 합니다.")
+      .max(11, "전화번호는 지역번호(9~10자리) 또는 휴대폰(10~11자리) 형식이어야 합니다.")
+      .regex(/^\d+$/, "전화번호는 숫자만 입력 가능합니다.")
+      .refine(isValidKoreanPhone, { message: KOREAN_PHONE_ERROR_MESSAGE }),
+  );
+
 const registerSchema = z
   .object({
     email: z
       .string()
       .max(30, { message: "이메일은 최대 30자까지 입력 가능합니다." })
       .email({ message: "이메일 형식이 올바르지 않습니다." }),
-    password: z
-      .string()
-      .min(8, "비밀번호는 최소 8글자 이상이여야 합니다.")
-      .max(16, "비밀번호는 최대 16글자 이하여야 합니다.")
-      .regex(
-        /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]+$/i,
-        "비밀번호는 영문, 숫자, ! ~ * 특수문자를 최소 1자리 이상 입력해야합니다.",
-      ),
-    passwordConfirm: z
-      .string()
-      .min(8, "비밀번호는 최소 8글자 이상이여야 합니다.")
-      .max(16, "비밀번호는 최대 16글자 이하여야 합니다.")
-      .regex(
-        /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]+$/i,
-        "비밀번호는 영문, 숫자, ! ~ * 특수문자를 최소 1자리 이상 입력해야합니다.",
-      ),
-    name: z
-      .string()
-      .min(2, "이름은 최소 2글자 이상이여야 합니다.")
-      .max(50, "이름은 최대 50글자 이하이여야 합니다.")
-      .regex(/^[가-힣]+$/, "이름은 한글(낱말)만 입력 가능합니다."),
-    phone: z
-      .string()
-      .min(1, "전화번호를 입력해주세요.")
-      .transform((val) => val.trim().replace(/\D/g, ""))
-      .pipe(
-        z
-          .string()
-          .min(9, "전화번호는 지역번호(9~10자리) 또는 휴대폰(10~11자리) 형식이어야 합니다.")
-          .max(11, "전화번호는 지역번호(9~10자리) 또는 휴대폰(10~11자리) 형식이어야 합니다.")
-          .regex(/^\d+$/, "전화번호는 숫자만 입력 가능합니다."),
-      ),
+    // 기존 관리자(이미 가입 이메일)일 때는 빈 문자열 허용 → 센터 정보만 검증
+    password: z.union([z.literal(""), passwordSchema]),
+    passwordConfirm: z.union([z.literal(""), passwordSchema]),
+    name: z.union([z.literal(""), nameSchema]),
+    phone: z.union([z.literal(""), phoneSchema]),
   })
   .merge(centerEditSchema)
   .superRefine((arg, ctx) => {
+    const isExistingAdminFlow =
+      arg.password === "" && arg.passwordConfirm === "";
+    if (isExistingAdminFlow) return;
     if (arg.password !== arg.passwordConfirm) {
-      return ctx.addIssue({
+      ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "비밀번호가 일치하지 않습니다.",
         path: ["passwordConfirm"],
@@ -126,6 +137,8 @@ export const RegisterContainer = () => {
   const [otpStatus, setOtpStatus] = useState<"required" | "verified" | "failed">("required");
   const [isOtpRequesting, setIsOtpRequesting] = useState(false);
   const [isAutoCheckingDevice, setIsAutoCheckingDevice] = useState(false);
+  /** 200 응답(이미 가입된 관리자)인 경우: 비밀번호/이름/전화번호 숨김, 센터 정보만 입력 */
+  const [isExistingAdmin, setIsExistingAdmin] = useState(false);
 
   // URL에 device_id가 있으면 기기 검증 자동 실행 후 회원가입 폼으로 이동
   useEffect(() => {
@@ -183,10 +196,38 @@ export const RegisterContainer = () => {
     setIsOtpRequesting(true);
     try {
       const res = await postRequestEmailVerificationOtp({ email, tempToken });
+      // 2) 기존 관리자(이미 가입한 적 있음)인 경우: OTP를 보내지 않고,
+      // existing_admin_before_registering_temp_token을 register-admin Authorization에 사용
+      if (
+        res?.status === 200 &&
+        res?.data &&
+        typeof res.data === "object" &&
+        "existing_admin_before_registering_temp_token" in res.data
+      ) {
+        const token = String(
+          (res.data as { existing_admin_before_registering_temp_token: string })
+            .existing_admin_before_registering_temp_token,
+        );
+        setIsExistingAdmin(true);
+        setValue("password", "");
+        setValue("passwordConfirm", "");
+        setValue("name", "");
+        setValue("phone", "");
+        handleOtpVerified(true, token);
+        setIsOtpDialogOpen(false);
+        alert("기존 관리자 계정이 확인되어 이메일 인증이 완료되었습니다.");
+        return;
+      }
+
+      // 1) 최초 가입(201)인 경우: OTP 다이얼로그 오픈
       setIsOtpDialogOpen(true);
       const remaining =
-        typeof res?.data?.remaining_issue_count === "number"
-          ? res.data.remaining_issue_count
+        res?.data &&
+        typeof res.data === "object" &&
+        "remaining_issue_count" in res.data &&
+        typeof (res.data as { remaining_issue_count: unknown }).remaining_issue_count ===
+          "number"
+          ? (res.data as { remaining_issue_count: number }).remaining_issue_count
           : null;
       alert(
         remaining != null
@@ -213,9 +254,35 @@ export const RegisterContainer = () => {
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
     try {
       const res = await postRequestEmailVerificationOtp({ email, tempToken });
+      // 기존 관리자 케이스면 재전송/OTP 없이 바로 verified 처리
+      if (
+        res?.status === 200 &&
+        res?.data &&
+        typeof res.data === "object" &&
+        "existing_admin_before_registering_temp_token" in res.data
+      ) {
+        const token = String(
+          (res.data as { existing_admin_before_registering_temp_token: string })
+            .existing_admin_before_registering_temp_token,
+        );
+        setIsExistingAdmin(true);
+        setValue("password", "");
+        setValue("passwordConfirm", "");
+        setValue("name", "");
+        setValue("phone", "");
+        handleOtpVerified(true, token);
+        setIsOtpDialogOpen(false);
+        alert("기존 관리자 계정이 확인되어 이메일 인증이 완료되었습니다.");
+        return;
+      }
+
       const remaining =
-        typeof res?.data?.remaining_issue_count === "number"
-          ? res.data.remaining_issue_count
+        res?.data &&
+        typeof res.data === "object" &&
+        "remaining_issue_count" in res.data &&
+        typeof (res.data as { remaining_issue_count: unknown }).remaining_issue_count ===
+          "number"
+          ? (res.data as { remaining_issue_count: number }).remaining_issue_count
           : null;
       alert(
         remaining != null
@@ -254,19 +321,31 @@ export const RegisterContainer = () => {
     }
     setRegisterPending(true);
     try {
-      await postRegisterAdmin(
-        {
-          admin_email: values.email,
-          password: values.password,
-          admin_name: values.name,
-          admin_mobile: values.phone,
-          center_name: values.centerName,
-          center_address: values.centerAddress,
-          center_address_detail: values.centerAddressDetail ?? "",
-          center_phone: values.centerPhone ?? "",
-        },
-        emailVerificationTempToken,
-      );
+      if (isExistingAdmin) {
+        await postRegisterAdmin(
+          {
+            center_name: values.centerName,
+            center_address: values.centerAddress,
+            center_address_detail: values.centerAddressDetail ?? "",
+            center_phone: values.centerPhone ?? "",
+          },
+          emailVerificationTempToken,
+        );
+      } else {
+        await postRegisterAdmin(
+          {
+            admin_email: values.email,
+            password: values.password,
+            admin_name: values.name,
+            admin_mobile: values.phone,
+            center_name: values.centerName,
+            center_address: values.centerAddress,
+            center_address_detail: values.centerAddressDetail ?? "",
+            center_phone: values.centerPhone ?? "",
+          },
+          emailVerificationTempToken,
+        );
+      }
       alert("회원가입이 완료되었습니다. 로그인해주세요.");
       router.push("/login");
     } catch (e) {
@@ -290,7 +369,8 @@ export const RegisterContainer = () => {
       <div className="flex flex-col items-center gap-5 text-center">
         <legend className="sr-only">센터관리자 회원가입</legend>
         <h1 className="text-2xl font-bold mb-3 lg:mb-5">
-          탱고플러스 센터주관리자 회원가입
+          <span className="block sm:inline">탱고플러스 센터관리자</span>{" "}
+          <span className="block sm:inline">회원가입</span>
         </h1>
         {!isCheckCenter ? (
           isAutoCheckingDevice ? (
@@ -307,7 +387,9 @@ export const RegisterContainer = () => {
               <div className="flex gap-2 w-full items-stretch">
                 <Input
                   id="email"
-                  type="text"
+                  type="email"
+                  inputMode="email"
+                  autoComplete="email"
                   placeholder="email@example.com"
                   required
                   maxLength={30}
@@ -329,7 +411,7 @@ export const RegisterContainer = () => {
                     ? "인증완료"
                     : isOtpRequesting
                       ? "전송중..."
-                      : "OTP 인증"}
+                      : "인증 번호 전송"}
                 </Button>
               </div>
               {errors.email?.message && (
@@ -348,12 +430,13 @@ export const RegisterContainer = () => {
                 </p>
               )}
             </div>
-            <div className="flex flex-col items-start gap-2">
-              <Label htmlFor="password" className="lg:text-lg">
-                비밀번호
-              </Label>
-
-              <Input
+            {!isExistingAdmin && (
+              <>
+                <div className="flex flex-col items-start gap-2">
+                  <Label htmlFor="password" className="lg:text-lg">
+                    비밀번호
+                  </Label>
+                  <Input
                 id="password"
                 type="password"
                 placeholder="********"
@@ -407,17 +490,27 @@ export const RegisterContainer = () => {
               </Label>
               <Input
                 id="phone"
-                type="text"
-                placeholder="하이픈(-)없이 입력해주세요."
+                type="tel"
+                inputMode="numeric"
+                autoComplete="tel"
+                pattern="[0-9\\s-]*"
+                placeholder="전화번호"
                 required
-                maxLength={15}
+                maxLength={20}
                 {...register("phone")}
                 className="bg-white dark:bg-border"
               />
               {errors.phone?.message && (
                 <ErrorText>{String(errors.phone?.message)}</ErrorText>
               )}
-            </div>
+                </div>
+              </>
+            )}
+            {isExistingAdmin && (
+              <p className="text-sm text-muted-foreground text-center w-full py-2">
+                이미 가입된 이메일 입니다. 센터 정보만 입력해주세요.
+              </p>
+            )}
             <div className="flex flex-col items-start gap-2">
               <Label htmlFor="centerName" className="lg:text-lg">
                 센터 이름
@@ -474,12 +567,12 @@ export const RegisterContainer = () => {
             </div>
             <div className="flex flex-col items-start gap-2">
               <Label htmlFor="centerPhone" className="lg:text-lg">
-                센터 번호
+                센터 전화 번호
               </Label>
               <Input
                 id="centerPhone"
                 type="tel"
-                placeholder="센터 번호"
+                placeholder="센터 전화 번호"
                 maxLength={20}
                 {...register("centerPhone")}
                 className="bg-white dark:bg-border"

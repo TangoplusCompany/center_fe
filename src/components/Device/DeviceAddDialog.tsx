@@ -43,11 +43,11 @@ const DeviceAddDialog = () => {
           </div>
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-fit rounded-2xl sm:rounded-xl">
-        <DialogHeader>
+      <DialogContent className="w-[calc(100%-2rem)] max-w-lg sm:w-full sm:max-w-md rounded-2xl sm:rounded-xl overflow-hidden">
+        <DialogHeader className="min-w-0">
           <DialogTitle className="">
-            <div className="flex gap-2 text-xl font-semibold items-center">
-              <div className="rounded-full p-2 bg-sub100">
+            <div className="flex gap-2 text-xl font-semibold items-center min-w-0">
+              <div className="rounded-full p-2 bg-sub100 shrink-0">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={`/icons/ic_device_add.svg`}
@@ -58,15 +58,16 @@ const DeviceAddDialog = () => {
                   }}
                 />
               </div>
-              기기 등록하기
+              <span className="truncate">기기 등록하기</span>
             </div>
-            
           </DialogTitle>
-          <DialogDescription className="text-sm whitespace-nowrap">
+          <DialogDescription className="text-sm break-words">
             기기를 등록하기 위해서는 기기의 시리얼 넘버를 입력해야 합니다.
           </DialogDescription>
         </DialogHeader>
-        <DeviceSearchContainer />
+        <div className="min-w-0">
+          <DeviceSearchContainer />
+        </div>
       </DialogContent>
     </Dialog>
   );
@@ -81,20 +82,22 @@ const DeviceAddContainer = ({ deviceInfo }: { deviceInfo: IDeviceSearch }) => {
   };
 
   return (
-    <div className="w-full flex items-start justify-between gap-2">
-      <div className="flex-1">
-        <p>
+    <div className="w-full flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 min-w-0">
+      <div className="flex-1 min-w-0 break-words">
+        <p className="break-words">
           기기 이름: {deviceInfo.data.device_name} (
           {deviceInfo.data.serial_number})
         </p>
-        <p>설치 장소: {deviceInfo.data.install_location}</p>
-        <p>
+        <p className="break-words">설치 장소: {deviceInfo.data.install_location}</p>
+        <p className="break-words">
           {deviceInfo.data.install_address_1 &&
-            `설치 주소: ${deviceInfo.data.install_address_1} ${deviceInfo.data.install_address_2}`}
+            `설치 주소: ${deviceInfo.data.install_address_1} ${deviceInfo.data.install_address_2 || ""}`}
         </p>
       </div>
-      <Button onClick={() => 
-        handlePostDeviceAdd(deviceInfo.data.device_sn)}>
+      <Button
+        onClick={() => handlePostDeviceAdd(deviceInfo.data.device_sn)}
+        className="shrink-0 w-full sm:w-auto"
+      >
         등록하기
       </Button>
     </div>
