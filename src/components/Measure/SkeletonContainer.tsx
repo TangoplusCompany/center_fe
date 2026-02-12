@@ -2,17 +2,17 @@
 
 import "@/css/body-skeleton.css";
 import { IUserDetailMeasureInfo } from "@/types/measure";
-import SkeletonSvg from "./SkeletonSvg";
+import { FullBodySkeleton3D } from "./FullBodySkeleton3D";
 
 const SkeletonContainer = ({ data }: { data: IUserDetailMeasureInfo }) => {
   return (
     <div className="relative box-border flex h-full flex-col items-center rounded-3xl border-2 border-sub200 p-4 text-black focus-visible:outline-none">
-      <div className="flex-1 flex items-center justify-center">
-        <div className="relative z-0 skeleton mb-8">
-          <SkeletonSvg
-            
-            data={data}
-          />
+      <p className="text-xs shrink-0 mb-2 self-start" style={{ color: "#9A9A9A" }}>
+        Polyon Studio (CC BY)
+      </p>
+      <div className="flex-1 flex items-center justify-center w-full min-h-0">
+        <div className="relative z-0 skeleton mb-8 w-[246px] h-[440px] shrink-0">
+          <FullBodySkeleton3D data={data} className="w-full h-full" />
         </div>
       </div>
 
