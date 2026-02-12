@@ -62,7 +62,6 @@ const UserDetailTap = ({
           isAIExerciseActive ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'
         }`}
       >
-        {/* 메인 컬러 포함 그라데이션 */}
         <div 
           className="absolute inset-0 z-0"
           style={{
@@ -71,13 +70,11 @@ const UserDetailTap = ({
           }}
         />
         
-        {/* 물방울 리플 2개 (0.5초 간격) */}
         <div className="absolute inset-0">
           <span className="ripple-dot" />
           <span className="ripple-dot" style={{ animationDelay: "0.5s" }} />
         </div>
         
-        {/* 버튼 내용 */}
         <span className="relative z-10 flex items-center text-xs sm:text-sm whitespace-nowrap">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
