@@ -1,9 +1,10 @@
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Pagination, PaginationButton, PaginationButtonNext, PaginationButtonPrevious, PaginationContent, PaginationEllipsis, PaginationItem } from "@/components/ui/pagination";
 import { ComparePagination } from "@/hooks/api/user/useMeasureListForCompare";
 import { ComparePair, CompareSlot } from "@/types/compare";
 import { IMeasureROMUnit } from "@/types/measure";
 import { formatDate } from "@/utils/formatDate";
-import { Dialog, DialogContent, DialogTitle } from "@radix-ui/react-dialog";
+
 import { useEffect, useState } from "react";
 
 export interface ROMPickerDialogProps {
@@ -60,7 +61,7 @@ export const ROMPickerDialog = ({
       <DialogContent className="w-full max-w-md rounded-2xl bg-white dark:bg-card p-4" aria-describedby={undefined}>
         {/* 헤더 */}
         <DialogTitle className="text-base font-semibold mb-3 text-foreground">
-          측정 목록 선택
+          ROM 측정 기록 선택
         </DialogTitle>
 
         {/* 내용 영역 */}

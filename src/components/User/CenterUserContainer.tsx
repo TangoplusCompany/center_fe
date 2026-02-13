@@ -4,7 +4,6 @@ import CenterUserMeasureListContainer from "./CenterUserMeasureListContainer";
 
 import MeasureDetail from "@/components/Measure/MeasureDetail";
 import CompareContainer from "../Measure/Compare/CompareContainer";
-import { IUserMeasureList } from "@/types/user";
 import { ComparePair, CompareSlot } from "@/types/compare";
 import CenterUserDashBoard from "./CenterUserDashBoard";
 import { useMeasureListForDetail } from "@/hooks/api/user/useMeasureListForDetail";
@@ -19,7 +18,6 @@ const CenterUserMeasureContainer = ({
   comparePair,
   onToggleCompareSn,
   onClearCompare,
-  userMeasureList, // eslint-disable-line @typescript-eslint/no-unused-vars
   // onRemoveCompare,
   onCompareDialogOpen,
   onOpenCompareMode,
@@ -35,7 +33,6 @@ const CenterUserMeasureContainer = ({
   comparePair: ComparePair;
   onToggleCompareSn: (sn: number, slot: CompareSlot) => void; // ✅ 추가
   onClearCompare: () => void;
-  userMeasureList: IUserMeasureList;
   // onRemoveCompare: (slot: CompareSlot) => void;
   onCompareDialogOpen: (slot: CompareSlot) => void;
   onOpenCompareMode: () => void;

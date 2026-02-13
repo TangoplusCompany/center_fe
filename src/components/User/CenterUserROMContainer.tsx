@@ -1,10 +1,11 @@
 import { useState } from "react";
-import ROMSelectContainer from "../Measure/ROM/SelectContainer";
+import ROMPartTab from "../Measure/ROM/PartTab";
 import ROMBody from "../Measure/ROM/Body";
 import { ComparePair, CompareSlot } from "@/types/compare";
 import ROMPickerDialog from "../Measure/ROM/PickerDialog";
 import { useROMListForCompare } from "@/hooks/api/measure/rom/useROMListForCompare";
-import { IMeasureROMDetail } from "@/types/measure";
+import { IMeasureROMDetail, IMeasureROMInfo } from "@/types/measure";
+import ROMItemContainer from "../Measure/ROM/ItemContainer";
 
 export interface UserROMProps {
   userSn: string
@@ -12,10 +13,18 @@ export interface UserROMProps {
 export const CenterUserROMContainer = ({
   userSn
 }: UserROMProps) => {
-  const [part, setPart] = useState(0);
-  const onPartSelect = (part: number) => {
+  const [part, setPart] = useState("0");
+  
+  // TODO 이곳에서 API에서 형식을 어떻게 정하느냐에따라 특정 ROM의 sn을 관리할 것이냐 
+  // 아니면 해당 ROM 검사의 unique값? 발 굽힘 검사라고 식별할 수 있는 number? 
+  const [romSn, setRomSn] = useState(-1);
+  const onPartSelect = (part: string) => {
     setPart(part);
   };
+  const onROMItemSelect = (romSn: number) => {
+    setRomSn(romSn);
+  };
+
 
   const [isCompareDialogOpen, setIsCompareDialogOpen] = useState(false);
   const [activeSlot, setActiveSlot] = useState<CompareSlot>(0);
@@ -47,7 +56,7 @@ export const CenterUserROMContainer = ({
   } = useROMListForCompare({
     // userUUID: isResultPage ? undefined : userUUID, // eslint-disable-line @typescript-eslint/no-unused-vars
     user_sn: parseInt(userSn),
-    part: part
+    part: parseInt(part)
   });
 
 
@@ -86,27 +95,56 @@ export const CenterUserROMContainer = ({
     value_2_max: "23.9",
     camera_orientation : 1
   }
-  const dummayRight : IMeasureROMDetail = {
-    title: "더미 타이틀2",
-    reg_date: "",
-    measure_server_file_name: "",
-    measure_server_json_name: "",
-    measure_server_mat_json_name: "",
-    description: "설명",
-    normal_bad: "0",
-    normal_normal: "1",
-    max_value: "1",
-    value_1_min: "18.0",
-    value_1_max: "100.1",
-    value_2_min: "19.1",
-    value_2_max: "273.9",
-    camera_orientation : 1
-  }
-
+  // const dummayRight : IMeasureROMDetail = {
+  //   title: "더미 타이틀2",
+  //   reg_date: "",
+  //   measure_server_file_name: "",
+  //   measure_server_json_name: "",
+  //   measure_server_mat_json_name: "",
+  //   description: "설명",
+  //   normal_bad: "0",
+  //   normal_normal: "1",
+  //   max_value: "1",
+  //   value_1_min: "18.0",
+  //   value_1_max: "100.1",
+  //   value_2_min: "19.1",
+  //   value_2_max: "273.9",
+  //   camera_orientation : 1
+  // }
+  const dummyROMItems : IMeasureROMInfo[] = [
+    {
+      title: "[좌측면] 발바닥 굽힘 검사",
+      howto: "왼쪽 발끝을 아래쪽으로 누르는 동작종아리 및 아킬레스 유연성 확인, 보행기능 평가, 족저근막염 기능 확인, 수술/재활 경과 확인"
+    },
+    {
+      title: "[우측면] 발바닥 굽힘 검사",
+      howto: "아킬레스 유연성 확인, 왼쪽 발끝을 아래쪽으로 누르는 동작종아리 및 보행기능 평가, 족저근막염 기능 확인, 수술/재활 경과 확인"
+    },
+    {
+      title: "[좌측면] 발등 굽힘 검사",
+      howto: "보행기능 평가, 족저근막염 기능 확인, 수술/재활 경과 확인 왼쪽 발끝을 아래쪽으로 누르는 동작종아리 및 아킬레스 유연성 확인, "
+    },
+    {
+      title: "[우측면] 발등 굽힘 검사",
+      howto: "보행기능 평가, 왼쪽 발끝을 아래쪽으로 누르는 동작종아리 및 아킬레스 유연성 확인, 족저근막염 기능 확인, 수술/재활 경과 확인"
+    },
+    {
+      title: "[좌측면] 발가락 검사",
+      howto: "수술/재활 경과 확인 왼쪽 발끝을 아래쪽으로 누르는 동작종아리 및 아킬레스 유연성 확인, 보행기능 평가, 족저근막염 기능 확인, "
+    }
+  ]
   return (
     <div className="flex flex-col gap-4">
-      <ROMSelectContainer onSelect={onPartSelect} />
-      <ROMBody data0={dummayLeft} data1={dummayRight} userSn={userSn} onCompareDialogOpen={onCompareDialogOpen}/>
+      <ROMPartTab onPartSelect={onPartSelect} onROMItemSelect={onROMItemSelect} romSn={romSn}/>
+      {(romSn === -1) && (
+        <ROMItemContainer datas={dummyROMItems.slice(0, Math.floor(Math.random() * 4) + 1)} onCompareDialogOpen={onCompareDialogOpen} onROMItemSelect={onROMItemSelect} />
+      )}
+
+
+      {/* <ROMBody data0={dummayLeft} data1={dummayRight} userSn={userSn} onCompareDialogOpen={onCompareDialogOpen}/> */}
+      {(romSn !== -1) && (
+        <ROMBody data0={dummayLeft} data1={undefined} userSn={userSn} onCompareDialogOpen={onCompareDialogOpen} onROMItemSelect={onROMItemSelect}/>
+      )}
 
       <ROMPickerDialog
         open={isCompareDialogOpen}

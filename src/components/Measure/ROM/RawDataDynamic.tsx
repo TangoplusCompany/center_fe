@@ -55,7 +55,7 @@ export const ROMRawDataDynamic = ({
   const isRotated1 = right?.camera_orientation === 1;
   return (
     <div className="flex flex-col w-full h-full gap-4">
-      <div className="grid grid-cols-2 gap-2 h-full">
+      <div className="grid grid-cols-2 gap-4 h-full">
         {/* 좌측 비디오 플레이어 */}
         <VideoPlayer
           videoSrc={left?.measure_server_file_name}
