@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
 import CenterUserMeasureListContainer from "./CenterUserMeasureListContainer";
 
 import MeasureDetail from "@/components/Measure/MeasureDetail";
 import CompareContainer from "../Measure/Compare/CompareContainer";
-import { IUserMeasureList } from "@/types/user";
 import { ComparePair, CompareSlot } from "@/types/compare";
 import CenterUserDashBoard from "./CenterUserDashBoard";
 import { useMeasureListForDetail } from "@/hooks/api/user/useMeasureListForDetail";
@@ -19,7 +18,6 @@ const CenterUserMeasureContainer = ({
   comparePair,
   onToggleCompareSn,
   onClearCompare,
-  userMeasureList, // eslint-disable-line @typescript-eslint/no-unused-vars
   // onRemoveCompare,
   onCompareDialogOpen,
   onOpenCompareMode,
@@ -35,7 +33,6 @@ const CenterUserMeasureContainer = ({
   comparePair: ComparePair;
   onToggleCompareSn: (sn: number, slot: CompareSlot) => void; // ✅ 추가
   onClearCompare: () => void;
-  userMeasureList: IUserMeasureList;
   // onRemoveCompare: (slot: CompareSlot) => void;
   onCompareDialogOpen: (slot: CompareSlot) => void;
   onOpenCompareMode: () => void;
@@ -43,6 +40,10 @@ const CenterUserMeasureContainer = ({
   isCompareMode: boolean;
   isResultPage: boolean;
 }) => {
+  const [isDatePickerOpen, setIsDatePickerOpen] = React.useState(false);
+  const frozenMeasureSnRef = useRef<number | undefined>(undefined);
+  const prevDatePickerOpenRef = useRef(false);
+
   const {
     data: latestMeasureListData,
     isLoading: latestMeasureLoading,
@@ -60,6 +61,21 @@ const CenterUserMeasureContainer = ({
   const latestUserSn = latestMeasureListData?.measurement_list?.[0]?.user_sn;
   const effectiveMeasureSn = measureSn > 0 ? measureSn : latestMeasureSn;
 
+  // 다이얼로그가 열릴 때만 effectiveMeasureSn 스냅샷 (페이지 이동 시 freeze 유지)
+  useEffect(() => {
+    if (isDatePickerOpen && !prevDatePickerOpenRef.current && effectiveMeasureSn != null) {
+      frozenMeasureSnRef.current = effectiveMeasureSn;
+    }
+    prevDatePickerOpenRef.current = isDatePickerOpen;
+  }, [isDatePickerOpen, effectiveMeasureSn]);
+
+  const snForDetailFetch =
+    measureSn > 0
+      ? measureSn
+      : isDatePickerOpen && frozenMeasureSnRef.current != null
+        ? frozenMeasureSnRef.current
+        : effectiveMeasureSn;
+
   // tab === 0일 때 선택된 측정 상세 데이터 가져오기 (날짜 변경 시 effectiveMeasureSn 바뀜 → refetch)
   const shouldFetchDetail = tab === 0 && !!effectiveMeasureSn;
   const detailUserSn = latestUserSn ?? userSn;
@@ -69,7 +85,7 @@ const CenterUserMeasureContainer = ({
     isLoading: latestMeasureDataLoading,
     isError: latestMeasureDataError,
   } = useMeasureInfo({
-    measure_sn: shouldFetchDetail ? effectiveMeasureSn : undefined,
+    measure_sn: shouldFetchDetail ? snForDetailFetch : undefined,
     user_sn: shouldFetchDetail ? `${detailUserSn}` : "",
     isResultPage,
   });
@@ -121,6 +137,8 @@ const CenterUserMeasureContainer = ({
           userSn={String(detailUserSn)}
           pagination={detailPagination}
           isResultPage={isResultPage}
+          isDatePickerOpen={isDatePickerOpen}
+          onDatePickerOpenChange={setIsDatePickerOpen}
             />
           )}
         </div>

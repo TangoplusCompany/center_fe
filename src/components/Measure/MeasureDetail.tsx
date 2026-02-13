@@ -32,6 +32,8 @@ type CenterUserMeasureProps = {
   userSn: string;
   pagination?: DetailPagination;  
   isResultPage: boolean;
+  isDatePickerOpen?: boolean;
+  onDatePickerOpenChange?: (open: boolean) => void;
 };
 
 // intro, front, side, back, dynamic 등 여러 탭이 들어가는 detail화면
@@ -43,8 +45,13 @@ const MeasureDetail = ({
   userSn,
   pagination,
   isResultPage = false,
+  isDatePickerOpen = false,
+  onDatePickerOpenChange,
 }: CenterUserMeasureProps) => {
-  const [isDatePickerOpen, setIsDatePickerOpen] = React.useState(false);
+  const [internalDatePickerOpen, setInternalDatePickerOpen] = React.useState(false);
+  const isControlled = onDatePickerOpenChange != null;
+  const datePickerOpen = isControlled ? isDatePickerOpen : internalDatePickerOpen;
+  const setDatePickerOpen = isControlled ? onDatePickerOpenChange : setInternalDatePickerOpen;
   const selectedMeasure =
     measureList && selectedMeasureSn != null
       ? measureList.find((item) => item.measure_sn === selectedMeasureSn)
@@ -234,7 +241,7 @@ const MeasureDetail = ({
             <>
               <button
                 type="button"
-                onClick={() => setIsDatePickerOpen(true)}
+                onClick={() => setDatePickerOpen(true)}
                 className="
                   w-auto flex items-center gap-2
                   border border-sub200 rounded-xl
@@ -257,8 +264,8 @@ const MeasureDetail = ({
                 </span>
               </button>
               <MeasureDetailDatePickerDialog
-                open={isDatePickerOpen}
-                onOpenChange={setIsDatePickerOpen}
+                open={datePickerOpen}
+                onOpenChange={setDatePickerOpen}
                 items={measureList}
                 selectedMeasureSn={selectedMeasureSn}
                 onSelect={(sn) => onChangeMeasureSn?.(sn)}

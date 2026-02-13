@@ -1,5 +1,5 @@
 import { customAxios, customUserAxios } from "@/lib/axios";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useAuthStoreOptional } from "@/providers/AuthProvider";
 
 /**
@@ -87,5 +87,6 @@ export const useGetUserMeasureList = <T>({
       return response.data.data;
     },
     enabled: user_sn !== undefined && (isResultPage || centerSn > 0),
+    placeholderData: keepPreviousData,
   });
 };
