@@ -6,9 +6,11 @@ import { Suspense, useLayoutEffect, useMemo } from "react";
 import * as THREE from "three";
 import { IUserDetailMeasureInfo } from "@/types/measure";
 
+type RiskKey = "risk_neck" | "risk_shoulder_left" | "risk_shoulder_right" | "risk_elbow_left" | "risk_elbow_right" | "risk_hip_left" | "risk_hip_right" | "risk_knee_left" | "risk_knee_right" | "risk_ankle_left" | "risk_ankle_right";
+
 type JointPoint = {
-  id: string;
   position: [number, number, number];
+  riskKey: RiskKey;
 };
 
 type JointLevel = "none" | "warning" | "danger";
@@ -37,33 +39,22 @@ const jointColorByLevel: Record<JointLevel, JointColor> = {
   }
 };
 
-const jointPoints: JointPoint[] = [
-  { id: "neck", position: [0, 1.65, 0.03] },
-  { id: "left-shoulder", position: [-0.15, 1.59, 0.055] },
-  { id: "right-shoulder", position: [0.15, 1.59, 0.055] },
-  { id: "left-elbow", position: [-0.21, 1.34, 0.055] },
-  { id: "right-elbow", position: [0.21, 1.34, 0.055] },
-  { id: "left-pelvis", position: [-0.125, 1.1, 0.02] },
-  { id: "right-pelvis", position: [0.125, 1.1, 0.02] },
-  { id: "left-knee", position: [-0.07, 0.79, -0.01] },
-  { id: "right-knee", position: [0.07, 0.79, -0.01] },
-  { id: "left-ankle", position: [-0.06, 0.4, 0.04] },
-  { id: "right-ankle", position: [0.06, 0.4, 0.04] }
-];
+/** 스켈레톤이 정면을 보도록 하는 Y축 회전 (모델과 JointDots에 동일 적용) */
+const SKELETON_FRONT_Y = 0.3;
 
-const riskToJointId: Record<string, keyof Pick<IUserDetailMeasureInfo, "risk_neck" | "risk_shoulder_left" | "risk_shoulder_right" | "risk_elbow_left" | "risk_elbow_right" | "risk_hip_left" | "risk_hip_right" | "risk_knee_left" | "risk_knee_right" | "risk_ankle_left" | "risk_ankle_right">> = {
-  neck: "risk_neck",
-  "left-shoulder": "risk_shoulder_left",
-  "right-shoulder": "risk_shoulder_right",
-  "left-elbow": "risk_elbow_left",
-  "right-elbow": "risk_elbow_right",
-  "left-pelvis": "risk_hip_left",
-  "right-pelvis": "risk_hip_right",
-  "left-knee": "risk_knee_left",
-  "right-knee": "risk_knee_right",
-  "left-ankle": "risk_ankle_left",
-  "right-ankle": "risk_ankle_right"
-};
+const jointPoints: JointPoint[] = [
+  { position: [0, 1.65, -0.025], riskKey: "risk_neck" },
+  { position: [-0.15, 1.59, -0.055], riskKey: "risk_shoulder_left" },
+  { position: [0.15, 1.59, -0.055], riskKey: "risk_shoulder_right" },
+  { position: [-0.21, 1.34, -0.055], riskKey: "risk_elbow_left" },
+  { position: [0.21, 1.34, -0.055], riskKey: "risk_elbow_right" },
+  { position: [-0.125, 1.1, -0.02], riskKey: "risk_hip_left" },
+  { position: [0.125, 1.1, -0.02], riskKey: "risk_hip_right" },
+  { position: [-0.07, 0.79, -0.01], riskKey: "risk_knee_left" },
+  { position: [0.07, 0.79, -0.01], riskKey: "risk_knee_right" },
+  { position: [-0.06, 0.4, -0.04], riskKey: "risk_ankle_left" },
+  { position: [0.06, 0.4, -0.04], riskKey: "risk_ankle_right" }
+];
 
 function getJointLevel(risk: number): JointLevel {
   const level = Number(risk);
@@ -91,7 +82,7 @@ function SkeletonModel() {
     const uniformScale = maxDim > 0 ? 1.55 / maxDim : 1;
     model.scale.setScalar(uniformScale);
     model.position.y += (size.y * uniformScale) / 2 + 0.48;
-    model.rotation.y = Math.PI;
+    model.rotation.y = SKELETON_FRONT_Y;
 
     model.traverse((obj) => {
       if (obj instanceof THREE.Mesh) {
@@ -106,16 +97,15 @@ function SkeletonModel() {
 
 function JointDots({ data }: { data: IUserDetailMeasureInfo }) {
   return (
-    <group position={[0, 0.02, 0]}>
+    <group position={[0, 0.02, 0]} rotation={[0, SKELETON_FRONT_Y, 0]}>
       {jointPoints.map((joint) => {
-        const riskKey = riskToJointId[joint.id];
-        const risk = riskKey ? data[riskKey] ?? 0 : 0;
+        const risk = data[joint.riskKey] ?? 0;
         const level = getJointLevel(risk);
         if (level === "none") return null;
         const colors = jointColorByLevel[level];
 
         return (
-          <group key={joint.id} position={joint.position} renderOrder={10}>
+          <group key={joint.riskKey} position={joint.position} renderOrder={10}>
             <mesh>
               <sphereGeometry args={[0.024, 20, 20]} />
               <meshStandardMaterial
@@ -153,6 +143,12 @@ type FullBodySkeleton3DProps = {
 export function FullBodySkeleton3D({ data, className }: FullBodySkeleton3DProps) {
   return (
     <div className={className ?? "w-full h-full min-h-[300px]"}>
+      <div
+        className="left-3 top-3 z-10 text-xs text-white/70"
+        aria-label="3D 모델 출처"
+      >
+        Polyon Studio (CC BY)
+      </div>
       <Canvas
         camera={{ position: [0.7, 1.34, 2.2], fov: 42 }}
         shadows
