@@ -1,12 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { CenterUserMeasureList } from "@/components/User/CenterUserMeasureList";
 import CenterUserMeasureListSkeleton from "@/components/User/CenterUserMeasureListSkeleton";
 import CustomPagination from "@/components/common/Pagination";
 import { useGetUserMeasureList } from "@/hooks/api/user/useGetUserMeasureList";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import { IUserMeasureList } from "@/types/user";
+import { IMeasureList } from "@/types/measure";
 import DataError from "@/components/Util/DataError";
 import { CompareSlot } from "@/types/compare";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
@@ -56,6 +57,23 @@ const CenterUserMeasureListContainer = ({
     sort,
     isResultPage,
   });
+
+  const measures: IMeasureList[] = useMemo(() => {
+    if (!userMeasureList?.measurement_list) return [];
+    return userMeasureList.measurement_list.map((item) => ({
+      sn: item.measure_sn,
+      measure_sn: item.measure_sn,
+      user_name: item.user_name,
+      device_name: item.device_name,
+      measure_date: item.measure_date,
+      mobile: item.mobile,
+      user_sn: item.user_sn,
+      user_uuid: "",
+      device_sn: 0,
+      t_score: 0,
+      center_name: item.center_name,
+    }));
+  }, [userMeasureList?.measurement_list]);
   const handleSelectChange = (value: string) => {
       setQueryParam([
         ["limit", value],
@@ -319,7 +337,7 @@ const CenterUserMeasureListContainer = ({
         
         
         <CenterUserMeasureList
-          measures={userMeasureList?.measurement_list ?? []}
+          measures={measures}
           onRowClick={onSelectMeasure ? (sn) => onSelectMeasure(sn) : undefined}
           onToggleCompareSn={onToggleCompareSn}
           onOpenCompareMode={onOpenCompareMode}
