@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React from "react";
 import { CenterUserMeasureList } from "@/components/User/CenterUserMeasureList";
 import CenterUserMeasureListSkeleton from "@/components/User/CenterUserMeasureListSkeleton";
 import CustomPagination from "@/components/common/Pagination";
@@ -9,7 +9,6 @@ import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import { IUserMeasureList } from "@/types/user";
 import DataError from "@/components/Util/DataError";
 import { CompareSlot } from "@/types/compare";
-import { IMeasureList } from "@/types/measure";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 // import { Calendar } from "@/components/ui/calendar";
 // import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -174,25 +173,6 @@ const CenterUserMeasureListContainer = ({
   //   from: new Date(from),
   //   to: new Date(to),
   // } : undefined;
-
-  const measurements: IMeasureList[] = useMemo(() => {
-    if (!userMeasureList?.measurement_list) return [];
-    
-    // IUserMeasureListItem[]를 IMeasureList[]로 변환
-    return userMeasureList.measurement_list.map((item) => ({
-      sn: item.measure_sn,
-      measure_sn: item.measure_sn,
-      user_name: item.user_name,
-      device_name: item.device_name,
-      measure_date: item.measure_date,
-      mobile: item.mobile,
-      user_sn: item.user_sn,
-      user_uuid: "",
-      device_sn: 0,
-      t_score: 0,
-      center_name: item.center_name,
-    }));
-  }, [userMeasureList?.measurement_list]);
   
   const handleSortChange = (value: string) => {
     setQueryParam([
@@ -339,7 +319,7 @@ const CenterUserMeasureListContainer = ({
         
         
         <CenterUserMeasureList
-          measures={measurements}
+          measures={userMeasureList?.measurement_list ?? []}
           onRowClick={onSelectMeasure ? (sn) => onSelectMeasure(sn) : undefined}
           onToggleCompareSn={onToggleCompareSn}
           onOpenCompareMode={onOpenCompareMode}

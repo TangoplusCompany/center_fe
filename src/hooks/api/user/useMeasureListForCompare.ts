@@ -56,7 +56,6 @@ export const useMeasureListForCompare = ({
 
 
   return {
-    data,
     isLoading,
     isError,
     measureList: data?.measurement_list ?? [],

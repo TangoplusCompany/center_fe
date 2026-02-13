@@ -88,7 +88,6 @@ const CenterUserDetail = ({
   // - useMeasureListForDetail과 완전히 독립적으로 작동
   // - limit: 20, 독립적인 page state 관리
   const {
-    data: compareMeasureList,
     measureList: compareMeasureListItems,
     pagination: comparePagination,
   } = useMeasureListForCompare({
@@ -150,7 +149,7 @@ const CenterUserDetail = ({
         {isResultPage && (
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 px-2 sm:px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors"
+            className="flex items-center gap-2 px-2 sm:px-4 py-2 text-sm text-sub700 hover:text-sub900 hover:bg-sub100 rounded-lg transition-colors"
             type="button"
             aria-label="로그아웃"
           >
@@ -179,7 +178,7 @@ const CenterUserDetail = ({
           {/* 뒤로가기 버튼 */}
           <button
             onClick={() => setIsAIExerciseActive(false)}
-            className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 transition-colors w-fit"
+            className="flex items-center gap-2 text-sm text-sub700 hover:text-sub900 transition-colors w-fit"
           >
             <svg 
               xmlns="http://www.w3.org/2000/svg" 
@@ -215,7 +214,6 @@ const CenterUserDetail = ({
             comparePair={ comparePair }
             onToggleCompareSn={ handleToggleCompareSn }
             onClearCompare={ onClearCompare }
-            userMeasureList={ compareMeasureList || { current_page: 1, per_page: 10, total: 0, total_pages: 1, has_next_page: false, has_prev_page: false, sort: "", measurement_list: [] } }
             // onRemoveCompare={ onRemoveCompare }
             onCompareDialogOpen= {onCompareDialogOpen}
             onOpenCompareMode={openCompareMode}
