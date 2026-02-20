@@ -25,27 +25,27 @@ export const CenterUserMeasureList = ({
   onToggleCompareSn?: (sn: number, slot: CompareSlot) => void;
   onOpenCompareMode: () => void;
 }) => {
-  const observerTarget = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMore && !isLoading) {
-          onLoadMore();
-        }
-      },
-      { threshold: 0.1 }
-    );
+  // const observerTarget = useRef<HTMLDivElement>(null);
+  // useEffect(() => {
+  //   const observer = new IntersectionObserver(
+  //     (entries) => {
+  //       if (entries[0].isIntersecting && hasMore && !isLoading) {
+  //         onLoadMore();
+  //       }
+  //     },
+  //     { threshold: 0.1 }
+  //   );
 
-    if (observerTarget.current) {
-      observer.observe(observerTarget.current);
-    }
+  //   if (observerTarget.current) {
+  //     observer.observe(observerTarget.current);
+  //   }
 
-    return () => {
-      if (observerTarget.current) {
-        observer.unobserve(observerTarget.current);
-      }
-    };
-  }, [hasMore, isLoading, onLoadMore]);
+  //   return () => {
+  //     if (observerTarget.current) {
+  //       observer.unobserve(observerTarget.current);
+  //     }
+  //   };
+  // }, [hasMore, isLoading, onLoadMore]);
   
   return (
     <div className="w-full table table-fixed min-w-0">
