@@ -43,8 +43,8 @@ const CenterUserMeasureListContainer = ({
   const to = query.to;
 
   // 인피니티 스크롤을 위한 state
-  const [allMeasures, setAllMeasures] = useState<IUserMeasureListItem[]>([]);
-  const [hasMore, setHasMore] = useState(true);
+  // const [allMeasures, setAllMeasures] = useState<IUserMeasureListItem[]>([]);
+  // const [hasMore, setHasMore] = useState(true);
 
   const {
     data: userMeasureList,
@@ -76,13 +76,13 @@ const CenterUserMeasureListContainer = ({
       center_name: item.center_name,
     }));
   }, [userMeasureList?.measurement_list]);
-  const handleSelectChange = (value: string) => {
-      setQueryParam([
-        ["limit", value],
-        ["page", "1"],
-      ]);
-    };
-  const defaultLimit = query.limit || 20;
+  // const handleSelectChange = (value: string) => {
+  //     setQueryParam([
+  //       ["limit", value],
+  //       ["page", "1"],
+  //     ]);
+  //   };
+  // const defaultLimit = query.limit || 20;
   
   // const [deleteSelectedSns, ] = useState<number[]>([]); // setDeleteSelectedSns
   // const onToggleDeleteSn = (sn: number) => {
@@ -340,7 +340,7 @@ const CenterUserMeasureListContainer = ({
         
         <CenterUserMeasureList
           measures={measures}
-          onRowClick={onSelectMeasure ? (sn) => onSelectMeasure(sn) : undefined}
+          // onRowClick={onSelectMeasure ? (sn) => onSelectMeasure(sn) : undefined}
           onToggleCompareSn={onToggleCompareSn}
           onOpenCompareMode={onOpenCompareMode}
         />
