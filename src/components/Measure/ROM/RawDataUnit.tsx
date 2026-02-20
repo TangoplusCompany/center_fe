@@ -1,7 +1,19 @@
+import { IMeasureROMItemCardData } from "@/types/measure";
+
+
 
 export const ROMRawDataUnit = ({
-
+  data
+}: {
+  data: IMeasureROMItemCardData
 }) => {
+  const romStateMap : Record<number, string> = {
+    0: "위험",
+    1: "주의",
+    2: "정상",
+    3: "매우 우수"
+  };
+  const romState = romStateMap[data.score] ?? "정상";
   return (
     <div className="flex flex-col w-full h-full gap-4">
       <div>
@@ -12,9 +24,9 @@ export const ROMRawDataUnit = ({
         </div>
 
         <div className="grid grid-cols-[25%_25%_50%] items-center dark:border dark:bg-muted divide-x-2 divide-sub200">
-          <div className="h-full flex items-center justify-center">172.1º</div>
-          <div className="h-full flex items-center justify-center">매우 우수</div>
-          <div className="h-full flex items-center px-2 py-1">팔이 귀 옆까지 들어올려지며 움직임이 부드럽고 안정적입니다</div>
+          <div className="h-full flex items-center justify-center">{data.value_1_max}º</div>
+          <div className="h-full flex items-center justify-center">{romState}</div>
+          <div className="h-full flex items-center px-2 py-1">{data.description}</div>
         </div>
       </div>
     </div>

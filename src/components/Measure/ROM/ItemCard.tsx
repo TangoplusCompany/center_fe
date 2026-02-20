@@ -1,15 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { CompareSlot } from "@/types/compare";
-import { IMeasureROMInfo } from "@/types/measure";
+import { IMeasureROMItem } from "@/types/measure";
 
 export interface ROMItemCardProps {
-  romInfo: IMeasureROMInfo
-  onCompareDialogOpen: (currenSlot: CompareSlot) => void;
+  romItem: IMeasureROMItem
+  onCompareDialogOpen: (currenSlot: CompareSlot, measureType: number) => void;
   onROMItemSelect ?: (romSn: number) => void;
 }
 
 export const ROMItemCard = ({
-  romInfo,
+  romItem,
   onCompareDialogOpen,
   onROMItemSelect
 } : ROMItemCardProps) => {
@@ -28,17 +28,17 @@ export const ROMItemCard = ({
 
         <div className="flex flex-col gap-1">
           <div className="text-base font-semibold text-sub700">
-            {romInfo.title}
+            {romItem.title}
           </div>
           <div className="text-base text-sub700">
-            {romInfo.howto}
+            {romItem.howto}
           </div>
         </div>
       </div>
 
       <div className="flex justify-between">
         <div className="flex h-full items-center text-base text-sub700">
-          최근 측정일 : 2026-01-20 16:43:21
+          최근 측정일 : {romItem.reg_date}
         </div>
 
         <Button
@@ -46,7 +46,7 @@ export const ROMItemCard = ({
           variant="outline"
           onClick={(e) => {
             e.stopPropagation(); // ✅ 이벤트 버블링 중단
-            onCompareDialogOpen(0);
+            onCompareDialogOpen(0, romItem.measure_type);
           }}
           className="shrink-0 shadow-none bg-sub200 text-sub700 hover:text-sub900"
         >

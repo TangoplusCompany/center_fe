@@ -27,7 +27,16 @@ export const DeviceMainContainer = () => {
   }
 
   return (
-    <div className="col-span-12 flex flex-col gap-4 items-end justify-center">
+    <div className="col-span-12 flex flex-col gap-4">
+      <div className="flex w-full items-center justify-between ">
+        <div className="flex gap-2 items-center">
+          <div className="w-1 h-12 bg-toggleAccent rounded-full"></div>
+          <h2 className="text-3xl font-semibold text-sub700 dark:text-white">
+            센터 기기 관리
+          </h2>
+        </div>
+        <article>{adminRole < 2 && <DeviceAddDialog />}</article>
+      </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
         {deviceStatus.data.map((device, index) => (
           <DeviceStatusItems
@@ -37,7 +46,7 @@ export const DeviceMainContainer = () => {
           />
         ))}
       </div>
-      <article>{adminRole < 2 && <DeviceAddDialog />}</article>
+      
     </div>
   );
 };

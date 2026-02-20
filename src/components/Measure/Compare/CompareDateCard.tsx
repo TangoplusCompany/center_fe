@@ -5,7 +5,7 @@ type CompareCardProps = {
   regDate?: string;
   currentSlot: CompareSlot;
   // onRemove?: (slot: CompareSlot) => void;
-  onCardClick?: (slot: CompareSlot) => void;
+  onCardClick?: (slot: CompareSlot, measureType ?: number) => void;
   
 };
 

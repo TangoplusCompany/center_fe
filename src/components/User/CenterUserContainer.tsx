@@ -174,7 +174,7 @@ const CenterUserMeasureContainer = ({
         </>
       )}
       {tab === 3 && (
-        <CenterUserROMContainer userSn={`${userSn}`} />
+        <CenterUserROMContainer userSn={userSn} />
       )}
 
     </>

@@ -1,37 +1,48 @@
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Pagination, PaginationButton, PaginationButtonNext, PaginationButtonPrevious, PaginationContent, PaginationEllipsis, PaginationItem } from "@/components/ui/pagination";
-import { ComparePagination } from "@/hooks/api/user/useMeasureListForCompare";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ComparePair, CompareSlot } from "@/types/compare";
-import { IMeasureROMUnit } from "@/types/measure";
+import { IMeasureROMItem } from "@/types/measure";
 import { formatDate } from "@/utils/formatDate";
 
 import { useEffect, useState } from "react";
+export interface ComparePagination {
+  page: number;
+  limit: number;
+  last_page: number;
+  setPage: (page: number) => void;
+}
 
 export interface ROMPickerDialogProps {
   open: boolean;
-  items: IMeasureROMUnit[];
+  items: IMeasureROMItem[];
+  title: string;
   comparePair: ComparePair;
   activeSlot: CompareSlot;
   onOpenChange: (v: boolean) => void;
   onToggleCompareSn: (measureSn : number, slot: CompareSlot) => void;
   pagination?: ComparePagination;
+  isLoading: boolean;
+  isError: boolean;
 }
 
 export const ROMPickerDialog = ({
   open,
   items,
+  title,
   comparePair,
   activeSlot,
   onOpenChange,
   onToggleCompareSn,
   pagination: apiPagination,
+  isLoading,
+  isError
 }: ROMPickerDialogProps) => {
   const [localPage, setLocalPage] = useState(1);
   const useApiPagination = !!apiPagination;
   
-  // comparePair에 포함된 항목 제외
   const filteredItems = items.filter((it) =>
-    !comparePair.includes(parseInt(it.rom_sn))
+    !comparePair.includes(it.sn)
   );
 
   const page = useApiPagination ? (apiPagination?.page ?? 1) : localPage;
@@ -55,45 +66,56 @@ export const ROMPickerDialog = ({
   useEffect(() => {
     if (open && !useApiPagination) setLocalPage(1);
   }, [open, useApiPagination]);
-
+  
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-full max-w-md rounded-2xl bg-white dark:bg-card p-4" aria-describedby={undefined}>
         {/* 헤더 */}
         <DialogTitle className="text-base font-semibold mb-3 text-foreground">
-          ROM 측정 기록 선택
+         이전 기록: {title}
         </DialogTitle>
-
-        {/* 내용 영역 */}
-        <div className="max-h-[360px] overflow-auto">
-          {filteredItems.length === 0 ? (
-            <div className="flex items-center justify-center h-[200px] text-sm text-gray-400 dark:text-gray-500">
-              비교할 항목이 없습니다.
-            </div>
-          ) : (
-            <div className="space-y-2">
-              {displayItems.map((it) => (
-                <button
-                  key={parseInt(it.rom_sn)}
-                  type="button"
-                  className="w-full text-left rounded-xl border border-border px-3 py-2 hover:bg-gray-50 dark:hover:bg-white/10 transition-colors text-foreground"
-                  onClick={() => {
-                    onToggleCompareSn(parseInt(it.rom_sn), activeSlot);
-                    onOpenChange(false);
-                  }}
-                >
-                  <div className="text-sm font-medium">
-                    {formatDate(it.measure_date)}
-                  </div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400">
-                    더미입니다.
-                  </div>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
+        {isLoading ? (
+          <div className="grid grid-cols-2 gap-4">
+            <Skeleton className="w-full h-64 rounded-xl" />
+            <Skeleton className="w-full h-64 rounded-xl" />
+            <Skeleton className="w-full h-64 rounded-xl" />
+            <Skeleton className="w-full h-64 rounded-xl" />
+          </div>
+        ) : isError ? (
+          <div className="flex items-center justify-center h-[200px] text-sm text-red-400">
+            오류가 발생했습니다. 잠시후 다시 시도해주세요.
+          </div>
+        ) : (
+          <div className="max-h-[360px] overflow-auto">
+            {filteredItems.length === 0 ? (
+              <div className="flex items-center justify-center h-[200px] text-sm text-gray-400 dark:text-gray-500">
+                선택할 항목이 없습니다.
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {displayItems.map((it) => (
+                  <button
+                    key={it.sn}
+                    type="button"
+                    className="w-full text-left rounded-xl border border-border px-3 py-2 hover:bg-gray-50 dark:hover:bg-white/10 transition-colors text-foreground"
+                    onClick={() => {
+                      onToggleCompareSn(it.sn, activeSlot);
+                      onOpenChange(false);
+                    }}
+                  >
+                    <div className="text-sm font-medium">
+                      {formatDate(it.reg_date)}
+                    </div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                      더미입니다.
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+        
         {filteredItems.length > 0 && (
           <div className="mt-3 pt-3 border-t border-sub200 dark:border-border">
             <Pagination>
