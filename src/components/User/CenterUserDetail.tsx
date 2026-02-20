@@ -68,13 +68,13 @@ const CenterUserDetail = ({
       // 비교분석 탭으로 들어올 때마다 비교 모드/선택 초기화 → 항상 리스트 화면
       if (index === 2) {
         setIsCompareMode(false);
-        setComparePair([null, null]);
+        setComparePair([undefined, undefined]);
       }
       handleTab(index);
     };
   const [isAIExerciseActive, setIsAIExerciseActive] = useState(false);
   
-  const [comparePair, setComparePair] = React.useState<ComparePair>([null, null]);
+  const [comparePair, setComparePair] = React.useState<ComparePair>([undefined, undefined]);
 
   const handleToggleCompareSn = (sn: number, slot: CompareSlot) => {
     setComparePair((prev) => {
@@ -97,7 +97,7 @@ const CenterUserDetail = ({
   });
     
   const onClearCompare = () => {
-    setComparePair([null, null]);
+    setComparePair([undefined, undefined]);
     setIsCompareMode(false); // ✅ 비교 모드도 종료(원하시면 이 줄 빼도 됨)
   };
   // const onRemoveCompare = (slot: CompareSlot) => {
@@ -203,7 +203,7 @@ const CenterUserDetail = ({
         </div>
       ) : (
         <>
-          {tab !== 3 &&
+          {tab !== 4 &&
         (
           <CenterUserMeasureContainer
             measureSn={measureSn}
@@ -222,7 +222,7 @@ const CenterUserDetail = ({
             isResultPage={isResultPage}
           />
         )}
-        {tab === 3 && <CenterUserInformation 
+        {tab === 4 && <CenterUserInformation 
         userSn={userSn} 
         isResultPage={isResultPage} />}
         </>

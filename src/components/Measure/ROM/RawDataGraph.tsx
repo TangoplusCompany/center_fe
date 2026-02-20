@@ -17,7 +17,7 @@ export const ROMRawDataGraph = ({
   }));
 
   return (
-    <div className="flex flex-col gap-2 rounded-xl p-4 bg-toggleAccent-background">
+    <div className="flex flex-col gap-2 rounded-xl p-4 bg-white dark:bg-black">
       <span className="text-lg font-semibold">
         {graphType === 0 ? '각도 변화' : '각속도 변화'}
       </span>
@@ -29,13 +29,13 @@ export const ROMRawDataGraph = ({
             color: "hsl(var(--toggle-accent))",
           },
         }}
-        className="aspect-auto h-[100px] w-full "
+        className="aspect-auto h-[64px] w-full"
       >
         <AreaChart data={chartData}>
           <defs>
             <linearGradient id="fillGradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="hsl(var(--toggle-accent))" stopOpacity={0.4} />
-              <stop offset="100%" stopColor="hsl(var(--toggle-accent))" stopOpacity={0.05} />
+              <stop offset="100%" stopColor="hsl(var(--toggle-accent-background))" stopOpacity={0.4} />
             </linearGradient>
           </defs>
 

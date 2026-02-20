@@ -35,7 +35,7 @@ const UserDetailTap = ({
   return (
     <div className="w-full flex items-center justify-between gap-2">
       <div className="inline-flex rounded-xl bg-sub200 p-1 gap-1 w-max">
-        {["최근", "기록 요약", "기록 비교", "사용자 정보"].map((item, index) => { // "ROM 결과",
+        {["최근", "기록 요약", "기록 비교", "ROM 결과", "사용자 정보"].map((item, index) => { // "ROM 결과",
           return (
             <button
               key={item + index}
@@ -55,14 +55,13 @@ const UserDetailTap = ({
           );
         })}
       </div>
-      {nowTab !== 3 && (
+      {nowTab !== 4 && (
       <button 
         onClick={() => setIsAIExerciseActive(true)}
         className={`relative h-full overflow-hidden px-2 py-1 sm:px-3 rounded-xl text-white transition-all duration-500 hover:scale-105 active:scale-95 isolate border-2 sm:border-4 border-toggleAccent/25 ${
           isAIExerciseActive ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'
         }`}
       >
-        {/* 메인 컬러 포함 그라데이션 */}
         <div 
           className="absolute inset-0 z-0"
           style={{
@@ -71,13 +70,11 @@ const UserDetailTap = ({
           }}
         />
         
-        {/* 물방울 리플 2개 (0.5초 간격) */}
         <div className="absolute inset-0">
           <span className="ripple-dot" />
           <span className="ripple-dot" style={{ animationDelay: "0.5s" }} />
         </div>
         
-        {/* 버튼 내용 */}
         <span className="relative z-10 flex items-center text-xs sm:text-sm whitespace-nowrap">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
