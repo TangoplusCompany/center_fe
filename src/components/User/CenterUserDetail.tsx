@@ -203,7 +203,7 @@ const CenterUserDetail = ({
         </div>
       ) : (
         <>
-          {tab !== 4 &&
+          {tab !== 3 &&
         (
           <CenterUserMeasureContainer
             measureSn={measureSn}
@@ -222,7 +222,7 @@ const CenterUserDetail = ({
             isResultPage={isResultPage}
           />
         )}
-        {tab === 4 && <CenterUserInformation 
+        {tab === 3 && <CenterUserInformation 
         userSn={userSn} 
         isResultPage={isResultPage} />}
         </>

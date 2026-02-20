@@ -35,7 +35,7 @@ const UserDetailTap = ({
   return (
     <div className="w-full flex items-center justify-between gap-2">
       <div className="inline-flex rounded-xl bg-sub200 p-1 gap-1 w-max">
-        {["최근", "기록 요약", "기록 비교", "ROM 결과", "사용자 정보"].map((item, index) => { // "ROM 결과",
+        {["최근", "기록 요약", "기록 비교", "사용자 정보"].map((item, index) => { // "ROM 결과",
           return (
             <button
               key={item + index}
@@ -55,7 +55,7 @@ const UserDetailTap = ({
           );
         })}
       </div>
-      {nowTab !== 4 && (
+      {nowTab !== 3 && (
       <button 
         onClick={() => setIsAIExerciseActive(true)}
         className={`relative h-full overflow-hidden px-2 py-1 sm:px-3 rounded-xl text-white transition-all duration-500 hover:scale-105 active:scale-95 isolate border-2 sm:border-4 border-toggleAccent/25 ${
