@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
 import { CenterUserMeasureList } from "@/components/User/CenterUserMeasureList";
 import CenterUserMeasureListSkeleton from "@/components/User/CenterUserMeasureListSkeleton";
 import { useGetUserMeasureList } from "@/hooks/api/user/useGetUserMeasureList";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
-import { IUserMeasureList, IUserMeasureListItem } from "@/types/user";
+import { IUserMeasureList } from "@/types/user";
+import { IMeasureList } from "@/types/measure";
 import DataError from "@/components/Util/DataError";
 import { CompareSlot } from "@/types/compare";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
@@ -59,37 +60,30 @@ const CenterUserMeasureListContainer = ({
     isResultPage,
   });
 
-  useEffect(() => {
-    if (userMeasureList?.measurement_list) {
-      if (page === "1") {
-        // 첫 페이지면 덮어쓰기
-        setAllMeasures(userMeasureList.measurement_list);
-      } else {
-        // 추가 페이지면 누적
-        setAllMeasures(prev => [...prev, ...userMeasureList.measurement_list]);
-      }
-      
-      // 더 불러올 데이터가 있는지 확인
-      setHasMore(userMeasureList.measurement_list.length === Number(limit));
-    }
-  }, [userMeasureList, page, limit]);
-
-  const handleLoadMore = () => {
-    if (!isLoading && hasMore) {
-      const nextPage = String(Number(page) + 1);
-      setQueryParam([["page", nextPage]]);
-    }
-  };
-
-  // const handleSelectChange = (value: string) => {
-  //   setAllMeasures([]); // 데이터 리셋
-  //   setQueryParam([
-  //     ["limit", value],
-  //     ["page", "1"],
-  //   ]);
-  // };
-
-  // const defaultLimit = query.limit || "20";
+  const measures: IMeasureList[] = useMemo(() => {
+    if (!userMeasureList?.measurement_list) return [];
+    return userMeasureList.measurement_list.map((item) => ({
+      sn: item.measure_sn,
+      measure_sn: item.measure_sn,
+      user_name: item.user_name,
+      device_name: item.device_name,
+      measure_date: item.measure_date,
+      mobile: item.mobile,
+      user_sn: item.user_sn,
+      user_uuid: "",
+      device_sn: 0,
+      t_score: 0,
+      center_name: item.center_name,
+    }));
+  }, [userMeasureList?.measurement_list]);
+  const handleSelectChange = (value: string) => {
+      setQueryParam([
+        ["limit", value],
+        ["page", "1"],
+      ]);
+    };
+  const defaultLimit = query.limit || 20;
+  
   // const [deleteSelectedSns, ] = useState<number[]>([]); // setDeleteSelectedSns
   // const onToggleDeleteSn = (sn: number) => {
   //   setDeleteSelectedSns((prev) =>
@@ -345,10 +339,8 @@ const CenterUserMeasureListContainer = ({
         
         
         <CenterUserMeasureList
-          measures={allMeasures}
-          onLoadMore={handleLoadMore}
-          hasMore={hasMore}
-          isLoading={isLoading}
+          measures={measures}
+          onRowClick={onSelectMeasure ? (sn) => onSelectMeasure(sn) : undefined}
           onToggleCompareSn={onToggleCompareSn}
           onOpenCompareMode={onOpenCompareMode}
         />

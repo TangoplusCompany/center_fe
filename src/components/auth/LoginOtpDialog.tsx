@@ -103,8 +103,10 @@ export const LoginOtpDialog = ({
       const res = await postRequestLogin2FAOtp({ type, tempJwt });
       // 재전송 성공 시 서버가 새 temp_token을 주므로 갱신
       onTempJwtChange?.(res.temp_token);
-    } catch {
-      alert("재전송에 실패했습니다. 잠시 후 다시 시도해주세요.");
+    } catch (e) {
+      alert(
+        e instanceof Error ? e.message : "재전송에 실패했습니다. 잠시 후 다시 시도해주세요.",
+      );
     } finally {
       setResendPending(false);
     }

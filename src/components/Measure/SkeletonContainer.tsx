@@ -2,25 +2,25 @@
 
 import "@/css/body-skeleton.css";
 import { IUserDetailMeasureInfo } from "@/types/measure";
-import SkeletonSvg from "./SkeletonSvg";
+import { FullBodySkeleton3D } from "./FullBodySkeleton3D";
 
 const SkeletonContainer = ({ data }: { data: IUserDetailMeasureInfo }) => {
   return (
     <div className="relative box-border flex h-full flex-col items-center rounded-3xl border-2 border-sub200 p-4 text-black focus-visible:outline-none">
-      <div className="flex-1 flex items-center justify-center">
-        <div className="relative z-0 skeleton mb-8">
-          <SkeletonSvg
-            
-            data={data}
-          />
+      <div className="flex-1 flex items-center justify-center w-full min-h-0">
+        <div className="relative z-0 skeleton mb-8 w-full max-w-[420px] aspect-[246/440] min-h-[300px]">
+          <FullBodySkeleton3D data={data} className="w-full h-full" />
         </div>
       </div>
 
       {/* ⭐ 기준바: Skeleton 하단 중앙 */}
       <div className="hidden md:block w-full max-w-xl mx-auto text-center mt-auto">
-        <div className="flex items-start">
-          <p className="text-sm mb-2" style={{ color: "#9A9A9A" }}>
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-sm" style={{ color: "#9A9A9A" }}>
             * 측정 기준 설명
+          </p>
+          <p className="text-sm" style={{ color: "#9A9A9A" }}>
+            Polyon Studio (CC BY)
           </p>
         </div>
         

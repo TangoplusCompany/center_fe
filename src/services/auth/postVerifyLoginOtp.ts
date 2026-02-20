@@ -5,11 +5,26 @@ import { ILoginData } from "@/types/manager";
 
 type IVerifyLoginOtpResponse = { data: ILoginData } & IResponseDefault;
 
-type IVerify2FAErrorResponse = IResponseDefault & {
-  status: 400 | 401 | 404 | 410 | 423;
+/** 400, 403, 404, 410, 423: data 빈 배열 */
+type IVerify2FAErrorResponseBase = IResponseDefault & {
+  status: 400 | 403 | 404 | 410 | 423;
   success: false;
   data: [];
 };
+
+/** 401: 남은 실패/발급 횟수 포함 */
+type IVerify2FAErrorResponse401 = IResponseDefault & {
+  status: 401;
+  success: false;
+  data: {
+    remaining_fail_count: number;
+    remaining_issue_count: number;
+  };
+};
+
+type IVerify2FAErrorResponse =
+  | IVerify2FAErrorResponseBase
+  | IVerify2FAErrorResponse401;
 
 /**
  * verify-2fa 에러 클래스
@@ -18,6 +33,10 @@ export class Verify2FAError extends Error {
   status: number;
   message: string;
   userMessage: string;
+  /** 401일 때만: 남은 OTP 검증 실패 횟수 (최대 5회) */
+  remainingFailCount?: number;
+  /** 401일 때만: 남은 OTP 발급 횟수 (최대 10회) */
+  remainingIssueCount?: number;
 
   constructor(errorResponse: IVerify2FAErrorResponse) {
     const message = errorResponse.message?.[0] ?? "OTP 검증에 실패했습니다.";
@@ -26,22 +45,34 @@ export class Verify2FAError extends Error {
     this.status = errorResponse.status;
     this.message = message;
 
+    if (errorResponse.status === 401 && "remaining_fail_count" in errorResponse.data) {
+      this.remainingFailCount = errorResponse.data.remaining_fail_count;
+      this.remainingIssueCount = errorResponse.data.remaining_issue_count;
+    }
+
     // 상태코드별 사용자 메시지
     switch (errorResponse.status) {
-      case 400: {
-        // Missing required parameters / Invalid type or purpose 둘 다 400이므로 message로 보정
-        if (message.toLowerCase().includes("missing required")) {
-          this.userMessage = "필수 정보가 누락되었습니다. 다시 시도해주세요.";
-        } else if (message.toLowerCase().includes("invalid type") || message.toLowerCase().includes("invalid purpose")) {
-          this.userMessage = "요청 값이 올바르지 않습니다. 다시 시도해주세요.";
-        } else {
-          this.userMessage = "요청이 올바르지 않습니다. 다시 시도해주세요.";
+      case 400:
+        this.userMessage = "필수 정보가 누락되었습니다. 다시 시도해주세요.";
+        break;
+      case 403:
+        this.userMessage = "요청 값이 올바르지 않습니다. 다시 시도해주세요.";
+        break;
+      case 401: {
+        this.userMessage = "인증번호가 맞지 않습니다.";
+        if (
+          this.remainingFailCount !== undefined ||
+          this.remainingIssueCount !== undefined
+        ) {
+          const parts: string[] = [];
+          if (this.remainingFailCount !== undefined)
+            parts.push(`남은 시도 ${this.remainingFailCount}회`);
+          if (this.remainingIssueCount !== undefined)
+            parts.push(`재전송 가능 ${this.remainingIssueCount}회`);
+          this.userMessage += ` (${parts.join(", ")})`;
         }
         break;
       }
-      case 401:
-        this.userMessage = "인증번호가 맞지 않습니다.";
-        break;
       case 404:
         this.userMessage = "인증번호 요청 내역이 없습니다. 재전송 후 다시 입력해주세요.";
         break;
@@ -59,21 +90,24 @@ export class Verify2FAError extends Error {
 }
 
 /**
- * 2차 인증 OTP 검증 (임시 JWT를 헤더에 담아 전송, 성공 시 로그인 정보 반환)
+ * 2차 인증 OTP 검증
+ * - Header: Content-Type, Authorization Bearer {temp_token} (request-2fa에서 발급한 임시 JWT)
+ * - Request: { otp } 만 전송 (type/purpose는 temp_token에 포함됨)
+ * - 성공 시 로그인 정보(admin_info, access_jwt) 반환
  */
 export const postVerifyLoginOtp = async ({
   otp,
-  type,
   tempJwt,
 }: {
   otp: string;
-  type: "email" | "mobile";
+  /** 호출부 호환용, API에는 미전송(temp_token에 포함) */
+  type?: "email" | "mobile";
   tempJwt: string;
 }): Promise<ILoginData> => {
   try {
     const { data } = await customUnAuthAxios.post<IVerifyLoginOtpResponse>(
       "/auth/verify-2fa",
-      { otp, type, purpose: "2fa" },
+      { otp },
       {
         headers: {
           "Content-Type": "application/json",
