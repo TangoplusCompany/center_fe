@@ -69,7 +69,8 @@ export interface IUserMeasureListItem
   device_name: string;
   center_name: string;
   mobile: string;
-  rom_exist: boolean;
+  has_normal: 0 | 1;
+  has_rom : 0 | 1;
 }
 
 

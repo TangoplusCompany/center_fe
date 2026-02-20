@@ -1,30 +1,42 @@
 import { useState } from "react";
-import ROMSelectContainer from "../Measure/ROM/SelectContainer";
-import ROMBody from "../Measure/ROM/Body";
+import ROMPartTab from "../Measure/ROM/PartTab";
 import { ComparePair, CompareSlot } from "@/types/compare";
 import ROMPickerDialog from "../Measure/ROM/PickerDialog";
-import { useROMListForCompare } from "@/hooks/api/measure/rom/useROMListForCompare";
-import { IMeasureROMDetail } from "@/types/measure";
+import ROMItemContainer from "../Measure/ROM/ItemContainer";
+import { useGetROMItemList } from "@/hooks/api/measure/rom/useGetROMItemList";
+import { Skeleton } from "../ui/skeleton";
+import { useAuthStore } from "@/providers/AuthProvider";
+import { useGetROMItemHistory } from "@/hooks/api/measure/rom/useGetROMItemHsitory";
+import ROMBody from "../Measure/ROM/Body";
+import { useGetROMItemDetail } from "@/hooks/api/measure/rom/useGetROMItemDetail";
 
 export interface UserROMProps {
-  userSn: string
+  userSn: number
 }
 export const CenterUserROMContainer = ({
-  userSn
+  userSn,
 }: UserROMProps) => {
-  const [part, setPart] = useState(0);
+  const [bodyPart, setBodyPart] = useState(1); // 상단 탭 선택하는 bodyPart
+  const [romSn, setRomSn] = useState(-1); // 한 검사 선택하는 rom Sn
+  const [measureType, setMeasureType] = useState(-1); // 이전 항목 선택을 관리하는 ROM 타입
+
+  const centerSn = useAuthStore((state) => state.centerSn);
+  const [page, setPage] = useState(1);
   const onPartSelect = (part: number) => {
-    setPart(part);
+    setBodyPart(part);
+  };
+  const onROMItemSelect = (romSn: number) => {
+    setRomSn(romSn);
   };
 
   const [isCompareDialogOpen, setIsCompareDialogOpen] = useState(false);
   const [activeSlot, setActiveSlot] = useState<CompareSlot>(0);
-  const onCompareDialogOpen = (slot: CompareSlot) => {
+  const onCompareDialogOpen = (slot: CompareSlot, measureType?: number) => {
     setActiveSlot(slot);
+    if (measureType !== undefined) setMeasureType(measureType)
     setIsCompareDialogOpen(true);
   };
-  // comparePair은 어차피 rom_sn이 있으니 해당 내용을 같이 쓰기.
-  const [comparePair, setComparePair] = useState<ComparePair>([null, null]);
+  const [comparePair, setComparePair] = useState<ComparePair>([undefined, undefined]);
   const handleToggleCompareSn = (sn: number, slot: CompareSlot) => {
     setComparePair((prev) => {
       const next: ComparePair = [...prev]; 
@@ -32,94 +44,100 @@ export const CenterUserROMContainer = ({
       return next;                         
     });
   };
-  // const {
-  //   data: leftData,
-  //   isLoading: leftLoading,
-  //   isError: leftError,
-  // } = useMeasureInfo({
-  //   measure_sn: leftEnabled ? leftSn : undefined,
-  //   user_sn: userSn,
-  //   isResultPage,
-  // });
+
   const {
-    measureList: compareROMListItems,
-    pagination: comparePagination,
-  } = useROMListForCompare({
-    // userUUID: isResultPage ? undefined : userUUID, // eslint-disable-line @typescript-eslint/no-unused-vars
-    user_sn: parseInt(userSn),
-    part: part
+    data: romList,
+    isLoading: romLoading,
+    isError: romError,
+  } = useGetROMItemList({
+    user_sn: userSn,
+    center_sn: centerSn,
+    body_part_number: bodyPart,
   });
 
+  const {
+    data: romHistory,
+    isLoading: romHLoading,
+    isError: romHError,
+  } = useGetROMItemHistory({
+    user_sn: userSn,
+    center_sn: centerSn,
+    measure_type: measureType,
+    page,
+  })
 
-  // TODO 여기서 선택한 SelectCard에서 선택을 누르면 여기서 받아와서 이제 새 API를 사용해야 함 
-  // const {
-  //   data: selectedROM0,
-  //   isLoading: loading0,
-  //   isError: error0
-  // } = useGetROMDetail({
-  //   user_sn: parseInt(userSn),
-  //   rom_sn: comparePair[0]
-  // })
-  // if (comparePair[1] != null) {
-  //   const {
-  //     data: selectedROM1,
-  //     isLoading: loading1,
-  //     isError: error1
-  //   } = useGetROMDetail({
-  //     user_sn: parseInt(userSn),
-  //     rom_sn: comparePair[1]
-  //   })
-  // }
-  const dummayLeft : IMeasureROMDetail = {
-    title: "더미 타이틀1",
-    reg_date: "",
-    measure_server_file_name: "",
-    measure_server_json_name: "",
-    measure_server_mat_json_name: "",
-    description: "설명",
-    normal_bad: "0",
-    normal_normal: "1",
-    max_value: "1",
-    value_1_min: "180.0",
-    value_1_max: "10.1",
-    value_2_min: "179.1",
-    value_2_max: "23.9",
-    camera_orientation : 1
-  }
-  const dummayRight : IMeasureROMDetail = {
-    title: "더미 타이틀2",
-    reg_date: "",
-    measure_server_file_name: "",
-    measure_server_json_name: "",
-    measure_server_mat_json_name: "",
-    description: "설명",
-    normal_bad: "0",
-    normal_normal: "1",
-    max_value: "1",
-    value_1_min: "18.0",
-    value_1_max: "100.1",
-    value_2_min: "19.1",
-    value_2_max: "273.9",
-    camera_orientation : 1
-  }
-
+  // leftROMItemDetail
+  const {
+    data: romDetail0,
+    isLoading: romDLoading0,
+    isError: romDError0,
+  } = useGetROMItemDetail({
+    user_sn: userSn,
+    center_sn: centerSn,
+    rom_result_sn: comparePair[0],
+  })
+  
+  // rightROMItemDetail
+  const {
+    data: romDetail1,
+    isLoading: romDLoading1,
+    isError: romDError1,
+  } = useGetROMItemDetail({
+    user_sn: userSn,
+    center_sn: centerSn,
+    rom_result_sn: comparePair[1],
+  })
   return (
     <div className="flex flex-col gap-4">
-      <ROMSelectContainer onSelect={onPartSelect} />
-      <ROMBody data0={dummayLeft} data1={dummayRight} userSn={userSn} onCompareDialogOpen={onCompareDialogOpen}/>
-
+      <ROMPartTab onPartSelect={onPartSelect} onROMItemSelect={onROMItemSelect} romSn={romSn}/>
+      {(romSn === -1) && (
+        romLoading ? (
+          <div className="grid grid-cols-2 gap-4">
+            <Skeleton className="w-full h-64 rounded-xl" />
+            <Skeleton className="w-full h-64 rounded-xl" />
+            <Skeleton className="w-full h-64 rounded-xl" />
+            <Skeleton className="w-full h-64 rounded-xl" />
+          </div>
+        ) : romError ? (
+          <div className="flex items-center justify-center h-[200px] text-sm text-red-400">
+            오류가 발생했습니다. 잠시후 다시 시도해주세요.
+          </div>
+        ) : (
+          <ROMItemContainer datas={romList ?? []} onCompareDialogOpen={onCompareDialogOpen} onROMItemSelect={onROMItemSelect} />
+        )
+      )}
+      {/* <ROMBody data0={dummayLeft} data1={dummayRight} userSn={userSn} onCompareDialogOpen={onCompareDialogOpen}/> */}
+      {(romSn !== -1 && romDetail0 !== undefined) && (
+        <ROMBody 
+        data0={romDetail0} 
+        data1={romDetail1} 
+        onCompareDialogOpen={onCompareDialogOpen} 
+        onROMItemSelect={onROMItemSelect} 
+        isLoading0={romDLoading0} 
+        isError0={romDError0} 
+        isLoading1={romDLoading1} 
+        isError1={romDError1}
+        />
+      )}
       <ROMPickerDialog
         open={isCompareDialogOpen}
-        items={compareROMListItems} 
+        items={romHistory?.rom_results ?? [] } 
+        title={romList?.find((it) => it.measure_type === measureType)?.title ?? ""}
         comparePair={comparePair}
         activeSlot={ activeSlot }
         onOpenChange={setIsCompareDialogOpen}
         onToggleCompareSn={(sn, slot) => {
-          // 선택하면 compareMeasureSns에 추가하고 닫기
           handleToggleCompareSn(sn, slot);
           setIsCompareDialogOpen(false);
         }}
-        pagination={comparePagination}
+        pagination={{
+          page: romHistory?.page ?? 1,
+          limit: romHistory?.limit ?? 10,
+          last_page: romHistory?.last_page ?? 1,
+          setPage,
+        }}
+        isLoading={romHLoading}
+        isError={romHError}
       />
     </div>
   )

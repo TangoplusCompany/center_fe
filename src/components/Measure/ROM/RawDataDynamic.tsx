@@ -12,38 +12,12 @@ export interface ROMRawDataDynamicProps {
 export const ROMRawDataDynamic = ({
   left,
   right,
-  // userSn,
   onCompareDialogOpen,
 }: {
   left: ROMRawDataDynamicProps;
   right?: ROMRawDataDynamicProps;
-  userSn: string,
   onCompareDialogOpen: (currenSlot: CompareSlot) => void;
 }) => {
-
-  // const {
-  //   data: measure0,
-  //   isLoading: seqLoading0,
-  //   isError: seqError0,
-  // } = useMeasureSequence({
-  //   measure_sn: leftSummaryData?.measure_sn ? String(leftSummaryData.measure_sn) : undefined,
-  //   user_sn: String(userSn),
-  //   sequence_number: 6,
-  //   isResultPage,
-
-  // });
-
-  // const {
-  //   data: measure1,
-  //   isLoading: seqLoading1,
-  //   isError: seqError1,
-  // } = useMeasureSequence({
-  //   measure_sn: rightSummaryData?.measure_sn ? String(rightSummaryData.measure_sn) : undefined,
-  //   user_sn: String(userSn),
-  //   sequence_number: 6,
-  //   isResultPage,
-  // });
-
 
   const { data: measureJson0, isLoading: jsonLoading0, isError: jsonError0 } = useMeasureDynamicJson(
     left.measure_server_json_name
@@ -55,7 +29,7 @@ export const ROMRawDataDynamic = ({
   const isRotated1 = right?.camera_orientation === 1;
   return (
     <div className="flex flex-col w-full h-full gap-4">
-      <div className="grid grid-cols-2 gap-2 h-full">
+      <div className="grid grid-cols-2 gap-4 h-full">
         {/* 좌측 비디오 플레이어 */}
         <VideoPlayer
           videoSrc={left?.measure_server_file_name}
@@ -64,10 +38,8 @@ export const ROMRawDataDynamic = ({
           measureJson={measureJson0}
           isLoading={jsonLoading0}
           isError={!!(jsonError0)}
-          // isLoading={seqLoading0 || jsonLoading0}
-          // isError={!!(seqError0 || jsonError0)}
         />
-
+        
         {/* 우측 비디오 플레이어 또는 기본 화면 */}
         {right ? (
           <VideoPlayer
@@ -77,8 +49,6 @@ export const ROMRawDataDynamic = ({
             measureJson={measureJson1}
             isLoading={jsonLoading1}
             isError={!!(jsonError1)}
-            // isLoading={seqLoading1 || jsonLoading1}
-            // isError={!!(seqError1 || jsonError1)}
 
             // customCanvasTransform={isRotated1 ? undefined : "scaleX(-1.25) scaleY(1.25)"}
             // videoClassName={isRotated1 ? undefined : "-rotate-90 w-[75%] h-full object-contain"}

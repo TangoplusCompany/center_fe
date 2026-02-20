@@ -3,7 +3,6 @@
 import React, { useMemo } from "react";
 import { CenterUserMeasureList } from "@/components/User/CenterUserMeasureList";
 import CenterUserMeasureListSkeleton from "@/components/User/CenterUserMeasureListSkeleton";
-import CustomPagination from "@/components/common/Pagination";
 import { useGetUserMeasureList } from "@/hooks/api/user/useGetUserMeasureList";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import { IUserMeasureList } from "@/types/user";
@@ -23,7 +22,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 const CenterUserMeasureListContainer = ({ 
   // userUUID,
   userSn,
-  onSelectMeasure,
+  // onSelectMeasure,
   onToggleCompareSn, 
   onOpenCompareMode,
   isResultPage = false,
@@ -31,18 +30,22 @@ const CenterUserMeasureListContainer = ({
 }: { 
   // userUUID: string;
   userSn: number;
-  onSelectMeasure?: (measureSn: number) => void;
+  // onSelectMeasure?: (measureSn: number) => void;
   onToggleCompareSn: (sn: number, slot: CompareSlot) => void;
   onOpenCompareMode: () => void;
   isResultPage: boolean;
 }) => {
-  const { setQueryParam, query } = useQueryParams();
+    const { setQueryParam, query } = useQueryParams();
   const page = query.page || "1";
   const limit = query.limit || "20";
-  const sort = query.sort || "desc"; // ✅ 추가
-  const from = query.from; // ✅ 추가
-  const to = query.to; // ✅ 추가
-  // 3가지 조건들을 적용해서 리스트에 들어갈 데이터를 필터링해주는 곳
+  const sort = query.sort || "desc";
+  const from = query.from;
+  const to = query.to;
+
+  // 인피니티 스크롤을 위한 state
+  const [allMeasures, setAllMeasures] = useState<IUserMeasureListItem[]>([]);
+  const [hasMore, setHasMore] = useState(true);
+
   const {
     data: userMeasureList,
     isLoading,
@@ -50,7 +53,6 @@ const CenterUserMeasureListContainer = ({
   } = useGetUserMeasureList<IUserMeasureList>({
     page,
     limit,
-    // user_uuid: userUUID,
     user_sn: userSn,
     from,
     to,
@@ -237,7 +239,7 @@ const CenterUserMeasureListContainer = ({
       </div> */}
 
       <div className="flex flex-col sm:flex-row items-end sm:items-center justify-end gap-2 sm:gap-4 w-full">
-        <div className="flex flex-1 justify-between items-center">
+        <div className="flex w-full justify-between items-center">
           {/* 총 갯수 표시 */}
           {userMeasureList && (
             <div className="text-base text-muted-foreground ">
@@ -245,7 +247,7 @@ const CenterUserMeasureListContainer = ({
             </div>
           )}
           <div className="flex items-center gap-4 ">
-            <Select
+            {/* <Select
               onValueChange={handleSelectChange}
               defaultValue={defaultLimit.toString()}
             >
@@ -257,7 +259,7 @@ const CenterUserMeasureListContainer = ({
                 <SelectItem value="20">20건</SelectItem>
                 <SelectItem value="50">50건</SelectItem>
               </SelectContent>
-            </Select>
+            </Select> */}
 
             <Select
               onValueChange={handleSortChange}
@@ -343,14 +345,14 @@ const CenterUserMeasureListContainer = ({
           onOpenCompareMode={onOpenCompareMode}
         />
 
-        {userMeasureList && (
+        {/* {userMeasureList && (
           <CustomPagination
             total={userMeasureList.total}
             page={userMeasureList.current_page}
             last_page={userMeasureList.total_pages}
             limit={userMeasureList.per_page}
           />
-        )}
+        )} */}
       </>
     )}
   </>

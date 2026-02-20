@@ -149,7 +149,7 @@ export const CenterUserAddDialog: React.FC<CenterUserAddDialogProps> = ({
                 type="button"
                 onClick={handleAddUser}
                 disabled={mutationAddUser.isPending}
-                className="w-full sm:w-auto px-4 py-2 rounded-xl bg-toggleAccent text-white hover:bg-toggleAccentDeep transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full sm:w-auto px-4 py-2 rounded-xl bg-toggleAccent text-white hover:bg-toggleAccent/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {mutationAddUser.isPending ? '추가 중...' : '사용자 추가'}
               </button>

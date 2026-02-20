@@ -1,4 +1,4 @@
-import { ROMSelectProps } from "./SelectContainer";
+import { ROMSelectProps } from "./PartTab";
 
 export const ROMSkeletonBox = ({
   // onSelect
