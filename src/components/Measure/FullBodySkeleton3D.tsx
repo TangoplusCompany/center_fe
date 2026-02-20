@@ -143,12 +143,6 @@ type FullBodySkeleton3DProps = {
 export function FullBodySkeleton3D({ data, className }: FullBodySkeleton3DProps) {
   return (
     <div className={className ?? "w-full h-full min-h-[300px]"}>
-      <div
-        className="left-3 top-3 z-10 text-xs text-white/70"
-        aria-label="3D 모델 출처"
-      >
-        Polyon Studio (CC BY)
-      </div>
       <Canvas
         camera={{ position: [0.7, 1.34, 2.2], fov: 42 }}
         shadows

@@ -31,15 +31,17 @@ export const Login2FAMethodDialog = ({
 }: Login2FAMethodDialogProps) => {
   const [method, setMethod] = useState<Login2FAMethod>("email");
   const [isPending, setIsPending] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleNext = async () => {
+    setErrorMessage(null);
     setIsPending(true);
     try {
       const res = await postRequestLogin2FAOtp({ type: method, tempJwt });
       onOpenChange(false);
       onNext(method, res.temp_token);
-    } catch {
-      // TODO: 실제 API 연동 시 에러 메시지 표시
+    } catch (e) {
+      setErrorMessage(e instanceof Error ? e.message : "요청에 실패했습니다.");
     } finally {
       setIsPending(false);
     }
@@ -67,20 +69,15 @@ export const Login2FAMethodDialog = ({
               </Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem
-                value="mobile"
-                id="2fa-mobile"
-                disabled
-                className="disabled:opacity-50"
-              />
-              <Label
-                htmlFor="2fa-mobile"
-                className="cursor-not-allowed font-normal text-muted-foreground"
-              >
-                핸드폰 인증 (준비 중)
+              <RadioGroupItem value="mobile" id="2fa-mobile" />
+              <Label htmlFor="2fa-mobile" className="cursor-pointer font-normal">
+                휴대폰 인증
               </Label>
             </div>
           </RadioGroup>
+          {errorMessage && (
+            <p className="text-sm text-destructive">{errorMessage}</p>
+          )}
           <Button
             type="button"
             className="w-full"
