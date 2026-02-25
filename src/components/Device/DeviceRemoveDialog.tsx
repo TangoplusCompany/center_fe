@@ -56,7 +56,7 @@ const DeviceRemoveDialog = ({
 
           <div className="grid grid-cols-2 items-center gap-4">
             <DialogClose asChild>
-              <Button className="shadow-none border-sub200 border bg-white hover:sub300">취소하기</Button>
+              <Button className="shadow-none border-sub200 border text-sub700 bg-sub150 hover:bg-sub300">취소하기</Button>
             </DialogClose>
             <Button className="border border-danger bg-danger-background hover:bg-danger-foreground text-danger hover:text-danger" variant={"outline"} onClick={handleDeviceRemove}>
               제거하기

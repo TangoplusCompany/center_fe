@@ -63,7 +63,7 @@ const CenterUserMeasureContainer = ({
 
   // 다이얼로그가 열릴 때만 effectiveMeasureSn 스냅샷 (페이지 이동 시 freeze 유지)
   useEffect(() => {
-    if (isDatePickerOpen && !prevDatePickerOpenRef.current && effectiveMeasureSn != null) {
+    if (isDatePickerOpen && !prevDatePickerOpenRef.current && effectiveMeasureSn != undefined) {
       frozenMeasureSnRef.current = effectiveMeasureSn;
     }
     prevDatePickerOpenRef.current = isDatePickerOpen;
@@ -72,7 +72,7 @@ const CenterUserMeasureContainer = ({
   const snForDetailFetch =
     measureSn > 0
       ? measureSn
-      : isDatePickerOpen && frozenMeasureSnRef.current != null
+      : isDatePickerOpen && frozenMeasureSnRef.current != undefined
         ? frozenMeasureSnRef.current
         : effectiveMeasureSn;
 
@@ -90,7 +90,7 @@ const CenterUserMeasureContainer = ({
     isResultPage,
   });
 
-  const hasCompare = comparePair[0] !== null || comparePair[1] !== null;
+  const hasCompare = comparePair[0] !== undefined || comparePair[1] !== undefined;
   const shouldShowCompare = isCompareMode || hasCompare;
 
   return (

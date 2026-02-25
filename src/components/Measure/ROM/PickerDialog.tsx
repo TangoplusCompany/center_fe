@@ -75,11 +75,12 @@ export const ROMPickerDialog = ({
          이전 기록: {title}
         </DialogTitle>
         {isLoading ? (
-          <div className="grid grid-cols-2 gap-4">
-            <Skeleton className="w-full h-64 rounded-xl" />
-            <Skeleton className="w-full h-64 rounded-xl" />
-            <Skeleton className="w-full h-64 rounded-xl" />
-            <Skeleton className="w-full h-64 rounded-xl" />
+          <div className="flex flex-col gap-4">
+            <Skeleton className="w-full h-8 rounded-xl" />
+            <Skeleton className="w-full h-8 rounded-xl" />
+            <Skeleton className="w-full h-8 rounded-xl" />
+            <Skeleton className="w-full h-8 rounded-xl" />
+            <div className="w-full h-8"></div>
           </div>
         ) : isError ? (
           <div className="flex items-center justify-center h-[200px] text-sm text-red-400">
