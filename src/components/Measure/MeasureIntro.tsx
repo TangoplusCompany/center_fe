@@ -2,7 +2,7 @@
 
 import { IPartDetailData, IUserMeasureInfoResponse } from "@/types/measure";
 import React from "react";
-import SkeletonContainer from "./SkeletonContainer";
+import SkeletonContainer, { SkeletonDatePickerProps } from "./SkeletonContainer";
 import FootStaticContainer, { IMatStaticPressure } from "./Mat/FootStaticContainer";
 import FootDynamicContainer, { IMatOhsPressure } from "./Mat/FootDynamicContainer";
 import KneeTrajectory from "./Mat/KneeTrajectoryContainer";
@@ -12,8 +12,10 @@ import MeasureIntroPart from "./MeasureIntroPart";
 
 const MeasureIntro = ({
   data,
+  props,
 }: {
   data: IUserMeasureInfoResponse;
+  props: SkeletonDatePickerProps;
 }) => {
   
   const {
@@ -93,7 +95,10 @@ const MeasureIntro = ({
 
   const topLeft = (
     <div className="h-full">
-      <SkeletonContainer data={data.result_summary_data} />
+      <SkeletonContainer 
+      data={data.result_summary_data} 
+      props={props}
+       />
     </div>
   );
 

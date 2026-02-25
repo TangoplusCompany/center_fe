@@ -1,14 +1,84 @@
 "use client";
 
 import "@/css/body-skeleton.css";
-import { IUserDetailMeasureInfo } from "@/types/measure";
+import { IMeasureList, IUserDetailMeasureInfo } from "@/types/measure";
 import { FullBodySkeleton3D } from "./FullBodySkeleton3D";
+import React from "react";
+import { MeasureDetailDatePickerDialog } from "./MeasureDetailDatePickerDialog";
+import { formatDate } from "@/utils/formatDate";
+import { DetailPagination } from "@/hooks/api/user/useMeasureListForDetail";
 
-const SkeletonContainer = ({ data }: { data: IUserDetailMeasureInfo }) => {
+export interface SkeletonDatePickerProps {
+  measureList?: IMeasureList[];              // 전체 측정 리스트 (현재 페이지)
+  selectedMeasureSn?: number | undefined;         // 현재 선택된 sn
+  isDatePickerOpen?: boolean;
+  onDatePickerOpenChange?: (open: boolean) => void;
+  onChangeMeasureSn?: (sn: number) => void;
+  pagination?: DetailPagination;  
+}
+
+const SkeletonContainer = ({ 
+  data,
+  props: rawProps // 원본 props를 따로 받고
+}: {
+  data:  IUserDetailMeasureInfo;
+  props?: SkeletonDatePickerProps;
+}) => {
+  
+  const props = rawProps ?? {}; 
+  const { } = props;
+
+  const [internalDatePickerOpen, setInternalDatePickerOpen] = React.useState(false);
+  const isControlled = props.onDatePickerOpenChange != undefined;
+  const datePickerOpen = isControlled ? props.isDatePickerOpen : internalDatePickerOpen;
+  const setDatePickerOpen = props.onDatePickerOpenChange ?? setInternalDatePickerOpen;
+  const selectedMeasure =
+    props.measureList && props.selectedMeasureSn != undefined
+      ? props.measureList.find((item) => item.measure_sn === props.selectedMeasureSn)
+      : undefined;
+  
   return (
     <div className="relative box-border flex h-full flex-col items-center rounded-3xl border-2 border-sub200 p-4 text-black focus-visible:outline-none">
+      
+      {props.measureList && props.onChangeMeasureSn && (
+        <>
+          <button
+            type="button"
+            onClick={() => setDatePickerOpen?.(true)}
+            className="
+              w-full flex items-center justify-center gap-2
+              border-2 border-sub300 rounded-xl
+              px-3 py-2 text-base shadow-sm
+              hover:border-toggleAccent
+              focus:outline-none focus:ring-2  focus:border-blue-500
+              transition
+            "
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/icons/ic_calendar.svg"
+              alt="date_select"
+              className="lg:!w-5 lg:!h-5"
+            />
+            <span>
+              {selectedMeasure
+                ? formatDate(selectedMeasure.measure_date)
+                : "측정일 선택"}
+            </span>
+          </button>
+          <MeasureDetailDatePickerDialog
+            open={datePickerOpen ?? false}
+            onOpenChange={setDatePickerOpen}
+            items={props.measureList}
+            selectedMeasureSn={props.selectedMeasureSn}
+            onSelect={(sn) => props.onChangeMeasureSn?.(sn)}
+            pagination={props.pagination}
+          />
+        </>
+      )}
+
       <div className="flex-1 flex items-center justify-center w-full min-h-0">
-        <div className="relative z-0 skeleton mb-8 w-full max-w-[420px] aspect-[246/440] min-h-[300px]">
+        <div className="relative z-0 skeleton mb-8 w-full max-w-[260px] aspect-[246/440] min-h-[150px]">
           <FullBodySkeleton3D data={data} className="w-full h-full" />
         </div>
       </div>

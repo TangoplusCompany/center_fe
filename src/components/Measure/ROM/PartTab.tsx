@@ -5,7 +5,7 @@ import {  useState } from "react";
 
 export interface ROMSelectProps {
   onPartSelect?: (part: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8) => void;
-  onROMItemSelect?: (ronSn: number, isLeft: boolean) => void;
+  onROMItemSelect?: (ronSn: number | undefined, isLeft: boolean) => void;
   romPair: ComparePair;
 }
 
@@ -18,7 +18,7 @@ type ROMPart = {
 export const ROMPartTab = ({
   onPartSelect,
   onROMItemSelect,
-  romPair
+  
 } : ROMSelectProps) => {
   const [activeIdx, setActiveIdx] = useState(0);
   // const prevActiveIdxRef = useRef(activeIdx); // ✅ 이전 activeIdx 추적
@@ -83,7 +83,10 @@ export const ROMPartTab = ({
             
             if (onPartSelect) onPartSelect(newValue);
           }
-          if (romPair !== undefined && onROMItemSelect) onROMItemSelect(-1, true);
+          if (onROMItemSelect) {
+            onROMItemSelect(undefined, true);
+            onROMItemSelect(undefined, false);
+          }
         }}
         className="w-full table table-fixed min-w-0"
       >
