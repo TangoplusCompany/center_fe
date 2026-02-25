@@ -16,5 +16,5 @@ export const getROMItemDetail = async ({
   rom_result_sn?: number;
 }) => {
   const { data } = await customAxios.get(`/members/${user_sn}/centers/${center_sn}/rom-results/${rom_result_sn}`);
-  return data;
+  return data.data;
 };

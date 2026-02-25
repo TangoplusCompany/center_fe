@@ -9,7 +9,7 @@ export interface ROMBodyProps {
   data0: IMeasureROMItemDetail
   data1? : IMeasureROMItemDetail 
   onCompareDialogOpen: (slot: CompareSlot, measureType?: number) => void;
-  onROMItemSelect ?: (romSn: number, isLeft: boolean) => void;
+  onROMItemSelect ?: (romSn: number | undefined, isLeft: boolean) => void;
   isLoading0 : boolean;
   isError0 : boolean;
   isLoading1: boolean;
@@ -26,6 +26,7 @@ export const ROMBody = ({
   isLoading1,
   isError1,
 }: ROMBodyProps) => {
+  
   const leftData : ROMRawDataDynamicProps  = {
     measure_server_file_name : data0.measure_server_file_name,
     measure_server_json_name : data0.measure_server_json_name,
@@ -41,7 +42,8 @@ export const ROMBody = ({
   const leftSlot: CompareSlot = 0;  // 또는 1
   const rightSlot: CompareSlot = 1;
 
-  
+  console.log(data0, leftData)
+  console.log(data1, rightData)
   if (isLoading0 || isLoading1) {
     return <CompareBodySkeleton />;
   }
@@ -50,17 +52,15 @@ export const ROMBody = ({
     return <div>데이터 로딩 중 오류가 발생했습니다.</div>;
   }
 
-
   return (
     <div className="flex flex-col gap-4">
-
       <div className="flex">
         <button
           type="button"
           onClick={() => {
             if (onROMItemSelect) {
-              onROMItemSelect(-1, true)
-              onROMItemSelect(-1, false) 
+              onROMItemSelect(undefined, true)
+              onROMItemSelect(undefined, false) 
             };
           }}
           className="px-3 py-1 rounded-md text-base text-sub700"

@@ -5,7 +5,7 @@ import { IMeasureROMItem } from "@/types/measure";
 export interface ROMItemCardProps {
   romItem: IMeasureROMItem
   onCompareDialogOpen: (currenSlot: CompareSlot, measureType: number) => void;
-  onROMItemSelect ?: (romSn: number, isLeft: boolean) => void;
+  onROMItemSelect ?: (romSn: number | undefined, isLeft: boolean) => void;
   idx: number;
 }
 

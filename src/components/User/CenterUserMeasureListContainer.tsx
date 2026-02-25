@@ -59,7 +59,7 @@ const CenterUserMeasureListContainer = ({
     sort,
     isResultPage,
   });
-
+  console.log(userMeasureList)
   const measures: IMeasureList[] = useMemo(() => {
     if (!userMeasureList?.measurement_list) return [];
     return userMeasureList.measurement_list.map((item) => ({

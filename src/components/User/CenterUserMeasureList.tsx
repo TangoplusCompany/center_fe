@@ -19,7 +19,7 @@ export const CenterUserMeasureList = ({
 }: {
   measures: IMeasureList[];
   onRowClick?: (measureSn: number) => void;
-
+  
   // deleteSelectedSns: number[];
   // onToggleDeleteSn: (sn: number) => void;
   onToggleCompareSn?: (sn: number, slot: CompareSlot) => void;
