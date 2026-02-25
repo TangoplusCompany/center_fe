@@ -24,9 +24,8 @@ export const CenterUserROMContainer = ({
   const onPartSelect = (part: number) => {
     setBodyPart(part);
   };
-  const onROMItemSelect = (romSn : number, isLeft: boolean) => {
+  const onROMItemSelect = (romSn : number | undefined, isLeft: boolean) => {
     setRomPair(isLeft ? [romSn, romPair[1]] : [romPair[0], romSn]) 
-    console.log("rom담기", romSn, isLeft, romPair)
   }
   const [isCompareDialogOpen, setIsCompareDialogOpen] = useState(false);
   const [activeSlot, setActiveSlot] = useState<CompareSlot>(0);
@@ -89,7 +88,7 @@ export const CenterUserROMContainer = ({
   return (
     <div className="flex flex-col gap-4">
       <ROMPartTab onPartSelect={onPartSelect} onROMItemSelect={onROMItemSelect} romPair={romPair}/>
-      {(romPair !== undefined ) && (
+      {(romPair[0] === undefined && romPair[1] === undefined) && (
         romLoading ? (
           <div className="grid grid-cols-2 gap-4">
             <Skeleton className="w-full h-64 rounded-xl" />

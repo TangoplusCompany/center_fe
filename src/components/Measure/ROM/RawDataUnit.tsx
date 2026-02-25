@@ -24,7 +24,7 @@ export const ROMRawDataUnit = ({
         </div>
 
         <div className="grid grid-cols-[25%_25%_50%] items-center dark:border dark:bg-muted divide-x-2 divide-sub200">
-          <div className="h-full flex items-center justify-center">{data.value_1_max}º</div>
+          <div className="h-full flex items-center justify-center">{Math.abs(data.value_1_max).toFixed(1)}º</div>
           <div className="h-full flex items-center justify-center">{romState}</div>
           <div className="h-full flex items-center px-2 py-1">{data.description}</div>
         </div>

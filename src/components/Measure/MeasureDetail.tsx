@@ -12,12 +12,10 @@ import MeasureIntro from "@/components/Measure/MeasureIntro"
 import { cn } from "@/lib/utils";
 import { actionKakaoEncrypt, actionPrintEncrypt } from "@/app/actions/getCrypto";
 import { postKakaoSend } from "@/app/actions/postKakaoSend";
-
-import { formatDate } from "@/utils/formatDate";
-import { MeasureDetailDatePickerDialog } from "./MeasureDetailDatePickerDialog";
 import { Button } from "../ui/button";
 import type { DetailPagination } from "@/hooks/api/user/useMeasureListForDetail";
 import { getResultReportUrl } from "@/app/actions/openPrintPage";
+import { SkeletonDatePickerProps } from "./SkeletonContainer";
 type MeasureListType = {
   title: string;
   value: string;
@@ -27,7 +25,7 @@ type MeasureListType = {
 type CenterUserMeasureProps = {
   measureData: IUserMeasureInfoResponse;
   measureList?: IMeasureList[];              // 전체 측정 리스트 (현재 페이지)
-  selectedMeasureSn?: number | null;         // 현재 선택된 sn
+  selectedMeasureSn?: number | undefined;         // 현재 선택된 sn
   onChangeMeasureSn?: (sn: number) => void;  // 다른 sn 선택 시 호출
   userSn: string;
   pagination?: DetailPagination;  
@@ -48,17 +46,7 @@ const MeasureDetail = ({
   isDatePickerOpen = false,
   onDatePickerOpenChange,
 }: CenterUserMeasureProps) => {
-  const [internalDatePickerOpen, setInternalDatePickerOpen] = React.useState(false);
-  const isControlled = onDatePickerOpenChange != null;
-  const datePickerOpen = isControlled ? isDatePickerOpen : internalDatePickerOpen;
-  const setDatePickerOpen = isControlled ? onDatePickerOpenChange : setInternalDatePickerOpen;
-  const selectedMeasure =
-    measureList && selectedMeasureSn != null
-      ? measureList.find((item) => item.measure_sn === selectedMeasureSn)
-      : undefined;
   const data = measureData.result_summary_data
-
-
   const handleKakaoSend = async () => {
     
     const cryptoData = {
@@ -98,16 +86,21 @@ const MeasureDetail = ({
       alert("리포트 페이지를 생성하는 중 오류가 발생했습니다.");
     }
   };
-
+  const MeasureDateProps : SkeletonDatePickerProps = {
+    measureList: measureList,
+    selectedMeasureSn: selectedMeasureSn,
+    isDatePickerOpen: isDatePickerOpen,
+    onDatePickerOpenChange: onDatePickerOpenChange,
+    onChangeMeasureSn: onChangeMeasureSn,
+    pagination: pagination
+  }
   const measureTabs: MeasureListType[] = [
     {
       title: "결과 요약",
       value: "summary",
       component: () => (
-        // 원하는 요약 컴포넌트를 여기 넣으면 됩니다.
-        // 예시: measureData.measure_info 기반
         <MeasureIntro 
-        data={measureData} />
+          data={measureData} props={MeasureDateProps} />
       ),
     },
     {
@@ -237,42 +230,7 @@ const MeasureDetail = ({
             인쇄하기
           </Button>
 
-          {measureList && onChangeMeasureSn && (
-            <>
-              <button
-                type="button"
-                onClick={() => setDatePickerOpen(true)}
-                className="
-                  w-auto flex items-center gap-2
-                  border border-sub200 rounded-xl
-                  px-3 py-2 text-sm shadow-sm
-                  hover:border-gray-400
-                  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                  transition
-                "
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/icons/ic_calendar.svg"
-                  alt="date_select"
-                  className="lg:!w-5 lg:!h-5"
-                />
-                <span>
-                  {selectedMeasure
-                    ? formatDate(selectedMeasure.measure_date)
-                    : "측정일 선택"}
-                </span>
-              </button>
-              <MeasureDetailDatePickerDialog
-                open={datePickerOpen}
-                onOpenChange={setDatePickerOpen}
-                items={measureList}
-                selectedMeasureSn={selectedMeasureSn}
-                onSelect={(sn) => onChangeMeasureSn?.(sn)}
-                pagination={pagination}
-              />
-            </>
-          )}
+          
 
         </div>
         
