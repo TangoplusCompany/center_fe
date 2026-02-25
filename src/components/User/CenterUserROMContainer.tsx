@@ -17,7 +17,6 @@ export const CenterUserROMContainer = ({
   userSn,
 }: UserROMProps) => {
   const [bodyPart, setBodyPart] = useState(1); // 상단 탭 선택하는 bodyPart
-  const [romSn, setRomSn] = useState(-1); // 한 검사 선택하는 rom Sn
   const [measureType, setMeasureType] = useState(-1); // 이전 항목 선택을 관리하는 ROM 타입
 
   const centerSn = useAuthStore((state) => state.centerSn);
@@ -25,10 +24,10 @@ export const CenterUserROMContainer = ({
   const onPartSelect = (part: number) => {
     setBodyPart(part);
   };
-  const onROMItemSelect = (romSn: number) => {
-    setRomSn(romSn);
-  };
-
+  const onROMItemSelect = (romSn : number, isLeft: boolean) => {
+    setRomPair(isLeft ? [romSn, romPair[1]] : [romPair[0], romSn]) 
+    console.log("rom담기", romSn, isLeft, romPair)
+  }
   const [isCompareDialogOpen, setIsCompareDialogOpen] = useState(false);
   const [activeSlot, setActiveSlot] = useState<CompareSlot>(0);
   const onCompareDialogOpen = (slot: CompareSlot, measureType?: number) => {
@@ -36,9 +35,9 @@ export const CenterUserROMContainer = ({
     if (measureType !== undefined) setMeasureType(measureType)
     setIsCompareDialogOpen(true);
   };
-  const [comparePair, setComparePair] = useState<ComparePair>([undefined, undefined]);
+  const [romPair, setRomPair] = useState<ComparePair>([undefined, undefined]);
   const handleToggleCompareSn = (sn: number, slot: CompareSlot) => {
-    setComparePair((prev) => {
+    setRomPair((prev) => {
       const next: ComparePair = [...prev]; 
       next[slot] = sn;                    
       return next;                         
@@ -74,7 +73,7 @@ export const CenterUserROMContainer = ({
   } = useGetROMItemDetail({
     user_sn: userSn,
     center_sn: centerSn,
-    rom_result_sn: comparePair[0],
+    rom_result_sn: romPair[0],
   })
   
   // rightROMItemDetail
@@ -85,12 +84,12 @@ export const CenterUserROMContainer = ({
   } = useGetROMItemDetail({
     user_sn: userSn,
     center_sn: centerSn,
-    rom_result_sn: comparePair[1],
+    rom_result_sn: romPair[1],
   })
   return (
     <div className="flex flex-col gap-4">
-      <ROMPartTab onPartSelect={onPartSelect} onROMItemSelect={onROMItemSelect} romSn={romSn}/>
-      {(romSn === -1) && (
+      <ROMPartTab onPartSelect={onPartSelect} onROMItemSelect={onROMItemSelect} romPair={romPair}/>
+      {(romPair !== undefined ) && (
         romLoading ? (
           <div className="grid grid-cols-2 gap-4">
             <Skeleton className="w-full h-64 rounded-xl" />
@@ -106,8 +105,7 @@ export const CenterUserROMContainer = ({
           <ROMItemContainer datas={romList ?? []} onCompareDialogOpen={onCompareDialogOpen} onROMItemSelect={onROMItemSelect} />
         )
       )}
-      {/* <ROMBody data0={dummayLeft} data1={dummayRight} userSn={userSn} onCompareDialogOpen={onCompareDialogOpen}/> */}
-      {(romSn !== -1 && romDetail0 !== undefined) && (
+      {(romPair !== undefined && romDetail0 !== undefined) && (
         <ROMBody 
         data0={romDetail0} 
         data1={romDetail1} 
@@ -123,7 +121,7 @@ export const CenterUserROMContainer = ({
         open={isCompareDialogOpen}
         items={romHistory?.rom_results ?? [] } 
         title={romList?.find((it) => it.measure_type === measureType)?.title ?? ""}
-        comparePair={comparePair}
+        comparePair={romPair}
         activeSlot={ activeSlot }
         onOpenChange={setIsCompareDialogOpen}
         onToggleCompareSn={(sn, slot) => {

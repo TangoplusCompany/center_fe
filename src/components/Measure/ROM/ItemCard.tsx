@@ -5,20 +5,21 @@ import { IMeasureROMItem } from "@/types/measure";
 export interface ROMItemCardProps {
   romItem: IMeasureROMItem
   onCompareDialogOpen: (currenSlot: CompareSlot, measureType: number) => void;
-  onROMItemSelect ?: (romSn: number) => void;
+  onROMItemSelect ?: (romSn: number, isLeft: boolean) => void;
+  idx: number;
 }
 
 export const ROMItemCard = ({
   romItem,
   onCompareDialogOpen,
-  onROMItemSelect
+  onROMItemSelect,
+  idx
 } : ROMItemCardProps) => {
-
   return (
     <div 
       className="flex flex-col gap-2 p-2 border-2 border-sub100 rounded-2xl hover:border-toggleAccent transition-colors cursor-pointer"
       onClick={() => {
-        if (onROMItemSelect) onROMItemSelect(1); // TODO 이 곳에다가 romItem을 식별할 수 있는 번호를 넣어줘야함
+        if (onROMItemSelect) onROMItemSelect(romItem.sn, idx % 2 === 0 ? true : false); // TODO 이 곳에다가 romItem을 식별할 수 있는 번호를 넣어줘야함
       }}
     >
       <div className="flex gap-2">

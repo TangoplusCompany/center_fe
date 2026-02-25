@@ -9,7 +9,7 @@ export interface ROMBodyProps {
   data0: IMeasureROMItemDetail
   data1? : IMeasureROMItemDetail 
   onCompareDialogOpen: (slot: CompareSlot, measureType?: number) => void;
-  onROMItemSelect ?: (romSn: number) => void;
+  onROMItemSelect ?: (romSn: number, isLeft: boolean) => void;
   isLoading0 : boolean;
   isError0 : boolean;
   isLoading1: boolean;
@@ -58,7 +58,10 @@ export const ROMBody = ({
         <button
           type="button"
           onClick={() => {
-            if (onROMItemSelect) onROMItemSelect(-1); 
+            if (onROMItemSelect) {
+              onROMItemSelect(-1, true)
+              onROMItemSelect(-1, false) 
+            };
           }}
           className="px-3 py-1 rounded-md text-base text-sub700"
         >
