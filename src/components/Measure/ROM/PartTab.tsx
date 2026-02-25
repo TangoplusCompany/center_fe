@@ -1,11 +1,12 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
+import { ComparePair } from "@/types/compare";
 import {  useState } from "react";
 
 export interface ROMSelectProps {
   onPartSelect?: (part: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8) => void;
-  onROMItemSelect?: (ronSn: number) => void;
-  romSn: number;
+  onROMItemSelect?: (ronSn: number, isLeft: boolean) => void;
+  romPair: ComparePair;
 }
 
 type ROMPart = {
@@ -17,7 +18,7 @@ type ROMPart = {
 export const ROMPartTab = ({
   onPartSelect,
   onROMItemSelect,
-  romSn
+  romPair
 } : ROMSelectProps) => {
   const [activeIdx, setActiveIdx] = useState(0);
   // const prevActiveIdxRef = useRef(activeIdx); // ✅ 이전 activeIdx 추적
@@ -82,7 +83,7 @@ export const ROMPartTab = ({
             
             if (onPartSelect) onPartSelect(newValue);
           }
-          if (romSn !== undefined && romSn !== -1 && onROMItemSelect) onROMItemSelect(-1);
+          if (romPair !== undefined && onROMItemSelect) onROMItemSelect(-1, true);
         }}
         className="w-full table table-fixed min-w-0"
       >
