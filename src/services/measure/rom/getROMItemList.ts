@@ -14,8 +14,8 @@ export const getROMItemList = async ({
 }: {
   user_sn: number;
   center_sn?: number;
-  body_part_number?: number;
+  body_part_number: number;
 }): Promise<IMeasureROMItem[]> => {
-  const { data } = await customAxios.get(`/members/${user_sn}/centers/${center_sn}/latest-rom-results/${body_part_number}`);
+  const { data } = await customAxios.get(`/members/${user_sn}/centers/${center_sn}/latest-rom-results/${body_part_number > 0 ? `${body_part_number}` : ""}`);
   return data.data;
 };

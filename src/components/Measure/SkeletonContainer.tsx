@@ -10,10 +10,10 @@ import { DetailPagination } from "@/hooks/api/user/useMeasureListForDetail";
 
 export interface SkeletonDatePickerProps {
   measureList?: IMeasureList[];              // 전체 측정 리스트 (현재 페이지)
-  selectedMeasureSn?: number | undefined;         // 현재 선택된 sn
+  selectedMeasure?: number | undefined;         // 현재 선택된 sn
   isDatePickerOpen?: boolean;
   onDatePickerOpenChange?: (open: boolean) => void;
-  onChangeMeasureSn?: (sn: number) => void;
+  changeMeasure?: (sn: number) => void;
   pagination?: DetailPagination;  
 }
 
@@ -33,14 +33,14 @@ const SkeletonContainer = ({
   const datePickerOpen = isControlled ? props.isDatePickerOpen : internalDatePickerOpen;
   const setDatePickerOpen = props.onDatePickerOpenChange ?? setInternalDatePickerOpen;
   const selectedMeasure =
-    props.measureList && props.selectedMeasureSn != undefined
-      ? props.measureList.find((item) => item.measure_sn === props.selectedMeasureSn)
+    props.measureList && props.selectedMeasure != undefined
+      ? props.measureList.find((item) => item.measure_sn === props.selectedMeasure)
       : undefined;
   
   return (
     <div className="relative box-border flex h-full flex-col items-center rounded-3xl border-2 border-sub200 p-4 text-black focus-visible:outline-none">
       
-      {props.measureList && props.onChangeMeasureSn && (
+      {props.measureList && props.changeMeasure && (
         <>
           <button
             type="button"
@@ -70,8 +70,8 @@ const SkeletonContainer = ({
             open={datePickerOpen ?? false}
             onOpenChange={setDatePickerOpen}
             items={props.measureList}
-            selectedMeasureSn={props.selectedMeasureSn}
-            onSelect={(sn) => props.onChangeMeasureSn?.(sn)}
+            selectedMeasure={props.selectedMeasure}
+            onSelect={(sn) => props.changeMeasure?.(sn)}
             pagination={props.pagination}
           />
         </>

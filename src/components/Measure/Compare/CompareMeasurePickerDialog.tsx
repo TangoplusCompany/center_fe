@@ -22,7 +22,7 @@ type MeasurePickerDialogProps = {
   comparePair: ComparePair;
   activeSlot: CompareSlot;
   onOpenChange: (v: boolean) => void;
-  onToggleCompareSn: (measureSn : number, slot: CompareSlot) => void;
+  selectCompareSn: (measureSn : number, slot: CompareSlot) => void;
   /** useMeasureListForCompare 연동 시 전달. 있으면 API 페이지네이션 사용 */
   pagination?: ComparePagination;
 };
@@ -33,7 +33,7 @@ export const MeasurePickerDialog = ({
   comparePair,
   activeSlot,
   onOpenChange,
-  onToggleCompareSn,
+  selectCompareSn,
   pagination: apiPagination,
 }: MeasurePickerDialogProps) => {
   const [localPage, setLocalPage] = useState(1);
@@ -89,7 +89,7 @@ export const MeasurePickerDialog = ({
                   type="button"
                   className="w-full text-left rounded-xl border border-border px-3 py-2 hover:bg-gray-50 dark:hover:bg-white/10 transition-colors text-foreground"
                   onClick={() => {
-                    onToggleCompareSn(it.measure_sn, activeSlot);
+                    selectCompareSn(it.measure_sn, activeSlot);
                     onOpenChange(false);
                   }}
                 >

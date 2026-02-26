@@ -17,7 +17,6 @@ import { useAuthStoreOptional } from "@/providers/AuthProvider";
 export const useGetUserMeasureList = <T>({
   page,
   limit,
-  // user_uuid,
   user_sn,
   isResultPage = false,
   from,
@@ -26,7 +25,6 @@ export const useGetUserMeasureList = <T>({
 }: {
   page: string;
   limit: string;
-  // user_uuid?: string;
   user_sn?: number;
   isResultPage?: boolean;
   from?: string;
@@ -37,8 +35,8 @@ export const useGetUserMeasureList = <T>({
   const centerSn = useAuthStoreOptional((state) => state.centerSn, 0);
   const axiosInstance = isResultPage ? customUserAxios : customAxios;
   const apiPath = isResultPage
-    ? `/users/${user_sn}/measurement`
-    : `/measurement/centers/${centerSn}/members/${user_sn}`;
+    ? `/users/${user_sn}/measurement` // my.tangobody.co.kr의 사용자 측정 목록 end point
+    : `/measurement/centers/${centerSn}/members/${user_sn}`; // admin.tangobody.co.kr의 사용자 측정 목록 end point 
 
   return useQuery<T>({
     queryKey: isResultPage

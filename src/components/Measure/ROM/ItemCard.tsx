@@ -1,20 +1,23 @@
-import { Button } from "@/components/ui/button";
-import { CompareSlot } from "@/types/compare";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { IMeasureROMItem } from "@/types/measure";
+import { Area, AreaChart, CartesianGrid } from "recharts";
 
 export interface ROMItemCardProps {
   romItem: IMeasureROMItem
-  onCompareDialogOpen: (currenSlot: CompareSlot, measureType: number) => void;
   onROMItemSelect ?: (romSn: number | undefined, isLeft: boolean) => void;
   idx: number;
 }
 
 export const ROMItemCard = ({
   romItem,
-  onCompareDialogOpen,
   onROMItemSelect,
   idx
 } : ROMItemCardProps) => {
+
+  const chartData = Object.entries(romItem.history_by_measuretype).map(([date, value]) => ({
+    date,
+    value,
+  }))
   return (
     <div 
       className="flex flex-col gap-2 p-2 border-2 border-sub100 rounded-2xl hover:border-toggleAccent transition-colors cursor-pointer"
@@ -42,17 +45,48 @@ export const ROMItemCard = ({
           최근 측정일 : {romItem.reg_date}
         </div>
 
-        <Button
-          type="button"
-          variant="outline"
-          onClick={(e) => {
-            e.stopPropagation(); // ✅ 이벤트 버블링 중단
-            onCompareDialogOpen(0, romItem.measure_type);
-          }}
-          className="shrink-0 shadow-none bg-sub200 text-sub700 hover:text-sub900"
-        >
-          이전 항목 선택
-        </Button>
+        <div className="flex flex-col gap-2 rounded-xl p-4 bg-white dark:bg-black">
+          <span className="text-lg font-semibold">
+            이전 기록 비교
+          </span>
+
+          <ChartContainer
+            config={{
+              value: {
+                label: "각도값",
+                color: "hsl(var(--toggle-accent))",
+              },
+            }}
+            className="aspect-auto h-[64px] w-full"
+          >
+            <AreaChart data={chartData}>
+              <defs>
+                <linearGradient id="fillGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="hsl(var(--toggle-accent))" stopOpacity={0.4} />
+                  <stop offset="100%" stopColor="hsl(var(--toggle-accent-background))" stopOpacity={0.4} />
+                </linearGradient>
+              </defs>
+
+              <Area
+                dataKey="value"
+                type="monotone"
+                fill="url(#fillGradient)"
+                stroke="hsl(var(--toggle-accent))"
+                strokeWidth={2}
+              />
+              
+              <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+              
+              <ChartTooltip
+                content={
+                  <ChartTooltipContent
+                    labelFormatter={(value) => `프레임 ${value}`}
+                  />
+                }
+              />
+            </AreaChart>
+          </ChartContainer>
+        </div>
       </div>
     </div>
   );

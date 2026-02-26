@@ -78,7 +78,7 @@ const MeasureDetailContainer = () => {
         <MeasureDetail 
         measureData={measureData}
         measureList= { undefined }
-        selectedMeasureSn= { decryptedData.measure_sn }
+        selectedMeasure= { decryptedData.measure_sn }
         userSn= {`${decryptedData.user_sn}`}
         isResultPage={false}
           />

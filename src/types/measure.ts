@@ -360,7 +360,7 @@ export interface IMeasureROMItemHistoryResponse {
   rom_results: IMeasureROMItem[];
 }
 
-export interface IMeasureROMItem {
+export interface IMeasureROMItem extends IMeasureROMItemRangeData {
   sn: number;
   measure_sn: number;
   user_name: number;
@@ -369,6 +369,7 @@ export interface IMeasureROMItem {
   howto: string;
   measure_seq: number;
   measure_type: number;
+  history_by_measuretype: Record<string, number>;
 }
 
 export interface IMeasureROMGraphJson {
@@ -376,18 +377,22 @@ export interface IMeasureROMGraphJson {
   values2 : number[];
 }
 
-export interface IMeasureROMItemCardData {
+export interface IMeasureROMItemCardData extends IMeasureROMItemRangeData {
   score: number;
   description: string;
-  normal_bad: number;
-  normal_warning: number;
-  normal_normal: number;
-  max_value: number;
   value_1_min: number;
   value_1_max: number;
   value_2_min: number;
   value_2_max: number;
 }
+
+export interface IMeasureROMItemRangeData {
+  normal_bad: number;
+  normal_warning: number;
+  normal_normal: number;
+  max_value: number;
+}
+
 export interface IMeasureROMItemDetail extends IMeasureROMItemRawData, IMeasureROMItemCardData {
   sn: number;
   device_sn: number;

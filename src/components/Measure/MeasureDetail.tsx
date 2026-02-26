@@ -25,8 +25,8 @@ type MeasureListType = {
 type CenterUserMeasureProps = {
   measureData: IUserMeasureInfoResponse;
   measureList?: IMeasureList[];              // 전체 측정 리스트 (현재 페이지)
-  selectedMeasureSn?: number | undefined;         // 현재 선택된 sn
-  onChangeMeasureSn?: (sn: number) => void;  // 다른 sn 선택 시 호출
+  selectedMeasure?: number | undefined;         // 현재 선택된 sn
+  changeMeasure?: (sn: number) => void;  // 다른 sn 선택 시 호출
   userSn: string;
   pagination?: DetailPagination;  
   isResultPage: boolean;
@@ -38,8 +38,8 @@ type CenterUserMeasureProps = {
 const MeasureDetail = ({
   measureData,
   measureList,
-  selectedMeasureSn,
-  onChangeMeasureSn,
+  selectedMeasure,
+  changeMeasure,
   userSn,
   pagination,
   isResultPage = false,
@@ -88,10 +88,10 @@ const MeasureDetail = ({
   };
   const MeasureDateProps : SkeletonDatePickerProps = {
     measureList: measureList,
-    selectedMeasureSn: selectedMeasureSn,
+    selectedMeasure: selectedMeasure,
     isDatePickerOpen: isDatePickerOpen,
     onDatePickerOpenChange: onDatePickerOpenChange,
-    onChangeMeasureSn: onChangeMeasureSn,
+    changeMeasure: changeMeasure,
     pagination: pagination
   }
   const measureTabs: MeasureListType[] = [

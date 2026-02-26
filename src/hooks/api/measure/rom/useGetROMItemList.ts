@@ -15,11 +15,11 @@ export const useGetROMItemList = ({
 }: {
   user_sn: number;
   center_sn?: number;
-  body_part_number?: number;
+  body_part_number: number;
 }) => {
   return useQuery<IMeasureROMItem[]>({
     queryKey: ["userROMItemList", user_sn, center_sn, body_part_number],
     queryFn: () => getROMItemList({ user_sn, center_sn, body_part_number }),
-    enabled: body_part_number !== undefined && body_part_number > 0,
+    enabled: body_part_number !== undefined ,
   });
 };

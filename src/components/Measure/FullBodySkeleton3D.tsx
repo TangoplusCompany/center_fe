@@ -1,9 +1,10 @@
 "use client";
 
 import { Html, OrbitControls, useGLTF } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
-import { Suspense, useLayoutEffect, useMemo } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Suspense, useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
+import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { IUserDetailMeasureInfo } from "@/types/measure";
 
 type RiskKey = "risk_neck" | "risk_shoulder_left" | "risk_shoulder_right" | "risk_elbow_left" | "risk_elbow_right" | "risk_hip_left" | "risk_hip_right" | "risk_knee_left" | "risk_knee_right" | "risk_ankle_left" | "risk_ankle_right";
@@ -133,6 +134,63 @@ function JointDots({ data }: { data: IUserDetailMeasureInfo }) {
   );
 }
 
+function AutoRotateControls() {
+  const controlsRef = useRef<OrbitControlsImpl>(null);
+  const elapsed = useRef(0);
+  const done = useRef(false); // 완료 플래그 추가
+
+  const FORWARD_DURATION = 1.5;
+  const BACK_DURATION = 1.0;
+  const TARGET_ANGLE = Math.PI / 3;
+
+  useFrame((_, delta) => {
+    const controls = controlsRef.current;
+    if (!controls || done.current) return; // 완료되면 즉시 리턴
+
+    elapsed.current += delta;
+    const total = FORWARD_DURATION + BACK_DURATION;
+    const t = Math.min(elapsed.current, total); // 총 시간 초과 방지
+
+    let angle: number;
+
+    if (t < FORWARD_DURATION) {
+      const progress = t / FORWARD_DURATION;
+      const eased = progress < 0.5
+        ? 2 * progress * progress
+        : -1 + (4 - 2 * progress) * progress;
+      angle = eased * TARGET_ANGLE;
+    } else {
+      const progress = (t - FORWARD_DURATION) / BACK_DURATION;
+      const eased = progress * progress;
+      angle = TARGET_ANGLE * (1 - eased);
+    }
+
+    controls.setAzimuthalAngle(angle);
+    controls.update();
+
+    // 애니메이션 종료
+    if (elapsed.current >= total) {
+      controls.setAzimuthalAngle(0);
+      controls.update();
+      done.current = true;
+    }
+  });
+
+  return (
+    <OrbitControls
+      ref={controlsRef}
+      makeDefault
+      enableDamping
+      dampingFactor={0.09}
+      enablePan={false}
+      enableZoom={false}
+      minPolarAngle={Math.PI / 2}
+      maxPolarAngle={Math.PI / 2}
+      target={[0, 1.1, 0]}
+    />
+  );
+}
+
 useGLTF.preload("/models/free_pack_-_human_skeleton/scene.gltf");
 
 type FullBodySkeleton3DProps = {
@@ -182,16 +240,7 @@ export function FullBodySkeleton3D({ data, className }: FullBodySkeleton3DProps)
         </Suspense>
         <JointDots data={data} />
 
-        <OrbitControls
-          makeDefault
-          enableDamping
-          dampingFactor={0.09}
-          enablePan={false}
-          enableZoom={false}
-          minPolarAngle={Math.PI / 2}
-          maxPolarAngle={Math.PI / 2}
-          target={[0, 1.1, 0]}
-        />
+        <AutoRotateControls />
       </Canvas>
     </div>
   );

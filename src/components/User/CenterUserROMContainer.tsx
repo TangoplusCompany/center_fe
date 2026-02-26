@@ -1,5 +1,4 @@
 import { useState } from "react";
-import ROMPartTab from "../Measure/ROM/PartTab";
 import { ComparePair, CompareSlot } from "@/types/compare";
 import ROMPickerDialog from "../Measure/ROM/PickerDialog";
 import ROMItemContainer from "../Measure/ROM/ItemContainer";
@@ -16,14 +15,14 @@ export interface UserROMProps {
 export const CenterUserROMContainer = ({
   userSn,
 }: UserROMProps) => {
-  const [bodyPart, setBodyPart] = useState(1); // 상단 탭 선택하는 bodyPart
+  const [bodyPart,] = useState(0); // 상단 탭 선택하는 bodyPart
   const [measureType, setMeasureType] = useState(-1); // 이전 항목 선택을 관리하는 ROM 타입
 
   const centerSn = useAuthStore((state) => state.centerSn);
   const [page, setPage] = useState(1);
-  const onPartSelect = (part: number) => {
-    setBodyPart(part);
-  };
+  // const onPartSelect = (part: number) => {
+  //   setBodyPart(part);
+  // };
   const onROMItemSelect = (romSn : number | undefined, isLeft: boolean) => {
     setRomPair(isLeft ? [romSn, romPair[1]] : [romPair[0], romSn]) 
   }
@@ -52,7 +51,6 @@ export const CenterUserROMContainer = ({
     center_sn: centerSn,
     body_part_number: bodyPart,
   });
-
   const {
     data: romHistory,
     isLoading: romHLoading,
@@ -87,7 +85,6 @@ export const CenterUserROMContainer = ({
   })
   return (
     <div className="flex flex-col gap-4">
-      <ROMPartTab onPartSelect={onPartSelect} onROMItemSelect={onROMItemSelect} romPair={romPair}/>
       {(romPair[0] === undefined && romPair[1] === undefined) && (
         romLoading ? (
           <div className="grid grid-cols-2 gap-4">
@@ -101,7 +98,7 @@ export const CenterUserROMContainer = ({
             오류가 발생했습니다. 잠시후 다시 시도해주세요.
           </div>
         ) : (
-          <ROMItemContainer datas={romList ?? []} onCompareDialogOpen={onCompareDialogOpen} onROMItemSelect={onROMItemSelect} />
+          <ROMItemContainer datas={romList ?? []} onROMItemSelect={onROMItemSelect} />
         )
       )}
       {(romPair !== undefined && romDetail0 !== undefined) && (

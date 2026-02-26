@@ -24,7 +24,7 @@ const CenterUserMeasureListSkeleton = () => {
       </TableHeader>
 
       <TableBody>
-        {Array.from({ length: 5 }).map((_, index) => (
+        {Array.from({ length: 12 }).map((_, index) => (
           <TableRow key={index}>
             <TableCell className="text-center">
               <div className="h-5 w-24 mx-auto bg-gray-200 rounded" />

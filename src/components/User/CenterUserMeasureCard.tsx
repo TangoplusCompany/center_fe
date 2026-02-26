@@ -62,7 +62,7 @@ export const CenterUserMeasureCard = ({
           </div>
 
           <div className="rounded-xl text-sm px-2 py-1 text-toggleAccent border border-toggleAccent bg-toggleAccent-background">
-            {(measure.has_normal === 1 && measure.has_rom === 1) ? '기본검사/ROM검사' : '기본검사'}
+            {(measure.has_basic === 1 && measure.has_rom === 1) ? '기본검사/ROM검사' : '기본검사'}
           </div>
         </div>
 

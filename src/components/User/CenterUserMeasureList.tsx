@@ -6,61 +6,36 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { IMeasureList } from "@/types/measure";
 import { CompareSlot } from "@/types/compare";
+import { UserDpMode } from "./CenterUserDetail";
+import { IUserMeasureListItem } from "@/types/user";
 
 export const CenterUserMeasureList = ({
   measures,
-  onRowClick,
-  // deleteSelectedSns,
-  // onToggleDeleteSn,
-  onToggleCompareSn,
-  onOpenCompareMode,
+  changeMeasure,
+  selectCompareSn,
+  changeDpMode,
 }: {
-  measures: IMeasureList[];
-  onRowClick?: (measureSn: number) => void;
-  
-  // deleteSelectedSns: number[];
-  // onToggleDeleteSn: (sn: number) => void;
-  onToggleCompareSn?: (sn: number, slot: CompareSlot) => void;
-  onOpenCompareMode: () => void;
+  measures: IUserMeasureListItem[];
+  changeMeasure?: (measureSn: number) => void;
+  selectCompareSn?: (sn: number, slot: CompareSlot) => void;
+  changeDpMode : (dpMode: UserDpMode) => void;
 }) => {
-  // const observerTarget = useRef<HTMLDivElement>(null);
-  // useEffect(() => {
-  //   const observer = new IntersectionObserver(
-  //     (entries) => {
-  //       if (entries[0].isIntersecting && hasMore && !isLoading) {
-  //         onLoadMore();
-  //       }
-  //     },
-  //     { threshold: 0.1 }
-  //   );
+  const measureTypeMap : Record<string, string> = {
+    rom_only : "ROM",
+    basic_only : "기본 검사",
+    basic_and_rom : "기본 검사/ROM"
+  }
 
-  //   if (observerTarget.current) {
-  //     observer.observe(observerTarget.current);
-  //   }
-
-  //   return () => {
-  //     if (observerTarget.current) {
-  //       observer.unobserve(observerTarget.current);
-  //     }
-  //   };
-  // }, [hasMore, isLoading, onLoadMore]);
-  
   return (
     <div className="w-full table table-fixed min-w-0">
       <div className="w-full overflow-x-auto">
       <Table>
         <TableHeader>
           <TableRow>
-            {/* ✅ 체크박스 컬럼 */}
-            {/* <TableHead className="w-10 text-center"></TableHead> */}
-
-            <TableHead className="text-center text-xs sm:text-sm whitespace-nowrap">측정 위치</TableHead>
-            <TableHead className="text-center text-xs sm:text-sm whitespace-nowrap">측정 일자</TableHead>
-            <TableHead className="text-center text-xs sm:text-sm whitespace-nowrap">측정 기기</TableHead>
-            <TableHead className="text-center text-xs sm:text-sm whitespace-nowrap">측정 요약</TableHead>
-
+            <TableHead className="w-1/6 text-center text-xs sm:text-sm whitespace-nowrap">측정 일자</TableHead>
+            <TableHead className="w-1/6 text-center text-xs sm:text-sm whitespace-nowrap">측정 위치</TableHead>
+            <TableHead className="w-1/6 text-center text-xs sm:text-sm whitespace-nowrap">측정 기기</TableHead>
           </TableRow>
         </TableHeader>
 
@@ -71,60 +46,46 @@ export const CenterUserMeasureList = ({
 
             return (
               <TableRow 
-              key={sn} 
-              onClick={onRowClick ? () => onRowClick(sn) : undefined}
-              className={onRowClick ? "cursor-pointer hover:bg-sub100" : ""}
+                key={sn} 
+                onClick={changeMeasure ? () => {
+                  changeMeasure(sn)
+                  changeDpMode(measure.has_basic === 1 ? "detail" : "rom")
+                  
+                }
+                 : undefined}
+                className={changeMeasure ? "cursor-pointer hover:bg-sub100" : ""}
               >
-                {/* ✅ 삭제 선택 체크박스 */}
-                {/* <TableCell className="text-center" onClick={(e) => e.stopPropagation()}>
-                  <input
-                    type="checkbox"
-                    checked={checked}
-                    onChange={() => onToggleDeleteSn(sn)}
-                  />
-                </TableCell> */}
 
+                <TableCell className="text-center text-xs sm:text-sm whitespace-nowrap">{measure.measure_date}</TableCell>
                 <TableCell className="text-center font-medium text-xs sm:text-sm whitespace-nowrap">
                   {measure.center_name ?? "-"}
                 </TableCell>
-                <TableCell className="text-center text-xs sm:text-sm whitespace-nowrap">{measure.measure_date}</TableCell>
                 <TableCell className="text-center text-xs sm:text-sm whitespace-nowrap">{measure.device_name}</TableCell>
-                {/* <TableCell className="text-center">
-                  <div>
-                    <span className={`
-                      flex inline-flex items-center justify-center mx-auto
-                      px-2 py-1 ${textBgCondition1} ${textLeftRightCondition1}
-                      text-xs rounded-full
-                    `}>
-                      {levelString1} {data1?.range_level}단계
-                    </span>
-                    <span className={`
-                      flex inline-flex items-center justify-center mx-auto
-                      px-2 py-1 ${textBgCondition1} ${textLeftRightCondition1}
-                      text-xs rounded-full
-                    `}>
-                      {levelString1} {data1?.range_level}단계
-                    </span>
+                <TableCell className="text-center">
+                  <div className="w-fit px-2 text-xs sm:text-sm text-center whitespace-nowrap text-toggleAccent bg-toggleAccent-background border border-toggleAccent rounded-full mx-auto">
+                    {measureTypeMap[measure.measurement_type]}
                   </div>
-                </TableCell> */}
-                <TableCell className="flex items-center justify-center gap-2 sm:gap-4 whitespace-nowrap">
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onToggleCompareSn?.(sn, 0);
-                      onOpenCompareMode();
-                    }}
-                    className="flex items-center gap-1 sm:gap-2 justify-center cursor-pointer"
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src="/icons/ic_compare.svg"
-                      alt="비교하기"
-                      className="w-4 h-4 sm:w-5 sm:h-5"
-                    />
-                    <span className="text-xs sm:text-sm">결과비교</span>
-                  </button>
+                </TableCell>
+                <TableCell className="flex items-center justify-end gap-2 sm:gap-4 whitespace-nowrap">
+                  {measure.has_basic === 1 && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        selectCompareSn?.(sn, 0);
+                        
+                      }}
+                      className="flex items-center gap-1 sm:gap-2 justify-center cursor-pointer"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src="/icons/ic_compare.svg"
+                        alt="비교하기"
+                        className="w-4 h-4 sm:w-5 sm:h-5"
+                      />
+                      <span className="text-xs sm:text-sm">결과비교</span>
+                    </button>
+                  )}
 
                 </TableCell>
               </TableRow>
