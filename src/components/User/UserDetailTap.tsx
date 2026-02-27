@@ -1,20 +1,20 @@
 "use client";
 
-import { UserDpMode } from "./CenterUserDetail";
+import { viewType } from "./CenterUserDetail";
 
 const UserDetailTap = ({
   nowTab,
   update,
   changeMeasure,
-  dpMode,
-  setDpMode,
+  currentView,
+  changeView,
 }: {
   nowTab: number;
   userUUID: string;
   update: (index: number) => void;
   changeMeasure: (sn: number) => void;
-  dpMode: UserDpMode;
-  setDpMode: (dpMode: UserDpMode) => void;
+  currentView: viewType;
+  changeView: (dpView: viewType) => void;
 }) => {
   const handleClick = (value: number) => {
     update(value);
@@ -51,9 +51,11 @@ const UserDetailTap = ({
               } px-2 sm:px-4 py-1 text-xs sm:text-sm font-medium rounded-xl transition-all whitespace-normal sm:whitespace-nowrap text-center leading-tight`}
               onClick={() => {
                 handleClick(index);
-                setDpMode("default");
-                if (index === 0) {  // 누른 탭이 0일 때
-                  changeMeasure(0); // latestMeasureSn 대신 0으로 초기화
+                if (index === 0) { 
+                  changeMeasure(0); 
+                  changeView("detail");
+                } else {
+                  changeView("default");
                 }
               }}
             >
@@ -64,9 +66,9 @@ const UserDetailTap = ({
       </div>
       {nowTab !== 3 && (
       <button 
-        onClick={() => setDpMode("aiExercise")}
+        onClick={() => changeView("aiExercise")}
         className={`relative h-full overflow-hidden px-2 py-1 sm:px-3 rounded-xl text-white transition-all duration-500 hover:scale-105 active:scale-95 isolate border-2 sm:border-4 border-toggleAccent/25 ${
-          dpMode === "aiExercise" ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'
+          currentView === "aiExercise" ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'
         }`}
       >
         <div

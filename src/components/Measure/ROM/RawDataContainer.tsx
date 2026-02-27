@@ -80,8 +80,8 @@ export const ROMRawDataContainer = ({
         <div className="flex flex-col py-2 rounded-xl bg-sub100 w-full h-full">
           {rangeComponent0}
           <div className="p-2 flex flex-col gap-2">
-            <ROMRawDataGraph graphType={0} data={measureJson0?.values ?? []} />
-            <ROMRawDataGraph graphType={1} data={measureJson0?.values2 ?? []} />    
+            <ROMRawDataGraph graphType={0} data={measureJson0?.values ?? []} maxMinValue={left} />
+            <ROMRawDataGraph graphType={1} data={measureJson0?.values2 ?? []} maxMinValue={left} />    
           </div>
         </div>
       </div>
@@ -92,8 +92,8 @@ export const ROMRawDataContainer = ({
         <div className="flex flex-col py-2 rounded-xl bg-sub100 w-full h-full">
           {rangeComponent1}
            <div className="p-2 flex flex-col gap-2">
-            <ROMRawDataGraph graphType={0} data={measureJson1?.values ?? []} />
-            <ROMRawDataGraph graphType={1} data={measureJson1?.values2 ?? []} />    
+            <ROMRawDataGraph graphType={0} data={measureJson1?.values ?? []} maxMinValue={right} />
+            <ROMRawDataGraph graphType={1} data={measureJson1?.values2 ?? []} maxMinValue={right} />    
           </div>
         </div>
       </div>

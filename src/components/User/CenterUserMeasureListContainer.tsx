@@ -9,19 +9,20 @@ import { IUserMeasureList } from "@/types/user";
 import DataError from "@/components/Util/DataError";
 import { CompareSlot } from "@/types/compare";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { UserDpMode } from "./CenterUserDetail";
+import { viewType } from "./CenterUserDetail";
+import CustomPagination from "../common/Pagination";
 
 const CenterUserMeasureListContainer = ({ 
   userSn,
   changeMeasure,
-  changeDpMode,
+  changeView,
   selectCompareSn, 
   isResultPage = false,
   
 }: { 
   userSn: number;
   changeMeasure?: (measureSn: number) => void;
-  changeDpMode: (dpMode: UserDpMode) => void;
+  changeView: (dpView: viewType) => void;
   selectCompareSn: (sn: number, slot: CompareSlot) => void;
   isResultPage: boolean;
 }) => {
@@ -91,17 +92,25 @@ const CenterUserMeasureListContainer = ({
     
     {isLoading ? (
       <CenterUserMeasureListSkeleton />
-    ) : (
-      <>
-        <CenterUserMeasureList
-          measures={userMeasureList?.measurement_list ?? []}
-          changeMeasure ={changeMeasure ? (sn) => changeMeasure(sn) : undefined}
-          selectCompareSn={selectCompareSn}
-          changeDpMode={changeDpMode}
-        />
+        ) : (
+          userMeasureList && (
+            <>
+              <CenterUserMeasureList
+                measures={userMeasureList?.measurement_list ?? []}
+                changeMeasure={changeMeasure ? (sn) => changeMeasure(sn) : undefined}
+                selectCompareSn={selectCompareSn}
+                changeView={changeView}
+              />
+              <CustomPagination
+                total={userMeasureList.total}
+                page={userMeasureList.current_page}
+                last_page={userMeasureList.total_pages}
+                limit={userMeasureList.limit}
+              /> 
+            </>
+          )
+        )}
       </>
-    )}
-  </>
 );
 };
 

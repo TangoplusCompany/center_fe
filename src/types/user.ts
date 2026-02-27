@@ -50,7 +50,7 @@ export interface IUserData {
 
 export interface IUserMeasureList {
   current_page: number;
-  per_page: number;
+  limit: number;
   total: number;
   total_pages: number;
   has_next_page: boolean;

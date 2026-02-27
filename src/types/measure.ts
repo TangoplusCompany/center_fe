@@ -369,7 +369,8 @@ export interface IMeasureROMItem extends IMeasureROMItemRangeData {
   howto: string;
   measure_seq: number;
   measure_type: number;
-  history_by_measuretype: Record<string, number>;
+  score: number;
+  history_by_measure_type: Record<string, number>;
 }
 
 export interface IMeasureROMGraphJson {

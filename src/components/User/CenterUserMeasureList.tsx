@@ -7,19 +7,19 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { CompareSlot } from "@/types/compare";
-import { UserDpMode } from "./CenterUserDetail";
+import { viewType } from "./CenterUserDetail";
 import { IUserMeasureListItem } from "@/types/user";
 
 export const CenterUserMeasureList = ({
   measures,
   changeMeasure,
   selectCompareSn,
-  changeDpMode,
+  changeView,
 }: {
   measures: IUserMeasureListItem[];
   changeMeasure?: (measureSn: number) => void;
   selectCompareSn?: (sn: number, slot: CompareSlot) => void;
-  changeDpMode : (dpMode: UserDpMode) => void;
+  changeView : (dpView: viewType) => void;
 }) => {
   const measureTypeMap : Record<string, string> = {
     rom_only : "ROM",
@@ -49,7 +49,7 @@ export const CenterUserMeasureList = ({
                 key={sn} 
                 onClick={changeMeasure ? () => {
                   changeMeasure(sn)
-                  changeDpMode(measure.has_basic === 1 ? "detail" : "rom")
+                  changeView(measure.has_basic === 1 ? "detail" : "rom")
                   
                 }
                  : undefined}

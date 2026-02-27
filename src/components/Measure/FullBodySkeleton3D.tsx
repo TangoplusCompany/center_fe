@@ -139,37 +139,41 @@ function AutoRotateControls() {
   const elapsed = useRef(0);
   const done = useRef(false); // 완료 플래그 추가
 
-  const FORWARD_DURATION = 1.5;
-  const BACK_DURATION = 1.0;
-  const TARGET_ANGLE = Math.PI / 3;
+  const FORWARD_DURATION = 1.25;
+  const BACK_DURATION = 1.25;
+  const REPEAT = 2;
+  const TARGET_ANGLE = Math.PI / 18;
+  const CYCLE = FORWARD_DURATION + BACK_DURATION; 
+  const TOTAL = CYCLE * REPEAT; 
 
   useFrame((_, delta) => {
     const controls = controlsRef.current;
-    if (!controls || done.current) return; // 완료되면 즉시 리턴
+    if (!controls || done.current) return;
 
     elapsed.current += delta;
-    const total = FORWARD_DURATION + BACK_DURATION;
-    const t = Math.min(elapsed.current, total); // 총 시간 초과 방지
+    const t = Math.min(elapsed.current, TOTAL);
+
+    const cycleT = t % CYCLE; // 현재 사이클 내 위치
 
     let angle: number;
-
-    if (t < FORWARD_DURATION) {
-      const progress = t / FORWARD_DURATION;
+    if (cycleT < FORWARD_DURATION) {
+      const progress = cycleT / FORWARD_DURATION;
       const eased = progress < 0.5
         ? 2 * progress * progress
         : -1 + (4 - 2 * progress) * progress;
       angle = eased * TARGET_ANGLE;
     } else {
-      const progress = (t - FORWARD_DURATION) / BACK_DURATION;
-      const eased = progress * progress;
+      const progress = (cycleT - FORWARD_DURATION) / BACK_DURATION;
+      const eased = progress < 0.5
+        ? 2 * progress * progress
+        : -1 + (4 - 2 * progress) * progress;
       angle = TARGET_ANGLE * (1 - eased);
     }
 
     controls.setAzimuthalAngle(angle);
     controls.update();
 
-    // 애니메이션 종료
-    if (elapsed.current >= total) {
+    if (elapsed.current >= TOTAL) {
       controls.setAzimuthalAngle(0);
       controls.update();
       done.current = true;

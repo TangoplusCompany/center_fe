@@ -1,6 +1,6 @@
 import ROMRawDataContainer from "./RawDataContainer";
 import RawDataDynamic, { ROMRawDataDynamicProps } from "./RawDataDynamic";
-import { CompareSlot } from "@/types/compare";
+import { ComparePair, CompareSlot } from "@/types/compare";
 import CompareDateCard from "../Compare/CompareDateCard";
 import { IMeasureROMItemDetail } from "@/types/measure";
 import CompareBodySkeleton from "../Compare/CompareBodySkeleton";
@@ -9,7 +9,7 @@ export interface ROMBodyProps {
   data0: IMeasureROMItemDetail
   data1? : IMeasureROMItemDetail 
   onCompareDialogOpen: (slot: CompareSlot, measureType?: number) => void;
-  onROMItemSelect ?: (romSn: number | undefined, isLeft: boolean) => void;
+  onROMItemSelect ?: (romSn: ComparePair) => void;
   isLoading0 : boolean;
   isError0 : boolean;
   isLoading1: boolean;
@@ -20,7 +20,7 @@ export const ROMBody = ({
   data0,
   data1,
   onCompareDialogOpen,
-  onROMItemSelect,
+  // onROMItemSelect,
   isLoading0,
   isError0,
   isLoading1,
@@ -42,8 +42,6 @@ export const ROMBody = ({
   const leftSlot: CompareSlot = 0;  // 또는 1
   const rightSlot: CompareSlot = 1;
 
-  console.log(data0, leftData)
-  console.log(data1, rightData)
   if (isLoading0 || isLoading1) {
     return <CompareBodySkeleton />;
   }
@@ -54,7 +52,7 @@ export const ROMBody = ({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex">
+      {/* <div className="flex">
         <button
           type="button"
           onClick={() => {
@@ -67,7 +65,7 @@ export const ROMBody = ({
         >
           ← 목록으로
         </button>
-      </div>
+      </div> */}
       
 
       <div className="grid grid-cols-2 gap-4 items-stretch w-full">

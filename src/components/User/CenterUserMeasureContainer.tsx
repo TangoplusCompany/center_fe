@@ -7,7 +7,7 @@ import { ComparePair, CompareSlot } from "@/types/compare";
 import CenterUserDashBoard from "./CenterUserDashBoard";
 import { useMeasureListForDetail } from "@/hooks/api/user/useMeasureListForDetail";
 import CenterUserROMContainer from "./CenterUserROMContainer";
-import { UserDpMode } from "./CenterUserDetail";
+import { viewType } from "./CenterUserDetail";
 
 
 const CenterUserMeasureContainer = ({
@@ -15,8 +15,8 @@ const CenterUserMeasureContainer = ({
   userSn,
   tab,
   changeMeasure,
-  dpMode,
-  changeDpMode,
+  currentView,
+  changeView,
   comparePair,
   selectCompareSn,
   clearCompare,
@@ -27,8 +27,8 @@ const CenterUserMeasureContainer = ({
   userSn: number;
   tab: number;
   changeMeasure: (sn: number) => void;
-  dpMode: UserDpMode;
-  changeDpMode: (dpMode: UserDpMode) => void;
+  currentView: viewType;
+  changeView: (dpView: viewType) => void;
   comparePair: ComparePair;
   selectCompareSn: (sn: number, slot: CompareSlot) => void; 
   clearCompare: () => void;
@@ -71,7 +71,7 @@ const CenterUserMeasureContainer = ({
         : effectiveMeasureSn;
 
   // tab === 0일 때 선택된 측정 상세 데이터 가져오기 (날짜 변경 시 effectiveMeasureSn 바뀜 → refetch)
-  const shouldFetchDetail = (tab === 0 || dpMode === "detail") && !!effectiveMeasureSn;
+  const shouldFetchDetail = (tab === 0 || currentView === "detail") && !!effectiveMeasureSn;
   const detailUserSn = latestUserSn ?? userSn;
 
   const {
@@ -88,7 +88,7 @@ const CenterUserMeasureContainer = ({
   return (
     <>
       {/* ✅ 탭 0: 유저 전체 요약/그래프 화면 */}
-      {(tab === 0 || dpMode === "detail") &&(
+      {(currentView === "detail") &&(
         <div className="w-full h-full flex flex-col gap-4">
           {(latestMeasureLoading || latestMeasureDataLoading) && (
             <p className="py-8 text-center">측정내역 불러오는 중입니다...</p>
@@ -112,6 +112,7 @@ const CenterUserMeasureContainer = ({
             measureList={detailMeasureList}
             selectedMeasure={effectiveMeasureSn}
             changeMeasure={changeMeasure}
+            changeDPView={changeView}
             userSn={String(detailUserSn)}
             pagination={detailPagination}
             isResultPage={isResultPage}
@@ -129,7 +130,7 @@ const CenterUserMeasureContainer = ({
       )}
 
       {/* ✅ 탭 1: 리스트 화면 vs 상세 화면 전환 */}
-      {tab === 2 && dpMode !== "default" && (
+      {tab === 2 && currentView !== "default" && (
         <div className="shrink-0">
           <div className="flex items-center justify-between p-2">
             <button
@@ -137,7 +138,7 @@ const CenterUserMeasureContainer = ({
               onClick={(e) => {
                 e.stopPropagation();
                 clearCompare();
-                changeDpMode("default")
+                changeView("default")
               }}
               className="px-3 py-1 rounded-md text-sm text-primary-foreground"
             >
@@ -156,19 +157,19 @@ const CenterUserMeasureContainer = ({
               onCompareDialogOpen={onCompareDialogOpen}
               isResultPage={isResultPage}
             />
-          ) : dpMode === "default" ? (
+          ) : currentView === "default" ? (
             <CenterUserMeasureListContainer
               userSn={userSn}
               changeMeasure={changeMeasure}
-              changeDpMode={changeDpMode}
+              changeView={changeView}
               selectCompareSn={selectCompareSn}
               isResultPage={isResultPage}
             />
           ) : null}
         </>
       )}
-      {dpMode === "rom" && (
-        <CenterUserROMContainer userSn={userSn} />
+      {currentView === "rom"  && (
+        <CenterUserROMContainer userSn={userSn} measureSn={measureSn} />
       )}
 
     </>

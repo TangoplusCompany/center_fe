@@ -2,20 +2,22 @@ import { useState } from "react";
 import { ComparePair, CompareSlot } from "@/types/compare";
 import ROMPickerDialog from "../Measure/ROM/PickerDialog";
 import ROMItemContainer from "../Measure/ROM/ItemContainer";
-import { useGetROMItemList } from "@/hooks/api/measure/rom/useGetROMItemList";
 import { Skeleton } from "../ui/skeleton";
 import { useAuthStore } from "@/providers/AuthProvider";
 import { useGetROMItemHistory } from "@/hooks/api/measure/rom/useGetROMItemHsitory";
 import ROMBody from "../Measure/ROM/Body";
 import { useGetROMItemDetail } from "@/hooks/api/measure/rom/useGetROMItemDetail";
+import { useGetROMItems } from "@/hooks/api/measure/rom/useGetROMItems";
 
 export interface UserROMProps {
-  userSn: number
+  userSn: number,
+  measureSn: number
 }
 export const CenterUserROMContainer = ({
   userSn,
+  measureSn,
 }: UserROMProps) => {
-  const [bodyPart,] = useState(0); // 상단 탭 선택하는 bodyPart
+  // const [bodyPart,] = useState(0); // 상단 탭 선택하는 bodyPart
   const [measureType, setMeasureType] = useState(-1); // 이전 항목 선택을 관리하는 ROM 타입
 
   const centerSn = useAuthStore((state) => state.centerSn);
@@ -23,8 +25,8 @@ export const CenterUserROMContainer = ({
   // const onPartSelect = (part: number) => {
   //   setBodyPart(part);
   // };
-  const onROMItemSelect = (romSn : number | undefined, isLeft: boolean) => {
-    setRomPair(isLeft ? [romSn, romPair[1]] : [romPair[0], romSn]) 
+  const onROMItemSelect = (romPair : ComparePair) => {
+    setRomPair(romPair)
   }
   const [isCompareDialogOpen, setIsCompareDialogOpen] = useState(false);
   const [activeSlot, setActiveSlot] = useState<CompareSlot>(0);
@@ -43,14 +45,15 @@ export const CenterUserROMContainer = ({
   };
 
   const {
-    data: romList,
+    data: romItems,
     isLoading: romLoading,
     isError: romError,
-  } = useGetROMItemList({
+  } = useGetROMItems({
     user_sn: userSn,
     center_sn: centerSn,
-    body_part_number: bodyPart,
+    measure_sn: measureSn,
   });
+  console.log(romItems)
   const {
     data: romHistory,
     isLoading: romHLoading,
@@ -98,7 +101,7 @@ export const CenterUserROMContainer = ({
             오류가 발생했습니다. 잠시후 다시 시도해주세요.
           </div>
         ) : (
-          <ROMItemContainer datas={romList ?? []} onROMItemSelect={onROMItemSelect} />
+          <ROMItemContainer datas={romItems ?? []} onROMItemSelect={onROMItemSelect} />
         )
       )}
       {(romPair !== undefined && romDetail0 !== undefined) && (
@@ -116,7 +119,7 @@ export const CenterUserROMContainer = ({
       <ROMPickerDialog
         open={isCompareDialogOpen}
         items={romHistory?.rom_results ?? [] } 
-        title={romList?.find((it) => it.measure_type === measureType)?.title ?? ""}
+        title={romItems?.find((it) => it.measure_type === measureType)?.title ?? ""}
         comparePair={romPair}
         activeSlot={ activeSlot }
         onOpenChange={setIsCompareDialogOpen}

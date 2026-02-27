@@ -1,91 +1,169 @@
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 import { IMeasureROMItem } from "@/types/measure";
-import { Area, AreaChart, CartesianGrid } from "recharts";
+import { useMemo } from "react";
+import { Area, AreaChart, DotProps, XAxis, YAxis } from "recharts";
 
 export interface ROMItemCardProps {
   romItem: IMeasureROMItem
-  onROMItemSelect ?: (romSn: number | undefined, isLeft: boolean) => void;
-  idx: number;
+  handleROMItemSelect : (measureType: number) => void
 }
+const FIXED_SLOTS = 5;
 
 export const ROMItemCard = ({
   romItem,
-  onROMItemSelect,
-  idx
+  handleROMItemSelect,
 } : ROMItemCardProps) => {
 
-  const chartData = Object.entries(romItem.history_by_measuretype).map(([date, value]) => ({
-    date,
-    value,
-  }))
+  const chartData = useMemo(() => {
+    const sorted = Object.entries(romItem.history_by_measure_type)
+     .map(([date, value]) => ({date, value}))
+     .sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
+
+    const dummy = Array.from(
+      { length: Math.max(0, FIXED_SLOTS - sorted.length) },
+      () => ({ date: " ", value: 0 }) 
+    );
+
+    return [...dummy, ...sorted];
+  }, [romItem.history_by_measure_type]);
+
+  const seriesKeys = useMemo(
+    () => chartData
+      // .filter((d) => !d.date.startsWith(" "))
+      .map((d) => d.date),
+    [chartData]
+  );
+
+  const currentValue = useMemo(
+    () => chartData.find((d) => d.date === romItem.reg_date)?.value ?? 0,
+    [chartData, romItem.reg_date]
+  );
+
+  const stateString :Record<number, string> = {
+    0 : "위험",
+    1 : "주의",
+    2 : "정상",
+    3 : "매우 양호"
+  }
+  const stateTextColor : Record<number, string> = {
+    0 : "text-danger",
+    1 : "text-warning",
+    2 : "text-toggleAccent",
+    3 : "text-toggleAccent"
+  }
+  const stateBorderColor : Record<number, string> = {
+    0 : "border-danger",
+    1 : "border-warning",
+    2 : "border-toggleAccent",
+    3 : "border-toggleAccent"
+  }
+  const stateBGColor : Record<number, string> = {
+    0 : "bg-danger",
+    1 : "bg-warning",
+    2 : "bg-toggleAccent",
+    3 : "bg-toggleAccent"
+  }
   return (
-    <div 
-      className="flex flex-col gap-2 p-2 border-2 border-sub100 rounded-2xl hover:border-toggleAccent transition-colors cursor-pointer"
+    <div
+      className="col-span-1 items-center justify-between rounded-xl border-2 border-toggleAccent-background relative transition-colors hover:border-toggleAccent cursor-pointer"
       onClick={() => {
-        if (onROMItemSelect) onROMItemSelect(romItem.sn, idx % 2 === 0 ? true : false); // TODO 이 곳에다가 romItem을 식별할 수 있는 번호를 넣어줘야함
+        if (handleROMItemSelect) handleROMItemSelect(romItem.measure_type);
+        console.log(romItem.sn)
       }}
     >
-      <div className="flex gap-2">
-        <div className="w-20 h-20 flex flex-shrink-0 rounded-2xl bg-sub200 items-center justify-center">
-          이미지
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <div className="text-base font-semibold text-sub700">
+      <div className="flex flex-col">
+        <div className="flex items-center justify-between rounded-t-xl bg-toggleAccent-background px-4 py-2 w-full">
+          <div className="text-xl text-toggleAccent dark:text-white font-semibold ">
+           
             {romItem.title}
           </div>
-          <div className="text-base text-sub700">
-            {romItem.howto}
+
+          <div className={` flex gap-2 text-sm font-semibold border-2 rounded-full px-2 py-1 items-center ${stateTextColor[romItem.score]} ${stateBorderColor[romItem.score]}`}>
+            <div className={`w-4 h-4 rounded-full ${stateBGColor[romItem.score]}`}/>
+            {stateString[romItem.score]}
           </div>
         </div>
-      </div>
+        
+        <div className="flex flex-col w-full min-h-32 gap-2 p-2">
+          <div className="flex flex-col gap-1 px-2">
+            <p className="text-base font-semibold">
+              최대각도: { Math.abs(currentValue).toFixed(1) }º
+            </p>
+            <p className="text-base ">
+              {romItem.howto}
+            </p>
+          </div>
 
-      <div className="flex justify-between">
-        <div className="flex h-full items-center text-base text-sub700">
-          최근 측정일 : {romItem.reg_date}
-        </div>
 
-        <div className="flex flex-col gap-2 rounded-xl p-4 bg-white dark:bg-black">
-          <span className="text-lg font-semibold">
-            이전 기록 비교
-          </span>
+          <div className="w-full px-2">
+            <ChartContainer
+              config={{
+                value: {
+                  label: "각도값",
+                  color: "hsl(var(--toggle-accent))",
+                },
+              }}
+              className="h-24 w-full bg-toggleAccent-background rounded-xl "
+            >
+              <AreaChart data={chartData} margin={{ top: 16, right: 16, left: 16, bottom: 16 }}>
+                <defs>
+                  <linearGradient id="fillGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="hsl(var(--toggle-accent))" stopOpacity={0.4} />
+                    <stop offset="100%" stopColor="hsl(var(--toggle-accent-background))" stopOpacity={0.4} />
+                  </linearGradient>
+                </defs>
+                <XAxis dataKey="date" hide />
+                <YAxis hide />
+                <Area
+                  dataKey="value"
+                  type="monotone"
+                  fill="url(#fillGradient)"
+                  stroke="hsl(var(--toggle-accent))"
+                  strokeWidth={2}
+                  connectNulls
+                  dot={(props: DotProps & { value?: number }) => {
+                    if (!props.value || props.value === 0) return <g key={props.key} />;
+                    return (
+                      <circle
+                        key={props.key}
+                        cx={props.cx}
+                        cy={props.cy}
+                        r={4}
+                        fill="hsl(var(--toggle-accent))"
+                        stroke="white"
+                        strokeWidth={1.5}
+                      />
+                    );
+                  }}
+                  className="bg-toggleAccent-background rounded-xl w-full "
+                />
+                
+                <ChartTooltip
+                  content={(props) => {
+                    const value = props.payload?.[0]?.value;
+                    if (!value || value === 0) return null;
+                    
+                    return (
+                      <div className="rounded-lg border bg-background px-3 py-2 shadow-sm text-xs">
+                        <p className="text-muted-foreground">{props.label?.startsWith("dummy") ? "" : props.label}</p>
+                        <p className="font-semibold text-foreground">{Number(value).toFixed(1)}º</p>
+                      </div>
+                    );
+                  }}
+                />
+              </AreaChart>
+            </ChartContainer>
+          </div>
 
-          <ChartContainer
-            config={{
-              value: {
-                label: "각도값",
-                color: "hsl(var(--toggle-accent))",
-              },
-            }}
-            className="aspect-auto h-[64px] w-full"
-          >
-            <AreaChart data={chartData}>
-              <defs>
-                <linearGradient id="fillGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="hsl(var(--toggle-accent))" stopOpacity={0.4} />
-                  <stop offset="100%" stopColor="hsl(var(--toggle-accent-background))" stopOpacity={0.4} />
-                </linearGradient>
-              </defs>
-
-              <Area
-                dataKey="value"
-                type="monotone"
-                fill="url(#fillGradient)"
-                stroke="hsl(var(--toggle-accent))"
-                strokeWidth={2}
-              />
-              
-              <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-              
-              <ChartTooltip
-                content={
-                  <ChartTooltipContent
-                    labelFormatter={(value) => `프레임 ${value}`}
-                  />
-                }
-              />
-            </AreaChart>
-          </ChartContainer>
+          <div className="flex items-center justify-between px-2">
+            {seriesKeys.map((key, i) => (
+              <span key={`${key}-${i}`} className="text-sm text-sub600">
+                {key === " " ? "" : key.slice(0, 11)}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </div>

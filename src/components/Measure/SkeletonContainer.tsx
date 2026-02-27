@@ -7,6 +7,8 @@ import React from "react";
 import { MeasureDetailDatePickerDialog } from "./MeasureDetailDatePickerDialog";
 import { formatDate } from "@/utils/formatDate";
 import { DetailPagination } from "@/hooks/api/user/useMeasureListForDetail";
+import { viewType } from "../User/CenterUserDetail";
+import { Button } from "../ui/button";
 
 export interface SkeletonDatePickerProps {
   measureList?: IMeasureList[];              // 전체 측정 리스트 (현재 페이지)
@@ -14,33 +16,32 @@ export interface SkeletonDatePickerProps {
   isDatePickerOpen?: boolean;
   onDatePickerOpenChange?: (open: boolean) => void;
   changeMeasure?: (sn: number) => void;
+  changeDpView?: (dpView: viewType) => void;
   pagination?: DetailPagination;  
 }
 
 const SkeletonContainer = ({ 
   data,
-  props: rawProps // 원본 props를 따로 받고
+  props: rawProps = {}
 }: {
   data:  IUserDetailMeasureInfo;
   props?: SkeletonDatePickerProps;
 }) => {
   
-  const props = rawProps ?? {}; 
-  const { } = props;
-
+  const { changeDpView } = rawProps;
   const [internalDatePickerOpen, setInternalDatePickerOpen] = React.useState(false);
-  const isControlled = props.onDatePickerOpenChange != undefined;
-  const datePickerOpen = isControlled ? props.isDatePickerOpen : internalDatePickerOpen;
-  const setDatePickerOpen = props.onDatePickerOpenChange ?? setInternalDatePickerOpen;
+  const isControlled = rawProps.onDatePickerOpenChange != undefined;
+  const datePickerOpen = isControlled ? rawProps.isDatePickerOpen : internalDatePickerOpen;
+  const setDatePickerOpen = rawProps.onDatePickerOpenChange ?? setInternalDatePickerOpen;
   const selectedMeasure =
-    props.measureList && props.selectedMeasure != undefined
-      ? props.measureList.find((item) => item.measure_sn === props.selectedMeasure)
+    rawProps.measureList && rawProps.selectedMeasure != undefined
+      ? rawProps.measureList.find((item) => item.measure_sn === rawProps.selectedMeasure)
       : undefined;
   
   return (
     <div className="relative box-border flex h-full flex-col items-center rounded-3xl border-2 border-sub200 p-4 text-black focus-visible:outline-none">
       
-      {props.measureList && props.changeMeasure && (
+      {rawProps.measureList && rawProps.changeMeasure && (
         <>
           <button
             type="button"
@@ -69,10 +70,10 @@ const SkeletonContainer = ({
           <MeasureDetailDatePickerDialog
             open={datePickerOpen ?? false}
             onOpenChange={setDatePickerOpen}
-            items={props.measureList}
-            selectedMeasure={props.selectedMeasure}
-            onSelect={(sn) => props.changeMeasure?.(sn)}
-            pagination={props.pagination}
+            items={rawProps.measureList}
+            selectedMeasure={rawProps.selectedMeasure}
+            onSelect={(sn) => rawProps.changeMeasure?.(sn)}
+            pagination={rawProps.pagination}
           />
         </>
       )}
@@ -84,9 +85,23 @@ const SkeletonContainer = ({
       </div>
 
       {/* ⭐ 기준바: Skeleton 하단 중앙 */}
-      <div className="hidden md:block w-full max-w-xl mx-auto text-center mt-auto">
-        <div className="flex items-center justify-between mb-2">
-          <p className="text-sm" style={{ color: "#9A9A9A" }}>
+      <div className="hidden md:flex flex-col w-full gap-2">
+        <div className="flex w-full justify-end">
+          { changeDpView && (
+            <Button 
+              className="text-sm" 
+              onClick={() => {
+                changeDpView("rom")
+              }}
+            >
+              ROM 검사 기록
+            </Button>
+          )}
+        </div>
+        
+        
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-sub400" >
             * 측정 기준 설명
           </p>
           <p className="text-sm" style={{ color: "#9A9A9A" }}>
@@ -96,7 +111,7 @@ const SkeletonContainer = ({
         
 
         {/* 상단 3단 바 */}
-        <div className="flex overflow-hidden rounded-md mx-auto" style={{ borderColor: "#E5E5E5" }}>
+        <div className="flex overflow-hidden rounded-md mx-auto w-full" style={{ borderColor: "#E5E5E5" }}>
           <div className="flex-1 py-1 text-center font-semibold" style={{ backgroundColor: "#F5F5F5", color: "#555555" }}>
             정상
           </div>

@@ -18,11 +18,20 @@ import { resultPageUserStore } from "@/stores/ResultPageUserStore";
 
 const useTab = () => {
   const [tab, setTab] = useState(0);
+  const [currentView, setCurrentView] = useState<viewType>("detail");
+
   const handleTab = useCallback((index: number) => {
     setTab(index);
+    setCurrentView(DEFAULT_VIEW[index] ?? "default");
   }, []);
-  return { tab, handleTab };
+
+  const changeView = useCallback((view: viewType) => {
+    setCurrentView(view);
+  }, []);
+
+  return { tab, handleTab, currentView, changeView };
 };
+
 
 const useMeasureSn = () => {
   const [measureSn, setMeasureSn] = useState<number>(0);
@@ -33,7 +42,12 @@ const useMeasureSn = () => {
 };
 
 // 화면 모드 enum default => 표
-export type UserDpMode = "default" | "detail" | "compare" | "aiExercise" | "rom";
+export type viewType = "default" | "detail" | "compare" | "aiExercise" | "rom";
+const DEFAULT_VIEW : Record<number, viewType> = {
+  0 : "detail",
+  1: "default",
+  2: "default"
+}
 
 const CenterUserDetail = ({ 
   userUUID,
@@ -47,13 +61,9 @@ const CenterUserDetail = ({
   isResultPage?: boolean;
 }) => {
   const router = useRouter();
-  const { tab, handleTab } = useTab();
   const { measureSn, changeMeasureSn } = useMeasureSn();
-  
-  const [dpMode, setDpMode] = useState<UserDpMode>("default");
-  const changeDpMode = (dPModee: UserDpMode) => {
-    setDpMode(dPModee)
-  }
+  const { tab, handleTab, currentView, changeView } = useTab();
+
  
   // 사용자 정보를 가져와서 최신 이름 표시 (사용자 정보 수정 시 자동 업데이트)
   const { data: userDetailData } = useGetUserDetail({ 
@@ -91,7 +101,7 @@ const CenterUserDetail = ({
   };
   const clearCompare = () => {
     setComparePair([undefined, undefined]);
-    setDpMode("default");
+    changeView("default");
   };
   
   // -------# compare dialog를 위한 변수들 #---------
@@ -158,15 +168,15 @@ const CenterUserDetail = ({
         userUUID={userUUID}
         update={handleTabWithReset}
         changeMeasure={changeMeasureSn}
-        dpMode={dpMode}
-        setDpMode={changeDpMode}
+        currentView={currentView}
+        changeView={changeView}
         />
 
-      {dpMode === "aiExercise" ? (
+      {currentView === "aiExercise" ? (
         <div className="flex flex-col gap-4">
           {/* 뒤로가기 버튼 */}
           <button
-            onClick={() => setDpMode("default")}
+            onClick={() => changeView("default")}
             className="flex items-center gap-2 text-sm text-sub700 hover:text-sub900 transition-colors w-fit"
           >
             <svg 
@@ -199,8 +209,8 @@ const CenterUserDetail = ({
             userSn={userSn}
             tab={tab}
             changeMeasure={changeMeasureSn}
-            dpMode={dpMode}
-            changeDpMode={changeDpMode}
+            currentView={currentView}
+            changeView={changeView}
             comparePair={ comparePair }
             selectCompareSn={ selectCompareSn }
             clearCompare={ clearCompare }
