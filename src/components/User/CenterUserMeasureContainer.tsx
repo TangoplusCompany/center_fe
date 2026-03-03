@@ -19,7 +19,7 @@ const CenterUserMeasureContainer = ({
   changeView,
   comparePair,
   selectCompareSn,
-  clearCompare,
+  // clearCompare,
   onCompareDialogOpen,
   isResultPage = false,
 }: {
@@ -31,7 +31,7 @@ const CenterUserMeasureContainer = ({
   changeView: (dpView: viewType) => void;
   comparePair: ComparePair;
   selectCompareSn: (sn: number, slot: CompareSlot) => void; 
-  clearCompare: () => void;
+  // clearCompare: () => void;
   onCompareDialogOpen: (slot: CompareSlot) => void;
   isResultPage: boolean;
 }) => {
@@ -49,6 +49,7 @@ const CenterUserMeasureContainer = ({
     user_sn: userSn,
     isResultPage,
   });
+  
   // tab === 0: 날짜(측정일) 선택 시 사용할 measure_sn
   // - 다이얼로그에서 선택한 경우 measureSn, 아니면 리스트 첫 번째(최신)
   const latestMeasureSn = latestMeasureListData?.measurement_list?.find((it) => it.has_basic === 1)?.measure_sn;
@@ -130,7 +131,7 @@ const CenterUserMeasureContainer = ({
       )}
 
       {/* ✅ 탭 1: 리스트 화면 vs 상세 화면 전환 */}
-      {tab === 2 && currentView !== "default" && (
+      {/* {tab === 2 && currentView !== "default" && (
         <div className="shrink-0">
           <div className="flex items-center justify-between p-2">
             <button
@@ -146,7 +147,7 @@ const CenterUserMeasureContainer = ({
             </button>
           </div>
         </div>
-      )}
+      )} */}
 
       {tab === 2 && (
         <>

@@ -30,9 +30,9 @@ export const CenterUserROMContainer = ({
   }
   const [isCompareDialogOpen, setIsCompareDialogOpen] = useState(false);
   const [activeSlot, setActiveSlot] = useState<CompareSlot>(0);
-  const onCompareDialogOpen = (slot: CompareSlot, measureType?: number) => {
+  const onCompareDialogOpen = (slot: CompareSlot, selectedMeasureType ?: number) => {
     setActiveSlot(slot);
-    if (measureType !== undefined) setMeasureType(measureType)
+    if (selectedMeasureType !== undefined) setMeasureType(selectedMeasureType)
     setIsCompareDialogOpen(true);
   };
   const [romPair, setRomPair] = useState<ComparePair>([undefined, undefined]);
@@ -53,7 +53,7 @@ export const CenterUserROMContainer = ({
     center_sn: centerSn,
     measure_sn: measureSn,
   });
-  console.log(romItems)
+  
   const {
     data: romHistory,
     isLoading: romHLoading,
@@ -86,6 +86,7 @@ export const CenterUserROMContainer = ({
     center_sn: centerSn,
     rom_result_sn: romPair[1],
   })
+  
   return (
     <div className="flex flex-col gap-4">
       {(romPair[0] === undefined && romPair[1] === undefined) && (

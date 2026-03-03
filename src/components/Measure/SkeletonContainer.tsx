@@ -87,9 +87,9 @@ const SkeletonContainer = ({
       {/* ⭐ 기준바: Skeleton 하단 중앙 */}
       <div className="hidden md:flex flex-col w-full gap-2">
         <div className="flex w-full justify-end">
-          { changeDpView && (
+          { (data.has_rom === 1 && changeDpView) && (
             <Button 
-              className="text-sm" 
+              className="hover:bg-sub200 bg-sub150 transition-colors text-primary-foreground text-sub700" 
               onClick={() => {
                 changeDpView("rom")
               }}

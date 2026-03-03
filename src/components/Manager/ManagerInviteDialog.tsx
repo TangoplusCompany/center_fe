@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+// import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -109,7 +109,9 @@ export const ManagerInviteDialog = ({
         <DialogHeader>
           <DialogTitle>매니저 초대</DialogTitle>
           <DialogDescription>
-            초대할 매니저의 이메일과 역할을 선택한 뒤 <span className="whitespace-nowrap">전송해주세요.</span>
+            이메일을 작성해 초대 링크를 전송하세요. <br />
+            초대된 매니저는 부관리자로 측정 결과 조회만 가능합니다.
+            {/* 초대할 매니저의 이메일과 역할을 선택한 뒤 <span className="whitespace-nowrap">전송해주세요.</span> */}
           </DialogDescription>
         </DialogHeader>
 
@@ -131,8 +133,9 @@ export const ManagerInviteDialog = ({
             )}
           </div>
 
-          <div className="space-y-2">
-            <Label>역할</Label>
+          <div className="space-y-2 text-sm text-sub400">
+            
+            {/* <Label>역할</Label>
             <RadioGroup
               value={String(role)}
               onValueChange={(v) => setRole(Number(v))}
@@ -159,7 +162,7 @@ export const ManagerInviteDialog = ({
                   일반
                 </Label>
               </div>
-            </RadioGroup>
+            </RadioGroup> */}
           </div>
 
           <Button type="submit" disabled={submitPending}>

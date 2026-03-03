@@ -27,11 +27,11 @@ export const ROMRawDataContainer = ({
   const rangeComponent0 = (
     <div className="grid grid-cols-4 w-full h-full rounded-xl bg-sub100 items-center divide-x-2 divide-sub200">
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
-        <span>매우 우수</span>
+        <span>매우 양호</span>
         <span>{left.normal_normal}º 이상</span>
       </div>
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
-        <span>정상</span>
+        <span>양호</span>
         <span>{left.normal_warning}º~{left.normal_normal}º</span>
       </div>
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
@@ -47,11 +47,11 @@ export const ROMRawDataContainer = ({
   const rangeComponent1 = right ? (
     <div className="grid grid-cols-4 w-full h-full rounded-xl bg-sub100 items-center divide-x-2 divide-sub200">
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
-        <span>매우 우수</span>
+        <span>매우 양호</span>
         <span>{right?.normal_normal}º 이상</span>
       </div>
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
-        <span>정상</span>
+        <span>양호</span>
         <span>{right?.normal_warning}º~{right?.normal_normal}º</span>
       </div>
       <div className="flex flex-col gap-1 w-full items-center py-2 ">

@@ -99,10 +99,10 @@ const CenterUserDetail = ({
       return next;                         
     });
   };
-  const clearCompare = () => {
-    setComparePair([undefined, undefined]);
-    changeView("default");
-  };
+  // const clearCompare = () => {
+  //   setComparePair([undefined, undefined]);
+  //   changeView("default");
+  // };
   
   // -------# compare dialog를 위한 변수들 #---------
   const [isCompareDialogOpen, setIsCompareDialogOpen] = React.useState(false);
@@ -213,7 +213,7 @@ const CenterUserDetail = ({
             changeView={changeView}
             comparePair={ comparePair }
             selectCompareSn={ selectCompareSn }
-            clearCompare={ clearCompare }
+            // clearCompare={ clearCompare }
             onCompareDialogOpen= {onCompareDialogOpen}
             isResultPage={isResultPage}
           />

@@ -63,6 +63,9 @@ export interface IUserDetailMeasureInfo
   user_uuid: string; // 유저 UUID
   mobile: string; // 휴대폰 번호
   camera_orientation: 0 | 1;
+  has_basic : 0 | 1;
+  has_rom : 0 | 1;
+  measurement_type: "rom_only" | "basic_only" | "basic_and_rom"
 }
 
 export interface IFilterMeasureInfo {

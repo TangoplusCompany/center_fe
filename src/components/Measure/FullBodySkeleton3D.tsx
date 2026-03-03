@@ -141,7 +141,7 @@ function AutoRotateControls() {
 
   const FORWARD_DURATION = 1.25;
   const BACK_DURATION = 1.25;
-  const REPEAT = 2;
+  const REPEAT = 1;
   const TARGET_ANGLE = Math.PI / 18;
   const CYCLE = FORWARD_DURATION + BACK_DURATION; 
   const TOTAL = CYCLE * REPEAT; 

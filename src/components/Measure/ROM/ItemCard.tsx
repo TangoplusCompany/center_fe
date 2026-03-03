@@ -24,7 +24,7 @@ export const ROMItemCard = ({
     const dummy = Array.from(
       { length: Math.max(0, FIXED_SLOTS - sorted.length) },
       () => ({ date: " ", value: 0 }) 
-    );
+    );                
 
     return [...dummy, ...sorted];
   }, [romItem.history_by_measure_type]);
@@ -159,8 +159,8 @@ export const ROMItemCard = ({
 
           <div className="flex items-center justify-between px-2">
             {seriesKeys.map((key, i) => (
-              <span key={`${key}-${i}`} className="text-sm text-sub600">
-                {key === " " ? "" : key.slice(0, 11)}
+              <span key={`${key}-${i}`} className="flex-1 text-center text-sm text-sub600">
+                {key === " " ? " " : key.slice(0, 11)}
               </span>
             ))}
           </div>
