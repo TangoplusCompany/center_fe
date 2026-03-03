@@ -27,7 +27,6 @@ export const UserList = ({
 }) => {
   const [list, setList] = useState<IUserData[]>(users);
   const router = useRouter();
-
   const mutationDeleteUser = useDeleteUser(refetch);
   const handleRemoveUser = (sn: number) => {
     mutationDeleteUser.mutate({ sn });
@@ -50,6 +49,7 @@ export const UserList = ({
           <TableRow>
             <TableHead className="text-center w-[100px] whitespace-nowrap">이름</TableHead>
             <TableHead className="text-center whitespace-nowrap">전화번호</TableHead>
+            <TableHead className="text-center whitespace-nowrap">성별</TableHead>
             <TableHead className="text-center whitespace-nowrap">이메일</TableHead>
             <TableHead className="text-right whitespace-nowrap"></TableHead>
           </TableRow>
@@ -63,7 +63,7 @@ export const UserList = ({
               <TableCell className="text-center whitespace-nowrap">
                 {phoneFiltering(phoneHyphen(user.mobile))}
               </TableCell>
-
+              <TableCell className="text-center whitespace-nowrap">{user.gender === "남성" || user.gender === "여성" ? user.gender : "미설정"}</TableCell>
               <TableCell className="text-center whitespace-nowrap">{user.email}</TableCell>
               <TableCell className="flex items-center justify-end gap-2 whitespace-nowrap">
                 <button

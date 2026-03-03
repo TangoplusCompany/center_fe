@@ -27,11 +27,11 @@ export const ROMRawDataContainer = ({
   const rangeComponent0 = (
     <div className="grid grid-cols-4 w-full h-full rounded-xl bg-sub100 items-center divide-x-2 divide-sub200">
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
-        <span>매우 우수</span>
+        <span>매우 양호</span>
         <span>{left.normal_normal}º 이상</span>
       </div>
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
-        <span>정상</span>
+        <span>양호</span>
         <span>{left.normal_warning}º~{left.normal_normal}º</span>
       </div>
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
@@ -47,11 +47,11 @@ export const ROMRawDataContainer = ({
   const rangeComponent1 = right ? (
     <div className="grid grid-cols-4 w-full h-full rounded-xl bg-sub100 items-center divide-x-2 divide-sub200">
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
-        <span>매우 우수</span>
+        <span>매우 양호</span>
         <span>{right?.normal_normal}º 이상</span>
       </div>
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
-        <span>정상</span>
+        <span>양호</span>
         <span>{right?.normal_warning}º~{right?.normal_normal}º</span>
       </div>
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
@@ -80,8 +80,8 @@ export const ROMRawDataContainer = ({
         <div className="flex flex-col py-2 rounded-xl bg-sub100 w-full h-full">
           {rangeComponent0}
           <div className="p-2 flex flex-col gap-2">
-            <ROMRawDataGraph graphType={0} data={measureJson0?.values ?? []} />
-            <ROMRawDataGraph graphType={1} data={measureJson0?.values2 ?? []} />    
+            <ROMRawDataGraph graphType={0} data={measureJson0?.values ?? []} maxMinValue={left} />
+            <ROMRawDataGraph graphType={1} data={measureJson0?.values2 ?? []} maxMinValue={left} />    
           </div>
         </div>
       </div>
@@ -92,8 +92,8 @@ export const ROMRawDataContainer = ({
         <div className="flex flex-col py-2 rounded-xl bg-sub100 w-full h-full">
           {rangeComponent1}
            <div className="p-2 flex flex-col gap-2">
-            <ROMRawDataGraph graphType={0} data={measureJson1?.values ?? []} />
-            <ROMRawDataGraph graphType={1} data={measureJson1?.values2 ?? []} />    
+            <ROMRawDataGraph graphType={0} data={measureJson1?.values ?? []} maxMinValue={right} />
+            <ROMRawDataGraph graphType={1} data={measureJson1?.values2 ?? []} maxMinValue={right} />    
           </div>
         </div>
       </div>

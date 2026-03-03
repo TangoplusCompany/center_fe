@@ -1,4 +1,4 @@
-import { getROMItemList } from "@/services/measure/rom/getROMItemList";
+import { getROMItems } from "@/services/measure/rom/getROMItems";
 import { IMeasureROMItem } from "@/types/measure";
 import { useQuery } from "@tanstack/react-query";
 
@@ -8,18 +8,18 @@ import { useQuery } from "@tanstack/react-query";
  * @param center_sn 센터 번호
  * @param body_part_number 바디 파트 번호
  */
-export const useGetROMItemList = ({
+export const useGetROMItems = ({
   user_sn,
   center_sn,
-  body_part_number,
+  measure_sn,
 }: {
   user_sn: number;
   center_sn?: number;
-  body_part_number: number;
+  measure_sn: number;
 }) => {
   return useQuery<IMeasureROMItem[]>({
-    queryKey: ["userROMItemList", user_sn, center_sn, body_part_number],
-    queryFn: () => getROMItemList({ user_sn, center_sn, body_part_number }),
-    enabled: body_part_number !== undefined ,
+    queryKey: ["userROMItems", user_sn, center_sn, measure_sn],
+    queryFn: () => getROMItems({ user_sn, center_sn, measure_sn }),
+    enabled: measure_sn !== undefined ,
   });
 };

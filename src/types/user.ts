@@ -42,6 +42,7 @@ export interface IUserData {
   user_uuid: string;
   mobile: string;
   user_name: string;
+  gender: string;
   email: string;
   created_at: string;
   consent: boolean;
@@ -49,7 +50,7 @@ export interface IUserData {
 
 export interface IUserMeasureList {
   current_page: number;
-  per_page: number;
+  limit: number;
   total: number;
   total_pages: number;
   has_next_page: boolean;
@@ -69,8 +70,9 @@ export interface IUserMeasureListItem
   device_name: string;
   center_name: string;
   mobile: string;
-  has_normal: 0 | 1;
+  has_basic: 0 | 1;
   has_rom : 0 | 1;
+  measurement_type: "rom_only" | "basic_only" | "basic_and_rom"
 }
 
 

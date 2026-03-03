@@ -119,7 +119,7 @@ const MeasureIntro = ({
   );
   
   const footer =
-    <div className="border border-sub300 rounded-3xl flex flex-col md:grid md:grid-cols-2 lg:flex lg:flex-row gap-4 p-4">
+    <div className="border-2 border-sub200 rounded-3xl flex flex-col md:grid md:grid-cols-2 lg:flex lg:flex-row gap-4 p-4">
       {/* 정적 족압 - 웹/태블릿: 첫 번째, 모바일: 첫 번째 */}
       <div className="w-full md:col-span-2 lg:col-span-1">
         <FootStaticContainer

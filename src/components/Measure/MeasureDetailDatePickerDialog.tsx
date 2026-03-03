@@ -21,7 +21,7 @@ const ITEMS_PER_PAGE = 10;
 type MeasureDetailDatePickerDialogProps = {
   open: boolean;
   items: IMeasureList[];
-  selectedMeasureSn?: number | null;
+  selectedMeasure?: number | null;
   onOpenChange: (v: boolean) => void;
   onSelect: (measureSn: number) => void;
   /** useMeasureListForDetail 연동 시 전달. 있으면 API 페이지네이션 사용 */
@@ -31,7 +31,7 @@ type MeasureDetailDatePickerDialogProps = {
 export const MeasureDetailDatePickerDialog = ({
   open,
   items,
-  selectedMeasureSn,
+  selectedMeasure,
   onOpenChange,
   onSelect,
   pagination: apiPagination,
@@ -78,8 +78,8 @@ export const MeasureDetailDatePickerDialog = ({
                   type="button"
                   className={cn(
                     "w-full text-left rounded-xl border px-3 py-2 hover:bg-gray-50 dark:hover:bg-white/10 transition-colors border-border text-foreground",
-                    selectedMeasureSn != null &&
-                      selectedMeasureSn === it.measure_sn &&
+                    selectedMeasure != null &&
+                      selectedMeasure === it.measure_sn &&
                       "border-toggleAccent bg-sub100/50 dark:bg-toggleAccent-background"
                   )}
                   onClick={() => {

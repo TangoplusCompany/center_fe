@@ -4,15 +4,15 @@ import { CompareSlot } from "@/types/compare";
 type CompareCardProps = {
   regDate?: string;
   currentSlot: CompareSlot;
-  // onRemove?: (slot: CompareSlot) => void;
-  onCardClick?: (slot: CompareSlot, measureType ?: number) => void;
+  measureType?: number;
+  onCardClick?: (slot: CompareSlot, selectedMeasureType ?: number) => void;
   
 };
 
-const CompareDateCard = ({ regDate, currentSlot, onCardClick }: CompareCardProps) => {
+const CompareDateCard = ({ regDate, currentSlot, measureType, onCardClick }: CompareCardProps) => {
   return (
     <div 
-      onClick={onCardClick ? () => onCardClick(currentSlot) : undefined}
+      onClick={onCardClick ? () => onCardClick(currentSlot, measureType) : undefined}
       className={[
         "relative rounded-xl border-2 px-4 py-2 transition flex items-center justify-center my-4",
         regDate 

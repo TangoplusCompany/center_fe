@@ -47,13 +47,130 @@ export const drawSkeleton = (
   ctxW: CanvasRenderingContext2D,
   ctxR: CanvasRenderingContext2D,
   lm: PoseLandmarks,
-  toScreen: (sx: number, sy: number) => { x: number; y: number }
+  toScreen: (sx: number, sy: number) => { x: number; y: number },
+  romType ?: number
 ) => {
   // white skeleton
   ctxW.strokeStyle = "#FFF";
   ctxW.lineWidth = 1;
 
-  // Head
+  if (romType) {
+    switch (romType) {
+      case 13:
+      case 14: {
+        drawLine(ctxW, lm, 7, 8, toScreen);
+        break;
+      }
+      case 15: {
+        drawLine(ctxW, lm, 11, 13, toScreen);
+        drawLine(ctxW, lm, 13, 15, toScreen);
+        break;
+      }
+      case 16: {
+        drawLine(ctxW, lm, 12, 14, toScreen);
+        drawLine(ctxW, lm, 14, 16, toScreen);
+        break;
+      }
+      case 17:
+      case 18: {
+        drawLine(ctxW, lm, 7, 8, toScreen);
+        drawLine(ctxW, lm, 11, 12, toScreen);
+        drawLine(ctxW, lm, 23, 24, toScreen);
+        break;
+      }
+      case 19: {
+        drawLine(ctxW, lm, 23, 25, toScreen);
+        drawLine(ctxW, lm, 25, 27, toScreen);
+        break;
+      }
+      case 20: {
+        drawLine(ctxW, lm, 24, 26, toScreen);
+        drawLine(ctxW, lm, 26, 28, toScreen);
+        break;
+      }
+      case 21:
+      case 22: {
+        drawLine(ctxW, lm, 11, 7, toScreen);
+        break;
+      }  
+      case 23: 
+      case 24: 
+      case 25: 
+      case 26: 
+      case 27: {
+        drawLine(ctxW, lm, 11, 13, toScreen);
+        drawLine(ctxW, lm, 13, 15, toScreen);
+        break;
+      } 
+      case 28: {
+        drawLine(ctxW, lm, 11, 13, toScreen);
+        drawLine(ctxW, lm, 13, 15, toScreen);
+        drawLine(ctxW, lm, 11, 23, toScreen);
+        drawLine(ctxW, lm, 23, 25, toScreen);
+        drawLine(ctxW, lm, 25, 27, toScreen);
+        break;
+      }
+      case 29: {
+        drawLine(ctxW, lm, 12, 14, toScreen);
+        drawLine(ctxW, lm, 14, 16, toScreen);
+        drawLine(ctxW, lm, 12, 24, toScreen);
+        drawLine(ctxW, lm, 24, 26, toScreen);
+        drawLine(ctxW, lm, 26, 28, toScreen);
+        break;
+      }
+      case 30: 
+      case 31:
+      case 32: {
+        drawLine(ctxW, lm, 23, 25, toScreen);
+        drawLine(ctxW, lm, 25, 27, toScreen);
+        break;
+      }
+      case 33:
+      case 34: {
+        drawLine(ctxW, lm, 25, 27, toScreen);
+        drawLine(ctxW, lm, 27, 31, toScreen);
+        break;
+      }
+
+      case 35:
+      case 36: {
+        drawLine(ctxW, lm, 8, 12, toScreen);
+        break;
+      }  
+      case 37: 
+      case 38: 
+      case 39: 
+      case 40: 
+      case 41: {
+        drawLine(ctxW, lm, 12, 14, toScreen);
+        drawLine(ctxW, lm, 14, 16, toScreen);
+        break;
+      } 
+      case 42:
+      case 43: {
+        drawLine(ctxW, lm, 12, 14, toScreen);
+        drawLine(ctxW, lm, 14, 16, toScreen);
+        drawLine(ctxW, lm, 12, 24, toScreen);
+        drawLine(ctxW, lm, 24, 26, toScreen);
+        drawLine(ctxW, lm, 26, 28, toScreen);
+        break;
+      }
+      case 44: 
+      case 45: 
+      case 46: {
+        drawLine(ctxW, lm, 24, 26, toScreen);
+        drawLine(ctxW, lm, 26, 28, toScreen);
+        break;
+      }
+      case 47: 
+      case 48: {
+        drawLine(ctxW, lm, 26, 28, toScreen);
+        drawLine(ctxW, lm, 28, 32, toScreen);
+        break;
+      }
+    }
+  } else {
+    // Head
   drawLine(ctxW, lm, 7, 8, toScreen);
 
   // Right arm
@@ -87,13 +204,14 @@ export const drawSkeleton = (
   drawLine(ctxW, lm, 26, 28, toScreen);
   drawLine(ctxW, lm, 28, 30, toScreen);
   drawLine(ctxW, lm, 28, 32, toScreen);
-
   // red lines
   ctxR.strokeStyle = "#FF0000";
   ctxR.lineWidth = 1;
   drawLine(ctxR, lm, 20, 19, toScreen, -100, 0, 100, 0);
   drawLine(ctxR, lm, 23, 24, toScreen);
   drawLine(ctxR, lm, 25, 26, toScreen);
+  }
+  
 };
 
 export const isNearStart = (v: HTMLVideoElement, eps = 0.05) => v.currentTime <= eps;
