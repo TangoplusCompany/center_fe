@@ -72,7 +72,9 @@ export const ROMPickerDialog = ({
       <DialogContent className="w-full max-w-md rounded-2xl bg-white dark:bg-card p-4" aria-describedby={undefined}>
         {/* 헤더 */}
         <DialogTitle className="text-base font-semibold mb-3 text-foreground">
-         이전 기록: {title}
+          <span>{title}</span> <br/>
+          <span className="text-sm text-sub400">날짜를 선택해 이전 기록과 비교해보세요</span>
+          
         </DialogTitle>
         {isLoading ? (
           <div className="flex flex-col gap-4">

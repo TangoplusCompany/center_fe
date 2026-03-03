@@ -10,8 +10,8 @@ export const ROMRawDataUnit = ({
   const romStateMap : Record<number, string> = {
     0: "위험",
     1: "주의",
-    2: "정상",
-    3: "매우 우수"
+    2: "양호",
+    3: "매우 양호"
   };
   const romState = romStateMap[data.score] ?? "정상";
   return (

@@ -6,7 +6,7 @@ const ROMCompareDefault = ({
   currentSlot,
 }: { 
   className?: string;
-  onCompareDialogOpen?: (slot: CompareSlot) => void;
+  onCompareDialogOpen?: (slot: CompareSlot, selectedMeasureType: number) => void;
   currentSlot?: CompareSlot;
 }) => {
   return (
@@ -18,7 +18,7 @@ const ROMCompareDefault = ({
           <div
             role="button"
             tabIndex={0}
-            onClick={onCompareDialogOpen && currentSlot ? () => onCompareDialogOpen(currentSlot) : undefined}
+            onClick={onCompareDialogOpen && currentSlot ? () => onCompareDialogOpen(currentSlot, -1) : undefined}
             className={[
               "relative h-full rounded-3xl border-2 border-sub300/50 border-dashed box-border",
               "transition cursor-pointer select-none",

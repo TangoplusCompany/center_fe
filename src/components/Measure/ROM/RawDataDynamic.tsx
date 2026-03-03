@@ -7,6 +7,7 @@ export interface ROMRawDataDynamicProps {
   measure_server_file_name: string;
   measure_server_json_name: string;
   camera_orientation: 0 | 1;
+  measure_type: number;
 }
 
 export const ROMRawDataDynamic = ({
@@ -16,7 +17,7 @@ export const ROMRawDataDynamic = ({
 }: {
   left: ROMRawDataDynamicProps;
   right?: ROMRawDataDynamicProps;
-  onCompareDialogOpen: (currenSlot: CompareSlot) => void;
+  onCompareDialogOpen: (currenSlot: CompareSlot, selectedMeasureType: number) => void;
 }) => {
 
   const { data: measureJson0, isLoading: jsonLoading0, isError: jsonError0 } = useMeasureDynamicJson(
@@ -38,6 +39,7 @@ export const ROMRawDataDynamic = ({
           measureJson={measureJson0}
           isLoading={jsonLoading0}
           isError={!!(jsonError0)}
+          romType={left.measure_type}
         />
         
         {/* 우측 비디오 플레이어 또는 기본 화면 */}
@@ -49,7 +51,7 @@ export const ROMRawDataDynamic = ({
             measureJson={measureJson1}
             isLoading={jsonLoading1}
             isError={!!(jsonError1)}
-
+            romType={right.measure_type}
             // customCanvasTransform={isRotated1 ? undefined : "scaleX(-1.25) scaleY(1.25)"}
             // videoClassName={isRotated1 ? undefined : "-rotate-90 w-[75%] h-full object-contain"}
             // stageClassName={isRotated1 ? undefined : "relative mx-auto w-full h-[300px] sm:h-[400px] md:h-[480px] lg:h-[560px] xl:h-[680px] overflow-hidden" }

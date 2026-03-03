@@ -11,6 +11,7 @@ import {
 } from "@/components/Measure/MeasureList";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import { Skeleton } from "../ui/skeleton";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 
 const MeasureListContainer = ({
   handleTotalItems,
@@ -43,24 +44,29 @@ const MeasureListContainer = ({
   if (isLoading) {
     return (
       <>
-        <div className="flex flex-col gap-4">
-          <Skeleton className="w-full h-[50px]" />
-          <Skeleton className="w-full h-[36px]" />
-          <Skeleton className="w-full h-[36px]" />
-          <Skeleton className="w-full h-[36px]" />
-          <Skeleton className="w-full h-[36px]" />
-          <Skeleton className="w-full h-[36px]" />
-          <Skeleton className="w-full h-[36px]" />
-          <Skeleton className="w-full h-[36px]" />
-          <Skeleton className="w-full h-[36px]" />
-          <Skeleton className="w-full h-[36px]" />
-          <Skeleton className="w-full h-[36px]" />
-          <Skeleton className="w-full h-[36px]" />
-          <Skeleton className="w-full h-[36px]" />
-          <Skeleton className="w-full h-[36px]" />
-          <Skeleton className="w-full h-[36px]" />
-          <Skeleton className="w-full h-[36px]" />
-        </div>
+        <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="text-center w-[200px] whitespace-nowrap">이름</TableHead>
+            <TableHead className="text-center whitespace-nowrap">전화번호</TableHead>
+            <TableHead className="text-center whitespace-nowrap">측정일</TableHead>
+            <TableHead className="text-center whitespace-nowrap">측정기기</TableHead>
+            {/* <TableHead className="text-center whitespace-nowrap">측정점수</TableHead> */}
+            <TableHead className="text-right whitespace-nowrap"></TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((_, index) => (
+            <TableRow key={index}>
+              {Array.from({ length: 4 }).map((_, i) => (
+                <TableCell key={i} className="p-2">
+                  <Skeleton className="w-full h-[28px]" />
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
       </>
     );
   }

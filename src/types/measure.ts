@@ -63,6 +63,9 @@ export interface IUserDetailMeasureInfo
   user_uuid: string; // 유저 UUID
   mobile: string; // 휴대폰 번호
   camera_orientation: 0 | 1;
+  has_basic : 0 | 1;
+  has_rom : 0 | 1;
+  measurement_type: "rom_only" | "basic_only" | "basic_and_rom"
 }
 
 export interface IFilterMeasureInfo {
@@ -360,7 +363,7 @@ export interface IMeasureROMItemHistoryResponse {
   rom_results: IMeasureROMItem[];
 }
 
-export interface IMeasureROMItem {
+export interface IMeasureROMItem extends IMeasureROMItemRangeData {
   sn: number;
   measure_sn: number;
   user_name: number;
@@ -369,6 +372,8 @@ export interface IMeasureROMItem {
   howto: string;
   measure_seq: number;
   measure_type: number;
+  score: number;
+  history_by_measure_type: Record<string, number>;
 }
 
 export interface IMeasureROMGraphJson {
@@ -376,18 +381,22 @@ export interface IMeasureROMGraphJson {
   values2 : number[];
 }
 
-export interface IMeasureROMItemCardData {
+export interface IMeasureROMItemCardData extends IMeasureROMItemRangeData {
   score: number;
   description: string;
-  normal_bad: number;
-  normal_warning: number;
-  normal_normal: number;
-  max_value: number;
   value_1_min: number;
   value_1_max: number;
   value_2_min: number;
   value_2_max: number;
 }
+
+export interface IMeasureROMItemRangeData {
+  normal_bad: number;
+  normal_warning: number;
+  normal_normal: number;
+  max_value: number;
+}
+
 export interface IMeasureROMItemDetail extends IMeasureROMItemRawData, IMeasureROMItemCardData {
   sn: number;
   device_sn: number;

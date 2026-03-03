@@ -46,11 +46,11 @@ export const useMeasureListForDetail = ({
     () => ({
       page: data?.current_page ?? 1,
       total: data?.total ?? 0,
-      limit: data?.per_page ?? Number(LIMIT),
+      limit: data?.limit ?? Number(LIMIT),
       last_page: data?.total_pages ?? 1,
       setPage: (p: number) => setPage(Math.max(1, p)),
     }),
-    [data?.current_page, data?.total, data?.per_page, data?.total_pages]
+    [data?.current_page, data?.total, data?.limit, data?.total_pages]
   );
 
   // measurement_list를 IMeasureList[]로 변환
