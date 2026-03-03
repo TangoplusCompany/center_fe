@@ -258,14 +258,28 @@ export const SubRegisterContainer = ({
             <Input
               id="phone"
               type="tel"
-              inputMode="numeric"
-              autoComplete="tel"
-              pattern="[0-9\\s-]*"
-              placeholder="전화번호"
+              placeholder="01012345678"
               required
-              maxLength={20}
-              {...register("phone")}
-              className="bg-white dark:bg-border"
+              {...register("phone", {
+                required: "전화번호를 입력해주세요.",
+                // 🔥 숫자 11자리 정규식 검사
+                pattern: {
+                  value: /^010\d{8}$/,
+                  message: "010으로 시작하는 11자리 숫자를 입력해주세요."
+                },
+                minLength: { value: 11, message: "휴대폰번호 11자리를 입력해야 합니다." },
+                maxLength: { value: 11, message: "11자 이상 입력할 수 없습니다." },
+                onChange: (e) => {
+                  // 1. 숫자 이외 문자 즉시 제거
+                  const onlyNumber = e.target.value.replace(/[^0-9]/g, "");
+                  // 2. 11자까지만 잘라서 다시 input에 할당 (이게 가장 확실합니다)
+                  e.target.value = onlyNumber.slice(0, 11);
+                }
+              })}
+              className={cn(
+                "bg-white dark:bg-border",
+                errors.phone && "border-red-500 focus-visible:ring-red-500" // 에러 시 강조
+              )}
             />
             {errors.phone?.message && (
               <ErrorText>{String(errors.phone?.message)}</ErrorText>
