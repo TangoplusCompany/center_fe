@@ -4,7 +4,7 @@ import { Html, OrbitControls, useGLTF } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Suspense, useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
-import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
+// import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { IUserDetailMeasureInfo } from "@/types/measure";
 
 type RiskKey = "risk_neck" | "risk_shoulder_left" | "risk_shoulder_right" | "risk_elbow_left" | "risk_elbow_right" | "risk_hip_left" | "risk_hip_right" | "risk_knee_left" | "risk_knee_right" | "risk_ankle_left" | "risk_ankle_right";
@@ -135,7 +135,7 @@ function JointDots({ data }: { data: IUserDetailMeasureInfo }) {
 }
 
 function AutoRotateControls() {
-  const controlsRef = useRef<OrbitControlsImpl>(null);
+  const controlsRef = useRef<React.ComponentRef<typeof OrbitControls>>(null);
   const elapsed = useRef(0);
   const done = useRef(false); // 완료 플래그 추가
 
