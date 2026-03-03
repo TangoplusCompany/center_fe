@@ -58,8 +58,8 @@ const phoneSchema = z
   .pipe(
     z
       .string()
-      .min(9, "전화번호는 지역번호(9~10자리) 또는 휴대폰(10~11자리) 형식이어야 합니다.")
-      .max(11, "전화번호는 지역번호(9~10자리) 또는 휴대폰(10~11자리) 형식이어야 합니다.")
+      .min(9, "전화번호는 휴대폰(10~11자리) 형식이어야 합니다.")
+      .max(11, "전화번호는 휴대폰(10~11자리) 형식이어야 합니다.")
       .regex(/^\d+$/, "전화번호는 숫자만 입력 가능합니다.")
       .refine(isValidKoreanPhone, { message: KOREAN_PHONE_ERROR_MESSAGE }),
   );
@@ -437,72 +437,77 @@ export const RegisterContainer = () => {
                     비밀번호
                   </Label>
                   <Input
-                id="password"
-                type="password"
-                placeholder="********"
-                required
-                maxLength={16}
-                className="bg-white dark:bg-border"
-                {...register("password")}
-              />
-              {errors.password?.message && (
-                <ErrorText>{String(errors.password?.message)}</ErrorText>
-              )}
-            </div>
-            <div className="flex flex-col items-start gap-2">
-              <Label htmlFor="passwordConfirm" className="lg:text-lg">
-                비밀번호 확인
-              </Label>
+                    id="password"
+                    type="password"
+                    placeholder="********"
+                    required
+                    maxLength={16}
+                    className="bg-white dark:bg-border"
+                    {...register("password")}
+                  />
+                  {errors.password?.message && (
+                    <ErrorText>{String(errors.password?.message)}</ErrorText>
+                  )}
+                </div>
+                <div className="flex flex-col items-start gap-2">
+                  <Label htmlFor="passwordConfirm" className="lg:text-lg">
+                    비밀번호 확인
+                  </Label>
 
-              <Input
-                id="passwordConfirm"
-                type="password"
-                placeholder="********"
-                required
-                maxLength={16}
-                className="bg-white dark:bg-border"
-                {...register("passwordConfirm")}
-              />
-              {errors.passwordConfirm?.message && (
-                <ErrorText>{String(errors.passwordConfirm?.message)}</ErrorText>
-              )}
-            </div>
-            <div className="flex flex-col items-start gap-2">
-              <Label htmlFor="name" className="lg:text-lg">
-                이름
-              </Label>
-              <Input
-                id="name"
-                type="text"
-                placeholder="홍길동"
-                required
-                maxLength={50}
-                {...register("name")}
-                className="bg-white dark:bg-border"
-              />
-              {errors.name?.message && (
-                <ErrorText>{String(errors.name?.message)}</ErrorText>
-              )}
-            </div>
-            <div className="flex flex-col items-start gap-2">
-              <Label htmlFor="phone" className="lg:text-lg">
-                전화번호
-              </Label>
-              <Input
-                id="phone"
-                type="tel"
-                inputMode="numeric"
-                autoComplete="tel"
-                pattern="[0-9\\s-]*"
-                placeholder="전화번호"
-                required
-                maxLength={20}
-                {...register("phone")}
-                className="bg-white dark:bg-border"
-              />
-              {errors.phone?.message && (
-                <ErrorText>{String(errors.phone?.message)}</ErrorText>
-              )}
+                  <Input
+                    id="passwordConfirm"
+                    type="password"
+                    placeholder="********"
+                    required
+                    maxLength={16}
+                    className="bg-white dark:bg-border"
+                    {...register("passwordConfirm")}
+                  />
+                  {errors.passwordConfirm?.message && (
+                    <ErrorText>{String(errors.passwordConfirm?.message)}</ErrorText>
+                  )}
+                </div>
+                <div className="flex flex-col items-start gap-2">
+                  <Label htmlFor="name" className="lg:text-lg">
+                    이름
+                  </Label>
+                  <Input
+                    id="name"
+                    type="text"
+                    placeholder="홍길동"
+                    required
+                    maxLength={50}
+                    {...register("name")}
+                    className="bg-white dark:bg-border"
+                  />
+                  {errors.name?.message && (
+                    <ErrorText>{String(errors.name?.message)}</ErrorText>
+                  )}
+                </div>
+                <div className="flex flex-col items-start gap-2">
+                  <Label htmlFor="phone" className="lg:text-lg">
+                    전화번호
+                  </Label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    pattern="[0-9\\s-]*"
+                    placeholder="전화번호"
+                    required
+                    {...register("phone", {
+                      required: "전화번호를 입력해주세요.",
+                      minLength: { value: 11, message: "휴대폰번호 11자리를 입력해야 합니다." },
+                      onChange: (e) => {
+                        const onlyNumber = e.target.value.replace(/[^0-9]/g, "");
+                        const truncated = onlyNumber.slice(0, 11);
+                        setValue("phone", truncated);
+                      }
+                    })}
+                    className="bg-white dark:bg-border"
+                  />
+                  {errors.phone?.message && (
+                    <ErrorText>{String(errors.phone?.message)}</ErrorText>
+                  )}
                 </div>
               </>
             )}
@@ -573,7 +578,8 @@ export const RegisterContainer = () => {
                 id="centerPhone"
                 type="tel"
                 placeholder="센터 전화 번호"
-                maxLength={20}
+                maxLength={15}
+                minLength={10}
                 {...register("centerPhone")}
                 className="bg-white dark:bg-border"
               />
