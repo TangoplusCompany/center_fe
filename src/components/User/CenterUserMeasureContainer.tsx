@@ -49,7 +49,6 @@ const CenterUserMeasureContainer = ({
     user_sn: userSn,
     isResultPage,
   });
-  
   // tab === 0: 날짜(측정일) 선택 시 사용할 measure_sn
   // - 다이얼로그에서 선택한 경우 measureSn, 아니면 리스트 첫 번째(최신)
   const latestMeasureSn = latestMeasureListData?.measurement_list?.find((it) => it.has_basic === 1)?.measure_sn;
@@ -70,7 +69,7 @@ const CenterUserMeasureContainer = ({
       : isDatePickerOpen && frozenMeasureSnRef.current != undefined
         ? frozenMeasureSnRef.current
         : effectiveMeasureSn;
-
+  
   // tab === 0일 때 선택된 측정 상세 데이터 가져오기 (날짜 변경 시 effectiveMeasureSn 바뀜 → refetch)
   const shouldFetchDetail = (tab === 0 || currentView === "detail") && !!effectiveMeasureSn;
   const detailUserSn = latestUserSn ?? userSn;
@@ -84,7 +83,6 @@ const CenterUserMeasureContainer = ({
     user_sn: shouldFetchDetail ? `${detailUserSn}` : "",
     isResultPage,
   });
-  
   const initCompare = comparePair[0] !== undefined || comparePair[1] !== undefined;
   return (
     <>

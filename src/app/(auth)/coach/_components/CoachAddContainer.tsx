@@ -95,8 +95,7 @@ const SearchAllCoach = ({ updateCoach }: { updateCoach: (coach: ICoachData) => v
 };
 
 const CoachAddContainer = () => {
-  const [coach, setCoach] = useState<ICoachData | null>(null);
-  console.log(coach);
+  const [, setCoach] = useState<ICoachData | null>(null);
   const getCoachData = (coach: ICoachData) => {
     setCoach(coach);
   };

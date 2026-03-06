@@ -20,7 +20,7 @@ export const getROMItemHistory = async ({
   page?: number;
   limit?: number;
 }) => {
-  const { data } = await customAxios.get(`/members/${user_sn}/centers/${center_sn}/rom-results/${measure_type}`, {
+  const { data } = await customAxios.get(`/members/${user_sn}/centers/${center_sn}/rom-results/measure-type/${measure_type}`, {
     params: { page, limit },
   });
   return data.data as IMeasureROMItemHistoryResponse;

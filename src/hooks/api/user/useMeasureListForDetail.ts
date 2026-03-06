@@ -21,11 +21,9 @@ export type DetailPagination = {
  * - 다이얼로그 페이지네이션 클릭 시 page 변경 → API 재요청
  */
 export const useMeasureListForDetail = ({
-  // userUUID,
   user_sn,
   isResultPage = false,
 }: {
-  // userUUID?: string;
   user_sn?: number;
   isResultPage?: boolean;
 }) => {
@@ -41,23 +39,30 @@ export const useMeasureListForDetail = ({
     user_sn: user_sn,
     isResultPage,
   });
+  const filteredItems = useMemo(() => {
+    if (!data?.measurement_list) return [];
 
+    return data.measurement_list.filter(
+      (item) => item.measurement_type === "basic_only"
+    );
+  }, [data?.measurement_list]);
+  
   const pagination: DetailPagination = useMemo(
     () => ({
       page: data?.current_page ?? 1,
-      total: data?.total ?? 0,
+      total: filteredItems.length,
       limit: data?.limit ?? Number(LIMIT),
       last_page: data?.total_pages ?? 1,
       setPage: (p: number) => setPage(Math.max(1, p)),
     }),
-    [data?.current_page, data?.total, data?.limit, data?.total_pages]
+    [data?.current_page, filteredItems, data?.limit, data?.total_pages]
   );
 
   // measurement_list를 IMeasureList[]로 변환
   const measureList: IMeasureList[] = useMemo(() => {
-    if (!data?.measurement_list) return [];
+    if (!filteredItems) return [];
     
-    return data.measurement_list.map((item) => ({
+    return filteredItems.map((item) => ({
       sn: item.measure_sn,
       measure_sn: item.measure_sn,
       user_name: item.user_name,
@@ -69,7 +74,7 @@ export const useMeasureListForDetail = ({
       device_sn: 0,
       t_score: 0,
     }));
-  }, [data?.measurement_list]);
+  }, [filteredItems]);
 
   return {
     data,

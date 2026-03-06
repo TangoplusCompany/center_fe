@@ -70,7 +70,6 @@ export const ROMItemCard = ({
       className="col-span-1 items-center justify-between rounded-xl border-2 border-toggleAccent-background relative transition-colors hover:border-toggleAccent cursor-pointer"
       onClick={() => {
         if (handleROMItemSelect) handleROMItemSelect(romItem.measure_type);
-        console.log(romItem.sn)
       }}
     >
       <div className="flex flex-col">

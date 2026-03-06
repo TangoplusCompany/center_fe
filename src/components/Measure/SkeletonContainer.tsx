@@ -9,6 +9,8 @@ import { formatDate } from "@/utils/formatDate";
 import { DetailPagination } from "@/hooks/api/user/useMeasureListForDetail";
 import { viewType } from "../User/CenterUserDetail";
 import { Button } from "../ui/button";
+// import { UnitySkeleton } from "./UnitySkeleton";
+// import { useTheme } from "next-themes";
 
 export interface SkeletonDatePickerProps {
   measureList?: IMeasureList[];              // 전체 측정 리스트 (현재 페이지)
@@ -37,7 +39,29 @@ const SkeletonContainer = ({
     rawProps.measureList && rawProps.selectedMeasure != undefined
       ? rawProps.measureList.find((item) => item.measure_sn === rawProps.selectedMeasure)
       : undefined;
-  
+  // const { resolvedTheme } = useTheme();
+  // const isDarkMode = resolvedTheme === "dark";
+  // const transformRiskToJoints = (data: IUserDetailMeasureInfo): Record<string, number> => {
+  //   return {
+  //     "목관절": data.risk_neck,
+  //     "좌측 어깨": data.risk_shoulder_left,
+  //     "우측 어깨": data.risk_shoulder_right,
+  //     "좌측 팔꿉": data.risk_elbow_left,
+  //     "우측 팔꿉": data.risk_elbow_right,
+  //     "좌측 골반": data.risk_hip_left,
+  //     "우측 골반": data.risk_hip_right,
+  //     "좌측 무릎": data.risk_knee_left,
+  //     "우측 무릎": data.risk_knee_right,
+  //     "좌측 발목": data.risk_ankle_left,
+  //     "우측 발목": data.risk_ankle_right,
+  //   };
+  // };
+  //  <div className="flex-1 flex items-center justify-center w-full min-h-0 my-4">
+  //       <div className="relative items-center justify-center skeleton w-full max-w-[512px] " >
+  //         {/* <FullBodySkeleton3D data={data} className="w-full h-full" /> */}
+  //         <UnitySkeleton joints={transformRiskToJoints(data)} isDarkMode={isDarkMode} />
+  //       </div>
+  //     </div>
   return (
     <div className="relative box-border flex h-full flex-col items-center rounded-3xl border-2 border-sub200 p-4 text-black focus-visible:outline-none">
       
@@ -49,7 +73,7 @@ const SkeletonContainer = ({
             className="
               w-full flex items-center justify-center gap-2
               border-2 border-sub300 rounded-xl
-              px-3 py-2 text-base shadow-sm
+              px-3 py-2 text-base text-sub700
               hover:border-toggleAccent
               focus:outline-none focus:ring-2  focus:border-blue-500
               transition
@@ -84,6 +108,8 @@ const SkeletonContainer = ({
         </div>
       </div>
 
+     
+      
       {/* ⭐ 기준바: Skeleton 하단 중앙 */}
       <div className="hidden md:flex flex-col w-full gap-2">
         <div className="flex w-full justify-end">
