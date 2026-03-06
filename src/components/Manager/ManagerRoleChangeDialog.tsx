@@ -15,7 +15,7 @@ import { ADMIN_ROLE } from "@/utils/constants/adminRole";
 import React from "react";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
-import { UserRoundPen } from "lucide-react";
+// import { UserRoundPen } from "lucide-react";
 import { usePatchManagerRole } from "@/hooks/api/manager/usePatchManagerRole";
 import { useBoolean } from "@/hooks/utils/useBoolean";
 import { useManagerRole } from "@/hooks/manager/useManagerRole";
@@ -68,10 +68,10 @@ const ManagerRoleChangeDialog = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="flex items-center gap-0.5 text-sm">
+        {/* <button className="flex items-center gap-0.5 text-sm">
           <UserRoundPen className="w-4 h-4 text-toggleAccent dark:text-white" />
           <span className="text-toggleAccent dark:text-white">매니저 등급 수정</span>
-        </button>
+        </button> */}
       </DialogTrigger>
       <DialogContent className="gap-4">
         <DialogHeader>

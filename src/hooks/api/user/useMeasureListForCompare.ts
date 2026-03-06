@@ -42,23 +42,29 @@ export const useMeasureListForCompare = ({
     user_sn: user_sn,
     isResultPage,
   });
+  const filteredItems = useMemo(() => {
+    if (!data?.measurement_list) return [];
+    return data.measurement_list.filter(
+      (item) => item.measurement_type === "basic_only"
+    );
+  }, [data?.measurement_list]);
 
   const pagination: ComparePagination = useMemo(
     () => ({
       page,
-      total: data?.total ?? 0,
+      total: filteredItems.length,
       limit: data?.limit ?? Number(LIMIT),
       last_page: data?.total_pages ?? 1,
       setPage: (p: number) => setPage(Math.max(1, p)),
     }),
-    [page, data?.total, data?.limit, data?.total_pages]
+    [page, filteredItems, data?.limit, data?.total_pages]
   );
 
 
   return {
     isLoading,
     isError,
-    measureList: data?.measurement_list ?? [],
+    measureList: filteredItems ?? [],
     pagination,
   };
 };

@@ -63,7 +63,7 @@ export const ROMRawDataGraph = ({
           <ChartTooltip
             content={
               <ChartTooltipContent
-                labelFormatter={(value) => `프레임 ${value}`}
+                labelFormatter={(value) => `관절 ${value}`}
               />
             }
           />

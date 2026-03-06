@@ -18,7 +18,6 @@ const CenterUserMeasureListContainer = ({
   changeView,
   selectCompareSn, 
   isResultPage = false,
-  
 }: { 
   userSn: number;
   changeMeasure?: (measureSn: number) => void;
@@ -46,6 +45,10 @@ const CenterUserMeasureListContainer = ({
     sort,
     isResultPage,
   });
+
+  const filteredList = userMeasureList?.measurement_list.filter((it) =>
+    it.measurement_type === "basic_only"
+  );
   const handleSortChange = (value: string) => {
     setQueryParam([
       ["sort", value], // ✅ "asc" 또는 "desc" 그대로 전달
@@ -96,10 +99,11 @@ const CenterUserMeasureListContainer = ({
           userMeasureList && (
             <>
               <CenterUserMeasureList
-                measures={userMeasureList?.measurement_list ?? []}
+                measures={filteredList ?? []}
                 changeMeasure={changeMeasure ? (sn) => changeMeasure(sn) : undefined}
                 selectCompareSn={selectCompareSn}
                 changeView={changeView}
+                isResultPage={isResultPage}
               />
               <CustomPagination
                 total={userMeasureList.total}

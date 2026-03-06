@@ -3,7 +3,7 @@ import { ComparePair, CompareSlot } from "@/types/compare";
 import ROMPickerDialog from "../Measure/ROM/PickerDialog";
 import ROMItemContainer from "../Measure/ROM/ItemContainer";
 import { Skeleton } from "../ui/skeleton";
-import { useAuthStore } from "@/providers/AuthProvider";
+import { useAuthStoreOptional } from "@/providers/AuthProvider";
 import { useGetROMItemHistory } from "@/hooks/api/measure/rom/useGetROMItemHsitory";
 import ROMBody from "../Measure/ROM/Body";
 import { useGetROMItemDetail } from "@/hooks/api/measure/rom/useGetROMItemDetail";
@@ -20,7 +20,7 @@ export const CenterUserROMContainer = ({
   // const [bodyPart,] = useState(0); // 상단 탭 선택하는 bodyPart
   const [measureType, setMeasureType] = useState(-1); // 이전 항목 선택을 관리하는 ROM 타입
 
-  const centerSn = useAuthStore((state) => state.centerSn);
+  const centerSn = useAuthStoreOptional((state) => state.centerSn, 0);
   const [page, setPage] = useState(1);
   // const onPartSelect = (part: number) => {
   //   setBodyPart(part);

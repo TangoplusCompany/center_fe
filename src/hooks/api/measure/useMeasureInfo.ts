@@ -25,7 +25,6 @@ export const useMeasureInfo = ({
   const apiPath = isResultPage
     ? `/users/${user_sn}/measurement/${measure_sn}`
     : `/measurement/${measure_sn}/centers/${centerSn}/members/${user_sn}`;
-
   return useQuery<IUserMeasureInfoResponse>({
     queryKey: isResultPage
       ? ["userResultMeasureDetail", measure_sn, user_sn]
