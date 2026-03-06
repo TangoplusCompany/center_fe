@@ -1,26 +1,32 @@
-import { IMeasureROMItemCardData } from "@/types/measure";
+import { IMeasureROMItemDetail } from "@/types/measure";
 
 
 
 export const ROMRawDataUnit = ({
   data
 }: {
-  data: IMeasureROMItemCardData
+  data: IMeasureROMItemDetail
 }) => {
   const romStateMap : Record<number, string> = {
     0: "위험",
     1: "주의",
-    2: "양호",
+    2: "정상",
     3: "매우 양호"
   };
   const romState = romStateMap[data.score] ?? "정상";
   return (
     <div className="flex flex-col w-full h-full gap-4">
       <div>
-        <div className="grid grid-cols-[25%_25%_50%] items-center border-b-2 border-sub200 dark:bodrer bg-sub100 dark:bg-muted py-4">
-          <div className="h-full flex items-center justify-center">최대 각도</div>
-          <div className="h-full flex items-center justify-center">단계</div>
-          <div className="h-full flex pl-2">설명</div>
+        <div className="flex flex-col border-b-2 border-sub200 dark:bodrer bg-sub100 dark:bg-muted py-2 gap-2">
+          
+          <div className="text-base font-semibold px-2">{data.title}</div>
+          
+          <div className="grid grid-cols-[25%_25%_50%] items-center ">
+            <div className="h-full flex items-center justify-center">최대 각도</div>
+            <div className="h-full flex items-center justify-center">단계</div>
+            <div className="h-full flex pl-2">설명</div>
+          </div>
+          
         </div>
 
         <div className="grid grid-cols-[25%_25%_50%] items-center dark:border dark:bg-muted divide-x-2 divide-sub200">

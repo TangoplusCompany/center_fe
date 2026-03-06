@@ -80,7 +80,7 @@ export const ManagerInviteDialog = ({
       if (res.status === 201) {
         alert("초대 링크가 발송되었습니다. (신규 부관리자 가입)");
       } else if (res.status === 200) {
-        alert("해당 센터에 부관리자가 가입되었습니다.");
+        alert("해당 센터에 부관리자가 되었습니다.");
       } else {
         alert("매니저 초대가 전송되었습니다.");
       }

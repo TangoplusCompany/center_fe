@@ -26,7 +26,10 @@ export const ROMBody = ({
   isLoading1,
   isError1,
 }: ROMBodyProps) => {
-  
+  // const [romCompareMode, setRomCompareMode] = useState(false);
+  // const toggleRomCompareMode = {
+
+  // }
   const leftData : ROMRawDataDynamicProps  = {
     measure_server_file_name : data0.measure_server_file_name,
     measure_server_json_name : data0.measure_server_json_name,
@@ -54,7 +57,7 @@ export const ROMBody = ({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex">
+      <div className="flex justify-between">
         <button
           type="button"
           onClick={() => {
@@ -66,15 +69,23 @@ export const ROMBody = ({
         >
           ← 목록으로
         </button>
-      </div>
-      
 
+        {/* <button>
+          type="button"
+          onClick={() => {
+            if (onROMItemSelect) {
+              onROMItemSelect([undefined, undefined])
+            };
+          }}
+          className="px-3 py-1 rounded-md text-sm text-sub700"
+        </button> */}
+      </div>
       {/* <div className="grid grid-cols-2 gap-4 items-stretch w-full">
         <div className="min-w-0">
           <CompareDateCard 
             regDate={leftData ? data0.reg_date : ""}
             currentSlot={leftSlot}
-            measureType={leftData.measure_type}
+            measureType={data1?.measure_type}
             onCardClick={onCompareDialogOpen} />
         </div>
         {data1 && (
@@ -82,7 +93,7 @@ export const ROMBody = ({
             <CompareDateCard 
               regDate={data1 ? data1.reg_date : ""}
               currentSlot={rightSlot}
-              measureType={data1.measure_type ?? -1}
+              measureType={leftData.measure_type ?? -1}
               onCardClick={onCompareDialogOpen} />
           </div>
         )}

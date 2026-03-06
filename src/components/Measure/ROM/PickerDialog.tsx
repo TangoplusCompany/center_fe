@@ -109,9 +109,9 @@ export const ROMPickerDialog = ({
                     <div className="text-sm font-medium">
                       {formatDate(it.reg_date)}
                     </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">
-                      더미입니다.
-                    </div>
+                    {/* <div className="text-xs text-gray-500 dark:text-gray-400">
+                      {it.}
+                    </div> */}
                   </button>
                 ))}
               </div>

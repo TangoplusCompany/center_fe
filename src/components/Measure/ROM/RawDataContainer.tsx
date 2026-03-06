@@ -1,11 +1,11 @@
-import { IMeasureROMItemCardData } from "@/types/measure";
+import { IMeasureROMItemDetail } from "@/types/measure";
 import ROMRawDataGraph from "./RawDataGraph";
 import ROMRawDataUnit from "./RawDataUnit";
 import { useGetMeasureROMGraphJson } from "@/hooks/api/measure/rom/useGetMeasureROMGraphJson";
 import { Skeleton } from "@/components/ui/skeleton";
 interface ROMRawDataContainerProps {
-  left: IMeasureROMItemCardData;
-  right?: IMeasureROMItemCardData;
+  left: IMeasureROMItemDetail;
+  right?: IMeasureROMItemDetail;
   fileName0: string;
   fileName1 ?: string;
 }
@@ -22,8 +22,6 @@ export const ROMRawDataContainer = ({
     fileName1
   );
 
-
-
   const rangeComponent0 = (
     <div className="grid grid-cols-4 w-full h-full rounded-xl bg-sub100 items-center divide-x-2 divide-sub200">
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
@@ -31,7 +29,7 @@ export const ROMRawDataContainer = ({
         <span>{left.normal_normal}º 이상</span>
       </div>
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
-        <span>양호</span>
+        <span>정상</span>
         <span>{left.normal_warning}º~{left.normal_normal}º</span>
       </div>
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
@@ -51,7 +49,7 @@ export const ROMRawDataContainer = ({
         <span>{right?.normal_normal}º 이상</span>
       </div>
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
-        <span>양호</span>
+        <span>정상</span>
         <span>{right?.normal_warning}º~{right?.normal_normal}º</span>
       </div>
       <div className="flex flex-col gap-1 w-full items-center py-2 ">

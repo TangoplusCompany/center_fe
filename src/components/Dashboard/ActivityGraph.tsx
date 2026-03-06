@@ -83,6 +83,24 @@ const ActivityGraph = ({
             </linearGradient>
           </defs>
         </svg>
+        <style>{`
+          @keyframes barRise {
+            from {
+              transform: scaleY(0);
+              opacity: 0;
+            }
+            to {
+              transform: scaleY(1);
+              opacity: 1;
+            }
+          }
+        `}</style>
+        <style>{`
+          @keyframes pulseRing {
+            0% { transform: scale(1); opacity: 0.1; }
+            100% { transform: scale(2); opacity: 0; }
+          }
+        `}</style>
 
         <div className="flex items-end justify-between gap-1 h-24">
           {barData.map((item, index) => {
@@ -100,18 +118,32 @@ const ActivityGraph = ({
                       background: `linear-gradient(to bottom, 
                         hsl(var(--toggle-accent)) ${gradientStart}%, 
                         hsl(var(--background)) 100%
-                      )`
+                      )`,
+                      // ✅ 핵심: transform-origin을 bottom으로 해야 아래서 위로 올라옴
+                      transformOrigin: 'bottom',
+                      animation: `barRise 0.6s cubic-bezier(0.33, 1, 0.68, 1) both`,
+                      animationDelay: `${index * 0.06}s`,
                     }}
                   />
                 </div>
                 
                 {/* 라벨 */}
-                { data.case === 0 ? (
-                  <div className={`px-2 py-1 text-xs font-medium  ${index == barData.length -1 ? 'rounded-full bg-chartLegendActive text-chartLegendActive-foreground': 'text-sub600'}` }>
+                {data.case === 0 ? (
+                  <div className={`px-2 py-1 text-xs font-medium relative ${
+                    index === barData.length - 1 
+                      ? 'rounded-full bg-chartLegendActive text-chartLegendActive-foreground' 
+                      : 'text-sub600'
+                  }`}>
+                    {index === barData.length - 1 && (
+                      <span
+                        className="absolute inset-0 rounded-full bg-chartLegendActive"
+                        style={{ animation: 'pulseRing 2s cubic-bezier(0, 0, 0.2, 1) infinite' }}
+                      />
+                    )}
                     {item.label}
                   </div>
                 ) : (
-                  <div className={`text-xs font-medium text-sub600` }>
+                  <div className="text-xs font-medium text-sub600">
                     {item.label}
                   </div>
                 )}

@@ -16,7 +16,6 @@ import { useQueryParams } from "@/hooks/utils/useQueryParams";
 const CustomPagination = ({ ...props }: IPagination) => {
   const { query, setQueryParam } = useQueryParams();
   const page = Number(query.page || 1);
-
   return (
     <Pagination>
       <PaginationContent>
