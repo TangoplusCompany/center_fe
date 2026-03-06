@@ -51,7 +51,6 @@ export const CenterUserMeasureList = ({
                 onClick={changeMeasure ? () => {
                   changeMeasure(sn)
                   changeView(measure.has_basic === 1 ? "detail" : "rom")
-                  
                 }
                  : undefined}
                 className={changeMeasure ? "cursor-pointer hover:bg-sub100" : ""}
