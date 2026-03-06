@@ -1,4 +1,5 @@
 import { getROMItems } from "@/services/measure/rom/getROMItems";
+import { getROMItemsInMy } from "@/services/measure/rom/getROMItemsInMy";
 import { IMeasureROMItem } from "@/types/measure";
 import { useQuery } from "@tanstack/react-query";
 
@@ -12,14 +13,16 @@ export const useGetROMItems = ({
   user_sn,
   center_sn,
   measure_sn,
+  isResultPage,
 }: {
   user_sn: number;
   center_sn?: number;
   measure_sn: number;
+  isResultPage: boolean;
 }) => {
   return useQuery<IMeasureROMItem[]>({
     queryKey: ["userROMItems", user_sn, center_sn, measure_sn],
-    queryFn: () => getROMItems({ user_sn, center_sn, measure_sn }),
+    queryFn: () => isResultPage ? getROMItemsInMy({ user_sn, measure_sn }) : getROMItems({ user_sn, center_sn, measure_sn }),
     enabled: measure_sn !== undefined ,
   });
 };

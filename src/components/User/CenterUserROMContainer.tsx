@@ -11,20 +11,20 @@ import { useGetROMItems } from "@/hooks/api/measure/rom/useGetROMItems";
 
 export interface UserROMProps {
   userSn: number,
-  measureSn: number
+  measureSn: number,
+  isResultPage: boolean
 }
 export const CenterUserROMContainer = ({
   userSn,
   measureSn,
+  isResultPage,
 }: UserROMProps) => {
-  // const [bodyPart,] = useState(0); // 상단 탭 선택하는 bodyPart
+
   const [measureType, setMeasureType] = useState(-1); // 이전 항목 선택을 관리하는 ROM 타입
 
   const centerSn = useAuthStoreOptional((state) => state.centerSn, 0);
   const [page, setPage] = useState(1);
-  // const onPartSelect = (part: number) => {
-  //   setBodyPart(part);
-  // };
+
   const onROMItemSelect = (romPair : ComparePair) => {
     setRomPair(romPair)
   }
@@ -52,6 +52,7 @@ export const CenterUserROMContainer = ({
     user_sn: userSn,
     center_sn: centerSn,
     measure_sn: measureSn,
+    isResultPage: isResultPage
   });
   
   const {
@@ -74,6 +75,7 @@ export const CenterUserROMContainer = ({
     user_sn: userSn,
     center_sn: centerSn,
     rom_result_sn: romPair[0],
+    isResultPage: isResultPage
   })
   
   // rightROMItemDetail
@@ -85,6 +87,7 @@ export const CenterUserROMContainer = ({
     user_sn: userSn,
     center_sn: centerSn,
     rom_result_sn: romPair[1],
+    isResultPage: isResultPage
   })
   
   return (

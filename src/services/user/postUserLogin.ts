@@ -74,7 +74,7 @@ export const postUserLogin = async ({
     // 사용자 로그인 API 호출
     // TODO: 백엔드에서 CORS 설정 완료되면 직접 호출 가능
     const { data } = await axios.post<IResultPageLoginResponse>(
-      "https://gym.tangoplus.co.kr/user_api/v1/login",
+      process.env.NEXT_PUBLIC_API_URL_V1 + "/login",
       {
         mobile,
         pin_password,

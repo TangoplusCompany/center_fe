@@ -46,9 +46,9 @@ const CenterUserMeasureListContainer = ({
     isResultPage,
   });
 
-  const filteredList = isResultPage ? userMeasureList?.measurement_list.filter((it) =>
-    it.measurement_type === "basic_only"
-  ) : userMeasureList?.measurement_list
+  // const filteredList = isResultPage ? userMeasureList?.measurement_list.filter((it) =>
+  //   it.measurement_type === "basic_only"
+  // ) : userMeasureList?.measurement_list
   const handleSortChange = (value: string) => {
     setQueryParam([
       ["sort", value], // ✅ "asc" 또는 "desc" 그대로 전달
@@ -99,7 +99,7 @@ const CenterUserMeasureListContainer = ({
           userMeasureList && (
             <>
               <CenterUserMeasureList
-                measures={filteredList ?? []}
+                measures={userMeasureList.measurement_list ?? []}
                 changeMeasure={changeMeasure ? (sn) => changeMeasure(sn) : undefined}
                 selectCompareSn={selectCompareSn}
                 changeView={changeView}
