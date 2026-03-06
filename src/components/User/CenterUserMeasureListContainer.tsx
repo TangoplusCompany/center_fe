@@ -46,9 +46,9 @@ const CenterUserMeasureListContainer = ({
     isResultPage,
   });
 
-  const filteredList = userMeasureList?.measurement_list.filter((it) =>
+  const filteredList = isResultPage ? userMeasureList?.measurement_list.filter((it) =>
     it.measurement_type === "basic_only"
-  );
+  ) : userMeasureList?.measurement_list
   const handleSortChange = (value: string) => {
     setQueryParam([
       ["sort", value], // ✅ "asc" 또는 "desc" 그대로 전달
