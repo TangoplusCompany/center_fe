@@ -37,24 +37,33 @@ export const ROMItemContainer = ({
   const handleROMItemSelect = (measureType: number) => {
     const pair = ROM_PAIRS.find(([a, b]) => a === measureType || b === measureType);
 
-    const romPair : ComparePair = measureType <= 21 ?
-      // 정면일경우 그대로 좌우측면일 경우 romSn을 반대로 넣어 관절 방향 매칭
-      [
-        datas.find((item) => item.measure_type === pair?.[0])?.sn,
-        datas.find((item) => item.measure_type === pair?.[1])?.sn,
-      ]
-     :
-      [
-        datas.find((item) => item.measure_type === pair?.[1])?.sn,
-        datas.find((item) => item.measure_type === pair?.[0])?.sn,
-      ]
+    // const romPair : ComparePair = measureType <= 21 ?
+    //   // 정면일경우 그대로 좌우측면일 경우 romSn을 반대로 넣어 관절 방향 매칭
+    //   [
+    //     datas.find((item) => item.measure_type === pair?.[0])?.sn,
+    //     datas.find((item) => item.measure_type === pair?.[1])?.sn,
+    //   ]
+    //  :
+    //   [
+    //     datas.find((item) => item.measure_type === pair?.[1])?.sn,
+    //     datas.find((item) => item.measure_type === pair?.[0])?.sn,
+    //   ]
+    const romPair : ComparePair = [
+      datas.find((item) => item.measure_type === pair?.[0])?.sn,
+      datas.find((item) => item.measure_type === pair?.[1])?.sn,
+    ]
     onROMItemSelect?.(romPair)
   }
   return (
-    <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-4">
-      {sortedDatas.map((item, index) => (
-        <ROMItemCard key={index} romItem={item} handleROMItemSelect={handleROMItemSelect} />
-      ))}
+    <div className="w-full flex flex-col gap-4">
+      <div className="text-base text-muted-foreground text-sub700">
+        ROM 측정날짜: <span className="font-semibold text-foreground ">{datas[0].reg_date.slice(0,16)}</span>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {sortedDatas.map((item, index) => (
+          <ROMItemCard key={index} romItem={item} handleROMItemSelect={handleROMItemSelect} />
+        ))}
+      </div>
     </div>
   );
 };

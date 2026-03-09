@@ -72,7 +72,9 @@ export const useMeasureListForDetail = ({
       user_sn: item.user_sn,
       user_uuid: "",
       device_sn: 0,
-      t_score: 0,
+      has_basic: 0,
+      has_rom: 0,
+      measurement_type: "basic_only"
     }));
   }, [filteredItems]);
 

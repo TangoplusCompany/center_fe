@@ -3,23 +3,24 @@ import ROMRawDataGraph from "./RawDataGraph";
 import ROMRawDataUnit from "./RawDataUnit";
 import { useGetMeasureROMGraphJson } from "@/hooks/api/measure/rom/useGetMeasureROMGraphJson";
 import { Skeleton } from "@/components/ui/skeleton";
+import { CompareSlot } from "@/types/compare";
+
 interface ROMRawDataContainerProps {
   left: IMeasureROMItemDetail;
   right?: IMeasureROMItemDetail;
-  fileName0: string;
-  fileName1 ?: string;
+  onCompareDialogOpen: (slot: CompareSlot, selectedMeasureType?: number) => void;
 }
+
 export const ROMRawDataContainer = ({
   left,
   right,
-  fileName0,
-  fileName1,
+  onCompareDialogOpen,
 } : ROMRawDataContainerProps) => {
   const { data: measureJson0, isLoading: jsonLoading0, isError: jsonError0 } = useGetMeasureROMGraphJson(
-    fileName0
+    left.measure_server_data_json_name
   );
   const { data: measureJson1, isLoading: jsonLoading1, isError: jsonError1 } = useGetMeasureROMGraphJson(
-    fileName1
+    right?.measure_server_data_json_name
   );
 
   const rangeComponent0 = (
@@ -74,7 +75,7 @@ export const ROMRawDataContainer = ({
   return (
     <div className="grid grid-cols-2 gap-4">
       <div className="flex flex-col gap-4">
-        <ROMRawDataUnit data={left} />
+        <ROMRawDataUnit data={left} onCompareDialogOpen={onCompareDialogOpen} compareSlot={1}  />
         <div className="flex flex-col py-2 rounded-xl bg-sub100 w-full h-full">
           {rangeComponent0}
           <div className="p-2 flex flex-col gap-2">
@@ -86,7 +87,7 @@ export const ROMRawDataContainer = ({
 
       {right && (
         <div className="flex flex-col gap-4">
-        <ROMRawDataUnit data={right} />
+        <ROMRawDataUnit data={right} onCompareDialogOpen={onCompareDialogOpen} compareSlot={0}/>
         <div className="flex flex-col py-2 rounded-xl bg-sub100 w-full h-full">
           {rangeComponent1}
            <div className="p-2 flex flex-col gap-2">

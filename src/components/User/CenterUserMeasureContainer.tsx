@@ -168,7 +168,7 @@ const CenterUserMeasureContainer = ({
         </>
       )}
       {currentView === "rom"  && (
-        <CenterUserROMContainer userSn={userSn} measureSn={measureSn} />
+        <CenterUserROMContainer userSn={userSn} measureSn={measureSn} isResultPage={isResultPage} />
       )}
 
     </>

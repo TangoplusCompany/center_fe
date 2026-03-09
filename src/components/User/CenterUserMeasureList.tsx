@@ -9,6 +9,7 @@ import {
 import { CompareSlot } from "@/types/compare";
 import { viewType } from "./CenterUserDetail";
 import { IUserMeasureListItem } from "@/types/user";
+import { formatDate } from "@/utils/formatDate";
 
 export const CenterUserMeasureList = ({
   measures,
@@ -51,13 +52,12 @@ export const CenterUserMeasureList = ({
                 onClick={changeMeasure ? () => {
                   changeMeasure(sn)
                   changeView(measure.has_basic === 1 ? "detail" : "rom")
-                  
                 }
                  : undefined}
                 className={changeMeasure ? "cursor-pointer hover:bg-sub100" : ""}
               >
 
-                <TableCell className="text-center text-xs sm:text-sm whitespace-nowrap">{measure.measure_date}</TableCell>
+                <TableCell className="text-center text-xs sm:text-sm whitespace-nowrap">{formatDate(measure.measure_date)}</TableCell>
                 <TableCell className="text-center font-medium text-xs sm:text-sm whitespace-nowrap">
                   {measure.center_name ?? "-"}
                 </TableCell>

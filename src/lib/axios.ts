@@ -141,8 +141,8 @@ customAxios.interceptors.response.use(
  * 사용자 전용 Axios 인스턴스
  * result-page에서 사용하는 사용자 API 호출용
  */
-export const customUserAxios = axios.create({
-  baseURL: "https://gym.tangoplus.co.kr/user_api/v1",
+export const customUserAxios = axios.create({ 
+  baseURL: process.env.NEXT_PUBLIC_API_URL_V1,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",

@@ -46,9 +46,9 @@ const CenterUserMeasureListContainer = ({
     isResultPage,
   });
 
-  const filteredList = isResultPage ? userMeasureList?.measurement_list.filter((it) =>
-    it.measurement_type === "basic_only"
-  ) : userMeasureList?.measurement_list
+  // const filteredList = isResultPage ? userMeasureList?.measurement_list.filter((it) =>
+  //   it.measurement_type === "basic_only"
+  // ) : userMeasureList?.measurement_list
   const handleSortChange = (value: string) => {
     setQueryParam([
       ["sort", value], // ✅ "asc" 또는 "desc" 그대로 전달
@@ -70,8 +70,8 @@ const CenterUserMeasureListContainer = ({
         <div className="flex w-full justify-between items-center">
           {/* 총 갯수 표시 */}
           {userMeasureList && (
-            <div className="text-base text-muted-foreground ">
-              총 <span className="font-semibold text-foreground">{userMeasureList.total}</span>건
+            <div className="text-base text-muted-foreground text-sub700">
+              총 <span className="font-semibold text-foreground ">{userMeasureList.total}</span>건
             </div>
           )}
           <div className="flex items-center gap-4 ">
@@ -99,7 +99,7 @@ const CenterUserMeasureListContainer = ({
           userMeasureList && (
             <>
               <CenterUserMeasureList
-                measures={filteredList ?? []}
+                measures={userMeasureList.measurement_list ?? []}
                 changeMeasure={changeMeasure ? (sn) => changeMeasure(sn) : undefined}
                 selectCompareSn={selectCompareSn}
                 changeView={changeView}
