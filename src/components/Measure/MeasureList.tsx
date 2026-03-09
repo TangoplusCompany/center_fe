@@ -70,7 +70,10 @@ export const MeasureList = ({
 }: {
   measurements: IMeasureList[];
 }) => {
-  const [list, setList] = useState<IMeasureList[]>(measurements);
+  const [list, setList] = useState<IMeasureList[]>(
+    measurements.filter(it => it.measurement_type === "basic_only")
+  );
+  
   useEffect(() => {
     setList(measurements);
   }, [measurements]);
@@ -93,7 +96,6 @@ export const MeasureList = ({
             <TableHead className="text-center whitespace-nowrap">전화번호</TableHead>
             <TableHead className="text-center whitespace-nowrap">측정일</TableHead>
             <TableHead className="text-center whitespace-nowrap">측정기기</TableHead>
-            {/* <TableHead className="text-center whitespace-nowrap">측정점수</TableHead> */}
             <TableHead className="text-right whitespace-nowrap"></TableHead>
           </TableRow>
         </TableHeader>

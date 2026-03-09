@@ -1,18 +1,34 @@
 # 탱고바디 관리자 페이지
-탱고바디의 관리자 페이지 레포지토리 입니다. 
+
+탱고바디의 관리자 페이지 레포지토리 입니다.
+
 ## 개요
+
 탱고바디 관리자 페이지는 센터 관리자들이 사용하는 페이지로 사용자조회, 측정조회, 매니저관리, 센터관리 등 다양한 백오피스 업무를 볼 수 있는 페이지입니다.
 
 ## 기술 스택
 
-|분야|기술 스택|
-|---|---|
-|Frontend|```React 19``` ```Next 15``` ```Typescript``` ```zustand``` ```tailwindCSS``` ```shadcn/ui``` ```tanstack-query``` ```zod``` ```react-hook-form``` ```qrcode.react``` |
-|Backend|```node.js(Next 15 Server)``` ```PHP```|
-|Infra|```vercel```|
-|기타|```ESLint``` ```Prettier```|
+| 분야     | 기술 스택                                                                                                                     |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Frontend | `React 19` `Next 15` `Typescript` `zustand` `tailwindCSS` `shadcn/ui` `tanstack-query` `zod` `react-hook-form` `qrcode.react` |
+| Backend  | `node.js(Next 15 Server)` `PHP`                                                                                               |
+| Infra    | `vercel`                                                                                                                      |
+| 기타     | `ESLint` `Prettier` `react-unity-webgl`                                                                                       |
+
+## 화면 구조
+
+### 관리자 페이지
+
+배포 환경: https://admin.tangobody.co.kr
+local 환경: https://localhost:4862/
+
+### 개인 페이지
+
+배포 환경: https://my.tangobody.co.kr
+local 환경: https://localhost:4862/result-page
 
 ## 폴더 구조
+
 ```
 src/              # 루트 디렉토리
 ├── app/          # 페이지 디렉토리
@@ -29,16 +45,12 @@ src/              # 루트 디렉토리
 └── middleware    # 미들웨어
 ```
 
-## 20260121 Vercel Actions 연동 배포 순서
-1. 각 작업 branch에 push (ex: feature)
-2. develop에 1차 pull request ( merge 오류 검수 목적)
-3. main에 최종 pull request (검수 후 실제 vercel에 자동화 배포)
-> 추후 AWS 로 이전 시 변경될 수 있음
-
 ## 설치 및 실행 방법
-탱고바디 관리자 페이지 프로젝트는 ```npm``` 과 ```pnpm``` 을 이용하여 ```modules``` 를 설치하고 실행할 수 있습니다.
+
+탱고바디 관리자 페이지 프로젝트는 `npm` 과 `pnpm` 을 이용하여 `modules` 를 설치하고 실행할 수 있습니다. vercel 자동 배포를 위해 pnpm사용을 권장합니다.
 
 ### 1. 설치
+
 ```
 # use npm
 npm install
@@ -48,6 +60,7 @@ pnpm add
 ```
 
 ### 2. 실행
+
 ```
 # use npm
 npm run dev
@@ -79,7 +92,9 @@ createServer(options, (req, res) => {
 # 이후 해당 파일 node로 실행
 # node 파일명.js
 ```
+
 ### 3. 빌드
+
 ```
 # use npm
 npm run build
@@ -89,14 +104,17 @@ pnpm build
 ```
 
 ### 4. 배포
-```Github```의 ```main branch``` 에 ```merge``` 할 경우 ```vercel```을 통해 자동 배포 됩니다.
+
+`Github`의 `main branch` 에 `merge` 할 경우 `vercel`을 통해 자동 배포 됩니다.
 
 추후 배포 환경 변경시 해당 환경에 맞게 배포를 진행하시면 됩니다.
 
 ## API 연동 및 환경변수 설명
-API는 환경변수에 주소를 저장하고 사용중입니다. API 관련 문서는 ```Notion``` 을 참고해 주시기 바랍니다.
+
+API는 환경변수에 주소를 저장하고 사용중입니다. API 관련 문서는 `Notion` 을 참고해 주시기 바랍니다.
 
 환경변수 예시는 다음과 같습니다.
+
 ```
 NEXT_PUBLIC_API_URL=
 NEXT_PUBLIC_FILE_URL=
@@ -105,8 +123,8 @@ TANGO_SECRET_KEY=
 TANGO_SECRET_IV=
 ```
 
-
 ## 기타
-```ESLint``` 와 ```prettier``` 로 코드 컨벤션을 준수하고 있습니다. 빌드시 에러가 발생할 수 있으니 컨벤션을 준수해 주시면됩니다.
 
-현재 배포 환경은 ```vercel``` 입니다. 다만 무료로 사용중인만큼 트래픽에 대한 한계와 초과시 비용에 대한 문제가 발생할 수 있으니 추후 변경 바랍니다.
+`ESLint` 와 `prettier` 로 코드 컨벤션을 준수하고 있습니다. 빌드시 에러가 발생할 수 있으니 컨벤션을 준수해 주시면됩니다.
+
+현재 배포 환경은 `vercel` 입니다. 다만 무료로 사용중인만큼 트래픽에 대한 한계와 초과시 비용에 대한 문제가 발생할 수 있으니 추후 변경 바랍니다.

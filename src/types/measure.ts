@@ -40,9 +40,10 @@ export interface IMeasureList {
   device_sn: number;
   device_name: string;
   measure_date: string;
-  t_score: number;
-  /** 기록 비교 리스트 등에서 표시용 (측정 위치/센터명) */
   center_name?: string;
+  has_basic : 0 | 1;
+  has_rom : 0 | 1;
+  measurement_type: "rom_only" | "basic_only" | "basic_and_rom"
 }
 
 

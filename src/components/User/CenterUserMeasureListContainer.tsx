@@ -70,8 +70,8 @@ const CenterUserMeasureListContainer = ({
         <div className="flex w-full justify-between items-center">
           {/* 총 갯수 표시 */}
           {userMeasureList && (
-            <div className="text-base text-muted-foreground ">
-              총 <span className="font-semibold text-foreground">{userMeasureList.total}</span>건
+            <div className="text-base text-muted-foreground text-sub700">
+              총 <span className="font-semibold text-foreground ">{userMeasureList.total}</span>건
             </div>
           )}
           <div className="flex items-center gap-4 ">
