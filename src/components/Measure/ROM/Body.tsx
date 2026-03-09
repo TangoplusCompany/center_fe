@@ -6,8 +6,8 @@ import { IMeasureROMItemDetail } from "@/types/measure";
 import CompareBodySkeleton from "../Compare/CompareBodySkeleton";
 
 export interface ROMBodyProps {
-  data0: IMeasureROMItemDetail
-  data1? : IMeasureROMItemDetail 
+  data0: IMeasureROMItemDetail;
+  data1? : IMeasureROMItemDetail;
   onCompareDialogOpen: (slot: CompareSlot, selectedMeasureType?: number) => void;
   onROMItemSelect ?: (romSn: ComparePair) => void;
   isLoading0 : boolean;
@@ -65,7 +65,7 @@ export const ROMBody = ({
               onROMItemSelect([undefined, undefined])
             };
           }}
-          className="px-3 py-1 rounded-md text-sm text-sub700"
+          className="px-3 py-1 rounded-md text-base text-sub700"
         >
           ← 목록으로
         </button>
@@ -99,7 +99,10 @@ export const ROMBody = ({
         )}
       </div> */}
       <RawDataDynamic left={leftData} right={rightData} onCompareDialogOpen={onCompareDialogOpen} /> 
-      <ROMRawDataContainer left={data0} right={data1 ?? undefined} fileName0={data0.measure_server_data_json_name} fileName1={data1?.measure_server_data_json_name ?? undefined} />
+      <ROMRawDataContainer 
+        left={data0}
+        right={data1 ?? undefined} 
+        onCompareDialogOpen={onCompareDialogOpen} />
     </div>
   )
 };

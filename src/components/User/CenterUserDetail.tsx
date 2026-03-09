@@ -10,9 +10,9 @@ import { useMeasureListForCompare } from "@/hooks/api/user/useMeasureListForComp
 import { MeasurePickerDialog } from "../Measure/Compare/CompareMeasurePickerDialog";
 import { ComparePair, CompareSlot } from "@/types/compare";
 import AIUserContainer from "./ai/UserContainer";
-import { useGetUserDashboard } from "@/hooks/api/user/useGetUserDashboard";
-import { IUserDashBoard } from "@/types/measure";
-import { formatDate } from "@/utils/formatDate";
+// import { useGetUserDashboard } from "@/hooks/api/user/useGetUserDashboard";
+// import { IUserDashBoard } from "@/types/measure";
+// import { formatDate } from "@/utils/formatDate";
 import { useGetUserDetail } from "@/hooks/api/user/useGetUserDetail";
 import { resultPageUserStore } from "@/stores/ResultPageUserStore";
 
@@ -72,10 +72,10 @@ const CenterUserDetail = ({
   });
   
   // 측정일을 가져오기 위한 대시보드 데이터
-  const { data: dashboardData } = useGetUserDashboard<IUserDashBoard>({
-    user_sn: userSn,
-    isResultPage,
-  });
+  // const { data: dashboardData } = useGetUserDashboard<IUserDashBoard>({
+  //   user_sn: userSn,
+  //   isResultPage,
+  // });
   
   // 사용자 이름: userDetailData가 있으면 우선 사용, 없으면 userName prop 사용
   const displayUserName = userDetailData?.user_name || userName;
@@ -137,11 +137,11 @@ const CenterUserDetail = ({
           <div className="w-1 h-12 bg-toggleAccent rounded-full"></div>
           <h2 className="text-3xl font-semibold text-[#333] dark:text-white flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
             <span>{displayUserName ? `${displayUserName}님` : "사용자"} 측정 결과</span>
-            {dashboardData?.latest_measure_summary?.measure_date && (
+            {/* {dashboardData?.latest_measure_summary?.measure_date && (
               <span className="text-sm text-sub300 dark:text-sub200 sm:pl-2">
                 {formatDate(dashboardData.latest_measure_summary.measure_date)}
               </span>
-            )}
+            )} */}
           </h2>
         </div>
         {isResultPage && (

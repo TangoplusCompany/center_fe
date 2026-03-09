@@ -308,23 +308,31 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     setIsSeeking(false);
     isSeekingRef.current = false;
   };
-
-  const finalCanvasTransform = customCanvasTransform ?? canvasTransform;
+  const isSymmetryRange = romType && (romType >= 21 && romType <= 48);
+  const finalCanvasTransform = React.useMemo(() => {
+  const baseTransform = customCanvasTransform ?? canvasTransform;
+  // isRotated이고 대칭 범위일 때만 scaleX(-1) 추가
+  if (isRotated && isSymmetryRange) {
+    return `${baseTransform} scaleX(-1)`;
+  }
+  return baseTransform;
+}, [customCanvasTransform, canvasTransform, isRotated, isSymmetryRange]);
   const isCompareCrop = isCompare && !isRotated;
   // 기본 video className과 커스텀 className 병합 (cn 사용으로 tailwind 충돌 방지)
+
   const defaultVideoBaseClasses = isRotated 
     ? "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" 
     : isCompareCrop
       ? "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 h-full w-auto scale-[2.35]" // 좌우 crop을 위한 확대
       : "w-full h-full";
   const defaultVideoRotatedClasses = isRotated 
-    ? "-rotate-90 h-full w-auto scale-[1.75]" 
+    ? ` h-full w-auto ${isSymmetryRange ? "rotate-90 scale-x-[-1.75] scale-y-[1.75]" : "-rotate-90 scale-[1.75]"}` 
     : "w-full h-full";
   const finalVideoClassName = cn(
     defaultVideoBaseClasses,
     videoClassName ?? defaultVideoRotatedClasses
   );
-  
+  console.log(finalVideoClassName)
   // 기본 stage className과 커스텀 className 병합
   const defaultStageClasses = "relative mx-auto w-full h-[480px] md:h-[560px] lg:h-[680px] overflow-hidden";
   const finalStageClassName = cn(defaultStageClasses, stageClassName);
