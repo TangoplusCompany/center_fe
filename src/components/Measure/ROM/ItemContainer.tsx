@@ -56,9 +56,7 @@ export const ROMItemContainer = ({
   }
   return (
     <div className="w-full flex flex-col gap-4">
-      <div className="text-base text-muted-foreground text-sub700">
-        ROM 측정날짜: <span className="font-semibold text-foreground ">{datas[0].reg_date.slice(0,16)}</span>
-      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {sortedDatas.map((item, index) => (
           <ROMItemCard key={index} romItem={item} handleROMItemSelect={handleROMItemSelect} />

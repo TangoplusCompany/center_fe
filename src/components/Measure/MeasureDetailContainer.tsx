@@ -8,7 +8,7 @@ import { useMeasureDecrypt } from "@/hooks/auth/useMeasureDecrypt";
 import { Skeleton } from "../ui/skeleton";
 import { formatDate } from "@/utils/formatDate";
 
-const MeasureDetailSkeleton = () => {
+export const MeasureDetailSkeleton = () => {
   return (
     <div className="flex flex-col gap-4 w-full">
       <Skeleton className="w-64 h-12" />
