@@ -63,7 +63,7 @@ export const CenterUserMeasureList = ({
                 </TableCell>
                 <TableCell className="text-center text-xs sm:text-sm whitespace-nowrap">{measure.device_name}</TableCell>
                 <TableCell className="text-center">
-                  <div className="w-fit px-2 text-xs sm:text-sm text-center whitespace-nowrap text-toggleAccent bg-toggleAccent-background border border-toggleAccent rounded-full mx-auto">
+                  <div className="w-fit px-2 text-xs sm:text-sm text-center whitespace-nowrap text-toggleAccent dark:text-white bg-toggleAccent-background dark:bg-toggleAccent border border-toggleAccent rounded-full mx-auto">
                     {measureTypeMap[measure.measurement_type]}
                   </div>
                 </TableCell>

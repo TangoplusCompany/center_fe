@@ -1,4 +1,4 @@
-"use-client";
+"use client";
 
 import AIExerciseContainer from "./ExerciseContainer";
 import { useGetAIAnalysis } from "@/hooks/api/ai/useGetAIAnalysis";

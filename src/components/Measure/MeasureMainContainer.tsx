@@ -29,7 +29,6 @@ const MeasureMainContainer = () => {
         search={searchValue} 
         onSearchChange={onChangeSearch}
       />
-
       
       <MeasureListContainer handleTotalItems={handleTotalItems} searchValue={searchValue} />
     </div>
