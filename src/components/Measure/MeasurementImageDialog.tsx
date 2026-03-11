@@ -175,7 +175,13 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
               onClick={() => onGridToggle(!showGrid)}
               style={{boxShadow: RadialGradientShadow}}
             >
-              {showGrid ? '그리드 끄기' : '그리드 켜기'}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/icons/ic_grid.svg"
+                alt="그리드 라디오버튼"
+                className="w-4 h-4"
+              />
+              <span className="hidden sm:inline">{showGrid ? '그리드 끄기' : '그리드 켜기'}</span>
             </Button>
             <Button
               className="z-5 bg-white/10 backdrop-blur-sm hover:bg-white/20"
@@ -184,7 +190,13 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
               onClick={() => onLineToggle(!showLine)}
               style={{boxShadow: RadialGradientShadow}}
             >
-              {showLine ? '랜드마크 끄기' : '랜드마크 켜기'}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/icons/ic_skeleton.svg"
+                alt="랜드마크 라디오버튼"
+                className="w-4 h-4"
+              />
+              <span className="hidden sm:inline">{showLine ? '랜드마크 끄기' : '랜드마크 켜기'}</span>
             </Button>
           </div>
 

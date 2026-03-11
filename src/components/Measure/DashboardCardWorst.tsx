@@ -3,7 +3,7 @@
 import { TWorstPart } from "@/types/dashboard";
 
 
-const MeasureWorst = ({ data }: { data: TWorstPart }) => {
+const DashboardCardWorst = ({ data }: { data: TWorstPart }) => {
 
   const imageSrc = {
     "목": "img_neck_2.svg",
@@ -63,4 +63,4 @@ const MeasureWorst = ({ data }: { data: TWorstPart }) => {
   );
 };
 
-export default MeasureWorst;
+export default DashboardCardWorst;

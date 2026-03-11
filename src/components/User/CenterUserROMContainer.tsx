@@ -8,6 +8,9 @@ import { useGetROMItemHistory } from "@/hooks/api/measure/rom/useGetROMItemHsito
 import ROMBody from "../Measure/ROM/Body";
 import { useGetROMItemDetail } from "@/hooks/api/measure/rom/useGetROMItemDetail";
 import { useGetROMItems } from "@/hooks/api/measure/rom/useGetROMItems";
+import { formatDate } from "@/utils/formatDate";
+import { Button } from "../ui/button";
+import ROMDashboardContainer from "../Measure/ROM/DashboardContainer";
 
 export interface UserROMProps {
   userSn: number,
@@ -89,59 +92,81 @@ export const CenterUserROMContainer = ({
     rom_result_sn: romPair[1],
     isResultPage: isResultPage
   })
-  
+  const [showROMDashboard, setShowROMDashboard] = useState(false);
   return (
     <div className="flex flex-col gap-4">
-      {(romPair[0] === undefined && romPair[1] === undefined) && (
-        romLoading ? (
-          <div className="grid grid-cols-2 gap-4">
-            <Skeleton className="w-full h-64 rounded-xl" />
-            <Skeleton className="w-full h-64 rounded-xl" />
-            <Skeleton className="w-full h-64 rounded-xl" />
-            <Skeleton className="w-full h-64 rounded-xl" />
-          </div>
-        ) : romError ? (
-          <div className="flex items-center justify-center h-[200px] text-sm text-red-400">
-            오류가 발생했습니다. 잠시후 다시 시도해주세요.
-          </div>
-        ) : (
-          <ROMItemContainer datas={romItems ?? []} onROMItemSelect={onROMItemSelect} />
-        )
-      )}
-      {(romPair !== undefined && romDetail0 !== undefined) && (
-        <ROMBody 
-        data0={romDetail0} 
-        data1={romDetail1} 
-        onCompareDialogOpen={onCompareDialogOpen} 
-        onROMItemSelect={onROMItemSelect} 
-        isLoading0={romDLoading0} 
-        isError0={romDError0} 
-        isLoading1={romDLoading1} 
-        isError1={romDError1}
+      {showROMDashboard ? (
+        /* --- 1. 대시보드 화면 --- */
+        <ROMDashboardContainer 
+          userSn={userSn} 
+          centerSn={centerSn} 
         />
+      ) : (
+        /* --- 2. 기존 목록/상세 화면 (전체) --- */
+        <>
+          <div className="flex text-base justify-between items-center">
+            {formatDate(romItems?.[0].reg_date ?? "")}
+            <Button onClick={() => setShowROMDashboard(true)}>
+              부위별 대시보드
+            </Button>
+          </div>
+
+          {/* 목록 섹션 (데이터가 선택되지 않았을 때) */}
+          {(romPair[0] === undefined && romPair[1] === undefined) && (
+            romLoading ? (
+              <div className="grid grid-cols-2 gap-4">
+                {[...Array(4)].map((_, i) => (
+                  <Skeleton key={i} className="w-full h-64 rounded-xl" />
+                ))}
+              </div>
+            ) : romError ? (
+              <div className="flex items-center justify-center h-[200px] text-sm text-red-400">
+                오류가 발생했습니다. 잠시후 다시 시도해주세요.
+              </div>
+            ) : (
+              <ROMItemContainer datas={romItems ?? []} onROMItemSelect={onROMItemSelect} isUserPage={true} />
+            )
+          )}
+
+          {/* 상세 섹션 (데이터가 선택되었을 때) */}
+          {(romPair[0] !== undefined && romDetail0 !== undefined) && (
+            <ROMBody 
+              data0={romDetail0} 
+              data1={romDetail1} 
+              onCompareDialogOpen={onCompareDialogOpen} 
+              onROMItemSelect={onROMItemSelect} 
+              isLoading0={romDLoading0} 
+              isError0={romDError0} 
+              isLoading1={romDLoading1} 
+              isError1={romDError1}
+            />
+          )}
+
+          {/* 다이얼로그는 기존 화면의 부속물이므로 여기에 위치 */}
+          <ROMPickerDialog
+            open={isCompareDialogOpen}
+            items={romHistory?.rom_results ?? []}
+            title={romItems?.find((it) => it.measure_type === measureType)?.title ?? ""}
+            comparePair={romPair}
+            activeSlot={activeSlot}
+            onOpenChange={setIsCompareDialogOpen}
+            onToggleCompareSn={(sn, slot) => {
+              handleToggleCompareSn(sn, slot);
+              setIsCompareDialogOpen(false);
+            }}
+            pagination={{
+              page: romHistory?.page ?? 1,
+              limit: romHistory?.limit ?? 10,
+              last_page: romHistory?.last_page ?? 1,
+              setPage,
+            }}
+            isLoading={romHLoading}
+            isError={romHError}
+          />
+        </>
       )}
-      <ROMPickerDialog
-        open={isCompareDialogOpen}
-        items={romHistory?.rom_results ?? [] } 
-        title={romItems?.find((it) => it.measure_type === measureType)?.title ?? ""}
-        comparePair={romPair}
-        activeSlot={ activeSlot }
-        onOpenChange={setIsCompareDialogOpen}
-        onToggleCompareSn={(sn, slot) => {
-          handleToggleCompareSn(sn, slot);
-          setIsCompareDialogOpen(false);
-        }}
-        pagination={{
-          page: romHistory?.page ?? 1,
-          limit: romHistory?.limit ?? 10,
-          last_page: romHistory?.last_page ?? 1,
-          setPage,
-        }}
-        isLoading={romHLoading}
-        isError={romHError}
-      />
     </div>
-  )
+  );
 };
 
 export default CenterUserROMContainer;

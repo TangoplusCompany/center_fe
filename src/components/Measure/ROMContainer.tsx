@@ -140,7 +140,7 @@ export const MeasureROMContainer = () => {
             >
               ← 목록으로
             </button>
-            <ROMItemContainer datas={romItems ?? []} onROMItemSelect={onROMItemSelect} />
+            <ROMItemContainer datas={romItems ?? []} onROMItemSelect={onROMItemSelect} isUserPage={false} />
           </div>
           
         )

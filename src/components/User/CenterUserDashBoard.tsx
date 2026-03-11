@@ -1,7 +1,7 @@
 "use client";
 
-import MeasureWorst from "@/components/Measure/MeasureWorst";
-import MeasureBest from "@/components/Measure/MeasureBest";
+import DashboardCardWorst from "@/components/Measure/DashboardCardWorst";
+import DashboardCardBest from "@/components/Measure/DashboardCardBest";
 import MeasurePartHeatMap from "@/components/Measure/MeasurePartHeatmap";
 import { IUserDashBoard, MeasureHistory } from "@/types/measure";
 import { IDayData } from "@/types/IDayData";
@@ -68,10 +68,10 @@ const CenterUserDashBoard = ({
         {/* Worst + Best */}
         <div className="flex flex-col lg:flex-row w-full gap-2 sm:gap-3 md:gap-4">
           <div className="w-full lg:flex-1 min-w-0">
-            <MeasureWorst data={worstPart} />
+            <DashboardCardWorst data={worstPart} />
           </div>
           <div className="w-full lg:flex-1 min-w-0">
-            <MeasureBest data={bestPart} />
+            <DashboardCardBest data={bestPart} />
           </div>
         </div>
 

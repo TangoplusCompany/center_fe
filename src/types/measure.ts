@@ -364,7 +364,7 @@ export interface IMeasureROMItemHistoryResponse {
   rom_results: IMeasureROMItem[];
 }
 
-export interface IMeasureROMItem extends IMeasureROMItemRangeData {
+export interface IMeasureROMItem extends IMeasureROMItemCardData {
   sn: number;
   measure_sn: number;
   user_name: number;
@@ -383,7 +383,7 @@ export interface IMeasureROMGraphJson {
 }
 
 export interface IMeasureROMItemCardData extends IMeasureROMItemRangeData {
-  score: number;
+  score: number; 
   description: string;
   value_1_min: number;
   value_1_max: number;

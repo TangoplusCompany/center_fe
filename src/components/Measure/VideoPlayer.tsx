@@ -332,7 +332,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     defaultVideoBaseClasses,
     videoClassName ?? defaultVideoRotatedClasses
   );
-  console.log(finalVideoClassName)
   // 기본 stage className과 커스텀 className 병합
   const defaultStageClasses = "relative mx-auto w-full h-[480px] md:h-[560px] lg:h-[680px] overflow-hidden";
   const finalStageClassName = cn(defaultStageClasses, stageClassName);

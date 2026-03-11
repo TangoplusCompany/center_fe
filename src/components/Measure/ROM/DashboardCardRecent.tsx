@@ -1,19 +1,16 @@
-"use client";
+import { TROMSelectPart } from "@/types/dashboard";
 
-type TWorstPart = {
-  partName: string;   // 예: '목', '어깨'
-  level: number;      // 예: '위험', '주의'
-  description: string // 설명
-};
-const MeasureBest = ({ data }: { data: TWorstPart }) => {
-    const imageSrc = {
+const ROMDashboardCardRecent = (
+  { data }: { data: TROMSelectPart }
+) => {
+  const imageSrc = {
     "목": "img_neck_0.svg",
     "어깨": "img_shoulder_0.svg",
     "팔꿈치": "img_elbow_0.svg",
     "골반": "img_hip_0.svg",
     "무릎": "img_knee_0.svg",
     "발목": "img_ankle_0.svg"
-  }[data.partName]
+  }[data.romName]
   return (
     <div className="flex flex-col h-full w-full rounded-3xl border-2 border-sub200 dark:border-border shadow-none bg-white dark:bg-muted relative overflow-hidden">
       {/* 배경 이미지 - 제일 뒤로 */}
@@ -42,26 +39,19 @@ const MeasureBest = ({ data }: { data: TWorstPart }) => {
       {/* 왼쪽 내용 */}
       <div className="flex flex-col justify-end flex-1 space-y-3 p-5 mb-6 relative z-10">
         {/* 위험 레벨 배지 */}
-        <div
-          className={`w-fit px-3 py-1 ${
-            data.level === 0
-              ? "bg-toggleAccent text-white"
-              : "bg-secondary text-secondary-foreground"
-          } text-lg font-semibold rounded-xl`}
-        >
-          {data.partName}
+        <div className={`w-fit px-3 py-1 bg-toggleAccent text-white text-lg font-semibold rounded-xl`}>
+          {data.romName}
         </div>
 
-          {/* 설명 박스 */}
-          <div className={`w-fit ${data.level === 2 ? "bg-toggleAccent-foreground/30" : "bg-accent/30"
-          }  rounded-lg p-4`}>
-            <p className="text-base text-primary-foreground leading-relaxed">
-              {data.description}
-            </p>
-          </div>
+        {/* 설명 박스 */}
+        <div className={`w-fit "bg-toggleAccent-foreground/30" rounded-lg p-4`}>
+          <p className="text-base text-primary-foreground leading-relaxed">
+            {data.description}
+          </p>
+        </div>
       </div>
     </div>
   );
 };
 
-export default MeasureBest
+export default ROMDashboardCardRecent;
