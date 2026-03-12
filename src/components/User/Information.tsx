@@ -3,7 +3,7 @@
 import { useGetUserDetail } from "@/hooks/api/user/useGetUserDetail";
 import { useAuthStoreOptional } from "@/providers/AuthProvider";
 import React from "react";
-import UserDetailForm from "./UserDetailForm";
+import UserDetailForm from "./DetailForm";
 import DataError from "../Util/DataError";
 
 interface CenterUserInformationProps {

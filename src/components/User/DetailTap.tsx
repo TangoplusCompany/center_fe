@@ -1,6 +1,6 @@
 "use client";
 
-import { viewType } from "./CenterUserDetail";
+import { viewType } from "./Detail";
 
 const UserDetailTap = ({
   nowTab,

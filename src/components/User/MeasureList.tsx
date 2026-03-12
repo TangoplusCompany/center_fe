@@ -7,7 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { CompareSlot } from "@/types/compare";
-import { viewType } from "./CenterUserDetail";
+import { viewType } from "./Detail";
 import { IUserMeasureListItem } from "@/types/user";
 import { formatDate } from "@/utils/formatDate";
 
@@ -87,7 +87,6 @@ export const CenterUserMeasureList = ({
                       <span className="text-xs sm:text-sm">결과비교</span>
                     </button>
                   )}
-
                 </TableCell>
               </TableRow>
             );

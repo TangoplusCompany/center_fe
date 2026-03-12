@@ -6,9 +6,9 @@ import SkeletonContainer, { SkeletonDatePickerProps } from "./SkeletonContainer"
 import FootStaticContainer, { IMatStaticPressure } from "./Mat/FootStaticContainer";
 import FootDynamicContainer, { IMatOhsPressure } from "./Mat/FootDynamicContainer";
 import KneeTrajectory from "./Mat/KneeTrajectoryContainer";
-import MeasureIntroUpper from "./MeasureIntroUpper";
-import MeasureIntroLower from "./MeasureIntroLower";
-import MeasureIntroPart from "./MeasureIntroPart";
+import MeasureIntroUpper from "./IntroUpper";
+import MeasureIntroLower from "./IntroLower";
+import MeasureIntroPart from "./IntroPart";
 
 const MeasureIntro = ({
   data,

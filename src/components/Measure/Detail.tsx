@@ -8,7 +8,7 @@ import BackMeasurement from "@/components/Measure/Static/BackMeasurement";
 import FrontMeasurement from "@/components/Measure/Static/FrontMeasurement";
 import SideMeasurement from "@/components/Measure/Static/SideMeasurement";
 import { IMeasureList } from "@/types/measure";
-import MeasureIntro from "@/components/Measure/MeasureIntro"
+import MeasureIntro from "@/components/Measure/Intro"
 import { cn } from "@/lib/utils";
 import { actionKakaoEncrypt, actionPrintEncrypt } from "@/app/actions/getCrypto";
 import { postKakaoSend } from "@/app/actions/postKakaoSend";
@@ -16,7 +16,7 @@ import { Button } from "../ui/button";
 import type { DetailPagination } from "@/hooks/api/user/useMeasureListForDetail";
 import { getResultReportUrl } from "@/app/actions/openPrintPage";
 import { SkeletonDatePickerProps } from "./SkeletonContainer";
-import { viewType } from "../User/CenterUserDetail";
+import { viewType } from "../User/Detail";
 type MeasureListType = {
   title: string;
   value: string;
@@ -178,8 +178,6 @@ const MeasureDetail = ({
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-start md:justify-between mb-4 gap-4 w-full">
         <div className="flex-1 min-w-0 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           <TabsList className="relative z-10 flex w-max min-w-full flex-nowrap items-center justify-start bg-transparent p-0 border-none shadow-none">
-            {/* <div className="absolute bottom-0 left-0 w-full h-[3px] bg-sub200 rounded-md" /> */}
-  
             {measureTabs.map((measure) => (
               <TabsTrigger
                 key={measure.value}

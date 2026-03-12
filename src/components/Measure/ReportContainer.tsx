@@ -1,7 +1,7 @@
 import { useGetMeasureSummary } from "@/hooks/api/measure/useGetMeasureSummary";
 import { FootPressureHistory, MeasureFootCOP, MeasureSummary, UpperAndLowerMeasureHistory } from "@/types/measure";
 import { useEffect, useState } from "react";
-import MeasureSummaryContainer from "./MeasureSummaryContainer";
+import MeasureSummaryContainer from "./SummaryContainer";
 import FootTrajectoryContainer from "./Mat/FootTrajectoryContainer";
 import { useGetMeasureFoot } from "@/hooks/api/measure/useGetMeasureFoot";
 

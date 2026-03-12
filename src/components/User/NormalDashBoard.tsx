@@ -2,13 +2,13 @@
 
 import DashboardCardWorst from "@/components/Measure/DashboardCardWorst";
 import DashboardCardBest from "@/components/Measure/DashboardCardBest";
-import MeasurePartHeatMap from "@/components/Measure/MeasurePartHeatmap";
+import MeasurePartHeatMap from "@/components/Measure/PartHeatmap";
 import { IUserDashBoard, MeasureHistory } from "@/types/measure";
 import { IDayData } from "@/types/IDayData";
 import { useGetUserDashboard } from "@/hooks/api/user/useGetUserDashboard";
 import { TWorstPart } from "@/types/dashboard";
-import MeasureReportContainer from "../Measure/MeasureReportContainer";
-import CenterUserDashBoardSkeleton from "./CenterUserDashBoardSkeleton";
+import MeasureReportContainer from "../Measure/ReportContainer";
+import CenterUserDashBoardSkeleton from "./DashBoardSkeleton";
 
 type Mode = "worst" | "best";
 const PARTS = [
@@ -28,7 +28,7 @@ const RISK_PART_KEYS = [
   "ankle",
 ] as const;
 
-const CenterUserDashBoard = ({
+const CenterUserNormalDashBoard = ({
   userSn,
   isResultPage = false,
 }: {
@@ -98,7 +98,7 @@ const CenterUserDashBoard = ({
     </div>
   )
 };
-export default CenterUserDashBoard;
+export default CenterUserNormalDashBoard;
 
 export function calculateExtremePart(
   history: MeasureHistory[],

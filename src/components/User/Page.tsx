@@ -9,8 +9,8 @@ import { Button } from "@/components/ui/button";
 import { UserList } from "@/components/User/UserList";
 import { useAuthStore } from "@/providers/AuthProvider";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
-import { CenterUserAddDialog } from "./CenterUserAddDialog";
-import CenterUserPageSkeleton from "./CenterUserPageSkeleton";
+import { CenterUserAddDialog } from "./AddDialog";
+import CenterUserPageSkeleton from "./PageSkeleton";
 
 const CenterUserPage = () => {
   const { adminRole } = useAuthStore((state) => state);

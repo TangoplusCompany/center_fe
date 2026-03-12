@@ -8,7 +8,7 @@ import {
   emailFiltering,
 } from "@/utils/regexFiltering";
 import { useAddUser } from "@/hooks/api/user/useAddUser";
-import CenterUserSearchContainer from "./CenterUserSearchContainer";
+import CenterUserSearchContainer from "./SearchContainer";
 
 const useUsers = (list: IUnregisterUserData[]) => {
   const [users, setUsers] = useState<IUnregisterUserData[]>(list);

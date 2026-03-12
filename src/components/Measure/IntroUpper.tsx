@@ -2,7 +2,7 @@
 
 import { formatComment } from "@/utils/formatComment";
 import React from "react";
-import { UpperLowerProps } from "./MeasureIntroLower";
+import { UpperLowerProps } from "./IntroLower";
 import { getRiskString } from "../../utils/getRiskString";
 
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
-import CenterUserSearchContainer from './CenterUserSearchContainer';
+import CenterUserSearchContainer from './SearchContainer';
 import { IUnregisterUserData } from '@/types/user';
 import { useAddUser } from '@/hooks/api/user/useAddUser';
 import { emailFiltering, phoneFiltering } from '@/utils/regexFiltering';

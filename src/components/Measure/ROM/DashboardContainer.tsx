@@ -5,10 +5,12 @@ import { useState } from "react";
 import ROMDashboardCardFrequent from "./DashboardCardFrequent";
 import ROMDashboardCardRecent from "./DashboardCardRecent";
 import ROMDashboardBody from "./DashboardBody";
+import { TROMSelectPart } from "@/types/dashboard";
 
 export interface ROMDashboardContainerProps {
   userSn: number;
   centerSn: number;
+  isResultPage: boolean;
 }
 
 
@@ -41,30 +43,32 @@ const ROMDashboardContainer = (
       오류가 발생했습니다. 잠시후 다시 시도해주세요.
     </div>
   );
-
+  const frequentData :TROMSelectPart = {
+    romName: "발목",
+    count: 7,
+    description: `[정면] 발목 굽힘 검사를 ${7}회간 검사했습니다.`
+  }
+  const recentData :TROMSelectPart = {
+    romName: "무릎",
+    count: 0,
+    description: `${"2026-05-21"}에 [오른측면] 무릎관절 폄 검사를 진행했습니다.`
+  }
   return (
     <div className="flex flex-col gap-4">
       <div className="grid grid-cols-2 gap-2">
-        <ROMDashboardCardFrequent data={{
-          romName: "",
-          count: 0,
-          description: ""
-        }} />
-        <ROMDashboardCardRecent data={{
-          romName: "",
-          count: 0,
-          description: ""
-        }} />
+        <ROMDashboardCardFrequent data={frequentData} />
+        <ROMDashboardCardRecent data={recentData} />
       </div>
 
       <ROMDashboardBody 
-        userSn={data.userSn} 
-        centerSn={centerSn} 
-        measureType={measureType} 
-        jointROMItems={jointROMItems ?? []} 
+        userSn={data.userSn}
+        centerSn={centerSn}
+        bodyPart={bodyPartNumber}
+        setMeasureType={setMeasureType}
+        measureType={measureType}
+        jointROMItems={jointROMItems ?? []}
         onSelectBodyPart={onSelectPart}
-        onSelectROMItem={onSelectROMItem}  
-        />
+        onSelectROMItem={onSelectROMItem} isResultPage={false}        />
     </div>
   );
 };

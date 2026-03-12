@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
-import CenterUserMeasureListContainer from "./CenterUserMeasureListContainer";
-import MeasureDetail from "@/components/Measure/MeasureDetail";
+import CenterUserMeasureListContainer from "./MeasureListContainer";
+import MeasureDetail from "@/components/Measure/Detail";
 import CompareContainer from "../Measure/Compare/CompareContainer";
 import { ComparePair, CompareSlot } from "@/types/compare";
-import CenterUserDashBoard from "./CenterUserDashBoard";
+import CenterUserDashBoard from "./NormalDashBoard";
 import { useMeasureListForDetail } from "@/hooks/api/user/useMeasureListForDetail";
-import CenterUserROMContainer from "./CenterUserROMContainer";
-import { viewType } from "./CenterUserDetail";
+import CenterUserROMContainer from "./ROMContainer";
+import { viewType } from "./Detail";
 
 
 const CenterUserMeasureContainer = ({

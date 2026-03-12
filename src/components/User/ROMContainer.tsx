@@ -11,6 +11,7 @@ import { useGetROMItems } from "@/hooks/api/measure/rom/useGetROMItems";
 import { formatDate } from "@/utils/formatDate";
 import { Button } from "../ui/button";
 import ROMDashboardContainer from "../Measure/ROM/DashboardContainer";
+import { LayoutDashboardIcon } from "lucide-react";
 
 export interface UserROMProps {
   userSn: number,
@@ -100,13 +101,18 @@ export const CenterUserROMContainer = ({
         <ROMDashboardContainer 
           userSn={userSn} 
           centerSn={centerSn} 
+          isResultPage={isResultPage}
         />
       ) : (
         /* --- 2. 기존 목록/상세 화면 (전체) --- */
         <>
           <div className="flex text-base justify-between items-center">
             {formatDate(romItems?.[0].reg_date ?? "")}
-            <Button onClick={() => setShowROMDashboard(true)}>
+            <Button 
+              className="hover:bg-sub200 bg-sub150 transition-colors text-primary-foreground text-sub700" 
+              onClick={() => setShowROMDashboard(true)}
+              >
+                <LayoutDashboardIcon className="w-4 h-4"/>
               부위별 대시보드
             </Button>
           </div>

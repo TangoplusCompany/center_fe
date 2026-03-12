@@ -3,9 +3,9 @@
 import React, { useCallback, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import UserDetailTap from "@/components/User/UserDetailTap";
-import CenterUserMeasureContainer from "./CenterUserMeasureContainer";
-import CenterUserInformation from "@/components/User/CenterUserInformation";
+import UserDetailTap from "@/components/User/DetailTap";
+import CenterUserMeasureContainer from "./MeasureContainer";
+import CenterUserInformation from "@/components/User/Information";
 import { useMeasureListForCompare } from "@/hooks/api/user/useMeasureListForCompare";
 import { MeasurePickerDialog } from "../Measure/Compare/CompareMeasurePickerDialog";
 import { ComparePair, CompareSlot } from "@/types/compare";

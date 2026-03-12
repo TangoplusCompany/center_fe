@@ -8,7 +8,7 @@ import { IMeasureData } from "@/types/measure";
 import {
   
   MeasureList,
-} from "@/components/Measure/MeasureList";
+} from "@/components/Measure/List";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import { Skeleton } from "../ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";

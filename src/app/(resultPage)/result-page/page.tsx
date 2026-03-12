@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import CenterUserDetail from "@/components/User/CenterUserDetail";
+import CenterUserDetail from "@/components/User/Detail";
 import { useResultPageUserStore } from "@/providers/ResultPageUserProvider";
 import { useRouter, useSearchParams } from "next/navigation";
 import { actionUserDecrypt } from "@/app/actions/getCrypto";

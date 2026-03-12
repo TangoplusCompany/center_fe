@@ -2,8 +2,8 @@
 
 import { UpperAndLowerMeasureHistory } from "@/types/measure";
 import React from "react";
-import MeasureSummaryGraph from "./MeasureSummaryGraph";
-import MeasureSummaryUnit from "./MeasureSummaryUnit";
+import MeasureSummaryGraph from "./SummaryGraph";
+import MeasureSummaryUnit from "./SummaryUnit";
 
 export interface MeasureSummaryProps {
   ment: string;

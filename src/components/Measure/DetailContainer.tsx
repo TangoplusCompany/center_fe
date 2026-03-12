@@ -3,7 +3,7 @@
 import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
 import { useGetQuery } from "@/hooks/utils/useGetQuery";
 import React from "react";
-import MeasureDetail from "./MeasureDetail";
+import MeasureDetail from "./Detail";
 import { useMeasureDecrypt } from "@/hooks/auth/useMeasureDecrypt";
 import { Skeleton } from "../ui/skeleton";
 import { formatDate } from "@/utils/formatDate";

@@ -1,7 +1,7 @@
 import { FootPressureHistory, MeasureFootCOP } from "@/types/measure";
 import MatSummary from "./MatSummary";
 import FootTrajectoryGridContainer from "./FootTrajectoryGridContainer";
-import MeasureSummaryGraph from "../MeasureSummaryGraph";
+import MeasureSummaryGraph from "../SummaryGraph";
 
 export interface MatUserDashBoardContainerProps {
   footOCP: MeasureFootCOP;

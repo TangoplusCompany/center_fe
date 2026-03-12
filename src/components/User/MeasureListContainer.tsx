@@ -1,15 +1,15 @@
 "use client";
 
 import React from "react";
-import { CenterUserMeasureList } from "@/components/User/CenterUserMeasureList";
-import CenterUserMeasureListSkeleton from "@/components/User/CenterUserMeasureListSkeleton";
+import { CenterUserMeasureList } from "@/components/User/MeasureList";
+import CenterUserMeasureListSkeleton from "@/components/User/MeasureListSkeleton";
 import { useGetUserMeasureList } from "@/hooks/api/user/useGetUserMeasureList";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import { IUserMeasureList } from "@/types/user";
 import DataError from "@/components/Util/DataError";
 import { CompareSlot } from "@/types/compare";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { viewType } from "./CenterUserDetail";
+import { viewType } from "./Detail";
 import CustomPagination from "../common/Pagination";
 
 const CenterUserMeasureListContainer = ({ 

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useMeasureCount } from "@/hooks/api/measure/useMeasureCount";
 import OptionBar from "../Util/OptionBar";
-import MeasureListContainer from "./MeasureListContainer";
+import MeasureListContainer from "./ListContainer";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
 
 const MeasureMainContainer = () => {

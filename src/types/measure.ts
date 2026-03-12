@@ -363,6 +363,10 @@ export interface IMeasureROMItemHistoryResponse {
   last_page: number;
   rom_results: IMeasureROMItem[];
 }
+export interface IMeasureROMHistoryItem extends IMeasureROMItem {
+  center_name: string;
+  device_name: string;
+}
 
 export interface IMeasureROMItem extends IMeasureROMItemCardData {
   sn: number;

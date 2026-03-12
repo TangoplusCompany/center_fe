@@ -11,7 +11,7 @@ import ROMItemContainer from "./ROM/ItemContainer";
 import ROMBody from "./ROM/Body";
 import ROMPickerDialog from "./ROM/PickerDialog";
 import { useGetQuery } from "@/hooks/utils/useGetQuery";
-import { MeasureDetailSkeleton } from "./MeasureDetailContainer";
+import { MeasureDetailSkeleton } from "./DetailContainer";
 import { useMeasureDecrypt } from "@/hooks/auth/useMeasureDecrypt";
 import { useAuthStoreOptional } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";

@@ -1,5 +1,5 @@
 import React from "react";
-import CenterUserDetail from "@/components/User/CenterUserDetail";
+import CenterUserDetail from "@/components/User/Detail";
 import { notFound } from "next/navigation";
 import { actionUserDecrypt } from "@/app/actions/getCrypto";
 
