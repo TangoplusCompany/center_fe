@@ -11,7 +11,7 @@ const FrontMeasurement = ({
   sns,
   measureInfo,
   cameraOrientation,
-  isResultPage = false,
+  isMyPage = false,
 }: {
   sns: {
     measureSn: string;
@@ -20,7 +20,7 @@ const FrontMeasurement = ({
   };
   measureInfo: IUserMeasureInfoResponse;
   cameraOrientation: 0 | 1;
-  isResultPage: boolean;
+  isMyPage: boolean;
 }) => {
 
   const {
@@ -31,7 +31,7 @@ const FrontMeasurement = ({
     measure_sn: sns.measureSn,
     user_sn: sns.userSn,
     sequence_number: 1,
-    isResultPage,
+    isMyPage,
   });
   const {
     data: measureSecond,
@@ -41,7 +41,7 @@ const FrontMeasurement = ({
     measure_sn: sns.measureSn,
     user_sn: sns.userSn,
     sequence_number: 5,
-    isResultPage,
+    isMyPage,
   });
   const mergedDetailData: IUserMeasureDetailData[] = useMemo(() => {
     return [

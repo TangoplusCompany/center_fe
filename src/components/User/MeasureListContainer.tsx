@@ -17,13 +17,13 @@ const CenterUserMeasureListContainer = ({
   changeMeasure,
   changeView,
   selectCompareSn, 
-  isResultPage = false,
+  isMyPage = false,
 }: { 
   userSn: number;
   changeMeasure?: (measureSn: number) => void;
   changeView: (dpView: viewType) => void;
   selectCompareSn: (sn: number, slot: CompareSlot) => void;
-  isResultPage: boolean;
+  isMyPage: boolean;
 }) => {
   const { setQueryParam, query } = useQueryParams();
   const page = query.page || "1";
@@ -43,10 +43,10 @@ const CenterUserMeasureListContainer = ({
     from,
     to,
     sort,
-    isResultPage,
+    isMyPage,
   });
 
-  // const filteredList = isResultPage ? userMeasureList?.measurement_list.filter((it) =>
+  // const filteredList = isMyPage ? userMeasureList?.measurement_list.filter((it) =>
   //   it.measurement_type === "basic_only"
   // ) : userMeasureList?.measurement_list
   const handleSortChange = (value: string) => {
@@ -103,7 +103,7 @@ const CenterUserMeasureListContainer = ({
                 changeMeasure={changeMeasure ? (sn) => changeMeasure(sn) : undefined}
                 selectCompareSn={selectCompareSn}
                 changeView={changeView}
-                isResultPage={isResultPage}
+                isMyPage={isMyPage}
               />
               <CustomPagination
                 total={userMeasureList.total}

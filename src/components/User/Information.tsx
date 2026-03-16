@@ -8,15 +8,15 @@ import DataError from "../Util/DataError";
 
 interface CenterUserInformationProps {
   userSn: number;
-  isResultPage: boolean;
+  isMyPage: boolean;
 }
 
-const CenterUserInformation = ({ userSn, isResultPage }: CenterUserInformationProps) => {
+const CenterUserInformation = ({ userSn, isMyPage }: CenterUserInformationProps) => {
   const {
     data: userDetailData,
     isLoading: userDetailDataLoading,
     isError: userDetailError,
-  } = useGetUserDetail({ userSn: userSn.toString(), isResultPage });
+  } = useGetUserDetail({ userSn: userSn.toString(), isMyPage });
 
   // result-page에서는 AuthStoreProvider가 없으므로 optional하게 사용
   const adminRole = useAuthStoreOptional((state) => state.adminRole, 0);
@@ -35,7 +35,7 @@ const CenterUserInformation = ({ userSn, isResultPage }: CenterUserInformationPr
 
   return (
     <div className="w-full px-2 sm:px-4 md:px-0">
-      <UserDetailForm userData={userDetailData} isResultPage={isResultPage} adminRole={adminRole} />
+      <UserDetailForm userData={userDetailData} isMyPage={isMyPage} adminRole={adminRole} />
     </div>
   );
 };

@@ -19,11 +19,11 @@ import { ko } from "date-fns/locale";
 
 const UserDetailForm = ({ 
   userData, 
-  isResultPage = false,
+  isMyPage = false,
   adminRole = 0
 }: { 
   userData: ICenterUserDetail;
-  isResultPage?: boolean;
+  isMyPage?: boolean;
   adminRole?: number;
 }) => {
   const [decryptedBirthday, setDecryptedBirthday] = useState<string>("");
@@ -119,7 +119,7 @@ const UserDetailForm = ({
         const datePattern = /^\d{4}-\d{2}-\d{2}$/;
         if (datePattern.test(userData.birthday)) {
           birthdayString = userData.birthday;
-        } else if (isResultPage) {
+        } else if (isMyPage) {
           // result-page에서는 API가 이미 복호화된 데이터를 반환하므로 복호화 시도하지 않음
           birthdayString = userData.birthday;
         } else {
@@ -143,13 +143,13 @@ const UserDetailForm = ({
     };
     
     decryptBirthday();
-  }, [userData.birthday, setValue, isResultPage]);
+  }, [userData.birthday, setValue, isMyPage]);
 
-  const mutationPatchUserDetail = usePatchUserDetail(userData.user_sn.toString(), isResultPage);
+  const mutationPatchUserDetail = usePatchUserDetail(userData.user_sn.toString(), isMyPage);
   const submitUserDetailForm = handleSubmit(async (data) => {
     const { userName, gender, height, weight, address, addressDetail, birthday } = data;
     
-    if (isResultPage) {
+    if (isMyPage) {
       // result-page용 요청 데이터 (birthday, mobile 포함)
       await mutationPatchUserDetail.mutateAsync({
         sn: userData.user_sn.toString(),
@@ -189,8 +189,8 @@ const UserDetailForm = ({
   return (
     <form onSubmit={submitUserDetailForm} className="flex flex-col gap-4 sm:gap-5">
       <legend className="sr-only">사용자 정보 수정</legend>
-      {/* isResultPage가 false이고 admin_role이 3일 때는 수정 버튼 숨김 */}
-      {(isResultPage || adminRole !== 3) && (
+      {/* isMyPage가 false이고 admin_role이 3일 때는 수정 버튼 숨김 */}
+      {(isMyPage || adminRole !== 3) && (
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2">
           <Button variant="outline" onClick={handleEditState} type="button" className="w-full sm:w-auto">
             {editState ? "취소하기" : "수정하기"}

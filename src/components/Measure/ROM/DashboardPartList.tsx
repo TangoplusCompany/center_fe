@@ -1,14 +1,14 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { IMeasureROMItem } from "@/types/measure";
+import { IMeasureROMTypeItem } from "@/types/measure";
 import { formatDate } from "@/utils/formatDate";
 
 export interface ROMDashboardPartListProps {
-  romTypeItems: IMeasureROMItem[]
-  onSelectMeasureType : (selectedMeasuredType: number) => void;
+  romTypeItems: IMeasureROMTypeItem[]
+  setMeasureType : (selectedMeasuredType: number) => void;
 }
 const ROMDashboardPartList = ({
   romTypeItems,
-  onSelectMeasureType
+  setMeasureType
 }: ROMDashboardPartListProps) => {
 
 
@@ -27,7 +27,7 @@ const ROMDashboardPartList = ({
     }
     const state = scoreMap[score] ?? {label: "-", className: "border-toggleAccent text-toggleAccent"}
     return (
-      <div className={`flex w-fit gap-2 rounded-full px-2 py-1 ${state.className} border items-center`}>
+      <div className={`flex w-fit gap-2 rounded-full px-2 ${state.className} border-2 items-center`}>
         <div className={`${stateCircle[score]} w-3 h-3 rounded-full`}/>
         {scoreMap[score].label}
       </div>
@@ -35,16 +35,16 @@ const ROMDashboardPartList = ({
   }
 
   return (
-    <div className="flex flex-col border-2 border-sub200 rounded-xl">
+    <div className="flex flex-col border-2 border-sub200 rounded-xl text-sub700">
       <div className="w-full overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="text-start px-2 text-sub700 w-[25%] whitespace-nowrap">검사종류</TableHead>
-              <TableHead className="text-center text-sub700 w-[25%] whitespace-nowrap">최근 측정 날짜</TableHead>
-              <TableHead className="text-center text-sub700 w-[20%] whitespace-nowrap">최근 각도값</TableHead>
-              <TableHead className="text-center text-sub700 w-[20%] whitespace-nowrap">최근 상태</TableHead>
-              <TableHead className="text-center text-sub700 w-[10%] whitespace-nowrap">측정 횟수</TableHead>
+              <TableHead className="text-start px-2 text-base w-[25%] whitespace-nowrap">검사종류</TableHead>
+              <TableHead className="text-center text-base w-[25%] whitespace-nowrap">최근 측정 날짜</TableHead>
+              <TableHead className="text-center text-base w-[20%] whitespace-nowrap">최근 각도값</TableHead>
+              <TableHead className="text-center text-base w-[20%] whitespace-nowrap">최근 상태</TableHead>
+              <TableHead className="text-center text-base w-[10%] whitespace-nowrap">측정 횟수</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -53,9 +53,9 @@ const ROMDashboardPartList = ({
               <TableRow 
                 key={rom.sn} 
                 onClick={() => {
-                  onSelectMeasureType(rom.measure_type)
+                  setMeasureType(rom.measure_type)
                 }}
-                className={"cursor-pointer hover:bg-sub100"}
+                className="cursor-pointer hover:bg-sub100 text-base"
               >
                 <TableCell className="text-start px-2 font-medium whitespace-nowrap">
                   {rom.title}
@@ -71,8 +71,7 @@ const ROMDashboardPartList = ({
                   </div>
                 </TableCell>
                 <TableCell className="text-center whitespace-nowrap">
-                  0회 
-                  {/* TODO 이곳에 횟수를 채워넣어야함 */}
+                  {rom.measurement_count}회
                 </TableCell>
               </TableRow>
             ))}

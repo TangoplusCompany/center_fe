@@ -38,6 +38,8 @@ export const ROMPickerDialog = ({
   isLoading,
   isError
 }: ROMPickerDialogProps) => {
+
+  console.log(items)
   const [localPage, setLocalPage] = useState(1);
   const useApiPagination = !!apiPagination;
   

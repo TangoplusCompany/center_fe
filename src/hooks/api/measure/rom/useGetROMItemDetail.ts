@@ -13,16 +13,16 @@ export const useGetROMItemDetail = ({
   user_sn,
   center_sn,
   rom_result_sn,
-  isResultPage,
+  isMyPage,
 }: {
   user_sn: number;
   center_sn?: number;
   rom_result_sn?: number;
-  isResultPage: boolean;
+  isMyPage: boolean;
 }) => {
   return useQuery<IMeasureROMItemDetail>({
     queryKey: ["userROMItemDetail", user_sn, center_sn, rom_result_sn],
-    queryFn: () => isResultPage ? getROMItemDetailInMy({ user_sn, rom_result_sn }) : getROMItemDetail({ user_sn, center_sn, rom_result_sn }),
+    queryFn: () => isMyPage ? getROMItemDetailInMy({ user_sn, rom_result_sn }) : getROMItemDetail({ user_sn, center_sn, rom_result_sn }),
     enabled: rom_result_sn !== undefined && rom_result_sn > 0,
   });
 };

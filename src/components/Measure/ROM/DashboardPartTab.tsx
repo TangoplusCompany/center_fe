@@ -33,7 +33,6 @@ export const ROMDashboardPartTab = ({
             value={measure}
             onClick={() => 
               {
-                console.log(index)
                 onSelectBodyPart(Number(index))
                 setMeasureType(-1)
               }

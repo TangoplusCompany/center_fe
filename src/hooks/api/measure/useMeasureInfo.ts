@@ -7,30 +7,30 @@ import { useAuthStoreOptional } from "@/providers/AuthProvider";
  * 측정 상세 조회
  * @param measure_sn 측정 번호
  * @param user_sn 유저 번호
- * @param isResultPage result-page에서 사용하는지 여부
+ * @param isMyPage result-page에서 사용하는지 여부
  * @returns 측정 상세 데이터
  */
 export const useMeasureInfo = ({
   measure_sn,
   user_sn,
-  isResultPage = false,
+  isMyPage = false,
 }: {
   measure_sn: number | undefined;
   user_sn: string;
-  isResultPage?: boolean;
+  isMyPage?: boolean;
 }) => {
   // result-page에서는 AuthStoreProvider가 없으므로 optional 사용
   const centerSn = useAuthStoreOptional((state) => state.centerSn, 0);
-  const axiosInstance = isResultPage ? customUserAxios : customAxios;
-  const apiPath = isResultPage
+  const axiosInstance = isMyPage ? customUserAxios : customAxios;
+  const apiPath = isMyPage
     ? `/users/${user_sn}/measurement/${measure_sn}`
     : `/measurement/${measure_sn}/centers/${centerSn}/members/${user_sn}`;
   return useQuery<IUserMeasureInfoResponse>({
-    queryKey: isResultPage
+    queryKey: isMyPage
       ? ["userResultMeasureDetail", measure_sn, user_sn]
       : ["measureDetail", measure_sn, user_sn, centerSn],
     queryFn: async () => {
-      const response = isResultPage
+      const response = isMyPage
         ? await axiosInstance.get(apiPath)
         : await axiosInstance.get(apiPath, {
             params: {
@@ -44,6 +44,6 @@ export const useMeasureInfo = ({
       user_sn !== undefined &&
       measure_sn !== 0 &&
       user_sn !== "" &&
-      (isResultPage || centerSn > 0),
+      (isMyPage || centerSn > 0),
   });
 };

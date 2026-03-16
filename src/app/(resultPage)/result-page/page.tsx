@@ -107,7 +107,7 @@ export default function ResultPage() {
         userUUID={decryptedData.user_uuid} 
         userSn={decryptedData.user_sn} 
         userName={decryptedData.user_name}
-        isResultPage={true}
+        isMyPage={true}
       />
     </div>
   );

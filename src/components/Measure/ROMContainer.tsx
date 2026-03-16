@@ -64,7 +64,7 @@ export const MeasureROMContainer = () => {
     user_sn: userSn,
     center_sn: centerSn,
     measure_sn: measureSn,
-    isResultPage: false
+    isMyPage: false
   });
   
   const {
@@ -87,7 +87,7 @@ export const MeasureROMContainer = () => {
     user_sn: userSn,
     center_sn: centerSn,
     rom_result_sn: romPair[0],
-    isResultPage: false
+    isMyPage: false
   })
   
   // rightROMItemDetail
@@ -99,7 +99,7 @@ export const MeasureROMContainer = () => {
     user_sn: userSn,
     center_sn: centerSn,
     rom_result_sn: romPair[1],
-    isResultPage: false
+    isMyPage: false
   })
   
   if (decryptLoading) return <MeasureDetailSkeleton />;

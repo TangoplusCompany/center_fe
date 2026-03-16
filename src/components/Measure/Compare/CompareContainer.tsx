@@ -6,13 +6,13 @@ const CompareContainer = ({
   userSn,
   comparePair,
   onCompareDialogOpen,
-  isResultPage = false,
+  isMyPage = false,
 }: {
   userSn: string;
   measureList? : IMeasureList[];
   comparePair: ComparePair;
   onCompareDialogOpen: (slot: CompareSlot) => void;
-  isResultPage: boolean;
+  isMyPage: boolean;
 }) => {
   
   
@@ -23,7 +23,7 @@ const CompareContainer = ({
             userSn={userSn}
             comparePair={comparePair}
             onCompareDialogOpen={onCompareDialogOpen}
-            isResultPage={isResultPage}
+            isMyPage={isMyPage}
           />
         </div>
     </div>

@@ -21,7 +21,7 @@ export const CenterUserMeasureList = ({
   changeMeasure?: (measureSn: number) => void;
   selectCompareSn?: (sn: number, slot: CompareSlot) => void;
   changeView : (dpView: viewType) => void;
-  isResultPage: boolean;
+  isMyPage: boolean;
 }) => {
   const measureTypeMap : Record<string, string> = {
     rom_only : "ROM",

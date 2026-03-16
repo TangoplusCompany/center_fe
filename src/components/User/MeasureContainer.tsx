@@ -4,10 +4,10 @@ import CenterUserMeasureListContainer from "./MeasureListContainer";
 import MeasureDetail from "@/components/Measure/Detail";
 import CompareContainer from "../Measure/Compare/CompareContainer";
 import { ComparePair, CompareSlot } from "@/types/compare";
-import CenterUserDashBoard from "./NormalDashBoard";
 import { useMeasureListForDetail } from "@/hooks/api/user/useMeasureListForDetail";
 import CenterUserROMContainer from "./ROMContainer";
 import { viewType } from "./Detail";
+import CenterUserDashboardContainer from "./DashBoardContainer";
 
 
 const CenterUserMeasureContainer = ({
@@ -21,7 +21,7 @@ const CenterUserMeasureContainer = ({
   selectCompareSn,
   // clearCompare,
   onCompareDialogOpen,
-  isResultPage = false,
+  isMyPage = false,
 }: {
   measureSn: number;
   userSn: number;
@@ -33,7 +33,7 @@ const CenterUserMeasureContainer = ({
   selectCompareSn: (sn: number, slot: CompareSlot) => void; 
   // clearCompare: () => void;
   onCompareDialogOpen: (slot: CompareSlot) => void;
-  isResultPage: boolean;
+  isMyPage: boolean;
 }) => {
   const [isDatePickerOpen, setIsDatePickerOpen] = React.useState(false);
   const frozenMeasureSnRef = useRef<number | undefined>(undefined);
@@ -47,7 +47,7 @@ const CenterUserMeasureContainer = ({
     pagination: detailPagination,
   } = useMeasureListForDetail({
     user_sn: userSn,
-    isResultPage,
+    isMyPage,
   });
   // tab === 0: 날짜(측정일) 선택 시 사용할 measure_sn
   // - 다이얼로그에서 선택한 경우 measureSn, 아니면 리스트 첫 번째(최신)
@@ -81,7 +81,7 @@ const CenterUserMeasureContainer = ({
   } = useMeasureInfo({
     measure_sn: shouldFetchDetail ? snForDetailFetch : undefined,
     user_sn: shouldFetchDetail ? `${detailUserSn}` : "",
-    isResultPage,
+    isMyPage,
   });
   const initCompare = comparePair[0] !== undefined || comparePair[1] !== undefined;
   return (
@@ -114,7 +114,7 @@ const CenterUserMeasureContainer = ({
             changeDPView={changeView}
             userSn={String(detailUserSn)}
             pagination={detailPagination}
-            isResultPage={isResultPage}
+            isMyPage={isMyPage}
             isDatePickerOpen={isDatePickerOpen}
             onDatePickerOpenChange={setIsDatePickerOpen}
             />
@@ -122,9 +122,9 @@ const CenterUserMeasureContainer = ({
         </div>
       )}
       {tab === 1 && (
-        <CenterUserDashBoard
+        <CenterUserDashboardContainer
           userSn={userSn}
-          isResultPage={isResultPage}
+          isMyPage={isMyPage}
         />
       )}
 
@@ -154,7 +154,7 @@ const CenterUserMeasureContainer = ({
               userSn={String(userSn)}
               comparePair={comparePair}
               onCompareDialogOpen={onCompareDialogOpen}
-              isResultPage={isResultPage}
+              isMyPage={isMyPage}
             />
           ) : currentView === "default" ? (
             <CenterUserMeasureListContainer
@@ -162,13 +162,13 @@ const CenterUserMeasureContainer = ({
               changeMeasure={changeMeasure}
               changeView={changeView}
               selectCompareSn={selectCompareSn}
-              isResultPage={isResultPage}
+              isMyPage={isMyPage}
             />
           ) : null}
         </>
       )}
       {currentView === "rom"  && (
-        <CenterUserROMContainer userSn={userSn} measureSn={measureSn} isResultPage={isResultPage} />
+        <CenterUserROMContainer userSn={userSn} measureSn={measureSn} isMyPage={isMyPage} />
       )}
 
     </>

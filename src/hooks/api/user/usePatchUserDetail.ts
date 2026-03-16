@@ -9,22 +9,22 @@ type PatchResultUserDetailParams = Parameters<typeof patchResultUserDetail>[0];
 /**
  * 사용자 상세 수정 Hooks
  * @param userSn 사용자 번호
- * @param isResultPage result-page에서 사용하는지 여부
+ * @param isMyPage result-page에서 사용하는지 여부
  * @returns 사용자 상세 수정 뮤테이션
  */
-export const usePatchUserDetail = (userSn: string, isResultPage = false) => {
+export const usePatchUserDetail = (userSn: string, isMyPage = false) => {
   const queryClient = useQueryClient();
   // result-page에서는 AuthStoreProvider가 없으므로 optional 사용
   const centerSn = useAuthStoreOptional((state) => state.centerSn, 0);
   return useMutation({
-    mutationFn: isResultPage
+    mutationFn: isMyPage
       ? (params: PatchResultUserDetailParams) => patchResultUserDetail(params)
       : (params: Omit<PatchUserDetailParams, "center_sn">) =>
           patchUserDetail({ ...params, center_sn: centerSn }),
     onSuccess: () => {
       alert("성공적으로 사용자의 데이터가 수정되었습니다.");
-      // queryKey를 isResultPage에 따라 다르게 무효화
-      if (isResultPage) {
+      // queryKey를 isMyPage에 따라 다르게 무효화
+      if (isMyPage) {
         queryClient.invalidateQueries({ queryKey: ["userResultDetail", userSn] });
       } else {
         queryClient.invalidateQueries({ queryKey: ["userDetail", userSn] });

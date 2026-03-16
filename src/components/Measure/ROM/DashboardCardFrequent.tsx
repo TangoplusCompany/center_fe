@@ -39,20 +39,17 @@ const ROMDashboardCardFrequent = (
         <h2 className="text-xl font-bold text-black dark:text-foreground">검사 횟수가 가장 많은 ROM</h2>
       </div>
 
-      {/* 왼쪽 내용 */}
       <div className="flex flex-col justify-end flex-1 space-y-3 p-5 mb-6 relative  z-10">
-        {/* 위험 레벨 배지 */}
         <div className={`w-fit px-3 py-1 bg-toggleAccent text-white text-lg font-semibold rounded-xl`}>
           {data.romName}
         </div>
-
-        {/* 설명 박스 */}
         <div className={`w-fit bg-toggleAccent-background/30 rounded-lg p-4`}>
           <p className="text-base text-primary-foreground leading-relaxed">
             {data.description}
           </p>
         </div>
       </div>
+      
     </div>
   );
 };

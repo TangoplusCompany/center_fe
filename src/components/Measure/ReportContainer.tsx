@@ -10,7 +10,7 @@ export interface MeasureReportProps {
   latestSummary: MeasureSummary;
   summaryData: UpperAndLowerMeasureHistory[];
   footData: FootPressureHistory[];
-  isResultPage: boolean;
+  isMyPage: boolean;
 }
 
 const MeasureReportContainer = ({
@@ -18,7 +18,7 @@ const MeasureReportContainer = ({
   latestSummary,
   summaryData,
   footData,
-  isResultPage = false,
+  isMyPage = false,
  }: MeasureReportProps 
 ) => {
 
@@ -31,7 +31,7 @@ const MeasureReportContainer = ({
     } = useGetMeasureSummary({
       measure_sn: selectedMeasureSn?.toString(),
       user_sn: `${userSn}`,
-      isResultPage,
+      isMyPage,
     });
     const {
       data: newFoot,
@@ -40,7 +40,7 @@ const MeasureReportContainer = ({
     } = useGetMeasureFoot({
       measure_sn: selectedMeasureSn?.toString(),
       user_sn: `${userSn}`,
-      isResultPage,
+      isMyPage,
     });
     const [selectedSummary, setSelectedSummary] = useState<MeasureSummary>(latestSummary);
     const [selectedFootOCP, setSelectedFootOCP] = useState<MeasureFootCOP>(latestSummary);

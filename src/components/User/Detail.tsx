@@ -53,12 +53,12 @@ const CenterUserDetail = ({
   userUUID,
   userSn,
   userName,
-  isResultPage = false,
+  isMyPage = false,
 }: {
   userUUID: string;
   userSn: number;
   userName?: string;
-  isResultPage?: boolean;
+  isMyPage?: boolean;
 }) => {
   const router = useRouter();
   const { measureSn, changeMeasureSn } = useMeasureSn();
@@ -68,13 +68,13 @@ const CenterUserDetail = ({
   // 사용자 정보를 가져와서 최신 이름 표시 (사용자 정보 수정 시 자동 업데이트)
   const { data: userDetailData } = useGetUserDetail({ 
     userSn: userSn.toString(),
-    isResultPage 
+    isMyPage 
   });
   
   // 측정일을 가져오기 위한 대시보드 데이터
   // const { data: dashboardData } = useGetUserDashboard<IUserDashBoard>({
   //   user_sn: userSn,
-  //   isResultPage,
+  //   isMyPage,
   // });
   
   // 사용자 이름: userDetailData가 있으면 우선 사용, 없으면 userName prop 사용
@@ -116,12 +116,12 @@ const CenterUserDetail = ({
     pagination: comparePagination,
   } = useMeasureListForCompare({
     user_sn: userSn,
-    isResultPage,
+    isMyPage,
   });
     
-  // ----------# 로그아웃 핸들러 (isResultPage일 때만 사용) #-----------
+  // ----------# 로그아웃 핸들러 (isMyPage일 때만 사용) #-----------
   const handleLogout = () => {
-    if (!isResultPage) return;
+    if (!isMyPage) return;
     if (confirm("로그아웃 하시겠습니까?")) {
       // 전역 store 인스턴스를 직접 사용 (Provider 없이도 사용 가능)
       resultPageUserStore.getState().setLogout();
@@ -144,7 +144,7 @@ const CenterUserDetail = ({
             )} */}
           </h2>
         </div>
-        {isResultPage && (
+        {isMyPage && (
           <button
             onClick={handleLogout}
             className="flex items-center gap-2 px-2 sm:px-4 py-2 text-sm text-sub700 hover:text-sub900 hover:bg-sub100 rounded-lg transition-colors"
@@ -215,12 +215,12 @@ const CenterUserDetail = ({
             selectCompareSn={ selectCompareSn }
             // clearCompare={ clearCompare }
             onCompareDialogOpen= {onCompareDialogOpen}
-            isResultPage={isResultPage}
+            isMyPage={isMyPage}
           />
         )}
         {tab === 3 && <CenterUserInformation 
         userSn={userSn} 
-        isResultPage={isResultPage} />}
+        isMyPage={isMyPage} />}
         </>
       )}
 

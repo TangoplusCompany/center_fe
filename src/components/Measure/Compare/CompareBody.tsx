@@ -26,7 +26,7 @@ export interface CompareStaticProps {
   right ?: IUserMeasureInfoResponse
   userSn: string;
   onCompareDialogOpen: (slot: CompareSlot) => void;
-  isResultPage: boolean;
+  isMyPage: boolean;
 }
 
 const CompareBody = ({
@@ -34,13 +34,13 @@ const CompareBody = ({
   comparePair,
   // onRemoveCompare,
   onCompareDialogOpen,
-  isResultPage = false,
+  isMyPage = false,
 } : {
   userSn: string;
   comparePair: ComparePair;
   // onRemoveCompare: (slot: CompareSlot) => void;
   onCompareDialogOpen: (slot: CompareSlot) => void;
-  isResultPage: boolean;
+  isMyPage: boolean;
 }) => {
   const leftSn = comparePair[0];
   const rightSn = comparePair[1];
@@ -54,7 +54,7 @@ const CompareBody = ({
   } = useMeasureInfo({
     measure_sn: leftEnabled ? leftSn : undefined,
     user_sn: userSn,
-    isResultPage,
+    isMyPage,
   });
 
   const {
@@ -64,7 +64,7 @@ const CompareBody = ({
   } = useMeasureInfo({
     measure_sn: rightEnabled ? rightSn : undefined,
     user_sn: userSn,
-    isResultPage,
+    isMyPage,
   });
 
   
@@ -99,7 +99,7 @@ const CompareBody = ({
               right={right}
               userSn={userSn}
               onCompareDialogOpen={onCompareDialogOpen}
-              isResultPage={isResultPage}
+              isMyPage={isMyPage}
             />
           </div>
         );
@@ -116,7 +116,7 @@ const CompareBody = ({
               right={right}
               userSn={userSn}
               onCompareDialogOpen={onCompareDialogOpen}
-              isResultPage={isResultPage}
+              isMyPage={isMyPage}
             />
           </div>
         );
@@ -133,7 +133,7 @@ const CompareBody = ({
               right={right}
               userSn={userSn}
               onCompareDialogOpen={onCompareDialogOpen}
-              isResultPage={isResultPage}
+              isMyPage={isMyPage}
             />
           </div>
         );
@@ -150,7 +150,7 @@ const CompareBody = ({
               right={right}
               userSn={userSn}
               onCompareDialogOpen={onCompareDialogOpen}
-              isResultPage={isResultPage}
+              isMyPage={isMyPage}
             />
           </div>
         );
@@ -167,7 +167,7 @@ const CompareBody = ({
               right={right}
               userSn={userSn}
               onCompareDialogOpen={onCompareDialogOpen}
-              isResultPage={isResultPage}
+              isMyPage={isMyPage}
             />
           </div>
         );
@@ -184,7 +184,7 @@ const CompareBody = ({
               right={right}
               userSn={userSn}
               onCompareDialogOpen={onCompareDialogOpen}
-              isResultPage={isResultPage}
+              isMyPage={isMyPage}
             />
           </div>
         );
@@ -201,7 +201,7 @@ const CompareBody = ({
               right={right}
               userSn={userSn}
               onCompareDialogOpen={onCompareDialogOpen} 
-              isResultPage={isResultPage}
+              isMyPage={isMyPage}
               />
           </div>
         );

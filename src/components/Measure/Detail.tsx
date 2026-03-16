@@ -31,7 +31,7 @@ type CenterUserMeasureProps = {
   changeDPView ?: (dpView: viewType) => void;
   userSn: string;
   pagination?: DetailPagination;  
-  isResultPage: boolean;
+  isMyPage: boolean;
   isDatePickerOpen?: boolean;
   onDatePickerOpenChange?: (open: boolean) => void;
 };
@@ -45,7 +45,7 @@ const MeasureDetail = ({
   changeDPView,
   userSn,
   pagination,
-  isResultPage = false,
+  isMyPage = false,
   isDatePickerOpen = false,
   onDatePickerOpenChange,
 }: CenterUserMeasureProps) => {
@@ -119,7 +119,7 @@ const MeasureDetail = ({
         }}
         measureInfo={measureData}
         cameraOrientation={data.camera_orientation}
-        isResultPage={isResultPage}
+        isMyPage={isMyPage}
         />
       ),
     },
@@ -135,7 +135,7 @@ const MeasureDetail = ({
         }}
         measureInfo={measureData}
         cameraOrientation={data.camera_orientation}
-        isResultPage={isResultPage}
+        isMyPage={isMyPage}
         />
       ),
     },
@@ -151,7 +151,7 @@ const MeasureDetail = ({
         }}
         measureInfo={measureData}
         cameraOrientation={data.camera_orientation}
-        isResultPage={isResultPage}
+        isMyPage={isMyPage}
         />
       ),
     },
@@ -166,7 +166,7 @@ const MeasureDetail = ({
           }} 
         cameraOrientation={data.camera_orientation}
         isCompare={0}
-        isResultPage={isResultPage}
+        isMyPage={isMyPage}
         />,
     },
   ];

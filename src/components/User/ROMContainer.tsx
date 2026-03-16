@@ -16,12 +16,12 @@ import { LayoutDashboardIcon } from "lucide-react";
 export interface UserROMProps {
   userSn: number,
   measureSn: number,
-  isResultPage: boolean
+  isMyPage: boolean
 }
 export const CenterUserROMContainer = ({
   userSn,
   measureSn,
-  isResultPage,
+  isMyPage,
 }: UserROMProps) => {
 
   const [measureType, setMeasureType] = useState(-1); // 이전 항목 선택을 관리하는 ROM 타입
@@ -56,7 +56,7 @@ export const CenterUserROMContainer = ({
     user_sn: userSn,
     center_sn: centerSn,
     measure_sn: measureSn,
-    isResultPage: isResultPage
+    isMyPage: isMyPage
   });
   
   const {
@@ -79,7 +79,7 @@ export const CenterUserROMContainer = ({
     user_sn: userSn,
     center_sn: centerSn,
     rom_result_sn: romPair[0],
-    isResultPage: isResultPage
+    isMyPage: isMyPage
   })
   
   // rightROMItemDetail
@@ -91,7 +91,7 @@ export const CenterUserROMContainer = ({
     user_sn: userSn,
     center_sn: centerSn,
     rom_result_sn: romPair[1],
-    isResultPage: isResultPage
+    isMyPage: isMyPage
   })
   const [showROMDashboard, setShowROMDashboard] = useState(false);
   return (
@@ -100,8 +100,7 @@ export const CenterUserROMContainer = ({
         /* --- 1. 대시보드 화면 --- */
         <ROMDashboardContainer 
           userSn={userSn} 
-          centerSn={centerSn} 
-          isResultPage={isResultPage}
+          isMyPage={isMyPage}
         />
       ) : (
         /* --- 2. 기존 목록/상세 화면 (전체) --- */

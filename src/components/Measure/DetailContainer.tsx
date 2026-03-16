@@ -80,7 +80,7 @@ const MeasureDetailContainer = () => {
         measureList= { undefined }
         selectedMeasure= { decryptedData.measure_sn }
         userSn= {`${decryptedData.user_sn}`}
-        isResultPage={false}
+        isMyPage={false}
           />
       )}
     </div>

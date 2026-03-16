@@ -30,10 +30,10 @@ const RISK_PART_KEYS = [
 
 const CenterUserNormalDashBoard = ({
   userSn,
-  isResultPage = false,
+  isMyPage = false,
 }: {
   userSn?: number;
-  isResultPage?: boolean;
+  isMyPage?: boolean;
 }) => {
   const {
     data: dashboardData,
@@ -41,10 +41,8 @@ const CenterUserNormalDashBoard = ({
     isError: dashboardDataError,
   } = useGetUserDashboard<IUserDashBoard>({
     user_sn: userSn ? Number(userSn) : undefined,
-    isResultPage,
+    isMyPage,
   });
-
-
 
   if (dashboardDataLoading) {
     return <CenterUserDashBoardSkeleton />;
@@ -83,7 +81,7 @@ const CenterUserNormalDashBoard = ({
             latestSummary={dashboardData?.latest_measure_summary} 
             summaryData={dashboardData?.upper_and_lower_measure_history} 
             footData={dashboardData?.foot_pressure_history}
-            isResultPage={isResultPage}
+            isMyPage={isMyPage}
             />
           ) : (
             <p className="text-sm md:text-base text-gray-500 px-2">요약 데이터를 불러오는 중이거나 없습니다.</p>
