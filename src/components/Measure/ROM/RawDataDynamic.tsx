@@ -15,13 +15,13 @@ export const ROMRawDataDynamic = ({
   right,
   onCompareDialogOpen,
 }: {
-  left: ROMRawDataDynamicProps;
+  left?: ROMRawDataDynamicProps;
   right?: ROMRawDataDynamicProps;
   onCompareDialogOpen: (currenSlot: CompareSlot, selectedMeasureType: number) => void;
 }) => {
 
   const { data: measureJson0, isLoading: jsonLoading0, isError: jsonError0 } = useMeasureDynamicJson(
-    left.measure_server_json_name
+    left?.measure_server_json_name
   );
   const { data: measureJson1, isLoading: jsonLoading1, isError: jsonError1 } = useMeasureDynamicJson(
     right?.measure_server_json_name
@@ -39,7 +39,7 @@ export const ROMRawDataDynamic = ({
           measureJson={measureJson0}
           isLoading={jsonLoading0}
           isError={!!(jsonError0)}
-          romType={left.measure_type}
+          romType={left?.measure_type}
         />
         
         {/* 우측 비디오 플레이어 또는 기본 화면 */}

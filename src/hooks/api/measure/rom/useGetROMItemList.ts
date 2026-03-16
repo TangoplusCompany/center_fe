@@ -1,5 +1,5 @@
 import { getROMItemList } from "@/services/measure/rom/getROMItemList";
-import { IMeasureROMItem } from "@/types/measure";
+import { IMeasureROMTypeItem } from "@/types/measure";
 import { useQuery } from "@tanstack/react-query";
 
 /**
@@ -17,7 +17,7 @@ export const useGetROMItemList = ({
   center_sn?: number;
   body_part_number: number;
 }) => {
-  return useQuery<IMeasureROMItem[]>({
+  return useQuery<IMeasureROMTypeItem[]>({
     queryKey: ["userROMItemList", user_sn, center_sn, body_part_number],
     queryFn: () => getROMItemList({ user_sn, center_sn, body_part_number }),
     enabled: body_part_number !== undefined ,

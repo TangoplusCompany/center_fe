@@ -1,5 +1,5 @@
 import React from "react";
-import CenterUserAddContainer from "@/components/User/CenterUserAddContainer";
+import CenterUserAddContainer from "@/components/User/AddContainer";
 
 const UserAddPage = () => {
   return (

@@ -1,5 +1,5 @@
 import React from "react";
-import MeasureMainContainer from "@/components/Measure/MeasureMainContainer";
+import MeasureMainContainer from "@/components/Measure/MainContainer";
 
 const MeasurePage = () => {
   return (

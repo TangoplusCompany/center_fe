@@ -1,0 +1,245 @@
+"use client";
+
+import React, { useCallback, useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import UserDetailTap from "@/components/User/DetailTap";
+import CenterUserMeasureContainer from "./MeasureContainer";
+import CenterUserInformation from "@/components/User/Information";
+import { useMeasureListForCompare } from "@/hooks/api/user/useMeasureListForCompare";
+import { MeasurePickerDialog } from "../Measure/Compare/CompareMeasurePickerDialog";
+import { ComparePair, CompareSlot } from "@/types/compare";
+import AIUserContainer from "./ai/UserContainer";
+// import { useGetUserDashboard } from "@/hooks/api/user/useGetUserDashboard";
+// import { IUserDashBoard } from "@/types/measure";
+// import { formatDate } from "@/utils/formatDate";
+import { useGetUserDetail } from "@/hooks/api/user/useGetUserDetail";
+import { resultPageUserStore } from "@/stores/ResultPageUserStore";
+
+const useTab = () => {
+  const [tab, setTab] = useState(0);
+  const [currentView, setCurrentView] = useState<viewType>("detail");
+
+  const handleTab = useCallback((index: number) => {
+    setTab(index);
+    setCurrentView(DEFAULT_VIEW[index] ?? "default");
+  }, []);
+
+  const changeView = useCallback((view: viewType) => {
+    setCurrentView(view);
+  }, []);
+
+  return { tab, handleTab, currentView, changeView };
+};
+
+
+const useMeasureSn = () => {
+  const [measureSn, setMeasureSn] = useState<number>(0);
+  const changeMeasureSn = useCallback((sn: number) => {
+    setMeasureSn(sn);
+  }, []);
+  return { measureSn, changeMeasureSn };
+};
+
+// 화면 모드 enum default => 표
+export type viewType = "default" | "detail" | "compare" | "aiExercise" | "rom";
+const DEFAULT_VIEW : Record<number, viewType> = {
+  0 : "detail",
+  1: "default",
+  2: "default"
+}
+
+const CenterUserDetail = ({ 
+  userUUID,
+  userSn,
+  userName,
+  isMyPage = false,
+}: {
+  userUUID: string;
+  userSn: number;
+  userName?: string;
+  isMyPage?: boolean;
+}) => {
+  const router = useRouter();
+  const { measureSn, changeMeasureSn } = useMeasureSn();
+  const { tab, handleTab, currentView, changeView } = useTab();
+
+ 
+  // 사용자 정보를 가져와서 최신 이름 표시 (사용자 정보 수정 시 자동 업데이트)
+  const { data: userDetailData } = useGetUserDetail({ 
+    userSn: userSn.toString(),
+    isMyPage 
+  });
+  
+  // 측정일을 가져오기 위한 대시보드 데이터
+  // const { data: dashboardData } = useGetUserDashboard<IUserDashBoard>({
+  //   user_sn: userSn,
+  //   isMyPage,
+  // });
+  
+  // 사용자 이름: userDetailData가 있으면 우선 사용, 없으면 userName prop 사용
+  const displayUserName = userDetailData?.user_name || userName;
+  const handleTabWithReset = (index: number) => {
+    if (tab === 1 && index !== 1 && measureSn !== 0) {
+      changeMeasureSn(0);
+    }
+    // 비교분석 탭으로 들어올 때마다 비교 모드/선택 초기화 → 항상 리스트 화면
+    if (index === 2) {
+      setComparePair([undefined, undefined]);
+    }
+    handleTab(index);
+  };
+  
+  // -------# compare를 위한 변수들 #---------
+  const [comparePair, setComparePair] = React.useState<ComparePair>([undefined, undefined]);
+  const selectCompareSn = (sn: number, slot: CompareSlot) => {
+    setComparePair((prev) => {
+      const next: ComparePair = [...prev]; 
+      next[slot] = sn;                    
+      return next;                         
+    });
+  };
+  // const clearCompare = () => {
+  //   setComparePair([undefined, undefined]);
+  //   changeView("default");
+  // };
+  
+  // -------# compare dialog를 위한 변수들 #---------
+  const [isCompareDialogOpen, setIsCompareDialogOpen] = React.useState(false);
+  const [activeSlot, setActiveSlot] = React.useState<CompareSlot>(0);
+  const onCompareDialogOpen = (slot: CompareSlot) => {
+    setActiveSlot(slot);
+    setIsCompareDialogOpen(true);
+  };
+  const {
+    measureList: compareMeasureListItems,
+    pagination: comparePagination,
+  } = useMeasureListForCompare({
+    user_sn: userSn,
+    isMyPage,
+  });
+    
+  // ----------# 로그아웃 핸들러 (isMyPage일 때만 사용) #-----------
+  const handleLogout = () => {
+    if (!isMyPage) return;
+    if (confirm("로그아웃 하시겠습니까?")) {
+      // 전역 store 인스턴스를 직접 사용 (Provider 없이도 사용 가능)
+      resultPageUserStore.getState().setLogout();
+      router.push("/result-page/login");
+    }
+  };
+
+  return (
+    <div className="w-full h-full flex flex-col gap-4 lg:gap-4">
+      {/* 타이틀 */}
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3 flex-1">
+          <div className="w-1 h-12 bg-toggleAccent rounded-full"></div>
+          <h2 className="text-3xl font-semibold text-[#333] dark:text-white flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+            <span>{displayUserName ? `${displayUserName}님` : "사용자"} 측정 결과</span>
+            {/* {dashboardData?.latest_measure_summary?.measure_date && (
+              <span className="text-sm text-sub300 dark:text-sub200 sm:pl-2">
+                {formatDate(dashboardData.latest_measure_summary.measure_date)}
+              </span>
+            )} */}
+          </h2>
+        </div>
+        {isMyPage && (
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-2 sm:px-4 py-2 text-sm text-sub700 hover:text-sub900 hover:bg-sub100 rounded-lg transition-colors"
+            type="button"
+            aria-label="로그아웃"
+          >
+            <Image
+              src="/icons/ic_logout.svg"
+              alt="로그아웃"
+              width={20}
+              height={20}
+              className="w-5 h-5"
+            />
+            <span className="hidden sm:inline">로그아웃</span>
+          </button>
+        )}
+      </div>
+
+      <UserDetailTap
+        nowTab={tab}
+        userUUID={userUUID}
+        update={handleTabWithReset}
+        changeMeasure={changeMeasureSn}
+        currentView={currentView}
+        changeView={changeView}
+        />
+
+      {currentView === "aiExercise" ? (
+        <div className="flex flex-col gap-4">
+          {/* 뒤로가기 버튼 */}
+          <button
+            onClick={() => changeView("default")}
+            className="flex items-center gap-2 text-sm text-sub700 hover:text-sub900 transition-colors w-fit"
+          >
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="20" 
+              height="20" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+            >
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            <span>뒤로가기</span>
+          </button>
+          
+          <AIUserContainer 
+            user_uuid={userUUID}
+            user_sn={`${userSn}`}
+          />
+        </div>
+      ) : (
+        <>
+          {tab !== 3 &&
+        (
+          <CenterUserMeasureContainer
+            measureSn={measureSn}
+            userSn={userSn}
+            tab={tab}
+            changeMeasure={changeMeasureSn}
+            currentView={currentView}
+            changeView={changeView}
+            comparePair={ comparePair }
+            selectCompareSn={ selectCompareSn }
+            // clearCompare={ clearCompare }
+            onCompareDialogOpen= {onCompareDialogOpen}
+            isMyPage={isMyPage}
+          />
+        )}
+        {tab === 3 && <CenterUserInformation 
+        userSn={userSn} 
+        isMyPage={isMyPage} />}
+        </>
+      )}
+
+      <MeasurePickerDialog
+        open={isCompareDialogOpen}
+        items={compareMeasureListItems} 
+        comparePair={comparePair}
+        activeSlot={ activeSlot }
+        onOpenChange={setIsCompareDialogOpen}
+        selectCompareSn={(sn, slot) => {
+          selectCompareSn(sn, slot);
+          setIsCompareDialogOpen(false);
+        }}
+        pagination={comparePagination}
+      />
+      
+      
+    </div>
+  );
+};
+
+export default CenterUserDetail;

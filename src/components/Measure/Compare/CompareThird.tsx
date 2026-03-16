@@ -13,7 +13,7 @@ const MeasureStaticCompareThird = React.memo(
   right,
   userSn,
   onCompareDialogOpen,
-  isResultPage = false,
+  isMyPage = false,
 }: CompareStaticProps) => {
   const leftSummaryData = left?.result_summary_data
   const rightSummaryData = right?.result_summary_data
@@ -25,7 +25,7 @@ const MeasureStaticCompareThird = React.memo(
     measure_sn: leftSummaryData?.measure_sn ? String(leftSummaryData.measure_sn) : undefined,
     user_sn: String(userSn),
     sequence_number: 2,
-    isResultPage,
+    isMyPage,
   });
   const {
     data: measure1,
@@ -35,7 +35,7 @@ const MeasureStaticCompareThird = React.memo(
     measure_sn: rightSummaryData?.measure_sn ? String(rightSummaryData.measure_sn) : undefined,
     user_sn: String(userSn),
     sequence_number: 2,
-    isResultPage,
+    isMyPage,
   });
   const {
     data: measureJson0,

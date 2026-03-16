@@ -8,7 +8,7 @@ import { useAuthStoreOptional } from "@/providers/AuthProvider";
  * @param measure_sn 측정 번호
  * @param user_sn 유저 번호
  * @param sequence_number 시퀀스 번호
- * @param isResultPage result-page에서 사용하는지 여부
+ * @param isMyPage result-page에서 사용하는지 여부
  * @returns 측정 시퀀스 데이터
  */
 type MeasureSequenceResponse<T extends number> = T extends 6
@@ -19,22 +19,22 @@ export const useMeasureSequence = <T extends number>({
   measure_sn,
   user_sn,
   sequence_number,
-  isResultPage = false,
+  isMyPage = false,
 }: {
   measure_sn: string | undefined;
   user_sn: string;
   sequence_number: T;
-  isResultPage?: boolean;
+  isMyPage?: boolean;
 }) => {
   // result-page에서는 AuthStoreProvider가 없으므로 optional 사용
   const centerSn = useAuthStoreOptional((state) => state.centerSn, 0);
-  const axiosInstance = isResultPage ? customUserAxios : customAxios;
-  const apiPath = isResultPage
+  const axiosInstance = isMyPage ? customUserAxios : customAxios;
+  const apiPath = isMyPage
     ? `/users/${user_sn}/measurement/${measure_sn}/sequences/${sequence_number}`
     : `/measurement/${measure_sn}/centers/${centerSn}/members/${user_sn}/sequences/${sequence_number}`;
 
   return useQuery<MeasureSequenceResponse<T>>({
-    queryKey: isResultPage
+    queryKey: isMyPage
       ? ["userResultMeasureSequence", measure_sn, user_sn, sequence_number]
       : ["measureSequence", measure_sn, user_sn, sequence_number, centerSn],
     queryFn: async () => {
@@ -45,6 +45,6 @@ export const useMeasureSequence = <T extends number>({
       measure_sn !== undefined &&
       user_sn !== undefined &&
       sequence_number !== undefined &&
-      (isResultPage || centerSn > 0),
+      (isMyPage || centerSn > 0),
   });
 };

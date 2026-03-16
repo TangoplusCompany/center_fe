@@ -19,11 +19,6 @@ export const UnitySkeleton = (
     frameworkUrl: "/unity/Build/Build.framework.js.unityweb",
     codeUrl: "/unity/Build/Build.wasm.unityweb",
 
-    webglContextAttributes: {
-      alpha: true,              // ← 투명 배경 핵심!
-      antialias: true,
-      premultipliedAlpha: false, 
-    },
   });
 
   const pct = useMemo(
@@ -66,7 +61,6 @@ export const UnitySkeleton = (
           background: "transparent"
         }}
       >
-        {/* devicePixelRatio={window.devicePixelRatio} */}
         <Unity
           unityProvider={unityProvider}
           devicePixelRatio={window.devicePixelRatio}

@@ -23,10 +23,10 @@ export const ROMItemCard = ({
 
     const dummy = Array.from(
       { length: Math.max(0, FIXED_SLOTS - sorted.length) },
-      () => ({ date: " ", value: 0 }) 
+      () => ({ date: " ", value: undefined }) 
     );                
 
-    return [...dummy, ...sorted];
+    return [...sorted, ...dummy]  // 데이터 먼저, 더미 뒤에
   }, [romItem.history_by_measure_type]);
 
   const seriesKeys = useMemo(
@@ -122,8 +122,9 @@ export const ROMItemCard = ({
                   stroke="hsl(var(--toggle-accent))"
                   strokeWidth={2}
                   connectNulls
-                  dot={(props: DotProps & { value?: number }) => {
-                    if (!props.value || props.value === 0) return <g key={props.key} />;
+                            dot={(props: DotProps & { value?: number; payload?: { score?: number } }) => {
+
+                    if (props.payload?.score === undefined || props.payload?.score === null) return <g key={props.key} />;
                     return (
                       <circle
                         key={props.key}

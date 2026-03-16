@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import CenterUserPage from "@/components/User/CenterUserPage";
+import CenterUserPage from "@/components/User/Page";
 
 const UserHome = () => {
   return (

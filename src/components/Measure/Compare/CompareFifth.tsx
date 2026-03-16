@@ -13,7 +13,7 @@ const MeasureStaticCompareFifth  = React.memo(
   right,
   userSn,
   onCompareDialogOpen,
-  isResultPage = false,
+  isMyPage = false,
 }: CompareStaticProps) => {
   // TODO 정적 조회하는 api를 사용 + 하단의 useMeasureJson을 써야함 (+ Raw Data card도 넣어줘야함)
   const leftSummaryData = left?.result_summary_data
@@ -26,7 +26,7 @@ const MeasureStaticCompareFifth  = React.memo(
     measure_sn: leftSummaryData?.measure_sn ? String(leftSummaryData.measure_sn) : undefined,
     user_sn: String(userSn),
     sequence_number: 3,
-    isResultPage,
+    isMyPage,
   });
   const {
     data: measure1,
@@ -36,7 +36,7 @@ const MeasureStaticCompareFifth  = React.memo(
     measure_sn: rightSummaryData?.measure_sn ? String(rightSummaryData.measure_sn) : undefined,
     user_sn: String(userSn),
     sequence_number: 3,
-    isResultPage,
+    isMyPage,
   });
   const {
     data: measureJson0,
