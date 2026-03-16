@@ -128,25 +128,6 @@ const CenterUserMeasureContainer = ({
         />
       )}
 
-      {/* ✅ 탭 1: 리스트 화면 vs 상세 화면 전환 */}
-      {/* {tab === 2 && currentView !== "default" && (
-        <div className="shrink-0">
-          <div className="flex items-center justify-between p-2">
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                clearCompare();
-                changeView("default")
-              }}
-              className="px-3 py-1 rounded-md text-sm text-primary-foreground"
-            >
-              ← 목록으로
-            </button>
-          </div>
-        </div>
-      )} */}
-
       {tab === 2 && (
         <>
           {initCompare ? (
