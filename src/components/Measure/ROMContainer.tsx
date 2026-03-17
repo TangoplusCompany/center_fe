@@ -75,6 +75,7 @@ export const MeasureROMContainer = () => {
     user_sn: userSn,
     center_sn: centerSn,
     measure_type: measureType,
+    isMyPage: false,
     page,
   })
 

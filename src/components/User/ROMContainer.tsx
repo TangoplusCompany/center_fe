@@ -67,6 +67,7 @@ export const CenterUserROMContainer = ({
     user_sn: userSn,
     center_sn: centerSn,
     measure_type: measureType,
+    isMyPage:isMyPage,
     page,
   })
 
