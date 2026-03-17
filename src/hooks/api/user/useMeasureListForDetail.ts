@@ -42,9 +42,10 @@ export const useMeasureListForDetail = ({
   const filteredItems = useMemo(() => {
     if (!data?.measurement_list) return [];
 
-    return data.measurement_list.filter(
-      (item) => item.measurement_type === "basic_only"
-    );
+    // return data.measurement_list.filter(
+    //   (item) => item.measurement_type === "basic_only"
+    // );
+    return data?.measurement_list
   }, [data?.measurement_list]);
   
   const pagination: DetailPagination = useMemo(

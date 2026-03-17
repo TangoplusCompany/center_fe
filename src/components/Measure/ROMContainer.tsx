@@ -2,7 +2,7 @@
 
 
 import { useGetROMItemDetail } from "@/hooks/api/measure/rom/useGetROMItemDetail";
-import { useGetROMItemHistory } from "@/hooks/api/measure/rom/useGetROMItemHsitory";
+import { useGetROMItemHistory } from "@/hooks/api/measure/rom/useGetROMItemHistory";
 import { useGetROMItems } from "@/hooks/api/measure/rom/useGetROMItems";
 import { ComparePair, CompareSlot } from "@/types/compare";
 import { useState } from "react";

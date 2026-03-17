@@ -15,7 +15,7 @@ import { postKakaoSend } from "@/app/actions/postKakaoSend";
 import { Button } from "../ui/button";
 import type { DetailPagination } from "@/hooks/api/user/useMeasureListForDetail";
 import { getResultReportUrl } from "@/app/actions/openPrintPage";
-import { SkeletonDatePickerProps } from "./SkeletonContainer";
+import { SkeletonDatePickerProps } from "./Skeleton/SkeletonContainer";
 import { viewType } from "../User/Detail";
 type MeasureListType = {
   title: string;

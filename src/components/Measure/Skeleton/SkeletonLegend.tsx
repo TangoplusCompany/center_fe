@@ -20,7 +20,7 @@
   {/* 하단 설명 */}
   <div className="flex justify-between text-sm mt-3">
     <span style={{ color: "#9A9A9A" }}>상태 유지 강화 권장</span>
-    <span style={{ color: "#B5741A" }}>제공되는 맨몸 운동 권장</span>
+    <span style={{ color: "#B5741A" }}>제공되는 맨몸<br />운동 권장</span>
     <span style={{ color: "#81363D" }}>전문가 상담 권장</span>
   </div>
 </div>

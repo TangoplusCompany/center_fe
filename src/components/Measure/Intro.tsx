@@ -2,7 +2,7 @@
 
 import { IPartDetailData, IUserMeasureInfoResponse } from "@/types/measure";
 import React from "react";
-import SkeletonContainer, { SkeletonDatePickerProps } from "./SkeletonContainer";
+import SkeletonContainer, { SkeletonDatePickerProps } from "./Skeleton/SkeletonContainer";
 import FootStaticContainer, { IMatStaticPressure } from "./Mat/FootStaticContainer";
 import FootDynamicContainer, { IMatOhsPressure } from "./Mat/FootDynamicContainer";
 import KneeTrajectory from "./Mat/KneeTrajectoryContainer";
