@@ -4,13 +4,13 @@ import "@/css/body-skeleton.css";
 import { IMeasureList, IUserDetailMeasureInfo } from "@/types/measure";
 // import { FullBodySkeleton3D } from "./FullBodySkeleton3D";
 import React from "react";
-import { MeasureDetailDatePickerDialog } from "./DetailDatePickerDialog";
+import { MeasureDetailDatePickerDialog } from "../DetailDatePickerDialog";
 import { formatDate } from "@/utils/formatDate";
 import { DetailPagination } from "@/hooks/api/user/useMeasureListForDetail";
-import { viewType } from "../User/Detail";
-import { Button } from "../ui/button";
-import { UnitySkeleton } from "./UnitySkeleton";
+import { viewType } from "../../User/Detail";
+import { Button } from "../../ui/button";
 import { useTheme } from "next-themes";
+import UnitySkeleton from "./UnitySkeleton";
 
 export interface SkeletonDatePickerProps {
   measureList?: IMeasureList[];              // 전체 측정 리스트 (현재 페이지)
@@ -39,6 +39,7 @@ const SkeletonContainer = ({
     rawProps.measureList && rawProps.selectedMeasure != undefined
       ? rawProps.measureList.find((item) => item.measure_sn === rawProps.selectedMeasure)
       : undefined;
+  console.log(selectedMeasure, rawProps)
   const { resolvedTheme } = useTheme();
   const isDarkMode = resolvedTheme === "dark";
   const transformRiskToJoints = (data: IUserDetailMeasureInfo): Record<string, number> => {
@@ -105,7 +106,7 @@ const SkeletonContainer = ({
       <div className="flex-1 flex items-center justify-center w-full min-h-0 my-4">
         <div className="relative items-center justify-center skeleton w-full max-w-[512px] " >
           {/* <FullBodySkeleton3D data={data} className="w-full h-full" /> */}
-          <UnitySkeleton joints={transformRiskToJoints(data)} isDarkMode={isDarkMode} />
+          <UnitySkeleton  joints={transformRiskToJoints(data)} isDarkMode={isDarkMode} />
         </div>
       </div>
      
@@ -129,9 +130,9 @@ const SkeletonContainer = ({
           <p className="text-sm text-sub400" >
             * 측정 기준 설명
           </p>
-          <p className="text-sm" style={{ color: "#9A9A9A" }}>
+          {/* <p className="text-sm" style={{ color: "#9A9A9A" }}>
             Polyon Studio (CC BY)
-          </p>
+          </p> */}
         </div>
         
 
@@ -157,7 +158,7 @@ const SkeletonContainer = ({
 
           {/* 주의 - 1/3 너비 및 중앙 정렬 */}
           <div className="flex-1 text-center">
-            <span style={{ color: "#B5741A" }}>제공되는 맨몸 운동 권장</span>
+            <span style={{ color: "#B5741A" }}>제공되는 맨몸<br />운동 권장</span>
           </div>
 
           {/* 위험 - 1/3 너비 및 중앙 정렬 */}

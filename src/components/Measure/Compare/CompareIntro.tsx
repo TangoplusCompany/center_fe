@@ -4,7 +4,7 @@ import CompareSummaryUnit from "./CompareSummaryUnit";
 import CompareFootTrajectoryGridContainer, { CompareFootTrajectoryGridProps } from "./CompareFootTrajectoryGridContainer";
 import CompareDefault from "./CompareDefault";
 import CompareSummaryFootStatic, { CompareSummaryFootStaticProps } from "./CompareSummaryFootStatic";
-import SkeletonContainer from "../SkeletonContainer";
+import SkeletonContainer from "../Skeleton/SkeletonContainer";
 
 export const extractMeasureData = (data: IUserMeasureInfoResponse  | undefined) => {
     if (!data?.result_summary_data) {

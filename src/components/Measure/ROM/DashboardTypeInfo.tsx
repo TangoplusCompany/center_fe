@@ -46,7 +46,7 @@ export const ROMDashboardTypeInfo = ({
         </h2>
       </div>
 
-      <div className="grid grid-cols-3 gap-2 items-stretch">
+      <div className="sm:grid sm:grid-cols-3 flex flex-col gap-2 items-stretch">
         <div className="flex flex-col border-2 border-sub200 rounded-xl p-4 h-full items-center justify-center ">
           <div className="text-base pb-4">
             {data.howto}

@@ -11,11 +11,17 @@ export const getROMItemList = async ({
   user_sn,
   center_sn,
   body_part_number,
+  isMyPage, 
 }: {
   user_sn: number;
   center_sn?: number;
   body_part_number: number;
+  isMyPage: boolean;
 }): Promise<IMeasureROMTypeItem[]> => {
-  const { data } = await customAxios.get(`/members/${user_sn}/centers/${center_sn}/latest-rom-results/${body_part_number > 0 ? `${body_part_number}` : ""}`);
+    
+  const apiPath = isMyPage 
+  ? `/members/${user_sn}/latest-rom-results/${body_part_number}`
+  : `/members/${user_sn}/centers/${center_sn}/latest-rom-results/${body_part_number}`
+  const { data } = await customAxios.get(apiPath);
   return data.data;
 };

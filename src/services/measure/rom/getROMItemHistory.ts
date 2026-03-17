@@ -11,16 +11,22 @@ export const getROMItemHistory = async ({
   user_sn,
   center_sn,
   measure_type,
+  isMyPage,
   page = 1,
   limit = 10,
 }: {
   user_sn: number;
   center_sn?: number;
   measure_type?: number;
+  isMyPage: boolean;
   page?: number;
   limit?: number;
 }) => {
-  const { data } = await customAxios.get(`/members/${user_sn}/centers/${center_sn}/rom-results/measure-type/${measure_type}`, {
+
+  const apiPath = isMyPage
+    ? `/users/${user_sn}/results/measure_type/${measure_type}` // TODO 여기 isMyPage 일때 endpoint 바꿔야됨
+    : `/members/${user_sn}/centers/${center_sn}/rom-results/measure-type/${measure_type}`;
+  const { data } = await customAxios.get(apiPath, {
     params: { page, limit },
   });
   return data.data as IMeasureROMItemHistoryResponse;

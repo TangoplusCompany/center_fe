@@ -6,7 +6,7 @@ export interface UnitySkeletonProps {
   joints : Record<string, number>
   isDarkMode: boolean
 }
-export const UnitySkeleton = (
+export const UnitySkeletonInner = (
   {
     joints,
     isDarkMode = false
@@ -73,16 +73,18 @@ export const UnitySkeleton = (
       </div>
 
       {!isLoaded && (
-        <div style={{
+        <div className="text-center" style={{
           position: "absolute",
           inset: 0,
           background: "white", // 원하는 색으로
           display: "flex",
+          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
           zIndex: 10,
         }}>
-          <p>Loading... {pct}%</p>
+          <p className="font-semibold">LOADING</p>
+            <p>{pct}%</p>
         </div>
       )}
 
@@ -90,4 +92,4 @@ export const UnitySkeleton = (
   );
 };
 
-export default UnitySkeleton;
+export default UnitySkeletonInner;

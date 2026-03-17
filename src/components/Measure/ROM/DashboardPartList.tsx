@@ -17,7 +17,7 @@ const ROMDashboardPartList = ({
       0 : {label: "위험", className: "border-danger text-danger"},
       1 : {label: "주의", className: "border-warning text-warning"},
       2 : {label: "정상", className: "border-toggleAccent text-toggleAccent"},
-      3 : {label: "정상", className: "border-toggleAccent text-toggleAccent"}
+      3 : {label: "매우 양호", className: "border-toggleAccent text-toggleAccent"}
     }
     const stateCircle : Record<number, string> = {
       0 : "bg-danger",
@@ -27,8 +27,8 @@ const ROMDashboardPartList = ({
     }
     const state = scoreMap[score] ?? {label: "-", className: "border-toggleAccent text-toggleAccent"}
     return (
-      <div className={`flex w-fit gap-2 rounded-full px-2 ${state.className} border-2 items-center`}>
-        <div className={`${stateCircle[score]} w-3 h-3 rounded-full`}/>
+      <div className={`flex w-fit gap-2 rounded-full text-sm font-semibold px-2 py-1 ${state.className} border-2 items-center`}>
+        <div className={`${stateCircle[score]} w-4 h-4 rounded-full`}/>
         {scoreMap[score].label}
       </div>
     )

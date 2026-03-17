@@ -1,16 +1,14 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetROMItemList } from "@/hooks/api/measure/rom/useGetROMItemList";
 import { useState } from "react";
-import ROMDashboardCardFrequent from "./DashboardCardFrequent";
-import ROMDashboardCardRecent from "./DashboardCardRecent";
 import ROMDashboardBody from "./DashboardBody";
-import { TROMSelectPart } from "@/types/dashboard";
 import { useGetROMItemDetail } from "@/hooks/api/measure/rom/useGetROMItemDetail";
 import { ComparePair, CompareSlot } from "@/types/compare";
 import ROMBody from "./Body";
 import ROMPickerDialog from "./PickerDialog";
-import { useGetROMItemHistory } from "@/hooks/api/measure/rom/useGetROMItemHsitory";
+import { useGetROMItemHistory } from "@/hooks/api/measure/rom/useGetROMItemHistory";
 import { useAuthStoreOptional } from "@/providers/AuthProvider";
+import ROMDashboardTotalGraph from "./DashboardTotalGrpah";
 
 export interface ROMDashboardContainerProps {
   userSn: number;
@@ -22,7 +20,6 @@ export type ROMDashboardViewType = "default" | "detail";
 
 const ROMDashboardContainer = ({
   userSn,
-
   isMyPage
 }: ROMDashboardContainerProps ) => {
   // 0. DP type (대시보드 컨테이너 안에서 화면 전환)
@@ -65,7 +62,8 @@ const ROMDashboardContainer = ({
   } = useGetROMItemList({
     user_sn: userSn,
     center_sn : centerSn,
-    body_part_number: bodyPartNumber
+    body_part_number: bodyPartNumber,
+    isMyPage: isMyPage
   });
   const {
     data: romHistory,
@@ -75,6 +73,7 @@ const ROMDashboardContainer = ({
     user_sn: userSn,
     center_sn: centerSn,
     measure_type: measureType,
+    isMyPage: isMyPage,
     page,
   })
   
@@ -100,16 +99,6 @@ const ROMDashboardContainer = ({
     isMyPage: isMyPage
   })
 
-  const frequentData :TROMSelectPart = {
-    romName: "발목",
-    count: 7,
-    description: `[정면] 발목 굽힘 검사를 ${7}회간 검사했습니다.`
-  }
-  const recentData :TROMSelectPart = {
-    romName: "무릎",
-    count: 0,
-    description: `${"2026-05-21"}에 [오른측면] 무릎관절 폄 검사를 진행했습니다.`
-  }
   if (jointROMLoading) return (<Skeleton></Skeleton>);
   if (jointROMError) return (
     <div className="flex items-center justify-center h-[200px] text-sm text-red-400">
@@ -122,13 +111,14 @@ const ROMDashboardContainer = ({
       오류가 발생했습니다. 잠시후 다시 시도해주세요.
     </div>
   );
+  
+
   return (
     <div className="flex flex-col gap-4">
       {(currentView === "default") ? (
         <>
-          <div className="grid grid-cols-2 gap-2">
-            <ROMDashboardCardFrequent data={frequentData} />
-            <ROMDashboardCardRecent data={recentData} />
+          <div className="flex flex-1">
+            <ROMDashboardTotalGraph userSn={userSn} isMyPage={isMyPage} />
           </div>
 
           <ROMDashboardBody 
