@@ -3,11 +3,11 @@ import ROMDashboardTypeGraph from "./DashboardTypeGraph";
 
 
 export interface ROMDashboardTypeInfoProps {
-  datas: IMeasureROMHistoryItem[]
+  datas: IMeasureROMHistoryItem[];
 }
 
 export const ROMDashboardTypeInfo = ({
-  datas
+  datas,
 }: ROMDashboardTypeInfoProps) => {
   const data = datas[0];
 
@@ -36,15 +36,9 @@ export const ROMDashboardTypeInfo = ({
     datas.map((it) => [it.reg_date, it.score])
   )
 
+
   return (
     <div className="flex flex-col gap-4">
-
-      <div className="flex items-center gap-3">
-        <div className="w-1 h-12 bg-toggleAccent rounded-full"></div>
-        <h2 className="text-xl font-semibold text-sub700 dark:text-white flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-          <span>{data.title}</span>
-        </h2>
-      </div>
 
       <div className="sm:grid sm:grid-cols-3 flex flex-col gap-2 items-stretch">
         <div className="flex flex-col border-2 border-sub200 rounded-xl p-4 h-full items-center justify-center ">

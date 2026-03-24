@@ -1,4 +1,4 @@
-import { customAxios } from "@/lib/axios";
+import { customAxios, customUserAxios } from "@/lib/axios";
 import { IMeasureROMItemHistoryResponse } from "@/types/measure";
 
 /**
@@ -22,11 +22,11 @@ export const getROMItemHistory = async ({
   page?: number;
   limit?: number;
 }) => {
-
+  const axiosInstance = isMyPage ? customUserAxios : customAxios;
   const apiPath = isMyPage
-    ? `/users/${user_sn}/results/measure_type/${measure_type}` // TODO 여기 isMyPage 일때 endpoint 바꿔야됨
+    ? `/users/${user_sn}/rom-results/measure-type/${measure_type}` 
     : `/members/${user_sn}/centers/${center_sn}/rom-results/measure-type/${measure_type}`;
-  const { data } = await customAxios.get(apiPath, {
+  const { data } = await axiosInstance.get(apiPath, {
     params: { page, limit },
   });
   return data.data as IMeasureROMItemHistoryResponse;

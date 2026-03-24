@@ -2,15 +2,15 @@
 
 import "@/css/body-skeleton.css";
 import { IMeasureList, IUserDetailMeasureInfo } from "@/types/measure";
-// import { FullBodySkeleton3D } from "./FullBodySkeleton3D";
 import React from "react";
 import { MeasureDetailDatePickerDialog } from "../DetailDatePickerDialog";
 import { formatDate } from "@/utils/formatDate";
 import { DetailPagination } from "@/hooks/api/user/useMeasureListForDetail";
 import { viewType } from "../../User/Detail";
 import { Button } from "../../ui/button";
-import { useTheme } from "next-themes";
-import UnitySkeleton from "./UnitySkeleton";
+import { FullBodySkeleton3D } from "../FullBodySkeleton3D";
+// import UnitySkeleton from "./UnitySkeleton";
+// import { useTheme } from "next-themes";
 
 export interface SkeletonDatePickerProps {
   measureList?: IMeasureList[];              // 전체 측정 리스트 (현재 페이지)
@@ -39,24 +39,23 @@ const SkeletonContainer = ({
     rawProps.measureList && rawProps.selectedMeasure != undefined
       ? rawProps.measureList.find((item) => item.measure_sn === rawProps.selectedMeasure)
       : undefined;
-  console.log(selectedMeasure, rawProps)
-  const { resolvedTheme } = useTheme();
-  const isDarkMode = resolvedTheme === "dark";
-  const transformRiskToJoints = (data: IUserDetailMeasureInfo): Record<string, number> => {
-    return {
-      "목관절": data.risk_neck,
-      "좌측 어깨": data.risk_shoulder_left,
-      "우측 어깨": data.risk_shoulder_right,
-      "좌측 팔꿉": data.risk_elbow_left,
-      "우측 팔꿉": data.risk_elbow_right,
-      "좌측 골반": data.risk_hip_left,
-      "우측 골반": data.risk_hip_right,
-      "좌측 무릎": data.risk_knee_left,
-      "우측 무릎": data.risk_knee_right,
-      "좌측 발목": data.risk_ankle_left,
-      "우측 발목": data.risk_ankle_right,
-    };
-  };
+  // const { resolvedTheme } = useTheme();
+  // const isDarkMode = resolvedTheme === "dark";
+  // const transformRiskToJoints = (data: IUserDetailMeasureInfo): Record<string, number> => {
+  //   return {
+  //     "목관절": data.risk_neck,
+  //     "좌측 어깨": data.risk_shoulder_left,
+  //     "우측 어깨": data.risk_shoulder_right,
+  //     "좌측 팔꿉": data.risk_elbow_left,
+  //     "우측 팔꿉": data.risk_elbow_right,
+  //     "좌측 골반": data.risk_hip_left,
+  //     "우측 골반": data.risk_hip_right,
+  //     "좌측 무릎": data.risk_knee_left,
+  //     "우측 무릎": data.risk_knee_right,
+  //     "좌측 발목": data.risk_ankle_left,
+  //     "우측 발목": data.risk_ankle_right,
+  //   };
+  // };
    
   return (
     <div className="relative box-border flex h-full flex-col items-center rounded-3xl border-2 border-sub200 p-4 text-black focus-visible:outline-none">
@@ -98,17 +97,16 @@ const SkeletonContainer = ({
         </>
       )}
 
-      {/* <div className="flex-1 flex items-center justify-center w-full min-h-0">
+      <div className="flex-1 flex items-center justify-center w-full min-h-0">
         <div className="relative z-0 skeleton mb-8 w-full max-w-[260px] aspect-[246/440] min-h-[150px]">
           <FullBodySkeleton3D data={data} className="w-full h-full" />
         </div>
-      </div> */}
-      <div className="flex-1 flex items-center justify-center w-full min-h-0 my-4">
+      </div>
+      {/* <div className="flex-1 flex items-center justify-center w-full min-h-0 my-4">
         <div className="relative items-center justify-center skeleton w-full max-w-[512px] " >
-          {/* <FullBodySkeleton3D data={data} className="w-full h-full" /> */}
           <UnitySkeleton  joints={transformRiskToJoints(data)} isDarkMode={isDarkMode} />
         </div>
-      </div>
+      </div> */}
      
       {/* ⭐ 기준바: Skeleton 하단 중앙 */}
       <div className="hidden md:flex flex-col w-full gap-2">
@@ -130,9 +128,9 @@ const SkeletonContainer = ({
           <p className="text-sm text-sub400" >
             * 측정 기준 설명
           </p>
-          {/* <p className="text-sm" style={{ color: "#9A9A9A" }}>
+          <p className="text-sm text-sub400">
             Polyon Studio (CC BY)
-          </p> */}
+          </p>
         </div>
         
 

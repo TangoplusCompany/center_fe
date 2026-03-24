@@ -1,4 +1,4 @@
-import { customAxios } from "@/lib/axios";
+import { customAxios, customUserAxios } from "@/lib/axios";
 import { IMeasureROMTypeItem } from "@/types/measure";
 
 /**
@@ -18,10 +18,11 @@ export const getROMItemList = async ({
   body_part_number: number;
   isMyPage: boolean;
 }): Promise<IMeasureROMTypeItem[]> => {
-    
+  const axiosInstance = isMyPage ? customUserAxios : customAxios;
   const apiPath = isMyPage 
-  ? `/members/${user_sn}/latest-rom-results/${body_part_number}`
+  ? `/users/${user_sn}/latest-rom-results/${body_part_number}`
   : `/members/${user_sn}/centers/${center_sn}/latest-rom-results/${body_part_number}`
-  const { data } = await customAxios.get(apiPath);
+  const { data } = await axiosInstance.get(apiPath);
+
   return data.data;
 };
