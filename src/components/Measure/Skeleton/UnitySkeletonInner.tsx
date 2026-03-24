@@ -63,7 +63,7 @@ export const UnitySkeletonInner = (
       >
         <Unity
           unityProvider={unityProvider}
-          devicePixelRatio={window.devicePixelRatio}
+          devicePixelRatio={typeof window !== "undefined" ? window.devicePixelRatio : 1}
           style={{
             width: "100%",
             height: "100%",

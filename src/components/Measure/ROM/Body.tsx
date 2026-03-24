@@ -4,7 +4,7 @@ import { ComparePair, CompareSlot } from "@/types/compare";
 // import CompareDateCard from "../Compare/CompareDateCard";
 import { IMeasureROMItemDetail } from "@/types/measure";
 import CompareBodySkeleton from "../Compare/CompareBodySkeleton";
-import { ROMDashboardViewType } from "./DashboardContainer";
+import { ROMDashboardViewType } from "@/components/User/DashBoardContainer";
 
 export interface ROMBodyProps {
   data0?: IMeasureROMItemDetail;

@@ -124,8 +124,9 @@ const CenterUserMeasureContainer = ({
       {tab === 1 && (
         <CenterUserDashboardContainer
           userSn={userSn}
-          isMyPage={isMyPage}
-        />
+          isMyPage={isMyPage} 
+          fromROMContainer={false}        
+          />
       )}
 
       {tab === 2 && (

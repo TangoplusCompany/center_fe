@@ -10,8 +10,8 @@ import { useGetROMItemDetail } from "@/hooks/api/measure/rom/useGetROMItemDetail
 import { useGetROMItems } from "@/hooks/api/measure/rom/useGetROMItems";
 import { formatDate } from "@/utils/formatDate";
 import { Button } from "../ui/button";
-import ROMDashboardContainer from "../Measure/ROM/DashboardContainer";
 import { LayoutDashboardIcon } from "lucide-react";
+import CenterUserDashboardContainer from "./DashBoardContainer";
 
 export interface UserROMProps {
   userSn: number,
@@ -47,7 +47,7 @@ export const CenterUserROMContainer = ({
       return next;                         
     });
   };
-
+  
   const {
     data: romItems,
     isLoading: romLoading,
@@ -99,9 +99,10 @@ export const CenterUserROMContainer = ({
     <div className="flex flex-col gap-4">
       {showROMDashboard ? (
         /* --- 1. 대시보드 화면 --- */
-        <ROMDashboardContainer 
-          userSn={userSn} 
+        <CenterUserDashboardContainer 
+          userSn={userSn}
           isMyPage={isMyPage}
+          fromROMContainer={true}       
         />
       ) : (
         /* --- 2. 기존 목록/상세 화면 (전체) --- */

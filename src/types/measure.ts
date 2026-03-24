@@ -370,6 +370,16 @@ export interface IMeasureROMHistoryItem extends IMeasureROMItem {
   opposite_side_rom_sn: number;
   opposite_measure_type: number;
 }
+
+export interface IMeasureROMCount {
+  total_count: number;
+  bad_score_count: number;
+  warning_score_count:number;
+  normal_score_count: number;
+  good_score_count: number;
+}
+
+
 export interface IMeasureROMTypeItem extends IMeasureROMItemCardData {
   sn: number;
   measure_sn: number;
@@ -383,8 +393,6 @@ export interface IMeasureROMTypeItem extends IMeasureROMItemCardData {
   history_by_measure_type: Record<string, number>;
   measurement_count: number;
 }
-
-
 
 export interface IMeasureROMItem extends IMeasureROMItemCardData {
   sn: number;

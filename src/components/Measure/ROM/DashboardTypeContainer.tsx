@@ -8,14 +8,12 @@ export interface ROMDashboardTypeContainerProps {
   onROMItemSelect ?: (romSn: ComparePair) => void;
 }
 
-
 const ROMDashboardTypeContainer = ({
   romHistorys,
-  onROMItemSelect
+  onROMItemSelect,
 }: ROMDashboardTypeContainerProps) => {
   return (
     <div className="flex flex-col gap-4">
-      
       <ROMDashboardTypeInfo datas={romHistorys} />
       <ROMDashboardTypeList onROMItemSelect={onROMItemSelect} romHistorys={romHistorys} />
     </div>

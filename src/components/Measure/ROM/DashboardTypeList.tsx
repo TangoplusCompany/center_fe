@@ -46,7 +46,7 @@ const ROMDashboardTypeList = ({
             <TableHead className="text-base text-center w-[20%] whitespace-nowrap">측정 센터</TableHead>
             <TableHead className="text-base text-center w-[20%] whitespace-nowrap">측정 기기</TableHead>
             <TableHead className="text-base text-center w-[20%] whitespace-nowrap">각도값</TableHead>
-            <TableHead className="text-base text-center w-[15%] whitespace-nowrap">최근 상태</TableHead>
+            <TableHead className="text-base text-center w-[15%] whitespace-nowrap">결과</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

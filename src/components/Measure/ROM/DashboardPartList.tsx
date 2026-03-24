@@ -1,17 +1,24 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { IMeasureROMTypeItem } from "@/types/measure";
+import { IMeasureROMHistoryItem, IMeasureROMTypeItem } from "@/types/measure";
 import { formatDate } from "@/utils/formatDate";
+import DashboardTypeContainer from "./DashboardTypeContainer";
+import { ComparePair } from "@/types/compare";
+import { Fragment } from "react";
 
 export interface ROMDashboardPartListProps {
-  romTypeItems: IMeasureROMTypeItem[]
+  romTypeItems: IMeasureROMTypeItem[];
+  measureType: number;
   setMeasureType : (selectedMeasuredType: number) => void;
+  romHistorys: IMeasureROMHistoryItem[];
+  onROMItemSelect ?: (romSn: ComparePair) => void;
 }
 const ROMDashboardPartList = ({
   romTypeItems,
-  setMeasureType
+  measureType,
+  setMeasureType,
+  romHistorys,
+  onROMItemSelect,
 }: ROMDashboardPartListProps) => {
-
-
   const stateComp = (score: number) => {
     const scoreMap : Record<number, {label : string; className: string}> = {
       0 : {label: "위험", className: "border-danger text-danger"},
@@ -35,7 +42,7 @@ const ROMDashboardPartList = ({
   }
 
   return (
-    <div className="flex flex-col border-2 border-sub200 rounded-xl text-sub700">
+    <div className="flex flex-col text-sub700">
       <div className="w-full overflow-x-auto">
         <Table>
           <TableHeader>
@@ -49,31 +56,50 @@ const ROMDashboardPartList = ({
           </TableHeader>
 
           <TableBody>
-            {(romTypeItems).map((rom) => (
-              <TableRow 
-                key={rom.sn} 
-                onClick={() => {
-                  setMeasureType(rom.measure_type)
-                }}
-                className="cursor-pointer hover:bg-sub100 text-base"
-              >
-                <TableCell className="text-start px-2 font-medium whitespace-nowrap">
-                  {rom.title}
-                </TableCell>
-                <TableCell className="text-center whitespace-nowrap">
-                  {formatDate(rom.reg_date)}
-                </TableCell>
+            {romTypeItems.map((rom) => (
+              <Fragment key={rom.sn}>
+                <TableRow
+                  onClick={() => {
+                    setMeasureType(measureType === rom.measure_type ? -1 : rom.measure_type)
+                  }}
+                  className={`cursor-pointer text-base ${
+                    measureType === rom.measure_type 
+                      ? "bg-sub100" // 열려있을 때 bg 고정
+                      : "hover:trasparent"
+                  }`}
+                >
+                  <TableCell className="text-start px-2 font-medium whitespace-nowrap">
+                    {rom.title}
+                  </TableCell>
+                  <TableCell className="text-center whitespace-nowrap">
+                    {formatDate(rom.reg_date)}
+                  </TableCell>
+                  <TableCell className="text-center whitespace-nowrap">
+                    {Math.abs(rom.value_1_max).toFixed(1)}º
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap text-center">
+                    <div className="flex justify-center">
+                      {stateComp(rom.score)}
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-center whitespace-nowrap">
+                    {rom.measurement_count}회
+                  </TableCell>
+                </TableRow>
 
-                <TableCell className="text-center whitespace-nowrap">{Math.abs(rom.value_1_max).toFixed(1)}º</TableCell>
-                <TableCell className=" whitespace-nowrap text-center">
-                  <div className="flex justify-center">
-                    {stateComp(rom.score)}
-                  </div>
-                </TableCell>
-                <TableCell className="text-center whitespace-nowrap">
-                  {rom.measurement_count}회
-                </TableCell>
-              </TableRow>
+                {measureType === rom.measure_type && (
+                  <TableRow className="hover:bg-transparent">
+                    <TableCell colSpan={5} className="p-4">  {/* 셀 패딩으로 바깥 여백 */}
+                      <div className="rounded-2xl border-2 border-sub200 p-4 ">  
+                        <DashboardTypeContainer
+                          romHistorys={romHistorys ?? []}
+                          onROMItemSelect={onROMItemSelect}
+                        />
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </Fragment>
             ))}
           </TableBody>
         </Table>

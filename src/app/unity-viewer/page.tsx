@@ -1,8 +1,13 @@
-// app/unity-viewer/page.tsx
 "use client";
-import UnitySkeletonInner from "@/components/Measure/Skeleton/UnitySkeletonInner";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import dynamic from "next/dynamic";
+
+// ✅ 컴포넌트 밖에서 선언
+const UnitySkeletonInner = dynamic(
+  () => import("@/components/Measure/Skeleton/UnitySkeletonInner"),
+  { ssr: false }
+);
 
 function UnityViewerContent() {
   const searchParams = useSearchParams();
@@ -15,7 +20,8 @@ function UnityViewerContent() {
       height: "100vh", 
       margin: 0, 
       padding: 0,
-      overflow: "hidden",  // ✅ 추가
+      overflow: "hidden",  
+      boxSizing: "border-box",
     }}>
       <UnitySkeletonInner joints={joints} isDarkMode={isDarkMode} />
     </div>
