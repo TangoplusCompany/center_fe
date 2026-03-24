@@ -361,10 +361,26 @@ export interface IMeasureROMItemHistoryResponse {
   limit: number;
   page: number;
   last_page: number;
-  rom_results: IMeasureROMItem[];
+  rom_results: IMeasureROMHistoryItem[];
 }
 
-export interface IMeasureROMItem extends IMeasureROMItemRangeData {
+export interface IMeasureROMHistoryItem extends IMeasureROMItem {
+  center_name: string;
+  device_name: string;
+  opposite_side_rom_sn: number;
+  opposite_measure_type: number;
+}
+
+export interface IMeasureROMCount {
+  total_count: number;
+  bad_score_count: number;
+  warning_score_count:number;
+  normal_score_count: number;
+  good_score_count: number;
+}
+
+
+export interface IMeasureROMTypeItem extends IMeasureROMItemCardData {
   sn: number;
   measure_sn: number;
   user_name: number;
@@ -375,6 +391,21 @@ export interface IMeasureROMItem extends IMeasureROMItemRangeData {
   measure_type: number;
   score: number;
   history_by_measure_type: Record<string, number>;
+  measurement_count: number;
+}
+
+export interface IMeasureROMItem extends IMeasureROMItemCardData {
+  sn: number;
+  measure_sn: number;
+  user_name: number;
+  reg_date: string;
+  title: string;
+  howto: string;
+  measure_seq: number;
+  measure_type: number;
+  score: number;
+  history_by_measure_type: Record<string, number>;
+
 }
 
 export interface IMeasureROMGraphJson {
@@ -383,7 +414,7 @@ export interface IMeasureROMGraphJson {
 }
 
 export interface IMeasureROMItemCardData extends IMeasureROMItemRangeData {
-  score: number;
+  score: number; 
   description: string;
   value_1_min: number;
   value_1_max: number;

@@ -9,7 +9,7 @@ import {
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import SearchForm from "@/components/Util/SearchForm";
 import { Button } from "@/components/ui/button";
-import MeasureDeviceTab from "../Measure/MeasureDeviceTab";
+import MeasureDeviceTab from "../Measure/DeviceTab";
 
 export const DummyOptionBar = () => {
   return (

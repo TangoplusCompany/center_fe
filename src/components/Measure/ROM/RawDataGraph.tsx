@@ -5,7 +5,7 @@ import { Area, AreaChart, CartesianGrid } from "recharts";
 export interface RawDataGraphProps {
   graphType: 0 | 1;
   data: number[];
-  maxMinValue: IMeasureROMItemCardData;
+  maxMinValue?: IMeasureROMItemCardData;
 }
 
 export const ROMRawDataGraph = ({
@@ -18,8 +18,8 @@ export const ROMRawDataGraph = ({
     frame: index,
     value: value
   }));
-  const maxValue = graphType === 0 ? maxMinValue.value_1_max : maxMinValue.value_2_max
-  const minValue = graphType === 0 ? maxMinValue.value_1_min : maxMinValue.value_2_min
+  const maxValue = (graphType === 0 ? maxMinValue?.value_1_max : maxMinValue?.value_2_max) ?? 0
+  const minValue = (graphType === 0 ? maxMinValue?.value_1_min : maxMinValue?.value_2_min) ?? 0
   return (
     <div className="flex flex-col gap-2 rounded-xl p-4 bg-white dark:bg-black">
       <div className="flex justify-between">

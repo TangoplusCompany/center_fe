@@ -5,25 +5,25 @@ import { useAuthStoreOptional } from "@/providers/AuthProvider";
 /**
  * 사용자 측정 데이터 JSON GET Hooks
  * @param user_sn 사용자 번호
- * @param isResultPage result-page에서 사용하는지 여부
+ * @param isMyPage result-page에서 사용하는지 여부
  * @returns 사용자 측정 데이터 JSON GET 쿼리
  */
 export const useGetUserDashboard = <T>({
   user_sn,
-  isResultPage = false,
+  isMyPage = false,
 }: {
   user_sn: number | undefined;
-  isResultPage?: boolean;
+  isMyPage?: boolean;
 }) => {
   // result-page에서는 AuthStoreProvider가 없으므로 optional 사용
   const centerSn = useAuthStoreOptional((state) => state.centerSn, 0);
-  const axiosInstance = isResultPage ? customUserAxios : customAxios;
-  const apiPath = isResultPage
+  const axiosInstance = isMyPage ? customUserAxios : customAxios;
+  const apiPath = isMyPage
     ? `/users/${user_sn}/measure-summary`
     : `/members/${user_sn}/centers/${centerSn}/measure-summary`;
 
   return useQuery<T>({
-    queryKey: isResultPage
+    queryKey: isMyPage
       ? ["userResultMeasureSummary", user_sn]
       : ["userMeasureSummary", user_sn, centerSn],
     queryFn: async () => {
@@ -33,6 +33,6 @@ export const useGetUserDashboard = <T>({
     enabled:
       user_sn !== undefined &&
       user_sn !== 0 &&
-      (isResultPage || centerSn > 0),
+      (isMyPage || centerSn > 0),
   });
 };

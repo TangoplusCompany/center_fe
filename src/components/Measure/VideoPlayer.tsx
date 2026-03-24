@@ -332,7 +332,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     defaultVideoBaseClasses,
     videoClassName ?? defaultVideoRotatedClasses
   );
-  console.log(finalVideoClassName)
   // 기본 stage className과 커스텀 className 병합
   const defaultStageClasses = "relative mx-auto w-full h-[480px] md:h-[560px] lg:h-[680px] overflow-hidden";
   const finalStageClassName = cn(defaultStageClasses, stageClassName);
@@ -403,15 +402,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           max={duration || 0}
           step={0.01}
           value={Math.min(currentTime, duration || 0)}
-          className="flex-1 bg-sub100 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 
-            [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full 
-            [&::-webkit-slider-thumb]:bg-blue-500 [&::-webkit-slider-thumb]:border-0
-            [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 
-            [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-blue-500
-            [&::-moz-range-thumb]:border-0"
-          style={{
-            background: `linear-gradient(to right, #7E7E7E 0%, #7E7E7E ${(currentTime / (duration || 1)) * 100}%, #F5F5F5 ${(currentTime / (duration || 1)) * 100}%, #F5F5F5 100%)`,
-          }}
+          className="flex-1 bg-sub700"
           onMouseDown={handleSeekStart}
           onTouchStart={handleSeekStart}
           onChange={(e) => {

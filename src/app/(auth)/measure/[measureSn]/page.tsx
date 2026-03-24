@@ -1,5 +1,5 @@
 import React from "react";
-import MeasureDetailContainer from "@/components/Measure/MeasureDetailContainer";
+import MeasureDetailContainer from "@/components/Measure/DetailContainer";
 
 const MeasureDetailPage = () => { 
   return (

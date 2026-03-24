@@ -1,5 +1,5 @@
-import { customAxios } from "@/lib/axios";
-import { IMeasureROMItem } from "@/types/measure";
+import { customAxios, customUserAxios } from "@/lib/axios";
+import { IMeasureROMTypeItem } from "@/types/measure";
 
 /**
  * 사용자 ROM 목록 조회 API
@@ -11,11 +11,18 @@ export const getROMItemList = async ({
   user_sn,
   center_sn,
   body_part_number,
+  isMyPage, 
 }: {
   user_sn: number;
   center_sn?: number;
   body_part_number: number;
-}): Promise<IMeasureROMItem[]> => {
-  const { data } = await customAxios.get(`/members/${user_sn}/centers/${center_sn}/latest-rom-results/${body_part_number > 0 ? `${body_part_number}` : ""}`);
+  isMyPage: boolean;
+}): Promise<IMeasureROMTypeItem[]> => {
+  const axiosInstance = isMyPage ? customUserAxios : customAxios;
+  const apiPath = isMyPage 
+  ? `/users/${user_sn}/latest-rom-results/${body_part_number}`
+  : `/members/${user_sn}/centers/${center_sn}/latest-rom-results/${body_part_number}`
+  const { data } = await axiosInstance.get(apiPath);
+
   return data.data;
 };

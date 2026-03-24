@@ -23,11 +23,11 @@ export type ComparePagination = {
 export const useMeasureListForCompare = ({
   // userUUID,
   user_sn,
-  isResultPage = false,
+  isMyPage = false,
 }: {
   // userUUID?: string;
   user_sn?: number;
-  isResultPage?: boolean;
+  isMyPage?: boolean;
 }) => {
   const [page, setPage] = useState(1);
 
@@ -40,7 +40,7 @@ export const useMeasureListForCompare = ({
     limit: LIMIT,
     // user_uuid: userUUID,
     user_sn: user_sn,
-    isResultPage,
+    isMyPage,
   });
   const filteredItems = useMemo(() => {
     if (!data?.measurement_list) return [];

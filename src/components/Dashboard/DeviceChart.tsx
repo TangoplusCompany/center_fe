@@ -51,7 +51,7 @@ const DeviceChart = ({
 
     // 날짜 기준 내림차순 정렬 (최신이 왼쪽)
     const sortedData = [...data].sort((a, b) => 
-      new Date(b.date).getTime() - new Date(a.date).getTime()
+      new Date(a.date).getTime() - new Date(b.date).getTime()
     );
 
     return sortedData.map(item => {

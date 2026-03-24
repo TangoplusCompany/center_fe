@@ -12,7 +12,7 @@ const MeasureDynamicCompare = ({
   right,
   userSn,
   onCompareDialogOpen,
-  isResultPage = false,
+  isMyPage = false,
 }: CompareStaticProps) => {
   const leftSummaryData = left?.result_summary_data
   const rightSummaryData = right?.result_summary_data
@@ -24,7 +24,7 @@ const MeasureDynamicCompare = ({
     measure_sn: leftSummaryData?.measure_sn ? String(leftSummaryData.measure_sn) : undefined,
     user_sn: String(userSn),
     sequence_number: 6,
-    isResultPage,
+    isMyPage,
 
   });
 
@@ -36,7 +36,7 @@ const MeasureDynamicCompare = ({
     measure_sn: rightSummaryData?.measure_sn ? String(rightSummaryData.measure_sn) : undefined,
     user_sn: String(userSn),
     sequence_number: 6,
-    isResultPage,
+    isMyPage,
   });
   const data0 = measure0?.file_data
   const data1 = measure1?.file_data

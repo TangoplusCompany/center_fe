@@ -22,10 +22,10 @@ export type DetailPagination = {
  */
 export const useMeasureListForDetail = ({
   user_sn,
-  isResultPage = false,
+  isMyPage = false,
 }: {
   user_sn?: number;
-  isResultPage?: boolean;
+  isMyPage?: boolean;
 }) => {
   const [page, setPage] = useState(1);
 
@@ -37,14 +37,15 @@ export const useMeasureListForDetail = ({
     page: String(page),
     limit: LIMIT,
     user_sn: user_sn,
-    isResultPage,
+    isMyPage,
   });
   const filteredItems = useMemo(() => {
     if (!data?.measurement_list) return [];
 
-    return data.measurement_list.filter(
-      (item) => item.measurement_type === "basic_only"
-    );
+    // return data.measurement_list.filter(
+    //   (item) => item.measurement_type === "basic_only"
+    // );
+    return data?.measurement_list
   }, [data?.measurement_list]);
   
   const pagination: DetailPagination = useMemo(

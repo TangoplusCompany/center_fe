@@ -6,21 +6,21 @@ import { useAuthStoreOptional } from "@/providers/AuthProvider";
 export const useGetMeasureFoot = ({
   measure_sn,
   user_sn,
-  isResultPage = false,
+  isMyPage = false,
 }: {
   measure_sn: string | undefined;
   user_sn: string;
-  isResultPage?: boolean;
+  isMyPage?: boolean;
 }) => {
   // result-page에서는 AuthStoreProvider가 없으므로 optional 사용
   const centerSn = useAuthStoreOptional((state) => state.centerSn, 0);
-  const axiosInstance = isResultPage ? customUserAxios : customAxios;
-  const apiPath = isResultPage
+  const axiosInstance = isMyPage ? customUserAxios : customAxios;
+  const apiPath = isMyPage
     ? `/users/${user_sn}/measurement/${measure_sn}/foot-cop`
     : `/members/${user_sn}/centers/${centerSn}/measurement/${measure_sn}/foot-cop`;
 
   return useQuery<MeasureFootCOP>({
-    queryKey: isResultPage
+    queryKey: isMyPage
       ? ["userResultMeasureFootCOP", measure_sn, user_sn]
       : ["MeasureFootCOP", measure_sn, user_sn, centerSn],
     queryFn: async () => {
@@ -30,6 +30,6 @@ export const useGetMeasureFoot = ({
     enabled:
       measure_sn !== undefined &&
       user_sn !== undefined &&
-      (isResultPage || centerSn > 0),
+      (isMyPage || centerSn > 0),
   });
 };

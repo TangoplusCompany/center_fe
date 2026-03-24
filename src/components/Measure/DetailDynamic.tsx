@@ -49,16 +49,16 @@ const MeasureDetailDynamic = ({
   sns,
   cameraOrientation,
   isCompare,
-  isResultPage = false,
+  isMyPage = false,
 }: {
   className?: string;
   sns: { measureSn: string; userSn: string };
   cameraOrientation: number;
   isCompare: 0 | 1;
-  isResultPage: boolean;
+  isMyPage: boolean;
 }) => {
   const { data: measureDynamic, isLoading: seq7Loading, isError: seq7Error } =
-    useMeasureSequence({ measure_sn: sns.measureSn, user_sn: sns.userSn, sequence_number: 6, isResultPage });
+    useMeasureSequence({ measure_sn: sns.measureSn, user_sn: sns.userSn, sequence_number: 6, isMyPage });
 
   const data = measureDynamic?.file_data;
   const fileData = measureDynamic?.file_data as IUserMeasureDynamicFileData;

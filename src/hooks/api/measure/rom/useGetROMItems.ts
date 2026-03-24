@@ -13,16 +13,16 @@ export const useGetROMItems = ({
   user_sn,
   center_sn,
   measure_sn,
-  isResultPage,
+  isMyPage,
 }: {
   user_sn: number;
   center_sn?: number;
   measure_sn: number;
-  isResultPage: boolean;
+  isMyPage: boolean;
 }) => {
   return useQuery<IMeasureROMItem[]>({
     queryKey: ["userROMItems", user_sn, center_sn, measure_sn],
-    queryFn: () => isResultPage ? getROMItemsInMy({ user_sn, measure_sn }) : getROMItems({ user_sn, center_sn, measure_sn }),
+    queryFn: () => isMyPage ? getROMItemsInMy({ user_sn, measure_sn }) : getROMItems({ user_sn, center_sn, measure_sn }),
     enabled: measure_sn !== undefined && user_sn !== -1 && center_sn !== -1 && measure_sn !== -1,
   });
 };

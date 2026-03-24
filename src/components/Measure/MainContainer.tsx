@@ -1,0 +1,38 @@
+"use client";
+
+import React, { useState } from "react";
+import { useMeasureCount } from "@/hooks/api/measure/useMeasureCount";
+import OptionBar from "../Util/OptionBar";
+import MeasureListContainer from "./ListContainer";
+import { useQueryParams } from "@/hooks/utils/useQueryParams";
+
+const MeasureMainContainer = () => {
+  const { totalItems, handleTotalItems } = useMeasureCount();
+  const { query, setQueryParam } = useQueryParams();
+    const deviceSn = query.device_sn || "0";
+    
+    const search = query.search || "";
+    const [searchValue, setSearchValue] = useState(search);
+    
+    const onChangeSearch = (searchValue: string) => {
+      setSearchValue(searchValue);
+      setQueryParam([
+        ["page", "1"],
+        ["limit", "20"],
+        ["device_sn", deviceSn],
+        ["search", searchValue],
+      ]);
+    };
+  return (
+    <div className="w-full min-w-0 flex flex-col gap-5">
+      <OptionBar totalItems={totalItems}
+        search={searchValue} 
+        onSearchChange={onChangeSearch}
+      />
+      
+      <MeasureListContainer handleTotalItems={handleTotalItems} searchValue={searchValue} />
+    </div>
+  );
+};
+
+export default MeasureMainContainer;

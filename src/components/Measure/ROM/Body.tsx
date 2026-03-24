@@ -4,9 +4,10 @@ import { ComparePair, CompareSlot } from "@/types/compare";
 // import CompareDateCard from "../Compare/CompareDateCard";
 import { IMeasureROMItemDetail } from "@/types/measure";
 import CompareBodySkeleton from "../Compare/CompareBodySkeleton";
+import { ROMDashboardViewType } from "@/components/User/DashBoardContainer";
 
 export interface ROMBodyProps {
-  data0: IMeasureROMItemDetail;
+  data0?: IMeasureROMItemDetail;
   data1? : IMeasureROMItemDetail;
   onCompareDialogOpen: (slot: CompareSlot, selectedMeasureType?: number) => void;
   onROMItemSelect ?: (romSn: ComparePair) => void;
@@ -14,6 +15,7 @@ export interface ROMBodyProps {
   isError0 : boolean;
   isLoading1: boolean;
   isError1: boolean;
+  setCurrentView ?: (selectedROMViewType: ROMDashboardViewType) => void;
 }
 
 export const ROMBody = ({
@@ -25,17 +27,19 @@ export const ROMBody = ({
   isError0,
   isLoading1,
   isError1,
+  setCurrentView
 }: ROMBodyProps) => {
   // const [romCompareMode, setRomCompareMode] = useState(false);
   // const toggleRomCompareMode = {
 
   // }
-  const leftData : ROMRawDataDynamicProps  = {
-    measure_server_file_name : data0.measure_server_file_name,
-    measure_server_json_name : data0.measure_server_json_name,
-    camera_orientation : data0.camera_orientation,
+  const leftData = data0 ? {
+    measure_server_file_name: data0.measure_server_file_name,
+    measure_server_json_name: data0.measure_server_json_name,
+    camera_orientation: data0.camera_orientation,
     measure_type: data0.measure_type
-  }
+  } as ROMRawDataDynamicProps : undefined;
+
   const rightData = data1 ? {
     measure_server_file_name: data1.measure_server_file_name,
     measure_server_json_name: data1.measure_server_json_name,
@@ -63,6 +67,7 @@ export const ROMBody = ({
           onClick={() => {
             if (onROMItemSelect) {
               onROMItemSelect([undefined, undefined])
+              setCurrentView?.("default")
             };
           }}
           className="px-3 py-1 rounded-md text-base text-sub700"
