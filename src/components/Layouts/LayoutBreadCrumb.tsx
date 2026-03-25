@@ -86,46 +86,5 @@ export function LayoutBreadCrumb() {
         </span>
       )}
     </div>
-//   return (
-//   <Breadcrumb>
-//     <BreadcrumbList>
-//       <BreadcrumbItem>
-//         {isCenterPage ? (
-//           <span
-//             className={`${breadcrumbLinkClass} font-semibold text-toggleAccent dark:text-white cursor-default hover:opacity-90`}
-//             aria-current="page"
-//           >
-//             센터목록
-//           </span>
-//         ) : (
-//           <BreadcrumbLink asChild>
-//             <Link
-//               href="/center"
-//               className={`${breadcrumbLinkClass} text-slate-950 dark:text-foreground`}
-//             >
-//               센터목록
-//             </Link>
-//           </BreadcrumbLink>
-//         )}
-//       </BreadcrumbItem>
-
-//       {/* 센터 이름이 있을 때만 표시 */}
-//       {centerSn && centerName && (
-//         <>
-//           <BreadcrumbSeparator />
-//           <BreadcrumbItem>
-//             <BreadcrumbLink asChild>
-//               <Link
-//                 href={`/center/${centerSn}`}
-//                 className={`${breadcrumbLinkClass} font-medium text-toggleAccent dark:text-white`}
-//               >
-//                 {centerName}
-//               </Link>
-//             </BreadcrumbLink>
-//           </BreadcrumbItem>
-//         </>
-//       )}
-//     </BreadcrumbList>
-//   </Breadcrumb>
   );
 }

@@ -1,6 +1,5 @@
 import React from "react";
 import { DarkModeToggle } from "../ui/darkmode";
-import { LayoutBreadCrumb } from "./LayoutBreadCrumb";
 import UpdateSessionButton from "../Util/UpdateSessionButton";
 import LoginUserCircle from "../Util/LoginUserCircle";
 import { useAuthStore } from "@/providers/AuthProvider";
@@ -29,9 +28,6 @@ export default function DefaultHeaderLayout() {
             aria-label="사이드바 열기"
           />
         )}
-        <div className="block pl-[10px] min-w-0">
-          <LayoutBreadCrumb />
-        </div>
       </div>
       <div className="flex items-center gap-1 md:gap-5 shrink-0">
         <div className="hidden md:block">
