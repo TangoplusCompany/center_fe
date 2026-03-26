@@ -76,7 +76,7 @@ const ManagerEditForm = ({
     >
       <div className="flex w-full justify-between items-center">
         <legend className="text-xl">
-          {editState ? "개인 정보 수정" : "개인 정보"}
+          {editState ? "계정 정보 수정" : "계정 정보"}
         </legend>
         <div className="flex items-center justify-center gap-2">
           <Button variant="outline" onClick={handleEditState} type="button">

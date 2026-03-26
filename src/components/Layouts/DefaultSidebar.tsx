@@ -201,30 +201,36 @@ export default function DefaultSidebar() {
       </SidebarHeader>
 
       {centerName && (
-        <div className="relative bg-white rounded-full mx-4">
+        <div className="relative bg-white rounded-full mx-4 px-2 rounded-full hover:bg-sub100 transition-colors">
           <button
             onClick={() => setCenterOpen(!centerOpen)}
-            className="w-full flex items-center justify-between gap-2 px-3 py-3 rounded-lg hover:bg-gray-100 transition-colors"
+            className="w-full flex items-center justify-between gap-2 px-3 py-2"
           >
-            <span className="text-base font-semibold text-sub700 truncate group-data-[collapsible=icon]:hidden flex-1 text-center">
+            <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 bg-toggleAccent`}>
+              <span className={`text-xs font-bold text-white`}>
+                {centerName?.charAt(0)}
+              </span>
+            </div>
+
+            <span className="text-sm font-semibold text-sub700 truncate group-data-[collapsible=icon]:hidden flex-1 text-start">
               {centerName}
             </span>
             <ChevronsUpDown 
               className={`w-4 h-4 shrink-0 group-data-[collapsible=icon]:hidden 
-                transition-all duration-300 ease-in-out opacity-0 animate-[fadeIn_0.3s_ease-in-out_forwards]
-                ${centerOpen ? "text-toggleAccent" : "text-sub400"}`} 
+                transition-all duration-300 ease-in-out text-sub400
+                ${centerOpen ? "rotate-180 text-toggleAccent" : ""}`} 
             />
           </button>
 
           <>
             <div
-              className={`fixed inset-0 z-40 transition-opacity duration-200 ${
+              className={`fixed inset-0 z-10 transition-opacity duration-200 ${
                 centerOpen ? "pointer-events-auto" : "pointer-events-none"
               }`}
               onClick={() => setCenterOpen(false)}
             />
             <div
-              className={`absolute left-full top-0 ml-2 w-72 bg-white rounded-xl shadow-xl border border-gray-100 z-50 overflow-hidden
+              className={`absolute left-full top-0 ml-2 w-72 bg-white rounded-xl shadow-xl border border-sub100 z-20 overflow-hidden
                 transition-all duration-200 ease-in-out
                 ${centerOpen
                   ? "opacity-100 translate-y-0 pointer-events-auto"
@@ -243,21 +249,21 @@ export default function DefaultSidebar() {
                 ) : (
                   centers.map((center) => (
                     <button
-                      key={center.admin_sn}
+                      key={center.center_sn}
                       onClick={() => {
                         setCenterSn(center.center_sn, center.center_name, center.admin_role);
                         setCenterOpen(false);
                         router.push("/");
                       }}
-                      className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors ${
-                        center.admin_sn === centerSn ? "bg-blue-50" : ""
+                      className={`cursor-pointer w-full flex items-center gap-3 px-4 py-3 hover:bg-sub100 transition-colors ${
+                        center.center_sn === centerSn ? "bg-sub100/50" : ""
                       }`}
                     >
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
-                        center.admin_sn === centerSn ? "bg-blue-500" : "bg-gray-200"
+                        center.center_sn === centerSn ? "bg-toggleAccent" : "bg-sub200"
                       }`}>
                         <span className={`text-xs font-bold ${
-                          center.admin_sn === centerSn ? "text-white" : "text-gray-500"
+                          center.center_sn === centerSn ? "text-white" : "text-gray-500"
                         }`}>
                           {center.center_name?.charAt(0)}
                         </span>

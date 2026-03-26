@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-type LoginData = {
+export type LoginData = {
   email: string;
   password: string;
 };

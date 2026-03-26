@@ -30,7 +30,7 @@ const FormSchema = z.object({
 
 const INITIAL_TIME = 300; // 5분 = 300초
 
-type LoginOtpDialogProps = {
+type SettingOtpDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   phone: string;
@@ -40,13 +40,13 @@ type LoginOtpDialogProps = {
   onTempJwtChange?: (jwt: string) => void;
 };
 
-export const LoginOtpDialog = ({
+export const SettingOtpDialog = ({
   open,
   onOpenChange,
   phone,
   tempJwt,
   onTempJwtChange,
-}: LoginOtpDialogProps) => {
+}: SettingOtpDialogProps) => {
   const router = useRouter();
   const setLogin = useAuthStore((state) => state.setLogin);
   const [timeLeft, setTimeLeft] = useState(INITIAL_TIME);
@@ -60,6 +60,7 @@ export const LoginOtpDialog = ({
     },
   });
 
+  // 타이머 로직
   useEffect(() => {
     if (timeLeft <= 0 || !open) return;
 
