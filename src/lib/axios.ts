@@ -124,8 +124,15 @@ customAxios.interceptors.response.use(
         processQueue(err as AxiosError, null);
         // result-page 경로는 별도의 인증 시스템을 사용하므로 리다이렉트 제외
         if (typeof window !== "undefined" && !window.location.pathname.startsWith("/result-page")) {
-          authStore.getState().setLogout(); // 로그아웃 처리
-          window.location.href = "/login";
+          const status = (err as AxiosError)?.response?.status
+          // 권한 위임 후 403으로 나올 때 centerSn으로 보내기 
+          if (status === 403) {
+            authStore.getState().setCenterSn(0, "", undefined);
+            window.location.href = "/center";
+          } else {
+            authStore.getState().setLogout();
+            window.location.href = "/login";
+          }
         }
         return Promise.reject(err);
       } finally {

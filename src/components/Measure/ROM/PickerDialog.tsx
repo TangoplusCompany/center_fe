@@ -15,11 +15,12 @@ export interface ComparePagination {
 
 export interface ROMPickerDialogProps {
   open: boolean;
+  onOpenChange: (v: boolean) => void;
   items: IMeasureROMItem[];
   title: string;
   comparePair: ComparePair;
   activeSlot: CompareSlot;
-  onOpenChange: (v: boolean) => void;
+  
   onToggleCompareSn: (measureSn : number, slot: CompareSlot) => void;
   pagination?: ComparePagination;
   isLoading: boolean;
@@ -28,11 +29,11 @@ export interface ROMPickerDialogProps {
 
 export const ROMPickerDialog = ({
   open,
+  onOpenChange,
   items,
   title,
   comparePair,
   activeSlot,
-  onOpenChange,
   onToggleCompareSn,
   pagination: apiPagination,
   isLoading,

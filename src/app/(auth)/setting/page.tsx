@@ -4,8 +4,7 @@ import SettingContainer from "@/components/Setting/SettingContainer";
 const SettingHome = () => {
   return (
     <div className="flex flex-col gap-5">
-      <h1 className="text-2xl">설정</h1>
-      <SettingContainer />
+      <SettingContainer />  
     </div>
   );
 };

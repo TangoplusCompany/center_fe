@@ -15,7 +15,7 @@ import { postRequestLogin2FAOtp } from "@/services/auth/postRequestLogin2FAOtp";
 
 export type Login2FAMethod = "email" | "mobile";
 
-type Login2FAMethodDialogProps = {
+type Setting2FAMethodDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   tempJwt: string;
@@ -23,12 +23,12 @@ type Login2FAMethodDialogProps = {
   onNext: (method: Login2FAMethod, requestedTempToken: string) => void;
 };
 
-export const Login2FAMethodDialog = ({
+export const Setting2FAMethodDialog = ({
   open,
   onOpenChange,
   tempJwt,
   onNext,
-}: Login2FAMethodDialogProps) => {
+}: Setting2FAMethodDialogProps) => {
   const [method, setMethod] = useState<Login2FAMethod>("email");
   const [isPending, setIsPending] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -49,17 +49,14 @@ export const Login2FAMethodDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[calc(100%-2rem)] sm:w-full sm:max-w-md" onKeyDown={(e) => { if (e.key === "Enter") handleNext(); }}>
+      <DialogContent className="w-[calc(100%-2rem)] sm:w-full sm:max-w-md">
         <DialogHeader>
           <DialogTitle>2차 인증이 필요합니다</DialogTitle>
           <DialogDescription>
             인증 수단을 선택한 뒤 다음을 눌러주세요.
           </DialogDescription>
         </DialogHeader>
-        <form
-          onSubmit={(e) => { e.preventDefault(); handleNext(); }}
-          className="flex flex-col gap-4 pt-2"
-        >
+        <div className="flex flex-col gap-4 pt-2">
           <RadioGroup
             value={method}
             onValueChange={(v) => setMethod(v as Login2FAMethod)}
@@ -82,13 +79,14 @@ export const Login2FAMethodDialog = ({
             <p className="text-sm text-destructive">{errorMessage}</p>
           )}
           <Button
-            type="submit"
+            type="button"
             className="w-full"
+            onClick={handleNext}
             disabled={isPending}
           >
             {isPending ? "요청 중..." : "다음"}
           </Button>
-        </form>
+        </div>
       </DialogContent>
     </Dialog>
   );

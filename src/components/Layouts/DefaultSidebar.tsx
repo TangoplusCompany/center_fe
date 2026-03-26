@@ -9,8 +9,11 @@ import { useLogout } from "@/hooks/api/auth/useLogout";
 import { useAuthStore } from "@/providers/AuthProvider";
 import { usePathname, useRouter } from "next/navigation";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { ChevronsUpDown } from "lucide-react";
+import { getAdminCenters } from "@/services/auth/getAdminCenters";
+import { useQuery } from "@tanstack/react-query";
 
-const dashboard = [
+const sideTabs = [
   {
     title: "대시보드",
     url: "/",
@@ -48,15 +51,26 @@ const dashboard = [
     external: true,
   },
   {
+    title: "센터 목록",
+    url: "/center",
+    icon: "/icons/ic_paper.svg",
+  },
+  {
     title: "설정",
     url: "/setting",
     icon: "/icons/ic_settings.svg",
   },
 ];
+const getInitialFromCenter = () => {
+  if (typeof window === "undefined") return false;
+  const stored = sessionStorage.getItem("fromCenter") === "true";
+  const path = window.location.pathname;
+  return path === "/center" || (path === "/setting" && stored);
+};
 
 export default function DefaultSidebar() {
   const logoutMutation = useLogout();
-  const { adminRole } = useAuthStore((state) => state);
+  const { adminRole, centerSn, centerName, adminSn, setCenterSn } = useAuthStore((state) => state);
   const pathname = usePathname();
   const [indicatorStyle, setIndicatorStyle] = React.useState({ top: 0, height: 0 });
   const menuItemRefs = React.useRef<(HTMLLIElement | null)[]>([]);
@@ -65,26 +79,35 @@ export default function DefaultSidebar() {
   const handleLogout = () => {
     logoutMutation.mutate();
   };
-
-  // 필터링된 대시보드 (기기 관리, 로그인 기록 관리, 매니저 관리 = 주관리자(1)만 표시)
+  const [isFromCenter, setIsFromCenter] = React.useState(getInitialFromCenter);
+  React.useEffect(() => {
+    if (pathname === "/center") {
+      sessionStorage.setItem("fromCenter", "true");
+      setIsFromCenter(true);
+    } else if (pathname === "/setting" && sessionStorage.getItem("fromCenter") === "true") {
+      setIsFromCenter(true);
+    } else {
+      sessionStorage.removeItem("fromCenter");
+      setIsFromCenter(false);
+    }
+  }, [pathname]);
   const filteredDashboard = React.useMemo(() => {
-    return dashboard.filter((item) => {
-      if (
-        item.title === "기기 관리" ||
-        item.title === "로그인 기록 관리" ||
-        item.title === "매니저 관리"
-      ) {
-        return adminRole === 1;
-      }
-      if (adminRole === 2) {
+    if (isFromCenter) {
+      return sideTabs.filter((item) =>
+        item.title === "센터 목록" || item.title === "설정"
+      );
+    }
+
+    return sideTabs
+      .filter((item) => item.title !== "센터 목록") // 항상 센터 목록 제외
+      .filter((item) => {
+        if (adminRole === 1) return true;
+        if (adminRole === 2) {
+          return ["대시보드", "센터 측정 현황", "사용자 회원 관리", "설정"].includes(item.title);
+        }
         return true;
-      }
-      if (adminRole >= 3) {
-        return !["대시보드", "사용자 히스토리 관리", "센터 측정 현황"].includes(item.title);
-      }
-      return true;
-    });
-  }, [adminRole]);
+      });
+  }, [adminRole, isFromCenter]);
 
   React.useEffect(() => {
     const activeIndex = filteredDashboard.findIndex((item) => {
@@ -141,6 +164,12 @@ export default function DefaultSidebar() {
       setOpenMobile(false);
     }
   };
+  const { data: centers = [], isLoading } = useQuery({
+    queryKey: ["adminCenters", adminSn],
+    queryFn: () => getAdminCenters(adminSn),
+    enabled: adminSn > 0,
+  });
+  const [centerOpen, setCenterOpen] = React.useState(false);
 
   return (
     <Sidebar collapsible="icon" className="bg-[#F1F5F9] dark:bg-black">
@@ -170,7 +199,104 @@ export default function DefaultSidebar() {
           </SidebarMenuButton>
         </div>
       </SidebarHeader>
-      <SidebarContent className="bg-toggleAccent-background !overflow-hidden">
+
+      {centerName && (
+        <div className="relative bg-white rounded-full mx-4 px-2 rounded-full hover:bg-sub100 transition-colors">
+          <button
+            onClick={() => setCenterOpen(!centerOpen)}
+            className="w-full flex items-center justify-between gap-2 px-3 py-2"
+          >
+            <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 bg-toggleAccent`}>
+              <span className={`text-xs font-bold text-white`}>
+                {centerName?.charAt(0)}
+              </span>
+            </div>
+
+            <span className="text-sm font-semibold text-sub700 truncate group-data-[collapsible=icon]:hidden flex-1 text-start">
+              {centerName}
+            </span>
+            <ChevronsUpDown 
+              className={`w-4 h-4 shrink-0 group-data-[collapsible=icon]:hidden 
+                transition-all duration-300 ease-in-out text-sub400
+                ${centerOpen ? "rotate-180 text-toggleAccent" : ""}`} 
+            />
+          </button>
+
+          <>
+            <div
+              className={`fixed inset-0 z-10 transition-opacity duration-200 ${
+                centerOpen ? "pointer-events-auto" : "pointer-events-none"
+              }`}
+              onClick={() => setCenterOpen(false)}
+            />
+            <div
+              className={`absolute left-full top-0 ml-2 w-72 bg-white rounded-xl shadow-xl border border-sub100 z-20 overflow-hidden
+                transition-all duration-200 ease-in-out
+                ${centerOpen
+                  ? "opacity-100 translate-y-0 pointer-events-auto"
+                  : "opacity-0 -translate-y-2 pointer-events-none"
+                }`}
+            >
+              <div className="p-3">
+                <span className="text-sm font-semibold text-gray-500">센터 목록</span>
+              </div>
+
+              <div className="max-h-80 overflow-y-auto">
+                {isLoading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <span className="text-sm text-gray-400">불러오는 중...</span>
+                  </div>
+                ) : (
+                  centers.map((center) => (
+                    <button
+                      key={center.center_sn}
+                      onClick={() => {
+                        setCenterSn(center.center_sn, center.center_name, center.admin_role);
+                        setCenterOpen(false);
+                        router.push("/");
+                      }}
+                      className={`cursor-pointer w-full flex items-center gap-3 px-4 py-3 hover:bg-sub100 transition-colors ${
+                        center.center_sn === centerSn ? "bg-sub100/50" : ""
+                      }`}
+                    >
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
+                        center.center_sn === centerSn ? "bg-toggleAccent" : "bg-sub200"
+                      }`}>
+                        <span className={`text-xs font-bold ${
+                          center.center_sn === centerSn ? "text-white" : "text-gray-500"
+                        }`}>
+                          {center.center_name?.charAt(0)}
+                        </span>
+                      </div>
+                      <div className="text-left min-w-0">
+                        <p className="text-sm font-medium truncate">{center.center_name}</p>
+                        <p className="text-xs text-gray-400 truncate">{center.center_address}</p>
+                        <p className="text-xs text-gray-400">{center.center_phone}</p>
+                      </div>
+                    </button>
+                  ))
+                )}
+              </div>
+
+              <div className="p-3 border-t border-gray-100">
+                <button
+                  onClick={() => {
+                    router.push("/center");
+                    setCenterOpen(false);
+                    setCenterSn(0, "", undefined);
+                  }}
+                  className="w-full text-sm text-center text-toggleAccent hover:text-toggleAccent/90 font-medium py-1"
+                >
+                  센터 선택 화면
+                </button>
+              </div>
+            </div>
+          </>
+        </div>
+      )}
+
+
+      <SidebarContent className="bg-toggleAccent-background !overflow-hidden mt-8">
         <SidebarGroup>
           {/* <SidebarGroupLabel>DASHBOARD</SidebarGroupLabel> */}
           <SidebarGroupContent>
