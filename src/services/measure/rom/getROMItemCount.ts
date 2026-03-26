@@ -23,6 +23,5 @@ export const getROMItemCount = async ({
   ? `/users/${user_sn}/rom-score-counts-by-body-parts/${body_part_number}`
   : `/members/${user_sn}/centers/${center_sn}/rom-score-counts-by-body-parts/${body_part_number}`
   const { data } = await axiosInstance.get(apiPath);
-  console.log(data.data)
   return data.data;
 };
