@@ -144,17 +144,17 @@ const ROMDashboardContainer = ({
     <div className="flex flex-col gap-4">
       {(currentROMViewType === "default") ? (
         <>
-          <div className="flex gap-8">
+          <div className="grid grid-cols-2 gap-4 sm:flex sm:gap-8">
             {countMap.map(({ state, label, count }) => (
               <div key={state} className="flex items-center gap-1">
                 {state === -1 ? (
                   <div className="flex w-fit gap-2 text-sm font-semibold border-2 rounded-full px-2 py-1 items-center border-sub300 text-sub600">
-                    <div className="w-4 h-4 rounded-full bg-sub300"/>
+                    <div className="w-4 h-4 rounded-full whitespace-nowrap bg-sub300 "/>
                     {label}
                   </div>
                 ) : (
                   <div className={`flex w-fit gap-2 text-sm font-semibold border-2 rounded-full px-2 py-1 items-center ${stateTextColor[state]} ${stateBorderColor[state]}`}>
-                    <div className={`w-4 h-4 rounded-full ${stateBGColor[state]}`}/>
+                    <div className={`w-4 h-4 rounded-full whitespace-nowrap ${stateBGColor[state]}`}/>
                     {label}
                   </div>
                 )}
