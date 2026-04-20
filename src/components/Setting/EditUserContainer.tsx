@@ -1,6 +1,6 @@
 // import { useEffect, useState } from "react";
-import EditManagerPasswordForm from "../Manager/EditManagerPasswordForm";
-import { Separator } from "../ui/separator";
+// import EditManagerPasswordForm from "../Manager/EditManagerPasswordForm";
+// import { Separator } from "../ui/separator";
 import EditManagerProfileContainer from "./EditUserProfileContainer";
 // import { useOtpDialog } from "@/hooks/api/auth/useOtpDialog";
 import React from "react";
@@ -34,9 +34,9 @@ export const EditUserContainer = () => {
   return (
     <>
       <EditManagerProfileContainer />
-      <Separator />
+      {/* <Separator />
       <EditManagerPasswordForm />
-      {/* <div className="flex w-full justify-end text-sub400 hover:text-sub400/90 cursor-pointer" onClick={() => setIsWarningOpen(true)}>
+      <div className="flex w-full justify-end text-sub400 hover:text-sub400/90 cursor-pointer" onClick={() => setIsWarningOpen(true)}>
         회원 탈퇴
       </div> */}
     </>
