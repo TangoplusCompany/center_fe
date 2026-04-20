@@ -201,10 +201,10 @@ export default function DefaultSidebar() {
       </SidebarHeader>
 
       {centerName && (
-        <div className="relative bg-white rounded-full mx-4 px-2 rounded-full hover:bg-sub100 transition-colors">
+        <div className="relative  bg-toggleAccent-background w-full flex px-4 py-2 border-none">
           <button
             onClick={() => setCenterOpen(!centerOpen)}
-            className="w-full flex items-center justify-between gap-2 px-3 py-2"
+            className="w-full flex items-center bg-white rounded-full rounded-full hover:bg-sub100 transition-colors justify-between gap-2 px-3 py-2"
           >
             <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 bg-toggleAccent`}>
               <span className={`text-xs font-bold text-white`}>
@@ -296,7 +296,7 @@ export default function DefaultSidebar() {
       )}
 
 
-      <SidebarContent className="bg-toggleAccent-background !overflow-hidden mt-8">
+      <SidebarContent className="bg-toggleAccent-background !overflow-hidden pt-8">
         <SidebarGroup>
           {/* <SidebarGroupLabel>DASHBOARD</SidebarGroupLabel> */}
           <SidebarGroupContent>

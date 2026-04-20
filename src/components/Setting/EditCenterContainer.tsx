@@ -5,7 +5,6 @@ import { useGetCenterInformation } from "@/hooks/api/center/useGetCenterInformat
 import React, { useEffect, useState } from "react";
 import { Login2FAMethod, Login2FAMethodDialog } from "../auth/Login2FAMethodDialog";
 import { LoginData, useOtpDialog } from "@/hooks/api/auth/useOtpDialog";
-// import { Button } from "../ui/button";
 import { LoginOtpDialog } from "../auth/LoginOtpDialog";
 import DelegateDialog from "./DelegateDialog";
 import WarningDialog from "./WarningDialog";
@@ -44,10 +43,14 @@ const EditCenterContainer = () => {
     <div className="flex flex-col gap-4">
       <CenterEditForm centerData={centerInformation} />
 
-      {/* <div className="flex w-full justify-end">
-        <Button className="w-fit bg-sub700 hover:bg-sub700/90 text-white hover:text-white" type="button" variant="outline" onClick={() => setIsWarningOpen(true)}>
+      {/* <div className="flex w-full items-center justify-end gap-4">
+        <div className="w-fit text-sub400 text-base font-semibold cursor-pointer hover:text-sub400/90" onClick={() => setIsWarningOpen(true)}>
           주관리자 권한 위임
-        </Button>
+        </div>
+        <div className="w-[2px] h-6 bg-sub200 rounded-full" />
+        <div className="w-fit text-sub400 text-base font-semibold cursor-pointer hover:text-sub400/90" onClick={() => {}}>
+          센터 비활성화
+        </div>
       </div> */}
       {/* TODO 버튼 클릭하면 삭제 프로세스대로 otp 2fa 넣기. 아마 hooks만 수정하면 됨 */}
       <WarningDialog

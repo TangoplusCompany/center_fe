@@ -9,7 +9,6 @@ import EditUserContainer from "./EditUserContainer";
 const SettingContainer = () => {
   const { adminRole } = useAuthStore((state) => state);
   const isMainAdmin = adminRole === 1;
-  console.log(isMainAdmin)
   const [nowTab, setNowTab] = useState(isMainAdmin ? 0 : 1);
   return (
     <div className="w-full flex flex-col gap-5">
