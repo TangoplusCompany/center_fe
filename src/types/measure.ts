@@ -188,7 +188,6 @@ export interface IPartDetailData {
   ankle: IPartDetail;
 }
 
-
 export interface IMeasureJson {
   hand_landmark: [];
   horizontal_angle_elbow: number;
@@ -232,7 +231,6 @@ export interface IMeasureJson {
   vertical_angle_wrist_elbow_shoulder_right: number;
   pose_landmark: IPoseLandmark[];
 }
-
 
 export interface MeasureSummary extends MeasureFootCOP {
   user_name: string;
@@ -354,8 +352,6 @@ export interface IUserMeasureSequenceDynamic {
   detail_data: IUserMeasureDetailData[];
 }
 
-
-// ROM을 위한 interface 
 export interface IMeasureROMItemHistoryResponse {
   total: number;
   limit: number;
@@ -378,7 +374,6 @@ export interface IMeasureROMCount {
   normal_score_count: number;
   good_score_count: number;
 }
-
 
 export interface IMeasureROMTypeItem extends IMeasureROMItemCardData {
   sn: number;

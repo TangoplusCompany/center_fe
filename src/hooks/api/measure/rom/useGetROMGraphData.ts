@@ -5,7 +5,6 @@ import { useQuery } from "@tanstack/react-query";
  * 사용자 ROM 목록 조회 API
  * @param user_sn 유저 번호
  * @param center_sn 센터 번호
- * @param body_part_number 바디 파트 번호
  */
 export const useGetROMGraphData = ({
   user_sn,

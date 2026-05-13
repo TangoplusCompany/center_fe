@@ -16,6 +16,7 @@ import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import dayjs from "dayjs";
 import { ko } from "date-fns/locale";
+// import { PinChangeDialog } from "./PinChangeDialog";
 
 const UserDetailForm = ({ 
   userData, 
@@ -30,6 +31,9 @@ const UserDetailForm = ({
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const { isBoolean: editState, setToggle: setEditState } = useBoolean();
   const editableFieldClass = editState ? "bg-background border border-input shadow-sm" : undefined;
+  // const [isPinDialogOpen, setIsPinDialogOpen] = useState(false);
+
+  
   const handleEditState = () => {
     if (editState) {
       reset();
@@ -80,6 +84,10 @@ const UserDetailForm = ({
         message: "한글, 영어, 숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
       })
       .optional(),
+    pinPWDetail: z.string()
+      .max(4, { message: "PIN번호는 4자리로 설정 가능합니다,"})
+      .regex(/^\d{4}$/ , { message: "숫자만 입력 가능합니다."})
+      .optional()
   });
   const {
     register,
@@ -97,6 +105,7 @@ const UserDetailForm = ({
       height: userData.height || "",
       weight: userData.weight || "",
       birthday: "",
+      pinPW: "",
     },
   });
 
@@ -180,11 +189,6 @@ const UserDetailForm = ({
     }
     setEditState();
   });
-
-
-
-
-
 
   return (
     <form onSubmit={submitUserDetailForm} className="flex flex-col gap-4 sm:gap-5">
@@ -413,6 +417,20 @@ const UserDetailForm = ({
           )}
         </div>
       </div>
+      {/* <div className="flex flex-col items-end gap-2">
+        <Button 
+          variant="outline" 
+          type="button" 
+          className="w-fit sm:w-auto" 
+          onClick={() => setIsPinDialogOpen(true)}>
+          키오스크 PIN번호 변경
+        </Button>
+
+        <PinChangeDialog 
+          open={isPinDialogOpen} 
+          onOpenChange={setIsPinDialogOpen} 
+        />
+      </div> */}
     </form>
   );
 };
