@@ -122,7 +122,7 @@ export const ROMItemCard = ({
                   stroke="hsl(var(--toggle-accent))"
                   strokeWidth={2}
                   connectNulls
-                            dot={(props: DotProps & { value?: number; payload?: { score?: number } }) => {
+                  dot={(props: DotProps & { value?: number; payload?: { score?: number } }) => {
 
                     if (props.payload?.score === undefined || props.payload?.score === null) return <g key={props.key} />;
                     return (
