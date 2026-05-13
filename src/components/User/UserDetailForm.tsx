@@ -43,7 +43,9 @@ const UserDetailForm = ({
     userName: z.string()
       .min(2, { message: "사용자 이름은 최소 2자 이상이어야 합니다." })
       .max(50, { message: "사용자 이름은 최대 50자까지 입력 가능합니다." })
-      .regex(/^[가-힣0-9]+$/, { message: "한글과 숫자만 입력 가능합니다." }),
+      .regex(/^[가-힣a-zA-Z0-9]+$/, {
+        message: "한글, 영문, 숫자만 입력 가능합니다.",
+      }),
     gender: z.string().optional().nullable(),
     birthday: z
       .string()
