@@ -207,6 +207,7 @@ const CenterUserDetail = ({
           <CenterUserMeasureContainer
             measureSn={measureSn}
             userSn={userSn}
+            uuid={userUUID}
             tab={tab}
             changeMeasure={changeMeasureSn}
             currentView={currentView}

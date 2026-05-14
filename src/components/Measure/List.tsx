@@ -79,11 +79,18 @@ measurements);
   const router = useRouter();
 
   const handleNavigate = async (
-    measure_sn: number, 
-    user_sn: number, 
+    measure_sn: number,
+    user_sn: number,
+    uuid: string ,
+    mobile: string,
     measurement_type: "rom_only" | "basic_only" | "basic_and_rom"
   ) => {
-    const encrypted = await actionMeasureEncrypt({ measure_sn, user_sn });
+    const encrypted = await actionMeasureEncrypt({
+      measure_sn,
+      user_sn,
+      uuid, mobile,
+    });
+
     if (encrypted !== "ERROR") {
       if (measurement_type === "rom_only") {
         router.push(`/measure/ROM?data=${encrypted}`);
@@ -115,7 +122,12 @@ measurements);
           {list.map((measurement, index) => (
             <TableRow 
               key={measurement.user_uuid + `-${index}`}
-              onClick={() => handleNavigate(measurement.measure_sn, measurement.user_sn, measurement.measurement_type)}
+              onClick={() => handleNavigate(
+                measurement.measure_sn, 
+                measurement.user_sn, 
+                measurement.user_uuid,
+                measurement.mobile,
+                measurement.measurement_type,)}
               className="cursor-pointer">
 
               <TableCell className="text-center font-medium whitespace-nowrap">
@@ -143,8 +155,13 @@ measurements);
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleNavigate(measurement.measure_sn, measurement.user_sn, measurement.measurement_type);
-                  }}
+                    handleNavigate(
+                      measurement.measure_sn, 
+                      measurement.user_sn, 
+                      measurement.user_uuid,
+                      measurement.mobile,
+                      measurement.measurement_type,)
+                    }}
                   className="flex items-center gap-2 justify-end cursor-pointer"
                 >
                   <FileText className="w-4 h-4" />

@@ -38,8 +38,8 @@ export const MainUserList = ({
     }
   };
 
-  const handleMeasureNavigate = async (measure_sn: number, user_sn: number) => {
-    const encrypted = await actionMeasureEncrypt({ measure_sn, user_sn });
+  const handleMeasureNavigate = async (measure_sn: number, user_sn: number, uuid: string, mobile: string) => {
+    const encrypted = await actionMeasureEncrypt({ measure_sn, user_sn, uuid, mobile });
     if (encrypted !== "ERROR") {
       router.push(`/measure/${encrypted}`);
     }
@@ -106,7 +106,7 @@ export const MainUserList = ({
                 </TableCell>
                 <TableCell className="flex items-center justify-end gap-2 whitespace-nowrap">
                   <button
-                    onClick={() => handleMeasureNavigate(measure.measure_sn ?? measure.measure_sn, measure.user_sn)}
+                    onClick={() => handleMeasureNavigate(measure.measure_sn ?? measure.measure_sn, measure.user_sn, measure.user_uuid, measure.mobile)}
                     className="flex items-center gap-2 justify-end cursor-pointer"
                   >
                     <FileText className="w-4 h-4" />
