@@ -60,7 +60,6 @@ export const CenterUserROMContainer = ({
       user_uuid: uuid,
       receiver: mobile,
     };
-    console.log(measureSn, uuid, mobile)
     const encryptData = await actionPrintEncrypt(cryptoData);
     try {
       const url = await getResultRomReportUrl(encryptData);
