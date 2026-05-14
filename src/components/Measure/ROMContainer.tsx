@@ -16,6 +16,9 @@ import { useMeasureDecrypt } from "@/hooks/auth/useMeasureDecrypt";
 import { useAuthStoreOptional } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 import { formatDate } from "@/utils/formatDate";
+import { Button } from "../ui/button";
+import { actionPrintEncrypt } from "@/app/actions/getCrypto";
+import { getResultRomReportUrl } from "@/app/actions/openRomPrintPage";
 
 
 export const MeasureROMContainer = () => {
@@ -52,9 +55,29 @@ export const MeasureROMContainer = () => {
   
   const userSn = decryptedData?.user_sn ?? -1
   const measureSn = decryptedData?.measure_sn ?? -1
+  const uuid = decryptedData?.uuid ?? ""
+  const mobile = decryptedData?.mobile ?? ""
   const centerSn = useAuthStoreOptional((state) => state.centerSn, 0);
 
   
+  // romPrint
+  const handlePrint = async () => {
+    const cryptoData = {
+      sn: measureSn,
+      user_uuid: uuid,
+      receiver: mobile,
+    };
+
+    const encryptData = await actionPrintEncrypt(cryptoData);
+    try {
+      const url = await getResultRomReportUrl(encryptData);
+      // 🔗 크롬(브라우저) 새 창/새 탭으로 리포트 페이지 열기
+      window.open(url, "_blank", "noopener,noreferrer");
+    } catch (e) {
+      console.error("리포트 URL 생성 실패:", e);
+      alert("리포트 페이지를 생성하는 중 오류가 발생했습니다.");
+    }
+  };
 
   const {
     data: romItems,
@@ -132,15 +155,32 @@ export const MeasureROMContainer = () => {
           </div>
         ) : (
           <div className="flex flex-col items-start gap-4">
-            <button
-              type="button"
-              onClick={() => {
-                router.push(`/measure/`);
-              }}
-              className="py-1 rounded-md text-base text-sub700"
-            >
-              ← 목록으로
-            </button>
+            <div className="flex w-full justify-between">
+              <button
+                type="button"
+                onClick={() => {
+                  router.push(`/measure/`);
+                }}
+                className="py-1 rounded-md text-base text-sub700"
+              >
+                ← 목록으로
+              </button>
+              
+              <Button 
+                className="hover:bg-sub200 bg-sub150 transition-colors text-primary-foreground text-sub700"
+                variant="default"
+                onClick={() => {
+                  handlePrint()
+                }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/icons/ic_print.svg"
+                  alt="인쇄하기"
+                  className="gap-4 size-4 dark:[filter:brightness(0)_invert(1)]"
+                />
+                인쇄하기
+              </Button>
+            </div>
             <ROMItemContainer datas={romItems ?? []} onROMItemSelect={onROMItemSelect} isUserPage={false} />
           </div>
           

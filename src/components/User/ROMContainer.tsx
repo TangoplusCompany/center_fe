@@ -12,15 +12,21 @@ import { formatDate } from "@/utils/formatDate";
 import { Button } from "../ui/button";
 import { LayoutDashboardIcon } from "lucide-react";
 import CenterUserDashboardContainer from "./DashBoardContainer";
+import { actionPrintEncrypt } from "@/app/actions/getCrypto";
+import { getResultRomReportUrl } from "@/app/actions/openRomPrintPage";
 
 export interface UserROMProps {
   userSn: number,
   measureSn: number,
+  uuid: string,
+  mobile: string,
   isMyPage: boolean
 }
 export const CenterUserROMContainer = ({
   userSn,
   measureSn,
+  uuid,
+  mobile,
   isMyPage,
 }: UserROMProps) => {
 
@@ -47,7 +53,24 @@ export const CenterUserROMContainer = ({
       return next;                         
     });
   };
-  
+  const handlePrint = async () => {
+    
+    const cryptoData = {
+      sn: measureSn,
+      user_uuid: uuid,
+      receiver: mobile,
+    };
+    console.log(measureSn, uuid, mobile)
+    const encryptData = await actionPrintEncrypt(cryptoData);
+    try {
+      const url = await getResultRomReportUrl(encryptData);
+      // 🔗 크롬(브라우저) 새 창/새 탭으로 리포트 페이지 열기
+      window.open(url, "_blank", "noopener,noreferrer");
+    } catch (e) {
+      console.error("리포트 URL 생성 실패:", e);
+      alert("리포트 페이지를 생성하는 중 오류가 발생했습니다.");
+    }
+  };
   const {
     data: romItems,
     isLoading: romLoading,
@@ -109,13 +132,29 @@ export const CenterUserROMContainer = ({
         <>
           <div className="flex text-base justify-between items-center">
             {formatDate(romItems?.[0].reg_date ?? "")}
-            <Button 
-              className="hover:bg-sub200 bg-sub150 transition-colors text-primary-foreground text-sub700" 
-              onClick={() => setShowROMDashboard(true)}
-              >
-                <LayoutDashboardIcon className="w-4 h-4"/>
-              부위별 대시보드
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                className="hover:bg-sub200 bg-sub150 transition-colors text-primary-foreground text-sub700"
+                variant="default"
+                onClick={() => {
+                  handlePrint()
+                }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/icons/ic_print.svg"
+                  alt="인쇄하기"
+                  className="gap-4 size-4 dark:[filter:brightness(0)_invert(1)]"
+                />
+                인쇄하기
+              </Button>
+              <Button 
+                className="hover:bg-sub200 bg-sub150 transition-colors text-primary-foreground text-sub700" 
+                onClick={() => setShowROMDashboard(true)}
+                >
+                  <LayoutDashboardIcon className="w-4 h-4"/>
+                부위별 대시보드
+              </Button>
+            </div>
           </div>
 
           {/* 목록 섹션 (데이터가 선택되지 않았을 때) */}
