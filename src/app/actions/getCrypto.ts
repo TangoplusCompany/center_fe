@@ -50,6 +50,8 @@ export const actionDecrypt = async (text: string): Promise<string> => {
 export interface IMeasureCryptoProps {
   measure_sn: number;
   user_sn: number;
+  uuid: string;
+  mobile: string;
 }
 
 export const actionMeasureEncrypt = async (

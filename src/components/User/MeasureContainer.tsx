@@ -13,6 +13,7 @@ import CenterUserDashboardContainer from "./DashBoardContainer";
 const CenterUserMeasureContainer = ({
   measureSn,
   userSn,
+  uuid,
   tab,
   changeMeasure,
   currentView,
@@ -25,6 +26,7 @@ const CenterUserMeasureContainer = ({
 }: {
   measureSn: number;
   userSn: number;
+  uuid:string;
   tab: number;
   changeMeasure: (sn: number) => void;
   currentView: viewType;
@@ -53,6 +55,7 @@ const CenterUserMeasureContainer = ({
   // - 다이얼로그에서 선택한 경우 measureSn, 아니면 리스트 첫 번째(최신)
   const latestMeasureSn = latestMeasureListData?.measurement_list?.find((it) => it.has_basic === 1)?.measure_sn;
   const latestUserSn = latestMeasureListData?.measurement_list?.[0]?.user_sn;
+  const latestMobile = latestMeasureListData?.measurement_list?.[0]?.mobile;
   const effectiveMeasureSn = measureSn > 0 ? measureSn : latestMeasureSn;
 
   // 다이얼로그가 열릴 때만 effectiveMeasureSn 스냅샷 (페이지 이동 시 freeze 유지)
@@ -150,7 +153,12 @@ const CenterUserMeasureContainer = ({
         </>
       )}
       {currentView === "rom"  && (
-        <CenterUserROMContainer userSn={userSn} measureSn={measureSn} isMyPage={isMyPage} />
+        <CenterUserROMContainer 
+          userSn={userSn} 
+          measureSn={measureSn} 
+          isMyPage={isMyPage} 
+          uuid={uuid} 
+          mobile={latestMobile ?? ""} />
       )}
 
     </>
