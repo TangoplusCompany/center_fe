@@ -44,7 +44,6 @@ const MeasureDetailContainer = () => {
     measure_sn: decryptedData?.measure_sn ?? 0,
     user_sn: decryptedData?.user_sn ? `${decryptedData.user_sn}` : "",
   });
-
   if (decryptLoading) return <MeasureDetailSkeleton />;
   if (decryptError) return <div>잘못된 접근입니다.</div>;
   if (measureDataLoading) return <MeasureDetailSkeleton />;
