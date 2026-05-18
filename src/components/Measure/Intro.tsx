@@ -17,7 +17,6 @@ const MeasureIntro = ({
   data: IUserMeasureInfoResponse;
   props: SkeletonDatePickerProps;
 }) => {
-  
   const {
     risk_upper_ment,
     risk_upper_risk_level,
