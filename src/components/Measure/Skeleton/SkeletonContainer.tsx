@@ -9,6 +9,8 @@ import { DetailPagination } from "@/hooks/api/user/useMeasureListForDetail";
 import { viewType } from "../../User/Detail";
 import { Button } from "../../ui/button";
 import { FullBodySkeleton3D } from "../FullBodySkeleton3D";
+import { actionMeasureEncrypt } from "@/app/actions/getCrypto";
+import { useRouter } from "next/navigation";
 // import UnitySkeleton from "./UnitySkeleton";
 // import { useTheme } from "next-themes";
 
@@ -29,7 +31,6 @@ const SkeletonContainer = ({
   data:  IUserDetailMeasureInfo;
   props?: SkeletonDatePickerProps;
 }) => {
-  
   const { changeDpView } = rawProps;
   const [internalDatePickerOpen, setInternalDatePickerOpen] = React.useState(false);
   const isControlled = rawProps.onDatePickerOpenChange != undefined;
@@ -57,6 +58,26 @@ const SkeletonContainer = ({
   //   };
   // };
    
+  // 최근 측정 현황에서 간편검사/ROM 둘 다 있을 때
+  const router = useRouter();
+  const handleNavigate = async (
+    measure_sn: number,
+    user_sn: number,
+    uuid: string ,
+    mobile: string,
+  ) => {
+    const encrypted = await actionMeasureEncrypt({
+      measure_sn,
+      user_sn,
+      uuid, mobile,
+    });
+
+    if (encrypted !== "ERROR") {
+      router.push(`/measure/ROM?data=${encrypted}`);
+      console.log("router pushed")
+    }
+  };
+
   return (
     <div className="relative box-border flex h-full flex-col items-center rounded-3xl border-2 border-sub200 p-4 text-black focus-visible:outline-none">
       
@@ -111,11 +132,20 @@ const SkeletonContainer = ({
       {/* ⭐ 기준바: Skeleton 하단 중앙 */}
       <div className="hidden md:flex flex-col w-full gap-2">
         <div className="flex w-full justify-end">
-          { (data.has_rom === 1 && changeDpView) && (
+          { (data.has_rom === 1) && (
             <Button 
               className="hover:bg-sub200 bg-sub150 transition-colors text-primary-foreground text-sub700" 
               onClick={() => {
-                changeDpView("rom")
+                if (changeDpView) {
+                  changeDpView("rom");
+                } else {
+                  handleNavigate(
+                    data.measure_sn as number, 
+                    data.user_sn as number, 
+                    data.user_uuid, 
+                    data.mobile, 
+                  );
+                }
               }}
             >
               ROM 검사 기록

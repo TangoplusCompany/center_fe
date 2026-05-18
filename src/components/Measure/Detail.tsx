@@ -14,9 +14,10 @@ import { actionKakaoEncrypt, actionPrintEncrypt } from "@/app/actions/getCrypto"
 import { postKakaoSend } from "@/app/actions/postKakaoSend";
 import { Button } from "../ui/button";
 import type { DetailPagination } from "@/hooks/api/user/useMeasureListForDetail";
-import { getResultReportUrl } from "@/app/actions/openPrintPage";
 import { SkeletonDatePickerProps } from "./Skeleton/SkeletonContainer";
 import { viewType } from "../User/Detail";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
+import { getPdfUrl } from "@/app/actions/openPdfPage";
 type MeasureListType = {
   title: string;
   value: string;
@@ -28,6 +29,7 @@ type CenterUserMeasureProps = {
   measureList?: IMeasureList[];              // 전체 측정 리스트 (현재 페이지)
   selectedMeasure?: number | undefined;         // 현재 선택된 sn
   changeMeasure?: (sn: number) => void;  // 다른 sn 선택 시 호출
+  currentDpView ?: viewType
   changeDPView ?: (dpView: viewType) => void;
   userSn: string;
   pagination?: DetailPagination;  
@@ -72,7 +74,7 @@ const MeasureDetail = ({
     }
   };
   
-  const handlePrint = async () => {
+  const handlePrint = async (type: 0 | 1 | 2) => {
     const cryptoData = {
       sn: Number(data.measure_sn),
       user_uuid: data.user_uuid,
@@ -81,7 +83,7 @@ const MeasureDetail = ({
 
     const encryptData = await actionPrintEncrypt(cryptoData);
     try {
-      const url = await getResultReportUrl(encryptData);
+      const url = await getPdfUrl(encryptData, type);
       // 🔗 크롬(브라우저) 새 창/새 탭으로 리포트 페이지 열기
       window.open(url, "_blank", "noopener,noreferrer");
     } catch (e) {
@@ -89,6 +91,7 @@ const MeasureDetail = ({
       alert("리포트 페이지를 생성하는 중 오류가 발생했습니다.");
     }
   };
+  
   const MeasureDateProps : SkeletonDatePickerProps = {
     measureList: measureList,
     selectedMeasure: selectedMeasure,
@@ -170,7 +173,8 @@ const MeasureDetail = ({
         />,
     },
   ];
-
+  const mType = measureData?.result_summary_data?.measurement_type;
+  const defaultSelectValue = mType === "basic_only" ? "1" : mType === "rom_only" ? "2" : "0";
   return (
     <Tabs defaultValue="summary" className="w-full table table-fixed min-w-0">
       {/* ✅ 상단 줄: TabsList (좌측) + Select(우측) */}
@@ -200,7 +204,7 @@ const MeasureDetail = ({
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 flex-shrink-0">
           <Button 
-            className="hover:bg-sub200 bg-sub150 transition-colors text-primary-foreground text-sub700"
+            className="px-6 hover:bg-sub200 bg-sub150 transition-colors text-primary-foreground text-sub700 shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring focus-visible:ring-inset"
             variant="default"
             onClick={() => {
               if (window.confirm(`${measureData.result_summary_data.user_name}로 카카오톡 결과를 전송하시습니까?`)) {
@@ -213,29 +217,43 @@ const MeasureDetail = ({
               alt="카카오톡 결과 전송"
               className="gap-4 size-4 dark:[filter:brightness(0)_invert(1)]"
             />
-            결과전송
+            <span>결과전송</span>
             
           </Button>
-
-          <Button 
-            className="hover:bg-sub200 bg-sub150 transition-colors text-primary-foreground text-sub700"
-            variant="default"
-            onClick={() => {
-              handlePrint()
-            }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/icons/ic_print.svg"
-              alt="인쇄하기"
-              className="gap-4 size-4 dark:[filter:brightness(0)_invert(1)]"
-            />
-            인쇄하기
-          </Button>
-
           
+          <Select
+            value=""
+            onValueChange={(val) => handlePrint(Number(val) as 0 | 1 | 2)}
+            defaultValue={defaultSelectValue} // 💡 동적 초기값 적용
+          >
+            <SelectTrigger className="flex hover:bg-sub200 bg-sub150 transition-colors text-primary-foreground text-sub700 gap-1 justify-center [&>svg]:hidden border-none">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/icons/ic_print.svg"
+                alt="인쇄하기"
+                className="size-4 dark:[filter:brightness(0)_invert(1)]"
+              />
+              <span>인쇄하기</span>
+            </SelectTrigger>
+            
+            <SelectContent>
+              {/* 💡 2개 이상일 때만 '모든 검사' 노출 */}
+              {mType === "basic_and_rom" && (
+                <SelectItem value="0">모든 검사</SelectItem>
+              )}
 
-        </div>
-        
+              {/* 간편 검사 노출 조건 */}
+              {(mType === "basic_only" || mType === "basic_and_rom") && (
+                <SelectItem value="1">간편 검사</SelectItem>
+              )}
+
+              {/* ROM 검사 노출 조건 */}
+              {(mType === "rom_only" || mType === "basic_and_rom") && (
+                <SelectItem value="2">ROM 검사</SelectItem>
+              )}
+            </SelectContent>
+          </Select>
+        </div>      
       </div>
 
       {/* ✅ 하단: 각 탭의 내용 */}
