@@ -74,7 +74,7 @@ const MeasureDetail = ({
     }
   };
   
-  const handlePrint = async (type: 0 | 1 | 2) => {
+  const handlePrint = async (type: string) => {
     const cryptoData = {
       sn: Number(data.measure_sn),
       user_uuid: data.user_uuid,
@@ -223,7 +223,7 @@ const MeasureDetail = ({
           
           <Select
             value=""
-            onValueChange={(val) => handlePrint(Number(val) as 0 | 1 | 2)}
+            onValueChange={(val) => handlePrint(val)}
             defaultValue={defaultSelectValue} // 💡 동적 초기값 적용
           >
             <SelectTrigger className="flex hover:bg-sub200 bg-sub150 transition-colors text-primary-foreground text-sub700 gap-1 justify-center [&>svg]:hidden border-none">
@@ -235,21 +235,20 @@ const MeasureDetail = ({
               />
               <span>인쇄하기</span>
             </SelectTrigger>
-            
             <SelectContent>
               {/* 💡 2개 이상일 때만 '모든 검사' 노출 */}
               {mType === "basic_and_rom" && (
-                <SelectItem value="0">모든 검사</SelectItem>
+                <SelectItem value="11">모든 검사</SelectItem>
               )}
 
               {/* 간편 검사 노출 조건 */}
               {(mType === "basic_only" || mType === "basic_and_rom") && (
-                <SelectItem value="1">간편 검사</SelectItem>
+                <SelectItem value="10">간편 검사</SelectItem>
               )}
 
               {/* ROM 검사 노출 조건 */}
               {(mType === "rom_only" || mType === "basic_and_rom") && (
-                <SelectItem value="2">ROM 검사</SelectItem>
+                <SelectItem value="01">ROM 검사</SelectItem>
               )}
             </SelectContent>
           </Select>
