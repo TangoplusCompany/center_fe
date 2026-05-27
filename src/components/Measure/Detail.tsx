@@ -3,7 +3,7 @@
 import { IUserMeasureInfoResponse } from "@/types/measure";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MeasureDetailDynamic from "@/components/Measure/DetailDynamic";
-import React, { JSX } from "react";
+import React, { JSX, useEffect, useState } from "react";
 import BackMeasurement from "@/components/Measure/Static/BackMeasurement";
 import FrontMeasurement from "@/components/Measure/Static/FrontMeasurement";
 import SideMeasurement from "@/components/Measure/Static/SideMeasurement";
@@ -16,8 +16,123 @@ import { Button } from "../ui/button";
 import type { DetailPagination } from "@/hooks/api/user/useMeasureListForDetail";
 import { SkeletonDatePickerProps } from "./Skeleton/SkeletonContainer";
 import { viewType } from "../User/Detail";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
-import { getPdfUrl } from "@/app/actions/openPdfPage";
+import * as Popover from "@radix-ui/react-popover";
+import { getMergedPrintUrl } from "@/app/actions/openMergedPrintPage";
+
+// Select 
+interface PrintSelectProps {
+  mType: "basic_and_rom" | "basic_only" | "rom_only";
+  handlePrint: (selectedValues: string) => void;
+}
+
+export function PrintSelect({ mType, handlePrint }: PrintSelectProps) {
+  const [basicChecked, setBasicChecked] = useState(false);
+  const [romChecked, setRomChecked] = useState(false);
+  const [biaChecked, setBiaChecked] = useState(false);
+
+  // mType 변경 시 노출될 체크박스만 기본값으로 활성화
+  useEffect(() => {
+    // 초기화
+    setBasicChecked(mType === "basic_only" || mType === "basic_and_rom");
+    setRomChecked(mType === "rom_only" || mType === "basic_and_rom");
+    setBiaChecked(false); // BIA는 필요시 기본값 수정
+  }, [mType]);
+
+  const onClickPrint = () => {
+    // 자릿수 규칙에 맞게 문자열 조합 (앞에서부터 Basic, Rom, Bia)
+    const char1 = basicChecked ? "1" : "0";
+    const char2 = romChecked ? "1" : "0";
+    const char3 = biaChecked ? "1" : "0";
+
+    handlePrint(`${char1}${char2}${char3}`);
+  };
+
+  return (
+    <Popover.Root>
+      <Popover.Trigger asChild>
+        <Button className="px-6 hover:bg-sub200 bg-sub150 transition-colors text-primary-foreground text-sub700 shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring focus-visible:ring-inset">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/icons/ic_print.svg"
+            alt="인쇄하기"
+            className="size-4 dark:[filter:brightness(0)_invert(1)]"
+          />
+          <span>인쇄하기</span>
+        </Button>
+      </Popover.Trigger>
+
+      <Popover.Portal>
+        <Popover.Content
+          className="z-20 w-56 rounded-xl border bg-popover p-2 text-popover-foreground shadow-md outline-none
+          data-[state=open]:animate-in
+          data-[state=closed]:animate-out
+          data-[state=open]:fade-in-0
+          data-[state=closed]:fade-out-0
+          data-[state=open]:zoom-in-95
+          data-[state=closed]:zoom-out-95
+          duration-200 /* 속도 조절 */
+          "
+          sideOffset={4}
+        >
+          <div className="flex flex-col gap-1 p-1">
+            
+            {/* 1. 간편 검사: basic_only 이거나 basic_and_rom 일 때만 노출 */}
+            {(mType === "basic_only" || mType === "basic_and_rom") && (
+              <label className="flex items-center gap-2 p-2 hover:bg-accent rounded-md cursor-pointer text-sm">
+                <input
+                  type="checkbox"
+                  checked={basicChecked}
+                  onChange={(e) => setBasicChecked(e.target.checked)}
+                  className="rounded border-toggle-accent accent-toggle-accent"
+                />
+                <span>간편 검사</span>
+              </label>
+            )}
+
+            {/* 2. ROM 검사: rom_only 이거나 basic_and_rom 일 때만 노출 */}
+            {(mType === "rom_only" || mType === "basic_and_rom") && (
+              <label className="flex items-center gap-2 p-2 hover:bg-accent rounded-md cursor-pointer text-sm">
+                <input
+                  type="checkbox"
+                  checked={romChecked}
+                  onChange={(e) => setRomChecked(e.target.checked)}
+                  className="rounded border-toggle-accent accent-toggle-accent"
+                />
+                <span>ROM 검사</span>
+              </label>
+            )}
+
+            {/* 3. BIA 검사 (기존 규칙 유지 - 필요 없으시면 이 블록은 지우셔도 됩니다) */}
+            {/* {mType === "basic_and_rom" && (
+              <label className="flex items-center gap-2 p-2 hover:bg-accent rounded-md cursor-pointer text-sm">
+                <input
+                  type="checkbox"
+                  checked={biaChecked}
+                  onChange={(e) => setBiaChecked(e.target.checked)}
+                  className="rounded border-toggle-accent accent-toggle-accent"
+                />
+                <span>BIA 검사</span>
+              </label>
+            )} */}
+
+            <hr className="border-muted my-1" />
+
+            <Popover.Close asChild>
+              <button
+                onClick={onClickPrint}
+                disabled={!basicChecked && !romChecked && !biaChecked}
+                className="w-full bg-sub150 hover:bg-sub200 text-sub700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors disabled:opacity-50"
+              >
+                선택 항목 인쇄
+              </button>
+            </Popover.Close>
+          </div>
+        </Popover.Content>
+      </Popover.Portal>
+    </Popover.Root>
+  );
+}
+
 type MeasureListType = {
   title: string;
   value: string;
@@ -74,7 +189,27 @@ const MeasureDetail = ({
     }
   };
   
-  const handlePrint = async (type: string) => {
+  // const handlePrint = async (type: string) => {
+  //   const cryptoData = {
+  //     sn: Number(data.measure_sn),
+  //     user_uuid: data.user_uuid,
+  //     receiver: data.mobile,
+  //   };
+
+  //   const encryptData = await actionPrintEncrypt(cryptoData);
+  //   try {
+  //     const url = await getPdfUrl(encryptData, type);
+  //     // 🔗 크롬(브라우저) 새 창/새 탭으로 리포트 페이지 열기
+  //     window.open(url, "_blank", "noopener,noreferrer");
+  //   } catch (e) {
+  //     console.error("리포트 URL 생성 실패:", e);
+  //     alert("리포트 페이지를 생성하는 중 오류가 발생했습니다.");
+  //   }
+  // };
+  const mType = measureData?.result_summary_data?.measurement_type;
+  const handlePrint = async (selectedValues: string) => {
+    if (selectedValues.length === 0) return;
+    console.log(selectedValues)
     const cryptoData = {
       sn: Number(data.measure_sn),
       user_uuid: data.user_uuid,
@@ -82,14 +217,14 @@ const MeasureDetail = ({
     };
 
     const encryptData = await actionPrintEncrypt(cryptoData);
-    try {
-      const url = await getPdfUrl(encryptData, type);
-      // 🔗 크롬(브라우저) 새 창/새 탭으로 리포트 페이지 열기
-      window.open(url, "_blank", "noopener,noreferrer");
-    } catch (e) {
-      console.error("리포트 URL 생성 실패:", e);
-      alert("리포트 페이지를 생성하는 중 오류가 발생했습니다.");
-    }
+      try {
+        const url = await getMergedPrintUrl(encryptData, selectedValues);
+        // 🔗 크롬(브라우저) 새 창/새 탭으로 리포트 페이지 열기
+        window.open(url, "_blank", "noopener,noreferrer");
+      } catch (e) {
+        console.error("리포트 URL 생성 실패:", e);
+        alert("리포트 페이지를 생성하는 중 오류가 발생했습니다.");
+      }
   };
   
   const MeasureDateProps : SkeletonDatePickerProps = {
@@ -118,7 +253,6 @@ const MeasureDetail = ({
           sns={{
           measureSn: String(measureData.result_summary_data.measure_sn),
           userSn: userSn
-          
         }}
         measureInfo={measureData}
         cameraOrientation={data.camera_orientation}
@@ -173,8 +307,7 @@ const MeasureDetail = ({
         />,
     },
   ];
-  const mType = measureData?.result_summary_data?.measurement_type;
-  const defaultSelectValue = mType === "basic_only" ? "1" : mType === "rom_only" ? "2" : "0";
+
   return (
     <Tabs defaultValue="summary" className="w-full table table-fixed min-w-0">
       {/* ✅ 상단 줄: TabsList (좌측) + Select(우측) */}
@@ -220,38 +353,7 @@ const MeasureDetail = ({
             <span>결과전송</span>
             
           </Button>
-          
-          <Select
-            value=""
-            onValueChange={(val) => handlePrint(val)}
-            defaultValue={defaultSelectValue} // 💡 동적 초기값 적용
-          >
-            <SelectTrigger className="flex hover:bg-sub200 bg-sub150 transition-colors text-primary-foreground text-sub700 gap-1 justify-center [&>svg]:hidden border-none">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/icons/ic_print.svg"
-                alt="인쇄하기"
-                className="size-4 dark:[filter:brightness(0)_invert(1)]"
-              />
-              <span>인쇄하기</span>
-            </SelectTrigger>
-            <SelectContent>
-              {/* 💡 2개 이상일 때만 '모든 검사' 노출 */}
-              {mType === "basic_and_rom" && (
-                <SelectItem value="11">모든 검사</SelectItem>
-              )}
-
-              {/* 간편 검사 노출 조건 */}
-              {(mType === "basic_only" || mType === "basic_and_rom") && (
-                <SelectItem value="10">간편 검사</SelectItem>
-              )}
-
-              {/* ROM 검사 노출 조건 */}
-              {(mType === "rom_only" || mType === "basic_and_rom") && (
-                <SelectItem value="01">ROM 검사</SelectItem>
-              )}
-            </SelectContent>
-          </Select>
+          <PrintSelect mType={mType} handlePrint={handlePrint} />
         </div>      
       </div>
 

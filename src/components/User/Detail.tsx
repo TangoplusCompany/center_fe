@@ -237,8 +237,6 @@ const CenterUserDetail = ({
         }}
         pagination={comparePagination}
       />
-      
-      
     </div>
   );
 };
