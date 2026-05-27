@@ -218,14 +218,11 @@ body {
 
 .ripple-dot {
   position: absolute;
-  /* left: 0;
-  bottom: 0; */
-  width: 128px;  /* 시작 원 크기 (여기 조절) */
-  height: 128px; /* 시작 원 크기 (여기 조절) */
+  width: 128px;  
+  height: 128px; 
   border-radius: 9999px;
   pointer-events: none;
 
-  /* ✅ 부드러운 링(두껍고 가장자리가 흐림) */
   background: radial-gradient(
     circle,
     transparent 50%,
@@ -234,7 +231,6 @@ body {
     transparent 50%
   );
 
-  /* ✅ 링을 더 소프트하게 */
   filter: blur(0.4px);
 
   animation: droplet-ripple 4s ease-out infinite;
