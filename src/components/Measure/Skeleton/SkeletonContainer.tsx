@@ -1,45 +1,21 @@
 "use client";
 
 import "@/css/body-skeleton.css";
-import { IMeasureList, IUserDetailMeasureInfo } from "@/types/measure";
+import { IUserDetailMeasureInfo } from "@/types/measure";
 import React from "react";
-import { MeasureDetailDatePickerDialog } from "../DetailDatePickerDialog";
-import { formatDate } from "@/utils/formatDate";
-import { DetailPagination } from "@/hooks/api/user/useMeasureListForDetail";
-import { viewType } from "../../User/Detail";
-import { Button } from "../../ui/button";
+
 import { FullBodySkeleton3D } from "../FullBodySkeleton3D";
-import { actionMeasureEncrypt } from "@/app/actions/getCrypto";
-import { useRouter } from "next/navigation";
 // import UnitySkeleton from "./UnitySkeleton";
 // import { useTheme } from "next-themes";
 
-export interface SkeletonDatePickerProps {
-  measureList?: IMeasureList[];              // 전체 측정 리스트 (현재 페이지)
-  selectedMeasure?: number | undefined;         // 현재 선택된 sn
-  isDatePickerOpen?: boolean;
-  onDatePickerOpenChange?: (open: boolean) => void;
-  changeMeasure?: (sn: number) => void;
-  changeDpView?: (dpView: viewType) => void;
-  pagination?: DetailPagination;  
-}
+
 
 const SkeletonContainer = ({ 
   data,
-  props: rawProps = {}
 }: {
   data:  IUserDetailMeasureInfo;
-  props?: SkeletonDatePickerProps;
 }) => {
-  const { changeDpView } = rawProps;
-  const [internalDatePickerOpen, setInternalDatePickerOpen] = React.useState(false);
-  const isControlled = rawProps.onDatePickerOpenChange != undefined;
-  const datePickerOpen = isControlled ? rawProps.isDatePickerOpen : internalDatePickerOpen;
-  const setDatePickerOpen = rawProps.onDatePickerOpenChange ?? setInternalDatePickerOpen;
-  const selectedMeasure =
-    rawProps.measureList && rawProps.selectedMeasure != undefined
-      ? rawProps.measureList.find((item) => item.measure_sn === rawProps.selectedMeasure)
-      : undefined;
+
   // const { resolvedTheme } = useTheme();
   // const isDarkMode = resolvedTheme === "dark";
   // const transformRiskToJoints = (data: IUserDetailMeasureInfo): Record<string, number> => {
@@ -59,64 +35,13 @@ const SkeletonContainer = ({
   // };
    
   // 최근 측정 현황에서 간편검사/ROM 둘 다 있을 때
-  const router = useRouter();
-  const handleNavigate = async (
-    measure_sn: number,
-    user_sn: number,
-    uuid: string ,
-    mobile: string,
-  ) => {
-    const encrypted = await actionMeasureEncrypt({
-      measure_sn,
-      user_sn,
-      uuid, mobile,
-    });
-
-    if (encrypted !== "ERROR") {
-      router.push(`/measure/ROM?data=${encrypted}`);
-      console.log("router pushed")
-    }
-  };
+  
+  
 
   return (
     <div className="relative box-border flex h-full flex-col items-center rounded-3xl border-2 border-sub200 p-4 text-black focus-visible:outline-none">
       
-      {rawProps.measureList && rawProps.changeMeasure && (
-        <>
-          <button
-            type="button"
-            onClick={() => setDatePickerOpen?.(true)}
-            className="
-              w-full flex items-center justify-center gap-2
-              border-2 border-sub300 rounded-xl
-              px-3 py-2 text-base text-sub700
-              hover:border-toggleAccent
-              focus:outline-none focus:ring-2  focus:border-blue-500
-              transition
-            "
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/icons/ic_calendar.svg"
-              alt="date_select"
-              className="lg:!w-5 lg:!h-5"
-            />
-            <span>
-              {selectedMeasure
-                ? formatDate(selectedMeasure.measure_date)
-                : "측정일 선택"}
-            </span>
-          </button>
-          <MeasureDetailDatePickerDialog
-            open={datePickerOpen ?? false}
-            onOpenChange={setDatePickerOpen}
-            items={rawProps.measureList}
-            selectedMeasure={rawProps.selectedMeasure}
-            onSelect={(sn) => rawProps.changeMeasure?.(sn)}
-            pagination={rawProps.pagination}
-          />
-        </>
-      )}
+      
 
       <div className="flex-1 flex items-center justify-center w-full min-h-0">
         <div className="relative z-0 skeleton mb-8 w-full max-w-[260px] aspect-[246/440] min-h-[150px]">
@@ -130,29 +55,7 @@ const SkeletonContainer = ({
       </div> */}
      
       {/* ⭐ 기준바: Skeleton 하단 중앙 */}
-      <div className="hidden md:flex flex-col w-full gap-2">
-        <div className="flex w-full justify-end">
-          { (data.has_rom === 1) && (
-            <Button 
-              className="hover:bg-sub200 bg-sub150 transition-colors text-primary-foreground text-sub700" 
-              onClick={() => {
-                if (changeDpView) {
-                  changeDpView("rom");
-                } else {
-                  handleNavigate(
-                    data.measure_sn as number, 
-                    data.user_sn as number, 
-                    data.user_uuid, 
-                    data.mobile, 
-                  );
-                }
-              }}
-            >
-              ROM 검사 기록
-            </Button>
-          )}
-        </div>
-        
+      <div className="hidden md:flex flex-col w-full gap-2">        
         
         <div className="flex items-center justify-between">
           <p className="text-sm text-sub400" >

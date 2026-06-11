@@ -1,15 +1,16 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import CenterUserDetail from "@/components/User/Detail";
+import UserDetail, { viewType } from "@/components/User/Detail";
 import { useResultPageUserStore } from "@/providers/ResultPageUserProvider";
 import { useRouter, useSearchParams } from "next/navigation";
 import { actionUserDecrypt } from "@/app/actions/getCrypto";
+import ResultPageTab from "@/components/User/My/ResultPageTab";
 
 export default function ResultPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+  const [currentTab, setCurrentTab] = useState<viewType>("latest");
   // Store 상태
   const user = useResultPageUserStore((state) => state.user);
   const isLogin = useResultPageUserStore((state) => state.isLogin);
@@ -103,10 +104,11 @@ export default function ResultPage() {
 
   return (
     <div className="w-full max-w-[1300px] mx-auto px-4 md:px-6 lg:px-8 py-4 md:py-6 lg:py-8">
-      <CenterUserDetail 
+      <ResultPageTab userName={decryptedData.user_name} currentTab={currentTab} setCurrentTab={setCurrentTab} />
+      <UserDetail 
         userUUID={decryptedData.user_uuid} 
         userSn={decryptedData.user_sn} 
-        userName={decryptedData.user_name}
+        currentTab={currentTab}
         isMyPage={true}
       />
     </div>

@@ -75,6 +75,7 @@ export const useMeasureListForDetail = ({
       device_sn: 0,
       has_basic: 0,
       has_rom: 0,
+      has_bia: 0,
       measurement_type: "basic_only"
     }));
   }, [filteredItems]);

@@ -8,7 +8,8 @@ import { getAdminCenters } from "@/services/auth/getAdminCenters";
 import { useQuery } from "@tanstack/react-query";
 import { IAdminCenterListItem } from "@/types/center";
 
-export const CenterMainContainer = () => {
+export const 
+CenterMainContainer = () => {
   const adminSn = useAuthStore((state) => state.adminSn);
 
   const { data: centers = [], isLoading, isError } = useQuery({
@@ -16,7 +17,7 @@ export const CenterMainContainer = () => {
     queryFn: () => getAdminCenters(adminSn),
     enabled: adminSn > 0,
   });
-
+  console.log(centers)
   // 로딩 중
   if (adminSn <= 0 || isLoading) {
     return (

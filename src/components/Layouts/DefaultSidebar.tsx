@@ -7,11 +7,12 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { useLogout } from "@/hooks/api/auth/useLogout";
 import { useAuthStore } from "@/providers/AuthProvider";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ChevronsUpDown } from "lucide-react";
 import { getAdminCenters } from "@/services/auth/getAdminCenters";
 import { useQuery } from "@tanstack/react-query";
+import UserSubTabCard from "../User/SubTabCard";
 
 const sideTabs = [
   {
@@ -91,15 +92,19 @@ export default function DefaultSidebar() {
       setIsFromCenter(false);
     }
   }, [pathname]);
+
+  const searchParams = useSearchParams();
+  const isUserDetailRoute = pathname.startsWith("/user/") && pathname !== "/user";
+  const encryptedParam = isUserDetailRoute ? pathname.split("/").pop() : null;
+  const currentSubTab = searchParams.get("subTab") || "latest";
+
   const filteredDashboard = React.useMemo(() => {
     if (isFromCenter) {
-      return sideTabs.filter((item) =>
-        item.title === "센터 목록" || item.title === "설정"
-      );
+      return sideTabs.filter((item) => item.title === "센터 목록" || item.title === "설정");
     }
 
     return sideTabs
-      .filter((item) => item.title !== "센터 목록") // 항상 센터 목록 제외
+      .filter((item) => item.title !== "센터 목록")
       .filter((item) => {
         if (adminRole === 1) return true;
         if (adminRole === 2) {
@@ -204,7 +209,7 @@ export default function DefaultSidebar() {
         <div className="relative  bg-toggleAccent-background w-full flex px-4 py-2 border-none">
           <button
             onClick={() => setCenterOpen(!centerOpen)}
-            className="w-full flex items-center bg-white rounded-full rounded-full hover:bg-sub100 transition-colors justify-between gap-2 px-3 py-2"
+            className="w-full flex items-center bg-white rounded-full hover:bg-sub100 transition-colors justify-between gap-2 px-3 py-2"
           >
             <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 bg-toggleAccent`}>
               <span className={`text-xs font-bold text-white`}>
@@ -305,7 +310,7 @@ export default function DefaultSidebar() {
                 className={`absolute left-0 transition-all duration-300 ease-in-out ${
                   state === "collapsed" && !openMobile && !isMobile
                     ? "w-8 h-8 rounded-full left-1/2 -translate-x-1/2" // 👈 접혔을 때: 원형 + 중앙 (데스크톱만)
-                    : "w-full bg-[#4169E1] rounded-l-[20px] rounded-r-none ml-4 " // 👈 펼쳤을 때 (데스크톱 expanded 또는 모바일 openMobile)
+                    : "w-full rounded-l-[20px] rounded-r-none ml-4 " // 👈 펼쳤을 때 (데스크톱 expanded 또는 모바일 openMobile)
                 }`}
                 style={{
                   top:
@@ -314,45 +319,79 @@ export default function DefaultSidebar() {
                       : `${indicatorStyle.top - 8}px`, // 👈 펼쳐졌을 때 (데스크톱 expanded 또는 모바일 openMobile)
                   height: state === "collapsed" && !openMobile && !isMobile ? "32px" : `${indicatorStyle.height + 16}px`,
                   opacity: indicatorStyle.height > 0 && (openMobile || !isMobile) ? 1 : 0,
-                  backgroundColor: "#4169E1",
+                  backgroundColor: isUserDetailRoute ? "transparent" : "#4169E1",
                 }}
               />
               {filteredDashboard.map((item, index) => {
-                  const isActive = item.url === "/" ? pathname === item.url : pathname.startsWith(item.url);
-                  // TODO 여기서 하단 스크롤만 없애고 넣기
-                  return (
-                    <SidebarMenuItem
-                      key={item.title}
-                      className="relative"
-                      ref={(el) => {
-                        menuItemRefs.current[index] = el;
-                      }}
-                    >
-                      <SidebarMenuButton asChild isActive={isActive}>
-                        <div
-                          className={`flex items-center gap-3 py-3 px-4 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:justify-center ${isActive ? "bg-transparent" : ""}`}
-                          onClick={handleLinkClick}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter" || e.key === " ") {
-                              handleLinkClick();
-                            }
-                          }}
-                          role="presentation"
+                const isUserMenu = item.title === "사용자 회원 관리";
+                const isActive = item.url === "/" 
+                  ? pathname === item.url 
+                  : isUserMenu && isUserDetailRoute 
+                    ? true 
+                    : pathname.startsWith(item.url);
+                return (
+                  <SidebarMenuItem
+                    key={item.title}
+                    className="relative"
+                    ref={(el) => {
+                      menuItemRefs.current[index] = el;
+                    }}
+                  >
+                    <SidebarMenuButton asChild isActive={isActive}>
+                      <div
+                        className={`flex items-center gap-3 py-3 px-4 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:justify-center ${isActive ? "bg-transparent" : ""}`}
+                        onClick={handleLinkClick}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            handleLinkClick();
+                          }
+                        }}
+                        role="presentation"
+                      >
+                        <Link
+                          href={item.url}
+                          className="flex items-center gap-3 w-full"
+                          {...(item.external && { target: "_blank", rel: "noopener noreferrer" })}
                         >
-                          <Link
-                            href={item.url}
-                            className="flex items-center gap-3 w-full"
-                            {...(item.external && { target: "_blank", rel: "noopener noreferrer" })}
-                          >
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={item.icon} alt={item.title} className={`lg:!w-5 lg:!h-5 ml-4 transition-all duration-300 ${isActive ? "brightness-0 invert" : ""}`} />
-                            <span className={`transition-colors duration-300 ${isActive ? "text-white" : ""}`}>{item.title}</span>
-                          </Link>
+                          
+                        <div className="lg:w-5 lg:h-5 ml-4 overflow-hidden relative">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img 
+                            src={item.icon} 
+                            alt={item.title} 
+                            className={`w-full h-full transition-all duration-300 ${
+                              isActive
+                                ? isUserMenu && isUserDetailRoute
+                                  ? "brightness-0 [filter:drop-shadow(100px_0_0_#4169E1)] -translate-x-[100px]" // 👈 toggleAccent 색상 대입 (예: #4169E1)
+                                  : "brightness-0 invert" // 👈 일반 활성화 (흰색)
+                                : "" // 👈 비활성화 (기본 회색)
+                            }`} 
+                          />
                         </div>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  );
-                })}
+                          <span
+                            className={`transition-colors duration-300 ${
+                              isActive 
+                                ? isUserMenu && isUserDetailRoute
+                                  ? "text-toggleAccent" // 👈 카드가 열린 사용자 관리 메뉴일 때
+                                  : "text-white"        // 👈 일반 활성화 메뉴일 때
+                                : ""
+                            }`}
+                          >
+                            {item.title}
+                          </span>
+                        </Link>
+                      </div>
+                    </SidebarMenuButton>
+                    {isUserMenu && isUserDetailRoute && encryptedParam && (
+                      <UserSubTabCard 
+                        encryptedParam={encryptedParam} 
+                        searchParams={searchParams} 
+                        currentSubTab={currentSubTab} 
+                      />
+                    )}
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

@@ -2,7 +2,7 @@
 
 import { IPartDetailData, IUserMeasureInfoResponse } from "@/types/measure";
 import React from "react";
-import SkeletonContainer, { SkeletonDatePickerProps } from "./Skeleton/SkeletonContainer";
+import SkeletonContainer from "./Skeleton/SkeletonContainer";
 import FootStaticContainer, { IMatStaticPressure } from "./Mat/FootStaticContainer";
 import FootDynamicContainer, { IMatOhsPressure } from "./Mat/FootDynamicContainer";
 import KneeTrajectory from "./Mat/KneeTrajectoryContainer";
@@ -12,10 +12,8 @@ import MeasureIntroPart from "./IntroPart";
 
 const MeasureIntro = ({
   data,
-  props,
 }: {
   data: IUserMeasureInfoResponse;
-  props: SkeletonDatePickerProps;
 }) => {
   const {
     risk_upper_ment,
@@ -96,7 +94,7 @@ const MeasureIntro = ({
     <div className="h-full">
       <SkeletonContainer 
       data={data.result_summary_data} 
-      props={props}
+      
        />
     </div>
   );

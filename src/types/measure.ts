@@ -43,7 +43,7 @@ export interface IMeasureList {
   center_name?: string;
   has_basic : 0 | 1;
   has_rom : 0 | 1;
-  measurement_type: "rom_only" | "basic_only" | "basic_and_rom"
+  has_bia: 0 | 1;
 }
 
 
@@ -66,7 +66,7 @@ export interface IUserDetailMeasureInfo
   camera_orientation: 0 | 1;
   has_basic : 0 | 1;
   has_rom : 0 | 1;
-  measurement_type: "rom_only" | "basic_only" | "basic_and_rom"
+  has_bia: 0 | 1;
 }
 
 export interface IFilterMeasureInfo {

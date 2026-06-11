@@ -7,27 +7,31 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { CompareSlot } from "@/types/compare";
-import { viewType } from "./Detail";
 import { IUserMeasureListItem } from "@/types/user";
 import { formatDate } from "@/utils/formatDate";
+import { useRouter } from "next/navigation";
 
 export const CenterUserMeasureList = ({
   measures,
   changeMeasure,
   selectCompareSn,
-  changeView,
 }: {
   measures: IUserMeasureListItem[];
-  changeMeasure?: (measureSn: number) => void;
+  changeMeasure: (measureSn: number) => void;
   selectCompareSn?: (sn: number, slot: CompareSlot) => void;
-  changeView : (dpView: viewType) => void;
   isMyPage: boolean;
 }) => {
-  const measureTypeMap : Record<string, string> = {
-    rom_only : "ROM",
-    basic_only : "기본 검사",
-    basic_and_rom : "기본 검사/ROM"
-  }
+  const router = useRouter();
+  const getMeasureTypeText = (measureItem: IUserMeasureListItem): string => {
+    const labels: string[] = [];
+    const hasBasic = measureItem.has_basic === 1;
+    const hasRom = measureItem.has_rom === 1;
+    const hasBia = measureItem.has_bia === 1;
+    if (hasBasic) labels.push("기본 검사");
+    if (hasRom) labels.push("ROM");
+    if (hasBia) labels.push("체성분")
+    return labels.length > 0 ? labels.join("/") : "";
+  };
 
   return (
     <div className="w-full table table-fixed min-w-0">
@@ -45,16 +49,15 @@ export const CenterUserMeasureList = ({
           {measures.map((measure) => {
             const sn = measure.measure_sn;
             // const checked = deleteSelectedSns.includes(sn);
-
             return (
               <TableRow 
                 key={sn} 
                 onClick={changeMeasure ? () => {
                   changeMeasure(sn)
-                  changeView(measure.has_basic === 1 ? "detail" : "rom")
+                  router.push(`?tab=latest`);
                 }
                  : undefined}
-                className={changeMeasure ? "cursor-pointer hover:bg-sub100" : ""}
+                className={"cursor-pointer hover:bg-sub100"}
               >
 
                 <TableCell className="text-center text-xs sm:text-sm whitespace-nowrap">{formatDate(measure.measure_date)}</TableCell>
@@ -64,7 +67,7 @@ export const CenterUserMeasureList = ({
                 <TableCell className="text-center text-xs sm:text-sm whitespace-nowrap">{measure.device_name}</TableCell>
                 <TableCell className="text-center">
                   <div className="w-fit px-2 text-xs sm:text-sm text-center whitespace-nowrap text-toggleAccent dark:text-white bg-toggleAccent-background dark:bg-toggleAccent border border-toggleAccent rounded-full mx-auto">
-                    {measureTypeMap[measure.measurement_type]}
+                    {getMeasureTypeText(measure)}
                   </div>
                 </TableCell>
                 <TableCell className="flex items-center justify-end gap-2 sm:gap-4 whitespace-nowrap mr-4">

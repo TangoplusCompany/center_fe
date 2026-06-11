@@ -26,7 +26,7 @@ export const ROMItemCard = ({
       () => ({ date: " ", value: undefined }) 
     );                
 
-    return [...sorted, ...dummy]  // 데이터 먼저, 더미 뒤에
+    return [...sorted, ...dummy] 
   }, [romItem.history_by_measure_type]);
 
   const seriesKeys = useMemo(

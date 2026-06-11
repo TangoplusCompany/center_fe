@@ -1,12 +1,12 @@
-import { MeasureROMContainer } from "@/components/Measure/ROMContainer";
+import { MeasureRomContainer } from "@/components/Measure/RomContainer";
 import React from "react";
 
-const MeasureROMPage = () => { 
+const MeasureRomPage = () => { 
   return (
     <div className="flex flex-col gap-5 w-full">
-      <MeasureROMContainer />
+      <MeasureRomContainer />
     </div>
   );
 };
 
-export default MeasureROMPage;
+export default MeasureRomPage;
