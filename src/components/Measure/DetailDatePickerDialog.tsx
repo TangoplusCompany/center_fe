@@ -80,7 +80,7 @@ export const MeasureDetailDatePickerDialog = ({
                     "w-full text-left rounded-xl border px-3 py-2 hover:bg-gray-50 dark:hover:bg-white/10 transition-colors border-border text-foreground",
                     selectedMeasure != null &&
                       selectedMeasure === it.measure_sn &&
-                      "border-toggleAccent bg-sub100/50 dark:bg-toggleAccent-background"
+                      "border-mainBlue-600 bg-sub100/50 dark:bg-mainBlue-600-background"
                   )}
                   onClick={() => {
                     onSelect(it.measure_sn);

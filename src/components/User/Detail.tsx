@@ -47,14 +47,14 @@ const UserDetail = ({
   });
   useEffect(() => {
     if (currentTab === "latest" && isListClick) {
-      setIsListClick(false); // 플래그 해제만 하고 종료
+      setIsListClick(false); 
       return;
     }
     if (currentTab !== "latest") {
       changeMeasureSn(0);
       setComparePair([undefined, undefined]);
     }
-  }, [currentTab]); 
+  }, [changeMeasureSn, currentTab, isListClick]); 
 
   useEffect(() => {
     if (currentTab !== "latest") return;

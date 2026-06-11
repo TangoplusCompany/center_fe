@@ -11,6 +11,7 @@ import MeasureDetail from "./Detail";
 import { viewType } from "../User/Detail";
 import CenterUserROMContainer from "../User/ROMContainer";
 import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
+import BiaContainer from "./Bia/BiaContainer";
 
 // Select 
 
@@ -152,7 +153,7 @@ const MeasureDetailContainer = ({
   userSn,
   measureSn,
   uuid,
-  mobile,
+  
   isMyPage = false,
   isDatePickerOpen = false,
   onDatePickerOpenChange,
@@ -262,7 +263,7 @@ const MeasureDetailContainer = ({
                 className={`${
                   // 💡 [수정] 실제 데이터가 있고(isAvailable), 선택된 탭일 때만 활성화 스타일 적용
                   isAvailable && measureType === type.key
-                    ? "bg-toggleAccent text-white shadow-sm"
+                    ? "bg-mainBlue-600 text-white shadow-sm"
                     : "text-sub600 hover:text-sub700"
                 } ${
                   // 3. 비활성화 스타일 분기 (흐리게 처리 및 마우스 커서 변경)
@@ -306,7 +307,7 @@ const MeasureDetailContainer = ({
           userSn={userSn}
           measureSn={measureSn}
           uuid={uuid}
-          mobile={mobile}
+          mobile={data.mobile}
           isMyPage = {isMyPage}
           isDatePickerOpen={isDatePickerOpen}
           onDatePickerOpenChange={onDatePickerOpenChange}
@@ -320,8 +321,15 @@ const MeasureDetailContainer = ({
         measureSn={measureSn ?? 0} 
         isMyPage={isMyPage} 
         uuid={uuid} 
-        mobile={mobile ?? ""} />
+        mobile={data.mobile ?? ""} />
       )}
+
+      {(measureType === "bia" && hasBia) && (
+        <BiaContainer 
+        />
+
+      )}
+
     </div>
   )
 }

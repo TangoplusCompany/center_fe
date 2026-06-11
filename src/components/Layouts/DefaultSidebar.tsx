@@ -178,7 +178,7 @@ export default function DefaultSidebar() {
 
   return (
     <Sidebar collapsible="icon" className="bg-[#F1F5F9] dark:bg-black">
-      <SidebarHeader className="bg-toggleAccent-background h-20 !flex !flex-row !items-center !p-0 px-2">
+      <SidebarHeader className="bg-mainBlue-600-background h-20 !flex !flex-row !items-center !p-0 px-2">
         <div className="flex items-center w-full">
           {/* 👇 앱로고와 텍스트는 SidebarMenuButton 안에 - 접히면 사라짐 */}
           <SidebarMenuButton 
@@ -206,12 +206,12 @@ export default function DefaultSidebar() {
       </SidebarHeader>
 
       {centerName && (
-        <div className="relative  bg-toggleAccent-background w-full flex px-4 py-2 border-none">
+        <div className="relative  bg-mainBlue-600-background w-full flex px-4 py-2 border-none">
           <button
             onClick={() => setCenterOpen(!centerOpen)}
             className="w-full flex items-center bg-white rounded-full hover:bg-sub100 transition-colors justify-between gap-2 px-3 py-2"
           >
-            <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 bg-toggleAccent`}>
+            <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 bg-mainBlue-600`}>
               <span className={`text-xs font-bold text-white`}>
                 {centerName?.charAt(0)}
               </span>
@@ -223,7 +223,7 @@ export default function DefaultSidebar() {
             <ChevronsUpDown 
               className={`w-4 h-4 shrink-0 group-data-[collapsible=icon]:hidden 
                 transition-all duration-300 ease-in-out text-sub400
-                ${centerOpen ? "rotate-180 text-toggleAccent" : ""}`} 
+                ${centerOpen ? "rotate-180 text-mainBlue-600" : ""}`} 
             />
           </button>
 
@@ -265,7 +265,7 @@ export default function DefaultSidebar() {
                       }`}
                     >
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
-                        center.center_sn === centerSn ? "bg-toggleAccent" : "bg-sub200"
+                        center.center_sn === centerSn ? "bg-mainBlue-600" : "bg-sub200"
                       }`}>
                         <span className={`text-xs font-bold ${
                           center.center_sn === centerSn ? "text-white" : "text-gray-500"
@@ -290,7 +290,7 @@ export default function DefaultSidebar() {
                     setCenterOpen(false);
                     setCenterSn(0, "", undefined);
                   }}
-                  className="w-full text-sm text-center text-toggleAccent hover:text-toggleAccent/90 font-medium py-1"
+                  className="w-full text-sm text-center text-mainBlue-600 hover:text-mainBlue-600/90 font-medium py-1"
                 >
                   센터 선택 화면
                 </button>
@@ -301,7 +301,7 @@ export default function DefaultSidebar() {
       )}
 
 
-      <SidebarContent className="bg-toggleAccent-background !overflow-hidden pt-8">
+      <SidebarContent className="bg-mainBlue-600-background !overflow-hidden pt-8">
         <SidebarGroup>
           {/* <SidebarGroupLabel>DASHBOARD</SidebarGroupLabel> */}
           <SidebarGroupContent>
@@ -362,7 +362,7 @@ export default function DefaultSidebar() {
                             className={`w-full h-full transition-all duration-300 ${
                               isActive
                                 ? isUserMenu && isUserDetailRoute
-                                  ? "brightness-0 [filter:drop-shadow(100px_0_0_#4169E1)] -translate-x-[100px]" // 👈 toggleAccent 색상 대입 (예: #4169E1)
+                                  ? "brightness-0 [filter:drop-shadow(100px_0_0_#4169E1)] -translate-x-[100px]" // 👈 mainBlue-600 색상 대입 (예: #4169E1)
                                   : "brightness-0 invert" // 👈 일반 활성화 (흰색)
                                 : "" // 👈 비활성화 (기본 회색)
                             }`} 
@@ -372,7 +372,7 @@ export default function DefaultSidebar() {
                             className={`transition-colors duration-300 ${
                               isActive 
                                 ? isUserMenu && isUserDetailRoute
-                                  ? "text-toggleAccent" // 👈 카드가 열린 사용자 관리 메뉴일 때
+                                  ? "text-mainBlue-600" // 👈 카드가 열린 사용자 관리 메뉴일 때
                                   : "text-white"        // 👈 일반 활성화 메뉴일 때
                                 : ""
                             }`}
@@ -396,7 +396,7 @@ export default function DefaultSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="bg-toggleAccent-background">
+      <SidebarFooter className="bg-mainBlue-600-background">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>

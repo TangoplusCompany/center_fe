@@ -28,7 +28,7 @@ export const MeasurementImage = ({
   const loadingPlaceholder = (
     <div className="w-full h-[720px] rounded-2xl bg-sub100 animate-pulse flex flex-col items-center justify-center gap-4">
       <div
-        className="w-12 h-12 rounded-full border-4 border-sub200 border-t-toggleAccent animate-spin"
+        className="w-12 h-12 rounded-full border-4 border-sub200 border-t-mainBlue-600 animate-spin"
         aria-hidden
       />
       <p className="text-sub400 dark:text-sub300 text-sm font-medium animate-pulse">

@@ -170,9 +170,9 @@ const MeasureDetail = ({
                   "relative pb-2 text-lg font-semibold transition-colors whitespace-nowrap flex-shrink-0",
                   "bg-transparent data-[state=active]:bg-transparent",
                   "shadow-none data-[state=active]:shadow-none",
-                  "text-sub600 hover:text-sub800 data-[state=active]:text-toggleAccent",
+                  "text-sub600 hover:text-sub800 data-[state=active]:text-mainBlue-600",
                   "after:absolute after:-bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-md",
-                  "after:bg-sub200 data-[state=active]:after:bg-toggleAccent after:z-5"
+                  "after:bg-sub200 data-[state=active]:after:bg-mainBlue-600 after:z-5"
                 )}
               >
                 {measure.title}
@@ -191,7 +191,7 @@ const MeasureDetail = ({
                 w-full flex items-center justify-center gap-2
                 border-2 border-sub300 rounded-xl
                 px-3 py-2 text-base text-sub700
-                hover:border-toggleAccent
+                hover:border-mainBlue-600
                 focus:outline-none focus:ring-2  focus:border-blue-500
                 transition
               "

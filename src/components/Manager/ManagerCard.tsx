@@ -21,10 +21,10 @@ export const ManagerCard = React.memo(({ manager }: ManagerCardProps) => {
   return (
     <div
       key={manager.sn}
-      className="col-span-1 items-center justify-between rounded-xl border-2 border-toggleAccent-background relative transition-colors overflow-hidden"
+      className="col-span-1 items-center justify-between rounded-xl border-2 border-mainBlue-100 relative transition-colors overflow-hidden"
     >
       <div className="flex flex-col">
-        <div className="flex items-center justify-between rounded-t-xl text-xl text-toggleAccent dark:text-white font-semibold bg-toggleAccent-background px-4 py-2 w-full">
+        <div className="flex items-center justify-between rounded-t-xl text-xl text-mainBlue-600 dark:text-white font-semibold bg-mainBlue-100 px-4 py-2 w-full">
           {manager.admin_name}
           <div className="flex items-center gap-2">
             {canChangeRole && <ManagerRoleChangeDialog manager={manager} />}

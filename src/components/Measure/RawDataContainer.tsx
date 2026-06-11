@@ -41,7 +41,7 @@ const RawDataContainer = ({
     <div>
       <div className="flex flex-col gap-4 mb-64">
         <div className="flex items-center gap-3">
-          <div className="w-1 h-10 bg-toggleAccent rounded-full"></div>
+          <div className="w-1 h-10 bg-mainBlue-600 rounded-full"></div>
           <h2 className="text-xl font-semibold text-[#333] dark:text-white">
             측정 결과 부위별 선택 보기
           </h2>

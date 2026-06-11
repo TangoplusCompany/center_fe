@@ -44,7 +44,7 @@ export const ROMDashboardPartTab = ({
               "after:absolute after:-bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-md",
               "after:z-10",
               currentBodyPart === Number(index)
-                ? "text-toggleAccent data-[state=active]:text-toggleAccent after:bg-toggleAccent"
+                ? "text-mainBlue-600 data-[state=active]:text-mainBlue-600 after:bg-mainBlue-600"
                 : "text-sub600 hover:text-sub800 data-[state=active]:text-sub600 after:bg-sub200"
             )}
           >

@@ -5,113 +5,14 @@
 body {
   font-family: "SUIT Variable", sans-serif;
 }
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 20 14.3% 4.1%;
-    --card: 0 0% 100%;
-    --card-foreground: 20 14.3% 4.1%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 20 14.3% 4.1%;
-    --primary: 0 0% 96.1%;
-    --primary-foreground: 0 0% 33.3%;
-    --secondary: 0 0% 27%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 60 4.8% 95.9%;
-    --muted-foreground: 25 5.3% 44.7%;
-    --accent: 60 4.8% 95.9%;
-    --accent-foreground: 24 9.8% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 60 9.1% 97.8%;
-    --border: 20 5.9% 90%;
-    --input: 20 5.9% 90%;
-    --ring: 227 65.1% 49.4%;
-    --radius: 0.5rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --toggle-accent: 227 65.1% 49.4%;
-    --toggle-accent-deep: 227 65.1% 40.4%;
-    --toggle-accent-foreground: 0 0% 100%;
-    --toggle-accent-background: 210 40% 96.1%;
-    /* 차트 범례 선택 배경/글자 (라이트: toggleAccent와 동일, 다크: 더 밝게 보이는 블루) */
-    --chart-legend-active: 227 65.1% 49.4%;
-    --chart-legend-active-foreground: 0 0% 100%;
-    --danger: 0 100% 64.5%;
-    --danger-foreground: 0 100% 66.1% / 0.35;
-    --danger-background: 0 100% 94.9%;
-    --danger-deep: 0 100% 23.5%;
-    --warning: 33 100% 50%;
-    --warning-foreground: 33 100% 61.4% / 0.35; 
-    --warning-deep:33 100% 28.2%;
-    --sub100: 0 0% 97.3%;
-    --sub150: 0 0% 96.1%;
-    --sub200: 0 0% 92.9%;
-    --sub300: 0 0% 86.3%;
-    --sub400: 0 0% 73.3%;
-    --sub600: 0 0% 49.4%;
-    --sub700: 0 0% 27.1%;
-    --sub800: 0 0% 11.3%;
-  }
 
-  .dark {
-    --background: 20 14.3% 4.1%;
-    --foreground: 60 9.1% 97.8%;
-    --card: 20 14.3% 4.1%;
-    --card-foreground: 60 9.1% 97.8%;
-    --popover: 20 14.3% 4.1%;
-    --popover-foreground: 60 9.1% 97.8%;
-    --primary: 20.5 90.2% 48.2%;
-    --primary-foreground: 60 9.1% 97.8%;
-    --secondary: 12 6.5% 15.1%;
-    --secondary-foreground: 60 9.1% 97.8%;
-    --muted: 12 6.5% 15.1%;
-    --muted-foreground: 24 5.4% 63.9%;
-    --accent: 12 6.5% 15.1%;
-    --accent-foreground: 60 9.1% 97.8%;
-    --destructive: 0 72.2% 50.6%;
-    --destructive-foreground: 60 9.1% 97.8%;
-    --border: 12 6.5% 15.1%;
-    --input: 12 6.5% 15.1%;
-    --ring: 227 65.1% 49.4%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --toggle-accent: 227 65.1% 49.4%;
-    --toggle-accent-deep: 210 40% 96.1%;
-    --toggle-accent-foreground: 0 0% 0%;
-    --toggle-accent-background: 222 47.4% 11.2%;
-    --chart-legend-active: 227 60% 52%;
-    --chart-legend-active-foreground: 0 0% 100%;
-    --danger: 0 100% 64.5%;
-    --danger-foreground: 0 100% 94.9%;
-    --danger-background: 0 100% 94.9%;
-    --danger-deep: 0 100% 23.5%;
-    --warning: 33 100% 50%;
-    --warning-foreground: 33 100% 88.6%; 
-    --warning-deep:33 100% 28.2%;
-    --sub100: 0 0% 11.3%;
-    --sub150: 0 0% 27.1%;
-    --sub200: 0 0% 49.4%;
-    --sub300: 0 0% 73.3%;
-    --sub400: 0 0% 86.3%;
-    --sub600: 0 0% 92.9%;
-    --sub700: 0 0% 96.1%;
-    --sub800: 0 0% 97.3%;
-  }
-}
-
+/* 💡 기존 :root와 .dark 내부의 색상 변수들만 깔끔하게 청소했습니다. */
 @layer base {
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-sub800;
-    @apply text-sub800;
   }
 }
 
@@ -119,29 +20,13 @@ body {
   box-sizing: border-box;
 }
 
-.dangerous.select {
-  background-color: #ff4a4a;
-}
-
-.warning.select {
-  background-color: #FFA73A;
-}
-
-.default.select {
-  background-color: #36abff;
-}
-
-.dangerous.select-text {
-  color: #ff5449;
-}
-
-.warning.select-text {
-  color: #ff971d;
-}
-
-.default.select-text {
-  color: #36abff;
-}
+/* 아래 커스텀 클래스들과 애니메이션은 꼭 필요하므로 남겨둡니다 */
+.dangerous.select { background-color: #ff4a4a; }
+.warning.select { background-color: #FFA73A; }
+.default.select { background-color: #36abff; }
+.dangerous.select-text { color: #ff5449; }
+.warning.select-text { color: #ff971d; }
+.default.select-text { color: #36abff; }
 
 .DialogOverlay {
   background-color: var(--black-a9);
@@ -151,8 +36,8 @@ body {
 }
 
 .crop-wrapper {
-  width: 100%; /* 또는 원하는 고정 크기 */
-  aspect-ratio: 3 / 4; /* 세로 기준 비율 유지 */
+  width: 100%;
+  aspect-ratio: 3 / 4;
   overflow: hidden;
   position: relative;
 }
@@ -160,8 +45,8 @@ body {
 .cropped-image {
   position: absolute;
   top: 0;
-  left: -25%; /* 왼쪽을 -25%만큼 이동해서 가운데 맞춤 */
-  width: 150%; /* 가로 50%만 남기고 2배 확대 */
+  left: -25%;
+  width: 150%;
   height: 100%;
   object-fit: cover;
 }
@@ -176,62 +61,28 @@ body {
 }
 
 @keyframes shimmer-slide {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
-
-.animate-shimmer-slide {
-  animation: shimmer-slide 2s ease-in-out infinite;
-}
+.animate-shimmer-slide { animation: shimmer-slide 2s ease-in-out infinite; }
 
 @keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
-.animate-slideDown {
-  animation: slideDown 0.5s ease-out forwards;
-  opacity: 0;
-}
+.animate-slideDown { animation: slideDown 0.5s ease-out forwards; opacity: 0; }
 
 @keyframes droplet-ripple {
-  
-  0% {
-    transform: translate(-50%, -35%) scale(0.5); /* 물방울이 바닥에 닿는 느낌 */
-    opacity: 0.55;
-  }
-  100% {
-    transform: translate(-50%, -35%) scale(2.5); /* 퍼지는 크기 (여기 조절) */
-    opacity: 0;
-  }
+  0% { transform: translate(-50%, -35%) scale(0.5); opacity: 0.55; }
+  100% { transform: translate(-50%, -35%) scale(2.5); opacity: 0; }
 }
-
 .ripple-dot {
   position: absolute;
   width: 128px;  
   height: 128px; 
   border-radius: 9999px;
   pointer-events: none;
-
-  background: radial-gradient(
-    circle,
-    transparent 50%,
-    rgba(255,255,255,0.18) 55%,
-    rgba(255,255,255,0.10) 60%,
-    transparent 50%
-  );
-
+  background: radial-gradient(circle, transparent 50%, rgba(255,255,255,0.18) 55%, rgba(255,255,255,0.10) 60%, transparent 50%);
   filter: blur(0.4px);
-
   animation: droplet-ripple 4s ease-out infinite;
 }

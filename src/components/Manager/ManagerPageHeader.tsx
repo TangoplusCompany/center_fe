@@ -16,7 +16,7 @@ export const ManagerPageHeader = () => {
   return (
     <div className="flex items-center justify-between">
       <div className="w-full flex items-center gap-3">
-        <div className="w-1 h-10 bg-toggleAccent rounded-full"></div>
+        <div className="w-1 h-10 bg-mainBlue-600 rounded-full"></div>
         <h2 className="text-2xl col-span-2">매니저 관리</h2>
       </div>
       <Button onClick={() => setDialogOpen(true)}>매니저 추가</Button>

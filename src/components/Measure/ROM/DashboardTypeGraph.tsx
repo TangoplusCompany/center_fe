@@ -39,7 +39,7 @@ const ROMDashboardTypeGraph = ({
           config={{
             score: {
               label: "점수",
-              color: "hsl(var(--toggle-accent))",
+              color: "#2563EB",
             },
           }}
           className="h-36 w-full"
@@ -47,8 +47,8 @@ const ROMDashboardTypeGraph = ({
           <AreaChart data={chartData} margin={{ top: 16, right: 16, left: 16, bottom: 16 }}>
             <defs>
               <linearGradient id="fillGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(var(--toggle-accent))" stopOpacity={0.4} />
-                <stop offset="100%" stopColor="hsl(var(--toggle-accent-background))" stopOpacity={0.4} />
+                <stop offset="0%" stopColor="#2563EB" stopOpacity={0.4} />
+                <stop offset="100%" stopColor="#2563EB" stopOpacity={0.4} />
               </linearGradient>
             </defs>
             <XAxis hide />
@@ -57,7 +57,7 @@ const ROMDashboardTypeGraph = ({
               dataKey="score"
               type="monotone"
               fill="url(#fillGradient)"
-              stroke="hsl(var(--toggle-accent))"
+              stroke="#2563EB"
               strokeWidth={2}
               dot={(props: DotProps & { value?: number; payload?: { score?: number } }) => {
                 if (props.payload?.score === undefined || props.payload?.score === null) return <g key={props.key} />;
@@ -67,13 +67,13 @@ const ROMDashboardTypeGraph = ({
                     cx={props.cx}
                     cy={props.cy}
                     r={4}
-                    fill="hsl(var(--toggle-accent))"
+                    fill="#2563EB"
                     stroke="white"
                     strokeWidth={1.5}
                   />
                 );
               }}
-              className="bg-toggleAccent-background rounded-xl w-full "
+              className="bg-mainBlue-600-background rounded-xl w-full "
             />
             
             <ChartTooltip

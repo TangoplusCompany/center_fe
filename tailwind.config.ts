@@ -10,87 +10,76 @@ export default {
   ],
   theme: {
     extend: {
+      // 💡 HSL 매핑 싹 지우고 직관적인 HEX 코드로 대입
       colors: {
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        danger: 'hsl(var(--danger))',
-        'danger-foreground': 'hsl(var(--danger-foreground))',
-        'danger-background': 'hsl(var(--danger-background))',
-        dangerDeep: "hsl(var(--danger-deep))",
-        warning: 'hsl(var(--warning))',
-        'warning-foreground': 'hsl(var(--warning-foreground))',
-        warningDeep: "hsl(var(--warning-deep))",
-        sub100: "hsl(var(--sub100))",
-        sub150: "hsl(var(--sub150))",
-        sub200: "hsl(var(--sub200))",
-        sub300: "hsl(var(--sub300))",
-        sub400: "hsl(var(--sub400))",
-        sub600: "hsl(var(--sub600))",
-        sub700: "hsl(var(--sub700))",
-        sub800: "hsl(var(--sub800))",
+        background: "#FFFFFF",
+        foreground: "#0F172A",
+        
+        // 위험/경고 상태 컬러 (기존 HEX 기반)
+        danger: '#FF4A4A',
+        'danger-foreground': '#FFFFFF',
+        'danger-background': '#FFEAEA',
+        dangerDeep: "#953442",
+        warning: '#FFA73A',
+        'warning-foreground': '#FFFFFF',
+        warningDeep: "#CC7B1C",
+
+        sub100: "#F8F8F8",
+        sub150: "#F5F5F5",
+        sub200: "#EDEDED",
+        sub300: "#DCDCDC",
+        sub400: "#BBBBBB",
+        sub600: "#7E7E7E",
+        sub700: "#454545",
+        sub750: "#7A828A",
+        sub800: "#1D1D1D",
+        
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: "#FFFFFF",
+          foreground: "#0F172A",
         },
         popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+          DEFAULT: "#FFFFFF",
+          foreground: "#0F172A",
         },
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "#F5F5F5",
+          foreground: "#555555",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "#454545",
+          foreground: "#FFFFFF",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: "#F5F5F5",
+          foreground: "#707070",
         },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
+
+        
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: "#EF4444",
+          foreground: "#FFFFFF",
         },
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        chart: {
-          "1": "hsl(var(--chart-1))",
-          "2": "hsl(var(--chart-2))",
-          "3": "hsl(var(--chart-3))",
-          "4": "hsl(var(--chart-4))",
-          "5": "hsl(var(--chart-5))",
+        border: "#E2E8F0",
+        input: "#E2E8F0",
+        ring: "#2563EB",
+        
+        mainBlue: {
+          100: "#F1F5F9",
+          300: "#5B93FF",
+          600: "#2563EB",
+          800: "#1E40AF"
         },
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
-        },
-        toggleAccent: {
-          DEFAULT: "hsl(var(--toggle-accent))",
-          foreground: "hsl(var(--toggle-accent-foreground))",
-          background: "hsl(var(--toggle-accent-background))"
-        },
-        toggleAccentDeep: "hsl(var(--toggle-accent-deep))",
+        
         chartLegendActive: {
-          DEFAULT: "hsl(var(--chart-legend-active))",
-          foreground: "hsl(var(--chart-legend-active-foreground))"
+          DEFAULT: "#2563EB",
+          foreground: "#FFFFFF"
         }
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        lg: "0.5rem",
+        md: "calc(0.5rem - 2px)",
+        sm: "calc(0.5rem - 4px)",
       },
     },
   },

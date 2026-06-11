@@ -83,7 +83,7 @@ const CenterUserDashboardContainer = ({
                 className={`
                   flex items-center gap-3 px-4 py-1 rounded-xl font-medium whitespace-nowrap transition-all cursor-pointer
                   ${isActive
-                    ? "border border-toggleAccent text-toggleAccent bg-toggleAccent-background"
+                    ? "border border-mainBlue-600 text-mainBlue-600 bg-mainBlue-600-background"
                     : "bg-white border border-sub300 text-sub300 hover:border-sub600 hover:text-sub600"
                   }
                 `}
@@ -93,18 +93,18 @@ const CenterUserDashboardContainer = ({
                 {/* ROM 탭이고 활성화일 때만 Select 표시 */}
                 {isROMTab && isActive && (currentROMViewType === "default") && (
                   <>
-                    <div className="w-1 h-full rounded-full bg-toggleAccent" />
+                    <div className="w-1 h-full rounded-full bg-mainBlue-600" />
                     <Select
                       value={String(bodyPartNumber)}
                       onValueChange={(val) => setBodyPartNumber(Number(val))}
                     >
                       <SelectTrigger
                         onClick={(e) => e.stopPropagation()}
-                        className="flex items-center gap-1 pl-2 border-l border-toggleAccent/40
+                        className="flex items-center gap-1 pl-2 border-l border-mainBlue-600/40
                                   border-0 shadow-none bg-transparent h-auto p-0
                                   focus:ring-0"
                       >
-                        <span className="text-base font-medium text-toggleAccent">
+                        <span className="text-base font-medium text-mainBlue-600">
                           <SelectValue />
                         </span>
                       </SelectTrigger>

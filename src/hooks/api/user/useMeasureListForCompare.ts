@@ -45,7 +45,7 @@ export const useMeasureListForCompare = ({
   const filteredItems = useMemo(() => {
     if (!data?.measurement_list) return [];
     return data.measurement_list.filter(
-      (item) => item.measurement_type === "basic_only"
+      (item) => item.has_basic === 1
     );
   }, [data?.measurement_list]);
 

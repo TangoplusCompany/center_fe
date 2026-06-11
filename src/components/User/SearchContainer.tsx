@@ -54,7 +54,7 @@ const CenterUserSearchContainer = ({
           className="min-w-0 flex-1"
           {...register("name")}
         />
-        <Button variant="outline" type="submit" className="shrink-0 w-full sm:w-auto bg-toggleAccent text-white hover:bg-toggleAccent/90 hover:text-white">
+        <Button variant="outline" type="submit" className="shrink-0 w-full sm:w-auto bg-mainBlue-600 text-white hover:bg-mainBlue-600/90 hover:text-white">
           조회하기
         </Button>
       </form>

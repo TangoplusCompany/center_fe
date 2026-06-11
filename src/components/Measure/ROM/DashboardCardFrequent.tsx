@@ -40,10 +40,10 @@ const ROMDashboardCardFrequent = (
       </div>
 
       <div className="flex flex-col justify-end flex-1 space-y-3 p-5 mb-6 relative  z-10">
-        <div className={`w-fit px-3 py-1 bg-toggleAccent text-white text-lg font-semibold rounded-xl`}>
+        <div className={`w-fit px-3 py-1 bg-mainBlue-600 text-white text-lg font-semibold rounded-xl`}>
           {data.romName}
         </div>
-        <div className={`w-fit bg-toggleAccent-background/30 rounded-lg p-4`}>
+        <div className={`w-fit bg-mainBlue-600-background/30 rounded-lg p-4`}>
           <p className="text-base text-primary-foreground leading-relaxed">
             {data.description}
           </p>

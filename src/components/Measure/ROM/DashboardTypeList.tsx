@@ -21,20 +21,20 @@ const ROMDashboardTypeList = ({
   const stateTextColor : Record<number, string> = {
     0 : "text-danger",
     1 : "text-warning",
-    2 : "text-toggleAccent",
-    3 : "text-toggleAccent"
+    2 : "text-mainBlue-600",
+    3 : "text-mainBlue-600"
   }
   const stateBorderColor : Record<number, string> = {
     0 : "border-danger",
     1 : "border-warning",
-    2 : "border-toggleAccent",
-    3 : "border-toggleAccent"
+    2 : "border-mainBlue-600",
+    3 : "border-mainBlue-600"
   }
   const stateBGColor : Record<number, string> = {
     0 : "bg-danger",
     1 : "bg-warning",
-    2 : "bg-toggleAccent",
-    3 : "bg-toggleAccent"
+    2 : "bg-mainBlue-600",
+    3 : "bg-mainBlue-600"
   }
   
   return (

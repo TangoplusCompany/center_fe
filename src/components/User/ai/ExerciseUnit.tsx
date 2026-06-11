@@ -13,7 +13,7 @@ const AIExerciseUnit = ( {
   const ExerciseReasonUnit = ({idx, text} : {idx: 0 | 1, text: string}) => {
     return (
       <div className="flex flex-col gap-4">
-        <div className={`text-lg font-semibold ${idx === 0 ? 'text-toggleAccent' : 'text-danger'}`}>
+        <div className={`text-lg font-semibold ${idx === 0 ? 'text-mainBlue-600' : 'text-danger'}`}>
           {reasonUnitTitles[idx]}
         </div>
         <div className="text-base">
@@ -24,9 +24,9 @@ const AIExerciseUnit = ( {
   }
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 rounded-xl shadow-md p-2">
-      <div className="flex flex-col gap-4 bg-toggleAccent-background rounded-lg ">
+      <div className="flex flex-col gap-4 bg-mainBlue-600-background rounded-lg ">
         <div className="flex gap-2 text-lg font-semibold p-4">
-          <div className="w-1 h-6 bg-toggleAccent rounded-full" />
+          <div className="w-1 h-6 bg-mainBlue-600 rounded-full" />
           {ed.exercise_name}
         </div>
 

@@ -20,7 +20,7 @@ const DeviceAddDialog = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="w-full bg-toggleAccent border-none shadow-none hover:bg-toggleAccent/90">
+        <Button variant="outline" className="w-full bg-mainBlue-600 border-none shadow-none hover:bg-mainBlue-600/90">
           <div className="flex gap-2 text-white items-center">
             <svg 
               className="text-white"

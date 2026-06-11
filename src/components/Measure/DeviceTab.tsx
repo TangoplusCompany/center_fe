@@ -42,7 +42,7 @@ const MeasureDeviceTab = () => {
           type="button"
           className={`${
             deviceSn === "0"
-              ? "bg-toggleAccent text-white shadow-sm"
+              ? "bg-mainBlue-600 text-white shadow-sm"
               : "text-sub600 hover:text-sub700"
           } px-4 py-1 text-sm font-medium rounded-xl transition-all whitespace-nowrap`}
           onClick={() => handleDeviceClick(0)}
@@ -60,7 +60,7 @@ const MeasureDeviceTab = () => {
               type="button"
               className={`${
                 active
-                  ? "bg-toggleAccent text-white shadow-sm"
+                  ? "bg-mainBlue-600 text-white shadow-sm"
                   : "text-sub600 hover:text-sub800"
               } px-4 py-1 text-sm font-medium rounded-xl transition-all whitespace-nowrap`}
               onClick={() => handleDeviceClick(device.device_sn)}

@@ -37,7 +37,7 @@ export const ROMRawDataGraph = ({
         config={{
           value: {
             label: graphType === 0 ? "각도" : "각속도",
-            color: "hsl(var(--toggle-accent))",
+            color: "#2563EB",
           },
         }}
         className="aspect-auto h-[64px] w-full"
@@ -45,8 +45,8 @@ export const ROMRawDataGraph = ({
         <AreaChart data={chartData}>
           <defs>
             <linearGradient id="fillGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="hsl(var(--toggle-accent))" stopOpacity={0.4} />
-              <stop offset="100%" stopColor="hsl(var(--toggle-accent-background))" stopOpacity={0.4} />
+              <stop offset="0%" stopColor="#2563EB" stopOpacity={0.4} />
+              <stop offset="100%" stopColor="#F1F5F9" stopOpacity={0.4} />
             </linearGradient>
           </defs>
 
@@ -54,7 +54,7 @@ export const ROMRawDataGraph = ({
             dataKey="value"
             type="monotone"
             fill="url(#fillGradient)"
-            stroke="hsl(var(--toggle-accent))"
+            stroke="#2563EB"
             strokeWidth={2}
           />
           

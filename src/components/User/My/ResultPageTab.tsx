@@ -42,7 +42,7 @@ const ResultPageTab = ({
       
       {/* 좌측: 유저 프로필 및 이름 */}
       <div className="flex items-center gap-3 flex-1">
-        <div className="w-1 h-12 bg-toggleAccent rounded-full"></div>
+        <div className="w-1 h-12 bg-mainBlue-600 rounded-full"></div>
         <h2 className="text-3xl font-semibold text-[#333] dark:text-white flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
           {userName ? `${userName}님` : "사용자"} 측정 결과
         </h2>

@@ -58,9 +58,9 @@ const ActivityGraph = ({
   }, []);
   
   return (
-    <div className="w-full flex flex-col border-2 border-toggleAccent-background rounded-xl gap-6 bg-gradient-to-b from-[#2c4fd0]/10 from-[2%] to-white to-[40%] dark:from-[#2c4fd0]/20 dark:to-background">
+    <div className="w-full flex flex-col border-2 border-mainBlue-600-background rounded-xl gap-6 bg-gradient-to-b from-[#2c4fd0]/10 from-[2%] to-white to-[40%] dark:from-[#2c4fd0]/20 dark:to-background">
       <div className="w-full p-4 flex justify-between items-center">
-        <div className="text-xl font-semibold text-toggleAccent dark:text-white">
+        <div className="text-xl font-semibold text-mainBlue-600 dark:text-white">
           {data.case === 0 && "요일별 사용량"}
           {data.case === 1 && "회원 연령대"}
         </div>
@@ -78,8 +78,8 @@ const ActivityGraph = ({
         <svg width="0" height="0" style={{ position: 'absolute' }}>
           <defs>
             <linearGradient id="masterGradient" x1="0%" y1="100%" x2="0%" y2="0%">
-              <stop offset="0%" className="[stop-color:hsl(var(--background))]" />
-              <stop offset="100%" className="[stop-color:hsl(var(--toggle-accent))]" />
+              <stop offset="0%" stopColor="#FFFFFF" />
+              <stop offset="100%" stopColor="#2563EB" />
             </linearGradient>
           </defs>
         </svg>
@@ -115,9 +115,10 @@ const ActivityGraph = ({
                     className="w-full rounded-t-full"
                     style={{ 
                       height: `${heightPercent}%`,
+                      // 💡 HSL 함수를 제거하고 순수 HEX 값(#2563EB, #FFFFFF)으로 교체
                       background: `linear-gradient(to bottom, 
-                        hsl(var(--toggle-accent)) ${gradientStart}%, 
-                        hsl(var(--background)) 100%
+                        #2563EB ${gradientStart}%, 
+                        #FFFFFF 100%
                       )`,
                       // ✅ 핵심: transform-origin을 bottom으로 해야 아래서 위로 올라옴
                       transformOrigin: 'bottom',

@@ -132,7 +132,7 @@ export const MeasureRomContainer = () => {
       
       {romItems && (
         <div className="flex items-center gap-3">
-          <div className="w-1 h-12 bg-toggleAccent rounded-full"></div>
+          <div className="w-1 h-12 bg-mainBlue-600 rounded-full"></div>
           <h2 className="text-3xl font-semibold text-[#333] dark:text-white flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
             <span>{romItems[0].user_name}님 ROM 측정 결과</span>
             <span className="text-sm text-sub300 dark:text-sub200 sm:pl-2"> {formatDate(romItems[0].reg_date.slice(0,16))}</span>

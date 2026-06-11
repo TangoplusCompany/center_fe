@@ -44,7 +44,7 @@ export const CenterUserMeasureCard = ({
   return (
     <>
       <div 
-        className="flex flex-col gap-2 p-2 rounded-2xl border-2 border-sub200 w-full hover:border-toggleAccent transition-colors cursor-pointer"
+        className="flex flex-col gap-2 p-2 rounded-2xl border-2 border-sub200 w-full hover:border-mainBlue-600 transition-colors cursor-pointer"
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -61,7 +61,7 @@ export const CenterUserMeasureCard = ({
             {measure.measure_date}
           </div>
 
-          <div className="rounded-xl text-sm px-2 py-1 text-toggleAccent border border-toggleAccent bg-toggleAccent-background">
+          <div className="rounded-xl text-sm px-2 py-1 text-mainBlue-600 border border-mainBlue-600 bg-mainBlue-600-background">
             {(measure.has_basic === 1 && measure.has_rom === 1) ? '기본검사/ROM검사' : '기본검사'}
           </div>
         </div>
@@ -101,10 +101,10 @@ export const CenterUserMeasureCard = ({
             top: `${mousePosition.y + 2}px`,
           }}
         >
-          <div className="relative bg-toggleAccent text-white px-3 py-2 rounded-lg shadow-lg text-sm font-semibold whitespace-nowrap">
+          <div className="relative bg-mainBlue-600 text-white px-3 py-2 rounded-lg shadow-lg text-sm font-semibold whitespace-nowrap">
             비교하기
             {/* 말풍선 왼쪽 위 꼬리 */}
-            <div className="absolute -left-1 top-3 w-2 h-2 bg-toggleAccent rotate-45"></div>
+            <div className="absolute -left-1 top-3 w-2 h-2 bg-mainBlue-600 rotate-45"></div>
           </div>
         </div>
       )}
