@@ -44,7 +44,7 @@ export const CenterUserMeasureCard = ({
   return (
     <>
       <div 
-        className="flex flex-col gap-2 p-2 rounded-2xl border-2 border-sub200 w-full hover:border-toggleAccent transition-colors cursor-pointer"
+        className="flex flex-col gap-2 p-2 rounded-2xl border-2 border-sub200 w-full hover:border-mainBlue-600 transition-colors cursor-pointer"
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -54,14 +54,14 @@ export const CenterUserMeasureCard = ({
         }}
       >
         <div className="flex justify-between">
-          <div className="flex gap-2 items-center text-sub700 font-semibold ">
+          <div className="flex gap-2 items-center text-sub800 dark:text-sub100 font-semibold ">
             <div className="flex w-6 h-6 rounded-full bg-sub150 items-center justify-center">
               <CalendarDays className="w-4 h-4 text-sub600" />
             </div>
             {measure.measure_date}
           </div>
 
-          <div className="rounded-xl text-sm px-2 py-1 text-toggleAccent border border-toggleAccent bg-toggleAccent-background">
+          <div className="rounded-xl text-sm px-2 py-1 text-mainBlue-600 border border-mainBlue-600 bg-mainBlue-100  dark:bg-mainBlue-900">
             {(measure.has_basic === 1 && measure.has_rom === 1) ? '기본검사/ROM검사' : '기본검사'}
           </div>
         </div>
@@ -70,7 +70,7 @@ export const CenterUserMeasureCard = ({
 
         <div className="grid grid-cols-[1fr_auto_1fr] gap-4 mx-auto items-center">
           <div className="flex gap-2 items-center w-fit">
-            <span className="text-sm text-sub700">상지 결과 요약</span>
+            <span className="text-sm text-sub800 dark:text-sub100">상지 결과 요약</span>
             <span className={`px-3 py-1 ${upperTextBgCondition} rounded-xl text-xs text-white`}>
               {upperRiskString} {upperRangeLevel}단계
             </span>  
@@ -79,7 +79,7 @@ export const CenterUserMeasureCard = ({
           <div className="w-1 h-full rounded-xl bg-sub100"/>
 
           <div className="flex gap-2 items-center w-fit">
-            <span className="text-sm text-sub700">하지 결과 요약</span>
+            <span className="text-sm text-sub800 dark:text-sub100">하지 결과 요약</span>
             <span className={`px-3 py-1 ${lowerTextBgCondition} rounded-xl text-xs text-white`}>
               {lowerRiskString} {lowerRangeLevel}단계
             </span>
@@ -101,10 +101,10 @@ export const CenterUserMeasureCard = ({
             top: `${mousePosition.y + 2}px`,
           }}
         >
-          <div className="relative bg-toggleAccent text-white px-3 py-2 rounded-lg shadow-lg text-sm font-semibold whitespace-nowrap">
+          <div className="relative bg-mainBlue-600 text-white px-3 py-2 rounded-lg shadow-lg text-sm font-semibold whitespace-nowrap">
             비교하기
             {/* 말풍선 왼쪽 위 꼬리 */}
-            <div className="absolute -left-1 top-3 w-2 h-2 bg-toggleAccent rotate-45"></div>
+            <div className="absolute -left-1 top-3 w-2 h-2 bg-mainBlue-600 rotate-45"></div>
           </div>
         </div>
       )}

@@ -1,4 +1,4 @@
-import { IUserMeasureInfoResponse } from "@/types/measure";
+import { IMeasureResponse } from "@/types/measure";
 import React, { useState } from "react";
 import MeasureStaticCompareFirst from "./CompareFirst";
 import MeasureStaticCompareSecond from "./CompareSecond";
@@ -18,12 +18,12 @@ import CompareBodySkeleton from "./CompareBodySkeleton";
 type MeasureTab = {
   title: string;
   value: string;
-  render: (left?: IUserMeasureInfoResponse, right?: IUserMeasureInfoResponse) => React.ReactNode;
+  render: (left?: IMeasureResponse, right?: IMeasureResponse) => React.ReactNode;
 };
 
 export interface CompareStaticProps {
-  left ?: IUserMeasureInfoResponse
-  right ?: IUserMeasureInfoResponse
+  left ?: IMeasureResponse
+  right ?: IMeasureResponse
   userSn: string;
   onCompareDialogOpen: (slot: CompareSlot) => void;
   isMyPage: boolean;
@@ -241,9 +241,9 @@ const CompareBody = ({
                     "relative pb-2 text-lg font-semibold transition-colors whitespace-nowrap flex-shrink-0",
                     "bg-transparent data-[state=active]:bg-transparent",
                     "shadow-none data-[state=active]:shadow-none",
-                    "text-sub300 hover:text-secondary data-[state=active]:text-toggleAccent",
+                    "text-sub300 hover:text-secondary data-[state=active]:text-mainBlue-600",
                     "after:absolute after:-bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-md",
-                    "after:bg-sub200 data-[state=active]:after:bg-toggleAccent after:z-10"
+                    "after:bg-sub200 data-[state=active]:after:bg-mainBlue-600 after:z-10"
                   )}
                 >
                   {measure.title}
@@ -258,13 +258,13 @@ const CompareBody = ({
       <div className="grid grid-cols-2 gap-4 items-stretch w-full">
         <div className="min-w-0">
           <CompareDateCard 
-            regDate={leftData ? leftData.result_summary_data.measure_date : ""}
+            regDate={leftData ? leftData?.basic_result?.result_summary_data.measure_date : ""}
             currentSlot={leftSlot}
             onCardClick={onCompareDialogOpen} />
         </div>
         <div className="min-w-0">
           <CompareDateCard 
-            regDate={rightData ? rightData.result_summary_data.measure_date : ""}
+            regDate={rightData ? rightData?.basic_result?.result_summary_data.measure_date : ""}
             currentSlot={rightSlot}
             onCardClick={onCompareDialogOpen} />
         </div>

@@ -42,9 +42,6 @@ export const useMeasureListForDetail = ({
   const filteredItems = useMemo(() => {
     if (!data?.measurement_list) return [];
 
-    // return data.measurement_list.filter(
-    //   (item) => item.measurement_type === "basic_only"
-    // );
     return data?.measurement_list
   }, [data?.measurement_list]);
   
@@ -59,7 +56,7 @@ export const useMeasureListForDetail = ({
     [data?.current_page, filteredItems, data?.limit, data?.total_pages]
   );
 
-  // measurement_list를 IMeasureList[]로 변환
+
   const measureList: IMeasureList[] = useMemo(() => {
     if (!filteredItems) return [];
     
@@ -75,7 +72,7 @@ export const useMeasureListForDetail = ({
       device_sn: 0,
       has_basic: 0,
       has_rom: 0,
-      measurement_type: "basic_only"
+      has_bia: 0,
     }));
   }, [filteredItems]);
 

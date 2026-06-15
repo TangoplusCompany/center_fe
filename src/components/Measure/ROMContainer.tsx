@@ -6,11 +6,11 @@ import { useGetROMItems } from "@/hooks/api/measure/rom/useGetROMItems";
 import { ComparePair, CompareSlot } from "@/types/compare";
 import { useState } from "react";
 import { Skeleton } from "../ui/skeleton";
-import ROMItemContainer from "./ROM/ItemContainer";
-import ROMBody from "./ROM/Body";
-import ROMPickerDialog from "./ROM/PickerDialog";
+import ROMItemContainer from "./Rom/ItemContainer";
+import ROMBody from "./Rom/Body";
+import ROMPickerDialog from "./Rom/PickerDialog";
 import { useGetQuery } from "@/hooks/utils/useGetQuery";
-import { MeasureDetailSkeleton } from "./DetailContainer";
+import { MeasureDetailSkeleton } from "./DetailQueryContainer";
 import { useMeasureDecrypt } from "@/hooks/auth/useMeasureDecrypt";
 import { useAuthStoreOptional } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
@@ -20,7 +20,7 @@ import { actionPrintEncrypt } from "@/app/actions/getCrypto";
 import { getResultRomReportUrl } from "@/app/actions/openRomPrintPage";
 
 
-export const MeasureROMContainer = () => {
+export const MeasureRomContainer = () => {
   const { query } = useGetQuery();
   const encryptedParam = query['data'];  // measureSn → data로 변경
   const [measureType, setMeasureType] = useState(-1); // 이전 항목 선택을 관리하는 ROM 타입
@@ -132,7 +132,7 @@ export const MeasureROMContainer = () => {
       
       {romItems && (
         <div className="flex items-center gap-3">
-          <div className="w-1 h-12 bg-toggleAccent rounded-full"></div>
+          <div className="w-1 h-12 bg-mainBlue-600 rounded-full"></div>
           <h2 className="text-3xl font-semibold text-[#333] dark:text-white flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
             <span>{romItems[0].user_name}님 ROM 측정 결과</span>
             <span className="text-sm text-sub300 dark:text-sub200 sm:pl-2"> {formatDate(romItems[0].reg_date.slice(0,16))}</span>
@@ -221,4 +221,4 @@ export const MeasureROMContainer = () => {
   )
 };
 
-export default MeasureROMContainer;
+export default MeasureRomContainer;

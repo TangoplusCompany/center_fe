@@ -33,8 +33,8 @@ const pastelColors = [
   "#bc8f8f", // Pastel Rose
   "#b0e0e6 ", // Pastel Aqua
 ];
-const COLOR_ACTIVE = "hsl(var(--toggle-accent))"; // 또는 "#..."로 직접
-const COLOR_INACTIVE = "hsl(var(--sub300))";
+const COLOR_ACTIVE = "#2563EB";   // mainBlue-600
+const COLOR_INACTIVE = "#BFBFBF"; // sub300
 
 const DeviceChart = ({
   chartConfig,
@@ -93,25 +93,25 @@ const DeviceChart = ({
     // 전체보기면 기존 pastelColors 그대로
     if (selectedLegend === "all") return pastelColors[index];
 
-    // 전체보기 버튼(legend 0)은 선택모드에선 sub300로 표시(원하시면 toggleAccent로 바꿔도 됨)
+    // 전체보기 버튼(legend 0)은 선택모드에선 sub300로 표시(원하시면 mainBlue-600로 바꿔도 됨)
     if (key === "all") return "hsl(var(--sub300))";
 
-    // 선택모드면 선택된 것만 toggleAccent, 나머지 sub300
+    // 선택모드면 선택된 것만 mainBlue-600, 나머지 sub300
     return selectedLegend === key
-      ? "hsl(var(--toggleAccent))"
-      : "hsl(var(--sub300))";
+      ? "#2563EB"
+      : "#BFBFBF";
   };
   return (
-    <Card className="rounded-lg shadow-none border-2 border-toggleAccent-background">
-      <CardHeader className="flex items-center gap-2 space-y-0 border-2 border-toggleAccent-background py-2 sm:flex-row bg-toggleAccent-background">
+    <Card className="rounded-lg shadow-none border-2 border-mainBlue-100 dark:border-mainBlue-600 bg-transparent">
+      <CardHeader className="flex items-center gap-2 space-y-0 border-b-2 border-mainBlue-100 dark:border-mainBlue-600 py-2 sm:flex-row bg-mainBlue-100  dark:bg-mainBlue-900 rounded-t-lg">
         <div className="grid flex-1 gap-1 text-center sm:text-left">
-          <CardTitle className="text-toggleAccent text-xl dark:text-white">센터 키오스크 사용자 추이</CardTitle>
+          <CardTitle className="text-mainBlue-600 text-xl dark:text-white ">센터 키오스크 사용자 추이</CardTitle>
         </div>
       </CardHeader>
-      <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+      <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6 bg-white dark:bg-black">
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
+          className="aspect-auto h-[250px] w-full "
         >
           <AreaChart data={transformedData}>
             <defs>
@@ -121,13 +121,13 @@ const DeviceChart = ({
                 return (
                   <linearGradient key={`gradient-${key}`} id={`fill-gradient-${key}`} x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor={color} stopOpacity={0.6} />
-                    <stop offset="100%" stopColor="white" stopOpacity={0.05} />
+                    <stop offset="100%" stopColor="var(--chart-bg-end)" stopOpacity={0.05} />
                   </linearGradient>
                 );
               })}
               <linearGradient id="fill-gradient-accent" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(var(--toggle-accent))" stopOpacity={0.6} />
-                <stop offset="100%" stopColor="white" stopOpacity={0.05} />
+                <stop offset="0%" stopColor="#2563EB" stopOpacity={0.6} />
+                <stop offset="100%" stopColor="var(--chart-bg-end)" stopOpacity={0.05} />
               </linearGradient>
             </defs>
 
@@ -139,11 +139,10 @@ const DeviceChart = ({
               const isSelected = selectedLegend === key;
               let fillValue = "transparent";
               if (isSelected) {
-                fillValue = "url(#fill-gradient-accent)"; // 선택된 항목은 accent 색상
+                fillValue = "url(#areaGradient)"; 
               } else if (isAll) {
-                fillValue = "transparent"; // 전체 보기일 때는 투명
+                fillValue = "transparent";
               }
-
               return (
                 <Area
                   dataKey={key}
@@ -199,7 +198,7 @@ const DeviceChart = ({
                       const seriesIndex = isAll ? -1 : seriesKeys.indexOf(key);
 
                       const dotColor = isAll
-                        ? (selectedLegend === "all" ? "hsl(var(--toggleAccent))" : "hsl(var(--sub300))")
+                        ? (selectedLegend === "all" ? "hsl(var(--mainBlue-600))" : "hsl(var(--sub300))")
                         : getSeriesColor(key, seriesIndex);
 
                       // 버튼 스타일(선택된 pill만 강조)

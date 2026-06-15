@@ -23,16 +23,16 @@ const ROMDashboardPartList = ({
     const scoreMap : Record<number, {label : string; className: string}> = {
       0 : {label: "위험", className: "border-danger text-danger"},
       1 : {label: "주의", className: "border-warning text-warning"},
-      2 : {label: "정상", className: "border-toggleAccent text-toggleAccent"},
-      3 : {label: "매우 양호", className: "border-toggleAccent text-toggleAccent"}
+      2 : {label: "정상", className: "border-mainBlue-600 text-mainBlue-600"},
+      3 : {label: "매우 양호", className: "border-mainBlue-600 text-mainBlue-600"}
     }
     const stateCircle : Record<number, string> = {
       0 : "bg-danger",
       1 : "bg-warning",
-      2 : "bg-toggleAccent",
-      3 : "bg-toggleAccent"
+      2 : "bg-mainBlue-600",
+      3 : "bg-mainBlue-600"
     }
-    const state = scoreMap[score] ?? {label: "-", className: "border-toggleAccent text-toggleAccent"}
+    const state = scoreMap[score] ?? {label: "-", className: "border-mainBlue-600 text-mainBlue-600"}
     return (
       <div className={`flex w-fit gap-2 rounded-full text-sm font-semibold px-2 py-1 ${state.className} border-2 items-center`}>
         <div className={`${stateCircle[score]} w-4 h-4 rounded-full`}/>

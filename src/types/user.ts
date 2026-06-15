@@ -65,14 +65,16 @@ export interface IUserMeasureListItem
   IMeasureUpperLowerLevel {
   measure_sn: number;
   user_sn: number;
+  user_uuid: string;
   user_name: string;
   measure_date: string;
   device_name: string;
+  device_sn: string;
   center_name: string;
   mobile: string;
   has_basic: 0 | 1;
   has_rom : 0 | 1;
-  measurement_type: "rom_only" | "basic_only" | "basic_and_rom"
+  has_bia : 0 | 1;
 }
 
 

@@ -1,10 +1,10 @@
-import { MeasureROMContainer } from "@/components/Measure/ROMContainer";
+import MeasureDetailQueryContainer from "@/components/Measure/DetailQueryContainer";
 import React from "react";
 
 const MeasureROMPage = () => { 
   return (
     <div className="flex flex-col gap-5 w-full">
-      <MeasureROMContainer />
+      <MeasureDetailQueryContainer firstMeasureType={"rom"} />
     </div>
   );
 };

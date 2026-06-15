@@ -1,26 +1,26 @@
 import React from "react";
-import CenterUserDetail from "@/components/User/Detail";
+import UserDetail from "@/components/User/Detail";
 import { notFound } from "next/navigation";
 import { actionUserDecrypt } from "@/app/actions/getCrypto";
 
-type UserDetailPageProps = {
+interface UserDetailPageProps {
   params: Promise<{ userUUID: string }>;
-  searchParams: Promise<{ key?: string; name?: string }>;
-};
+  searchParams: Promise<{ key?: string; name?: string; subTab?: string }>;
+}
 
 const UserDetailPage = async ({ params, searchParams }: UserDetailPageProps) => {
   const { userUUID: encryptedParam } = await params;
-  const { key, name } = await searchParams;
+  const { key, subTab } = await searchParams; // subTab 추출
 
   // 암호화된 파라미터 복호화 시도
   const decryptedData = await actionUserDecrypt(encryptedParam);
-
+  const currentTab = subTab || "latest";
   // 복호화 성공 시 암호화된 URL 사용
   if (decryptedData) {
-    const { user_uuid: userUUID, user_sn: userSn, user_name: userName } = decryptedData;
+    const { user_uuid: userUUID, user_sn: userSn } = decryptedData;
 
     return (
-      <CenterUserDetail userUUID={userUUID} userSn={userSn} userName={userName} />
+      <UserDetail userUUID={userUUID} userSn={userSn} currentTab={currentTab} />
     );
   }
 
@@ -29,7 +29,7 @@ const UserDetailPage = async ({ params, searchParams }: UserDetailPageProps) => 
     const userSn = Number(key);
     if (!Number.isNaN(userSn)) {
       return (
-        <CenterUserDetail userUUID={encryptedParam} userSn={userSn} userName={name} />
+        <UserDetail userUUID={encryptedParam} userSn={userSn} currentTab={currentTab} />
       );
     }
   }

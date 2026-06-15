@@ -218,8 +218,8 @@ const MeasureSummaryGraph = ({
             />
             <defs>
               <linearGradient id="fill-gradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(var(--toggle-accent))" stopOpacity={0.6} />
-                <stop offset="100%" stopColor="white" stopOpacity={0.05} />
+                <stop offset="0%" stopColor="#2563EB" stopOpacity={0.6} />
+                <stop offset="100%" stopColor="#FFFFFF" stopOpacity={0.05} />
               </linearGradient>
             </defs>
             {/* Area 컴포넌트들 - seriesKeys를 기반으로 생성 */}

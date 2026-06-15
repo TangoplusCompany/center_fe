@@ -28,7 +28,7 @@ export const ROMRawDataUnit = ({
           <div className="flex justify-between p-2">
             <div className="text-base font-semibold">{data?.title}</div>
             <div 
-              className="text-sm text-toggleAccent px-2 py-1 rounded-full border-2 border-toggleAccent bg-toggleAccent-background cursor-pointer hover:border-toggleAccent/80 transition-colors" 
+              className="text-sm text-mainBlue-600 px-2 py-1 rounded-full border-2 border-mainBlue-600 bg-mainBlue-100  dark:bg-mainBlue-900 cursor-pointer hover:border-mainBlue-600/80 transition-colors" 
               onClick={() => onCompareDialogOpen(compareSlot, data?.measure_type)} 
               >이전 기록과 비교</div>
           </div>

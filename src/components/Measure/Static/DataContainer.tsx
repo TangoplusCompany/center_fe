@@ -1,12 +1,16 @@
-import { IUserMeasureInfoResponse } from "@/types/measure";
+import { IMeasureResponse } from "@/types/measure";
 import FootStaticContainer, { IMatStaticPressure } from "../Mat/FootStaticContainer";
 
 const StaticDataContainer = ({
   measureData,
 }:{
-  measureData: IUserMeasureInfoResponse;
+  measureData: IMeasureResponse;
 
 }) => {
+  if (!measureData?.basic_result?.result_summary_data) {
+      return undefined;
+    }
+
   const {
     mat_static_risk_level,
     mat_static_range_level,
@@ -18,12 +22,12 @@ const StaticDataContainer = ({
     mat_static_right_pressure,
     mat_static_top_pressure,
     mat_static_bottom_pressure,
-  } = measureData.result_summary_data;
+  } = measureData?.basic_result.result_summary_data;
   const { 
     measure_server_mat_image_name,
     mat_static_horizontal_ment,
     mat_static_vertical_ment,
-  } = measureData.static_mat_data;
+  } = measureData?.basic_result.static_mat_data;
 
   const staticFourCorners: IMatStaticPressure = {
     leftTopPressure: mat_static_left_top,
@@ -44,8 +48,8 @@ const StaticDataContainer = ({
   }[mat_static_risk_level] ?? "bg-primary-foreground";
   const bgCondition = {
     "0": "border-sub300/50 dark:bg-muted",
-    "1": "bg-gradient-to-b from-[#FFA73A]/10 from-[2%] to-white to-[40%] dark:from-[#FFA73A]/20 dark:to-muted",
-    "2": "bg-gradient-to-b from-[#FF5252]/10 from-[2%] to-white to-[50%] dark:from-[#FF5252]/20 dark:to-muted",
+    "1": "bg-gradient-to-b from-[#FFA73A]/10 from-[2%] to-white to-[40%] dark:from-[#FFA73A]/20 dark:to-transparent",
+    "2": "bg-gradient-to-b from-[#FF5252]/10 from-[2%] to-white to-[50%] dark:from-[#FF5252]/20 dark:to-transparent",
   }[mat_static_risk_level] ?? "bg-primary-foreground";
   // 위아래로 할 경우 flex h-full flex-col gap-4
   

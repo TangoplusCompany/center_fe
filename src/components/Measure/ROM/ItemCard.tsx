@@ -26,7 +26,7 @@ export const ROMItemCard = ({
       () => ({ date: " ", value: undefined }) 
     );                
 
-    return [...sorted, ...dummy]  // 데이터 먼저, 더미 뒤에
+    return [...sorted, ...dummy] 
   }, [romItem.history_by_measure_type]);
 
   const seriesKeys = useMemo(
@@ -50,31 +50,31 @@ export const ROMItemCard = ({
   const stateTextColor : Record<number, string> = {
     0 : "text-danger",
     1 : "text-warning",
-    2 : "text-toggleAccent",
-    3 : "text-toggleAccent"
+    2 : "text-mainBlue-600",
+    3 : "text-mainBlue-600"
   }
   const stateBorderColor : Record<number, string> = {
     0 : "border-danger",
     1 : "border-warning",
-    2 : "border-toggleAccent",
-    3 : "border-toggleAccent"
+    2 : "border-mainBlue-600",
+    3 : "border-mainBlue-600"
   }
   const stateBGColor : Record<number, string> = {
     0 : "bg-danger",
     1 : "bg-warning",
-    2 : "bg-toggleAccent",
-    3 : "bg-toggleAccent"
+    2 : "bg-mainBlue-600",
+    3 : "bg-mainBlue-600"
   }
   return (
     <div
-      className="col-span-1 items-center justify-between rounded-xl border-2 border-toggleAccent-background relative transition-colors hover:border-toggleAccent cursor-pointer"
+      className="col-span-1 items-center justify-between rounded-xl border-2 border-mainBlue-100 dark:border-mainBlue-600 relative transition-colors hover:border-mainBlue-600 cursor-pointer"
       onClick={() => {
         if (handleROMItemSelect) handleROMItemSelect(romItem.measure_type);
       }}
     >
       <div className="flex flex-col">
-        <div className="flex items-center justify-between rounded-t-xl bg-toggleAccent-background px-4 py-2 w-full">
-          <div className="text-xl text-toggleAccent dark:text-white font-semibold ">
+        <div className="flex items-center justify-between rounded-t-xl bg-mainBlue-100  dark:bg-mainBlue-900 px-4 py-2 w-full">
+          <div className="text-xl text-mainBlue-600 dark:text-white font-semibold ">
            
             {romItem.title}
           </div>
@@ -101,16 +101,16 @@ export const ROMItemCard = ({
               config={{
                 value: {
                   label: "각도값",
-                  color: "hsl(var(--toggle-accent))",
+                  color: "#2563EB",
                 },
               }}
-              className="h-24 w-full bg-toggleAccent-background rounded-xl "
+              className="h-24 w-full bg-mainBlue-100  dark:bg-mainBlue-900 rounded-xl "
             >
               <AreaChart data={chartData} margin={{ top: 16, right: 16, left: 16, bottom: 16 }}>
                 <defs>
                   <linearGradient id="fillGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="hsl(var(--toggle-accent))" stopOpacity={0.4} />
-                    <stop offset="100%" stopColor="hsl(var(--toggle-accent-background))" stopOpacity={0.4} />
+                    <stop offset="0%" stopColor="#2563EB" stopOpacity={0.4} />
+                    <stop offset="100%" stopColor="#F1F5F9" stopOpacity={0.4} />
                   </linearGradient>
                 </defs>
                 <XAxis dataKey="date" hide />
@@ -119,7 +119,7 @@ export const ROMItemCard = ({
                   dataKey="value"
                   type="monotone"
                   fill="url(#fillGradient)"
-                  stroke="hsl(var(--toggle-accent))"
+                  stroke="#2563EB"
                   strokeWidth={2}
                   connectNulls
                   dot={(props: DotProps & { value?: number; payload?: { score?: number } }) => {
@@ -131,13 +131,13 @@ export const ROMItemCard = ({
                         cx={props.cx}
                         cy={props.cy}
                         r={4}
-                        fill="hsl(var(--toggle-accent))"
+                        fill="#2563EB"
                         stroke="white"
                         strokeWidth={1.5}
                       />
                     );
                   }}
-                  className="bg-toggleAccent-background rounded-xl w-full "
+                  className="bg-mainBlue-100  dark:bg-mainBlue-900 rounded-xl w-full "
                 />
                 
                 <ChartTooltip

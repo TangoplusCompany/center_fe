@@ -23,7 +23,7 @@ const CompareDefault = ({
               "relative h-full rounded-3xl border-2 border-sub300/50 border-dashed box-border",
               "transition cursor-pointer select-none",
               "hover:border-sub400 active:bg-sub400",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-toggleAccent",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBlue-600",
               className ?? "",
             ].join(" ")}
           >

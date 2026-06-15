@@ -21,8 +21,8 @@ const MeasureStaticCompareFirst = React.memo(
   // TODO 정적 조회하는 api를 사용 + 하단의 useMeasureJson을 써야함 (+ Raw Data card도 넣어줘야함)
 
 
-  const leftSummaryData = left?.result_summary_data
-  const rightSummaryData = right?.result_summary_data
+  const leftSummaryData = left?.basic_result?.result_summary_data
+  const rightSummaryData = right?.basic_result?.result_summary_data
   const {
     data: measure0,
     isLoading: seq1Loading0,
