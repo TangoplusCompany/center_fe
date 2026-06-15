@@ -16,7 +16,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { actionMeasureEncrypt } from "@/app/actions/getCrypto";
 
-
 export const MeasureDummyList = ({ limit }: { limit: number }) => {
   return (
     <div className="w-full table table-fixed min-w-0">
@@ -83,27 +82,34 @@ measurements);
     user_sn: number,
     uuid: string ,
     mobile: string,
-    measurement_type: "rom_only" | "basic_only" | "basic_and_rom"
+    has_basic: 0 | 1,
+    has_rom: 0 | 1,
+    has_bia: 0 | 1,
   ) => {
     const encrypted = await actionMeasureEncrypt({
       measure_sn,
       user_sn,
       uuid, mobile,
     });
-
-    if (encrypted !== "ERROR") {
-      if (measurement_type === "rom_only") {
-        router.push(`/measure/ROM?data=${encrypted}`);
-      } else {
-        router.push(`/measure/${encrypted}`);
-      }
+    if (has_basic === 1) {
+      router.push(`/measure/basic?data=${encrypted}`);
+    } else if (has_rom === 1) {
+      router.push(`/measure/rom?data=${encrypted}`);
+    } else if (has_bia === 1) {
+      router.push(`/measure/bia?data=${encrypted}`);
     }
   };
-  const measureTypeMap : Record<string, string> = {
-    rom_only : "ROM",
-    basic_only : "기본 검사",
-    basic_and_rom : "기본 검사/ROM"
-  }
+  const getMeasureTypeText = (measureItem: IMeasureList): string => {
+    const labels: string[] = [];
+    const hasBasic = measureItem.has_basic === 1;
+    const hasRom = measureItem.has_rom === 1;
+    const hasBia = measureItem.has_bia === 1;
+    if (hasBasic) labels.push("기본 검사");
+    if (hasRom) labels.push("ROM");
+    if (hasBia) labels.push("체성분")
+
+    return labels.length > 0 ? labels.join("/") : "";
+  };
   return (
     <div className="w-full table table-fixed min-w-0">
       <div className="w-full overflow-x-auto">
@@ -127,7 +133,10 @@ measurements);
                 measurement.user_sn, 
                 measurement.user_uuid,
                 measurement.mobile,
-                measurement.measurement_type,)}
+                measurement.has_basic,
+                measurement.has_rom,
+                measurement.has_bia,
+              )}
               className="cursor-pointer">
 
               <TableCell className="text-center font-medium whitespace-nowrap">
@@ -146,8 +155,8 @@ measurements);
               </TableCell>
 
               <TableCell className="text-center">
-                  <div className="w-fit px-2 text-xs sm:text-sm text-center whitespace-nowrap text-toggleAccent dark:text-white bg-toggleAccent-background dark:bg-toggleAccent border border-toggleAccent rounded-full mx-auto">
-                    {measureTypeMap[measurement.measurement_type]}
+                  <div className="w-fit px-2 text-xs sm:text-sm text-center whitespace-nowrap text-mainBlue-600 dark:text-white bg-mainBlue-100 dark:bg-mainBlue-600 border border-mainBlue-600 rounded-full mx-auto">
+                    {getMeasureTypeText(measurement)}
                   </div>
                 </TableCell>
 
@@ -160,7 +169,9 @@ measurements);
                       measurement.user_sn, 
                       measurement.user_uuid,
                       measurement.mobile,
-                      measurement.measurement_type,)
+                      measurement.has_basic,
+                      measurement.has_rom,
+                      measurement.has_bia,)
                     }}
                   className="flex items-center gap-2 justify-end cursor-pointer"
                 >

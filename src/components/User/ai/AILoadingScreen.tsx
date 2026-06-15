@@ -40,14 +40,14 @@ const AILoadingScreen = () => {
   }, [displayedText, isTyping, currentMessageIndex]);
 
   return (
-    <div className="h-[512px] rounded-3xl flex flex-col items-center justify-center bg-gradient-to-b from-toggleAccent/10 to-white dark:from-toggleAccent/20 dark:to-muted p-8">
+    <div className="h-[512px] rounded-3xl flex flex-col items-center justify-center bg-gradient-to-b from-mainBlue-600/10 to-white dark:from-mainBlue-600/20 dark:to-muted p-8">
       {/* 회전하는 원형 로더 */}
       <div className="relative mb-12">
         {/* 외곽 원 */}
         <div className="w-32 h-32 rounded-full border-4 border-sub200 dark:border-border"></div>
         
         {/* 회전하는 그라데이션 원 */}
-        <div className="absolute top-0 left-0 w-32 h-32 rounded-full border-4 border-transparent border-t-toggleAccent border-r-toggleAccent animate-spin"></div>
+        <div className="absolute top-0 left-0 w-32 h-32 rounded-full border-4 border-transparent border-t-mainBlue-600 border-r-mainBlue-600 animate-spin"></div>
       </div>
 
       {/* 타이핑 텍스트 */}

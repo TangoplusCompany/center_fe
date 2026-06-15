@@ -11,16 +11,16 @@ import {
   PaginationButtonPrevious,
   PaginationButtonNext,
 } from "@/components/ui/pagination";
-import { IMeasureList } from "@/types/measure";
 import { formatDate } from "@/utils/formatDate";
 import { cn } from "@/lib/utils";
 import type { DetailPagination } from "@/hooks/api/user/useMeasureListForDetail";
+import { IUserMeasureListItem } from "@/types/user";
 
 const ITEMS_PER_PAGE = 10;
 
 type MeasureDetailDatePickerDialogProps = {
   open: boolean;
-  items: IMeasureList[];
+  items: IUserMeasureListItem[];
   selectedMeasure?: number | null;
   onOpenChange: (v: boolean) => void;
   onSelect: (measureSn: number) => void;
@@ -80,7 +80,7 @@ export const MeasureDetailDatePickerDialog = ({
                     "w-full text-left rounded-xl border px-3 py-2 hover:bg-gray-50 dark:hover:bg-white/10 transition-colors border-border text-foreground",
                     selectedMeasure != null &&
                       selectedMeasure === it.measure_sn &&
-                      "border-toggleAccent bg-sub100/50 dark:bg-toggleAccent-background"
+                      "border-mainBlue-600 bg-sub100/50 dark:bg-mainBlue-100  dark:bg-mainBlue-900"
                   )}
                   onClick={() => {
                     onSelect(it.measure_sn);

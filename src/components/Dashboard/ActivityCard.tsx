@@ -22,8 +22,8 @@ const ActivityCard = ({
   const centerY = 15;
 
   return (
-    <div className="w-full flex flex-col border-2 border-toggleAccent-background rounded-xl gap-6 bg-gradient-to-b from-[#2c4fd0]/10 from-[2%] to-white to-[40%] dark:from-[#2c4fd0]/20 dark:to-background">
-      <div className="p-4 text-xl font-semibold text-toggleAccent dark:text-white">
+    <div className="w-full flex flex-col border-2 border-mainBlue-100 dark:border-mainBlue-600 rounded-xl gap-6 bg-gradient-to-b from-[#2c4fd0]/10 from-[2%] to-white to-[40%] dark:from-[#2c4fd0]/20 dark:to-black/20">
+      <div className="p-4 text-xl font-semibold text-mainBlue-600 dark:text-white">
         {data.case === 0 && "센터 일간 측정"}
         {data.case === 1 && "센터 주간 측정"}
       </div>
@@ -37,12 +37,13 @@ const ActivityCard = ({
         >
           <defs>
             <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" className="[stop-color:hsl(var(--toggle-accent))]" />
-              <stop offset="100%" className="[stop-color:hsl(var(--toggle-accent))]" />
+              <stop offset="0%" stopColor="var(--chart-line)" />
+              <stop offset="100%" stopColor="var(--chart-line)" />
             </linearGradient>
+            
             <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" className="[stop-color:hsl(var(--toggle-accent))]" />
-              <stop offset="100%" className="[stop-color:hsl(var(--background))]" />
+              <stop offset="0%" stopColor="var(--chart-line)" stopOpacity={0.8} /> 
+              <stop offset="100%" stopColor="var(--chart-bg-end)" stopOpacity={0} />
             </linearGradient>
           </defs>
 
@@ -82,7 +83,7 @@ const ActivityCard = ({
           style={{ paddingLeft: 'inherit', paddingRight: 'inherit' }}
         >
           {/* ✅ Pulse 외곽 원 (퍼지는 효과) */}
-          <circle cx="50" cy={centerY} r="4" className="fill-toggleAccent opacity-30">
+          <circle cx="50" cy={centerY} r="4" className="fill-mainBlue-600 opacity-30">
             <animate attributeName="r" values="4;9;4" dur="3s" repeatCount="indefinite" />
             <animate attributeName="opacity" values="0.3;0;0.3" dur="3s" repeatCount="indefinite" />
           </circle>
@@ -92,7 +93,7 @@ const ActivityCard = ({
             cx="50"
             cy={centerY}
             r="4"
-            className="stroke-toggleAccent fill-white dark:fill-black dark:fill-background"
+            className="stroke-mainBlue-600 fill-white dark:fill-black"
           />
 
           {/* 내부 원 */}
@@ -100,11 +101,11 @@ const ActivityCard = ({
             cx="50"
             cy={centerY}
             r="3"
-            className="fill-toggleAccent"
+            className="fill-mainBlue-600"
           />
         </svg>
 
-        <div className="absolute left-1/2 top-0 transform translate-x-2 -translate-y-1 flex items-center gap-1 text-base font-semibold text-toggleAccent dark:text-white">
+        <div className="absolute left-1/2 top-0 transform translate-x-2 -translate-y-1 flex items-center gap-1 text-base font-semibold text-mainBlue-600 dark:text-white">
           <span>
             {data.upDown === 2 && "▲"}
             {data.upDown === 1 && "―"}

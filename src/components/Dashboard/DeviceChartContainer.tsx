@@ -21,7 +21,7 @@ const DeviceChartContainer = ({
   return (
     <div className="w-full flex flex-col gap-4">
       <div className="flex items-center gap-3">
-        <div className="w-1 h-10 bg-toggleAccent rounded-full"></div>
+        <div className="w-1 h-10 bg-mainBlue-600 rounded-full"></div>
         <h2 className="text-2xl col-span-2">키오스크 사용자 추이</h2>
       </div>
       <div className="w-full">

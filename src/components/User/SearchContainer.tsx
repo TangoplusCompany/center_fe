@@ -54,7 +54,7 @@ const CenterUserSearchContainer = ({
           className="min-w-0 flex-1"
           {...register("name")}
         />
-        <Button variant="outline" type="submit" className="shrink-0 w-full sm:w-auto bg-toggleAccent text-white hover:bg-toggleAccent/90 hover:text-white">
+        <Button variant="outline" type="submit" className="shrink-0 w-full sm:w-auto bg-mainBlue-600 text-white hover:bg-mainBlue-600/90 hover:text-white">
           조회하기
         </Button>
       </form>
@@ -77,7 +77,7 @@ const CenterUserSearchContainer = ({
               {userList.map((user) => (
                 <div
                   key={user.user_uuid + user.user_name}
-                  className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 items-center px-3 py-2 hover:bg-sub150 border-b last:border-none border-solid border-sub200 transition-colors"
+                  className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 items-center px-3 py-2 border-b last:border-none border-solid border-sub200 transition-colors"
                 >
                   <p className="text-center text-sm truncate" title={user.user_name}>
                     {user.user_name}
@@ -88,13 +88,14 @@ const CenterUserSearchContainer = ({
                   <p className="text-center text-sm truncate">
                     {phoneFiltering(user.mobile)}
                   </p>
-                  <button
+                  <Button
                     type="button"
+                    variant="sub"
                     onClick={() => selectUserHandler(user.user_uuid)}
-                    className="shrink-0 w-14 py-1.5 rounded-lg bg-sub100 hover:bg-sub300 transition-colors"
+                    className="shrink-0 w-14 py-1.5 rounded-lgtransition-colors"
                   >
                     선택
-                  </button>
+                  </Button>
                 </div>
               ))}
             </div>

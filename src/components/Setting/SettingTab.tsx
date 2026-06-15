@@ -25,7 +25,7 @@ export const SettingTab = ({
               disabled={isLocked}
               className={`${
                 nowTab === index
-                  ? "bg-toggleAccent text-white shadow-sm"
+                  ? "bg-mainBlue-600 text-white shadow-sm"
                   : "text-sub600 hover:text-sub700"
               } ${
                 isLocked ? "opacity-40 cursor-not-allowed" : ""

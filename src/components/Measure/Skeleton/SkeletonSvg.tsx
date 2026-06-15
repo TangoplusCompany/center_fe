@@ -1,13 +1,12 @@
 import React from "react";
-import "@/css/body-skeleton.css";
-import { IUserDetailMeasureInfo } from "@/types/measure";
+import { IMeasureInfo } from "@/types/measure";
 
 const SkeletonSvg= ({
   className,
   data,
 }: {
   className?: string;
-  data: IUserDetailMeasureInfo;
+  data: IMeasureInfo;
 }) => {
   // 위험도에 따른 색상 결정
   const getRiskColor = (riskLevel: number) => {

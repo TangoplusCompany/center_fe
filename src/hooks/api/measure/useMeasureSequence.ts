@@ -1,5 +1,5 @@
 import { customAxios, customUserAxios } from "@/lib/axios";
-import { IUserMeasureSequence, IUserMeasureSequenceDynamic } from "@/types/measure";
+import { IMeasureSequence, IMeasureSequenceDynamic } from "@/types/measure";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthStoreOptional } from "@/providers/AuthProvider";
 
@@ -12,8 +12,8 @@ import { useAuthStoreOptional } from "@/providers/AuthProvider";
  * @returns 측정 시퀀스 데이터
  */
 type MeasureSequenceResponse<T extends number> = T extends 6
-  ? IUserMeasureSequenceDynamic
-  : IUserMeasureSequence;
+  ? IMeasureSequenceDynamic
+  : IMeasureSequence;
 
 export const useMeasureSequence = <T extends number>({
   measure_sn,

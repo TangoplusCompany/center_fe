@@ -58,8 +58,8 @@ const DeviceEditDialog = ({
     <Dialog open={open} onOpenChange={setToggle}>
       <DialogTrigger asChild>
         <button className="flex items-center gap-0.5 text-sm text-gray-500">
-          <PencilLine className="w-4 h-4 text-toggleAccent dark:text-white" />
-          <span className="text-toggleAccent dark:text-white">수정하기</span>
+          <PencilLine className="w-4 h-4 text-mainBlue-600 dark:text-white" />
+          <span className="text-mainBlue-600 dark:text-white">수정하기</span>
         </button>
       </DialogTrigger>
       <DialogContent className="w-[calc(100%-2rem)] sm:w-full max-w-2xl rounded-2xl sm:rounded-xl">
@@ -159,7 +159,7 @@ const DeviceEditDialog = ({
                   취소하기
                 </Button>
               </DialogClose>
-              <Button type="submit" className="border border-toggleAccent bg-toggleAccent-background hover:bg-white text-toggleAccent hover:text-toggleAccent">
+              <Button type="submit" className="border border-mainBlue-600 bg-mainBlue-100  dark:bg-mainBlue-900 hover:bg-white text-mainBlue-600 hover:text-mainBlue-600">
                 수정하기
               </Button>
             </div>

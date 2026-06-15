@@ -20,7 +20,7 @@ const DeviceAddDialog = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="w-full bg-toggleAccent border-none shadow-none hover:bg-toggleAccent/90">
+        <Button variant="default" className="w-full shadow-none ">
           <div className="flex gap-2 text-white items-center">
             <svg 
               className="text-white"
@@ -43,7 +43,7 @@ const DeviceAddDialog = () => {
           </div>
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[calc(100%-2rem)] max-w-lg sm:w-full sm:max-w-md rounded-2xl sm:rounded-xl overflow-hidden">
+      <DialogContent className="w-[calc(100%-2rem)] max-w-lg sm:w-full sm:max-w-md rounded-2xl sm:rounded-xl overflow-hidden bg-white dark:bg-sub800">
         <DialogHeader className="min-w-0">
           <DialogTitle className="">
             <div className="flex gap-2 text-xl font-semibold items-center min-w-0">

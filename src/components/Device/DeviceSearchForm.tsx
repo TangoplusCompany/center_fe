@@ -39,7 +39,8 @@ export const DeviceSearchForm = ({
         </div>
         <Button
           type="submit"
-          className="bg-sub600 shadow-none dark:text-sub100 hover:bg-sub300 shrink-0"
+          variant="sub"
+          className="shrink-0"
         >
           <Search className="w-4 h-4" />
           기기 검색

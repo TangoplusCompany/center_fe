@@ -5,7 +5,7 @@ import MeasureStaticSecond from "./Second";
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
 import RawDataContainer from "../RawDataContainer";
 import StaticDataContainer from "./DataContainer";
-import { IUserMeasureDetailData, IUserMeasureInfoResponse } from "@/types/measure";
+import { IUserMeasureDetailData, IMeasureResponse } from "@/types/measure";
 
 const FrontMeasurement = ({
   sns,
@@ -18,7 +18,7 @@ const FrontMeasurement = ({
     userSn: string;
 
   };
-  measureInfo: IUserMeasureInfoResponse;
+  measureInfo: IMeasureResponse;
   cameraOrientation: 0 | 1;
   isMyPage: boolean;
 }) => {

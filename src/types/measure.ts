@@ -1,6 +1,20 @@
+import { IBiaData } from "./bia";
 import { IPagination, IResponseDefault } from "./default";
 import { IPoseLandmark } from "./pose";
 
+export interface IMeasureResponse {
+  measurement_meta: IMeasurementMeta
+  basic_result?: IMeasureBasic;
+  rom_result?: IMeasureROMItemDetail[]
+  bia_result?: IBiaData
+}
+
+export interface IMeasureBasic {
+  result_summary_data: IMeasureInfo;
+  static_mat_data: IStaticMat;
+  dynamic_mat_data: IDynamicMat;
+  detail_data: IPartDetailData;
+}
 
 
 export interface IMeasureListResponse extends IResponseDefault {
@@ -11,25 +25,7 @@ export interface IMeasureData extends IPagination {
   measurements: IMeasureList[];
 }
 
-export interface IUserMeasureSequence {
-  file_data: IUserMeasureFileData;
-  detail_data: IUserMeasureDetailData[];
-}
-
-
-export interface IUserMeasureInfoResponse {
-  result_summary_data: IUserDetailMeasureInfo;
-  static_mat_data: IStaticMat;
-  dynamic_mat_data: IDynamicMat;
-  detail_data: IPartDetailData;
-}
-
-export interface IUserMeasureSeqResponse {
-  result_summary_data: IUserDetailMeasureInfo;
-  static_mat_data: IStaticMat;
-  dynamic_mat_data: IDynamicMat;
-  detail_data: IPartDetailData;
-}
+// table에서 쓰는 IMeasureList라서 분리
 export interface IMeasureList {
   sn: number;
   user_sn: number;
@@ -43,18 +39,9 @@ export interface IMeasureList {
   center_name?: string;
   has_basic : 0 | 1;
   has_rom : 0 | 1;
-  measurement_type: "rom_only" | "basic_only" | "basic_and_rom"
+  has_bia: 0 | 1;
 }
-
-
-export interface IUserDetailMeasureInfo
-  extends IMeasureUserRisk,
-    IMeasureRiskLevel,
-    IMeasureRangeLevel,
-    IMeasureUpperLowerMent,
-    IMeasureUpperLowerLevel,
-    IMatStatic,
-    IMatOhs {
+export interface IMeasurementMeta {
   user_sn: number | string; // sn
   device_sn: number | string; // 장치 sn
   measure_sn: number | string; // t_measure_info_sn
@@ -66,7 +53,22 @@ export interface IUserDetailMeasureInfo
   camera_orientation: 0 | 1;
   has_basic : 0 | 1;
   has_rom : 0 | 1;
-  measurement_type: "rom_only" | "basic_only" | "basic_and_rom"
+  has_bia: 0 | 1;
+}
+// 측정 한개 조회할 때 확인하는 것 
+export interface IMeasureInfo
+  extends IMeasureUserRisk,
+    IMeasureRiskLevel,
+    IMeasureRangeLevel,
+    IMeasureUpperLowerMent,
+    IMeasureUpperLowerLevel,
+    IMatStatic,
+    IMatOhs,
+    IMeasurementMeta {}
+
+export interface IMeasureSequence {
+  file_data: IUserMeasureFileData;
+  detail_data: IUserMeasureDetailData[];
 }
 
 export interface IFilterMeasureInfo {
@@ -347,7 +349,7 @@ export interface IUserMeasureDetailData {
   left_right: number; // 0 | 1 로 좁혀도 됨
 }
 
-export interface IUserMeasureSequenceDynamic {
+export interface IMeasureSequenceDynamic {
   file_data: IUserMeasureDynamicFileData;
   detail_data: IUserMeasureDetailData[];
 }
@@ -400,7 +402,6 @@ export interface IMeasureROMItem extends IMeasureROMItemCardData {
   measure_type: number;
   score: number;
   history_by_measure_type: Record<string, number>;
-
 }
 
 export interface IMeasureROMGraphJson {
