@@ -17,7 +17,6 @@ CenterMainContainer = () => {
     queryFn: () => getAdminCenters(adminSn),
     enabled: adminSn > 0,
   });
-  console.log(centers)
   // 로딩 중
   if (adminSn <= 0 || isLoading) {
     return (

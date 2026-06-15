@@ -73,7 +73,7 @@ const ROMDashboardTypeGraph = ({
                   />
                 );
               }}
-              className="bg-mainBlue-600-background rounded-xl w-full "
+              className="bg-mainBlue-100  dark:bg-mainBlue-900 rounded-xl w-full "
             />
             
             <ChartTooltip

@@ -68,7 +68,8 @@ export default {
           100: "#F1F5F9",
           300: "#5B93FF",
           600: "#2563EB",
-          800: "#1E40AF"
+          800: "#1E40AF",
+          900: "#000F48"
         },
         
         chartLegendActive: {

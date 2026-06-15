@@ -35,7 +35,7 @@ export default function DefaultHeaderLayout() {
             variant="outline"
             onClick={handleLogout}
             disabled={logoutMutation.isPending}
-            className="text-sm md:text-base dark:bg-sub100 hover:bg-sub150"
+            className="text-sm md:text-base"
           >
             로그아웃
           </Button>

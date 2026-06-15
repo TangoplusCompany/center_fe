@@ -4,7 +4,7 @@ import MeasureStaticFourth from "./Fourth";
 
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
 import RawDataContainer from "../RawDataContainer";
-import { IUserMeasureDetailData, IUserMeasureInfoResponse } from "@/types/measure";
+import { IUserMeasureDetailData, IMeasureResponse } from "@/types/measure";
 import StaticDataContainer from "./DataContainer";
 
 const SideMeasurement = ({
@@ -17,7 +17,7 @@ const SideMeasurement = ({
     measureSn: string;
     userSn: string;
   };
-  measureInfo: IUserMeasureInfoResponse;
+  measureInfo: IMeasureResponse;
   cameraOrientation: 0 | 1;
   isMyPage: boolean;
 }) => {

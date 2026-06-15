@@ -105,13 +105,12 @@ export const ManagerInviteDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="w-[calc(100%-2rem)] sm:w-full sm:max-w-md">
+      <DialogContent className="w-[calc(100%-2rem)] sm:w-full sm:max-w-md bg-white dark:bg-sub800">
         <DialogHeader>
           <DialogTitle>매니저 초대</DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-sub800 dark:text-sub100">
             이메일을 작성해 초대 링크를 전송하세요. <br />
             초대된 매니저는 부관리자로 측정 결과 조회만 가능합니다.
-            {/* 초대할 매니저의 이메일과 역할을 선택한 뒤 <span className="whitespace-nowrap">전송해주세요.</span> */}
           </DialogDescription>
         </DialogHeader>
 

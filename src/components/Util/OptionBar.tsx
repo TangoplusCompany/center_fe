@@ -70,7 +70,7 @@ const OptionBar = ({
           </div>
 
           {showAddButton && setDialogOpen && (
-            <Button className="bg-mainBlue-600-background border-none shadow-none text-mainBlue-600 dark:text-white hover:bg-mainBlue-600-background/90" variant="secondary" onClick={() => setDialogOpen(true)}>
+            <Button className="" variant="outline" onClick={() => setDialogOpen(true)}>
               사용자 추가
             </Button>
             

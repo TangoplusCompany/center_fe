@@ -2,9 +2,9 @@ import React from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const CenterCardSkeleton = () => (
-  <div className="col-span-1 rounded-xl border-2 border-mainBlue-600-background dark:border-border overflow-hidden">
+  <div className="col-span-1 rounded-xl border-2 border-mainBlue-100 dark:border-mainBlue-600 dark:border-border overflow-hidden">
     <div className="flex flex-col">
-      <div className="flex items-center justify-between rounded-t-xl bg-mainBlue-600-background dark:bg-mainBlue-600-background px-4 py-2">
+      <div className="flex items-center justify-between rounded-t-xl bg-mainBlue-100  dark:bg-mainBlue-900 dark:bg-mainBlue-100  dark:bg-mainBlue-900 px-4 py-2">
         <Skeleton className="h-6 w-32" />
         <Skeleton className="h-5 w-16 rounded-md" />
       </div>

@@ -5,7 +5,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Suspense, useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 // import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
-import { IUserDetailMeasureInfo } from "@/types/measure";
+import { IMeasureInfo } from "@/types/measure";
 
 type RiskKey = "risk_neck" | "risk_shoulder_left" | "risk_shoulder_right" | "risk_elbow_left" | "risk_elbow_right" | "risk_hip_left" | "risk_hip_right" | "risk_knee_left" | "risk_knee_right" | "risk_ankle_left" | "risk_ankle_right";
 
@@ -96,7 +96,7 @@ function SkeletonModel() {
   return <primitive object={model} position={[0, 0.02, 0]} />;
 }
 
-function JointDots({ data }: { data: IUserDetailMeasureInfo }) {
+function JointDots({ data }: { data: IMeasureInfo }) {
   return (
     <group position={[0, 0.02, 0]} rotation={[0, SKELETON_FRONT_Y, 0]}>
       {jointPoints.map((joint) => {
@@ -198,7 +198,7 @@ function AutoRotateControls() {
 useGLTF.preload("/models/free_pack_-_human_skeleton/scene.gltf");
 
 type FullBodySkeleton3DProps = {
-  data: IUserDetailMeasureInfo;
+  data: IMeasureInfo;
   className?: string;
 };
 

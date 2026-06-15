@@ -22,7 +22,7 @@ const ActivityCard = ({
   const centerY = 15;
 
   return (
-    <div className="w-full flex flex-col border-2 border-mainBlue-600-background rounded-xl gap-6 bg-gradient-to-b from-[#2c4fd0]/10 from-[2%] to-white to-[40%] dark:from-[#2c4fd0]/20 dark:to-background">
+    <div className="w-full flex flex-col border-2 border-mainBlue-100 dark:border-mainBlue-600 rounded-xl gap-6 bg-gradient-to-b from-[#2c4fd0]/10 from-[2%] to-white to-[40%] dark:from-[#2c4fd0]/20 dark:to-black/20">
       <div className="p-4 text-xl font-semibold text-mainBlue-600 dark:text-white">
         {data.case === 0 && "센터 일간 측정"}
         {data.case === 1 && "센터 주간 측정"}
@@ -37,13 +37,13 @@ const ActivityCard = ({
         >
           <defs>
             <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#2563EB" />
-              <stop offset="100%" stopColor="#2563EB" />
+              <stop offset="0%" stopColor="var(--chart-line)" />
+              <stop offset="100%" stopColor="var(--chart-line)" />
             </linearGradient>
             
             <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#2563EB" stopOpacity={0.3} /> 
-              <stop offset="100%" stopColor="#FFFFFF" stopOpacity={0} />
+              <stop offset="0%" stopColor="var(--chart-line)" stopOpacity={0.8} /> 
+              <stop offset="100%" stopColor="var(--chart-bg-end)" stopOpacity={0} />
             </linearGradient>
           </defs>
 
@@ -93,7 +93,7 @@ const ActivityCard = ({
             cx="50"
             cy={centerY}
             r="4"
-            className="stroke-mainBlue-600 fill-white dark:fill-black dark:fill-background"
+            className="stroke-mainBlue-600 fill-white dark:fill-black"
           />
 
           {/* 내부 원 */}

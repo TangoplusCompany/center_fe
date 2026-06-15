@@ -16,7 +16,7 @@ const CompareDateCard = ({ regDate, currentSlot, measureType, onCardClick }: Com
       className={[
         "relative rounded-xl border-2 px-4 py-2 transition flex items-center justify-center my-4",
         regDate 
-          ? "border-sub300/50 dark:border-border dark:bg-card cursor-pointer hover:border-mainBlue-600 hover:bg-mainBlue-600-background dark:hover:bg-mainBlue-600-background active:bg-mainBlue-600-background active:border-mainBlue-600" // 데이터 있을 때
+          ? "border-sub300/50 dark:border-border dark:bg-card cursor-pointer hover:border-mainBlue-600 hover:bg-mainBlue-100  dark:bg-mainBlue-900 dark:hover:bg-mainBlue-100  dark:bg-mainBlue-900 active:bg-mainBlue-100  dark:bg-mainBlue-900 active:border-mainBlue-600" // 데이터 있을 때
           : "border-sub200 dark:border-border border-dashed bg-white dark:bg-black cursor-pointer hover:border-sub400 dark:hover:border-sub300 active:border-sub400" // 데이터 없을 때
       ].join(" ")}
     >

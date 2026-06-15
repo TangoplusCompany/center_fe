@@ -1,6 +1,6 @@
 "use client";
 
-import { IPartDetailData, IUserMeasureInfoResponse } from "@/types/measure";
+import { IPartDetailData, IMeasureResponse } from "@/types/measure";
 import React from "react";
 import SkeletonContainer from "./Skeleton/SkeletonContainer";
 import FootStaticContainer, { IMatStaticPressure } from "./Mat/FootStaticContainer";
@@ -13,8 +13,11 @@ import MeasureIntroPart from "./IntroPart";
 const MeasureIntro = ({
   data,
 }: {
-  data: IUserMeasureInfoResponse;
+  data: IMeasureResponse;
 }) => {
+  if (!data?.basic_result?.result_summary_data) {
+    return <p className="py-8 text-center text-sub400">측정 기본 데이터가 존재하지 않습니다.</p>;
+  }
   const {
     risk_upper_ment,
     risk_upper_risk_level,
@@ -42,7 +45,7 @@ const MeasureIntro = ({
     mat_ohs_top_pressure,
     mat_ohs_bottom_pressure,
     
-  } = data.result_summary_data;
+  } = data?.basic_result?.result_summary_data;
 
   const staticFourCorners: IMatStaticPressure = {
     leftTopPressure: mat_static_left_top,
@@ -70,7 +73,7 @@ const MeasureIntro = ({
     measure_server_mat_image_name,
     mat_static_horizontal_ment,
     mat_static_vertical_ment,
-   } = data.static_mat_data;
+   } = data?.basic_result.static_mat_data;
   const {
     mat_hip_down_image_name,
     mat_hip_trajectory_image_name,
@@ -79,7 +82,7 @@ const MeasureIntro = ({
     mat_ohs_horizontal_ment,
     mat_ohs_vertical_ment,
     mat_ohs_knee_ment,
-  } = data.dynamic_mat_data;
+  } = data?.basic_result.dynamic_mat_data;
 
   const PART_ORDER: { key: keyof IPartDetailData; label: string }[] = [
     { key: "neck", label: "목" },
@@ -93,7 +96,7 @@ const MeasureIntro = ({
   const topLeft = (
     <div className="h-full">
       <SkeletonContainer 
-      data={data.result_summary_data} 
+      data={data?.basic_result.result_summary_data} 
       
        />
     </div>
@@ -173,22 +176,22 @@ const MeasureIntro = ({
           <div className="text-base font-semibold mb-2">상체 분석</div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-4">
             {PART_ORDER.slice(0, 3).map(({ key, label }) => {
-              const partData = data.detail_data[key];
+              const partData = data?.basic_result?.detail_data[key];
               if (!partData) return null;
 
               const partKey = key as PartKey;
               const riskLevel =
-                data.result_summary_data[`risk_level_${partKey}` as RiskLevelKey];
+                data?.basic_result?.result_summary_data[`risk_level_${partKey}` as RiskLevelKey];
               const rangeLevel =
-                data.result_summary_data[`range_level_${partKey}` as RangeLevelKey];
+                data?.basic_result?.result_summary_data[`range_level_${partKey}` as RangeLevelKey];
 
               return (
                 <MeasureIntroPart
                   key={key}
                   title={label}
                   cardData={partData}
-                  riskLevel={riskLevel}
-                  rangeLevel={rangeLevel}
+                  riskLevel={riskLevel ?? 0}
+                  rangeLevel={rangeLevel ?? 0}
                 />
               );
             })}
@@ -198,22 +201,22 @@ const MeasureIntro = ({
           <div className="text-base font-semibold mt-4 mb-2">하체 분석</div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-4">
             {PART_ORDER.slice(3, 6).map(({ key, label }) => {
-              const partData = data.detail_data[key];
+              const partData = data?.basic_result?.detail_data[key];
               if (!partData) return null;
 
               const partKey = key as PartKey;
               const riskLevel =
-                data.result_summary_data[`risk_level_${partKey}` as RiskLevelKey];
+                data?.basic_result?.result_summary_data[`risk_level_${partKey}` as RiskLevelKey];
               const rangeLevel =
-                data.result_summary_data[`range_level_${partKey}` as RangeLevelKey];
+                data?.basic_result?.result_summary_data[`range_level_${partKey}` as RangeLevelKey];
 
               return (
                 <MeasureIntroPart
                   key={key}
                   title={label}
                   cardData={partData}
-                  riskLevel={riskLevel}
-                  rangeLevel={rangeLevel}
+                  riskLevel={riskLevel ?? 0}
+                  rangeLevel={rangeLevel ?? 0}
                 />
               );
             })}

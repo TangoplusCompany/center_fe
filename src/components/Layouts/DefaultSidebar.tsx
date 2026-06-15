@@ -177,10 +177,9 @@ export default function DefaultSidebar() {
   const [centerOpen, setCenterOpen] = React.useState(false);
 
   return (
-    <Sidebar collapsible="icon" className="bg-[#F1F5F9] dark:bg-black">
-      <SidebarHeader className="bg-mainBlue-600-background h-20 !flex !flex-row !items-center !p-0 px-2">
+    <Sidebar collapsible="icon" className="">
+      <SidebarHeader className="bg-mainBlue-100  dark:bg-mainBlue-900 h-20 !flex !flex-row !items-center !p-0 px-2">
         <div className="flex items-center w-full">
-          {/* 👇 앱로고와 텍스트는 SidebarMenuButton 안에 - 접히면 사라짐 */}
           <SidebarMenuButton 
           size="lg" 
           className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground flex-1 !h-full !flex !items-center !justify-center"
@@ -206,10 +205,10 @@ export default function DefaultSidebar() {
       </SidebarHeader>
 
       {centerName && (
-        <div className="relative  bg-mainBlue-600-background w-full flex px-4 py-2 border-none">
+        <div className="relative  bg-mainBlue-100  dark:bg-mainBlue-900 w-full flex px-4 py-2 border-none">
           <button
             onClick={() => setCenterOpen(!centerOpen)}
-            className="w-full flex items-center bg-white rounded-full hover:bg-sub100 transition-colors justify-between gap-2 px-3 py-2"
+            className="w-full flex items-center bg-white dark:bg-sub800 rounded-full hover:bg-sub100 transition-colors justify-between gap-2 px-3 py-2"
           >
             <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 bg-mainBlue-600`}>
               <span className={`text-xs font-bold text-white`}>
@@ -217,7 +216,7 @@ export default function DefaultSidebar() {
               </span>
             </div>
 
-            <span className="text-sm font-semibold text-sub700 truncate group-data-[collapsible=icon]:hidden flex-1 text-start">
+            <span className="text-sm font-semibold text-sub700 dark:text-sub100 truncate group-data-[collapsible=icon]:hidden flex-1 text-start">
               {centerName}
             </span>
             <ChevronsUpDown 
@@ -301,7 +300,7 @@ export default function DefaultSidebar() {
       )}
 
 
-      <SidebarContent className="bg-mainBlue-600-background !overflow-hidden pt-8">
+      <SidebarContent className="bg-mainBlue-100  dark:bg-mainBlue-900 !overflow-hidden pt-8">
         <SidebarGroup>
           {/* <SidebarGroupLabel>DASHBOARD</SidebarGroupLabel> */}
           <SidebarGroupContent>
@@ -362,9 +361,9 @@ export default function DefaultSidebar() {
                             className={`w-full h-full transition-all duration-300 ${
                               isActive
                                 ? isUserMenu && isUserDetailRoute
-                                  ? "brightness-0 [filter:drop-shadow(100px_0_0_#4169E1)] -translate-x-[100px]" // 👈 mainBlue-600 색상 대입 (예: #4169E1)
-                                  : "brightness-0 invert" // 👈 일반 활성화 (흰색)
-                                : "" // 👈 비활성화 (기본 회색)
+                                  ? "brightness-0 [filter:drop-shadow(100px_0_0_#4169E1)] -translate-x-[100px]" 
+                                  : "brightness-0 invert" 
+                                : "" 
                             }`} 
                           />
                         </div>
@@ -372,8 +371,8 @@ export default function DefaultSidebar() {
                             className={`transition-colors duration-300 ${
                               isActive 
                                 ? isUserMenu && isUserDetailRoute
-                                  ? "text-mainBlue-600" // 👈 카드가 열린 사용자 관리 메뉴일 때
-                                  : "text-white"        // 👈 일반 활성화 메뉴일 때
+                                  ? "text-mainBlue-600" 
+                                  : "text-white"        
                                 : ""
                             }`}
                           >
@@ -396,7 +395,7 @@ export default function DefaultSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="bg-mainBlue-600-background">
+      <SidebarFooter className="bg-mainBlue-100  dark:bg-mainBlue-900">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>

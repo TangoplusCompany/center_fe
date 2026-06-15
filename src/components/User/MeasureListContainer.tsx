@@ -10,15 +10,20 @@ import DataError from "@/components/Util/DataError";
 import { CompareSlot } from "@/types/compare";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import CustomPagination from "../common/Pagination";
+import { measureType, viewType } from "./Detail";
 
 const CenterUserMeasureListContainer = ({ 
   userSn,
-  changeMeasure,
+  setMeasureSn,
+  setMeasureType,
+  setCurrentTab,
   selectCompareSn, 
   isMyPage = false,
 }: { 
   userSn: number;
-  changeMeasure: (measureSn: number) => void;
+  setMeasureSn: (measureSn: number) => void;
+  setMeasureType: (mt: measureType) => void;
+  setCurrentTab ?: (tab : viewType) => void;
   selectCompareSn: (sn: number, slot: CompareSlot) => void;
   isMyPage: boolean;
 }) => {
@@ -41,11 +46,8 @@ const CenterUserMeasureListContainer = ({
     to,
     sort,
     isMyPage,
-  });
+  })
 
-  // const filteredList = isMyPage ? userMeasureList?.measurement_list.filter((it) =>
-  //   it.measurement_type === "basic_only"
-  // ) : userMeasureList?.measurement_list
   const handleSortChange = (value: string) => {
     setQueryParam([
       ["sort", value], 
@@ -66,8 +68,8 @@ const CenterUserMeasureListContainer = ({
           <div className="flex w-full justify-between items-center">
             {/* 총 갯수 표시 */}
             {userMeasureList && (
-              <div className="text-base text-muted-foreground text-sub700">
-                총 <span className="font-semibold text-foreground ">{userMeasureList.total}</span>건
+              <div className="text-base text-sub800 dark:text-sub100 ">
+                총 <span className="font-semibold text-black dark:text-white">{userMeasureList.total}</span>건
               </div>
             )}
             <div className="flex items-center gap-4 ">
@@ -96,7 +98,9 @@ const CenterUserMeasureListContainer = ({
           <>
             <CenterUserMeasureList
               measures={userMeasureList.measurement_list ?? []}
-              changeMeasure={changeMeasure}
+              setMeasureSn={setMeasureSn}
+              setMeasureType={setMeasureType}
+              setCurrentTab={setCurrentTab}
               selectCompareSn={selectCompareSn}
               isMyPage={isMyPage}
             />

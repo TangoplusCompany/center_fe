@@ -20,7 +20,6 @@ export function PinChangeDialog({ open, onOpenChange }: PinChangeDialogProps) {
       return;
     }
     // PIN 변경 로직
-    console.log('PIN 변경:', newPin);
     onOpenChange(false);
   };
 /* TODO kotlin의 PBKDF2 + SHA512

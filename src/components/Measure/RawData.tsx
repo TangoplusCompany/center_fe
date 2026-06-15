@@ -53,7 +53,7 @@ export const RawData = (
   }[data1.risk_level] ?? "정상") : null;
 
   const textCondition0 = {
-    정상: "text-sub600 dark:text-muted-foreground",
+    정상: "text-sub600 dark:text-sub100",
     주의: "text-warningDeep dark:text-warning-foreground",
     위험: "text-dangerDeep dark:text-danger",
   }[levelString0] ?? "bg-primary-foreground";
@@ -64,7 +64,7 @@ export const RawData = (
   }[levelString0] ?? "bg-primary-foreground";
 
   const textCondition1 = {
-    정상: "text-sub600 dark:text-muted-foreground",
+    정상: "text-sub600 dark:text-sub100",
     주의: "text-warningDeep dark:text-warning-foreground",
     위험: "text-dangerDeep dark:text-danger",
   }[levelString1 ?? "정상"] ?? "bg-primary-foreground";
@@ -83,7 +83,7 @@ export const RawData = (
     <div className="w-full table table-fixed min-w-0 overflow-hidden">
       <div className="flex flex-col overflow-x-auto overflow-y-hidden w-full min-w-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         <div className="flex flex-col border-b-2 border-sub200 min-w-[800px]">
-          <div className="grid grid-cols-[18%_10%_12%_60%] items-center border-b-2 border-sub200 dark:border-border bg-sub100 dark:bg-muted py-2">
+          <div className="grid grid-cols-[18%_10%_12%_60%] items-center border-b-2 border-sub200 dark:border-border bg-sub100 dark:bg-sub750 dark:bg-muted py-2">
             <span className="text-base font-semibold text-black dark:text-foreground px-4 whitespace-normal break-keep">{data0.measure_unit}</span>
             <span className={`flex flex-1 justify-center text-base text-sub600 dark:text-muted-foreground`}>{!data1 ? '' : '기준값'}</span>
             <span className="flex justify-center text-base text-sub600 dark:text-muted-foreground">단계표시</span>
@@ -97,7 +97,7 @@ export const RawData = (
           
           <div className={`grid items-center h-full ${data1 && 'divide-y-2 divide-sub200'}`}>
             <div className="flex justify-center">
-              <span className={`flex text-xs items-center justify-center text-sub600 px-2 py-1 rounded-full bg-sub100 my-3 whitespace-normal break-keep ${!data1 && 'invisible'}`}>
+              <span className={`flex text-xs items-center justify-center text-sub600 dark:text-sub100 px-2 py-1 rounded-full bg-sub100 dark:bg-sub750 my-3 whitespace-normal break-keep ${!data1 && 'invisible'}`}>
                 {leftRightString0}
               </span>
               <span className={`flex items-center text-xl leading-none mx-2 whitespace-normal break-keep`}>
@@ -106,7 +106,7 @@ export const RawData = (
             </div>
             <div className="flex justify-center">
               {data1 && (
-                <span className={`flex text-xs items-center justify-center text-sub600 px-2 py-1 rounded-full bg-sub100 my-2 whitespace-normal break-keep`}>
+                <span className={`flex text-xs items-center justify-center text-sub600 dark:text-sub100 px-2 py-1 rounded-full bg-sub100 dark:bg-sub750 my-2 whitespace-normal break-keep`}>
                   {leftRightString1}
                 </span>
               )}

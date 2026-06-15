@@ -6,13 +6,13 @@ body {
   font-family: "SUIT Variable", sans-serif;
 }
 
-/* 💡 기존 :root와 .dark 내부의 색상 변수들만 깔끔하게 청소했습니다. */
+/* 💡 다크모드 대응을 위해 bg-white와 dark:bg-zinc-900(혹은 원하는 어두운 색)을 매핑했습니다. */
 @layer base {
   * {
     @apply border-border;
   }
   body {
-    @apply bg-background text-sub800;
+    @apply bg-white text-sub800 dark:bg-zinc-950 dark:text-zinc-50;
   }
 }
 
@@ -85,4 +85,14 @@ body {
   background: radial-gradient(circle, transparent 50%, rgba(255,255,255,0.18) 55%, rgba(255,255,255,0.10) 60%, transparent 50%);
   filter: blur(0.4px);
   animation: droplet-ripple 4s ease-out infinite;
+}
+
+:root {
+  --chart-line: #2563EB;     
+  --chart-bg-end: #FFFFFF;   
+}
+
+.dark {
+  --chart-line: #2563EB;     
+  --chart-bg-end: #000000;  
 }

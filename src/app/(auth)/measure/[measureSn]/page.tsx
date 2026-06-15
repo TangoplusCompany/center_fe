@@ -4,7 +4,7 @@ import MeasureDetailQueryContainer from "@/components/Measure/DetailQueryContain
 const MeasureDetailPage = () => { 
   return (
     <div className="flex flex-col gap-5 w-full">
-      <MeasureDetailQueryContainer />
+      <MeasureDetailQueryContainer firstMeasureType={"basic"} />
     </div>
   );
 };

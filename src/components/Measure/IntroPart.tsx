@@ -24,9 +24,9 @@ const arrowCondition: Record<0 | 1 | 2, string> = {
 
 // 각 단계별 셀 색
 const levelCellBg: Record<0 | 1 | 2, string> = {
-  0: "bg-sub100 dark:bg-muted", // 정상
-  1: "bg-sub200 dark:bg-muted", // 주의
-  2: "bg-sub300 dark:bg-muted", // 위험
+  0: "bg-sub100 dark:bg-sub700", // 정상
+  1: "bg-sub200 dark:bg-sub600", // 주의
+  2: "bg-sub300 dark:bg-sub400", // 위험
 };
 
 export const MEASURE_NAME_MAP: Record<string, string> = {
@@ -118,9 +118,9 @@ const MeasureIntroPart = ({
                 {isActive && <div className={`text-xs ${arrowCondition[safeRisk]} leading-none`}>▼</div>}
               </div>
 
-              <div className="flex-[1] bg-white dark:bg-card flex items-center justify-center">
+              <div className="flex-[1] bg-white dark:bg-sub800 flex items-center justify-center">
                 {isActive && (
-                  <div className="text-xs leading-none text-foreground">{safeRange + 1}단계</div>
+                  <div className="text-xs leading-none text-sub800 dark:text-sub100">{safeRange + 1}단계</div>
                 )}
               </div>
             </div>
@@ -131,9 +131,9 @@ const MeasureIntroPart = ({
   };
 
   return (
-    <div className="flex rounded-xl border-2 border-sub100 dark:border-border bg-white dark:bg-card shadow-sm h-full">
+    <div className="flex rounded-xl border-2 border-sub100 dark:border-border bg-white dark:bg-sub700 shadow-sm h-full">
       {/* 전체 grid */}
-      <div className="flex flex-col w-1/4 items-center justify-center text-base font-semibold gap-1 text-foreground">
+      <div className="flex flex-col w-1/4 items-center justify-center text-base font-semibold gap-1 text-sub800 dark:text-sub100">
         <div className="text-center whitespace-normal break-keep">{title}</div>
         <div
           className={cn(
@@ -152,7 +152,7 @@ const MeasureIntroPart = ({
             "flex flex-1 min-h-0 items-stretch",
             idx !== items.length - 1 && "border-b dark:border-border"
           )}>
-            <div className="flex w-1/2 text-sm items-center justify-center border-r dark:border-border px-2 py-1 text-center whitespace-normal break-keep text-foreground">{MEASURE_NAME_MAP[measureName] ?? item?.measure_unit ?? measureName}</div>
+            <div className="flex w-1/2 text-sm items-center justify-center border-r dark:border-border px-2 py-1 text-center whitespace-normal break-keep text-sub800 dark:text-sub100">{MEASURE_NAME_MAP[measureName] ?? item?.measure_unit ?? measureName}</div>
             <div className="flex w-1/2 items-stretch">{renderRangeBoxes(item?.risk_level, item?.range_level, idx, items?.length)}</div>
           </div>
         ))}

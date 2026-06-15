@@ -8,11 +8,8 @@ import FrontMeasurement from "@/components/Measure/Static/FrontMeasurement";
 import SideMeasurement from "@/components/Measure/Static/SideMeasurement";
 import MeasureIntro from "@/components/Measure/Intro"
 import { cn } from "@/lib/utils";
-import { CenterUserMeasureProps } from "./DetailContainer";
-import { IMeasureList } from "@/types/measure";
-import { DetailPagination } from "@/hooks/api/user/useMeasureListForDetail";
-import { MeasureDetailDatePickerDialog } from "./DetailDatePickerDialog";
-import { formatDate } from "@/utils/formatDate";
+import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
+import { IUserMeasureListItem } from "@/types/user";
 // import { useRouter } from "next/navigation";
 
 
@@ -22,40 +19,49 @@ type MeasureListType = {
   component: () => JSX.Element;
 };
 
-export interface SkeletonDatePickerProps {
-  measureList?: IMeasureList[];              // 전체 측정 리스트 (현재 페이지)
-  selectedMeasure?: number | undefined;         // 현재 선택된 sn
+
+
+export type UserMeasureDetailProps = {
+  measureList?: IUserMeasureListItem[];              // 전체 측정 리스트 (현재 페이지)
+  userSn: string;
+  measureSn: number | undefined;
+  setMeasureSn?: (sn: number) => void;
+  isMyPage: boolean;
+  isUserPage: boolean;
   isDatePickerOpen?: boolean;
   onDatePickerOpenChange?: (open: boolean) => void;
-  changeMeasure?: (sn: number) => void;
-  pagination?: DetailPagination;  
-}
-
+  aiExerciseOpen?: boolean;
+  setAiExerciseOpen?: (open: boolean) => void;
+};
 // intro, front, side, back, dynamic 등 여러 탭이 들어가는 detail화면
 
 // 해당 화면 컨테이너 화 시키기 or 컨테이너 만들어서 MeasureDetail을 BasicDetail로 변경
 const MeasureDetail = ({
-  measureData,
-  measureList,
   userSn,
   measureSn,
   isMyPage = false,
-  isDatePickerOpen = false,
-  onDatePickerOpenChange,
-}: CenterUserMeasureProps) => {
-  const [internalDatePickerOpen, setInternalDatePickerOpen] = React.useState(false);
-  
-  if (!measureData || !measureData.result_summary_data) {
-    return <p className="py-8 text-center">데이터가 존재하지 않습니다.</p>;
+  isUserPage = false,
+  aiExerciseOpen,
+  setAiExerciseOpen
+}: UserMeasureDetailProps) => {
+  const {
+    data: measureData,
+    isLoading: measureDataLoading,
+  } = useMeasureInfo({
+    measure_sn: measureSn ?? 0,
+    user_sn: `${userSn}`,
+    isMyPage,
+  });
+
+  if (measureDataLoading) {
+    return <p className="py-8 text-center">로딩중입니다</p>;
   }
-  const data = measureData.result_summary_data
-  
-  const dateProps : SkeletonDatePickerProps = {
-    measureList: measureList,
-    selectedMeasure: measureSn,
-    isDatePickerOpen: isDatePickerOpen,
-    onDatePickerOpenChange: onDatePickerOpenChange,
+  if (!measureData || !measureData.measurement_meta) {
+    return <p className="py-8 text-center">데이터가 존재하지 않습니다</p>;
   }
+  const data = measureData.measurement_meta
+  
+  
   const measureTabs: MeasureListType[] = [
     {
       title: "결과 요약",
@@ -71,7 +77,7 @@ const MeasureDetail = ({
       component: () => (
         <FrontMeasurement
           sns={{
-          measureSn: String(measureData.result_summary_data.measure_sn),
+          measureSn: String(measureData.measurement_meta.measure_sn),
           userSn: userSn
         }}
         measureInfo={measureData}
@@ -86,7 +92,7 @@ const MeasureDetail = ({
       component: () => (
         <SideMeasurement
           sns={{
-          measureSn: String(measureData.result_summary_data.measure_sn),
+          measureSn: String(measureData.measurement_meta.measure_sn),
           userSn: userSn
           
         }}
@@ -102,7 +108,7 @@ const MeasureDetail = ({
       component: () => (
         <BackMeasurement
           sns={{
-          measureSn: String(measureData.result_summary_data.measure_sn),
+          measureSn: String(measureData.measurement_meta.measure_sn),
           userSn: userSn
           
         }}
@@ -118,7 +124,7 @@ const MeasureDetail = ({
       component: () => 
       <MeasureDetailDynamic 
         sns={{
-            measureSn: String(measureData.result_summary_data.measure_sn),
+            measureSn: String(measureData.measurement_meta.measure_sn),
             userSn: userSn
           }} 
         cameraOrientation={data.camera_orientation}
@@ -127,33 +133,6 @@ const MeasureDetail = ({
         />,
     },
   ];
-
-
-  const isControlled = dateProps.onDatePickerOpenChange != undefined;
-  const datePickerOpen = isControlled ? dateProps.isDatePickerOpen : internalDatePickerOpen;
-  const setDatePickerOpen = dateProps.onDatePickerOpenChange ?? setInternalDatePickerOpen;
-  const selectedMeasure =
-    dateProps.measureList && dateProps.selectedMeasure != undefined
-      ? dateProps.measureList.find((item) => item.measure_sn === dateProps.selectedMeasure)
-      : undefined;
-  // const router = useRouter();
-  // const handleNavigate = async (
-  //   measure_sn: number,
-  //   user_sn: number,
-  //   uuid: string ,
-  //   mobile: string,
-  // ) => {
-  //   const encrypted = await actionMeasureEncrypt({
-  //     measure_sn,
-  //     user_sn,
-  //     uuid, mobile,
-  //   });
-
-  //   if (encrypted !== "ERROR") {
-  //     router.push(`/measure/ROM?data=${encrypted}`);
-  //     console.log("router pushed")
-  //   }
-  // };
 
   return (
     <Tabs defaultValue="summary" className="w-full table table-fixed min-w-0">
@@ -182,53 +161,56 @@ const MeasureDetail = ({
           </TabsList>
         </div>
 
-        {dateProps.measureList && dateProps.changeMeasure && (
-          <>
-            <button
-              type="button"
-              onClick={() => setDatePickerOpen?.(true)}
-              className="
-                w-full flex items-center justify-center gap-2
-                border-2 border-sub300 rounded-xl
-                px-3 py-2 text-base text-sub700
-                hover:border-mainBlue-600
-                focus:outline-none focus:ring-2  focus:border-blue-500
-                transition
-              "
-            >
+             
+
+        {/* print 넣기 */}
+        {isUserPage && (
+          <button 
+            onClick={() => setAiExerciseOpen && (setAiExerciseOpen(true))}
+            className={`relative h-full overflow-hidden px-2 py-1.5 sm:px-3 rounded-xl text-white transition-all duration-500 hover:scale-105 active:scale-95 isolate border-2 sm:border-4 border-toggleAccent/25 ${
+              aiExerciseOpen ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'
+            }`}
+          >
+            <div
+              className="absolute inset-0 z-0"
+              style={{
+                background: 'radial-gradient(circle, #6BA0EF 45%, #2C4FD0 100%)',
+                boxShadow: 'inset 0 0 16px rgba(255, 255, 255, 0.25)'
+              }}
+            />
+            
+            <div className="absolute inset-0">
+              <span className="ripple-dot" />
+              <span className="ripple-dot" style={{ animationDelay: "0.5s" }} />
+            </div>
+            
+            <span className="relative z-10 flex items-center justify-center gap-1.5 text-xs sm:text-sm whitespace-nowrap">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/icons/ic_calendar.svg"
-                alt="date_select"
-                className="lg:!w-5 lg:!h-5"
+                src={`/icons/ic_ai_analysis_bubble.svg`}
+                alt="measureDefault"
+                className="w-4 h-4"
+                onError={(e) => {
+                  e.currentTarget.src = "/images/measure_default.png";
+                }}
               />
-              <span>
-                {selectedMeasure
-                  ? formatDate(selectedMeasure.measure_date)
-                  : "측정일 선택"}
-              </span>
-            </button>
-            <MeasureDetailDatePickerDialog
-              open={datePickerOpen ?? false}
-              onOpenChange={setDatePickerOpen}
-              items={dateProps.measureList}
-              selectedMeasure={dateProps.selectedMeasure}
-              onSelect={(sn) => dateProps.changeMeasure?.(sn)}
-              pagination={dateProps.pagination}
-            />
-          </>
-        )}     
+              <span>AI 운동 추천</span>
+            </span>
+          </button>
+        )}
       </div>
 
-      {measureTabs.map((measure) => (
-        <TabsContent
-          key={measure.value}
-          value={measure.value}
-          className="!mt-0"
-        >
-          {measure.component()}
-        </TabsContent>
-      ))}
+      {!aiExerciseOpen && (
+        measureTabs.map((measure) => (
+          <TabsContent
+            key={measure.value}
+            value={measure.value}
+            className="!mt-0"
+          >
+            {measure.component()}
+          </TabsContent>
+        ))
+      ) }
     </Tabs>
   );
 };

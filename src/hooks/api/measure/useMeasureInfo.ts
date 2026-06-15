@@ -1,5 +1,5 @@
 import { customAxios, customUserAxios } from "@/lib/axios";
-import { IUserMeasureInfoResponse } from "@/types/measure";
+import { IMeasureResponse } from "@/types/measure";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthStoreOptional } from "@/providers/AuthProvider";
 
@@ -19,13 +19,12 @@ export const useMeasureInfo = ({
   user_sn: string;
   isMyPage?: boolean;
 }) => {
-  // result-page에서는 AuthStoreProvider가 없으므로 optional 사용
   const centerSn = useAuthStoreOptional((state) => state.centerSn, 0);
   const axiosInstance = isMyPage ? customUserAxios : customAxios;
   const apiPath = isMyPage
-    ? `/users/${user_sn}/measurement/${measure_sn}`
-    : `/measurement/${measure_sn}/centers/${centerSn}/members/${user_sn}`;
-  return useQuery<IUserMeasureInfoResponse>({
+    ? `/users/${user_sn}/measurement/${measure_sn}` // /test
+    : `/measurement/${measure_sn}/centers/${centerSn}/members/${user_sn}` // test
+  return useQuery<IMeasureResponse>({
     queryKey: isMyPage
       ? ["userResultMeasureDetail", measure_sn, user_sn]
       : ["measureDetail", measure_sn, user_sn, centerSn],

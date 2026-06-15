@@ -102,16 +102,16 @@ const DeviceChart = ({
       : "#BFBFBF";
   };
   return (
-    <Card className="rounded-lg shadow-none border-2 border-mainBlue-600-background">
-      <CardHeader className="flex items-center gap-2 space-y-0 border-2 border-mainBlue-100 py-2 sm:flex-row bg-mainBlue-100">
+    <Card className="rounded-lg shadow-none border-2 border-mainBlue-100 dark:border-mainBlue-600 bg-transparent">
+      <CardHeader className="flex items-center gap-2 space-y-0 border-b-2 border-mainBlue-100 dark:border-mainBlue-600 py-2 sm:flex-row bg-mainBlue-100  dark:bg-mainBlue-900 rounded-t-lg">
         <div className="grid flex-1 gap-1 text-center sm:text-left">
-          <CardTitle className="text-mainBlue-600 text-xl dark:text-white">센터 키오스크 사용자 추이</CardTitle>
+          <CardTitle className="text-mainBlue-600 text-xl dark:text-white ">센터 키오스크 사용자 추이</CardTitle>
         </div>
       </CardHeader>
-      <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+      <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6 bg-white dark:bg-black">
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
+          className="aspect-auto h-[250px] w-full "
         >
           <AreaChart data={transformedData}>
             <defs>
@@ -121,13 +121,13 @@ const DeviceChart = ({
                 return (
                   <linearGradient key={`gradient-${key}`} id={`fill-gradient-${key}`} x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor={color} stopOpacity={0.6} />
-                    <stop offset="100%" stopColor="white" stopOpacity={0.05} />
+                    <stop offset="100%" stopColor="var(--chart-bg-end)" stopOpacity={0.05} />
                   </linearGradient>
                 );
               })}
               <linearGradient id="fill-gradient-accent" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#2563EB" stopOpacity={0.6} />
-                <stop offset="100%" stopColor="#FFFFFF" stopOpacity={0.05} />
+                <stop offset="100%" stopColor="var(--chart-bg-end)" stopOpacity={0.05} />
               </linearGradient>
             </defs>
 

@@ -24,7 +24,7 @@ const AIExerciseUnit = ( {
   }
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 rounded-xl shadow-md p-2">
-      <div className="flex flex-col gap-4 bg-mainBlue-600-background rounded-lg ">
+      <div className="flex flex-col gap-4 bg-mainBlue-100  dark:bg-mainBlue-900 rounded-lg ">
         <div className="flex gap-2 text-lg font-semibold p-4">
           <div className="w-1 h-6 bg-mainBlue-600 rounded-full" />
           {ed.exercise_name}

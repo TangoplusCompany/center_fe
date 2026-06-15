@@ -38,7 +38,7 @@ const ExerciseDataTab = ({ selectedPart, onSelectPart, exercises }: ExerciseData
             px-4 py-1 rounded-xl font-medium whitespace-nowrap transition-all flex-shrink-0
             ${
               selectedPart === tab.id
-                ? "border border-mainBlue-600 text-mainBlue-600 bg-mainBlue-600-background"
+                ? "border border-mainBlue-600 text-mainBlue-600 bg-mainBlue-100  dark:bg-mainBlue-900"
                 : "bg-white border border-sub300 text-sub300 hover:border-sub600 hover:text-sub600"
             }
           `}

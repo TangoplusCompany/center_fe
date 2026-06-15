@@ -1,7 +1,6 @@
 "use client";
 
-import "@/css/body-skeleton.css";
-import { IUserDetailMeasureInfo } from "@/types/measure";
+import { IMeasureInfo } from "@/types/measure";
 import React from "react";
 
 import { FullBodySkeleton3D } from "../FullBodySkeleton3D";
@@ -13,30 +12,9 @@ import { FullBodySkeleton3D } from "../FullBodySkeleton3D";
 const SkeletonContainer = ({ 
   data,
 }: {
-  data:  IUserDetailMeasureInfo;
+  data:  IMeasureInfo;
 }) => {
 
-  // const { resolvedTheme } = useTheme();
-  // const isDarkMode = resolvedTheme === "dark";
-  // const transformRiskToJoints = (data: IUserDetailMeasureInfo): Record<string, number> => {
-  //   return {
-  //     "목관절": data.risk_neck,
-  //     "좌측 어깨": data.risk_shoulder_left,
-  //     "우측 어깨": data.risk_shoulder_right,
-  //     "좌측 팔꿉": data.risk_elbow_left,
-  //     "우측 팔꿉": data.risk_elbow_right,
-  //     "좌측 골반": data.risk_hip_left,
-  //     "우측 골반": data.risk_hip_right,
-  //     "좌측 무릎": data.risk_knee_left,
-  //     "우측 무릎": data.risk_knee_right,
-  //     "좌측 발목": data.risk_ankle_left,
-  //     "우측 발목": data.risk_ankle_right,
-  //   };
-  // };
-   
-  // 최근 측정 현황에서 간편검사/ROM 둘 다 있을 때
-  
-  
 
   return (
     <div className="relative box-border flex h-full flex-col items-center rounded-3xl border-2 border-sub200 p-4 text-black focus-visible:outline-none">

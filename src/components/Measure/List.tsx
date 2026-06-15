@@ -16,7 +16,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { actionMeasureEncrypt } from "@/app/actions/getCrypto";
 
-
 export const MeasureDummyList = ({ limit }: { limit: number }) => {
   return (
     <div className="w-full table table-fixed min-w-0">
@@ -93,13 +92,12 @@ measurements);
       uuid, mobile,
     });
     if (has_basic === 1) {
-      router.push(`/measure/${encrypted}`);
+      router.push(`/measure/basic?data=${encrypted}`);
     } else if (has_rom === 1) {
       router.push(`/measure/rom?data=${encrypted}`);
     } else if (has_bia === 1) {
       router.push(`/measure/bia?data=${encrypted}`);
     }
-    
   };
   const getMeasureTypeText = (measureItem: IMeasureList): string => {
     const labels: string[] = [];
@@ -157,7 +155,7 @@ measurements);
               </TableCell>
 
               <TableCell className="text-center">
-                  <div className="w-fit px-2 text-xs sm:text-sm text-center whitespace-nowrap text-mainBlue-600 dark:text-white bg-mainBlue-600-background dark:bg-mainBlue-600 border border-mainBlue-600 rounded-full mx-auto">
+                  <div className="w-fit px-2 text-xs sm:text-sm text-center whitespace-nowrap text-mainBlue-600 dark:text-white bg-mainBlue-100 dark:bg-mainBlue-600 border border-mainBlue-600 rounded-full mx-auto">
                     {getMeasureTypeText(measurement)}
                   </div>
                 </TableCell>

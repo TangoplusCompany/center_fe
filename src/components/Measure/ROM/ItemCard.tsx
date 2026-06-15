@@ -67,13 +67,13 @@ export const ROMItemCard = ({
   }
   return (
     <div
-      className="col-span-1 items-center justify-between rounded-xl border-2 border-mainBlue-600-background relative transition-colors hover:border-mainBlue-600 cursor-pointer"
+      className="col-span-1 items-center justify-between rounded-xl border-2 border-mainBlue-100 dark:border-mainBlue-600 relative transition-colors hover:border-mainBlue-600 cursor-pointer"
       onClick={() => {
         if (handleROMItemSelect) handleROMItemSelect(romItem.measure_type);
       }}
     >
       <div className="flex flex-col">
-        <div className="flex items-center justify-between rounded-t-xl bg-mainBlue-600-background px-4 py-2 w-full">
+        <div className="flex items-center justify-between rounded-t-xl bg-mainBlue-100  dark:bg-mainBlue-900 px-4 py-2 w-full">
           <div className="text-xl text-mainBlue-600 dark:text-white font-semibold ">
            
             {romItem.title}
@@ -104,7 +104,7 @@ export const ROMItemCard = ({
                   color: "#2563EB",
                 },
               }}
-              className="h-24 w-full bg-mainBlue-600-background rounded-xl "
+              className="h-24 w-full bg-mainBlue-100  dark:bg-mainBlue-900 rounded-xl "
             >
               <AreaChart data={chartData} margin={{ top: 16, right: 16, left: 16, bottom: 16 }}>
                 <defs>
@@ -137,7 +137,7 @@ export const ROMItemCard = ({
                       />
                     );
                   }}
-                  className="bg-mainBlue-600-background rounded-xl w-full "
+                  className="bg-mainBlue-100  dark:bg-mainBlue-900 rounded-xl w-full "
                 />
                 
                 <ChartTooltip

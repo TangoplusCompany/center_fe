@@ -16,8 +16,8 @@ const MeasureStaticCompareFourth = React.memo(
   onCompareDialogOpen,
   isMyPage = false,
 }: CompareStaticProps) => {
-  const leftSummaryData = left?.result_summary_data
-  const rightSummaryData = right?.result_summary_data
+  const leftSummaryData = left?.basic_result?.result_summary_data
+  const rightSummaryData = right?.basic_result?.result_summary_data
   const {
     data: measure0,
     isLoading: seqLoading0,

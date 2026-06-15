@@ -27,13 +27,13 @@ const CenterUserMeasureListSkeleton = () => {
         {Array.from({ length: 12 }).map((_, index) => (
           <TableRow key={index}>
             <TableCell className="text-center">
-              <div className="h-5 w-24 mx-auto bg-gray-200 rounded" />
+              <div className="h-5 w-24 mx-auto bg-sub150 dark:bg-sub750 rounded" />
             </TableCell>
             <TableCell className="text-center">
-              <div className="h-5 w-28 mx-auto bg-gray-200 rounded" />
+              <div className="h-5 w-28 mx-auto bg-sub150 dark:bg-sub750 rounded" />
             </TableCell>
             <TableCell className="text-center">
-              <div className="h-5 w-20 mx-auto bg-gray-200 rounded" />
+              <div className="h-5 w-20 mx-auto bg-sub150 dark:bg-sub750 rounded" />
             </TableCell>
             <TableCell className="flex items-center justify-center gap-2 sm:gap-4">
               <div className="flex items-center gap-1 sm:gap-2 justify-center">

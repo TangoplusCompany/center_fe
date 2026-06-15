@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import CenterUserInformation from "@/components/User/Information";
 import { ComparePair, CompareSlot } from "@/types/compare";
 import { useMeasureListForDetail } from "@/hooks/api/user/useMeasureListForDetail";
@@ -12,13 +12,6 @@ import CenterUserDashboardContainer from "./DashBoardContainer";
 import MeasureDetailContainer from "../Measure/DetailContainer";
 import AIUserContainer from "./ai/UserContainer";
 
-const useMeasureSn = () => {
-  const [measureSn, setMeasureSn] = useState<number>(0);
-  const changeMeasureSn = useCallback((sn: number) => {
-    setMeasureSn(sn);
-  }, []);
-  return { measureSn, changeMeasureSn };
-};
 
 export type viewType = "latest" | "dashboard" | "history" | "userInfo";
 export type measureType = "basic" | "rom" | "bia";
@@ -26,21 +19,22 @@ const UserDetail = ({
   userUUID,
   userSn,
   currentTab = "latest",
+  setCurrentTab,
   isMyPage = false,
 }: {
   userUUID: string;
   userSn: number;
   currentTab?: string;
+  setCurrentTab ?: (tab : viewType) => void;
   isMyPage?: boolean;
 }) => {
-  
-  const { measureSn, changeMeasureSn } = useMeasureSn();
-  const [comparePair, setComparePair] = React.useState<ComparePair>([undefined, undefined]);
-  const [isListClick, setIsListClick] = useState(false); 
+  const [ measureSn, setMeasureSn] = useState<number>();
+  const [ measureType, setMeasureType ] = useState<measureType>();
+  const [ comparePair, setComparePair ] = React.useState<ComparePair>([undefined, undefined]);
+  const [ isListClick, setIsListClick ] = useState(false); 
 
   const {
     data: latestMeasureListData,
-    measureList: latestMeasureListItems,
   } = useMeasureListForDetail({
     user_sn: userSn,
     isMyPage,
@@ -51,10 +45,10 @@ const UserDetail = ({
       return;
     }
     if (currentTab !== "latest") {
-      changeMeasureSn(0);
+      setMeasureSn(0);
       setComparePair([undefined, undefined]);
     }
-  }, [changeMeasureSn, currentTab, isListClick]); 
+  }, [setMeasureSn, currentTab, isListClick]); 
 
   useEffect(() => {
     if (currentTab !== "latest") return;
@@ -62,9 +56,10 @@ const UserDetail = ({
 
     const latestMeasureSn = latestMeasureListData?.measurement_list[0]?.measure_sn;
     if (latestMeasureSn) {
-      changeMeasureSn(latestMeasureSn);
+      setMeasureSn(latestMeasureSn);
+      
     }
-  }, [currentTab, latestMeasureListData, measureSn, changeMeasureSn]);
+  }, [currentTab, latestMeasureListData, measureSn, setMeasureSn]);
 
   const [isDatePickerOpen, setIsDatePickerOpen] = React.useState(false);
   const [aiExerciseOpen, setAiExerciseOpen] = React.useState(false);
@@ -124,20 +119,22 @@ const UserDetail = ({
           />
         </div>
       )}
-      {
-      
-      (currentTab === "latest") &&(
-        
+      {(currentTab === "latest") && (
         <div className="w-full h-full flex flex-col gap-4">
           <MeasureDetailContainer
-            measureList={latestMeasureListItems}
+            measureList={latestMeasureListData?.measurement_list}
+            measureType={measureType ?? "basic"}
+            setMeasureType={setMeasureType}
             userSn={String(userSn)}
             measureSn={measureSn}
+            setMeasureSn={setMeasureSn}
             uuid={userUUID}
-            mobile={""}
             isMyPage={isMyPage}
+            isUserPage={true}
             isDatePickerOpen={isDatePickerOpen}
             onDatePickerOpenChange={setIsDatePickerOpen}
+            aiExerciseOpen={aiExerciseOpen}
+            setAiExerciseOpen={setAiExerciseOpen}
             />
         </div>
       )}
@@ -161,7 +158,9 @@ const UserDetail = ({
           ) :  (
             <CenterUserMeasureListContainer
               userSn={userSn}
-              changeMeasure={changeMeasureSn}
+              setMeasureSn={setMeasureSn}
+              setMeasureType={setMeasureType}
+              setCurrentTab={ setCurrentTab }
               selectCompareSn={selectCompareSn}
               isMyPage={isMyPage}
             />

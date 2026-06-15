@@ -1,13 +1,13 @@
 import { CompareSlot } from "@/types/compare";
-import { IUserMeasureInfoResponse } from "@/types/measure";
+import { IMeasureResponse } from "@/types/measure";
 import CompareSummaryUnit from "./CompareSummaryUnit";
 import CompareFootTrajectoryGridContainer, { CompareFootTrajectoryGridProps } from "./CompareFootTrajectoryGridContainer";
 import CompareDefault from "./CompareDefault";
 import CompareSummaryFootStatic, { CompareSummaryFootStaticProps } from "./CompareSummaryFootStatic";
 import SkeletonContainer from "../Skeleton/SkeletonContainer";
 
-export const extractMeasureData = (data: IUserMeasureInfoResponse  | undefined) => {
-    if (!data?.result_summary_data) {
+export const extractMeasureData = (data: IMeasureResponse  | undefined) => {
+    if (!data?.basic_result?.result_summary_data) {
       return undefined;
     }
 
@@ -37,13 +37,13 @@ export const extractMeasureData = (data: IUserMeasureInfoResponse  | undefined) 
       mat_ohs_right_pressure,
       mat_ohs_top_pressure,
       mat_ohs_bottom_pressure,
-    } = data.result_summary_data;
+    } = data?.basic_result.result_summary_data;
 
     const { 
       measure_server_mat_image_name,
       mat_static_horizontal_ment,
       mat_static_vertical_ment,
-    } = data.static_mat_data;
+    } = data?.basic_result.static_mat_data;
 
     const {
       mat_hip_down_image_name,
@@ -53,7 +53,7 @@ export const extractMeasureData = (data: IUserMeasureInfoResponse  | undefined) 
       mat_ohs_horizontal_ment,
       mat_ohs_vertical_ment,
       mat_ohs_knee_ment,
-    } = data.dynamic_mat_data;
+    } = data?.basic_result.dynamic_mat_data;
 
     
     const staticFourCorners = {
@@ -116,8 +116,8 @@ const CompareIntro = ({
   onCompareDialogOpen,
 
 }:{
-  data0?: IUserMeasureInfoResponse;
-  data1?: IUserMeasureInfoResponse;
+  data0?: IMeasureResponse;
+  data1?: IMeasureResponse;
   onCompareDialogOpen? : (slot: CompareSlot) => void;
   currentSlot?: CompareSlot;
 }) => {
@@ -131,12 +131,12 @@ const CompareIntro = ({
 
   const skeletonBoxes = (
     <div className="grid grid-cols-2 gap-4">
-      {data0?.result_summary_data ? 
-      <SkeletonContainer data={data0.result_summary_data} /> : 
+      {data0?.basic_result?.result_summary_data ? 
+      <SkeletonContainer data={data0?.basic_result.result_summary_data} /> : 
       <CompareDefault onCompareDialogOpen={onCompareDialogOpen} currentSlot={0}/>
       }
-      {data1?.result_summary_data ? 
-      <SkeletonContainer data={data1.result_summary_data} /> : 
+      {data1?.basic_result?.result_summary_data ? 
+      <SkeletonContainer data={data1?.basic_result.result_summary_data} /> : 
       <CompareDefault onCompareDialogOpen={onCompareDialogOpen} currentSlot={1}/>
       }
     </div>

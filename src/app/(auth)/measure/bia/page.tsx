@@ -1,10 +1,10 @@
-import BiaContainer from "@/components/Measure/Bia/BiaContainer";
+import MeasureDetailQueryContainer from "@/components/Measure/DetailQueryContainer";
 import React from "react";
 
 const MeasureBiaPage = () => { 
   return (
     <div className="flex flex-col gap-5 w-full">
-      <BiaContainer />
+      <MeasureDetailQueryContainer firstMeasureType={"bia"} />
     </div>
   );
 };

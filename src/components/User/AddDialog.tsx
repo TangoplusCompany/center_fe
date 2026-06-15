@@ -5,6 +5,7 @@ import { IUnregisterUserData } from '@/types/user';
 import { useAddUser } from '@/hooks/api/user/useAddUser';
 import { emailFiltering, phoneFiltering } from '@/utils/regexFiltering';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '../ui/dialog';
+import { Button } from '../ui/button';
 
 interface CenterUserAddDialogProps {
   open: boolean;
@@ -66,7 +67,7 @@ export const CenterUserAddDialog: React.FC<CenterUserAddDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
-      <DialogContent className="w-[calc(100%-2rem)] sm:w-full max-w-4xl max-h-[90vh] flex flex-col p-0 [&>button]:hidden overflow-hidden" aria-describedby={undefined}>
+      <DialogContent className="w-[calc(100%-2rem)] sm:w-full max-w-4xl max-h-[90vh] flex flex-col p-0 [&>button]:hidden overflow-hidden bg-white dark:bg-sub800" aria-describedby={undefined}>
         {/* Header */}
         <DialogHeader className="p-4 sm:p-6 border-b shrink-0 min-w-0">
           <div className="flex items-center justify-between gap-2">
@@ -88,7 +89,7 @@ export const CenterUserAddDialog: React.FC<CenterUserAddDialogProps> = ({
         <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 min-h-0">
           <div className="flex flex-col gap-6 min-w-0">
             {/* 유저 검색 컴포넌트 */}
-            <div className="p-4 border-2 border-sub200 rounded-xl bg-sub100 min-w-0">
+            <div className="p-4 border-2 border-sub200 rounded-xl min-w-0 bg-white dark:bg-sub800">
               <CenterUserSearchContainer updateUser={getUserData} />
             </div>
 
@@ -101,7 +102,7 @@ export const CenterUserAddDialog: React.FC<CenterUserAddDialogProps> = ({
                   {/* Table - horizontal scroll on narrow screens */}
                   <div className="overflow-x-auto">
                     <div className="min-w-[280px]">
-                      <div className="grid grid-cols-3 gap-2 px-3 py-3 bg-sub100 border-b border-sub200">
+                      <div className="grid grid-cols-3 gap-2 px-3 py-3 bg-sub100 dark:bg-sub750 border-b border-sub200 dark:border-sub700">
                         <p className="text-center text-sm font-medium">이름</p>
                         <p className="text-center text-sm font-medium">이메일</p>
                         <p className="text-center text-sm font-medium">전화번호</p>
@@ -138,21 +139,19 @@ export const CenterUserAddDialog: React.FC<CenterUserAddDialogProps> = ({
         {users.length > 0 && (
           <DialogFooter className="p-4 sm:p-6 border-t shrink-0">
             <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 w-full">
-              <button
-                type="button"
+              <Button type="button"
                 onClick={handleClose}
-                className="w-full sm:w-auto px-4 py-2 rounded-xl bg-sub200 hover:bg-sub300 transition-colors"
-              >
+                className="w-full sm:w-auto px-4 py-2 rounded-xl"
+                variant="sub" >
                 취소
-              </button>
-              <button
-                type="button"
-                onClick={handleAddUser}
+              </Button>
+
+              <Button onClick={handleAddUser}
                 disabled={mutationAddUser.isPending}
-                className="w-full sm:w-auto px-4 py-2 rounded-xl bg-mainBlue-600 text-white hover:bg-mainBlue-600/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
+                variant="default"
+                className="w-full sm:w-auto px-4 py-2 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed">
                 {mutationAddUser.isPending ? '추가 중...' : '사용자 추가'}
-              </button>
+              </Button>
             </div>
           </DialogFooter>
         )}

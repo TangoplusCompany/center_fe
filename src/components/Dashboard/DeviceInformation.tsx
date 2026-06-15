@@ -21,10 +21,10 @@ const DashboardDeviceStatus = ({
     <div
       key={device.device_sn}
       onClick={handleClick}
-      className="w-full col-span-1 items-center justify-between rounded-xl border-2 border-mainBlue-100 relative cursor-pointer hover:border-mainBlue-600 transition-colors"
+      className="w-full col-span-1 items-center justify-between rounded-xl border-2 border-mainBlue-100 dark:border-mainBlue-600 relative cursor-pointer hover:border-mainBlue-600 transition-colors"
     >
       <div className="w-full flex flex-col">
-        <div className="flex items-center justify-start rounded-t-xl text-xl text-mainBlue-600 dark:text-white font-semibold bg-mainBlue-100 px-4 py-2 w-full">
+        <div className="flex items-center justify-start rounded-t-xl text-xl text-mainBlue-600 dark:text-white font-semibold bg-mainBlue-100  dark:bg-mainBlue-900 px-4 py-2 w-full">
           {device.device_name}
         </div>
         
@@ -44,7 +44,7 @@ const DashboardDeviceStatus = ({
           </div>
 
           <div className="flex flex-row items-end justify-between px-4 pb-2 xl:px-0 xl:pb-0">
-            <div className="flex rounded-xl bg-mainBlue-100 p-2 m-0 xl:m-2 w-fit h-fit shrink-0">
+            <div className="flex rounded-xl bg-mainBlue-100  dark:bg-mainBlue-900 p-2 m-0 xl:m-2 w-fit h-fit shrink-0">
               <div className="flex flex-col gap-2">
                 <div className="text-sm text-mainBlue-600 dark:text-white whitespace-nowrap">
                   일일 측정 건수
@@ -104,7 +104,7 @@ export const DeviceInformation = () => {
         {hasMore && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="w-full py-2 px-4 text-sm text-mainBlue-600 dark:text-white rounded-xl hover:bg-mainBlue-600-background transition-colors"
+            className="w-full py-2 px-4 text-sm text-mainBlue-600 dark:text-white rounded-xl hover:bg-mainBlue-100  dark:bg-mainBlue-900 transition-colors"
           >
             {isExpanded ? '접기' : `더보기`}
           </button>

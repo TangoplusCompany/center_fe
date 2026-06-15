@@ -45,7 +45,7 @@ const ROMDashboardCardRecent = (
         </div>
 
         {/* 설명 박스 */}
-        <div className={`w-fit bg-mainBlue-600-background/30 rounded-lg p-4`}>
+        <div className={`w-fit bg-mainBlue-100  dark:bg-mainBlue-900/30 rounded-lg p-4`}>
           <p className="text-base text-primary-foreground leading-relaxed">
             {data.description}
           </p>

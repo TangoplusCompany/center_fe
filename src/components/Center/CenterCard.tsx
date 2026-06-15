@@ -28,11 +28,11 @@ export const CenterCard = ({ center }: { center: IAdminCenterListItem }) => {
 
   return (
     <div
-      className="col-span-1 items-center justify-between rounded-xl border-2 border-mainBlue-600-background dark:border-border relative transition-colors overflow-hidden cursor-pointer hover:border-mainBlue-600"
+      className="col-span-1 items-center justify-between rounded-xl border-2 border-mainBlue-100 dark:border-mainBlue-600 dark:border-border relative transition-colors overflow-hidden cursor-pointer hover:border-mainBlue-600"
       onClick={handleCenterClick}
     >
       <div className="flex flex-col">
-        <div className="flex items-center rounded-t-xl text-xl text-mainBlue-600 dark:text-white font-semibold bg-mainBlue-600-background dark:bg-mainBlue-600-background px-4 py-2 w-full">
+        <div className="flex items-center rounded-t-xl text-xl text-mainBlue-600 dark:text-white font-semibold bg-mainBlue-100  dark:bg-mainBlue-900 dark:bg-mainBlue-100  dark:bg-mainBlue-900 px-4 py-2 w-full">
           <div className="flex items-center gap-2 min-w-0">
             <span className="truncate">{center.center_name}</span>
             {managerLabel != null && (

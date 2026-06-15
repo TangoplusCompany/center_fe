@@ -44,7 +44,7 @@ const CenterUserPage = () => {
   const handleDialogClose = (shouldRefetch: boolean) => {
     setDialogOpen(false);
     if (shouldRefetch) {
-      refetchUserList(); // 사용자 추가 성공 시 목록 갱신
+      refetchUserList(); 
     }
   };
   if (isLoading) {
@@ -62,7 +62,7 @@ const CenterUserPage = () => {
       <div className="col-span-12 flex flex-col gap-5">
         <div className="col-span-12 flex justify-between">
           <p>사용자가 존재하지 않습니다. 신규 사용자를 추가해주세요.</p>
-          <Button variant="secondary" onClick={() => setDialogOpen(true)}>
+          <Button className="" variant="outline" onClick={() => setDialogOpen(true)}>
             사용자 추가
           </Button>
         </div>

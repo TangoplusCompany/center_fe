@@ -5,7 +5,7 @@ import MeasureStaticSixth from "./Sixth";
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
 import RawDataContainer from "../RawDataContainer";
 import StaticDataContainer from "./DataContainer";
-import { IUserMeasureDetailData, IUserMeasureInfoResponse } from "@/types/measure";
+import { IUserMeasureDetailData, IMeasureResponse } from "@/types/measure";
 
 const BackMeasurement = ({
   sns,
@@ -17,7 +17,7 @@ const BackMeasurement = ({
     measureSn: string;
     userSn: string;
   };
-  measureInfo: IUserMeasureInfoResponse;
+  measureInfo: IMeasureResponse;
   cameraOrientation: 0 | 1;
   isMyPage: boolean;
 }) => {

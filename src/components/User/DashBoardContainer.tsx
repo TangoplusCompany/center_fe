@@ -83,7 +83,7 @@ const CenterUserDashboardContainer = ({
                 className={`
                   flex items-center gap-3 px-4 py-1 rounded-xl font-medium whitespace-nowrap transition-all cursor-pointer
                   ${isActive
-                    ? "border border-mainBlue-600 text-mainBlue-600 bg-mainBlue-600-background"
+                    ? "border border-mainBlue-600 text-mainBlue-600 bg-mainBlue-100  dark:bg-mainBlue-900"
                     : "bg-white border border-sub300 text-sub300 hover:border-sub600 hover:text-sub600"
                   }
                 `}

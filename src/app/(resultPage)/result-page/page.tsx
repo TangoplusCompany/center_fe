@@ -109,6 +109,7 @@ export default function ResultPage() {
         userUUID={decryptedData.user_uuid} 
         userSn={decryptedData.user_sn} 
         currentTab={currentTab}
+        setCurrentTab={setCurrentTab}
         isMyPage={true}
       />
     </div>

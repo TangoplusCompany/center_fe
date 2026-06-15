@@ -159,7 +159,7 @@ const DeviceEditDialog = ({
                   취소하기
                 </Button>
               </DialogClose>
-              <Button type="submit" className="border border-mainBlue-600 bg-mainBlue-600-background hover:bg-white text-mainBlue-600 hover:text-mainBlue-600">
+              <Button type="submit" className="border border-mainBlue-600 bg-mainBlue-100  dark:bg-mainBlue-900 hover:bg-white text-mainBlue-600 hover:text-mainBlue-600">
                 수정하기
               </Button>
             </div>

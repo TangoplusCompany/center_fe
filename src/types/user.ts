@@ -65,9 +65,11 @@ export interface IUserMeasureListItem
   IMeasureUpperLowerLevel {
   measure_sn: number;
   user_sn: number;
+  user_uuid: string;
   user_name: string;
   measure_date: string;
   device_name: string;
+  device_sn: string;
   center_name: string;
   mobile: string;
   has_basic: 0 | 1;

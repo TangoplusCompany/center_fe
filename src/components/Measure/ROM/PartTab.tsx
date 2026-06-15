@@ -13,7 +13,7 @@ type ROMPart = {
   title: string;
   value: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
   // 이 부분에 ROM 결과목록을 받아와야 함.
-  // render: (left?: IUserMeasureInfoResponse, right?: IUserMeasureInfoResponse) => React.ReactNode; 
+  // render: (left?: IMeasureResponse, right?: IMeasureResponse) => React.ReactNode; 
 };
 export const ROMPartTab = ({
   onPartSelect,
