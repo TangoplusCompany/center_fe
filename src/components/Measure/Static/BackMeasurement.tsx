@@ -11,6 +11,7 @@ const BackMeasurement = ({
   sns,
   measureInfo,
   cameraOrientation,
+  onImageReady,
   isMyPage = false,
 }: {
   sns: {
@@ -19,6 +20,7 @@ const BackMeasurement = ({
   };
   measureInfo: IMeasureResponse;
   cameraOrientation: 0 | 1;
+  onImageReady?: (step: string, url: string) => void;
   isMyPage: boolean;
 }) => {
   const {
@@ -68,10 +70,10 @@ if (seq5Error || seq6Error) {
       {/* 상단: 이미지 2개 */}
       <div className="grid grid-cols-2 gap-4">
         <div className="col-span-1">
-          <MeasureStaticFifth files={measureFifth?.file_data} cameraOrientation={cameraOrientation} />
+          <MeasureStaticFifth files={measureFifth?.file_data} cameraOrientation={cameraOrientation} onImageReady={onImageReady} />
         </div>
         <div className="col-span-1">
-          <MeasureStaticSixth files={measureSixth?.file_data} cameraOrientation={cameraOrientation} />
+          <MeasureStaticSixth files={measureSixth?.file_data} cameraOrientation={cameraOrientation} onImageReady={onImageReady }/>
         </div>
       </div>
       <StaticDataContainer measureData={measureInfo} />
