@@ -252,7 +252,7 @@ const MeasureDetailContainer = ({
     if (selectedValues.length === 0) return;
     const cryptoData = {
       sn: Number(measureData.measure_sn),
-      user_uuid: measureData.user_uuid,
+      user_uuid: uuid,
       receiver: measureData.mobile,
     };
 
