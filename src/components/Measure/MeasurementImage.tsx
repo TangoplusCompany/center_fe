@@ -10,7 +10,8 @@ interface MeasurementImageProps {
   step: "first" | "second" | "third" | "fourth" | "fifth" | "sixth";
   cameraOrientation: 0 | 1;
   compareSlot?: 0 | 1;
-  onImageReady?: (step: string, url: string) => void;
+  leftRight ?: 0 | 1;
+  onImageReady?: (idx : 0 | 1, url: string) => void;
 }
 export const MeasurementImage = ({
   imageUrl,
@@ -18,6 +19,7 @@ export const MeasurementImage = ({
   step,
   cameraOrientation,
   compareSlot,
+  leftRight,
   onImageReady
 }: MeasurementImageProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -27,7 +29,7 @@ export const MeasurementImage = ({
   const { resultUrl, loading } = useStaticLandmark(imageUrl, measureJson, step, cameraOrientation, showLine);
   useEffect(() => {
     if (resultUrl && onImageReady) {
-      onImageReady(step, resultUrl);
+      onImageReady(compareSlot ? compareSlot : (leftRight ? leftRight : 0), resultUrl);
     }
   }, [resultUrl]);
   const RadialGradientShadow = 'inset 0 0 12px rgba(255, 255, 255, 0.75)'

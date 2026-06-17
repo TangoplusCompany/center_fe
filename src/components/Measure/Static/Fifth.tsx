@@ -14,7 +14,7 @@ const MeasureStaticFifth = React.memo(
     className?: string;
     files?: IUserMeasureFileData;
     cameraOrientation: 0 | 1;
-    onImageReady?: (step: string, url: string) => void;
+    onImageReady?: (idx: 0 | 1, url: string) => void;
   }) => {
     const {
       data: measureJson,
@@ -34,6 +34,7 @@ const MeasureStaticFifth = React.memo(
           step="fifth"
           cameraOrientation={cameraOrientation}
           onImageReady={onImageReady}
+          leftRight={0}
         />
       </div>
     );

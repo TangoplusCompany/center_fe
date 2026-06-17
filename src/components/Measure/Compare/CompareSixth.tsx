@@ -13,6 +13,7 @@ const MeasureStaticCompareSixth = React.memo(
   right,
   userSn,
   onCompareDialogOpen,
+  onImageReady,
   isMyPage = false,
 }: CompareStaticProps) => {
   // TODO 정적 조회하는 api를 사용 + 하단의 useMeasureJson을 써야함 (+ Raw Data card도 넣어줘야함)
@@ -79,6 +80,7 @@ const MeasureStaticCompareSixth = React.memo(
             step="sixth"
             cameraOrientation={leftSummaryData?.camera_orientation ?? 0}
             compareSlot={0}
+            onImageReady={onImageReady}
           />
         )}
       </div>
@@ -93,6 +95,7 @@ const MeasureStaticCompareSixth = React.memo(
               step="sixth"
               cameraOrientation={rightSummaryData?.camera_orientation ?? 0}
               compareSlot={1}
+              onImageReady={onImageReady}
             />
           ) : (
           <CompareDefault onCompareDialogOpen={onCompareDialogOpen} currentSlot={1}/>

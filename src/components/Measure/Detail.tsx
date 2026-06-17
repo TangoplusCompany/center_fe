@@ -2,7 +2,7 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MeasureDetailDynamic from "@/components/Measure/DetailDynamic";
-import React, { JSX, useEffect, useState } from "react";
+import React, { JSX,  useState } from "react";
 import BackMeasurement from "@/components/Measure/Static/BackMeasurement";
 import FrontMeasurement from "@/components/Measure/Static/FrontMeasurement";
 import SideMeasurement from "@/components/Measure/Static/SideMeasurement";
@@ -11,121 +11,119 @@ import { cn } from "@/lib/utils";
 import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
 import { IUserMeasureListItem } from "@/types/user";
 import { Button } from "../ui/button";
-import * as Popover from "@radix-ui/react-popover";
+// import * as Popover from "@radix-ui/react-popover";
 import { generatePrintUrls } from "@/hooks/api/measure/generatePrinUrls";
 import { actionPrintEncrypt } from "@/app/actions/getCrypto";
 
+// export interface BasicPrintItem {
+//   key: string; 
+//   label: string; 
+// }
+// interface BasicPrintSelectProps {
+//   items: BasicPrintItem[]; 
+//   handlePrint: (selectedKeys: string[]) => void; 
+// }
+// export function PrintSelect({ items, handlePrint }: BasicPrintSelectProps) {
+//   const [selectedItems, setSelectedItems] = useState<Record<string, boolean>>({});
 
-export interface BasicPrintItem {
-  key: string; 
-  label: string; 
-}
+//   useEffect(() => {
+//     const defaultState = items.reduce((acc, item) => {
+//       acc[item.key] = true; // 기본값: 전체 선택 상태
+//       return acc;
+//     }, {} as Record<string, boolean>);
 
-interface BasicPrintSelectProps {
-  items: BasicPrintItem[]; 
-  handlePrint: (selectedKeys: string[]) => void; 
-}
-export function PrintSelect({ items, handlePrint }: BasicPrintSelectProps) {
-  const [selectedItems, setSelectedItems] = useState<Record<string, boolean>>({});
+//     setSelectedItems(defaultState);
+//   }, [items]);
 
-  useEffect(() => {
-    const defaultState = items.reduce((acc, item) => {
-      acc[item.key] = true; // 기본값: 전체 선택 상태
-      return acc;
-    }, {} as Record<string, boolean>);
+//   // 개별 체크박스 토글 핸들러
+//   const handleCheckboxChange = (key: string, checked: boolean) => {
+//     setSelectedItems((prev) => ({
+//       ...prev,
+//       [key]: checked,
+//     }));
+//   };
 
-    setSelectedItems(defaultState);
-  }, [items]);
+//   const onClickPrint = () => {
+//     const activeKeys = Object.keys(selectedItems).filter((key) => selectedItems[key]);
+//     handlePrint(activeKeys);
+//   };
+//   const isNothingChecked = !Object.values(selectedItems).some((val) => val);
+//   return (
+//     <Popover.Root>
+//       <Popover.Trigger asChild>
+//         <Button className="px-6 sm:w-auto" variant="sub">
+//           {/* eslint-disable-next-line @next/next/no-img-element */}
+//           <img
+//             src="/icons/ic_people_image.svg"
+//             alt="인쇄하기"
+//             className="size-4 dark:[filter:brightness(0)_invert(1)]"
+//           />
+//           <span>측정 이미지 인쇄</span>
+//         </Button>
+//       </Popover.Trigger>
 
-  // 개별 체크박스 토글 핸들러
-  const handleCheckboxChange = (key: string, checked: boolean) => {
-    setSelectedItems((prev) => ({
-      ...prev,
-      [key]: checked,
-    }));
-  };
-
-  const onClickPrint = () => {
-    const activeKeys = Object.keys(selectedItems).filter((key) => selectedItems[key]);
-    handlePrint(activeKeys);
-  };
-  const isNothingChecked = !Object.values(selectedItems).some((val) => val);
-  return (
-    <Popover.Root>
-      <Popover.Trigger asChild>
-        <Button className="px-6 sm:w-auto" variant="sub">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/icons/ic_people_image.svg"
-            alt="인쇄하기"
-            className="size-4 dark:[filter:brightness(0)_invert(1)]"
-          />
-          <span>측정 이미지 인쇄</span>
-        </Button>
-      </Popover.Trigger>
-
-      <Popover.Portal>
-        <Popover.Content
-          className="z-20 w-56 rounded-xl border bg-popover dark:bg-sub750 dark:text-sub100 p-2 text-popover-foreground shadow-md outline-none
-          data-[state=open]:animate-in
-          data-[state=closed]:animate-out
-          data-[state=open]:fade-in-0
-          data-[state=closed]:fade-out-0
-          data-[state=open]:zoom-in-95
-          data-[state=closed]:zoom-out-95
-          duration-200"
-          sideOffset={4}
-        >
-          <div className="flex flex-col gap-1 p-1">
+//       <Popover.Portal>
+//         <Popover.Content
+//           className="z-20 w-56 rounded-xl border bg-popover dark:bg-sub750 dark:text-sub100 p-2 text-popover-foreground shadow-md outline-none
+//           data-[state=open]:animate-in
+//           data-[state=closed]:animate-out
+//           data-[state=open]:fade-in-0
+//           data-[state=closed]:fade-out-0
+//           data-[state=open]:zoom-in-95
+//           data-[state=closed]:zoom-out-95
+//           duration-200"
+//           sideOffset={4}
+//         >
+//           <div className="flex flex-col gap-1 p-1">
             
-            {/* items 배열을 기반으로 체크박스 동적 매핑 렌더링 */}
-            {items.map((item) => (
-              <label 
-                key={item.key} 
-                className="flex items-center gap-2 p-2 hover:bg-accent rounded-md cursor-pointer text-sm"
-              >
-                <input
-                  type="checkbox"
-                  checked={!!selectedItems[item.key]}
-                  onChange={(e) => handleCheckboxChange(item.key, e.target.checked)}
-                  className="rounded border-toggle-accent accent-toggle-accent"
-                />
-                <span>{item.label}</span>
-              </label>
-            ))}
+//             {/* items 배열을 기반으로 체크박스 동적 매핑 렌더링 */}
+//             {items.map((item) => (
+//               <label 
+//                 key={item.key} 
+//                 className="flex items-center gap-2 p-2 hover:bg-accent rounded-md cursor-pointer text-sm"
+//               >
+//                 <input
+//                   type="checkbox"
+//                   checked={!!selectedItems[item.key]}
+//                   onChange={(e) => handleCheckboxChange(item.key, e.target.checked)}
+//                   className="rounded border-toggle-accent accent-toggle-accent"
+//                 />
+//                 <span>{item.label}</span>
+//               </label>
+//             ))}
 
-            <hr className="border-muted my-1" />
+//             <hr className="border-muted my-1" />
 
-            <Popover.Close asChild>
-              <button
-                onClick={onClickPrint}
-                disabled={isNothingChecked}
-                className="w-full bg-sub150 hover:bg-sub200 text-sub700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors disabled:opacity-50"
-              >
-                선택 항목 인쇄
-              </button>
-            </Popover.Close>
-          </div>
-        </Popover.Content>
-      </Popover.Portal>
-    </Popover.Root>
-  );
-}
+//             <Popover.Close asChild>
+//               <button
+//                 onClick={onClickPrint}
+//                 disabled={isNothingChecked}
+//                 className="w-full bg-sub150 hover:bg-sub200 text-sub700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors disabled:opacity-50"
+//               >
+//                 선택 항목 인쇄
+//               </button>
+//             </Popover.Close>
+//           </div>
+//         </Popover.Content>
+//       </Popover.Portal>
+//     </Popover.Root>
+//   );
+// }
 
-const tabItemsMap: Record<string, BasicPrintItem[]> = {
-  frontTotal: [
-    { key: "front", label: "정면 자세" },
-    { key: "elbow", label: "팔꿈치 정렬" },
-  ],
-  sideTotal: [
-    { key: "left", label: "좌측 자세" },
-    { key: "right", label: "우측 자세" },
-  ],
-  backTotal: [
-    { key: "back", label: "후면 자세" },
-    { key: "back_sit", label: "앉은 후면" },
-  ],
-};
+// const tabItemsMap: Record<string, BasicPrintItem[]> = {
+//   frontTotal: [
+//     { key: "front", label: "정면 자세" },
+//     { key: "elbow", label: "팔꿈치 정렬" },
+//   ],
+//   sideTotal: [
+//     { key: "left", label: "좌측 자세" },
+//     { key: "right", label: "우측 자세" },
+//   ],
+//   backTotal: [
+//     { key: "back", label: "후면 자세" },
+//     { key: "back_sit", label: "앉은 후면" },
+//   ],
+// };
 
 type MeasureListType = {
   title: string;
@@ -156,15 +154,15 @@ const MeasureDetail = ({
   const [activeBasicTab, setActiveBasicTab] = useState('summary');
   const [, setIsPrinting] = useState(false);
   const [printImageMap, setPrintImageMap] = useState<Record<string, string>>({});
-  const handleImageReady = (step: string, url: string) => {
+  const handleImageReady = (idx: 0 | 1, url: string) => {
     setPrintImageMap((prev) => ({
       ...prev,
-      [step]: url 
+      [idx]: url 
     }));
   };
   const handleBasicTabChange = (nextTab: string) => {
     setActiveBasicTab(nextTab);
-    setPrintImageMap({}); // 💡 탭 바뀔 때 객체 초기화
+    setPrintImageMap({}); 
   };
   const {
     data: measureData,
@@ -260,7 +258,7 @@ const MeasureDetail = ({
   ];
 
 
-  const handlePrintProcess = async () => {
+  const handlePrintProcess = async (seq: string) => {
     const imageUrls = Object.values(printImageMap);
     if (imageUrls.length === 0) return;
     
@@ -287,7 +285,7 @@ const MeasureDetail = ({
       if (urlParams && urlParams.length > 0) {
         console.log(printImageMap)
         const bProjectBaseUrl = process.env.NEXT_PUBLIC_IMAGE_PRIN_URL;
-        const finalUrl = `${bProjectBaseUrl}?t_r=${encryptData}&${urlParams.join("&")}`;
+        const finalUrl = `${bProjectBaseUrl}?t_r0=${encryptData}&${urlParams.join("&")}&seq=${seq}`;
         window.open(finalUrl, '_blank');
       } else {
         alert("이미지 주소 생성에 실패했습니다.");
@@ -364,13 +362,23 @@ const MeasureDetail = ({
         )}
 
         {['frontTotal', 'sideTotal', 'backTotal'].includes(activeBasicTab) && (
-          <PrintSelect 
-            items={tabItemsMap[activeBasicTab] || []} 
-            handlePrint={() => {
-              // 캡처 대상 key 배열(['front_total', 'front_elbow'])을 넘겨받아 html2canvas 실행
-              handlePrintProcess()
-            }} 
-          />
+          <Button 
+            className="px-6 sm:w-auto" 
+            variant="sub"
+            onClick={() => {
+              // 'frontTotal' -> 'front' 형태로 변환
+              const seq = activeBasicTab.replace('Total', ''); 
+              handlePrintProcess(seq);
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/icons/ic_people_image.svg"
+              alt="인쇄하기"
+              className="size-4 dark:[filter:brightness(0)_invert(1)]"
+            />
+            <span>측정 이미지 인쇄</span>
+          </Button>
         )}
 
       </div>

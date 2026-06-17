@@ -21,7 +21,7 @@ const FrontMeasurement = ({
   };
   measureInfo: IMeasureResponse;
   cameraOrientation: 0 | 1;
-  onImageReady?: (step: string, url: string) => void;
+  onImageReady?: (idx: 0 | 1, url: string) => void;
   isMyPage: boolean;
 }) => {
 

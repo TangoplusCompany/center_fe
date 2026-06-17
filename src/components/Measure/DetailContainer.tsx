@@ -186,7 +186,7 @@ const MeasureDetailContainer = ({
     : externalMeasureData;
 
   const [internalDatePickerOpen, setInternalDatePickerOpen] = useState(false);
-
+  
   useEffect(() => {
     if (!measureData || !setMeasureType) return; // 💡 setMeasureType이 undefined면 실행 방지
 
