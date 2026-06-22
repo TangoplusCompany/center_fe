@@ -57,13 +57,13 @@ export function CompositionCard({ title, weight, value, low, high, prevValue }: 
   const diffColor = Number(diff) > 0 ? "text-redd" : "text-mainBlue-600";
 
   return (
-    <div className="flex h-full items-center gap-1 w-full ">
+    <div className="flex items-center gap-1 w-full h-full ">
       <div className={`flex items-center h-full w-20 p-2 text-sm leading-tight font-bold text-white rounded-[4px] justify-center ${stateColor}`}>
         {title}
       </div>
 
       {/* 메인 데이터 영역 */}
-      <div className="flex flex-1 h-full items-center bg-sub100 rounded-[4px] px-2 gap-2">
+      <div className="flex flex-1 h-[34px] items-center bg-sub100 rounded-[4px] px-2 gap-2">
         <div className="w-12 text-center text-[13px] font-bold text-sub800">
           {percentage}%
         </div>
@@ -105,7 +105,7 @@ export function CompositionCard({ title, weight, value, low, high, prevValue }: 
       </div>
 
       {/* 증감 표시 영역 */}
-      <div className={`flex h-full w-12 justify-center items-center bg-sub100 rounded-[4px] text-xs font-medium ${diff !== undefined ? diffColor : 'text-transparent'}`}>
+      <div className={`flex h-[34px] w-12 justify-center items-center bg-sub100 rounded-[4px] text-xs font-medium ${diff !== undefined ? diffColor : 'text-transparent'}`}>
         {diff !== undefined && (
           <>({Number(diff) >= 0 ? '▲' : '▼'} {Math.abs(Number(diff))})</>
         )}
@@ -164,25 +164,24 @@ export default function Composition({data}: {data: IBiaData}) {
   const donutComps : SegmentData[] = [
     {
       label: "체수분",
-      percentage: (data.moisture_content / data.weight) * 100,
+      percentage: Number(((data.moisture_content / data.weight) * 100).toFixed(1)),
       color: "#5B93FF"
     },
     {
       label: "단백질",
-      percentage: (data.protein_mass / data.weight) * 100,
+      percentage: Number(((data.protein_mass / data.weight) * 100).toFixed(1)),
       color: "#FFA546"
     },
     {
       label: "무기질",
-      percentage: (data.amount_of_inorganic_salt / data.weight) * 100,
+      percentage: Number(((data.amount_of_inorganic_salt / data.weight) * 100).toFixed(1)),
       color: "#7A828A"
     },
     {
       label: "체지방",
-      percentage: (data.body_fat_mass / data.weight) * 100,
+      percentage: Number(((data.body_fat_mass / data.weight) * 100).toFixed(1)),
       color: "#FF766C"
     }
-
   ]
   return (
     <div className="flex flex-col rounded-lg border border-sub200 p-2">
@@ -196,58 +195,56 @@ export default function Composition({data}: {data: IBiaData}) {
 
       <div className="flex flex-col my-2 h-full w-full gap-2">
         {/* 1. 상단 헤더 영역 (전체 너비를 사용하며 하단 카드들의 바 위치와 정렬) */}
-        <div className="flex w-full items-center text-xs text-sub800 font-bold">
-          {/* 차트 너비만큼 비워주기 (차트 영역이 차지하는 너비에 맞춰 조정하세요) */}
-          <div className="w-[160px]" /> 
-
-          {/* 카드의 타이틀 + % 수치 너비만큼 비워주기 */}
-          <div className="w-48" /> 
-
-          {/* 표준 영역: 하단 프로그레스 바와 수직으로 일치하게 됨 */}
-          <div className="flex-1 grid grid-cols-3 text-center">
-            <span>표준 이하</span>
-            <span>표준</span>
-            <span>표준 이상</span>
-          </div>
-
-          {/* 변화 영역 */}
-          <div className="w-16 text-right pr-3">
-            <span>변화</span>
-          </div>
-        </div>
+        
 
         {/* 2. 하단 컨텐츠 영역 (차트와 카드 리스트가 같은 높이를 공유) */}
-        <div className="flex flex-1 gap-1 items-stretch">
+        <div className="flex flex-col sm:flex-row flex-1 gap-1 items-stretch">
           {/* 도넛 차트 컨테이너 (정중앙 배치) */}
-          <div className="flex items-center">
+          <div className="flex items-center justify-center">
             <PieChartBar data={donutComps} />
-            
           </div>
 
-          {/* 카드 리스트 컨테이너 (차트 높이에 맞춰 카드 간격이 자동 조절되도록 justify-between 사용 가능) */}
-          <div className="flex flex-col flex-1 gap-1">
-            <div className="flex items-center gap-1 w-full ">
-              {/* 타이틀 박스 */}
-              <div className={`flex items-center w-20 justify-center h-fit px-2 py-1 text-sm font-bold text-white rounded-[4px] bg-sub400`}>
-                평균 비율
+          <div className="flex flex-col flex-1 w-full h-full">
+            <div className="flex w-full items-center text-xs text-sub800 font-bold">
+              <div className="w-40" /> 
+
+              {/* 표준 영역: 하단 프로그레스 바와 수직으로 일치하게 됨 */}
+              <div className="flex-1 grid grid-cols-3 text-center py-1">
+                <span>표준 이하</span>
+                <span>표준</span>
+                <span>표준 이상</span>
               </div>
 
-              {/* 메인 데이터 영역 */}
-              <div className="flex h-fit flex-1 text-xs text-sub600 pl-6 items-center bg-sub100 rounded-sm px-2 py-1 gap-1">
-                 체수분 : 55~65% / 단백질 : 15~18% / 무기질 : 5~6% / 체지방 :10~20%
+              {/* 변화 영역 */}
+              <div className="w-16 text-right pr-3">
+                <span>변화</span>
               </div>
             </div>
-            {mainComps.map((comp) => (
-              <CompositionCard
-                key={comp.title}
-                title={comp.title}
-                weight={data.weight} 
-                value={comp.value}
-                low={comp.low}
-                high={comp.high}
-                prevValue={comp.prevValue}
-              />
-            ))}
+            {/* 카드 리스트 컨테이너 (차트 높이에 맞춰 카드 간격이 자동 조절되도록 justify-between 사용 가능) */}
+            <div className="flex flex-col flex-1 gap-1">
+              <div className="flex items-center gap-1 w-full ">
+                {/* 타이틀 박스 */}
+                <div className={`flex items-center w-20 justify-center h-fit px-2 py-1 text-sm font-bold text-white rounded-[4px] bg-sub400`}>
+                  평균 비율
+                </div>
+
+                {/* 메인 데이터 영역 */}
+                <div className="flex h-fit flex-1 text-xs text-sub600 pl-6 items-center bg-sub100 rounded-sm px-2 py-1 gap-1">
+                  체수분 : 55~65% / 단백질 : 15~18% / 무기질 : 5~6% / 체지방 :10~20%
+                </div>
+              </div>
+              {mainComps.map((comp) => (
+                <CompositionCard
+                  key={comp.title}
+                  title={comp.title}
+                  weight={data.weight} 
+                  value={comp.value}
+                  low={comp.low}
+                  high={comp.high}
+                  prevValue={comp.prevValue}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>

@@ -27,7 +27,7 @@ const myDotPosition = {
       <div className="relative ml-6 mb-2">
         
         {/* --- Y축 라벨 (BMI) --- */}
-        <div className="absolute -left-6 top-0 h-full text-xs text-sub400">
+        <div className="absolute -left-8 top-0 h-full text-xs text-sub400">
           <span className="absolute -top-2 left-1">BMI</span>
           <span className="absolute top-[25%] -translate-y-1/2">30.0</span>
           <span className="absolute top-[50%] -translate-y-1/2">25.0</span>
@@ -66,7 +66,7 @@ const myDotPosition = {
         </div>
 
         {/* --- X축 라벨 (체지방률) --- */}
-        <div className="absolute -bottom-0.5 left-0 w-full text-xs text-sub400">
+        <div className="absolute -bottom-2 left-0 w-full text-xs text-sub400 pb-2">
           <span className="absolute left-[33.33%] -translate-x-1/2">10.0</span>
           <span className="absolute left-[66.66%] -translate-x-1/2">20.0</span>
           <span className="absolute right-0">체지방률</span>
