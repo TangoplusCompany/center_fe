@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 import CompareIntro from "./CompareIntro";
 import MeasureDynamicCompare from "./CompareSeventh";
 import CompareBodySkeleton from "./CompareBodySkeleton";
-import { generatePrintUrls } from "@/hooks/api/measure/generatePrinUrls";
+import { generatePrintUrls } from "@/hooks/api/measure/generatePrintUrls";
 import { actionPrintEncrypt } from "@/app/actions/getCrypto";
 import { Button } from "@/components/ui/button";
 
@@ -51,7 +51,6 @@ const CompareBody = ({
   const [, setIsPrinting] = useState(false);
   const [printImageMap, setPrintImageMap] = useState<Record<string, string>>({});
   const handleImageReady = (idx: 0 | 1, url: string) => {
-    console.log(idx, url)
     setPrintImageMap((prev) => ({
       ...prev,
       [idx]: url 

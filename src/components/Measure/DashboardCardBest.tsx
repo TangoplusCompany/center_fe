@@ -53,7 +53,7 @@ const DashboardCardBest = ({ data }: { data: TWorstPart }) => {
         </div>
 
           {/* 설명 박스 */}
-          <div className={`w-fit ${data.level === 2 ? "bg-mainBlue-600-foreground/30" : "bg-accent/30"
+          <div className={`w-fit ${data.level === 2 ? "bg-sub-300/30" : "bg-mainBlue-600/10"
           }  rounded-lg p-4`}>
             <p className="text-base text-primary-foreground leading-relaxed">
               {data.description}

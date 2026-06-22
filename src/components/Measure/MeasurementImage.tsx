@@ -31,7 +31,7 @@ export const MeasurementImage = ({
     if (resultUrl && onImageReady) {
       onImageReady(compareSlot ? compareSlot : (leftRight ? leftRight : 0), resultUrl);
     }
-  }, [resultUrl]);
+  }, [compareSlot, leftRight, onImageReady, resultUrl]);
   const RadialGradientShadow = 'inset 0 0 12px rgba(255, 255, 255, 0.75)'
 
   const loadingPlaceholder = (

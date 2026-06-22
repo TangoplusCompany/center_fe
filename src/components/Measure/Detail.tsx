@@ -12,7 +12,7 @@ import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
 import { IUserMeasureListItem } from "@/types/user";
 import { Button } from "../ui/button";
 // import * as Popover from "@radix-ui/react-popover";
-import { generatePrintUrls } from "@/hooks/api/measure/generatePrinUrls";
+import { generatePrintUrls } from "@/hooks/api/measure/generatePrintUrls";
 import { actionPrintEncrypt } from "@/app/actions/getCrypto";
 
 // export interface BasicPrintItem {
@@ -154,12 +154,15 @@ const MeasureDetail = ({
   const [activeBasicTab, setActiveBasicTab] = useState('summary');
   const [, setIsPrinting] = useState(false);
   const [printImageMap, setPrintImageMap] = useState<Record<string, string>>({});
-  const handleImageReady = (idx: 0 | 1, url: string) => {
-    setPrintImageMap((prev) => ({
+  const handleImageReady = React.useCallback((idx: 0 | 1, url: string) => {
+  setPrintImageMap((prev) => {
+    if (prev[idx] === url) return prev; 
+    return {
       ...prev,
       [idx]: url 
-    }));
-  };
+    };
+  });
+}, []); 
   const handleBasicTabChange = (nextTab: string) => {
     setActiveBasicTab(nextTab);
     setPrintImageMap({}); 
@@ -283,7 +286,6 @@ const MeasureDetail = ({
       const encryptData = await actionPrintEncrypt(cryptoData);
 
       if (urlParams && urlParams.length > 0) {
-        console.log(printImageMap)
         const bProjectBaseUrl = process.env.NEXT_PUBLIC_IMAGE_PRIN_URL;
         const finalUrl = `${bProjectBaseUrl}?t_r0=${encryptData}&${urlParams.join("&")}&seq=${seq}`;
         window.open(finalUrl, '_blank');
