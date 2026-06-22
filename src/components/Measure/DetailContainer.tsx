@@ -16,6 +16,7 @@ import { formatDate } from "@/utils/formatDate";
 import { MeasureDetailDatePickerDialog } from "./DetailDatePickerDialog";
 import { IMeasurementMeta } from "@/types/measure";
 import { Skeleton } from "../ui/skeleton";
+import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
 
 // Select 
 
@@ -181,17 +182,26 @@ const MeasureDetailContainer = ({
   aiExerciseOpen = false,
   setAiExerciseOpen
 }: CenterUserMeasureProps) => {
-  const measureData = measureList 
+  const measureMetaData = measureList 
     ? measureList.find((measure) => measure.measure_sn === measureSn)
     : externalMeasureData;
   const [internalDatePickerOpen, setInternalDatePickerOpen] = useState(false);
-  
-  useEffect(() => {
-    if (!measureData || !setMeasureType) return; // 💡 setMeasureType이 undefined면 실행 방지
 
-    const hasBasic = measureData.has_basic === 1;
-    const hasRom = measureData.has_rom === 1;
-    const hasBia = measureData.has_bia === 1;
+  const {
+    data: measureData,
+    isLoading: measureDataLoading,
+  } = useMeasureInfo({
+    measure_sn: measureSn ?? 0,
+    user_sn: `${userSn}`,
+    isMyPage,
+  });
+
+  useEffect(() => {
+    if (!measureMetaData || !setMeasureType) return; // 💡 setMeasureType이 undefined면 실행 방지
+
+    const hasBasic = measureMetaData.has_basic === 1;
+    const hasRom = measureMetaData.has_rom === 1;
+    const hasBia = measureMetaData.has_bia === 1;
 
     const availableType = MEASURE_TYPE.find(type => {
       if (type.key === "basic") return hasBasic;
@@ -203,9 +213,9 @@ const MeasureDetailContainer = ({
     if (availableType) {
       setMeasureType(availableType.key as measureType);
     }
-  }, [measureData, setMeasureType]);
+  }, [measureMetaData, setMeasureType]);
 
-  if (!measureData) {
+  if (!measureMetaData) {
     return (
       <div className="flex flex-col gap-4">
         <div className="flex justify-between">
@@ -227,13 +237,13 @@ const MeasureDetailContainer = ({
 
   const handleKakaoSend = async () => {
     const cryptoData = {
-      device_sn: Number(measureData.device_sn),
-      sn: Number(measureData.measure_sn),
-      measure_sn: Number(measureData.measure_sn),
+      device_sn: Number(measureMetaData.device_sn),
+      sn: Number(measureMetaData.measure_sn),
+      measure_sn: Number(measureMetaData.measure_sn),
       user_uuid: uuid,
-      receiver: measureData.mobile,
-      receiver_name: measureData.user_name,
-      measure_date: measureData.measure_date
+      receiver: measureMetaData.mobile,
+      receiver_name: measureMetaData.user_name,
+      measure_date: measureMetaData.measure_date
     };
     const encryptData = await actionKakaoEncrypt(cryptoData);
     try {
@@ -249,9 +259,9 @@ const MeasureDetailContainer = ({
   const handlePrint = async (selectedValues: string) => {
     if (selectedValues.length === 0) return;
     const cryptoData = {
-      sn: Number(measureData.measure_sn),
+      sn: Number(measureMetaData.measure_sn),
       user_uuid: uuid,
-      receiver: measureData.mobile,
+      receiver: measureMetaData.mobile,
     };
 
     const encryptData = await actionPrintEncrypt(cryptoData);
@@ -264,9 +274,9 @@ const MeasureDetailContainer = ({
     }
   };
 
-  const hasBasic = measureData.has_basic === 1;
-  const hasRom = measureData.has_rom === 1;
-  const hasBia = measureData.has_bia === 1;
+  const hasBasic = measureMetaData.has_basic === 1;
+  const hasRom = measureMetaData.has_rom === 1;
+  const hasBia = measureMetaData.has_bia === 1;
 
   const dateProps : SkeletonDatePickerProps = {
     measureList: measureList,
@@ -282,7 +292,15 @@ const MeasureDetailContainer = ({
     dateProps.measureList && dateProps.selectedMeasure != undefined
       ? dateProps.measureList.find((item) => item.measure_sn === dateProps.selectedMeasure)
       : undefined;
+
   
+  
+  if (measureDataLoading) {
+    return <p className="py-8 text-center">로딩중입니다</p>;
+  }
+  if (!measureData || !measureData.measurement_meta) {
+    return <p className="py-8 text-center">데이터가 존재하지 않습니다</p>;
+  }
   return (
     <div className="flex flex-col gap-4">
       {!aiExerciseOpen && (
@@ -344,7 +362,7 @@ const MeasureDetailContainer = ({
               className="w-full sm:w-auto px-6 "
               variant="sub"
               onClick={() => {
-                if (window.confirm(`${measureData.user_name}로 카카오톡 결과를 전송하시습니까?`)) {
+                if (window.confirm(`${measureMetaData.user_name}로 카카오톡 결과를 전송하시습니까?`)) {
                   handleKakaoSend()
                 }
               }}>
@@ -362,7 +380,7 @@ const MeasureDetailContainer = ({
         <MeasureDetail 
           measureList={measureList}
           userSn={userSn}
-          measureSn={measureSn}
+          measureData={measureData}
           setMeasureSn={setMeasureSn} 
           isMyPage={isMyPage}
           isUserPage={isUserPage}
@@ -379,12 +397,12 @@ const MeasureDetailContainer = ({
           measureSn={measureSn ?? 0} 
           isMyPage={isMyPage} 
           uuid={uuid} 
-          mobile={measureData.mobile ?? ""} 
+          mobile={measureMetaData.mobile ?? ""} 
         />
       )}
 
-      {(measureType === "bia" && hasBia) && (
-        <BiaContainer />
+      {(measureType === "bia" && hasBia && measureData.bia_result) && (
+        <BiaContainer data={measureData.bia_result}/>
       )}
     </div>
   )

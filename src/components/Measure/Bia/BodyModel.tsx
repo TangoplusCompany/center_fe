@@ -57,18 +57,19 @@ export function PentagonChart({
 
         {/* 3. Status Badge (상태) */}
         <foreignObject
-          x="-20"
+          // 💡 [수정] width가 64이므로, 중앙 정렬을 위해 x는 절반인 -32로 이동합니다.
+          x="-32"
           y="6"
-          width="40"
-          height="14"
+          width="64"
+          height="18" // py-[2px]와 text-xs 공간을 고려해 높이도 살짝 늘려줍니다.
           style={{ overflow: "visible" }}
         >
           <div
             className={`
-            text-xs text-white text-center rounded-[2px] 
-            py-[2px] leading-none flex items-center justify-center min-w-[40px]
-            ${item.status === "표준이상" ? "bg-mainBlue-600/30" : "bg-sub400/30"}
-          `}
+              text-xs text-white text-center rounded-[2px] 
+              py-[2px] leading-none flex items-center justify-center min-w-[64px]
+              ${item.status === "표준이상" ? "bg-mainBlue-600/30" : "bg-sub400/30"}
+            `}
           >
             {item.status}
           </div>

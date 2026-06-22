@@ -10,14 +10,14 @@ export function RecommendCard ({type, title, description} : {type: string, title
   };
   return (
     <div className="flex w-full gap-2">
-      <div className="h-20 w-20 aspect-square rounded-[4px] bg-sub100 border items-center flex justify-center border-sub200">
+      <div className="w-20 h-20 px-2 py-1 aspect-square rounded-[4px] bg-sub100 border items-center flex justify-center border-sub200">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={iconMap[type]} alt={type} className="w-8 h-8" />
+        <img src={iconMap[type]} alt={type} className="w-12 h-12" />
       </div>
       <div className="flex flex-col gap-1 w-full">
         <div className="flex w-full justify-between items-center">
           <span className="text-sm font-bold text-blackk ">{title}</span>
-          <div className="px-1 rounded-[4px] bg-mainBlue-600 text-xs text-white">{type}</div>
+          <div className="px-2 py-1 rounded-[4px] bg-mainBlue-600 text-xs text-white">{type}</div>
         </div>
 
         <div className="text-xs text-start leading-tight text-sub600">

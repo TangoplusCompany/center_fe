@@ -8,12 +8,12 @@ import FrontMeasurement from "@/components/Measure/Static/FrontMeasurement";
 import SideMeasurement from "@/components/Measure/Static/SideMeasurement";
 import MeasureIntro from "@/components/Measure/Intro"
 import { cn } from "@/lib/utils";
-import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
 import { IUserMeasureListItem } from "@/types/user";
 import { Button } from "../ui/button";
 // import * as Popover from "@radix-ui/react-popover";
 import { generatePrintUrls } from "@/hooks/api/measure/generatePrintUrls";
 import { actionPrintEncrypt } from "@/app/actions/getCrypto";
+import { IMeasureResponse } from "@/types/measure";
 
 // export interface BasicPrintItem {
 //   key: string; 
@@ -134,7 +134,7 @@ type MeasureListType = {
 export type UserMeasureDetailProps = {
   measureList?: IUserMeasureListItem[];              // 전체 측정 리스트 (현재 페이지)
   userSn: string;
-  measureSn: number | undefined;
+  measureData: IMeasureResponse 
   setMeasureSn?: (sn: number) => void;
   isMyPage: boolean;
   isUserPage: boolean;
@@ -145,7 +145,7 @@ export type UserMeasureDetailProps = {
 };
 const MeasureDetail = ({
   userSn,
-  measureSn,
+  measureData,
   isMyPage = false,
   isUserPage = false,
   aiExerciseOpen,
@@ -167,21 +167,6 @@ const MeasureDetail = ({
     setActiveBasicTab(nextTab);
     setPrintImageMap({}); 
   };
-  const {
-    data: measureData,
-    isLoading: measureDataLoading,
-  } = useMeasureInfo({
-    measure_sn: measureSn ?? 0,
-    user_sn: `${userSn}`,
-    isMyPage,
-  });
-
-  if (measureDataLoading) {
-    return <p className="py-8 text-center">로딩중입니다</p>;
-  }
-  if (!measureData || !measureData.measurement_meta) {
-    return <p className="py-8 text-center">데이터가 존재하지 않습니다</p>;
-  }
   const data = measureData.measurement_meta
   
   
