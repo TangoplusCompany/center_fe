@@ -26,7 +26,7 @@ function MetricList({ title, titleValue, items }: MetricListProps) {
       <div className="relative h-[2px] rounded-full bg-sub800 shrink-0 mr-2" />
 
       {/* 리스트 영역 */}
-      <div className="flex flex-col text-[12px] text-black leading-[1.75]">
+      <div className="flex flex-col text-sm text-black leading-[1.75]">
         {items.map((item, index) => (
           <div key={index} className="flex justify-between items-center ">
             <span className="font-medium text-sub600">{item.label}</span>
@@ -85,8 +85,8 @@ export default function BodyBenchMark({data}: {data: IBiaBodyBenchmark}) {
     9 : '/images/bt_9.png',
   }[data.body_type]
   return (
-    <div className='flex flex-col'>
-      <div className='flex w-fit bg-accent rounded-br-xl rounded-tl-xl text-base text-white font-semibold px-2 py-1'>
+    <div className='flex flex-col rounded-xl border border-sub200'>
+      <div className='flex w-fit bg-mainBlue-600 rounded-br-xl rounded-tl-xl text-base text-white font-semibold px-2 py-1'>
         주요건강 지표
       </div>
 
@@ -123,7 +123,7 @@ export default function BodyBenchMark({data}: {data: IBiaBodyBenchmark}) {
         
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="flex items-baseline">
-            <span className="text-5xl font-bebas font-bold text-sub800 leading-none">
+            <span className="text-5xl font-bebas font-semibold text-sub800 leading-none">
               {data.body_score}
             </span>
             <span className="text-lg font-bold text-sub600 ml-1">점</span>
@@ -138,14 +138,14 @@ export default function BodyBenchMark({data}: {data: IBiaBodyBenchmark}) {
           <img 
             src={bodyTypeImg}
             alt='건강지표이미지'
-            className='rounded-2xl print:rounded-xl bg-sub100 w-14 h-14 my-auto border-2 border-sub200/60'
+            className='rounded-2xl print:rounded-xl bg-sub100 w-20 h-20 my-auto border-2 border-sub200/60'
           >
           </img>
           <div className='flex flex-col gap-0.5'>
-            <div className='text-[12px] font-bold text-black'>
+            <div className='text-base font-bold text-black'>
               {bodyType}
             </div>
-            <div className='text-[10px] leading-[1.3] break-keep text-black'>
+            <div className='text-xs leading-[1.3] break-keep text-black'>
               {data.result_body_type_description}
             </div>
           </div>

@@ -4,13 +4,12 @@ import React, { useState } from "react";
 import Image from "next/image"; // Next.js Image 컴포넌트 임포트
 import { Menu, X } from "lucide-react";
 import { resultPageUserStore } from "@/stores/ResultPageUserStore";
-import { useRouter } from "next/navigation";
-import { viewType } from "../Detail";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 interface ResultPageTabProps {
   userName: string;
   currentTab: string;
-  setCurrentTab: (tab: viewType) => void;
 }
 
 const USER_SUB_TABS = [
@@ -23,11 +22,11 @@ const USER_SUB_TABS = [
 const ResultPageTab = ({
   userName,
   currentTab,
-  setCurrentTab,
 }: ResultPageTabProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
-
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
   const handleLogout = () => {
     if (confirm("로그아웃 하시겠습니까?")) {
       resultPageUserStore.getState().setLogout();
@@ -59,23 +58,22 @@ const ResultPageTab = ({
             {/* 1. 서브 탭 메뉴 목록 */}
             {USER_SUB_TABS.map((subTab) => {
               const isSubActive = currentTab === subTab.key;
+              const newParams = new URLSearchParams(searchParams.toString());
 
+              newParams.set("subTab", subTab.key);
               return (
-                <button
+                <Link
                   key={subTab.key}
-                  type="button"
-                  onClick={() => {
-                    setCurrentTab(subTab.key as viewType);
-                    setIsOpen(false);
-                  }}
+                  href={`${pathname}?${newParams.toString()}`}
                   className={`w-full text-center py-2.5 px-4 rounded-xl text-sm font-medium transition-all duration-200 ${
                     isSubActive
                       ? "bg-blue-600 text-white shadow-sm"
                       : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
                   }`}
+                  onClick={() => {setIsOpen(false);}}
                 >
                   {subTab.title}
-                </button>
+                </Link>
               );
             })}
 

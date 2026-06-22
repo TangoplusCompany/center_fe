@@ -219,7 +219,7 @@ export const dummyBiaData: IBiaData = {
 const BiaContainer = () => {
   
   return (
-    <div className='flex flex-1 w-full px-2 py-4 gap-2'>
+    <div className='flex flex-1 w-full gap-2'>
         {/* 🥘🥘🥘🥘 left 🥘🥘🥘🥘 */}
         <div className='flex flex-col w-2/3 gap-4'>
           <Composition data={dummyBiaData} />
@@ -229,7 +229,7 @@ const BiaContainer = () => {
         </div>
 
         {/* 🍲🍲🍲🍲 right 🍲🍲🍲🍲 */}
-        <div className='flex flex-col gap-4 w-1/3 rounded-xl shadow'>
+        <div className='flex flex-col gap-4 w-1/3'>
           <BodyBenchMark data={dummyBiaData} />
           <Recommend data={dummyBiaData} />
           <BodyTypeChart data={dummyBiaData} />

@@ -50,6 +50,7 @@ const UserSubTabCard = ({encryptedParam, searchParams, currentSubTab} : UserSubT
           const isSubActive = currentSubTab === subTab.key;
           
           const newParams = new URLSearchParams(searchParams.toString());
+
           newParams.set("subTab", subTab.key);
           return (
             <Link

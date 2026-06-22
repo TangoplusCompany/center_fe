@@ -184,7 +184,6 @@ const MeasureDetailContainer = ({
   const measureData = measureList 
     ? measureList.find((measure) => measure.measure_sn === measureSn)
     : externalMeasureData;
-
   const [internalDatePickerOpen, setInternalDatePickerOpen] = useState(false);
   
   useEffect(() => {
