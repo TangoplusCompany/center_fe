@@ -9,7 +9,7 @@ import {
 import { CompareSlot } from "@/types/compare";
 import { IUserMeasureListItem } from "@/types/user";
 import { formatDate } from "@/utils/formatDate";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { measureType, viewType } from "./Detail";
 
 export const CenterUserMeasureList = ({
@@ -28,6 +28,7 @@ export const CenterUserMeasureList = ({
   isMyPage: boolean;
 }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const getMeasureTypeText = (measureItem: IUserMeasureListItem): string => {
     const labels: string[] = [];
     const hasBasic = measureItem.has_basic === 1;
@@ -60,6 +61,7 @@ export const CenterUserMeasureList = ({
                 key={sn} 
                 onClick={setMeasureSn ? () => {
                   setMeasureSn(sn)
+                  
                   let targetType: measureType = "basic"; 
                   if (measure.has_basic === 1) {
                     targetType = "basic";
@@ -69,8 +71,17 @@ export const CenterUserMeasureList = ({
                     targetType = "bia";
                   }
                   setMeasureType(targetType);
+                  const currentParams = new URLSearchParams(window.location.search);
+                  currentParams.set("subTab", "latest"); // 원하는 탭 파라미터명에 맞게 세팅 (subTab 또는 tab)
+
                   if (setCurrentTab) setCurrentTab("latest")
-                  if (!isMyPage) router.push(`?tab=latest`);
+                  if (isMyPage) {
+                    // 마이페이지일 때는 기존 pathname 유지 + 업데이트된 파라미터
+                    router.push(`${pathname}?${currentParams.toString()}`);
+                  } else {
+                    // 마이페이지가 아닐 때도 기존 파라미터를 유지한 채 이동
+                    router.push(`?${currentParams.toString()}`);
+                  }
                 }
                  : undefined}
                 className={"cursor-pointer hover:bg-sub100"}

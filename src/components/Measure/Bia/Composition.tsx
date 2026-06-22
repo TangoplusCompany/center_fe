@@ -54,11 +54,11 @@ export function CompositionCard({ title, weight, value, low, high, prevValue }: 
   
   // 증감 계산
   const diff = prevValue !== undefined ? (value - prevValue).toFixed(1) : undefined;
-  const diffColor = Number(diff) > 0 ? "text-redd" : "text-accent";
+  const diffColor = Number(diff) > 0 ? "text-redd" : "text-mainBlue-600";
 
   return (
     <div className="flex h-full items-center gap-1 w-full ">
-      <div className={`flex items-center h-full p-2 w-16 text-[12px] leading-tight font-bold text-white rounded-[4px] justify-center ${stateColor}`}>
+      <div className={`flex items-center h-full w-20 p-2 text-sm leading-tight font-bold text-white rounded-[4px] justify-center ${stateColor}`}>
         {title}
       </div>
 
@@ -105,7 +105,7 @@ export function CompositionCard({ title, weight, value, low, high, prevValue }: 
       </div>
 
       {/* 증감 표시 영역 */}
-      <div className={`flex h-full w-12 justify-center items-center bg-sub100 rounded-[4px] text-[10px] font-medium ${diff !== undefined ? diffColor : 'text-transparent'}`}>
+      <div className={`flex h-full w-12 justify-center items-center bg-sub100 rounded-[4px] text-xs font-medium ${diff !== undefined ? diffColor : 'text-transparent'}`}>
         {diff !== undefined && (
           <>({Number(diff) >= 0 ? '▲' : '▼'} {Math.abs(Number(diff))})</>
         )}
@@ -185,23 +185,23 @@ export default function Composition({data}: {data: IBiaData}) {
 
   ]
   return (
-    <div className="flex flex-col mb-2">
+    <div className="flex flex-col rounded-lg border border-sub200 p-2">
       
       <div className="flex items-center gap-2 ">
-        <div className="w-3 h-3 rounded-[3px] bg-accent" />
-        <div className="text-accent text-sm font-bold ">
+        <div className="w-3 h-3 rounded-[3px] bg-mainBlue-600" />
+        <div className="text-mainBlue-600 text-sm font-bold ">
           체성분 & 체수분 밸런스
         </div>
       </div>
 
       <div className="flex flex-col my-2 h-full w-full gap-2">
         {/* 1. 상단 헤더 영역 (전체 너비를 사용하며 하단 카드들의 바 위치와 정렬) */}
-        <div className="flex w-full items-center text-xs text-gray-500 font-bold">
+        <div className="flex w-full items-center text-xs text-sub800 font-bold">
           {/* 차트 너비만큼 비워주기 (차트 영역이 차지하는 너비에 맞춰 조정하세요) */}
           <div className="w-[160px]" /> 
 
           {/* 카드의 타이틀 + % 수치 너비만큼 비워주기 */}
-          <div className="w-8" /> 
+          <div className="w-48" /> 
 
           {/* 표준 영역: 하단 프로그레스 바와 수직으로 일치하게 됨 */}
           <div className="flex-1 grid grid-cols-3 text-center">
@@ -228,12 +228,12 @@ export default function Composition({data}: {data: IBiaData}) {
           <div className="flex flex-col flex-1 gap-1">
             <div className="flex items-center gap-1 w-full ">
               {/* 타이틀 박스 */}
-              <div className={`flex items-center justify-center h-fit px-2 py-1 w-16 text-base font-bold text-white rounded-[4px] bg-sub400`}>
+              <div className={`flex items-center w-20 justify-center h-fit px-2 py-1 text-sm font-bold text-white rounded-[4px] bg-sub400`}>
                 평균 비율
               </div>
 
               {/* 메인 데이터 영역 */}
-              <div className="flex h-fit flex-1 text-sm text-sub600 pl-6 items-center bg-sub100 rounded-sm px-2 py-1 gap-1">
+              <div className="flex h-fit flex-1 text-xs text-sub600 pl-6 items-center bg-sub100 rounded-sm px-2 py-1 gap-1">
                  체수분 : 55~65% / 단백질 : 15~18% / 무기질 : 5~6% / 체지방 :10~20%
               </div>
             </div>
@@ -253,7 +253,7 @@ export default function Composition({data}: {data: IBiaData}) {
       </div>
 
       <div className="flex gap-2 px-4 py-2  bg-sub100 border border-sub200 rounded-sm items-center ">
-          <span className="font-bold text-sub800 text-base text-center">{title}</span>
+          <span className="font-bold text-sub800 text-sm text-center">{title}</span>
           <span className="text-sub800 text-sm] leading-none">{description}</span>
       </div>
     </div>

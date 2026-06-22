@@ -10,17 +10,17 @@ export function RecommendCard ({type, title, description} : {type: string, title
   };
   return (
     <div className="flex w-full gap-2">
-      <div className="h-20 w-20 print:w-14 print:h-14 aspect-square rounded-[4px] bg-sub100 border items-center flex justify-center border-sub200">
+      <div className="h-20 w-20 aspect-square rounded-[4px] bg-sub100 border items-center flex justify-center border-sub200">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={iconMap[type]} alt={type} className="w-8 h-8" />
       </div>
       <div className="flex flex-col gap-1 w-full">
         <div className="flex w-full justify-between items-center">
-          <span className="text-xs font-bold text-blackk ">{title}</span>
-          <div className="px-1 rounded-[4px] bg-accent text-[9px] text-white">{type}</div>
+          <span className="text-sm font-bold text-blackk ">{title}</span>
+          <div className="px-1 rounded-[4px] bg-mainBlue-600 text-xs text-white">{type}</div>
         </div>
 
-        <div className="text-[10px] text-start leading-tight text-sub600">
+        <div className="text-xs text-start leading-tight text-sub600">
           {description}
         </div>
       </div>
@@ -51,11 +51,11 @@ export default function Recommend({data}: {data: IBiaRecommend}) {
 
   ]
   return (
-    <div className="flex flex-col gap-2 px-2 w-full h-full">
+    <div className="flex flex-col gap-2 px-2 w-full h-full rounded-lg border border-sub200  p-2">
       {/* 1. 타이틀 영역 (작성하신 부분) */}
-      <div className="flex gap-2 items-center text-accent font-bold">
-        <div className="w-3 h-3 rounded-[3px] bg-accent" />
-        <div className="text-accent font-bold text-sm ">
+      <div className="flex gap-2 items-center text-mainBlue-600 font-bold">
+        <div className="w-3 h-3 rounded-[3px] bg-mainBlue-600" />
+        <div className="text-mainBlue-600 font-bold text-sm ">
           체중조절/처방
         </div>
       </div>
