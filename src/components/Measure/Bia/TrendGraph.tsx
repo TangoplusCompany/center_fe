@@ -68,8 +68,9 @@ const DataCell = ({ value, diff, status, unit, up }: { value: string, diff: stri
 };
 
 export default function TrendGraph({data}: {data:IBiaData}) {
-  const sortedHistory = [...data.history_data];
-  const dates = sortedHistory.map((h) => h.measure_date).slice(0, 7).reverse();
+  const sortedHistory = [...data.history_data].slice(0, 7).reverse();
+  const dates = sortedHistory.map((h) => h.measure_date);
+
   const TREND_DATA = {
     score: transformToTrend(sortedHistory, 'body_score'),
     sarcopenia: transformToTrend(sortedHistory, 'skeletal_muscle_mass_index'),
@@ -101,9 +102,9 @@ export default function TrendGraph({data}: {data:IBiaData}) {
             {Array.from({ length: 7 }).map((_, i) => (
               <div key={i} className="text-center text-sm text-gray-400 font-medium min-h-[12px] truncate">
                 {dates[i] ? (() => {
-                  const [datePart, timePart] = dates[i].split(" "); // 공백 기준으로 날짜와 시간 분리
-                  const formattedDate = datePart.replace(/-/g, "."); // 2000.10.10
-                  const formattedTime = timePart ? timePart.slice(0, 5) : ""; // 16:33:28 -> 16:33
+                  const [datePart, timePart] = dates[i].split(" "); 
+                  const formattedDate = datePart.replace(/-/g, "."); 
+                  const formattedTime = timePart ? timePart.slice(0, 5) : ""; 
 
                   return (
                     <>
