@@ -11,6 +11,7 @@ const FrontMeasurement = ({
   sns,
   measureInfo,
   cameraOrientation,
+  onImageReady,
   isMyPage = false,
 }: {
   sns: {
@@ -20,6 +21,7 @@ const FrontMeasurement = ({
   };
   measureInfo: IMeasureResponse;
   cameraOrientation: 0 | 1;
+  onImageReady?: (idx: 0 | 1, url: string) => void;
   isMyPage: boolean;
 }) => {
 
@@ -69,14 +71,12 @@ const FrontMeasurement = ({
       {/* 상단: 이미지 2개 */}
       <div className="grid grid-cols-2 gap-4">
         <div className="col-span-1">
-          <MeasureStaticFirst files={measureFirst?.file_data} cameraOrientation={cameraOrientation} />
+          <MeasureStaticFirst files={measureFirst?.file_data} cameraOrientation={cameraOrientation} onImageReady={onImageReady} />
         </div>
         <div className="col-span-1">
-          <MeasureStaticSecond files={measureSecond?.file_data} cameraOrientation={cameraOrientation} />
+          <MeasureStaticSecond files={measureSecond?.file_data} cameraOrientation={cameraOrientation} onImageReady={onImageReady} />
         </div>
       </div>
-      {/* TODO 이 곳에 족압 이미지를 넣는 컴포넌트가 필요함. */}
-      {/* 하단: RawDataResult*/}
       <StaticDataContainer measureData={measureInfo} />
       <RawDataContainer mergedDetailData0={mergedDetailData} measure_date0={""} measure_date1={""} />
     </div>

@@ -1,6 +1,6 @@
 import { IPoseLandmark } from "@/types/pose";
 import { useStaticLandmark } from "@/hooks/landmark/useStaticLandmark";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MeasurementImageDialog from "./MeasurementImageDialog";
 import { Button } from "../ui/button";
 
@@ -10,6 +10,8 @@ interface MeasurementImageProps {
   step: "first" | "second" | "third" | "fourth" | "fifth" | "sixth";
   cameraOrientation: 0 | 1;
   compareSlot?: 0 | 1;
+  leftRight ?: 0 | 1;
+  onImageReady?: (idx : 0 | 1, url: string) => void;
 }
 export const MeasurementImage = ({
   imageUrl,
@@ -17,12 +19,19 @@ export const MeasurementImage = ({
   step,
   cameraOrientation,
   compareSlot,
+  leftRight,
+  onImageReady
 }: MeasurementImageProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [showGrid, setShowGrid] = useState(true);
   const [showLine, setShowLine] = useState(true);
 
   const { resultUrl, loading } = useStaticLandmark(imageUrl, measureJson, step, cameraOrientation, showLine);
+  useEffect(() => {
+    if (resultUrl && onImageReady) {
+      onImageReady(compareSlot ? compareSlot : (leftRight ? leftRight : 0), resultUrl);
+    }
+  }, [compareSlot, leftRight, onImageReady, resultUrl]);
   const RadialGradientShadow = 'inset 0 0 12px rgba(255, 255, 255, 0.75)'
 
   const loadingPlaceholder = (

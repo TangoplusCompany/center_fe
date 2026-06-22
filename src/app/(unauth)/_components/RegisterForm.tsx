@@ -75,6 +75,8 @@ const registerSchema = z
     passwordConfirm: z.union([z.literal(""), passwordSchema]),
     name: z.union([z.literal(""), nameSchema]),
     phone: z.union([z.literal(""), phoneSchema]),
+    termsAccepted: z.boolean().refine((val) => val === true, "필수 동의 항목입니다."),
+    privacyAccepted: z.boolean().refine((val) => val === true, "필수 동의 항목입니다."),
   })
   .merge(centerEditSchema)
   .superRefine((arg, ctx) => {
@@ -120,9 +122,12 @@ export const RegisterContainer = () => {
       centerAddress: "",
       centerAddressDetail: "",
       centerPhone: "",
+      termsAccepted: false, 
+      privacyAccepted: false,
     },
   });
-
+  const isTermsAccepted = watch("termsAccepted");
+  const isPrivacyAccepted = watch("privacyAccepted");
   const emailValue = watch("email") ?? "";
   const isEmailValid =
     emailValue.trim().length > 0 &&
@@ -587,14 +592,53 @@ export const RegisterContainer = () => {
                 <ErrorText>{String(errors.centerPhone?.message)}</ErrorText>
               )}
             </div>
+            <div className="flex flex-col items-start gap-2">
+              <Label htmlFor="centerPhone" className="lg:text-lg">
+                약관 동의
+              </Label>
+              <div className="flex flex-col gap-2 w-full border p-3 ">
+                {/* 서비스 이용약관 */}
+                <div className="flex items-center justify-between w-full">
+                  <span onClick={() => {
+                    window.open('https://tangobody-terms.vercel.app/admin_page/terms', '_blank');
+                  }} className="text-sm text-muted-foreground underline cursor-pointer">
+                    [필수] 서비스 이용약관
+                  </span>
+                  <input
+                    type="checkbox"
+                    id="termsAccepted"
+                    className="h-4 w-4 rounded border-gray-350"
+                    {...register("termsAccepted")}
+                  />
+                </div>
+
+                {/* 개인정보 처리 방침 */}
+                <div className="flex items-center justify-between w-full">
+                  <span onClick={() => {
+                    window.open('https://tangobody-terms.vercel.app/admin_page/privacy', '_blank');
+                  }} className="text-sm text-muted-foreground underline cursor-pointer">
+                    [필수] 개인정보 처리 방침
+                  </span>
+                  <input
+                    type="checkbox"
+                    id="privacyAccepted"
+                    className="h-4 w-4 rounded border-gray-350"
+                    {...register("privacyAccepted")}
+                  />
+                </div>
+              </div>
+            </div>
+
             <Button
               type="submit"
               variant={"outline"}
               className="w-full lg:text-lg"
-              disabled={otpStatus !== "verified" || registerPending}
+              disabled={otpStatus !== "verified" || !isTermsAccepted || !isPrivacyAccepted || registerPending}
             >
               {registerPending ? "가입 중..." : "회원가입"}
             </Button>
+
+            
           </div>
         )}
       </div>

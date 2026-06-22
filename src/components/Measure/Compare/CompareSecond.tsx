@@ -13,6 +13,7 @@ const MeasureStaticCompareSecond = React.memo(
   right,
   userSn,
   onCompareDialogOpen,
+  onImageReady,
   isMyPage = false,
 }: CompareStaticProps) => {
   const leftSummaryData = left?.basic_result?.result_summary_data
@@ -80,6 +81,7 @@ const MeasureStaticCompareSecond = React.memo(
               step="second"
               cameraOrientation={leftSummaryData?.camera_orientation ?? 0}
               compareSlot={0}
+              onImageReady={onImageReady}
             />
           )}
         </div>
@@ -94,6 +96,7 @@ const MeasureStaticCompareSecond = React.memo(
                 step="second"
                 cameraOrientation={rightSummaryData?.camera_orientation ?? 0}
                 compareSlot={1}
+                onImageReady={onImageReady}
               />
             ) : (
             <CompareDefault onCompareDialogOpen={onCompareDialogOpen} currentSlot={1}/>

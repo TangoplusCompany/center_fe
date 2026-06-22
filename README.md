@@ -116,15 +116,11 @@ API는 환경변수에 주소를 저장하고 사용중입니다. API 관련 문
 환경변수 예시는 다음과 같습니다.
 
 ```
-NEXT_PUBLIC_API_URL=
-NEXT_PUBLIC_FILE_URL=
-NEXT_PUBLIC_KAKAO_URL=
-TANGO_SECRET_KEY=
-TANGO_SECRET_IV=
+### 3D스켈레톤 등 이미지 깨짐
+Remove-Item -Recurse -Force .next, node_modules, package-lock.json
+npm cache clean --force
+npm install
+
+혹은 middleware 점검
+
 ```
-
-## 기타
-
-`ESLint` 와 `prettier` 로 코드 컨벤션을 준수하고 있습니다. 빌드시 에러가 발생할 수 있으니 컨벤션을 준수해 주시면됩니다.
-
-현재 배포 환경은 `vercel` 입니다. 다만 무료로 사용중인만큼 트래픽에 대한 한계와 초과시 비용에 대한 문제가 발생할 수 있으니 추후 변경 바랍니다.

@@ -9,45 +9,60 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { FileText } from "lucide-react";
-import { emailFiltering, phoneFiltering } from "@/utils/regexFiltering";
 import { useEffect, useState } from "react";
-import { IUserData } from "@/types/user";
 import { IMeasureList } from "@/types/measure";
 import { formatDate } from "@/utils/formatDate";
 import { useRouter } from "next/navigation";
-import { actionUserEncrypt, actionMeasureEncrypt } from "@/app/actions/getCrypto";
+import { actionMeasureEncrypt } from "@/app/actions/getCrypto";
 
 export const MainUserList = ({
   users,
   path,
 }: {
-  users: IUserData[] | IMeasureList[];
+  users: IMeasureList[];
   path: string;
 }) => {
   const router = useRouter();
-  const [list, setList] = useState<IUserData[] | IMeasureList[]>(users);
-
+  const [list, setList] = useState<IMeasureList[]>(users);
   useEffect(() => {
     setList(users);
   }, [users]);
 
-  const handleUserNavigate = async (user_uuid: string, user_sn: number, user_name: string) => {
-    const encrypted = await actionUserEncrypt({ user_uuid, user_sn, user_name });
-    if (encrypted !== "ERROR") {
-      router.push(`/user/${encrypted}`);
-    }
-  };
+  // const handleUserNavigate = async (
+  //   user_uuid: string, 
+  //   user_sn: number, 
+  //   user_name: string
+  // ) => {
+  //   const encrypted = await actionUserEncrypt({ user_uuid, user_sn, user_name });
+  //   if (encrypted !== "ERROR") {
+  //     router.push(`/user/${encrypted}`);
+  //   }
+  // };
 
-  const handleMeasureNavigate = async (measure_sn: number, user_sn: number, uuid: string, mobile: string) => {
+  const handleMeasureNavigate = async (
+    measure_sn: number,
+    user_sn: number,
+    uuid: string,
+    mobile: string,
+    has_basic: 0 | 1,
+    has_rom: 0 | 1,
+    has_bia: 0 | 1,
+  ) => {
     const encrypted = await actionMeasureEncrypt({ measure_sn, user_sn, uuid, mobile });
     if (encrypted !== "ERROR") {
-      router.push(`/measure/${encrypted}`);
+      if (has_basic === 1) {
+      router.push(`/measure/basic?data=${encrypted}`);
+    } else if (has_rom === 1) {
+      router.push(`/measure/rom?data=${encrypted}`);
+    } else if (has_bia === 1) {
+      router.push(`/measure/bia?data=${encrypted}`);
+    }
     }
   };
   return (
     <div className="w-full overflow-x-auto">
       <Table>
-      {path === "user" && (
+      {/* {path === "user" && (
         <>
           <TableHeader>
             <TableRow>
@@ -81,7 +96,7 @@ export const MainUserList = ({
             ))}
           </TableBody>
         </>
-      )}
+      )} */}
       {path === "measure" && (
         <>
           <TableHeader>
@@ -106,7 +121,15 @@ export const MainUserList = ({
                 </TableCell>
                 <TableCell className="flex items-center justify-end gap-2 whitespace-nowrap">
                   <button
-                    onClick={() => handleMeasureNavigate(measure.measure_sn ?? measure.measure_sn, measure.user_sn, measure.user_uuid, measure.mobile)}
+                    onClick={() => handleMeasureNavigate(
+                      measure.measure_sn ?? measure.measure_sn, 
+                      measure.user_sn, 
+                      measure.user_uuid, 
+                      measure.mobile,
+                      measure.has_basic,
+                      measure.has_rom,
+                      measure.has_bia
+                    )}
                     className="flex items-center gap-2 justify-end cursor-pointer"
                   >
                     <FileText className="w-4 h-4" />

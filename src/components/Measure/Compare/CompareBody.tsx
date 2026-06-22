@@ -9,13 +9,16 @@ import MeasureStaticCompareSixth from "./CompareSixth";
 import CompareDateCard from "./CompareDateCard";
 import { ComparePair, CompareSlot } from "@/types/compare";
 import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import CompareIntro from "./CompareIntro";
 import MeasureDynamicCompare from "./CompareSeventh";
 import CompareBodySkeleton from "./CompareBodySkeleton";
+import { generatePrintUrls } from "@/hooks/api/measure/generatePrintUrls";
+import { actionPrintEncrypt } from "@/app/actions/getCrypto";
+import { Button } from "@/components/ui/button";
 
-type MeasureTab = {
+type CompareTab = {
   title: string;
   value: string;
   render: (left?: IMeasureResponse, right?: IMeasureResponse) => React.ReactNode;
@@ -26,25 +29,37 @@ export interface CompareStaticProps {
   right ?: IMeasureResponse
   userSn: string;
   onCompareDialogOpen: (slot: CompareSlot) => void;
+  onImageReady?: (idx: 0 | 1, url: string) => void;
   isMyPage: boolean;
 }
 
 const CompareBody = ({
   userSn,
   comparePair,
-  // onRemoveCompare,
   onCompareDialogOpen,
   isMyPage = false,
 } : {
   userSn: string;
   comparePair: ComparePair;
-  // onRemoveCompare: (slot: CompareSlot) => void;
   onCompareDialogOpen: (slot: CompareSlot) => void;
   isMyPage: boolean;
 }) => {
   const leftSn = comparePair[0];
   const rightSn = comparePair[1];
-  const [activeIdx, setActiveIdx] = useState(0);
+
+  const [activeCompareTab, setActiveCompareTab] = useState('summary');
+  const [, setIsPrinting] = useState(false);
+  const [printImageMap, setPrintImageMap] = useState<Record<string, string>>({});
+  const handleImageReady = (idx: 0 | 1, url: string) => {
+    setPrintImageMap((prev) => ({
+      ...prev,
+      [idx]: url 
+    }));
+  };
+  const handleCompareTabChange = (nextTab: string) => {
+    setActiveCompareTab(nextTab);
+    setPrintImageMap({}); 
+  };
   const leftEnabled = !!leftSn;
   const rightEnabled = !!rightSn;
   const {
@@ -76,10 +91,9 @@ const CompareBody = ({
     return <div>데이터 로딩 중 오류가 발생했습니다.</div>;
   }
 
-
   const leftSlot: CompareSlot = 0;  // 또는 1
   const rightSlot: CompareSlot = 1;
-  const measureTabs: MeasureTab[] = [
+  const compareTabs: CompareTab[] = [
     {
       title: "결과 요약",
       value: "summary",
@@ -100,6 +114,7 @@ const CompareBody = ({
               userSn={userSn}
               onCompareDialogOpen={onCompareDialogOpen}
               isMyPage={isMyPage}
+              onImageReady={handleImageReady}
             />
           </div>
         );
@@ -117,6 +132,7 @@ const CompareBody = ({
               userSn={userSn}
               onCompareDialogOpen={onCompareDialogOpen}
               isMyPage={isMyPage}
+              onImageReady={handleImageReady}
             />
           </div>
         );
@@ -134,6 +150,7 @@ const CompareBody = ({
               userSn={userSn}
               onCompareDialogOpen={onCompareDialogOpen}
               isMyPage={isMyPage}
+              onImageReady={handleImageReady}
             />
           </div>
         );
@@ -151,6 +168,7 @@ const CompareBody = ({
               userSn={userSn}
               onCompareDialogOpen={onCompareDialogOpen}
               isMyPage={isMyPage}
+              onImageReady={handleImageReady}
             />
           </div>
         );
@@ -168,6 +186,7 @@ const CompareBody = ({
               userSn={userSn}
               onCompareDialogOpen={onCompareDialogOpen}
               isMyPage={isMyPage}
+              onImageReady={handleImageReady}
             />
           </div>
         );
@@ -185,6 +204,7 @@ const CompareBody = ({
               userSn={userSn}
               onCompareDialogOpen={onCompareDialogOpen}
               isMyPage={isMyPage}
+              onImageReady={handleImageReady}
             />
           </div>
         );
@@ -208,35 +228,68 @@ const CompareBody = ({
       },
     }
   ];
-  
-  const activeTab = measureTabs[activeIdx];
-  const activeValue = measureTabs[activeIdx].value;
 
+  const handlePrintProcess = async (seq: string) => {
+    const imageUrls = Object.values(printImageMap);
+    if (imageUrls.length === 0) return;
+    
+    setIsPrinting(true);
+
+    try {
+      // 1. 컴포넌트 단에서 html2canvas 실행 후 Blob 객체 리스트 만들기
+      const imagesToUpload = imageUrls.map((url, index) => ({
+        paramKey: `img${index + 1}`,
+        imageUrl: url
+      }));
+
+      // 분리된 스토리지 파일 함수 호출
+      const urlParams = await generatePrintUrls(imagesToUpload);
+
+      const cryptoData0 = {
+        sn: Number(leftData?.measurement_meta.measure_sn),
+        user_uuid: leftData?.measurement_meta.user_uuid ?? "",
+        receiver: leftData?.measurement_meta.mobile ?? "",
+      };
+  
+      const encryptData0 = await actionPrintEncrypt(cryptoData0);
+
+      const cryptoData1 = {
+        sn: Number(rightData?.measurement_meta.measure_sn),
+        user_uuid: rightData?.measurement_meta.user_uuid?? "",
+        receiver: rightData?.measurement_meta.mobile?? "",
+      };
+  
+      const encryptData1 = await actionPrintEncrypt(cryptoData1);
+
+      if (urlParams && urlParams.length > 0) {
+        const bProjectBaseUrl = process.env.NEXT_PUBLIC_IMAGE_PRIN_URL;
+        const finalUrl = `${bProjectBaseUrl}?t_r0=${encryptData0}&t_r1=${encryptData1}&${urlParams.join("&")}&seq=${seq}`;
+        window.open(finalUrl, '_blank');
+      } else {
+        alert("이미지 주소 생성에 실패했습니다.");
+      }
+
+    } catch (error) {
+      console.error("인쇄 처리 실패:", error);
+    } finally {
+      setIsPrinting(false);
+    }
+  };
   return (
-    // 1. 최상위 div에 min-w-0을 추가하여 flex 자식일 경우를 대비합니다.
-    <div className="w-full flex flex-col gap-4 min-w-0 max-w-full">
-      
-      {/* ✅ 상단 탭 영역: value/onValueChange로 제어해 다이얼로그 열림 후에도 선택 탭이 유지되도록 함 */}
-      <Tabs
-        value={activeValue}
-        onValueChange={(value) => {
-          const idx = measureTabs.findIndex((m) => m.value === value);
-          if (idx >= 0) setActiveIdx(idx);
-        }}
+    <Tabs
+        value={activeCompareTab}
+        onValueChange={handleCompareTabChange}
         className="w-full table table-fixed min-w-0"
       >
-        <div className="w-full">
-          {/* 1. 이 div가 가장 중요합니다. 가로 스크롤 전용 컨테이너입니다. */}
+        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-start md:justify-between mb-4 gap-4 w-full">
           <div className="overflow-x-auto overflow-y-hidden w-full min-w-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             
-            {/* 2. TabsList에 flex-nowrap을 강제로 주고 w-max로 길이를 확보합니다. */}
             <TabsList className="relative z-10 flex w-max min-w-full flex-nowrap items-center justify-start bg-transparent p-0 border-none shadow-none">
 
-              {measureTabs.map((measure) => (
+              {compareTabs.map((measure) => (
                 <TabsTrigger
                   key={measure.value}
                   value={measure.value}
-                  // 3. whitespace-nowrap이 여기서 글자 줄바꿈을 막아줍니다.
                   className={cn(
                     "relative pb-2 text-lg font-semibold transition-colors whitespace-nowrap flex-shrink-0",
                     "bg-transparent data-[state=active]:bg-transparent",
@@ -251,32 +304,56 @@ const CompareBody = ({
               ))}
             </TabsList>
           </div>
+
+          {['first', 'second', 'third', 'fourth', 'fifth', 'sixth'].includes(activeCompareTab) &&
+          (leftData && rightData) && (
+              <Button 
+                className="px-6 sm:w-auto" 
+                variant="sub"
+                onClick={() => {
+                  handlePrintProcess(activeCompareTab);
+                }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/icons/ic_people_image.svg"
+                  alt="인쇄하기"
+                  className="size-4 dark:[filter:brightness(0)_invert(1)]"
+                />
+                <span>측정 이미지 인쇄</span>
+              </Button>
+            )}
         </div>
+
+        <div className="grid grid-cols-2 gap-4 items-stretch w-full">
+          <div className="min-w-0">
+            <CompareDateCard 
+              regDate={leftData ? leftData?.basic_result?.result_summary_data.measure_date : ""}
+              currentSlot={leftSlot}
+              onCardClick={onCompareDialogOpen} />
+          </div>
+          <div className="min-w-0">
+            <CompareDateCard 
+              regDate={rightData ? rightData?.basic_result?.result_summary_data.measure_date : ""}
+              currentSlot={rightSlot}
+              onCardClick={onCompareDialogOpen} />
+          </div>
+        </div>
+
+        {true && (
+        compareTabs.map((compareTab) => (
+          <TabsContent
+            key={compareTab.value}
+            value={compareTab.value}
+            className="!mt-0"
+          >
+            {compareTab.render(leftData, rightData)}
+          </TabsContent>
+        ))
+      ) }
       </Tabs>
 
-      {/* 날짜 카드 영역 */}
-      <div className="grid grid-cols-2 gap-4 items-stretch w-full">
-        <div className="min-w-0">
-          <CompareDateCard 
-            regDate={leftData ? leftData?.basic_result?.result_summary_data.measure_date : ""}
-            currentSlot={leftSlot}
-            onCardClick={onCompareDialogOpen} />
-        </div>
-        <div className="min-w-0">
-          <CompareDateCard 
-            regDate={rightData ? rightData?.basic_result?.result_summary_data.measure_date : ""}
-            currentSlot={rightSlot}
-            onCardClick={onCompareDialogOpen} />
-        </div>
-      </div>
-
-      {/* 하단 컨텐츠 영역 */}
-      <div className="w-full overflow-hidden">
-        {activeTab.render(leftData, rightData)}
-      </div>
-    </div>
   );
 };
-
 
 export default CompareBody;
