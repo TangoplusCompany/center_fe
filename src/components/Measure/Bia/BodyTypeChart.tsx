@@ -14,11 +14,11 @@ const myDotPosition = {
   bottom: `${100 - bmiPos}%`, 
 };
   return (
-    <div className="flex flex-col px-2 w-full h-full">
+    <div className="flex flex-col px-2 w-full h-full rounded-lg border border-sub200  p-2">
       {/* 1. 타이틀 영역 */}
-      <div className="flex gap-2 items-center mb-2 text-accent font-bold">
-        <div className="w-3 h-3 rounded-[3px] bg-accent" />
-        <div className="text-accent font-bold text-sm">
+      <div className="flex gap-2 items-center mb-2 text-mainBlue-600 font-bold">
+        <div className="w-3 h-3 rounded-[3px] bg-mainBlue-600" />
+        <div className="text-mainBlue-600 font-bold text-sm">
           바디 타입 세부 분석
         </div>
       </div>
@@ -27,7 +27,7 @@ const myDotPosition = {
       <div className="relative ml-6 mb-2">
         
         {/* --- Y축 라벨 (BMI) --- */}
-        <div className="absolute -left-6 top-0 h-full text-[10px] text-sub400">
+        <div className="absolute -left-6 top-0 h-full text-xs text-sub400">
           <span className="absolute -top-2 left-1">BMI</span>
           <span className="absolute top-[25%] -translate-y-1/2">30.0</span>
           <span className="absolute top-[50%] -translate-y-1/2">25.0</span>
@@ -35,7 +35,7 @@ const myDotPosition = {
         </div>
 
         {/* --- 메인 그리드 표 (h-[160px]를 h-full로 변경!) --- */}
-        <div className="grid grid-cols-3 grid-rows-4 w-full h-[150px] border border-sub200 rounded-md text-[11px] text-sub800 bg-white relative">
+        <div className="grid grid-cols-3 grid-rows-4 w-full h-[256px] border border-sub200 rounded-md text-xs text-sub800 bg-white relative">
           
           {/* Row 1 */}
           <div className="border-b border-r border-sub200 flex items-center justify-center">우람한</div>
@@ -60,13 +60,13 @@ const myDotPosition = {
 
           {/* --- 내 위치 마커 --- */}
           <div
-            className="absolute w-3.5 h-3.5 bg-accent/75 rounded-full transform -translate-x-1/2 -translate-y-1/2"
+            className="absolute w-3.5 h-3.5 bg-mainBlue-600/75 rounded-full transform -translate-x-1/2 -translate-y-1/2"
             style={{ left: myDotPosition.left, top: myDotPosition.bottom }}
           />
         </div>
 
         {/* --- X축 라벨 (체지방률) --- */}
-        <div className="absolute -bottom-0.5 left-0 w-full text-[10px] text-sub400">
+        <div className="absolute -bottom-0.5 left-0 w-full text-xs text-sub400">
           <span className="absolute left-[33.33%] -translate-x-1/2">10.0</span>
           <span className="absolute left-[66.66%] -translate-x-1/2">20.0</span>
           <span className="absolute right-0">체지방률</span>

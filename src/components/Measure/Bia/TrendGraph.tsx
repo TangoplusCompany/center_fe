@@ -53,13 +53,13 @@ const transformToTrend = (
 const DataCell = ({ value, diff, status, unit, up }: { value: string, diff: string, status: string, unit: string, up: boolean }) => {
   const colorClass = 
     status === 'red' ? ' text-danger' : 
-    status === 'blue' ? ' text-accent' :
+    status === 'blue' ? ' text-mainBlue-600' :
     ' text-sub600 bg-white';
 
   return (
-    <div className={`flex flex-col items-center justify-center rounded-sm py-1 px-1 w-full min-w-[40px] h-[28px] leading-none ${colorClass}`}>
-      <span className="text-[9px] font-bold leading-tight">{value}{unit}</span>
-      <div className="flex items-center gap-0.5 text-[7px] mt-1">
+    <div className={`flex flex-col items-center justify-center rounded-sm py-1 px-1 w-full min-w-[40px] h-[48px] leading-none border border-sub200 ${colorClass}`}>
+      <span className="text-sm font-bold leading-tight">{value}{unit}</span>
+      <div className="flex items-center gap-0.5 text-xs mt-1">
         <span>{up ? '▲' : '▼'}</span>
         <span>{diff}</span>
       </div>
@@ -78,49 +78,54 @@ export default function TrendGraph({data}: {data:IBiaData}) {
     fat: transformToTrend(sortedHistory, 'body_fat_mass', true),
   };
   return (
-    <div className="flex flex-col w-full bg-white">
+    <div className="flex flex-col w-full bg-white rounded-lg border border-sub200  p-2">
       <div className="flex justify-between items-center ">
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-accent rounded-[4px]" />
-          <h2 className="text-sm font-bold text-accent">측정 이력</h2>
+          <div className="w-3 h-3 bg-mainBlue-600 rounded-[4px]" />
+          <h2 className="text-sm font-bold text-mainBlue-600">측정 이력</h2>
         </div>
         <div className="flex items-center gap-1.5">
           <div className="w-2 h-2 bg-sub600 rounded-[2px]" />
-          <span className="text-[10px] text-gray-500 font-medium">최근이력</span>
+          <span className="text-xs text-gray-500 font-medium">최근이력</span>
         </div>
       </div>
 
-      <div className="flex justify-center h-full items-center">
-        <div className="">
-          {/* 날짜 행 */}
-          <div className="grid grid-cols-[80px_repeat(7,1fr)] gap-2 mb-1">
-            <div /> {/* 첫 칸 비우기 */}
+      <div className="flex flex-1 w-full h-full items-center justify-center">
+        {/* 기존 빈 div를 제거하거나 w-full 추가 */}
+        <div className="w-full"> 
+          
+          {/* 상단 날짜 헤더 구역 */}
+          {/* gap-2에서 아래 데이터 행과 맞추기 위해 gap-0.5로 통일하고 w-full 부여 */}
+          <div className="grid grid-cols-[80px_repeat(7,1fr)] gap-0.5 mb-1 w-full">
+            <div /> 
             {Array.from({ length: 7 }).map((_, i) => (
-              <div key={i} className="text-center text-[9px] text-gray-400 font-medium min-h-[12px]">
+              <div key={i} className="text-center text-sm text-gray-400 font-medium min-h-[12px] truncate">
                 {dates[i] ? dates[i].slice(0, 10).replace(/-/g, ".") : ""}
               </div>
             ))}
           </div>
 
-          {/* 카테고리별 데이터 행 */}
-          <div className="flex flex-col gap-0.5">
+          {/* 데이터 행 구역 */}
+          <div className="flex flex-col w-full gap-0.5">
             {CATEGORIES.map((cat) => (
-              <div key={cat.id} className="grid grid-cols-[80px_repeat(7,1fr)] gap-0.5 items-center">
-                {/* 왼쪽 카테고리 라벨 */}
-                <div className="flex flex-col items-center justify-center bg-gray-100 rounded-sm h-[28px] text-center leading-tight">
-                  <span className="text-[9px] font-bold text-gray-700 leading-tight">{cat.label}</span>
-                  <span className="text-[7px] text-gray-500 font-medium">({cat.unit})</span>
+              <div key={cat.id} className="grid grid-cols-[80px_repeat(7,1fr)] gap-0.5 items-center w-full">
+                
+                {/* 카테고리 이름 영역 */}
+                <div className="flex flex-col items-center justify-center bg-gray-100 rounded-sm h-[48px] text-center leading-tight">
+                  <span className="text-sm font-bold text-gray-700 leading-tight">{cat.label}</span>
+                  <span className="text-xs text-gray-500 font-medium">({cat.unit})</span>
                 </div>
 
-                {/* 해결책: 항상 7번 루프를 돕니다 */}
+                {/* 7개 데이터 셀 영역 */}
                 {Array.from({ length: 7 }).map((_, i) => {
-                  // 해당 인덱스(i)에 데이터가 있는지 확인
                   const data = TREND_DATA[cat.id as keyof typeof TREND_DATA]?.[i];
 
                   return data ? (
+                    // DataCell 내부에도 h-full과 w-full이 잘 먹히는지 확인 필요합니다.
                     <DataCell key={i} {...data} unit={cat.unit} />
                   ) : (
-                    <div key={i} className="border-2 border-gray-200 rounded-sm h-full opacity-40" />
+                    // 빈 셀의 높이를 카테고리 높이(h-[28px])와 맞춰주기 위해 h-[28px] 추가
+                    <div key={i} className="border-2 border-sub200 rounded-sm h-[48px] w-full opacity-40" />
                   );
                 })}
               </div>
@@ -128,6 +133,8 @@ export default function TrendGraph({data}: {data:IBiaData}) {
           </div>
         </div>
       </div>
+
+
     </div>
   );
 }

@@ -2,15 +2,13 @@ import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, Responsi
 import type { IBiaData } from "../../../types/bia";
 import { SVGProps } from "react";
 
-
-// 1. 차트 데이터 배열의 각 객체 타입을 명확히 선언합니다.
 interface PentagonChartDataItem {
-  subject: string;      // 부위 명칭 (예: "오른팔", "왼팔")
-  value: number;        // 현재 측정값
-  lastValue: number;    // 이전 측정값
-  weight: number;       // 무게 (kg)
-  percent: string;      // 퍼센트 문자열 (예: "105%")
-  status: string;       // 상태 (예: "표준이상", "표준")
+  subject: string; 
+  value: number; 
+  lastValue: number; 
+  weight: number;
+  percent: string;
+  status: string;
 }
 
 interface RechartsTickProps extends SVGProps<SVGTextElement> {
@@ -31,15 +29,12 @@ export function PentagonChart({
   isMuscle: boolean;
 }) {
   
-  // 3. props에 정확한 타입을 매핑하고 구조 분해 할당 진행
   const CustomAngleAxis = (props: RechartsTickProps) => {
     const { payload, x, y } = props;
     
-    // 방어 코드
     if (!payload || x === undefined || y === undefined) return <g />;
 
     const item = data.find((d) => d.subject === payload.value);
-    // 💡 Recharts 타입 호환성을 위해 null 대신 빈 <g /> 반환
     if (!item) return <g />;
 
     return (
@@ -48,7 +43,7 @@ export function PentagonChart({
         <text
           textAnchor="middle"
           fill="#333"
-          fontSize="9"
+          fontSize="14"
           fontWeight="bold"
           dy="-12"
         >
@@ -56,8 +51,8 @@ export function PentagonChart({
         </text>
 
         <text textAnchor="middle" fill="#666" dy="1">
-          <tspan fontSize="9">{item.weight}kg</tspan>
-          <tspan fontSize="7" fill="#999">{` (${item.percent})`}</tspan>
+          <tspan fontSize="14">{item.weight}kg</tspan>
+          <tspan fontSize="12" fill="#999">{` (${item.percent})`}</tspan>
         </text>
 
         {/* 3. Status Badge (상태) */}
@@ -70,9 +65,9 @@ export function PentagonChart({
         >
           <div
             className={`
-            text-[7px] text-white text-center rounded-[2px] 
+            text-xs text-white text-center rounded-[2px] 
             py-[2px] leading-none flex items-center justify-center min-w-[40px]
-            ${item.status === "표준이상" ? "bg-accent" : "bg-sub400"}
+            ${item.status === "표준이상" ? "bg-mainBlue-600/30" : "bg-sub400/30"}
           `}
           >
             {item.status}
@@ -85,14 +80,19 @@ export function PentagonChart({
   const maxValue = isMuscle ? 150 : 300;
 
   return (
+    // 1. relative 컨테이너 유지 (차트가 이 위에 얹어짐)
     <div className="relative flex-1 w-full min-h-0 flex justify-center items-center">
+      
+      {/* 2. absolute를 제거하고 h-64 부여 -> 이제 이 이미지가 부모의 높이를 확보합니다 */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/images/img_body.png"
-        className="absolute w-28 h-auto pointer-events-none"
+        className="w-auto h-64 pointer-events-none" 
         alt="body-bg"
       />
-      <div className="w-full h-full z-10">
+      
+      {/* 3. 차트 영역을 absolute로 변경하여 이미지 위에 덮어씌웁니다 */}
+      <div className="absolute inset-0 z-10 w-full h-full">
         <ResponsiveContainer width="100%" height="100%">
           <RadarChart cx="50%" cy="50%" outerRadius="65%" data={data}>
             <PolarGrid gridType="polygon" stroke="#DBDBDB" />
@@ -118,7 +118,6 @@ export function PentagonChart({
             />
             <PolarAngleAxis
               dataKey="subject"
-              // 💡 래핑 함수를 지우고 컴포넌트를 직접 주입하면 타입 추론이 올바르게 맵핑됩니다.
               tick={CustomAngleAxis}
             />
           </RadarChart>
@@ -228,29 +227,25 @@ export default function BodyModel({data} : {data: IBiaData}) {
 
 
   return (
-    <div className='grid grid-cols-2 gap-1 w-full h-full'>
+    <div className='grid grid-cols-2 gap-1 w-full h-full rounded-lg border border-sub200  p-2'>
       <div className='flex flex-col gap-1 w-full h-full'>
         <div className='flex justify-between '>
           <div className='flex gap-1 pl-1 pt-1 items-center'>
-            <div className='w-3 h-3 rounded-[3px] bg-accent' />
-            <span className='text-accent font-bold text-sm'>근육 분포</span>
+            <div className='w-3 h-3 rounded-[3px] bg-mainBlue-600' />
+            <span className='text-mainBlue-600 font-bold text-sm'>근육 분포</span>
           </div>
         </div>
         
         <PentagonChart data={muscleData} isMuscle={true} />
-
-
       </div>
 
       <div className='flex flex-col gap-1 w-full h-full'>
         <div className='flex justify-between '>
           <div className='flex gap-1 pl-1 pt-1 items-center'>
-            <div className='w-3 h-3 rounded-[3px] bg-accent' />
-            <span className='text-accent font-bold text-sm'>지방 분포</span>
+            <div className='w-3 h-3 rounded-[3px] bg-mainBlue-600' />
+            <span className='text-mainBlue-600 font-bold text-sm'>지방 분포</span>
           </div>
         </div>
-
-
         <PentagonChart data={fatData} isMuscle={false} />
       </div>
 

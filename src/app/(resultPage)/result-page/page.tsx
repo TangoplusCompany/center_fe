@@ -11,6 +11,7 @@ export default function ResultPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [currentTab, setCurrentTab] = useState<viewType>("latest");
+  
   // Store 상태
   const user = useResultPageUserStore((state) => state.user);
   const isLogin = useResultPageUserStore((state) => state.isLogin);
@@ -20,18 +21,26 @@ export default function ResultPage() {
     user_uuid: string;
     user_sn: number;
     user_name: string;
+    encryptedKey: string;
   } | null>(null);
 
   // 로딩 및 검증 상태 통합
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isStoreInitialized, setIsStoreInitialized] = useState(false);
 
+  // 💡 [추가] URL의 ?subTab= 변경을 감지하여 currentTab 상태 동기화
+  useEffect(() => {
+    const subTabParam = searchParams.get("subTab") as viewType;
+    if (subTabParam) {
+      setCurrentTab(subTabParam);
+    } else {
+      setCurrentTab("latest"); // 기본값
+    }
+  }, [searchParams]);
+
   // persist 복원 완료 대기
   useEffect(() => {
-    if (!hasHydrated) {
-      // persist가 복원될 때까지 기다림
-      return;
-    }
+    if (!hasHydrated) return;
 
     const initAuthAndData = async () => {
       const encryptedKey = searchParams.get("key");
@@ -42,7 +51,6 @@ export default function ResultPage() {
       }
 
       try {
-        // 1. 파라미터 복호화
         const decrypted = await actionUserDecrypt(encryptedKey);
         
         if (!decrypted) {
@@ -53,14 +61,12 @@ export default function ResultPage() {
           user_uuid: decrypted.user_uuid,
           user_sn: decrypted.user_sn,
           user_name: decrypted.user_name,
+          encryptedKey: encryptedKey,
         });
 
-        // 2. persist 복원 완료 후 Store 상태 확인
         if (isLogin && user) {
-          // 이미 로그인 상태이므로 추가 처리 불필요
           setIsStoreInitialized(true);
         } else {
-          // Store에 데이터가 없으면 로그인 페이지로 리다이렉트
           router.replace("/result-page/login");
           return;
         }
@@ -73,18 +79,15 @@ export default function ResultPage() {
     initAuthAndData();
   }, [hasHydrated, searchParams, router, isLogin, user]);
 
-  // Store 상태가 실제로 업데이트될 때까지 기다리기
+  // Store 상태 업데이트 대기
   useEffect(() => {
     if (!isStoreInitialized || !decryptedData) return;
 
     if (isLogin && user) {
       setIsInitialLoading(false);
     } else {
-      // Store 상태 반영이 늦어지는 경우를 대비해 
-      // 강제로 한 번 더 스토어 확인을 하거나 리다이렉트 시점을 명확히 함
       const timer = setTimeout(() => {
         if (!isLogin) {
-          // 1초 뒤에도 로그인이 안 되어 있다면 세션이 끊긴 것으로 간주
           router.replace("/result-page/login");
         }
         setIsInitialLoading(false);
@@ -93,7 +96,6 @@ export default function ResultPage() {
     }
   }, [isStoreInitialized, isLogin, user, decryptedData, router]);
 
-  // 최종 렌더링 전 방어막
   if (isInitialLoading || !isLogin || !user || !decryptedData) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -104,7 +106,10 @@ export default function ResultPage() {
 
   return (
     <div className="w-full max-w-[1300px] mx-auto px-4 md:px-6 lg:px-8 py-4 md:py-6 lg:py-8">
-      <ResultPageTab userName={decryptedData.user_name} currentTab={currentTab} setCurrentTab={setCurrentTab} />
+      <ResultPageTab 
+        userName={decryptedData.user_name} 
+        currentTab={currentTab} 
+      />
       <UserDetail 
         userUUID={decryptedData.user_uuid} 
         userSn={decryptedData.user_sn} 

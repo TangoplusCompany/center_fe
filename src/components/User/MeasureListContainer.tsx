@@ -3,62 +3,34 @@
 import React from "react";
 import { CenterUserMeasureList } from "@/components/User/MeasureList";
 import CenterUserMeasureListSkeleton from "@/components/User/MeasureListSkeleton";
-import { useGetUserMeasureList } from "@/hooks/api/user/useGetUserMeasureList";
-import { useQueryParams } from "@/hooks/utils/useQueryParams";
-import { IUserMeasureList } from "@/types/user";
-import DataError from "@/components/Util/DataError";
 import { CompareSlot } from "@/types/compare";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import CustomPagination from "../common/Pagination";
 import { measureType, viewType } from "./Detail";
+import { IUserMeasureList } from "@/types/user";
 
 const CenterUserMeasureListContainer = ({ 
-  userSn,
+  userMeasureList,
+  handleSortChange,
+  sort,
   setMeasureSn,
   setMeasureType,
   setCurrentTab,
   selectCompareSn, 
   isMyPage = false,
+  isListLoading,
 }: { 
-  userSn: number;
+  userMeasureList : IUserMeasureList,
+  handleSortChange: (value : string) => void;
+  sort: string;
   setMeasureSn: (measureSn: number) => void;
   setMeasureType: (mt: measureType) => void;
   setCurrentTab ?: (tab : viewType) => void;
   selectCompareSn: (sn: number, slot: CompareSlot) => void;
   isMyPage: boolean;
+  isListLoading: boolean;
 }) => {
-  const { setQueryParam, query } = useQueryParams();
-  const page = query.page || "1";
-  const limit = query.limit || "20";
-  const sort = query.sort || "desc";
-  const from = query.from;
-  const to = query.to;
-
-  const {
-    data: userMeasureList,
-    isLoading,
-    isError,
-  } = useGetUserMeasureList<IUserMeasureList>({
-    page,
-    limit,
-    user_sn: userSn,
-    from,
-    to,
-    sort,
-    isMyPage,
-  })
-
-  const handleSortChange = (value: string) => {
-    setQueryParam([
-      ["sort", value], 
-      ["page", "1"]
-    ]);
-  };
-
-  if (isError) {
-    return <DataError />;
-  }
-
+  
   return (
     <>
       {/* ✅ 삭제 버튼 영역 (항상 공간 확보) */}
@@ -91,7 +63,7 @@ const CenterUserMeasureListContainer = ({
         </div>
       </div>
     
-    {isLoading ? (
+    {isListLoading ? (
       <CenterUserMeasureListSkeleton />
       ) : (
         userMeasureList && (

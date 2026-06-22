@@ -61,15 +61,15 @@ export function AnalysisHorizonCard({ title, value, low, high }: AnalysisHorizon
   return (
     <div className="flex h-full items-center gap-1 w-full ">
       {/* 타이틀 박스 */}
-      <div className={`flex items-center h-full p-2 w-14 text-[10px] leading-tight font-bold text-white rounded-[4px] justify-center bg-sub300`}>
+      <div className={`flex items-center h-full p-2 w-14 text-sm leading-tight font-bold text-white rounded-[4px] justify-center bg-sub300`}>
         {title}
       </div>
 
       {/* 메인 데이터 영역 */}
-      <div className="flex flex-1 h-full items-center bg-sub100 rounded-sm pr-2">
-        <div className="flex flex-col leading-none items-center w-12 text-center bg-white/80 rounded-[4px] ml-1 my-1 px-1 py-1">
-          <span className="text-[10px] font-bold text-sub800 ">{value}</span>
-          <span className="text-[8px] text-sub400 ">{low}~{high}</span>
+      <div className="flex flex-1 h-fit items-center bg-sub100 rounded-sm pr-2">
+        <div className="flex flex-col leading-none items-center w-16 text-center bg-white/80 rounded-[4px] ml-1 my-1 px-1 py-1">
+          <span className="text-xs font-bold text-sub800 ">{value}</span>
+          <span className="text-xs text-sub400 ">{low}~{high}</span>
         </div>
 
         <div className="relative flex-1 h-full flex items-center">
@@ -118,12 +118,12 @@ const AnalysisCard = ({ label, value, unit, grade }: IAnalysisCardProps) => {
   return (
     <div className="bg-sub100 border border-sub200 rounded-[3px] py-1 flex flex-col items-center gap-1 leading-[2.0]">
       {/* 라벨 */}
-      <span className="text-[10px] font-bold text-sub800 mb-0.5">{label}</span>
+      <span className="text-sm font-bold text-sub800 mb-0.5">{label}</span>
       
       {/* 수치 */}
       <div className="flex items-baseline gap-0.5 leading-[1]">
-        <span className="text-[10px] font-bold text-sub800">{value.toFixed(1)}</span>
-        <span className="text-[8px] text-sub400 font-medium">{unit}</span>
+        <span className="text-xs font-bold text-sub800">{value.toFixed(1)}</span>
+        <span className="text-xs text-sub400 font-medium">{unit}</span>
       </div>
 
       {/* 게이지 바 */}
@@ -180,13 +180,13 @@ const muscleMassIndex = (() => {
   }
 })();
   return (
-    <div className="grid grid-cols-2 w-full gap-2">
+    <div className="grid grid-cols-2 w-full gap-2 rounded-lg border border-sub200 p-2">
       
       <div className="grid grid-rows-[40%_60%] h-full justify-center">
         <div className="grid grid-cols-[25%_75%] items-center">
-          <div className="h-20 w-20 print:w-14 print:h-14 bg-sub100 rounded-2xl border-2 border-sub200 flex justify-center">
+          <div className="w-20  bg-sub100 rounded-2xl border-2 border-sub200 flex justify-center">
             <span 
-              className="text-[52px] font-bebas font-bold text-sub200 leading-none flex items-center mt-2" 
+              className="text-[64px] font-bebas font-semibold text-sub200 leading-none flex items-center mt-2" 
               style={{ WebkitTextStroke: '1px #7E7E7E' }}
             >
               {typeInitial}
@@ -195,12 +195,12 @@ const muscleMassIndex = (() => {
 
           <div className="text-sub800 flex flex-col">
             <span className="text-sm font-bold">{typeTitle}</span>
-            <span className="text-[10px] leading-[1.3] break-keep">{data.result_cid_comment}</span>
+            <span className="text-xs leading-[1.3] break-keep">{data.result_cid_comment}</span>
           </div>
         </div>
 
         <div className="flex flex-col ">
-          <div className="grid grid-cols-4 text-[8px] text-center text-sub600 ml-16 mb-2 flex items-center">
+          <div className="grid grid-cols-4 text-xs text-center text-sub600 ml-14 mb-2 items-center">
             <span className="leading-none">체성분<br/> 밸런스</span>
             <span>표준 이하</span>
             <span>표준</span>
@@ -225,10 +225,10 @@ const muscleMassIndex = (() => {
       </div>
 
       <div className="grid grid-rows-[40%_60%]">
-        <div className="flex flex-col flex-1 bg-sub100 border border-sub200 rounded-[2px] py-1 px-2">
+        <div className="flex flex-col flex-1 bg-sub100 border border-sub200 rounded-[2px] pt-1 pb-10 px-2">
             <div className="flex items-center gap-2 ">
-              <div className="w-3 h-3 rounded-[3px] bg-accent" />
-              <div className="text-accent font-bold text-sm">
+              <div className="w-3 h-3 rounded-[3px] bg-mainBlue-600" />
+              <div className="text-mainBlue-600 font-bold text-sm">
                 근감소 수치
               </div>
             </div>
@@ -237,21 +237,21 @@ const muscleMassIndex = (() => {
                     
               {/* 수치 */}
               <div className="flex flex-col text-center">
-                <span className="text-sm font-bold text-sub800">{data.skeletal_muscle_mass_index.toFixed(1)}</span>
-                <span className="text-[10px] font-bold text-sub800">(이전 대비 {-diffMuscleMassIndex.toFixed(1)})</span>
+                <span className="text-base font-bold text-sub800">{data.skeletal_muscle_mass_index.toFixed(1)}</span>
+                <span className="text-sm font-bold text-sub800">(이전 대비 {-diffMuscleMassIndex.toFixed(1)})</span>
               </div>
 
               {/* 게이지 바 */}
               <div className="flex flex-col w-48 gap-2">
                 {/* 상단 라벨 영역: justify-between으로 양 끝과 중앙 배치 */}
                 <div className="flex justify-between w-full px-0.5">
-                  <span className="text-[9px] font-bold text-gray-400">평균이하</span>
-                  <span className="text-[9px] font-bold text-gray-400">평균</span>
-                  <span className="text-[9px] font-bold text-gray-400">평균이상</span>
+                  <span className="text-xs font-bold text-gray-400">평균이하</span>
+                  <span className="text-xs font-bold text-gray-400">평균</span>
+                  <span className="text-xs font-bold text-gray-400">평균이상</span>
                 </div>
 
                 {/* 게이지 바 영역 */}
-                <div className="relative flex items-center w-full">
+                <div className="relative flex items-center w-full ">
                   {/* 배경 바 */}
                   <div className="w-full h-1.5 bg-sub200 rounded-full"></div>
                   

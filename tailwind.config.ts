@@ -10,6 +10,10 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        // 이제 className="font-bebas"로 사용할 수 있습니다.
+        bebas: ['"Bebas Neue"', 'sans-serif'], 
+      },
       // 💡 HSL 매핑 싹 지우고 직관적인 HEX 코드로 대입
       colors: {
         background: "#FFFFFF",
