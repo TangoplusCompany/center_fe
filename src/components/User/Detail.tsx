@@ -75,30 +75,25 @@ const UserDetail = ({
     sort,
     isMyPage,
   });
-
-  // 3. 💡 [최적화] 흩어져 있던 복수의 useEffect를 하나로 완벽 통합
   useEffect(() => {
-    // [Case A] 최신 결과(latest) 탭이 아닐 때 상태 초기화
-    if (currentTab !== "latest") {
-      setMeasureSn(undefined); // 0 대신 undefined로 안전하게 초기화하여 API 중복 트리거 방지
+    // 비교 초기화
+    if (currentTab !== "latest" && (!comparePair[0] || !comparePair[1])) {
       setComparePair([undefined, undefined]);
       return;
     }
-
-    // [Case B] 최신 결과(latest) 탭이며, 히스토리 리스트 클릭으로 넘어왔을 때
+    // history에서 클릭 시 
     if (isListClick) {
       setIsListClick(false); 
       return;
     }
-
-    // 이미 유효한 measureSn이 선점되어 있다면 추가 세팅 생략
     if (measureSn) return;
 
-    // 초기 진입 시 가장 최신(첫 번째) 측정 sn을 기본값으로 세팅
+    // 처음 user에 들어왔을 때 선택된 Sn이 없을 때만 
     const latestMeasureSn = dateChangeMeasureList?.measurement_list?.[0]?.measure_sn;
-    if (latestMeasureSn) {
+    if (!measureSn && latestMeasureSn) {
       setMeasureSn(latestMeasureSn);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTab, dateChangeMeasureList, isListClick, measureSn]); 
 
   // 4. 핸들러 함수들
