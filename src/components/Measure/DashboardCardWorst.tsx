@@ -50,7 +50,7 @@ const DashboardCardWorst = ({ data }: { data: TWorstPart }) => {
         </div>
 
         {/* 설명 박스 */}
-        <div className={`w-fit ${data.level === 2 ? "bg-danger-foreground" : "bg-warning-foreground"
+        <div className={`w-fit ${data.level === 2 ? "bg-danger/10" : "bg-warning/10"
         } rounded-lg p-4`}>
           <p className={`text-base ${
             data.level === 2 ? "text-danger dark:text-black" : "text-warning dark:text-black"

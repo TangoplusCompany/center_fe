@@ -40,32 +40,29 @@ const MeasureSummaryGraph = ({
     return risk * 3 + range;
   };
   const processedData = React.useMemo(() => {
-    const isFootPressureHistory = (
-      item: UpperAndLowerMeasureHistory | FootPressureHistory
-    ): item is FootPressureHistory => {
-      return dCase === 2;
-    };
-
     const mapped = data.map(item => {
       let upperScore = 0;
       let lowerScore = 0;
       let footScore = 0;
-      if (isFootPressureHistory(item)) {
-        // 족압의 경우
+
+      // 함수를 거치지 않고 dCase 값으로 직접 분기 처리
+      if (dCase === 2) {
+        // 족압의 경우 (타입 단언을 통해 item을 FootPressureHistory로 취급)
+        const footItem = item as FootPressureHistory;
         footScore = calculateScore(
-          item.mat_static_risk_level,
-          item.mat_static_range_level
+          footItem.mat_static_risk_level,
+          footItem.mat_static_range_level
         );
-        lowerScore = 0; // 또는 족압의 다른 값
       } else {
-        // 상지/하지의 경우
+        // 상지/하지의 경우 (UpperAndLowerMeasureHistory로 취급)
+        const upperLowerItem = item as UpperAndLowerMeasureHistory;
         upperScore = calculateScore(
-          item.risk_upper_risk_level,
-          item.risk_upper_range_level
+          upperLowerItem.risk_upper_risk_level,
+          upperLowerItem.risk_upper_range_level
         );
         lowerScore = calculateScore(
-          item.risk_lower_risk_level,
-          item.risk_lower_range_level
+          upperLowerItem.risk_lower_risk_level,
+          upperLowerItem.risk_lower_range_level
         );
       }
 
@@ -78,7 +75,6 @@ const MeasureSummaryGraph = ({
       };
     });
 
-    // 날짜 기준 오름차순 정렬 (가장 오래된 것 → 가장 최근 것)
     return mapped.sort((a, b) => {
       return new Date(a.measure_date).getTime() - new Date(b.measure_date).getTime();
     });

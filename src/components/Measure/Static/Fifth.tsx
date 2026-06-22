@@ -8,11 +8,13 @@ const MeasureStaticFifth = React.memo(
   ({
     className,
     files,
-    cameraOrientation
+    cameraOrientation,
+    onImageReady
   }: {
     className?: string;
     files?: IUserMeasureFileData;
     cameraOrientation: 0 | 1;
+    onImageReady?: (idx: 0 | 1, url: string) => void;
   }) => {
     const {
       data: measureJson,
@@ -27,13 +29,12 @@ const MeasureStaticFifth = React.memo(
     return (
       <div className={`${className ?? ""} flex flex-col gap-4 lg:gap-10`}>
         <MeasurementImage
-          imageUrl={
-            `https://gym.tangoplus.co.kr/data/Results/` +
-            files?.measure_server_file_name
-          }
+          imageUrl={`${process.env.NEXT_PUBLIC_FILE_URL ?? ""}/${files?.measure_server_file_name}`}
           measureJson={measureJson}
           step="fifth"
           cameraOrientation={cameraOrientation}
+          onImageReady={onImageReady}
+          leftRight={0}
         />
       </div>
     );

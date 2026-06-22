@@ -11,6 +11,7 @@ const SideMeasurement = ({
   sns,
   measureInfo,
   cameraOrientation,
+  onImageReady,
   isMyPage = false,
 }: {
   sns: {
@@ -19,6 +20,7 @@ const SideMeasurement = ({
   };
   measureInfo: IMeasureResponse;
   cameraOrientation: 0 | 1;
+  onImageReady?: (idx: 0 | 1, url: string) => void;
   isMyPage: boolean;
 }) => {
   const {
@@ -68,10 +70,10 @@ const SideMeasurement = ({
       {/* 상단: 이미지 2개 */}
       <div className="grid grid-cols-2 gap-4">
         <div className="col-span-1">
-          <MeasureStaticThird files={measureThird?.file_data} cameraOrientation={cameraOrientation} />
+          <MeasureStaticThird files={measureThird?.file_data} cameraOrientation={cameraOrientation} onImageReady={onImageReady} />
         </div>
         <div className="col-span-1">
-          <MeasureStaticFourth files={measureFourth?.file_data} cameraOrientation={cameraOrientation} />
+          <MeasureStaticFourth files={measureFourth?.file_data} cameraOrientation={cameraOrientation} onImageReady={onImageReady} />
         </div>
       </div>
       <StaticDataContainer measureData={measureInfo} />

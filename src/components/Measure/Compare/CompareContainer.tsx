@@ -28,7 +28,6 @@ const CompareContainer = ({
         </div>
     </div>
   );
-
 };
 
 

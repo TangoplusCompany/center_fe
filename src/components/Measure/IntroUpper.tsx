@@ -31,7 +31,7 @@ const MeasureIntroUpper = (
     2: "text-dangerDeep",
   }[risk_level] ?? "bg-primary-foreground";
   const textBgCondition = {
-    0: "bg-sub800 dark:text-sub100",
+    0: "bg-sub600 dark:text-sub100",
     1: "bg-warning",
     2: "bg-danger",
   }[risk_level] ?? "bg-primary-foreground";

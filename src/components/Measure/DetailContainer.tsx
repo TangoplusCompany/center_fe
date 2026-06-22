@@ -186,7 +186,7 @@ const MeasureDetailContainer = ({
     : externalMeasureData;
 
   const [internalDatePickerOpen, setInternalDatePickerOpen] = useState(false);
-
+  
   useEffect(() => {
     if (!measureData || !setMeasureType) return; // 💡 setMeasureType이 undefined면 실행 방지
 
@@ -231,12 +231,11 @@ const MeasureDetailContainer = ({
       device_sn: Number(measureData.device_sn),
       sn: Number(measureData.measure_sn),
       measure_sn: Number(measureData.measure_sn),
-      user_uuid: measureData.user_uuid,
+      user_uuid: uuid,
       receiver: measureData.mobile,
       receiver_name: measureData.user_name,
       measure_date: measureData.measure_date
     };
-    
     const encryptData = await actionKakaoEncrypt(cryptoData);
     try {
       await postKakaoSend(encryptData);

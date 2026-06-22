@@ -1,0 +1,14 @@
+name: Cleanup temp images
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call cleanup function
+        run: |
+          curl -X POST ${{ secrets.SUPABASE_EDGE_FUNCTION_URL }}/cleanup-temp-images \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
