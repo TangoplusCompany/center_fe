@@ -69,7 +69,7 @@ const DataCell = ({ value, diff, status, unit, up }: { value: string, diff: stri
 
 export default function TrendGraph({data}: {data:IBiaData}) {
   const sortedHistory = [...data.history_data];
-  const dates = sortedHistory.map((h) => h.measure_date).slice(0, 7);
+  const dates = sortedHistory.map((h) => h.measure_date).slice(0, 7).reverse();
   const TREND_DATA = {
     score: transformToTrend(sortedHistory, 'body_score'),
     sarcopenia: transformToTrend(sortedHistory, 'skeletal_muscle_mass_index'),
