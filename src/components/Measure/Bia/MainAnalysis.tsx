@@ -66,23 +66,21 @@ export function AnalysisHorizonCard({ title, value, low, high }: AnalysisHorizon
       </div>
 
       {/* 메인 데이터 영역 */}
-      <div className="flex flex-1 h-fit items-center bg-sub100 rounded-sm pr-2">
+      <div className="flex flex-1 h-full items-center bg-sub100 rounded-sm pr-2">
         <div className="flex flex-col leading-none items-center w-16 text-center bg-white/80 rounded-[4px] ml-1 my-1 px-1 py-1">
           <span className="text-xs font-bold text-sub800 ">{value}</span>
           <span className="text-xs text-sub400 ">{low}~{high}</span>
         </div>
 
         <div className="relative flex-1 h-full flex items-center">
-          {/* 배경 (3등분) */}
+          
           <div className="absolute inset-0 flex">
             <div className="flex-1 bg-sub100 rounded-l-md border-r border-white/50" />
-            <div className="flex-1 bg-sub200 border-r border-white/50" />
+            <div className="h-full flex-1 bg-sub200 border-r border-white/50" />
             <div className="flex-1 bg-sub100 rounded-r-md" />
           </div>
           
-          {/* 막대 영역 */}
           <div className="flex flex-col flex-1 gap-1.5 z-10">
-            {/* 현재 값 막대 */}
             <div 
               className={`relative h-3 rounded-r-[4px] transition-all duration-700 ease-out}`}
               style={{ width: `${currentPos}%`, backgroundImage: `linear-gradient(to right, ${COLORS.sub300}, ${endColor})` }}
@@ -90,7 +88,7 @@ export function AnalysisHorizonCard({ title, value, low, high }: AnalysisHorizon
           
           </div>
 
-          {/* 측정 값 라벨 */}
+          
           <div 
             className="absolute right-0 z-20 w-fit"
             style={{ top: '50%', transform: 'translateY(-50%)' }}
@@ -180,27 +178,32 @@ const muscleMassIndex = (() => {
   }
 })();
   return (
-    <div className="grid grid-cols-2 w-full gap-2 rounded-lg border border-sub200 p-2">
+    <div className="grid grid-cols-1 sm:grid-cols-2 w-full gap-4 rounded-lg border border-sub200 p-2 h-auto items-stretch">
       
-      <div className="grid grid-rows-[40%_60%] h-full justify-center">
-        <div className="grid grid-cols-[25%_75%] items-center">
-          <div className="w-20  bg-sub100 rounded-2xl border-2 border-sub200 flex justify-center">
-            <span 
-              className="text-[64px] font-bebas font-semibold text-sub200 leading-none flex items-center mt-2" 
-              style={{ WebkitTextStroke: '1px #7E7E7E' }}
-            >
-              {typeInitial}
-            </span>
-          </div>
+      <div className="flex flex-col gap-2 w-full h-full justify-between">
+        <div className="flex flex-col flex-1 w-full justify-center items-center gap-4 py-4"> 
+          {/* 가로 정렬을 위해 내부 아이템들을 감싸는 레이아웃 추가 */}
+          <div className="flex w-full items-center justify-center gap-4">
+            {/* 왼쪽 아이콘 */}
+            <div className="w-20 shrink-0 bg-sub100 rounded-2xl border-2 border-sub200 flex justify-center">
+              <span 
+                className="text-[64px] font-bebas font-semibold text-sub200 leading-none flex items-center mt-2" 
+                style={{ WebkitTextStroke: '1px #7E7E7E' }}
+              >
+                {typeInitial}
+              </span>
+            </div>
 
-          <div className="text-sub800 flex flex-col">
-            <span className="text-sm font-bold">{typeTitle}</span>
-            <span className="text-xs leading-[1.3] break-keep">{data.result_cid_comment}</span>
+            {/* 오른쪽 텍스트 */}
+            <div className="text-sub800 flex flex-col flex-1 min-w-0">
+              <span className="text-sm font-bold">{typeTitle}</span>
+              <span className="text-xs leading-[1.3] break-keep">{data.result_cid_comment}</span>
+            </div>
           </div>
         </div>
 
         <div className="flex flex-col ">
-          <div className="grid grid-cols-4 text-xs text-center text-sub600 ml-14 mb-2 items-center">
+          <div className="grid grid-cols-[0.9fr_1fr_1fr_1fr] text-xs text-center text-sub600 ml-14 mb-2 items-center">
             <span className="leading-none">체성분<br/> 밸런스</span>
             <span>표준 이하</span>
             <span>표준</span>
@@ -224,8 +227,8 @@ const muscleMassIndex = (() => {
         </div>
       </div>
 
-      <div className="grid grid-rows-[40%_60%]">
-        <div className="flex flex-col flex-1 bg-sub100 border border-sub200 rounded-[2px] pt-1 pb-10 px-2">
+      <div className="flex flex-col gap-4 w-full h-full justify-between">
+        <div className="flex flex-col flex-1  bg-sub100 border border-sub200 rounded-[2px] pt-1 pb-8 px-2">
             <div className="flex items-center gap-2 ">
               <div className="w-3 h-3 rounded-[3px] bg-mainBlue-600" />
               <div className="text-mainBlue-600 font-bold text-sm">

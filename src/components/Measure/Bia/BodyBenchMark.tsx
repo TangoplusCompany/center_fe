@@ -16,7 +16,7 @@ interface MetricListProps {
 
 function MetricList({ title, titleValue, items }: MetricListProps) {
   return (
-    <div className="flex flex-col w-full gap-1">
+    <div className="flex flex-col w-full gap-1 py-2">
       {/* 상단 메인 타이틀 (빨간색 강조) */}
       <div className="text-danger text-sm font-bold text-start">
         {title}: {titleValue}
@@ -42,7 +42,7 @@ function MetricList({ title, titleValue, items }: MetricListProps) {
 }
 
 export default function BodyBenchMark({data}: {data: IBiaBodyBenchmark}) {
-  const radius = 60;
+  const radius = 80;
   const strokeWidth = 12;
   const normalizedRadius = radius - strokeWidth / 2;
   const circumference = normalizedRadius * 2 * Math.PI;
