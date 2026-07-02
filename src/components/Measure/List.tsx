@@ -69,8 +69,7 @@ export const MeasureList = ({
 }: {
   measurements: IMeasureList[];
 }) => {
-  const [list, setList] = useState<IMeasureList[]>(
-measurements);
+  const [list, setList] = useState<IMeasureList[]>(measurements);
   
   useEffect(() => {
     setList(measurements);

@@ -23,17 +23,20 @@ const UserDetail = ({
   userSn,
   currentTab = "latest",
   setCurrentTab,
+  comparePair,
+  setComparePair,
   isMyPage = false,
 }: {
   userUUID: string;
   userSn: number;
   currentTab?: string;
   setCurrentTab ?: (tab : viewType) => void;
+  comparePair: ComparePair;
+  setComparePair: React.Dispatch<React.SetStateAction<ComparePair>>;
   isMyPage?: boolean;
 }) => {
   const [measureSn, setMeasureSn] = useState<number>();
   const [measureType, setMeasureType] = useState<measureType>();
-  const [comparePair, setComparePair] = React.useState<ComparePair>([undefined, undefined]);
   const [isListClick, setIsListClick] = useState(false); 
 
   const [isDatePickerOpen, setIsDatePickerOpen] = React.useState(false);
@@ -76,7 +79,6 @@ const UserDetail = ({
     isMyPage,
   });
   useEffect(() => {
-    // 비교 초기화
     if (currentTab !== "latest" && (!comparePair[0] || !comparePair[1])) {
       setComparePair([undefined, undefined]);
       return;
@@ -107,7 +109,7 @@ const UserDetail = ({
   const selectCompareSn = (sn: number, slot: CompareSlot) => {
     setComparePair((prev) => {
       const next: ComparePair = [...prev]; 
-      next[slot] = sn;                    
+      next[slot] = sn;
       return next;                         
     });
   };
@@ -153,6 +155,8 @@ const UserDetail = ({
         <div className="w-full h-full flex flex-col gap-4">
           <MeasureDetailContainer
             measureList={userMeasureList?.measurement_list}
+            currentTab={currentTab}
+            setCurrentTab={setCurrentTab}
             measureType={measureType ?? "basic"}
             setMeasureType={setMeasureType}
             userSn={String(userSn)}

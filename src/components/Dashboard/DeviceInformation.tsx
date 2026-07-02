@@ -111,9 +111,6 @@ export const DeviceInformation = () => {
         )}
       </div>
       <DeviceChartContainer deviceList={deviceStatus.data} />
-
-      
-      
     </>
   );
 };
