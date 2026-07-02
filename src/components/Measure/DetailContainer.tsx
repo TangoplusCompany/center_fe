@@ -7,7 +7,7 @@ import { actionKakaoEncrypt, actionPrintEncrypt } from "@/app/actions/getCrypto"
 import { postKakaoSend } from "@/app/actions/postKakaoSend";
 import { getMergedPrintUrl } from "@/app/actions/openMergedPrintPage";
 import MeasureDetail from "./Detail";
-import { measureType } from "../User/Detail";
+import { measureType, viewType } from "../User/Detail";
 import CenterUserROMContainer from "../User/ROMContainer";
 import BiaContainer from "./Bia/BiaContainer";
 import { IUserMeasureListItem } from "@/types/user";
@@ -151,7 +151,9 @@ export function PrintSelect({ hasBasic, hasRom, hasBia, handlePrint }: PrintSele
 
 export type CenterUserMeasureProps = {
   measureData?: IMeasurementMeta ;
-  measureList?: IUserMeasureListItem[];              // 전체 측정 리스트 (현재 페이지)
+  measureList?: IUserMeasureListItem[];
+  currentTab?: string;
+  setCurrentTab?: (tab : viewType) => void;
   measureType ?: measureType
   setMeasureType ?: (mt: measureType) => void;
   userSn: string;

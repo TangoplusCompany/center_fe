@@ -1,5 +1,5 @@
 import { IMeasureResponse } from "@/types/measure";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import MeasureStaticCompareFirst from "./CompareFirst";
 import MeasureStaticCompareSecond from "./CompareSecond";
 import MeasureStaticCompareThird from "./CompareThird";
@@ -50,12 +50,17 @@ const CompareBody = ({
   const [activeCompareTab, setActiveCompareTab] = useState('summary');
   const [, setIsPrinting] = useState(false);
   const [printImageMap, setPrintImageMap] = useState<Record<string, string>>({});
-  const handleImageReady = (idx: 0 | 1, url: string) => {
-    setPrintImageMap((prev) => ({
-      ...prev,
-      [idx]: url 
-    }));
-  };
+  const handleImageReady = useCallback((idx: 0 | 1, url: string) => {
+    setPrintImageMap((prev) => {
+      // 💡 불필요한 상태 업데이트 방지: 이미 같은 URL이 들어있다면 업데이트 생략
+      if (prev[idx] === url) return prev; 
+      
+      return {
+        ...prev,
+        [idx]: url 
+      };
+    });
+  }, []);
   const handleCompareTabChange = (nextTab: string) => {
     setActiveCompareTab(nextTab);
     setPrintImageMap({}); 

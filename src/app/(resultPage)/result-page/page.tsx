@@ -6,12 +6,13 @@ import { useResultPageUserStore } from "@/providers/ResultPageUserProvider";
 import { useRouter, useSearchParams } from "next/navigation";
 import { actionUserDecrypt } from "@/app/actions/getCrypto";
 import ResultPageTab from "@/components/User/My/ResultPageTab";
+import { ComparePair } from "@/types/compare";
 
 export default function ResultPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [currentTab, setCurrentTab] = useState<viewType>("latest");
-  
+  const [comparePair, setComparePair] = React.useState<ComparePair>([undefined, undefined]);
   // Store 상태
   const user = useResultPageUserStore((state) => state.user);
   const isLogin = useResultPageUserStore((state) => state.isLogin);
@@ -33,6 +34,7 @@ export default function ResultPage() {
     const subTabParam = searchParams.get("subTab") as viewType;
     if (subTabParam) {
       setCurrentTab(subTabParam);
+      setComparePair([undefined, undefined]);
     } else {
       setCurrentTab("latest"); // 기본값
     }
@@ -115,6 +117,8 @@ export default function ResultPage() {
         userSn={decryptedData.user_sn} 
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
+        comparePair={comparePair} 
+        setComparePair={setComparePair}
         isMyPage={true}
       />
     </div>
