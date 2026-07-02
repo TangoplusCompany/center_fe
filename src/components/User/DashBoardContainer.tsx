@@ -14,7 +14,11 @@ export interface CenterUserDashboardContainerProps {
 type DashboardViewType = "normal" | "rom";
 export type ROMDashboardViewType = "default" | "detail";
 
-
+const dashboardTabs: Record<number, string> = {
+    0: "기본 검사",
+    1: "ROM 검사"
+  }
+  
 const CenterUserDashboardContainer = ({
   userSn,
   isMyPage,
@@ -22,10 +26,7 @@ const CenterUserDashboardContainer = ({
 }: CenterUserDashboardContainerProps) => {
   const [currentViewType, setCurrentViewType] = useState<DashboardViewType>(fromROMContainer ? "rom" : "normal")
   const [currentROMViewType, setCurrentROMViewType] = useState<ROMDashboardViewType>("default");
-  const dashboardTabs: Record<number, string> = {
-    0: "기본 검사",
-    1: "ROM 검사"
-  }
+  
   const bodyPartTabs = [
     { id: 1, label: "목관절" },
     { id: 2, label: "어깨" },

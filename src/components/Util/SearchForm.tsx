@@ -10,11 +10,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 const SearchForm = ({
   setSearch,
   search,
-
+  placeholder
 }: {
   setSearch: (searchValue: string) => void;
   search: string;
   className?: string;
+  placeholder ?: string;
 }) => {
   const searchSchema = z.object({
     search: z
@@ -54,7 +55,7 @@ const SearchForm = ({
           type="text"
           aria-invalid={!!errors.search}
           {...register("search")}
-          placeholder="이름 혹은 전화번호를 입력해주세요."
+          placeholder={`${placeholder ? placeholder : "이름 혹은 전화번호를 입력해주세요."}`}
           maxLength={50}
           className="flex-1"
         />

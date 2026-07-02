@@ -105,7 +105,6 @@ export const CenterUserMeasureList = ({
                       onClick={(e) => {
                         e.stopPropagation();
                         selectCompareSn?.(sn, 0);
-                        
                       }}
                       className="flex items-center gap-1 sm:gap-2 justify-center cursor-pointer"
                     >
