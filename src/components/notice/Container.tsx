@@ -12,74 +12,15 @@ import NoticeDetail from "./Detail";
 export const DUMMY_NOTICE_DETAILS: INoticeDetail[] = [
   {
     sn: 1,
-    title: "[공지] 시스템 정기 점검 안내 (07/15)",
+    title: "TangoBody 매뉴얼, 상품설명서, 설치·사용 주의사항 안내",
     type: 0,
-    author: "최고관리자",
-    reg_date: "2026-07-10 14:00:00",
-    description: "안정적인 서비스 제공을 위한 서버 정기 점검이 진행될 예정입니다. 점검 시간 중에는 서비스 이용이 일시 중단되오니 양해 부탁드립니다.",
+    author: "TangoBody 관리자페이지 운영진",
+    reg_date: "2026-06-12 14:23:00",
+    description: "TangoBody",
     attached_file_url: "https://example.com/files/notice_0715.pdf",
     is_read : 0
   },
-  {
-    sn: 2,
-    title: "[업데이트] 개인정보처리방침 변경 고지",
-    type: 1,
-    author: "법무팀",
-    reg_date: "2026-07-08 09:30:00",
-    description: "새로운 서비스 출시 및 제공에 따라 개인정보처리방침이 일부 변경됩니다. 변경 사항을 확인하시어 이용에 차질 없으시길 바랍니다.",
-    attached_file_url: "",
-    is_read : 0
-  },
-  {
-    sn: 3,
-    title: "[이벤트] 여름맞이 운영자 리프레시 쿠폰 지급",
-    type: 2,
-    author: "마케팅팀",
-    reg_date: "2026-07-05 18:22:11",
-    description: "열심히 일하시는 운영자분들을 위한 특별 쿠폰팩이 발급되었습니다. 마이페이지에서 확인해 보세요!",
-    attached_file_url: "https://example.com/images/event_summer.png",
-    is_read : 0
-  },
-  {
-    sn: 4,
-    title: "[긴급] 특정 브라우저 로그인 오류 현상 안내",
-    type: 3,
-    author: "기술지원팀",
-    reg_date: "2026-07-03 11:05:00",
-    description: "현재 구버전 브라우저에서 간헐적으로 로그인이 풀리는 현상이 제보되어 긴급 수정 중입니다. 불편을 드려 죄소합니다.",
-    attached_file_url: "",
-    is_read : 0
-  },
-  {
-    sn: 5,
-    title: "[안내] 신규 관리자 기능 매뉴얼 배포",
-    type: 0,
-    author: "서비스기획팀",
-    reg_date: "2026-06-28 16:45:00",
-    description: "이번 패치로 추가된 대시보드 커스텀 기능의 상세 사용 매뉴얼 가이드입니다. 첨부파일을 확인해 주세요.",
-    attached_file_url: "https://example.com/files/admin_manual_v2.pdf",
-    is_read : 0
-  },
-  {
-    sn: 6,
-    title: "[인사] 하반기 운영 대행사 소통 창구 일원화 안내",
-    type: 0,
-    author: "운영총괄",
-    reg_date: "2026-06-25 10:00:00",
-    description: "업무 효율화를 위해 하반기부터 파트너사 문의 채널이 통합됩니다. 지정된 슬랙 채널을 이용해 주시기 바랍니다.",
-    attached_file_url: "",
-    is_read : 0
-  },
-  {
-    sn: 7,
-    title: "[경고] 계정 보안 강화 및 비밀번호 변경 캠페인",
-    type: 1,
-    author: "보안운영팀",
-    reg_date: "2026-06-20 13:15:30",
-    description: "안전한 관리자 페이지 운영을 위해 3개월 이상 비밀번호를 변경하지 않은 계정은 로그인 시 변경 안내 팝업이 노출됩니다.",
-    attached_file_url: "",
-    is_read : 0
-  }
+
 ];
 
 // 💡 INoticeList 인터페이스에 맞춘 최종 더미 데이터

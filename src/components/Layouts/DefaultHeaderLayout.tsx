@@ -12,7 +12,7 @@ import Balloon from "../common/Balloon";
 import { usePathname } from "next/navigation";
 
 const USER_SUB_TABS = [
-  // { key: "notice", title: "공지사항" },
+  { key: "notice", title: "공지사항" },
   { key: "darkMode", title: "다크모드" },
 ];
 

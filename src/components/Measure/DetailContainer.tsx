@@ -14,9 +14,10 @@ import { IUserMeasureListItem } from "@/types/user";
 import { DetailPagination } from "@/hooks/api/user/useMeasureListForDetail";
 import { formatDate } from "@/utils/formatDate";
 import { MeasureDetailDatePickerDialog } from "./DetailDatePickerDialog";
-import { IMeasurementMeta } from "@/types/measure";
+import { IMeasureGaitDetail, IMeasurementMeta } from "@/types/measure";
 import { Skeleton } from "../ui/skeleton";
 import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
+import GaitContainer from "./Gait/Container";
 
 // Select 
 
@@ -24,6 +25,7 @@ const MEASURE_TYPE = [
   { key: "basic", title: "간편 검사" },
   { key: "rom", title: "ROM 검사" },
   { key: "bia", title: "체성분 검사" },
+  { key: "gait", title: "보행 분석" },
 ];
 
 export interface SkeletonDatePickerProps {
@@ -204,11 +206,12 @@ const MeasureDetailContainer = ({
     const hasBasic = measureMetaData.has_basic === 1;
     const hasRom = measureMetaData.has_rom === 1;
     const hasBia = measureMetaData.has_bia === 1;
-
+    const hasGait = measureMetaData.has_gait === 1;
     const availableType = MEASURE_TYPE.find(type => {
       if (type.key === "basic") return hasBasic;
       if (type.key === "rom") return hasRom;
       if (type.key === "bia") return hasBia;
+      if (type.key === "gait") return hasGait;
       return false;
     });
 
@@ -279,7 +282,7 @@ const MeasureDetailContainer = ({
   const hasBasic = measureMetaData.has_basic === 1;
   const hasRom = measureMetaData.has_rom === 1;
   const hasBia = measureMetaData.has_bia === 1;
-
+  const hasGait = measureMetaData.has_gait === 1;
   const dateProps : SkeletonDatePickerProps = {
     measureList: measureList,
     selectedMeasure: measureSn,
@@ -406,8 +409,116 @@ const MeasureDetailContainer = ({
       {(measureType === "bia" && hasBia && measureData.bia_result) && (
         <BiaContainer data={measureData.bia_result}/>
       )}
+
+      {(measureType === "gait" && hasGait && measureData.gait_result) && (
+        // <GaitContainer data={measureData.gait_result}/>
+        <GaitContainer data={mockMeasureGaitDetail}/>
+      )}
+
     </div>
   )
 }
 
 export default MeasureDetailContainer;
+
+
+export const mockMeasureGaitDetail: IMeasureGaitDetail = {
+  sn: 1,
+  local_sn: 101,
+  device_sn: 5002,
+  measure_sn: 2026072901,
+  measure_server_sn: 90001,
+  user_uuid: "usr_8f9a2b3c-4d5e-6f7a-8b9c-0d1e2f3a4b5c",
+  user_sn: 42,
+  user_name: "홍길동",
+  measure_date: "2026-07-29T10:30:00Z",
+  file_name_video: "video_20260729_103000.mp4",
+  file_name_gait_frame: "gait_frames_20260729_103000.json",
+  totalSequenceCount: 120,
+  averageStepLength: 65.4,
+  avgLeftStepLength: 64.8,
+  avgRightStepLength: 66.0,
+  averageStrideLength: 130.8,
+  avgLeftStrideLength: 130.2,
+  avgRightStrideLength: 131.4,
+  averageStepWidth: 12.5,
+  overallGaitSpeed: 1.15,
+  cadence: 110.5,
+  avgStancePhaseRatio: 60.2,
+  avgSwingPhaseRatio: 39.8,
+  avgDoubleSupportRatio: 20.4,
+  averageToeClearance: 2.1,
+  avgLeftSingleSupportRatio: 39.9,
+  avgRightSingleSupportRatio: 39.7,
+  avgDoubleSupportTime: 0.22,
+  avgLeftSingleSupportTime: 0.43,
+  avgRightSingleSupportTime: 0.42,
+  avgLeftStanceRatio: 60.1,
+  avgLeftSwingRatio: 39.9,
+  avgRightStanceRatio: 60.3,
+  avgRightSwingRatio: 39.7,
+  overallDataQualityScore: 95.0,
+  avgMaxShoulderTilt: 2.3,
+  avgMaxTrunkFlexion: 4.1,
+  avgMaxTrunkSway: 3.5,
+  avgMaxPevisDrop: 1.8,
+  avgArmSwingSymmetry: 92.5,
+  avgLeftArmSwingRange: 25.4,
+  avgRightArmSwingRange: 24.8,
+  avgMaxLeftKneeFlexion: 58.2,
+  avgMaxRightKneeFlexion: 57.9,
+  avgLeftStepSpeed: 1.14,
+  avgRightStepSpeed: 1.16,
+  avgOverallStepSpeed: 1.15,
+  avgLeftStrideSpeed: 1.14,
+  avgRightStrideSpeed: 1.16,
+  avgOverallStrideSpeed: 1.15,
+  resultToeClearanceRisk: 0,
+  resultDoubleSupportRisk: 1,
+  resultSpeedRisk: 0,
+  resultStepWidthRisk: 0,
+  resultLeftKneeFlexionRisk: 0,
+  resultRightKneeFlexionRisk: 1,
+  resultKneeFlexionRisk: 1,
+  resultSpeedDiffRatio: 1.02,
+  resultFallRiskScore: 15.5,
+  resultIsAsymmetric: 0,
+  resultGaitTypeGrade: 0,
+  resultGaitTypeTitle: "정상 보행 패턴",
+  resultGaitPatternGrade: 0,
+  resultGaitPatternTitle: "안정적인 보행",
+  resultGaitPatternDescription: "보행 시 좌우 균형이 양호하며, 안정적인 속도를 유지하고 있습니다.",
+  resultGaitBalanceGrade: 1,
+  resultGaitBalanceTitle: "보행 균형 주의",
+  resultGaitBalanceDescription: "체중 이동 시 약간의 흔들림이 관찰됩니다. 균형 감각 강화 운동이 권장됩니다.",
+  resultGaitEfficiencyGrade: 0,
+  resultGaitEfficiencyTitle: "우수한 보행 효율",
+  resultGaitEfficiencyDescription: "보คง 속도와 보폭의 리듬감이 일정합니다. 보행 에너지가 효율적으로 사용되고 있습니다.",
+  resultGaitTotalCommentTitle: "종합 보행 평가 결과",
+  resultGaitTotalCommentDescription: "전반적으로 양호한 보행 상태를 보이고 있습니다. 꾸준한 유산소 운동을 지속하세요.",
+  resultGaitTotalCommentGrade: 0,
+  resultGaitRhythmTitle: "보행 리듬 평가",
+  resultGaitRhythmDescription: "양발의 접지 시간이 규칙적입니다. 보행 리듬 유지가 원활합니다.",
+  resultGaitRhythmGrade: 0,
+  resultFallRiskTitle: "낙상 위험도 낮음",
+  resultFallRiskDescription: "현재 낙상 위험 수준은 낮습니다. 주변 환경의 장애물을 주의하세요.",
+  resultFallRiskGrade: 0,
+  resultRecommendCommentTitle: "맞춤 운동 추천",
+  resultRecommendCommentDescription: "하체 근력 강화를 위해 스쿼트를 추천합니다. 하루 15회씩 3세트 진행하세요.",
+  resultRecommendCommentGrade: 0,
+  resultLeftSingleSupportRisk: 0,
+  resultRightSingleSupportRisk: 1,
+  resultSingleRiskSupportDescription: "우측 단각지지 시간이 다소 짧습니다. 오른쪽 다리의 지지력을 확인하세요.",
+  resultDoubleSupportRiskDescription: "양각지지 비율이 평균보다 높습니다. 보행 속도가 줄어들 수 있습니다.",
+  resultLeftStanceRisk: 0,
+  resultRightStanceRisk: 0,
+  resultStanceRiskDescription: "입각기 비율이 안정적인 범위를 유지하고 있습니다.",
+  resultSymmetryRisk: 0,
+  resultSymmetryDescription: "좌우 보폭 및 지지 시간의 대칭성이 매우 양호합니다.",
+  resultPhaseMaxRisk: 1,
+  resultStepLengthRisk: 0,
+  resultStrideLengthRisk: 0,
+  resultStepLengthAsymmetry: 1.8,
+  resultStepLenthDescirption: "보폭 크기가 신장 대비 적절합니다. 현재 상태를 유지하세요.",
+  ersultStrideLengthDescription: "보구 간격이 규칙적으로 측정되었습니다. 안정적인 걸음걸이입니다.",
+};
