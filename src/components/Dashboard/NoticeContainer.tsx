@@ -1,6 +1,6 @@
-import { INoticeListItem } from "@/types/notice"
+import { INoticeListItem } from "@/types/announcement"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
-import { NoticeTypeCss, NoticeTypeRecord } from "../notice/List"
+import { NoticeTypeCss, NoticeTypeRecord } from "../announcement/List"
 
 export interface DashboardNoticeContainerProps {
   noticeList : INoticeListItem[]

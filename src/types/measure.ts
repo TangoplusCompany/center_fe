@@ -1,6 +1,6 @@
 import { IBiaData } from "./bia";
 import { IPagination, IResponseDefault } from "./default";
-import { IPoseLandmark } from "./pose";
+import { I2DPoseLandmark, I3DPoseLandmark, IPoseLandmark } from "./pose";
 
 export interface IMeasureResponse {
   measurement_meta: IMeasurementMeta
@@ -194,45 +194,7 @@ export interface IPartDetailData {
 
 export interface IMeasureJson {
   hand_landmark: [];
-  horizontal_angle_elbow: number;
-  horizontal_angle_hip: number;
-  horizontal_angle_knee: number;
-  horizontal_angle_mid_finger_tip: number;
-  horizontal_angle_shoulder: number;
-  horizontal_angle_wrist: number;
-  horizontal_distance_center_left_hip: number;
-  horizontal_distance_center_left_knee: number;
-  horizontal_distance_center_left_toe: number;
-  horizontal_distance_center_left_wrist: number;
-  horizontal_distance_center_mid_finger_tip_left: number;
-  horizontal_distance_center_mid_finger_tip_right: number;
-  horizontal_distance_center_right_hip: number;
-  horizontal_distance_center_right_knee: number;
-  horizontal_distance_center_right_toe: number;
-  horizontal_distance_center_right_wrist: number;
-  horizontal_distance_elbow: number;
-  horizontal_distance_hip: number;
-  horizontal_distance_knee: number;
-  horizontal_distance_mid_finger_tip: number;
-  horizontal_distance_shoulder: number;
-  horizontal_distance_wrist: number;
   time: number;
-  vertical_angle_ankle_toe_left: number;
-  vertical_angle_ankle_toe_right: number;
-  vertical_angle_elbow_shoulder_left: number;
-  vertical_angle_elbow_shoulder_right: number;
-  vertical_angle_hip_knee_left: number;
-  vertical_angle_hip_knee_right: number;
-  vertical_angle_hip_knee_toe_left: number;
-  vertical_angle_hip_knee_toe_right: number;
-  vertical_angle_knee_ankle_toe_left: number;
-  vertical_angle_knee_ankle_toe_right: number;
-  vertical_angle_knee_toe_left: number;
-  vertical_angle_knee_toe_right: number;
-  vertical_angle_wrist_elbow_left: number;
-  vertical_angle_wrist_elbow_right: number;
-  vertical_angle_wrist_elbow_shoulder_left: number;
-  vertical_angle_wrist_elbow_shoulder_right: number;
   pose_landmark: IPoseLandmark[];
 }
 
@@ -474,8 +436,8 @@ export interface IMeasureGaitDetail {
   user_sn: number;
   user_name : string;
   measure_date : string;
-  file_name_video : string;
-  file_name_gait_frame : string;
+  file_server_video_name : string;
+  file_server_gait_frame_name : string;
   totalSequenceCount	: number;
   averageStepLength	: number;
   avgLeftStepLength	: number;
@@ -563,4 +525,26 @@ export interface IMeasureGaitDetail {
   resultStepLengthAsymmetry	: number;
   resultStepLenthDescirption	: string;
   ersultStrideLengthDescription: string;
+}
+
+export interface IGaitSeqFrameData {
+  sequenceIndex: number;
+  frameIndex: number;
+  timestamp: number;
+  headLateralTilt: number;
+  headForwardTilt: number;
+  trunkSway: number;
+  trunkFlexion: number;
+  shoulderTilt: number;
+  leftArmAngle: number;
+  rightArmAngle: number;
+  pelvicDrop: number;
+  leftKneeAngle: number;
+  rightKneeAngle: number;
+}
+
+export interface IGaitMeasureJson {
+  landmarks: I3DPoseLandmark[];
+  timestamp: number;
+  screen_landmarks: I2DPoseLandmark[];
 }

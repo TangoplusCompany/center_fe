@@ -282,7 +282,7 @@ const MeasureDetailContainer = ({
   const hasBasic = measureMetaData.has_basic === 1;
   const hasRom = measureMetaData.has_rom === 1;
   const hasBia = measureMetaData.has_bia === 1;
-  const hasGait = measureMetaData.has_gait === 1;
+  const hasGait = measureMetaData.has_gait === 1; // true //
   const dateProps : SkeletonDatePickerProps = {
     measureList: measureList,
     selectedMeasure: measureSn,
@@ -316,7 +316,7 @@ const MeasureDetailContainer = ({
               if (type.key === "basic") isAvailable = hasBasic;
               if (type.key === "rom") isAvailable = hasRom;
               if (type.key === "bia") isAvailable = hasBia;
-
+              if (type.key === "gait") isAvailable = hasGait;
               return (
                 <button
                   key={type.key}
@@ -410,9 +410,9 @@ const MeasureDetailContainer = ({
         <BiaContainer data={measureData.bia_result}/>
       )}
 
-      {(measureType === "gait" && hasGait && measureData.gait_result) && (
-        // <GaitContainer data={measureData.gait_result}/>
-        <GaitContainer data={mockMeasureGaitDetail}/>
+      {(measureType === "gait" && hasGait && measureData.gait_result ) && ( // && hasGait && measureData.gait_result
+        <GaitContainer data={measureData.gait_result}/>
+        // <GaitContainer data={mockMeasureGaitDetail}/>
       )}
 
     </div>
@@ -432,16 +432,16 @@ export const mockMeasureGaitDetail: IMeasureGaitDetail = {
   user_sn: 42,
   user_name: "홍길동",
   measure_date: "2026-07-29T10:30:00Z",
-  file_name_video: "video_20260729_103000.mp4",
-  file_name_gait_frame: "gait_frames_20260729_103000.json",
+  file_server_video_name: "8-2805-2-1785390105.mp4",
+  file_server_gait_frame_name: "8-2805-2-1785391133.json",
   totalSequenceCount: 120,
-  averageStepLength: 65.4,
-  avgLeftStepLength: 64.8,
-  avgRightStepLength: 66.0,
-  averageStrideLength: 130.8,
-  avgLeftStrideLength: 130.2,
-  avgRightStrideLength: 131.4,
-  averageStepWidth: 12.5,
+  averageStepLength: 0.654,
+  avgLeftStepLength: 0.648,
+  avgRightStepLength: 0.660,
+  averageStrideLength: 1.308,
+  avgLeftStrideLength: 1.302,
+  avgRightStrideLength: 1.314,
+  averageStepWidth: 8.25,
   overallGaitSpeed: 1.15,
   cadence: 110.5,
   avgStancePhaseRatio: 60.2,
@@ -475,7 +475,7 @@ export const mockMeasureGaitDetail: IMeasureGaitDetail = {
   avgOverallStrideSpeed: 1.15,
   resultToeClearanceRisk: 0,
   resultDoubleSupportRisk: 1,
-  resultSpeedRisk: 0,
+  resultSpeedRisk: 2,
   resultStepWidthRisk: 0,
   resultLeftKneeFlexionRisk: 0,
   resultRightKneeFlexionRisk: 1,
@@ -516,8 +516,8 @@ export const mockMeasureGaitDetail: IMeasureGaitDetail = {
   resultSymmetryRisk: 0,
   resultSymmetryDescription: "좌우 보폭 및 지지 시간의 대칭성이 매우 양호합니다.",
   resultPhaseMaxRisk: 1,
-  resultStepLengthRisk: 0,
-  resultStrideLengthRisk: 0,
+  resultStepLengthRisk: 2,
+  resultStrideLengthRisk: 1,
   resultStepLengthAsymmetry: 1.8,
   resultStepLenthDescirption: "보폭 크기가 신장 대비 적절합니다. 현재 상태를 유지하세요.",
   ersultStrideLengthDescription: "보구 간격이 규칙적으로 측정되었습니다. 안정적인 걸음걸이입니다.",

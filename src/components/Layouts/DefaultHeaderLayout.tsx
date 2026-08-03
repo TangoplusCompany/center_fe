@@ -10,6 +10,7 @@ import DefaultHeaderMoreTab from "./DefaultHeaderMoreTab";
 import { useNoticeStore } from "@/stores/noticeStore";
 import Balloon from "../common/Balloon";
 import { usePathname } from "next/navigation";
+import { useGetAnnouncements } from "@/hooks/api/announcement/useGetAnnouncements";
 
 const USER_SUB_TABS = [
   { key: "notice", title: "공지사항" },
@@ -40,9 +41,21 @@ export default function DefaultHeaderLayout() {
     ? USER_SUB_TABS.filter(tab => tab.key !== "notice")
     : USER_SUB_TABS;
 
-  // 말풍선 재생성 방지 
+  // 1. API 데이터 조회
+  const { data: announcementsData } = useGetAnnouncements({ page: 1, limit: 10, search: "" });
+
+  // 2. 전역 스토어
   const { hasUnreadNotice, setHasUnreadNotice } = useNoticeStore();
-  const [showSidebarHint, setShowSidebarHint] = useState(true); // 실제론 useEffect + localStorage 조합
+
+  // 3. API 데이터로 스토어 상태 동기화
+  useEffect(() => {
+    if (announcementsData) {
+      const isUnread = announcementsData.announcements.some((item) => !item.is_read);
+      setHasUnreadNotice(isUnread);
+    }
+  }, [announcementsData, setHasUnreadNotice]);
+
+  const [showSidebarHint, setShowSidebarHint] = useState(true);
   const { state, openMobile } = useSidebar();
   const isSidebarCollapsed = state === "collapsed" && !openMobile;
   return (
