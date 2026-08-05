@@ -89,7 +89,7 @@ export function FallItem({ item }: { item: FallItemData }) {
       <div className="flex justify-between items-center">
         <span className="text-sm sm:text-base font-semibold text-sub700">{item.title}</span>
         <div className="flex items-center gap-1.5">
-          <span className="font-semibold text-sub700">{item.value} {item.unit}</span>
+          <span className="text-xs sm:text-sm font-semibold text-sub700">{item.value} {item.unit}</span>
           <span className={`px-3 py-1 rounded-full text-xs text-white text-center whitespace-normal break-keep ${riskInfo.badgeCss}`}>
             {riskInfo.label}
           </span>
@@ -102,25 +102,25 @@ export function FallItem({ item }: { item: FallItemData }) {
           {gaugeType === "center" ? (
             /* 5단계: 위험 -> 주의 -> 정상 -> 주의 -> 위험 */
             <>
-              <div className={`w-[20%] ${position < 20 ? "bg-danger" : "bg-danger/20"}`} />
-              <div className={`w-[20%] ${position >= 20 && position < 40 ? "bg-warning" : "bg-warning/20"}`} />
-              <div className={`w-[20%] ${position >= 40 && position < 60 ? "bg-mainBlue-300" : "bg-mainBlue-300/20"}`} />
-              <div className={`w-[20%] ${position >= 60 && position < 80 ? "bg-warning" : "bg-warning/20"}`} />
-              <div className={`w-[20%] ${position >= 80 ? "bg-danger" : "bg-danger/20"}`} />
+              <div className={`w-[20%] ${position < 20 ? "bg-sub700" : "bg-sub700/50"}`} />
+              <div className={`w-[20%] ${position >= 20 && position < 40 ? "bg-sub400" : "bg-sub400/50"}`} />
+              <div className={`w-[20%] ${position >= 40 && position < 60 ? "bg-sub200" : "bg-sub200/50"}`} />
+              <div className={`w-[20%] ${position >= 60 && position < 80 ? "bg-sub400" : "bg-sub400/50"}`} />
+              <div className={`w-[20%] ${position >= 80 ? "bg-sub700" : "bg-sub700/50"}`} />
             </>
           ) : gaugeType === "low" ? (
             /* 3단계(Low): 정상 -> 주의 -> 위험 */
             <>
-              <div className={`w-[33.3%] ${position < 33.3 ? "bg-mainBlue-300" : "bg-mainBlue-300/20"}`} />
-              <div className={`w-[33.3%] ${position >= 33.3 && position < 66.6 ? "bg-warning" : "bg-warning/20"}`} />
-              <div className={`w-[33.4%] ${position >= 66.6 ? "bg-danger" : "bg-danger/20"}`} />
+              <div className={`w-[33.3%] ${position < 33.3 ? "bg-sub200" : "bg-sub200/50"}`} />
+              <div className={`w-[33.3%] ${position >= 33.3 && position < 66.6 ? "bg-sub400" : "bg-sub400/50"}`} />
+              <div className={`w-[33.4%] ${position >= 66.6 ? "bg-sub700" : "bg-sub700/50"}`} />
             </>
           ) : (
             /* 3단계(High): 위험 -> 주의 -> 정상 */
             <>
-              <div className={`w-[33.3%] ${position < 33.3 ? "bg-danger" : "bg-danger/20"}`} />
-              <div className={`w-[33.3%] ${position >= 33.3 && position < 66.6 ? "bg-warning" : "bg-warning/20"}`} />
-              <div className={`w-[33.4%] ${position >= 66.6 ? "bg-mainBlue-300" : "bg-mainBlue-300/20"}`} />
+              <div className={`w-[33.3%] ${position < 33.3 ? "bg-sub700" : "bg-sub700/50"}`} />
+              <div className={`w-[33.3%] ${position >= 33.3 && position < 66.6 ? "bg-sub400" : "bg-sub400/50"}`} />
+              <div className={`w-[33.4%] ${position >= 66.6 ? "bg-sub200" : "bg-sub200/50"}`} />
             </>
           )}
         </div>
@@ -158,12 +158,12 @@ export function FallItem({ item }: { item: FallItemData }) {
 function  TiltItem ({title, value}: {title: string, value: number}) {
   
   return (
-    <div className="grid grid-cols-[35%_65%] item-center rounded-xl bg-sub200 px-2 py-1">
-      <span className="text-sub700 text-xs text-start font-semibold">{title}</span>
-      <div className="flex h-full items-center gap-1 text-sub700 ">
-        <span className="text-sub700 text-xs font-semibold ">{value}</span>
-        <div className="flex h-2 w-full rounded-r-lg bg-mainBlue-300">
-
+    <div className="grid grid-cols-[25%_10%_65%] item-center rounded-xl bg-sub200 px-2 py-1">
+      <span className="text-sub700 text-xs sm:text-sm text-start font-semibold">{title}</span>
+      <span className="text-sub700 text-xs sm:text-sm font-semibold ">{value}</span>
+      
+      <div className="flex w-full rounded-r-lg overflow-hidden bg-sub100 items-center justify-between py-1">
+        <div className="flex h-full  rounded-r-lg bg-sub400 py-1" style={{ width: `${80}%` }}>
         </div>
       </div>
     </div>
@@ -239,63 +239,76 @@ export default function GaitFall({ data }: GaitContainerProps) {
       <div className="text-lg font-semibold mb-2 text-sub700">
         낙상 주요 지표
       </div>
-      <div className="grid grid-cols-2 grid-rows-3 gap-2">
+      <div className="grid grid-cols-2 grid-rows-2 gap-2">
         {fallItems.map((item, index) => (
           <FallItem key={index} item={item} />
         ))}
+      </div>
 
-
+      <div className="flex flex-col gap-4 mt-4">
         <div className="flex flex-col w-full gap-4 mb-2 ">
           <div className="flex justify-between items-center">
             <span className="text-sm sm:text-base font-semibold text-sub700">무릎 최대 굽힘</span>
             <div className="flex items-center gap-1.5">
-              <div className="text-xs flex flex-col">
-                <span className=" text-sub700">L-{data.avgMaxLeftKneeFlexion}º</span>
-                <span className=" text-sub700">R-{data.avgMaxRightKneeFlexion}º</span>
+              <div className="text-xs sm:text-sm flex gap-2 font-semibold">
+                <span className=" text-sub700">L - {data.avgMaxLeftKneeFlexion}º</span>
+                <span className=" text-sub700"> | </span>
+                <span className=" text-sub700">R - {data.avgMaxRightKneeFlexion}º</span>
               </div>
               <span className={`px-3 py-1 rounded-full text-xs text-white text-center whitespace-normal break-keep ${riskInfo.badgeCss}`}>
                 {riskInfo.label}
               </span>
             </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <div className="relative w-full py-2">
-              <div className="relative w-full h-3 rounded-full overflow-hidden flex">
-                <div className={`w-[33.3%] ${leftKneePosition < 33.3 ? "bg-danger" : "bg-danger/20"}`} />
-                <div className={`w-[33.3%] ${leftKneePosition >= 33.3 && leftKneePosition < 66.6 ? "bg-warning" : "bg-warning/20"}`} />
-                <div className={`w-[33.4%] ${leftKneePosition >= 66.6 ? "bg-mainBlue-300" : "bg-mainBlue-300/20"}`} />
+          <div className="flex flex-col gap-3 w-full">
+            {/* 1. 좌측 게이지 바 */}
+            <div className="flex items-center gap-2 w-full">
+              <div className="shrink-0 whitespace-nowrap text-sm font-medium text-sub700 w-8">
+                좌측
               </div>
+              <div className="relative w-full py-2">
+                <div className="relative w-full h-3 rounded-full overflow-hidden flex">
+                  <div className={`w-[33.3%] ${leftKneePosition < 33.3 ? "bg-sub700" : "bg-sub700/50"}`} />
+                  <div className={`w-[33.3%] ${leftKneePosition >= 33.3 && leftKneePosition < 66.6 ? "bg-sub400" : "bg-sub400/50"}`} />
+                  <div className={`w-[33.4%] ${leftKneePosition >= 66.6 ? "bg-sub200" : "bg-sub200/50"}`} />
+                </div>
 
-              <div
-                className="absolute top-[1px] -translate-x-1/2 bg-white shadow-md border border-sub200 rounded-full w-6 h-6 flex items-center justify-center z-10 transition-all"
-                style={{ left: `${leftKneePosition}%` }}
-              >
-                <svg width="5" height="9" viewBox="0 0 5 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M2.38235 0C3.07059 0 3.63971 0.302294 4.08971 0.906882C4.53971 1.51147 4.76471 2.268 4.76471 3.17647C4.76471 3.78529 4.69412 4.317 4.55294 4.77159C4.46028 5.06996 4.36952 5.32545 4.28066 5.53807C4.2055 5.7179 4.01103 5.81044 3.81991 5.77222L0.6079 5.12982C0.460243 5.10028 0.337049 4.99723 0.290049 4.85417C0.225286 4.65705 0.166192 4.44193 0.112765 4.20882C0.0379419 3.88235 0.000353537 3.53824 5.95514e-07 3.17647C5.95514e-07 2.39118 0.209648 1.66553 0.628942 0.999529C1.04824 0.333529 1.63271 0.000352941 2.38235 0ZM1.65441 9C1.17794 9 0.783001 8.83235 0.469589 8.49706C0.156177 8.16176 -0.000352346 7.74265 5.95514e-07 7.23971C5.95514e-07 7.03676 0.030883 6.84053 0.0926478 6.651C0.114374 6.58433 0.136646 6.52009 0.159465 6.45826C0.229274 6.26913 0.43022 6.16931 0.627823 6.20929L3.31367 6.75273C3.5301 6.79652 3.6838 6.99588 3.63887 7.21207C3.55193 7.63039 3.37574 8.00807 3.11029 8.34512C2.76618 8.78206 2.28088 9.00035 1.65441 9Z" fill="black"/>
-                </svg>
+                <div
+                  className="absolute top-[1px] -translate-x-1/2 bg-white shadow-md border border-sub200 rounded-full w-6 h-6 flex items-center justify-center z-10 transition-all"
+                  style={{ left: `${leftKneePosition}%` }}
+                >
+                  <svg width="5" height="9" viewBox="0 0 5 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.38235 0C3.07059 0 3.63971 0.302294 4.08971 0.906882C4.53971 1.51147 4.76471 2.268 4.76471 3.17647C4.76471 3.78529 4.69412 4.317 4.55294 4.77159C4.46028 5.06996 4.36952 5.32545 4.28066 5.53807C4.2055 5.7179 4.01103 5.81044 3.81991 5.77222L0.6079 5.12982C0.460243 5.10028 0.337049 4.99723 0.290049 4.85417C0.225286 4.65705 0.166192 4.44193 0.112765 4.20882C0.0379419 3.88235 0.000353537 3.53824 5.95514e-07 3.17647C5.95514e-07 2.39118 0.209648 1.66553 0.628942 0.999529C1.04824 0.333529 1.63271 0.000352941 2.38235 0ZM1.65441 9C1.17794 9 0.783001 8.83235 0.469589 8.49706C0.156177 8.16176 -0.000352346 7.74265 5.95514e-07 7.23971C5.95514e-07 7.03676 0.030883 6.84053 0.0926478 6.651C0.114374 6.58433 0.136646 6.52009 0.159465 6.45826C0.229274 6.26913 0.43022 6.16931 0.627823 6.20929L3.31367 6.75273C3.5301 6.79652 3.6838 6.99588 3.63887 7.21207C3.55193 7.63039 3.37574 8.00807 3.11029 8.34512C2.76618 8.78206 2.28088 9.00035 1.65441 9Z" fill="black"/>
+                  </svg>
+                </div>
               </div>
             </div>
 
-            <div className="relative w-full py-2">
-              <div className="relative w-full h-3 rounded-full overflow-hidden flex">
-                <div className={`w-[33.3%] ${rightKneePosition < 33.3 ? "bg-danger" : "bg-danger/20"}`} />
-                <div className={`w-[33.3%] ${rightKneePosition >= 33.3 && rightKneePosition < 66.6 ? "bg-warning" : "bg-warning/20"}`} />
-                <div className={`w-[33.4%] ${rightKneePosition >= 66.6 ? "bg-mainBlue-300" : "bg-mainBlue-300/20"}`} />
+            {/* 2. 우측 게이지 바 */}
+            <div className="flex items-center gap-2 w-full">
+              <div className="shrink-0 whitespace-nowrap text-sm font-medium text-sub700 w-8">
+                우측
               </div>
+              <div className="relative w-full py-2">
+                <div className="relative w-full h-3 rounded-full overflow-hidden flex">
+                  <div className={`w-[33.3%] ${rightKneePosition < 33.3 ? "bg-sub700" : "bg-sub700/50"}`} />
+                  <div className={`w-[33.3%] ${rightKneePosition >= 33.3 && rightKneePosition < 66.6 ? "bg-sub400" : "bg-sub400/50"}`} />
+                  <div className={`w-[33.4%] ${rightKneePosition >= 66.6 ? "bg-sub200" : "bg-sub200/50"}`} />
+                </div>
 
-              <div
-                className="absolute top-[1px] -translate-x-1/2 bg-white shadow-md border border-sub200 rounded-full w-6 h-6 flex items-center justify-center z-10 transition-all"
-                style={{ left: `${rightKneePosition}%` }}
-              >
-                <svg width="5" height="9" viewBox="0 0 5 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M2.38235 0C3.07059 0 3.63971 0.302294 4.08971 0.906882C4.53971 1.51147 4.76471 2.268 4.76471 3.17647C4.76471 3.78529 4.69412 4.317 4.55294 4.77159C4.46028 5.06996 4.36952 5.32545 4.28066 5.53807C4.2055 5.7179 4.01103 5.81044 3.81991 5.77222L0.6079 5.12982C0.460243 5.10028 0.337049 4.99723 0.290049 4.85417C0.225286 4.65705 0.166192 4.44193 0.112765 4.20882C0.0379419 3.88235 0.000353537 3.53824 5.95514e-07 3.17647C5.95514e-07 2.39118 0.209648 1.66553 0.628942 0.999529C1.04824 0.333529 1.63271 0.000352941 2.38235 0ZM1.65441 9C1.17794 9 0.783001 8.83235 0.469589 8.49706C0.156177 8.16176 -0.000352346 7.74265 5.95514e-07 7.23971C5.95514e-07 7.03676 0.030883 6.84053 0.0926478 6.651C0.114374 6.58433 0.136646 6.52009 0.159465 6.45826C0.229274 6.26913 0.43022 6.16931 0.627823 6.20929L3.31367 6.75273C3.5301 6.79652 3.6838 6.99588 3.63887 7.21207C3.55193 7.63039 3.37574 8.00807 3.11029 8.34512C2.76618 8.78206 2.28088 9.00035 1.65441 9Z" fill="black"/>
-                </svg>
-              </div>
-              <div className="absolute w-full bottom-0 flex text-[11px] text-sub400 font-medium">
-                <>
+                <div
+                  className="absolute top-[1px] -translate-x-1/2 bg-white shadow-md border border-sub200 rounded-full w-6 h-6 flex items-center justify-center z-10 transition-all"
+                  style={{ left: `${rightKneePosition}%` }}
+                >
+                  <svg width="5" height="9" viewBox="0 0 5 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.38235 0C3.07059 0 3.63971 0.302294 4.08971 0.906882C4.53971 1.51147 4.76471 2.268 4.76471 3.17647C4.76471 3.78529 4.69412 4.317 4.55294 4.77159C4.46028 5.06996 4.36952 5.32545 4.28066 5.53807C4.2055 5.7179 4.01103 5.81044 3.81991 5.77222L0.6079 5.12982C0.460243 5.10028 0.337049 4.99723 0.290049 4.85417C0.225286 4.65705 0.166192 4.44193 0.112765 4.20882C0.0379419 3.88235 0.000353537 3.53824 5.95514e-07 3.17647C5.95514e-07 2.39118 0.209648 1.66553 0.628942 0.999529C1.04824 0.333529 1.63271 0.000352941 2.38235 0ZM1.65441 9C1.17794 9 0.783001 8.83235 0.469589 8.49706C0.156177 8.16176 -0.000352346 7.74265 5.95514e-07 7.23971C5.95514e-07 7.03676 0.030883 6.84053 0.0926478 6.651C0.114374 6.58433 0.136646 6.52009 0.159465 6.45826C0.229274 6.26913 0.43022 6.16931 0.627823 6.20929L3.31367 6.75273C3.5301 6.79652 3.6838 6.99588 3.63887 7.21207C3.55193 7.63039 3.37574 8.00807 3.11029 8.34512C2.76618 8.78206 2.28088 9.00035 1.65441 9Z" fill="black"/>
+                  </svg>
+                </div>
+
+                <div className="absolute w-full bottom-0 flex text-[11px] text-sub400 font-medium">
                   <span className="absolute left-[33.3%] -translate-x-1/2">40º</span>
                   <span className="absolute left-[66.6%] -translate-x-1/2">50º</span>
-                </>
+                </div>
               </div>
             </div>
           </div>
@@ -315,8 +328,6 @@ export default function GaitFall({ data }: GaitContainerProps) {
             ))}
           </div>
         </div>
-
-
       </div>
     </div>
   )

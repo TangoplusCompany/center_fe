@@ -62,8 +62,8 @@ export default function GaitBalance({data}: GaitContainerProps) {
             <div className="grid grid-cols-[20%_80%] w-full rounded-xl border border-sub100 p-2">
               <div className="flex gap-2 border-2 border-sub200 rounded-xl items-center p-2 mr-1">
                 <div className="flex flex-col  text-sub700 font-semibold">
-                  <span className="opacity-10">R</span>
                   <span>L</span>
+                  <span className="opacity-10">R</span>
                 </div>
                 <FootPrintIcon leftStartColor="#454545" leftEndColor="#454545" />
               </div>
@@ -89,8 +89,8 @@ export default function GaitBalance({data}: GaitContainerProps) {
             <div className="grid grid-cols-[20%_80%] w-full rounded-xl border border-sub100 p-2">
               <div className="flex gap-2 border-2 border-sub200 rounded-xl items-center p-2 mr-1">
                 <div className="flex flex-col  text-sub700 font-semibold">
-                  <span >R</span>
                   <span className="opacity-10">L</span>
+                  <span >R</span>
                 </div>
                 <FootPrintIcon rightStartColor="#454545" rightEndColor="#454545" />
               </div>
@@ -116,8 +116,8 @@ export default function GaitBalance({data}: GaitContainerProps) {
             <div className="grid grid-cols-[20%_80%] w-full rounded-xl border border-sub100 p-2">
               <div className="flex gap-2 border-2 border-sub200 rounded-xl items-center p-2 mr-1">
                 <div className="flex flex-col  text-sub700 font-semibold">
-                  <span>R</span>
                   <span>L</span>
+                  <span>R</span>
                 </div>
                 <FootPrintIcon leftStartColor="#454545" leftEndColor="#454545" rightStartColor="#454545" rightEndColor="#454545" />
               </div>

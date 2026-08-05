@@ -1,9 +1,16 @@
-import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { GaitContainerProps } from "./Container"
-import { Area, AreaChart, CartesianGrid, YAxis } from "recharts";
-import { IGaitSeqFrameData } from "@/types/measure";
-import { useMemo } from "react";
+// src/components/gait/GaitSeqResult.tsx (컴포넌트 파일 경로)
+"use client";
 
+import { useMemo, useState, useId } from "react";
+import { Area, AreaChart, CartesianGrid, YAxis } from "recharts";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { GaitContainerProps } from "./Container";
+import { IGaitSeqFrameData } from "@/types/measure";
 
 const DUMMY_FRAMES: IGaitSeqFrameData[] = [
   { sequenceIndex: 0, frameIndex: 6, timestamp: 1.373, headLateralTilt: 178.0, headForwardTilt: 175.7, trunkSway: 178.8, trunkFlexion: 178.4, shoulderTilt: 178.3, leftArmAngle: -176.8, rightArmAngle: -173.1, pelvicDrop: 178.3, leftKneeAngle: 9.7, rightKneeAngle: 54.4 },
@@ -27,7 +34,29 @@ export function GaitGraphItem({
   data1: GraphUnit;
   data2?: GraphUnit;
 }) {
-  // 1. 최대 프레임 길이에 맞춰 3개 데이터를 하나의 배열로 병합
+  const uniqueId = useId().replace(/:/g, "");
+  
+  // 단일 선택 상태 (null일 때는 아무것도 선택 안 됨 = 기본 상태)
+  const [selectedKey, setSelectedKey] = useState<string | null>(null);
+
+  const toggleKey = (key: string) => {
+    setSelectedKey((prev) => (prev === key ? null : key));
+  };
+
+  const DEFAULT_COLORS: Record<string, string> = {
+    val0: "#5B93FFCC",
+    val1: "#2563EBE6",
+    val2: "#1E40AF",
+  };
+
+  // 💡 색상 결정 로직:
+  // 선택된 게 없으면(null) -> 각자 기본 색상
+  // 하나라도 선택되면 -> 선택된 항목만 기본 색상, 나머지는 #BBBBBB
+  const getColor = (key: string) => {
+    if (!selectedKey) return DEFAULT_COLORS[key];
+    return selectedKey === key ? DEFAULT_COLORS[key] : "#BBBBBB";
+  };
+
   const maxLength = Math.max(
     data0.value.length,
     data1.value.length,
@@ -40,6 +69,7 @@ export function GaitGraphItem({
     val1: data1.value[index],
     val2: data2?.value[index],
   }));
+
   const yDomain = useMemo(() => {
     const combinedValues = [...data0.value, ...data1.value, ...(data2?.value || [])].filter(
       (v) => typeof v === "number" && !isNaN(v)
@@ -50,80 +80,96 @@ export function GaitGraphItem({
     const min = Math.min(...combinedValues);
     const max = Math.max(...combinedValues);
     const diff = max - min;
-    const padding = diff === 0 ? 10 : diff * 0.15; // 데이터 변화가 없을 시 기본 10 패딩
+    const padding = diff === 0 ? 10 : diff * 0.15;
 
     return [Math.floor(min - padding), Math.ceil(max + padding)];
   }, [data0, data1, data2]);
 
-  // 2. chartConfig에 각 데이터의 title과 색상 지정
   const chartConfig = {
-    val0: {
-      label: data0.title,
-      color: "#2563EB", // 파랑
-    },
-    val1: {
-      label: data1.title,
-      color: "#16A34A", // 초록
-    },
-    ...(data2 && {
-      val2: {
-        label: data2.title,
-        color: "#DC2626", // 빨강
-      },
-    }),
+    val0: { label: data0.title, color: getColor("val0") },
+    val1: { label: data1.title, color: getColor("val1") },
+    ...(data2 && { val2: { label: data2.title, color: getColor("val2") } }),
   } satisfies ChartConfig;
 
+  const legendList = [
+    { key: "val0", title: data0.title },
+    { key: "val1", title: data1.title },
+    ...(data2 ? [{ key: "val2", title: data2.title }] : []),
+  ];
+
   return (
-    <div className="w-full">
+    <div className="w-full space-y-2">
+      {/* 범례 영역 */}
+      <div className="flex justify-end gap-3 text-xs font-medium pr-2">
+        {legendList.map((item) => {
+          const color = getColor(item.key);
+          const isActive = !selectedKey || selectedKey === item.key;
+
+          return (
+            <button
+              key={item.key}
+              type="button"
+              onClick={() => toggleKey(item.key)}
+              className="flex items-center gap-1.5 cursor-pointer transition-opacity hover:opacity-80"
+            >
+              <span
+                className="w-3 h-3 rounded-sm rounded-xs transition-colors"
+                style={{ backgroundColor: color }}
+              />
+              <span className={isActive ? "text-gray-900 font-bold" : "text-gray-400"}>
+                {item.title}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
       <ChartContainer config={chartConfig} className="aspect-auto h-[180px] w-full">
         <AreaChart data={chartData}>
           <defs>
-            <linearGradient id="fillVal0" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#2563EB" stopOpacity={0.4} />
-              <stop offset="100%" stopColor="#2563EB" stopOpacity={0.05} />
+            <linearGradient id={`fillVal0-${uniqueId}`} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={getColor("val0")} stopOpacity={0.4} />
+              <stop offset="100%" stopColor={getColor("val0")} stopOpacity={0.05} />
             </linearGradient>
-            <linearGradient id="fillVal1" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#16A34A" stopOpacity={0.4} />
-              <stop offset="100%" stopColor="#16A34A" stopOpacity={0.05} />
+            <linearGradient id={`fillVal1-${uniqueId}`} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={getColor("val1")} stopOpacity={0.4} />
+              <stop offset="100%" stopColor={getColor("val1")} stopOpacity={0.05} />
             </linearGradient>
             {data2 && (
-              <linearGradient id="fillVal2" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#DC2626" stopOpacity={0.4} />
-                <stop offset="100%" stopColor="#DC2626" stopOpacity={0.05} />
+              <linearGradient id={`fillVal2-${uniqueId}`} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={getColor("val2")} stopOpacity={0.4} />
+                <stop offset="100%" stopColor={getColor("val2")} stopOpacity={0.05} />
               </linearGradient>
             )}
           </defs>
+
           <YAxis domain={yDomain} hide />
           <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-
-          {/* 범례(Legend) 추가 */}
-          <ChartLegend content={<ChartLegendContent />} />
 
           <ChartTooltip
             content={<ChartTooltipContent labelFormatter={(value) => `${value} 프레임`} />}
           />
 
-          {/* Area 3개 배치 */}
           <Area
             dataKey="val0"
             type="monotone"
-            fill="url(#fillVal0)"
-            stroke="#2563EB"
+            fill={`url(#fillVal0-${uniqueId})`}
+            stroke={getColor("val0")}
             strokeWidth={2}
           />
           <Area
             dataKey="val1"
             type="monotone"
-            fill="url(#fillVal1)"
-            stroke="#16A34A"
+            fill={`url(#fillVal1-${uniqueId})`}
+            stroke={getColor("val1")}
             strokeWidth={2}
           />
           {data2 && (
             <Area
               dataKey="val2"
               type="monotone"
-              fill="url(#fillVal2)"
-              stroke="#DC2626"
+              fill={`url(#fillVal2-${uniqueId})`}
+              stroke={getColor("val2")}
               strokeWidth={2}
             />
           )}
@@ -133,29 +179,24 @@ export function GaitGraphItem({
   );
 }
 
+export default function GaitSeqResult({ data }: GaitContainerProps) {
+  console.log(data);
 
-export default function GaitSeqResult({data}: GaitContainerProps) {
-  console.log(data)
-  // 2. 프레임 배열을 각 그래프그룹용 GraphUnit 데이터로 추출
   const graphGroups = useMemo(() => {
     return {
-      // 1) Head (2개)
       head: {
         data0: { title: "머리 좌우 기울기", value: DUMMY_FRAMES.map((f) => f.headLateralTilt) },
         data1: { title: "머리 전후 기울기", value: DUMMY_FRAMES.map((f) => f.headForwardTilt) },
       },
-      // 2) Trunk (2개)
       trunk: {
         data0: { title: "몸통 흔들림", value: DUMMY_FRAMES.map((f) => f.trunkSway) },
         data1: { title: "몸통 굽힘", value: DUMMY_FRAMES.map((f) => f.trunkFlexion) },
       },
-      // 3) Shoulder & Arm (3개)
       shoulderArm: {
         data0: { title: "어깨 기울기", value: DUMMY_FRAMES.map((f) => f.shoulderTilt) },
         data1: { title: "왼쪽 팔 각도", value: DUMMY_FRAMES.map((f) => f.leftArmAngle) },
         data2: { title: "오른쪽 팔 각도", value: DUMMY_FRAMES.map((f) => f.rightArmAngle) },
       },
-      // 4) Lower Body (3개)
       lowerBody: {
         data0: { title: "골반 틀어짐", value: DUMMY_FRAMES.map((f) => f.pelvicDrop) },
         data1: { title: "왼쪽 무릎 각도", value: DUMMY_FRAMES.map((f) => f.leftKneeAngle) },
@@ -163,20 +204,18 @@ export default function GaitSeqResult({data}: GaitContainerProps) {
       },
     };
   }, []);
+
   return (
     <div className="bg-white rounded-xl border border-sub200 p-4">
-      <span className="text-sm sm:text-base font-semibold text-sub700 ">편도 보행 결과</span>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full ">
-        {/* 1. 머리 관절 */}
+      <div className="text-lg font-semibold mb-2 text-sub700">편도 보행 결과</div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
         <GaitGraphItem data0={graphGroups.head.data0} data1={graphGroups.head.data1} />
-
         <GaitGraphItem data0={graphGroups.trunk.data0} data1={graphGroups.trunk.data1} />
         <GaitGraphItem
           data0={graphGroups.shoulderArm.data0}
           data1={graphGroups.shoulderArm.data1}
           data2={graphGroups.shoulderArm.data2}
         />
-
         <GaitGraphItem
           data0={graphGroups.lowerBody.data0}
           data1={graphGroups.lowerBody.data1}

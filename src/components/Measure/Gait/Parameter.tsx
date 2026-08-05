@@ -34,7 +34,7 @@ const calculatePercent = (val: number, t0: number, t1: number) => {
   const overPercent = 66.6 + ((val - t1) / (maxVal - t1)) * 33.4;
   return Math.min(100, Math.max(0, overPercent));
 };
-const getRiskFromValue = (val: number, t0: number, t1: number) => {
+export const getRiskFromValue = (val: number, t0: number, t1: number) => {
   if (val < t0) return 2; // 위험
   if (val <= t1) return 1; // 주의
   return 0; // 정상
@@ -64,31 +64,36 @@ function GaitItem({ item }: { item: ParameterItem }) {
   const isMidActive = position >= 33.3 && position < 66.6;
   const isHighActive = position >= 66.6;
 
+  // 게이지 아이템 컴포넌트 파일 (예: src/components/gait/GaitGaugeItem.tsx)
+
   return (
-    <div className="flex flex-col w-full mb-2">
+    /* 💡 1. h-full 과 justify-center 를 추가하여 높이 안에서 중앙 정렬 기반 마련 */
+    <div className="flex flex-col justify-center w-full h-full mb-2">
       {/* 헤더 */}
       <div className="flex justify-between items-center">
         <span className="text-sm sm:text-base font-semibold text-sub700">{item.title}</span>
         
         <div className="flex gap-1">
-          <span>{item.value}{item.unit}</span>
+          <span className="text-xs sm:text-sm text-sub700 font-semibold">{item.value}{item.unit}</span>
           <span className={`px-3 py-1 rounded-full text-xs text-white text-center whitespace-normal break-keep ${riskInfo.badgeCss}`}>
             {riskInfo.label}
           </span>
         </div>
       </div>
 
-      {/* 게이지 바 (Red -> Yellow -> Blue) */}
-      <div className="relative w-full py-2">
+      {/* 게이지 바 
+          💡 2. my-auto를 통해 L/R 박스가 없을 때는 자동으로 세로 중앙에 위치하도록 설정 
+          💡 3. 하단 수치 라벨 공간 확보를 위해 pb-5 pt-2 지정
+      */}
+      <div className="relative w-full py-2 mb-3">
         <div className="relative w-full h-3 rounded-full overflow-hidden flex">
           {/* 1구간 (< t0): 위험 영역 */}
-          <div className={`w-[33.3%] transition-colors ${isLowActive ? "bg-danger" : "bg-danger/20"}`} />
+          <div className={`w-[33.3%] transition-colors ${isLowActive ? "bg-sub700" : "bg-sub700/50"}`} />
           {/* 2구간 (t0 ~ t1): 주의 영역 */}
-          <div className={`w-[33.3%] transition-colors ${isMidActive ? "bg-warning" : "bg-warning/20"}`} />
+          <div className={`w-[33.3%] transition-colors ${isMidActive ? "bg-sub400" : "bg-sub400/50"}`} />
           {/* 3구간 (> t1): 정상 영역 */}
-          <div className={`w-[33.4%] transition-colors ${isHighActive ? "bg-mainBlue-300" : "bg-mainBlue-300/20"}`} />
+          <div className={`w-[33.4%] transition-colors ${isHighActive ? "bg-sub200" : "bg-sub200/50"}`} />
         </div>
-
 
         {/* 발자국 인디케이터 */}
         <div
@@ -107,8 +112,9 @@ function GaitItem({ item }: { item: ParameterItem }) {
         </div>
       </div>
 
+      {/* L / R 수치 박스 */}
       {item.leftValue && item.rightValue && (
-        <div className="grid grid-cols-2 gap-2 text-xs md:text-sm font-medium text-sub700 mt-4 mb-2">
+        <div className="grid grid-cols-2 gap-2 text-xs md:text-sm font-medium text-sub700 mt-2 mb-1">
           <div className="bg-sub200 py-2 rounded-lg text-center">L - {item.leftValue}</div>
           <div className="bg-sub200 py-2 rounded-lg text-center">R - {item.rightValue}</div>
         </div>
@@ -164,10 +170,12 @@ export default function GaitParameter({ data }: GaitContainerProps) {
       <div className="text-lg font-semibold mb-2 text-sub700">
         보행 분석 파라미터
       </div>
+      <div className="grid grid-rows-4 gap-2 h-full">
+        {gaitItems.map((item, index) => (
+          <GaitItem key={index} item={item} />
+        ))}
+      </div>
       
-      {gaitItems.map((item, index) => (
-        <GaitItem key={index} item={item} />
-      ))}
     </div>
   );
 }

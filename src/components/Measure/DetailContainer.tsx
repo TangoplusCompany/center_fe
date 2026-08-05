@@ -1,7 +1,7 @@
 "use client";
 
 import * as Popover from "@radix-ui/react-popover";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "../ui/button";
 import { actionKakaoEncrypt, actionPrintEncrypt } from "@/app/actions/getCrypto";
 import { postKakaoSend } from "@/app/actions/postKakaoSend";
@@ -14,10 +14,11 @@ import { IUserMeasureListItem } from "@/types/user";
 import { DetailPagination } from "@/hooks/api/user/useMeasureListForDetail";
 import { formatDate } from "@/utils/formatDate";
 import { MeasureDetailDatePickerDialog } from "./DetailDatePickerDialog";
-import { IMeasureGaitDetail, IMeasurementMeta } from "@/types/measure";
+import { IMeasureGaitDetail, IMeasurementMeta, IMeasureMoireDetail } from "@/types/measure";
 import { Skeleton } from "../ui/skeleton";
 import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
 import GaitContainer from "./Gait/Container";
+import MoireContainer from "./Moire/Container";
 
 // Select 
 
@@ -171,7 +172,7 @@ export type CenterUserMeasureProps = {
 };
 
 const MeasureDetailContainer = ({
-  measureData : externalMeasureData,
+  measureData: externalMeasureData,
   measureList,
   measureType,
   setMeasureType,
@@ -191,6 +192,16 @@ const MeasureDetailContainer = ({
     : externalMeasureData;
   const [internalDatePickerOpen, setInternalDatePickerOpen] = useState(false);
 
+  const hasFlags = useMemo(() => ({
+    hasBasic: measureMetaData?.has_basic === 1,
+    hasRom: measureMetaData?.has_rom === 1,
+    hasBia: measureMetaData?.has_bia === 1,
+    hasGait: true, // measureMetaData?.has_gait === 1,
+    hasMoire: true, // measureMetaData?.has_moire === 1,
+  }), [measureMetaData]);
+
+  const { hasBasic, hasRom, hasBia, hasGait, hasMoire } = hasFlags;
+
   const {
     data: measureData,
     isLoading: measureDataLoading,
@@ -200,25 +211,23 @@ const MeasureDetailContainer = ({
     isMyPage,
   });
 
+  // 💡 2. 계산된 플래그를 useEffect 내부에서 재사용
   useEffect(() => {
-    if (!measureMetaData || !setMeasureType) return; // 💡 setMeasureType이 undefined면 실행 방지
+    if (!measureMetaData || !setMeasureType) return;
 
-    const hasBasic = measureMetaData.has_basic === 1;
-    const hasRom = measureMetaData.has_rom === 1;
-    const hasBia = measureMetaData.has_bia === 1;
-    const hasGait = measureMetaData.has_gait === 1;
     const availableType = MEASURE_TYPE.find(type => {
       if (type.key === "basic") return hasBasic;
       if (type.key === "rom") return hasRom;
       if (type.key === "bia") return hasBia;
       if (type.key === "gait") return hasGait;
+      if (type.key === "moire") return hasMoire;
       return false;
     });
 
     if (availableType) {
       setMeasureType(availableType.key as measureType);
     }
-  }, [measureMetaData, setMeasureType]);
+  }, [measureMetaData, setMeasureType, hasBasic, hasRom, hasBia, hasGait, hasMoire]);
 
   if (!measureMetaData) {
     return (
@@ -230,7 +239,6 @@ const MeasureDetailContainer = ({
         <div className="grid grid-cols-[1fr_2fr] gap-4">
           <Skeleton className="w-full h-[512px]"/>
           <div className="w-full h-fit flex flex-col gap-4">
-            {/* 💡 h-50 대신 구체적인 픽셀 값 지정 */}
             <Skeleton className="w-full h-[248px]"/>
             <Skeleton className="w-full h-[248px]"/>
           </div>
@@ -259,7 +267,6 @@ const MeasureDetailContainer = ({
       alert("카카오톡 공유에 실패했습니다. 잠시 후 다시 시도해주세요.");
     }
   };
-  
 
   const handlePrint = async (selectedValues: string) => {
     if (selectedValues.length === 0) return;
@@ -279,10 +286,8 @@ const MeasureDetailContainer = ({
     }
   };
 
-  const hasBasic = measureMetaData.has_basic === 1;
-  const hasRom = measureMetaData.has_rom === 1;
-  const hasBia = measureMetaData.has_bia === 1;
-  const hasGait = measureMetaData.has_gait === 1; // true //
+  // 💡 3. 하단에 있던 중복 선언문 제거됨 (상단에서 구출한 hasBasic, hasRom 등 그대로 사용)
+  
   const dateProps : SkeletonDatePickerProps = {
     measureList: measureList,
     selectedMeasure: measureSn,
@@ -298,8 +303,6 @@ const MeasureDetailContainer = ({
       ? dateProps.measureList.find((item) => item.measure_sn === dateProps.selectedMeasure)
       : undefined;
 
-  
-  
   if (measureDataLoading) {
     return <p className="py-8 text-center">로딩중입니다</p>;
   }
@@ -317,6 +320,7 @@ const MeasureDetailContainer = ({
               if (type.key === "rom") isAvailable = hasRom;
               if (type.key === "bia") isAvailable = hasBia;
               if (type.key === "gait") isAvailable = hasGait;
+              if (type.key === "gait") isAvailable = hasMoire;
               return (
                 <button
                   key={type.key}
@@ -410,11 +414,18 @@ const MeasureDetailContainer = ({
         <BiaContainer data={measureData.bia_result}/>
       )}
 
-      {(measureType === "gait" && hasGait && measureData.gait_result ) && ( // && hasGait && measureData.gait_result
-        <GaitContainer data={measureData.gait_result}/>
-        // <GaitContainer data={mockMeasureGaitDetail}/>
+      {(measureType === "gait"  ) && ( // && hasGait && measureData.gait_result
+        // <GaitContainer data={measureData.gait_result}/>
+        <GaitContainer data={mockMeasureGaitDetail}/>
       )}
-
+      {(measureType === "gait"  ) && ( // && hasGait && measureData.gait_result
+        // <GaitContainer data={measureData.gait_result}/>
+        <GaitContainer data={mockMeasureGaitDetail}/>
+      )}
+      {(measureType === "moire"  ) && ( // && hasMoire && measureData.moire_result
+        // <MoireContainer data={measureData.moire_result}/>
+        <MoireContainer data={DUMMY_MOIRE_DETAIL}/>
+      )}
     </div>
   )
 }
@@ -521,4 +532,67 @@ export const mockMeasureGaitDetail: IMeasureGaitDetail = {
   resultStepLengthAsymmetry: 1.8,
   resultStepLenthDescirption: "보폭 크기가 신장 대비 적절합니다. 현재 상태를 유지하세요.",
   ersultStrideLengthDescription: "보구 간격이 규칙적으로 측정되었습니다. 안정적인 걸음걸이입니다.",
+};
+
+export const DUMMY_MOIRE_DETAIL: IMeasureMoireDetail = {
+  sn: 1,
+  local_sn: 1,
+  device_sn: 101,
+  measure_sn: 501,
+  measure_server_sn: 501,
+  user_uuid: "usr-uuid-001",
+  user_sn: 12,
+  user_name: "홍길동",
+  measure_date: "2026-08-05 14:00:00",
+  file_server_image_name0 : "93-2796-1-1-1784854291.jpg",
+  file_server_image_name1 : "93-2796-6-4-1784854292.jpg",
+  measure_server_mat_image_name: "93-2796-1-1-1784854292.png",
+  mat_static_left_top: 17.078,
+  mat_static_left_bottom: 11.981,
+  mat_static_right_top: 48.1758,
+  mat_static_right_bottom: 22.7645,
+  mat_static_left_pressure: 29.0597,
+  mat_static_right_pressure: 70.9404,
+  mat_static_top_pressure: 65.2538,
+  mat_static_bottom_pressure: 34.7462,
+  front_description: "전면 체형 분석 결과, 어깨와 골반의 좌우 균형에서 경미한 차이가 확인되며 신체 중심축이 한쪽으로 약간 치우치는 경향이 나타났습니다. 또한 체중이 특정 방향으로 집중되는 모습이 관찰되어 장시간 같은 자세를 유지하거나 반복적인 생활 습관에 의해 체형 불균형이 발생했을 가능성이 있습니다. 지속적인 자세 관리와 균형 운동을 권장합니다.",
+  back_desription: "후면 체형 분석 결과, 어깨와 골반의 정렬에서 일부 좌우 비대칭이 확인되며 허리 중심선도 약간 치우친 모습이 관찰되었습니다. 이러한 변화는 평소 자세 습관이나 근육 사용의 불균형으로 인해 나타날 수 있으며, 지속될 경우 체형 불균형으로 이어질 가능성이 있습니다. 자세 교정과 균형 운동을 통한 관리가 권장됩니다.",
+
+  // 전면 (Front)
+  front_shoulder_risk: 1,
+  front_shoulder_sub_angle: 2.1,
+  front_left_shoulder_max_angle: 5.2,
+  front_right_shoulder_max_angle: 3.1,
+  front_shoulder_description: "전면 어깨 불균형 경미",
+
+  front_waist_risk: 0,
+  front_waist_sub_excursion: 0.8, // cm
+  front_left_waist_max_excursion: 1.2, // cm
+  front_right_waist_max_excursion: 2.0, // cm
+  front_waist_description: "전면 허리 이동량 정상",
+
+  front_hip_risk: 2,
+  front_hip_sub_angle: 4.5,
+  front_left_hip_max_angle: 6.8,
+  front_right_hip_max_angle: 2.3,
+  front_hip_description: "전면 골반 기울기 주의",
+
+  // 후면 (Back)
+  back_shoulder_risk: 1,
+  back_shoulder_sub_angle: 1.8,
+  back_left_shoulder_max_angle: 4.1,
+  back_right_shoulder_max_angle: 2.3,
+  back_shoulder_description: "후면 어깨 불균형 경미",
+
+  back_waist_risk: 1,
+  back_waist_sub_excursion: 1.5, // cm
+  back_left_waist_max_excursion: 2.5, // cm
+  back_right_waist_max_excursion: 1.0, // cm
+  back_waist_description: "후면 허리 이동량 약간 높음",
+
+  back_hip_risk: 2,
+  back_hip_sub_angle: 5.1,
+  back_left_hip_max_angle: 7.2,
+  back_right_hip_max_angle: 2.1,
+  back_hip_description: "후면 골반 기울기 주의",
 };

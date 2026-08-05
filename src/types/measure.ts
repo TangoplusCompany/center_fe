@@ -8,6 +8,7 @@ export interface IMeasureResponse {
   rom_result?: IMeasureROMItemDetail[]
   bia_result?: IBiaData;
   gait_result?: IMeasureGaitDetail;
+  moire_result ?: IMeasureMoireDetail;
 }
 
 export interface IMeasureBasic {
@@ -547,4 +548,66 @@ export interface IGaitMeasureJson {
   landmarks: I3DPoseLandmark[];
   timestamp: number;
   screen_landmarks: I2DPoseLandmark[];
+}
+
+// 🪷🪷🪷🪷 Moire 🪷🪷🪷🪷
+export interface IMeasureMoireDetail {
+  sn : number;
+  local_sn: number;
+  device_sn: number;
+  measure_sn	: number;
+  measure_server_sn: number;
+  user_uuid	 : string;
+  user_sn: number;
+  user_name : string;
+  measure_date : string;
+  file_server_image_name0 : string;
+  file_server_image_name1 : string;
+  measure_server_mat_image_name: string;
+  mat_static_left_top: number;
+  mat_static_left_bottom: number;
+  mat_static_right_top: number;
+  mat_static_right_bottom: number;
+  mat_static_left_pressure: number;
+  mat_static_right_pressure: number;
+  mat_static_top_pressure: number;
+  mat_static_bottom_pressure: number;
+  front_description: string;
+  back_desription: string;
+
+  front_shoulder_risk: number;
+  front_shoulder_sub_angle: number;
+  front_left_shoulder_max_angle:number;
+  front_right_shoulder_max_angle: number;
+  front_shoulder_description: string;
+
+  front_waist_risk: number;
+  front_waist_sub_excursion: number;
+  front_left_waist_max_excursion:number;
+  front_right_waist_max_excursion: number;
+  front_waist_description: string;
+
+  front_hip_risk: number;
+  front_hip_sub_angle: number;
+  front_left_hip_max_angle:number;
+  front_right_hip_max_angle: number;
+  front_hip_description: string;
+
+  back_shoulder_risk: number;
+  back_shoulder_sub_angle: number;
+  back_left_shoulder_max_angle:number;
+  back_right_shoulder_max_angle: number;
+  back_shoulder_description: string;
+
+  back_waist_risk: number;
+  back_waist_sub_excursion: number;
+  back_left_waist_max_excursion:number;
+  back_right_waist_max_excursion: number;
+  back_waist_description: string;
+
+  back_hip_risk: number;
+  back_hip_sub_angle: number;
+  back_left_hip_max_angle:number;
+  back_right_hip_max_angle: number;
+  back_hip_description: string;
 }
