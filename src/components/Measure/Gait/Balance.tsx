@@ -11,7 +11,7 @@ export default function GaitBalance({data}: GaitContainerProps) {
       </div>
 
 
-      <div className="grid grid-cols-2 gap-2">
+      <div className="flex flex-col md:grid md:grid-cols-2 gap-2">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2 ">
             <div className="w-3 h-3 rounded-sm bg-mainBlue-600" />

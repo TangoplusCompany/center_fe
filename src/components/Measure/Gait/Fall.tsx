@@ -251,9 +251,9 @@ export default function GaitFall({ data }: GaitContainerProps) {
             <span className="text-sm sm:text-base font-semibold text-sub700">무릎 최대 굽힘</span>
             <div className="flex items-center gap-1.5">
               <div className="text-xs sm:text-sm flex gap-2 font-semibold">
-                <span className=" text-sub700">L - {data.avgMaxLeftKneeFlexion}º</span>
+                <span className=" text-sub700">L {data.avgMaxLeftKneeFlexion}º</span>
                 <span className=" text-sub700"> | </span>
-                <span className=" text-sub700">R - {data.avgMaxRightKneeFlexion}º</span>
+                <span className=" text-sub700">R {data.avgMaxRightKneeFlexion}º</span>
               </div>
               <span className={`px-3 py-1 rounded-full text-xs text-white text-center whitespace-normal break-keep ${riskInfo.badgeCss}`}>
                 {riskInfo.label}

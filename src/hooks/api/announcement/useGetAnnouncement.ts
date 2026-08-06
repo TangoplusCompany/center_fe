@@ -22,6 +22,7 @@ export const useGetAnnouncement = ({
     },
     enabled:
       announcement_sn !== undefined &&
+      announcement_sn > 0 &&
       centerSn > 0,
   });
 };

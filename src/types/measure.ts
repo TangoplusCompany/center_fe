@@ -427,7 +427,7 @@ export interface IMeasureROMItemDetail extends IMeasureROMItemCardData {
 }
 
 // 🪷🪷🪷🪷 GAIT 🪷🪷🪷🪷
-export interface IMeasureGaitDetail {
+export interface IMeasureGaitMeta {
   sn : number;
   local_sn: number;
   device_sn: number;
@@ -437,6 +437,8 @@ export interface IMeasureGaitDetail {
   user_sn: number;
   user_name : string;
   measure_date : string;
+}
+export interface IMeasureGaitDetail extends IMeasureGaitMeta {
   file_server_video_name : string;
   file_server_gait_frame_name : string;
   totalSequenceCount	: number;
@@ -528,6 +530,79 @@ export interface IMeasureGaitDetail {
   ersultStrideLengthDescription: string;
 }
 
+export interface IGaitSeqDetail extends IMeasureGaitMeta {
+  file_name_kinematics_frame: string;
+  file_server_kinematics_frame: string;
+  sequenceIndex: string;
+  direction: string;
+  globalStartFrameIndex: string;
+  globalEndFrameIndex: string;
+  validStepCount: string;
+  validStrideCount: string;
+  sequenceTime: string;
+  gaitSpeed: string;
+  cadence: string;
+  doubleSupportTime: string;
+  leftSingleSupportTime: string;
+  rightSingleSupportTime: string;
+  avgLeftStanceTime: string;
+  avgLeftSwingTime: string;
+  avgRightStanceTime: string;
+  avgRightSwingTime: string;
+  doubleSupportRatio: string;
+  leftSingleSupportRatio: string;
+  rightSingleSupportRatio: string;
+  leftStanceRatio: string;
+  leftSwingRatio: string;
+  rightStanceRatio: string;
+  rightSwingRatio: string;
+  maxShoulderTilt: string;
+  maxTrunkFlexion: string;
+  maxTrunkSway: string;
+  maxPelvisDrop: string;
+  armSwingAsymmetry: string;
+  leftArmSwingRange: string;
+  rightArmSwingRange: string;
+}
+
+export interface IGaitStep extends IMeasureGaitMeta {
+  sequenceIndex: string;
+  direction: string;
+  stepIndex: string;
+  startFrameIndex: number;
+  endFrameIndex: number;
+  foot: "Left" | "Right";
+  startTiem: number;
+  endTime: number;
+  stepLength: number;
+  stepWidth : number;
+  stepTime: number;
+  stepSpeed: number;
+  isValid: 0 | 1;
+  accuracyScore: number;
+}
+export interface IGaitStride extends IMeasureGaitMeta {
+  sequenceIndex: string;
+  direction: string;
+  strideIndex: string;
+  startFrameIndex: number;
+  endFrameIndex: number;
+  foot: "Left" | "Right";
+  startTime: number;
+  endTime: number;
+  strideLength: number;
+  strideTime: number;
+  stanceRatio: number;
+  swingRatio: number;
+  stanceTime: number;
+  swingTime: number;
+  maxToeClearance: number;
+  strideSpeed: number;
+  isValid: 0 | 1;
+  accuracyScore: number;
+}
+
+
 export interface IGaitSeqFrameData {
   sequenceIndex: number;
   frameIndex: number;
@@ -576,38 +651,38 @@ export interface IMeasureMoireDetail {
   back_desription: string;
 
   front_shoulder_risk: number;
-  front_shoulder_sub_angle: number;
-  front_left_shoulder_max_angle:number;
-  front_right_shoulder_max_angle: number;
+  front_shoulder_sub_value: number;
+  front_left_shoulder_max_value:number;
+  front_right_shoulder_max_value: number;
   front_shoulder_description: string;
 
   front_waist_risk: number;
-  front_waist_sub_excursion: number;
-  front_left_waist_max_excursion:number;
-  front_right_waist_max_excursion: number;
+  front_waist_sub_value: number;
+  front_left_waist_max_value:number;
+  front_right_waist_max_value: number;
   front_waist_description: string;
 
   front_hip_risk: number;
-  front_hip_sub_angle: number;
-  front_left_hip_max_angle:number;
-  front_right_hip_max_angle: number;
+  front_hip_sub_value: number;
+  front_left_hip_max_value:number;
+  front_right_hip_max_value: number;
   front_hip_description: string;
 
   back_shoulder_risk: number;
-  back_shoulder_sub_angle: number;
-  back_left_shoulder_max_angle:number;
-  back_right_shoulder_max_angle: number;
+  back_shoulder_sub_value: number;
+  back_left_shoulder_max_value:number;
+  back_right_shoulder_max_value: number;
   back_shoulder_description: string;
 
   back_waist_risk: number;
-  back_waist_sub_excursion: number;
-  back_left_waist_max_excursion:number;
-  back_right_waist_max_excursion: number;
+  back_waist_sub_value: number;
+  back_left_waist_max_value:number;
+  back_right_waist_max_value: number;
   back_waist_description: string;
 
   back_hip_risk: number;
-  back_hip_sub_angle: number;
-  back_left_hip_max_angle:number;
-  back_right_hip_max_angle: number;
+  back_hip_sub_value: number;
+  back_left_hip_max_value:number;
+  back_right_hip_max_value: number;
   back_hip_description: string;
 }

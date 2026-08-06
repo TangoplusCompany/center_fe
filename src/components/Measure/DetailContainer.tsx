@@ -26,7 +26,8 @@ const MEASURE_TYPE = [
   { key: "basic", title: "간편 검사" },
   { key: "rom", title: "ROM 검사" },
   { key: "bia", title: "체성분 검사" },
-  { key: "gait", title: "보행 분석" },
+  { key: "gait", title: "보행 검사" },
+  { key: "moire", title: "모아레 검사" },
 ];
 
 export interface SkeletonDatePickerProps {
@@ -320,7 +321,7 @@ const MeasureDetailContainer = ({
               if (type.key === "rom") isAvailable = hasRom;
               if (type.key === "bia") isAvailable = hasBia;
               if (type.key === "gait") isAvailable = hasGait;
-              if (type.key === "gait") isAvailable = hasMoire;
+              if (type.key === "moire") isAvailable = hasMoire;
               return (
                 <button
                   key={type.key}
@@ -414,10 +415,6 @@ const MeasureDetailContainer = ({
         <BiaContainer data={measureData.bia_result}/>
       )}
 
-      {(measureType === "gait"  ) && ( // && hasGait && measureData.gait_result
-        // <GaitContainer data={measureData.gait_result}/>
-        <GaitContainer data={mockMeasureGaitDetail}/>
-      )}
       {(measureType === "gait"  ) && ( // && hasGait && measureData.gait_result
         // <GaitContainer data={measureData.gait_result}/>
         <GaitContainer data={mockMeasureGaitDetail}/>
@@ -560,39 +557,39 @@ export const DUMMY_MOIRE_DETAIL: IMeasureMoireDetail = {
 
   // 전면 (Front)
   front_shoulder_risk: 1,
-  front_shoulder_sub_angle: 2.1,
-  front_left_shoulder_max_angle: 5.2,
-  front_right_shoulder_max_angle: 3.1,
+  front_shoulder_sub_value: 2.1,
+  front_left_shoulder_max_value: 5.2,
+  front_right_shoulder_max_value: 3.1,
   front_shoulder_description: "전면 어깨 불균형 경미",
 
   front_waist_risk: 0,
-  front_waist_sub_excursion: 0.8, // cm
-  front_left_waist_max_excursion: 1.2, // cm
-  front_right_waist_max_excursion: 2.0, // cm
+  front_waist_sub_value: 0.8, // cm
+  front_left_waist_max_value: 1.2, // cm
+  front_right_waist_max_value: 2.0, // cm
   front_waist_description: "전면 허리 이동량 정상",
 
   front_hip_risk: 2,
-  front_hip_sub_angle: 4.5,
-  front_left_hip_max_angle: 6.8,
-  front_right_hip_max_angle: 2.3,
+  front_hip_sub_value: 4.5,
+  front_left_hip_max_value: 6.8,
+  front_right_hip_max_value: 2.3,
   front_hip_description: "전면 골반 기울기 주의",
 
   // 후면 (Back)
   back_shoulder_risk: 1,
-  back_shoulder_sub_angle: 1.8,
-  back_left_shoulder_max_angle: 4.1,
-  back_right_shoulder_max_angle: 2.3,
+  back_shoulder_sub_value: 1.8,
+  back_left_shoulder_max_value: 4.1,
+  back_right_shoulder_max_value: 2.3,
   back_shoulder_description: "후면 어깨 불균형 경미",
 
   back_waist_risk: 1,
-  back_waist_sub_excursion: 1.5, // cm
-  back_left_waist_max_excursion: 2.5, // cm
-  back_right_waist_max_excursion: 1.0, // cm
+  back_waist_sub_value: 1.5, // cm
+  back_left_waist_max_value: 2.5, // cm
+  back_right_waist_max_value: 1.0, // cm
   back_waist_description: "후면 허리 이동량 약간 높음",
 
   back_hip_risk: 2,
-  back_hip_sub_angle: 5.1,
-  back_left_hip_max_angle: 7.2,
-  back_right_hip_max_angle: 2.1,
+  back_hip_sub_value: 5.1,
+  back_left_hip_max_value: 7.2,
+  back_right_hip_max_value: 2.1,
   back_hip_description: "후면 골반 기울기 주의",
 };

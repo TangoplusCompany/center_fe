@@ -13,12 +13,12 @@ export default function GaitContainer({ data }: GaitContainerProps) {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="grid grid-cols-2 gap-2">
+      <div className="flex flex-col lg:grid lg:grid-cols-2 gap-2">
         <GaitDynamic data={data} />
         <GaitInfo  data={data} />
       </div>
       <GaitBalance data={data} />
-      <div className="grid grid-cols-2 gap-2">
+      <div className="flex flex-col lg:grid lg:grid-cols-2 gap-2">
         <GaitParameter data={data} />
         <GaitFall data={data} />
       </div>

@@ -113,7 +113,7 @@ export default function AnnouncementContainer({ onClose }: AnnouncementContainer
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-sub700/30 backdrop-blur-sm p-4">
       <div 
-        className="relative w-full max-w-[1600px] max-h-[1200px] overflow-y-auto bg-white rounded-xl shadow-2xl p-2 md:p-4 space-y-6 animate-scale-up"
+        className="relative w-[90%] h-[90%] md:w-[80%] md:h-[80%] flex flex-col bg-white rounded-xl shadow-2xl p-4 md:p-6 animate-scale-up overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between w-full">

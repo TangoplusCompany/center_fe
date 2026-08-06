@@ -73,7 +73,7 @@ function GaitItem({ item }: { item: ParameterItem }) {
       <div className="flex justify-between items-center">
         <span className="text-sm sm:text-base font-semibold text-sub700">{item.title}</span>
         
-        <div className="flex gap-1">
+        <div className="flex gap-1 items-center">
           <span className="text-xs sm:text-sm text-sub700 font-semibold">{item.value}{item.unit}</span>
           <span className={`px-3 py-1 rounded-full text-xs text-white text-center whitespace-normal break-keep ${riskInfo.badgeCss}`}>
             {riskInfo.label}

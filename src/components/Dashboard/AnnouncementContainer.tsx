@@ -40,7 +40,9 @@ export default function DashboardannouncementContainer({
             >
               <TableCell className="text-center font-medium whitespace-nowrap">
                 <span className="px-2 py-1 bg-blue-50 text-mainBlue-600 rounded text-xs font-bold">
-                  {ANNOUNCEMENT_TYPE_LIST?.find((meta) => meta.key === announcement.category)?.label || announcement.category}
+                  { // 이모지만 제거
+                  (ANNOUNCEMENT_TYPE_LIST?.find((meta) => meta.key === announcement.category)?.label || announcement.category)
+                    ?.replace(/^[\p{Emoji}\p{Emoji_Component}\s]+/gu, '')}
                 </span>
               </TableCell>
 
