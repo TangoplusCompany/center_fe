@@ -62,7 +62,7 @@ export default function AnnouncementDetail({
         >
           <path d="M19 12H5M12 19l-7-7 7-7" />
         </svg>
-        <span>목록으로 돌아가기</span>
+        <span>이전으로</span>
       </button>
 
       {/* 2. 남은 높이를 채우도록 flex-1 추가 */}

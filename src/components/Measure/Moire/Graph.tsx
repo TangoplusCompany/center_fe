@@ -1,6 +1,6 @@
 import { ChartContainer } from "@/components/ui/chart";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid } from "recharts";
-import { useId } from "react";
+import { useId, useMemo } from "react";
 import { IMoireGraphTitle } from "./Container";
 
 export const RISK_RECORD = {
@@ -11,24 +11,24 @@ export const RISK_RECORD = {
 
 export interface IMoireGraphProps {
   title: IMoireGraphTitle;
-  risk: number;
   leftValue: number;
   rightValue: number;
   leftIndex: number;
   rightIndex: number;
   unit: string;
-  description: string;
   indexData: number[];
 }
+
 interface CustomDotProps {
   cx?: number;
   cy?: number;
   index?: number;
 }
+
 export default function MoireGraph({ graphData }: { graphData: IMoireGraphProps }) {
   const uniqueId = useId().replace(/:/g, "");
 
-  // 1차원 숫자 배열을 Recharts용 데이터(x: 인덱스, zValue: 수치)로 변환
+  // 1차원 숫자 배열을 Recharts용 데이터로 변환
   const chartData = (graphData.indexData || []).map((zValue, x) => ({ x, zValue }));
 
   const total = chartData.length;
@@ -36,9 +36,34 @@ export default function MoireGraph({ graphData }: { graphData: IMoireGraphProps 
   const maxX = total > 0 ? total - 1 : 100;
   const midX = (minX + maxX) / 2;
 
-  // X축 5등분 틱 계산 (중앙 0 위치 고정)
+  // X축 5등분 틱 계산
   const xTicks = [minX, (minX + midX) / 2, midX, (midX + maxX) / 2, maxX];
-  const currentRisk = RISK_RECORD[graphData.risk as keyof typeof RISK_RECORD] || RISK_RECORD[0];
+
+  const { yMin, yMax, yTicks } = useMemo(() => {
+    const data = graphData.indexData || [];
+    if (data.length === 0) {
+      return { yMin: 2.0, yMax: 2.5, yTicks: [2.0, 2.25, 2.5] };
+    }
+
+    // 1. 오직 indexData(DepthArray) 수치로만 최댓값/최솟값을 추출합니다.
+    const minVal = Math.min(...data);
+    const maxVal = Math.max(...data);
+
+    // 2. 수치 변화폭에 맞춰 상하 20% 여유(Padding)를 줍니다.
+    const diff = maxVal - minVal;
+    const padding = diff > 0 ? diff * 0.2 : 0.01; 
+
+    const computedMin = Number((minVal - padding).toFixed(3));
+    const computedMax = Number((maxVal + padding).toFixed(3));
+    const computedMid = Number(((computedMin + computedMax) / 2).toFixed(3));
+
+    return {
+      yMin: computedMin,
+      yMax: computedMax,
+      yTicks: [computedMin, computedMid, computedMax],
+    };
+  }, [graphData.indexData]);
+
   const renderCustomDot = (props: CustomDotProps): React.ReactElement<SVGElement> => {
     const { cx, cy, index } = props;
 
@@ -48,16 +73,15 @@ export default function MoireGraph({ graphData }: { graphData: IMoireGraphProps 
 
     let color = "";
     if (index === graphData.leftIndex) {
-      color = "#5B93FF"; // Left: mainBlue-300
+      color = "#5B93FF";
     } else if (index === graphData.rightIndex) {
-      color = "#49D68F"; // Right: mainGreen-600
+      color = "#49D68F";
     } else {
       return <g key={`dot-${index}`} />;
     }
 
     return (
       <g key={`dot-${index}`}>
-        {/* 외곽 은은한 테두리 Ring */}
         <circle
           cx={cx}
           cy={cy}
@@ -67,23 +91,21 @@ export default function MoireGraph({ graphData }: { graphData: IMoireGraphProps 
           strokeWidth={1.5}
           strokeOpacity={0.6}
         />
-        {/* 중앙 원형 Solid Dot */}
         <circle cx={cx} cy={cy} r={5.5} fill={color} />
       </g>
     );
   };
+
   const subTitle: string = graphData.title.includes("허리") ? "중심선 편위" : "높이 차";
+
   return (
     <div className="flex flex-col rounded-xl border-2 border-sub200 p-4 bg-white">
       {/* Header */}
       <div className="flex w-full items-center justify-between mb-2">
         <span className="text-sm sm:text-base font-semibold text-sub700">{graphData.title}</span>
-        <span className={`px-2.5 py-0.5 rounded-full text-xs text-white font-medium ${currentRisk.badgeCss}`}>
-          {currentRisk.label}
-        </span>
       </div>
 
-      <div className="grid grid-cols-[60%_40%] gap-2">
+      <div className="grid grid-cols-[70%_30%] gap-2">
         <ChartContainer config={{}} className="aspect-auto h-[150px] w-full">
           <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
             <defs>
@@ -111,13 +133,15 @@ export default function MoireGraph({ graphData }: { graphData: IMoireGraphProps 
               }}
             />
 
+            {/* 💡 동적 yMin, yMax, yTicks 적용 */}
             <YAxis
-              domain={[-6, 6]}
-              ticks={[-6, 0, 6]}
+              domain={[yMin, yMax]}
+              reversed={true}
+              ticks={yTicks}
               tickLine={false}
               axisLine={{ stroke: "#374151" }}
-              tick={{ fill: "#6B7280", fontSize: 12 }}
-              tickFormatter={(val) => (val > 0 ? `+${val}` : `${val}`)}
+              tick={{ fill: "#6B7280", fontSize: 11 }}
+              tickFormatter={(val) => `${val.toFixed(2)}m`} // 2.15, 2.20 형태로 표시
             />
 
             <Area
@@ -130,18 +154,16 @@ export default function MoireGraph({ graphData }: { graphData: IMoireGraphProps 
             />
           </AreaChart>
         </ChartContainer>
-        
 
         <div className="flex flex-col gap-0.5 py-2">
-          <span className="text-xs sm:text-sm font-semibold text-sub700">{subTitle} {Math.abs(graphData.leftValue - graphData.rightValue).toFixed(1)} {graphData.unit}</span>
+          <span className="text-xs sm:text-sm font-semibold text-sub700">
+            {subTitle} {Math.abs(graphData.leftValue - graphData.rightValue).toFixed(1)} {graphData.unit}
+          </span>
           <div className="flex gap-2 text-xs sm:text-sm font-semibold">
-            <span className="text-mainBlue-300">L { graphData.leftValue} {graphData.unit}</span>
-            <span className="text-mainGreen-600">R { graphData.rightValue} {graphData.unit}</span>
+            <span className="text-mainBlue-300">L {graphData.leftValue} {graphData.unit}</span>
+            <span className="text-mainGreen-600">R {graphData.rightValue} {graphData.unit}</span>
           </div>
-
-          <span className="text-xs sm:text-sm text-sub700">{graphData.description}</span>
         </div>
-
       </div>
     </div>
   );

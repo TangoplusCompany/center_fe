@@ -3,7 +3,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { IGaitMeasureJson } from "@/types/measure";
 import React, { useRef, useState, useEffect } from "react";
-import { drawTrailSegment, midPoint2D } from "../Compare/utils/compareUtils";
+import { midPoint2D } from "../Compare/utils/compareUtils";
 import { drawSkeleton } from "../Compare/utils/DrawSkeleton";
 
 interface VideoPlayerProps {
@@ -28,7 +28,6 @@ export default function VideoPlayer({
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasWhiteRef = useRef<HTMLCanvasElement>(null);
   const canvasRedRef = useRef<HTMLCanvasElement>(null);
-  const canvasTrailRef = useRef<HTMLCanvasElement>(null);
 
   const [frame, setFrame] = useState(0);
   const [fit, setFit] = useState({ stageW: 0, stageH: 0 });
@@ -55,7 +54,7 @@ export default function VideoPlayer({
       const { clientWidth, clientHeight } = videoRef.current;
       setFit({ stageW: clientWidth, stageH: clientHeight });
 
-      [canvasWhiteRef, canvasRedRef, canvasTrailRef].forEach((ref) => {
+      [canvasWhiteRef, canvasRedRef].forEach((ref) => {
         if (ref.current) {
           ref.current.width = clientWidth;
           ref.current.height = clientHeight;
@@ -78,9 +77,8 @@ export default function VideoPlayer({
     const lm = item.screen_landmarks;
     const cw = canvasWhiteRef.current;
     const cr = canvasRedRef.current;
-    const ct = canvasTrailRef.current;
 
-    if (!cw || !cr || !ct || fit.stageW === 0 || fit.stageH === 0) return;
+    if (!cw || !cr || fit.stageW === 0 || fit.stageH === 0) return;
 
     // 💡 스케일링 없이 원데이터 절대 좌표(x, y) 그대로 사용
     const toScreen = (sx: number, sy: number) => {
@@ -99,11 +97,7 @@ export default function VideoPlayer({
     
     const ctxW = cw.getContext("2d");
     const ctxR = cr.getContext("2d");
-    const ctxT = ct.getContext("2d");
-    if (!ctxW || !ctxR || !ctxT) return;
-
-    ctxT.lineWidth = 1;
-    ctxT.strokeStyle = "#00FF00";
+    if (!ctxW || !ctxR) return;
 
     const p15 = { x: lm[15].x, y: lm[15].y };
     const p16 = { x: lm[16].x, y: lm[16].y };
@@ -112,12 +106,6 @@ export default function VideoPlayer({
     const p25 = { x: lm[25].x, y: lm[25].y };
     const p26 = { x: lm[26].x, y: lm[26].y };
 
-    const prev = trailPrevRef.current;
-    drawTrailSegment(ctxT, prev.p15, p15);
-    drawTrailSegment(ctxT, prev.p16, p16);
-    drawTrailSegment(ctxT, prev.pMid, pMid);
-    drawTrailSegment(ctxT, prev.p25, p25);
-    drawTrailSegment(ctxT, prev.p26, p26);
 
     trailPrevRef.current = { p15, p16, pMid, p25, p26 };
 
@@ -127,7 +115,7 @@ export default function VideoPlayer({
 
     // Draw skeleton
     drawSkeleton(ctxW, ctxR, lm, toScreen);
-  }, [measureJson, frame, fit, romType]);
+  }, [measureJson, frame, fit, romType, cropScale]);
 
   // custom Player를 위한 
   const [, setIsSeeking] = useState(false);
@@ -212,7 +200,6 @@ useEffect(() => {
             transformOrigin: "center center",
           }}
         />
-        <canvas ref={canvasTrailRef} className="absolute inset-0 w-full h-full pointer-events-none z-10" />
         <canvas ref={canvasWhiteRef} className="absolute inset-0 w-full h-full pointer-events-none z-20" />
         <canvas ref={canvasRedRef} className="absolute inset-0 w-full h-full pointer-events-none z-30" />
       </div>
