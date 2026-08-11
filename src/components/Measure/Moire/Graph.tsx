@@ -53,9 +53,9 @@ export default function MoireGraph({ graphData }: { graphData: IMoireGraphProps 
     const diff = maxVal - minVal;
     const padding = diff > 0 ? diff * 0.2 : 0.01; 
 
-    const computedMin = Number((minVal - padding).toFixed(3));
-    const computedMax = Number((maxVal + padding).toFixed(3));
-    const computedMid = Number(((computedMin + computedMax) / 2).toFixed(3));
+    const computedMin = Number((minVal - padding).toFixed(2));
+    const computedMax = Number((maxVal + padding).toFixed(2));
+    const computedMid = Number(((computedMin + computedMax) / 2).toFixed(2));
 
     return {
       yMin: computedMin,
@@ -105,7 +105,7 @@ export default function MoireGraph({ graphData }: { graphData: IMoireGraphProps 
         <span className="text-sm sm:text-base font-semibold text-sub700">{graphData.title}</span>
       </div>
 
-      <div className="grid grid-cols-[70%_30%] gap-2">
+      <div className="grid grid-cols-[80%_20%] gap-2">
         <ChartContainer config={{}} className="aspect-auto h-[150px] w-full">
           <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
             <defs>
@@ -157,11 +157,11 @@ export default function MoireGraph({ graphData }: { graphData: IMoireGraphProps 
 
         <div className="flex flex-col gap-0.5 py-2">
           <span className="text-xs sm:text-sm font-semibold text-sub700">
-            {subTitle} {Math.abs(graphData.leftValue - graphData.rightValue).toFixed(1)} {graphData.unit}
+            {subTitle} {Math.abs(graphData.leftValue - graphData.rightValue).toFixed(3)} {graphData.unit}
           </span>
           <div className="flex gap-2 text-xs sm:text-sm font-semibold">
-            <span className="text-mainBlue-300">L {graphData.leftValue} {graphData.unit}</span>
-            <span className="text-mainGreen-600">R {graphData.rightValue} {graphData.unit}</span>
+            <span className="text-mainBlue-300">L {graphData.leftValue.toFixed(1)} {graphData.unit}</span>
+            <span className="text-mainGreen-600">R {graphData.rightValue.toFixed(1)} {graphData.unit}</span>
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ import { GaitContainerProps } from "./Container"
 
 export interface GaitInfoCardProps {
   type: string//"Pattern" | "Balance" | "Efficiency"
-  title: string;
+  title ?: string;
   description ?: string;
   grade: number;
 }
@@ -72,19 +72,19 @@ export default function GaitInfo({data}: GaitContainerProps) {
   const infoHorizonCards = [
     {
       type: "Pattern",
-      title: iData.resultGaitPatternTitle,
+      title: iData.resultGaitPatternDescription,
       description: iData.resultGaitPatternDescription,
       grade: iData.resultGaitPatternGrade
     },
     {
       type: "Balance",
-      title: iData.resultGaitBalanceTitle,
+      title: iData.resultGaitBalanceDescription,
       description: iData.resultGaitBalanceDescription,
       grade: iData.resultGaitBalanceGrade
     },
     {
       type: "Efficiency",
-      title: iData.resultGaitEfficiencyTitle,
+      title: iData.resultGaitEfficiencyDescription,
       description: iData.resultGaitEfficiencyDescription,
       grade: iData.resultGaitEfficiencyGrade
     }
@@ -93,25 +93,21 @@ export default function GaitInfo({data}: GaitContainerProps) {
   const infoVertiCards = [
     {
       type: "TotalComment",
-      title: iData.resultGaitTotalCommentTitle,
       description: iData.resultGaitTotalCommentDescription,
       grade: iData.resultGaitTotalCommentGrade
     },
     {
       type: "Rhythm",
-      title: iData.resultGaitRhythmTitle,
       description: iData.resultGaitRhythmDescription,
       grade: iData.resultGaitRhythmGrade
     },
     {
       type: "FallRisk",
-      title: iData.resultFallRiskTitle,
       description: iData.resultFallRiskDescription,
       grade: iData.resultFallRiskGrade
     },
     {
       type: "RecommendComment",
-      title: iData.resultRecommendCommentTitle,
       description: iData.resultRecommendCommentDescription,
       grade: iData.resultRecommendCommentGrade
     }
@@ -144,7 +140,7 @@ export default function GaitInfo({data}: GaitContainerProps) {
       </div>
       <div className="grid grid-rows-4 h-full gap-2 mt-4">
          {infoVertiCards.map((card, id) => (
-            <GaitInfoVertiCard key={id} type={card.type} title={card.title} description={card.description} grade={card.grade} />
+            <GaitInfoVertiCard key={id} type={card.type} description={card.description} grade={card.grade} />
           ))}
       </div>
     </div>

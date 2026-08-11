@@ -1,10 +1,10 @@
-import { IMeasureMoireDetail } from "@/types/measure"
+import { IMoireDetail } from "@/types/measure"
 import MoireImage from "./Image";
 import MoireGraph from "./Graph";
 import { useMeasureMoireStaticJson } from "@/hooks/api/measure/moire/useMeasureMoireStaticJson";
 
 export interface IMoireContainerProps {
-  data : IMeasureMoireDetail[]
+  data : IMoireDetail
 }
 export type IMoireGraphTitle = "어깨 등고선" | "허리 등고선" | "골반 등고선"
 
@@ -20,79 +20,13 @@ export type MoireBodyPart =
 
 export type IMoireMultiPartData = Record<MoireBodyPart, number[]>;
 
-// export const DUMMY_MOIRE_DATA: IMoireMultiPartData = {
-//   frontShoulderValue: [
-//     -3.1 ,
-//     -2.5 ,
-//     0.1 ,
-//     1.8 ,
-//     3.2 ,
-//     4.9 ,
-//     3.2 ,
-//     -0.6 ,
-//   ],
-//   frontWaistValue: [
-//      0.8 ,
-//      0.9 ,
-//      1.1 ,
-//      1.3 ,
-//      1.5 ,
-//      1.4 ,
-//     1.1 ,
-//      0.9 ,
-//   ],
-//   frontHipValue: [
-//     4.2 ,
-//     4.5 ,
-//     4.8 ,
-//     5.1 ,
-//     5.6 ,
-//     5.3 ,
-//     4.9 ,
-//     4.4 ,
-//   ],
-//   backShoulderValue: [
-//     1.8 ,
-//     2.0 ,
-//     2.4 ,
-//     2.9 ,
-//     3.2 ,
-//     3.0 ,
-//     2.5 ,
-//     2.1 ,
-//   ],
-//   backWaistValue: [
-//     1.2 ,
-//     1.4 ,
-//     1.7 ,
-//     2.0 ,
-//     2.3 ,
-//     2.1 ,
-//     1.8 ,
-//     1.5 ,
-//   ],
-//   backHipValue: [
-//     5.0 ,
-//     5.2 ,
-//     5.5 ,
-//     6.0 ,
-//     6.4 ,
-//     6.1 ,
-//     5.7 ,
-//     5.1 ,
-//   ],
-// };
-
 export default function MoireContainer ({ data }: IMoireContainerProps) {
-  const leftFileName = data.length === 2 ? data[0].server_file_name_moire_json : undefined;
-  const rightFileName = data.length === 2 ? data[1].server_file_name_moire_json : undefined;
+  const leftFileName = data.front[0].server_file_name_moire_json
+  const rightFileName = data.back[0].server_file_name_moire_json
 
   const { data: measureJson0, isLoading: jsonLoading0, isError: jsonError0 } = useMeasureMoireStaticJson(leftFileName);
   const { data: measureJson1, isLoading: jsonLoading1, isError: jsonError1 } = useMeasureMoireStaticJson(rightFileName);
-  // 2. Early Return 및 데이터 예외 처리는 Hook 호출 이후에 수행
-  if (data.length !== 2) {
-    return <div className="text-red-500">오류가 발생했습니다. Moire 데이터 데이터 누락</div>;
-  }
+
   if (jsonLoading0 || jsonLoading1) {
     return <div className="text-sub400">로딩중입니다.</div>;
   }
@@ -101,7 +35,8 @@ export default function MoireContainer ({ data }: IMoireContainerProps) {
   }
 
 
-  const [frontD, backD] = data;
+  const frontD = data.front[0];
+  const backD = data.back[0];
   const graphs = [
     {
       title: "전면 어깨 등고선" as IMoireGraphTitle,

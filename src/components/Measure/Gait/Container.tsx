@@ -27,7 +27,8 @@ export default function GaitContainer({ data }: GaitContainerProps) {
         <GaitFall data={data} />
       </div>
 
-      <GaitSeqResult data={data}/>
+      <GaitSeqResult isFront={true} data={data}/>
+      <GaitSeqResult isFront={false} data={data}/>
       <GaitStepStride data={stepStride} />
     </div>
   )

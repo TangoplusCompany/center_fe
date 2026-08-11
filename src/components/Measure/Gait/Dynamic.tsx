@@ -16,7 +16,8 @@ export default function GaitDynamic({ data }: GaitContainerProps) {
         isError={!!(jsonError0)}
         cropScale={1.0} 
         isRotated={true}
-        isCompare={false}        />
+        isCompare={false}        
+      />
     </div>
   );
 }
