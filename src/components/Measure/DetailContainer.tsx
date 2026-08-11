@@ -1,7 +1,7 @@
 "use client";
 
 import * as Popover from "@radix-ui/react-popover";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "../ui/button";
 import { actionKakaoEncrypt, actionPrintEncrypt } from "@/app/actions/getCrypto";
 import { postKakaoSend } from "@/app/actions/postKakaoSend";
@@ -14,9 +14,11 @@ import { IUserMeasureListItem } from "@/types/user";
 import { DetailPagination } from "@/hooks/api/user/useMeasureListForDetail";
 import { formatDate } from "@/utils/formatDate";
 import { MeasureDetailDatePickerDialog } from "./DetailDatePickerDialog";
-import { IMeasurementMeta } from "@/types/measure";
+import { IMeasurementMeta, IMeasureMoireDetail } from "@/types/measure";
 import { Skeleton } from "../ui/skeleton";
 import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
+import GaitContainer from "./Gait/Container";
+import MoireContainer from "./Moire/Container";
 
 // Select 
 
@@ -24,6 +26,8 @@ const MEASURE_TYPE = [
   { key: "basic", title: "간편 검사" },
   { key: "rom", title: "ROM 검사" },
   { key: "bia", title: "체성분 검사" },
+  { key: "gait", title: "보행 검사" },
+  { key: "moire", title: "모아레 검사" },
 ];
 
 export interface SkeletonDatePickerProps {
@@ -169,7 +173,7 @@ export type CenterUserMeasureProps = {
 };
 
 const MeasureDetailContainer = ({
-  measureData : externalMeasureData,
+  measureData: externalMeasureData,
   measureList,
   measureType,
   setMeasureType,
@@ -189,6 +193,16 @@ const MeasureDetailContainer = ({
     : externalMeasureData;
   const [internalDatePickerOpen, setInternalDatePickerOpen] = useState(false);
 
+  const hasFlags = useMemo(() => ({
+    hasBasic: measureMetaData?.has_basic === 1,
+    hasRom: measureMetaData?.has_rom === 1,
+    hasBia: measureMetaData?.has_bia === 1,
+    hasGait: measureMetaData?.has_gait === 1,
+    hasMoire: measureMetaData?.has_moire === 1,
+  }), [measureMetaData]);
+
+  const { hasBasic, hasRom, hasBia, hasGait, hasMoire } = hasFlags;
+
   const {
     data: measureData,
     isLoading: measureDataLoading,
@@ -198,24 +212,23 @@ const MeasureDetailContainer = ({
     isMyPage,
   });
 
+  // 💡 2. 계산된 플래그를 useEffect 내부에서 재사용
   useEffect(() => {
-    if (!measureMetaData || !setMeasureType) return; // 💡 setMeasureType이 undefined면 실행 방지
-
-    const hasBasic = measureMetaData.has_basic === 1;
-    const hasRom = measureMetaData.has_rom === 1;
-    const hasBia = measureMetaData.has_bia === 1;
+    if (!measureMetaData || !setMeasureType) return;
 
     const availableType = MEASURE_TYPE.find(type => {
       if (type.key === "basic") return hasBasic;
       if (type.key === "rom") return hasRom;
       if (type.key === "bia") return hasBia;
+      if (type.key === "gait") return hasGait;
+      if (type.key === "moire") return hasMoire;
       return false;
     });
 
     if (availableType) {
       setMeasureType(availableType.key as measureType);
     }
-  }, [measureMetaData, setMeasureType]);
+  }, [measureMetaData, setMeasureType, hasBasic, hasRom, hasBia, hasGait, hasMoire]);
 
   if (!measureMetaData) {
     return (
@@ -227,7 +240,6 @@ const MeasureDetailContainer = ({
         <div className="grid grid-cols-[1fr_2fr] gap-4">
           <Skeleton className="w-full h-[512px]"/>
           <div className="w-full h-fit flex flex-col gap-4">
-            {/* 💡 h-50 대신 구체적인 픽셀 값 지정 */}
             <Skeleton className="w-full h-[248px]"/>
             <Skeleton className="w-full h-[248px]"/>
           </div>
@@ -256,7 +268,6 @@ const MeasureDetailContainer = ({
       alert("카카오톡 공유에 실패했습니다. 잠시 후 다시 시도해주세요.");
     }
   };
-  
 
   const handlePrint = async (selectedValues: string) => {
     if (selectedValues.length === 0) return;
@@ -276,10 +287,8 @@ const MeasureDetailContainer = ({
     }
   };
 
-  const hasBasic = measureMetaData.has_basic === 1;
-  const hasRom = measureMetaData.has_rom === 1;
-  const hasBia = measureMetaData.has_bia === 1;
-
+  // 💡 3. 하단에 있던 중복 선언문 제거됨 (상단에서 구출한 hasBasic, hasRom 등 그대로 사용)
+  
   const dateProps : SkeletonDatePickerProps = {
     measureList: measureList,
     selectedMeasure: measureSn,
@@ -295,8 +304,6 @@ const MeasureDetailContainer = ({
       ? dateProps.measureList.find((item) => item.measure_sn === dateProps.selectedMeasure)
       : undefined;
 
-  
-  
   if (measureDataLoading) {
     return <p className="py-8 text-center">로딩중입니다</p>;
   }
@@ -313,7 +320,8 @@ const MeasureDetailContainer = ({
               if (type.key === "basic") isAvailable = hasBasic;
               if (type.key === "rom") isAvailable = hasRom;
               if (type.key === "bia") isAvailable = hasBia;
-
+              if (type.key === "gait") isAvailable = hasGait;
+              if (type.key === "moire") isAvailable = hasMoire;
               return (
                 <button
                   key={type.key}
@@ -406,8 +414,273 @@ const MeasureDetailContainer = ({
       {(measureType === "bia" && hasBia && measureData.bia_result) && (
         <BiaContainer data={measureData.bia_result}/>
       )}
+
+      {(measureType === "gait" && hasGait && measureData.gait_result) && ( // && hasGait && measureData.gait_result
+        <GaitContainer data={measureData.gait_result}/>
+      )}
+      {(measureType === "moire" && hasMoire && measureData.moire_result?.length == 2) && ( // && hasMoire && measureData.moire_result
+        <MoireContainer data={[measureData.moire_result[0], measureData.moire_result[1]]}/>
+      )}
     </div>
   )
 }
 
 export default MeasureDetailContainer;
+
+
+// export const mockMeasureGaitDetail: IMeasureGaitDetail = {
+//   sn: 1,
+//   local_sn: 101,
+//   device_sn: 5002,
+//   measure_sn: 2026072901,
+//   measure_server_sn: 90001,
+//   user_uuid: "usr_8f9a2b3c-4d5e-6f7a-8b9c-0d1e2f3a4b5c",
+//   user_sn: 42,
+//   user_name: "홍길동",
+//   measure_date: "2026-07-29T10:30:00Z",
+//   file_server_video_name: "8-2805-2-1785390105.mp4",
+//   file_server_gait_frame_name: "8-2805-2-1785391133.json",
+//   totalSequenceCount: 120,
+//   averageStepLength: 0.654,
+//   avgLeftStepLength: 0.648,
+//   avgRightStepLength: 0.660,
+//   averageStrideLength: 1.308,
+//   avgLeftStrideLength: 1.302,
+//   avgRightStrideLength: 1.314,
+//   averageStepWidth: 8.25,
+//   overallGaitSpeed: 1.15,
+//   cadence: 110.5,
+//   avgStancePhaseRatio: 60.2,
+//   avgSwingPhaseRatio: 39.8,
+//   avgDoubleSupportRatio: 20.4,
+//   averageToeClearance: 2.1,
+//   avgLeftSingleSupportRatio: 39.9,
+//   avgRightSingleSupportRatio: 39.7,
+//   avgDoubleSupportTime: 0.22,
+//   avgLeftSingleSupportTime: 0.43,
+//   avgRightSingleSupportTime: 0.42,
+//   avgLeftStanceRatio: 60.1,
+//   avgLeftSwingRatio: 39.9,
+//   avgRightStanceRatio: 60.3,
+//   avgRightSwingRatio: 39.7,
+//   overallDataQualityScore: 95.0,
+//   avgMaxShoulderTilt: 2.3,
+//   avgMaxTrunkFlexion: 4.1,
+//   avgMaxTrunkSway: 3.5,
+//   avgMaxPevisDrop: 1.8,
+//   avgArmSwingSymmetry: 92.5,
+//   avgLeftArmSwingRange: 25.4,
+//   avgRightArmSwingRange: 24.8,
+//   avgMaxLeftKneeFlexion: 58.2,
+//   avgMaxRightKneeFlexion: 57.9,
+//   avgLeftStepSpeed: 1.14,
+//   avgRightStepSpeed: 1.16,
+//   avgOverallStepSpeed: 1.15,
+//   avgLeftStrideSpeed: 1.14,
+//   avgRightStrideSpeed: 1.16,
+//   avgOverallStrideSpeed: 1.15,
+//   resultToeClearanceRisk: 0,
+//   resultDoubleSupportRisk: 1,
+//   resultSpeedRisk: 2,
+//   resultStepWidthRisk: 0,
+//   resultLeftKneeFlexionRisk: 0,
+//   resultRightKneeFlexionRisk: 1,
+//   resultKneeFlexionRisk: 1,
+//   resultSpeedDiffRatio: 1.02,
+//   resultFallRiskScore: 15.5,
+//   resultIsAsymmetric: 0,
+//   resultGaitTypeGrade: 0,
+//   resultGaitTypeTitle: "정상 보행 패턴",
+//   resultGaitPatternGrade: 0,
+//   resultGaitPatternTitle: "안정적인 보행",
+//   resultGaitPatternDescription: "보행 시 좌우 균형이 양호하며, 안정적인 속도를 유지하고 있습니다.",
+//   resultGaitBalanceGrade: 1,
+//   resultGaitBalanceTitle: "보행 균형 주의",
+//   resultGaitBalanceDescription: "체중 이동 시 약간의 흔들림이 관찰됩니다. 균형 감각 강화 운동이 권장됩니다.",
+//   resultGaitEfficiencyGrade: 0,
+//   resultGaitEfficiencyTitle: "우수한 보행 효율",
+//   resultGaitEfficiencyDescription: "보คง 속도와 보폭의 리듬감이 일정합니다. 보행 에너지가 효율적으로 사용되고 있습니다.",
+//   resultGaitTotalCommentTitle: "종합 보행 평가 결과",
+//   resultGaitTotalCommentDescription: "전반적으로 양호한 보행 상태를 보이고 있습니다. 꾸준한 유산소 운동을 지속하세요.",
+//   resultGaitTotalCommentGrade: 0,
+//   resultGaitRhythmTitle: "보행 리듬 평가",
+//   resultGaitRhythmDescription: "양발의 접지 시간이 규칙적입니다. 보행 리듬 유지가 원활합니다.",
+//   resultGaitRhythmGrade: 0,
+//   resultFallRiskTitle: "낙상 위험도 낮음",
+//   resultFallRiskDescription: "현재 낙상 위험 수준은 낮습니다. 주변 환경의 장애물을 주의하세요.",
+//   resultFallRiskGrade: 0,
+//   resultRecommendCommentTitle: "맞춤 운동 추천",
+//   resultRecommendCommentDescription: "하체 근력 강화를 위해 스쿼트를 추천합니다. 하루 15회씩 3세트 진행하세요.",
+//   resultRecommendCommentGrade: 0,
+//   resultLeftSingleSupportRisk: 0,
+//   resultRightSingleSupportRisk: 1,
+//   resultSingleRiskSupportDescription: "우측 단각지지 시간이 다소 짧습니다. 오른쪽 다리의 지지력을 확인하세요.",
+//   resultDoubleSupportRiskDescription: "양각지지 비율이 평균보다 높습니다. 보행 속도가 줄어들 수 있습니다.",
+//   resultLeftStanceRisk: 0,
+//   resultRightStanceRisk: 0,
+//   resultStanceRiskDescription: "입각기 비율이 안정적인 범위를 유지하고 있습니다.",
+//   resultSymmetryRisk: 0,
+//   resultSymmetryDescription: "좌우 보폭 및 지지 시간의 대칭성이 매우 양호합니다.",
+//   resultPhaseMaxRisk: 1,
+//   resultStepLengthRisk: 2,
+//   resultStrideLengthRisk: 1,
+//   resultStepLengthAsymmetry: 1.8,
+//   resultStepLenthDescirption: "보폭 크기가 신장 대비 적절합니다. 현재 상태를 유지하세요.",
+//   ersultStrideLengthDescription: "보구 간격이 규칙적으로 측정되었습니다. 안정적인 걸음걸이입니다.",
+// };
+
+export const mockMeasureMoireDetailLeft: IMeasureMoireDetail = {
+  sn: 1,
+  local_sn: 1,
+  device_sn: 101,
+  measure_sn: 1001,
+  measure_server_sn: 5001,
+  user_uuid: "usr_9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+  user_sn: 42,
+  user_name: "홍길동",
+  measure_date: "2026-08-10 10:00:00",
+  measure_seq: 1,
+  measure_type: 1,
+  measure_photo_file_name: "measure_photo_01.jpg",
+  measure_overlay_width: 1080,
+  measure_overlay_height: 1920,
+  measure_overlay_scale_factor_x: 1.0,
+  measure_overlay_scale_factor_y: 1.0,
+  server_file_name: "8-2834-1-1786070058.jpg",
+  server_file_name_moire: "8-2834-1-1786070754.png",
+  server_file_name_moire_json: "8-2834-1-1786077777.json",
+  server_file_name_mat: "8-2834-1-1786078423.png",
+  server_file_name_mat_json: "8-2834-1-1786084327.json",
+  
+  // 어깨 (Shoulder)
+  shoulder_left_peak_depth: 12.5,
+  shoulder_left_peak_index: 19,
+  shoulder_left_peak_x: 320.5,
+  shoulder_left_peak_y: 450.0,
+  shoulder_left_sx: 322.0,
+  shoulder_left_sy: 451.5,
+  shoulder_right_peak_depth: 14.2,
+  shoulder_right_peak_index: 91,
+  shoulder_right_peak_x: 760.5,
+  shoulder_right_peak_y: 455.0,
+  shoulder_right_sx: 758.0,
+  shoulder_right_sy: 456.0,
+  shoulder_peak_diff: 1.7,
+  shoulder_left_depth: 1200.0,
+  shoulder_right_depth: 1205.0,
+  shoulder_landmark_diff: 5.0,
+
+  // 허리 (Waist)
+  waist_left_peak_depth: 8.3,
+  waist_left_peak_index: 46,
+  waist_left_peak_x: 380.0,
+  waist_left_peak_y: 850.0,
+  waist_left_sx: 382.0,
+  waist_left_sy: 851.0,
+  waist_right_peak_depth: 9.1,
+  waist_right_peak_index: 64,
+  waist_right_peak_x: 700.0,
+  waist_right_peak_y: 852.0,
+  waist_right_sx: 698.0,
+  waist_right_sy: 853.0,
+  waist_peak_diff: 0.8,
+  waist_left_depth: 1180.0,
+  waist_right_depth: 1182.0,
+  waist_landmark_diff: 2.0,
+
+  // 골반 (Hip)
+  hip_left_peak_depth: 15.0,
+  hip_left_peak_index: 48,
+  hip_left_peak_x: 350.0,
+  hip_left_peak_y: 1150.0,
+  hip_left_sx: 351.5,
+  hip_left_sy: 1151.0,
+  hip_right_peak_depth: 16.5,
+  hip_right_peak_index: 53,
+  hip_right_peak_x: 730.0,
+  hip_right_peak_y: 1155.0,
+  hip_right_sx: 728.5,
+  hip_right_sy: 1156.0,
+  hip_peak_diff: 1.5,
+  hip_left_depth: 1190.0,
+  hip_right_depth: 1195.0,
+  hip_landmark_diff: 5.0
+};
+
+export const mockMeasureMoireDetailRight: IMeasureMoireDetail = {
+  sn: 1,
+  local_sn: 1,
+  device_sn: 101,
+  measure_sn: 1001,
+  measure_server_sn: 5001,
+  user_uuid: "usr_9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+  user_sn: 42,
+  user_name: "홍길동",
+  measure_date: "2026-08-10 10:00:00",
+  measure_seq: 1,
+  measure_type: 1,
+  measure_photo_file_name: "measure_photo_01.jpg",
+  measure_overlay_width: 1080,
+  measure_overlay_height: 1920,
+  measure_overlay_scale_factor_x: 1.0,
+  measure_overlay_scale_factor_y: 1.0,
+  server_file_name: "8-2834-2-1786070058.jpg",
+  server_file_name_moire: "8-2834-2-1786070755.png",
+  server_file_name_moire_json: "8-2834-2-1786077777.json",
+  server_file_name_mat: "8-2834-2-1786078423.png",
+  server_file_name_mat_json: "8-2834-2-1786084327.json",
+  
+  // 어깨 (Shoulder)
+  shoulder_left_peak_depth: 13.5,
+  shoulder_left_peak_index: 12,
+  shoulder_left_peak_x: 220.5,
+  shoulder_left_peak_y: 350.0,
+  shoulder_left_sx: 222.0,
+  shoulder_left_sy: 341.5,
+  shoulder_right_peak_depth: 16.2,
+  shoulder_right_peak_index: 53,
+  shoulder_right_peak_x: 560.5,
+  shoulder_right_peak_y: 355.0,
+  shoulder_right_sx: 238.0,
+  shoulder_right_sy: 146.0,
+  shoulder_peak_diff: 3.7,
+  shoulder_left_depth: 330.0,
+  shoulder_right_depth: 635.0,
+  shoulder_landmark_diff: 2.0,
+
+  // 허리 (Waist)
+  waist_left_peak_depth: 6.3,
+  waist_left_peak_index: 9,
+  waist_left_peak_x: 250.0,
+  waist_left_peak_y: 450.0,
+  waist_left_sx: 292.0,
+  waist_left_sy: 381.0,
+  waist_right_peak_depth: 8.1,
+  waist_right_peak_index: 50,
+  waist_right_peak_x: 350.0,
+  waist_right_peak_y: 982.0,
+  waist_right_sx: 368.0,
+  waist_right_sy: 183.0,
+  waist_peak_diff: 1.8,
+  waist_left_depth: 380.0,
+  waist_right_depth: 218.0,
+  waist_landmark_diff: 52.0,
+
+  // 골반 (Hip)
+  hip_left_peak_depth: 13.0,
+  hip_left_peak_index: 42,
+  hip_left_peak_x: 560.0,
+  hip_left_peak_y: 120.0,
+  hip_left_sx: 493.5,
+  hip_left_sy: 1251.0,
+  hip_right_peak_depth: 13.5,
+  hip_right_peak_index: 82,
+  hip_right_peak_x: 569.0,
+  hip_right_peak_y: 1155.0,
+  hip_right_sx: 728.5,
+  hip_right_sy: 1156.0,
+  hip_peak_diff: 1.5,
+  hip_left_depth: 1190.0,
+  hip_right_depth: 1195.0,
+  hip_landmark_diff: 5.0
+};

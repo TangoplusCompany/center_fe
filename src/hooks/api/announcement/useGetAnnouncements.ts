@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "@/providers/AuthProvider";
-import { getNoticeLists } from "@/services/notice/getNoticeList";
+import { getAnnouncements } from "@/services/announcement/getAnnouncements";
 
 /**
  * 센터 관리자 목록 조회 Hooks
@@ -9,7 +9,7 @@ import { getNoticeLists } from "@/services/notice/getNoticeList";
  * @param search 검색어
  * @returns 센터 관리자 목록 조회 쿼리
  */
-export const useGetNoticeList = ({
+export const useGetAnnouncements = ({
   page,
   limit,
   search,
@@ -22,7 +22,7 @@ export const useGetNoticeList = ({
 
   return useQuery({
     queryKey: ["adminList", page, limit, search, centerSn],
-    queryFn: () => getNoticeLists({ center_sn: centerSn, search }), // TODO 매개변수 필요함
+    queryFn: () => getAnnouncements({ center_sn: centerSn }), 
     enabled: centerSn > 0,
   });
 };

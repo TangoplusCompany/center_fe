@@ -22,8 +22,8 @@ export const useMeasureInfo = ({
   const centerSn = useAuthStoreOptional((state) => state.centerSn, 0);
   const axiosInstance = isMyPage ? customUserAxios : customAxios;
   const apiPath = isMyPage
-    ? `/users/${user_sn}/measurement/${measure_sn}` // /test
-    : `/measurement/${measure_sn}/centers/${centerSn}/members/${user_sn}` // test
+    ? `/users/${user_sn}/measurement/${measure_sn}/test` // /test
+    : `/measurement/${measure_sn}/centers/${centerSn}/members/${user_sn}/test` // test
   return useQuery<IMeasureResponse>({
     queryKey: isMyPage
       ? ["userResultMeasureDetail", measure_sn, user_sn]

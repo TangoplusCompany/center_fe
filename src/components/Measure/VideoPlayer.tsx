@@ -19,8 +19,9 @@ interface VideoPlayerProps {
   containerClassName?: string; // 커스텀 container className (선택적)
   children?: React.ReactNode; // 추가 컨텐츠 (예: DynamicDataContainer)
   romType ?: number;
+  cropScale ?: number;
 }
-export const compareCropScale = 2.35; 
+
 const VideoPlayer: React.FC<VideoPlayerProps> = ({
   videoSrc,
   isRotated,
@@ -35,6 +36,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   containerClassName,
   children,
   romType,
+  cropScale = 2.35,
 }) => {
   const {
     stageRef,
@@ -56,8 +58,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     videoSrc,
     isRotated,
     isCompare,
-    measureJson,
     onFrameChange,
+    cropScale,
   });
 
   // Update canvas size when fit changes
@@ -352,7 +354,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           muted
           playsInline
           webkit-playsinline="true"
-          src={videoSrc ? `https://gym.tangoplus.co.kr/data/Results/${videoSrc}` : undefined}
+          src={videoSrc ? `${process.env.NEXT_PUBLIC_FILE_URL}/${videoSrc}` : undefined}
           className={finalVideoClassName}
         />
 

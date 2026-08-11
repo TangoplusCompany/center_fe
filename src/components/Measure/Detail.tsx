@@ -291,28 +291,31 @@ const MeasureDetail = ({
       {/* ✅ 상단 줄: TabsList (좌측) + Select(우측) */}
       
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-start md:justify-between mb-4 gap-4 w-full">
-        <div className="flex-1 min-w-0 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          <TabsList className="relative z-5 flex w-max min-w-full flex-nowrap items-center justify-start bg-transparent p-0 border-none shadow-none">
-            {measureTabs.map((measure) => (
-              <TabsTrigger
-                key={measure.value}
-                value={measure.value}
-                className={cn(
-                  "relative pb-2 text-lg font-semibold transition-colors whitespace-nowrap flex-shrink-0",
-                  "bg-transparent data-[state=active]:bg-transparent",
-                  "shadow-none data-[state=active]:shadow-none",
-                  "text-sub600 hover:text-sub800 data-[state=active]:text-mainBlue-600",
-                  "after:absolute after:-bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-md",
-                  "after:bg-sub200 data-[state=active]:after:bg-mainBlue-600 after:z-5"
-                )}
-              >
-                {measure.title}
+        {!aiExerciseOpen && (
+          <div className="flex-1 min-w-0 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+            <TabsList className="relative z-5 flex w-max min-w-full flex-nowrap items-center justify-start bg-transparent p-0 border-none shadow-none">
+              {measureTabs.map((measure) => (
+                <TabsTrigger
+                  key={measure.value}
+                  value={measure.value}
+                  className={cn(
+                    "relative pb-2 text-lg font-semibold transition-colors whitespace-nowrap flex-shrink-0",
+                    "bg-transparent data-[state=active]:bg-transparent",
+                    "shadow-none data-[state=active]:shadow-none",
+                    "text-sub600 hover:text-sub800 data-[state=active]:text-mainBlue-600",
+                    "after:absolute after:-bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-md",
+                    "after:bg-sub200 data-[state=active]:after:bg-mainBlue-600 after:z-5"
+                  )}
+                >
+                  {measure.title}
 
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </div>
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </div>
+        ) }
 
+        
         {isUserPage && !isMyPage && (
           <button 
             onClick={() => setAiExerciseOpen && (setAiExerciseOpen(true))}

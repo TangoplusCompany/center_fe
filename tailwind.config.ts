@@ -75,7 +75,9 @@ export default {
           800: "#1E40AF",
           900: "#000F48"
         },
-        
+        mainGreen: {
+          600: "#49D68F"
+        },
         chartLegendActive: {
           DEFAULT: "#2563EB",
           foreground: "#FFFFFF"

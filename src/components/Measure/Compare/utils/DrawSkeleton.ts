@@ -1,35 +1,8 @@
-import { PoseLandmarks } from "../../DetailDynamic";
-
-// 공통 유틸리티 함수들
-
-export const midPoint = (a: { sx: number; sy: number }, b: { sx: number; sy: number }) => ({
-  sx: (a.sx + b.sx) / 2,
-  sy: (a.sy + b.sy) / 2,
-});
-export const mid2DPoint = (a: { x: number; y: number }, b: { x: number; y: number }) => ({
-  sx: (a.x + b.x) / 2,
-  sy: (a.y + b.y) / 2,
-});
-export const midPoint2D = (a: { x: number; y: number }, b: { x: number; y: number }) => ({
-  x: (a.x + b.x) / 2,
-  y: (a.y + b.y) / 2,
-});
-
-export const drawTrailSegment = (
-  ctx: CanvasRenderingContext2D,
-  prev: { x: number; y: number } | undefined,
-  curr: { x: number; y: number },
-) => {
-  if (!prev) return;
-  ctx.beginPath();
-  ctx.moveTo(prev.x, prev.y);
-  ctx.lineTo(curr.x, curr.y);
-  ctx.stroke();
-};
+import { I2DPoseLandmark } from "@/types/pose";
 
 export const drawLine = (
   ctx: CanvasRenderingContext2D,
-  lm: PoseLandmarks,
+  lm: I2DPoseLandmark[],
   a: number,
   b: number,
   toScreen: (sx: number, sy: number) => { x: number; y: number },
@@ -42,8 +15,8 @@ export const drawLine = (
   const B = lm[b];
   if (!A || !B) return;
 
-  const p1 = toScreen(A.sx + extendAx, A.sy + extendAy);
-  const p2 = toScreen(B.sx + extendBx, B.sy + extendBy);
+  const p1 = toScreen(A.x + extendAx, A.y + extendAy);
+  const p2 = toScreen(B.x + extendBx, B.y + extendBy);
 
   ctx.beginPath();
   ctx.moveTo(p1.x, p1.y);
@@ -54,7 +27,7 @@ export const drawLine = (
 export const drawSkeleton = (
   ctxW: CanvasRenderingContext2D,
   ctxR: CanvasRenderingContext2D,
-  lm: PoseLandmarks,
+  lm: I2DPoseLandmark[],
   toScreen: (sx: number, sy: number) => { x: number; y: number },
   romType ?: number
 ) => {

@@ -17,7 +17,7 @@ import { IUserMeasureList } from "@/types/user";
 
 
 export type viewType = "latest" | "dashboard" | "history" | "userInfo";
-export type measureType = "basic" | "rom" | "bia";
+export type measureType = "basic" | "rom" | "bia" | "gait" | "moire";
 const UserDetail = ({ 
   userUUID,
   userSn,

@@ -1,12 +1,14 @@
 import { IBiaData } from "./bia";
 import { IPagination, IResponseDefault } from "./default";
-import { IPoseLandmark } from "./pose";
+import { I2DPoseLandmark, I3DPoseLandmark, IPoseLandmark } from "./pose";
 
 export interface IMeasureResponse {
   measurement_meta: IMeasurementMeta
   basic_result?: IMeasureBasic;
   rom_result?: IMeasureROMItemDetail[]
-  bia_result?: IBiaData
+  bia_result?: IBiaData;
+  gait_result?: IMeasureGaitDetail;
+  moire_result ?: IMeasureMoireDetail[];
 }
 
 export interface IMeasureBasic {
@@ -40,6 +42,8 @@ export interface IMeasureList {
   has_basic : 0 | 1;
   has_rom : 0 | 1;
   has_bia: 0 | 1;
+  has_gait: 0 | 1;
+  has_moire: 0 | 1;
 }
 export interface IMeasurementMeta {
   user_sn: number | string; // sn
@@ -54,6 +58,8 @@ export interface IMeasurementMeta {
   has_basic : 0 | 1;
   has_rom : 0 | 1;
   has_bia: 0 | 1;
+  has_gait: 0 | 1;
+  has_moire: 0 | 1;
 }
 // 측정 한개 조회할 때 확인하는 것 
 export interface IMeasureInfo
@@ -192,45 +198,7 @@ export interface IPartDetailData {
 
 export interface IMeasureJson {
   hand_landmark: [];
-  horizontal_angle_elbow: number;
-  horizontal_angle_hip: number;
-  horizontal_angle_knee: number;
-  horizontal_angle_mid_finger_tip: number;
-  horizontal_angle_shoulder: number;
-  horizontal_angle_wrist: number;
-  horizontal_distance_center_left_hip: number;
-  horizontal_distance_center_left_knee: number;
-  horizontal_distance_center_left_toe: number;
-  horizontal_distance_center_left_wrist: number;
-  horizontal_distance_center_mid_finger_tip_left: number;
-  horizontal_distance_center_mid_finger_tip_right: number;
-  horizontal_distance_center_right_hip: number;
-  horizontal_distance_center_right_knee: number;
-  horizontal_distance_center_right_toe: number;
-  horizontal_distance_center_right_wrist: number;
-  horizontal_distance_elbow: number;
-  horizontal_distance_hip: number;
-  horizontal_distance_knee: number;
-  horizontal_distance_mid_finger_tip: number;
-  horizontal_distance_shoulder: number;
-  horizontal_distance_wrist: number;
   time: number;
-  vertical_angle_ankle_toe_left: number;
-  vertical_angle_ankle_toe_right: number;
-  vertical_angle_elbow_shoulder_left: number;
-  vertical_angle_elbow_shoulder_right: number;
-  vertical_angle_hip_knee_left: number;
-  vertical_angle_hip_knee_right: number;
-  vertical_angle_hip_knee_toe_left: number;
-  vertical_angle_hip_knee_toe_right: number;
-  vertical_angle_knee_ankle_toe_left: number;
-  vertical_angle_knee_ankle_toe_right: number;
-  vertical_angle_knee_toe_left: number;
-  vertical_angle_knee_toe_right: number;
-  vertical_angle_wrist_elbow_left: number;
-  vertical_angle_wrist_elbow_right: number;
-  vertical_angle_wrist_elbow_shoulder_left: number;
-  vertical_angle_wrist_elbow_shoulder_right: number;
   pose_landmark: IPoseLandmark[];
 }
 
@@ -425,7 +393,7 @@ export interface IMeasureROMItemRangeData {
   max_value: number;
 }
 
-export interface IMeasureROMItemDetail extends IMeasureROMItemRawData, IMeasureROMItemCardData {
+export interface IMeasureROMItemDetail extends IMeasureROMItemCardData {
   sn: number;
   device_sn: number;
   server_sn: number;
@@ -461,171 +429,337 @@ export interface IMeasureROMItemDetail extends IMeasureROMItemRawData, IMeasureR
   camera_orientation: 0 | 1; 
 }
 
-export interface IMeasureROMItemRawData {
-  front_neck_left_down_angle_center_shoulder_nose: number;
-  front_neck_left_down_angle_upper_shoulder_shoulder_nose: number;
-  front_neck_left_down_angle_shoulder_center_shoulder_nose: number;
-  front_neck_left_down_velocity: number;
-  front_neck_right_down_angle_center_shoulder_nose: number;
-  front_neck_right_down_angle_upper_shoulder_shoulder_nose: number;
-  front_neck_right_down_angle_shoulder_center_shoulder_nose: number;
-  front_neck_right_down_velocity: number;
-  front_shoulder_left_up_angle_under_shoulder_shoulder_wrist: number;
-  front_shoulder_left_up_angle_under_shoulder_shoulder_elbow: number;
-  front_shoulder_left_up_angle_shoulder_elbow_wrist: number;
-  front_shoulder_left_up_velocity: number;
-  front_shoulder_right_up_angle_under_shoulder_shoulder_wrist: number;
-  front_shoulder_right_up_angle_under_shoulder_shoulder_elbow: number;
-  front_shoulder_right_up_angle_shoulder_elbow_wrist: number;
-  front_shoulder_right_up_velocity: number;
-  front_upper_body_left_down_angle_center_hip_center_shoulder: number;
-  front_upper_body_left_down_angle_upper_hip_center_hip_center_sho: number;
-  front_upper_body_left_down_angle_shoulder: number;
-  front_upper_body_left_down_angle_shoulder_3_point: number;
-  front_upper_body_left_down_velocity: number;
-  front_upper_body_right_down_angle_center_hip_center_shoulder: number;
-  front_upper_body_right_down_angle_upper_hip_center_hip_center_sh: number;
-  front_upper_body_right_down_angle_shoulder: number;
-  front_upper_body_right_down_angle_shoulder_3_point: number;
-  front_upper_body_right_down_velocity: number;
-  front_leg_left_up_angle_under_hip_hip_ankle: number;
-  front_leg_left_up_angle_under_hip_hip_knee: number;
-  front_leg_left_up_angle_hip_knee_ankle: number;
-  front_leg_left_up_angle_hip_ankle: number;
-  front_leg_left_up_angle_hip_knee: number;
-  front_leg_left_up_velocity: number;
-  front_leg_right_up_angle_under_hip_hip_ankle: number;
-  front_leg_right_up_angle_under_hip_hip_knee: number;
-  front_leg_right_up_angle_hip_knee_ankle: number;
-  front_leg_right_up_angle_hip_ankle: number;
-  front_leg_right_up_angle_hip_knee: number;
-  front_leg_right_up_velocity: number;
-  side_left_neck_down_angle_hip_ear: number;
-  side_left_neck_down_angle_shoulder_ear: number;
-  side_left_neck_down_angle_upper_hip_hip_ear: number;
-  side_left_neck_down_angle_upper_shoulder_shoulder_ear: number;
-  side_left_neck_down_velocity: number;
-  side_left_neck_up_angle_hip_ear: number;
-  side_left_neck_up_angle_shoulder_ear: number;
-  side_left_neck_up_angle_upper_hip_hip_ear: number;
-  side_left_neck_up_angle_upper_shoulder_shoulder_ear: number;
-  side_left_neck_up_velocity: number;
-  side_left_shoulder_up_angle_under_shoulder_shoulder_wrist: number;
-  side_left_shoulder_up_angle_under_shoulder_shoulder_elbow: number;
-  side_left_shoulder_up_angle_shoulder_elbow_wrist: number;
-  side_left_shoulder_up_angle_shoulder_wrist: number;
-  side_left_shoulder_up_angle_shoulder_elbow: number;
-  side_left_shoulder_up_velocity: number;
-  side_left_shoulder_back_angle_under_shoulder_shoulder_wrist: number;
-  side_left_shoulder_back_angle_under_shoulder_shoulder_elbow: number;
-  side_left_shoulder_back_angle_shoulder_elbow_wrist: number;
-  side_left_shoulder_back_angle_shoulder_wrist: number;
-  side_left_shoulder_back_angle_shoulder_elbow: number;
-  side_left_shoulder_back_velocity: number;
-  side_left_elbow_wrist_rotate_up_angle_elbow_wrist: number;
-  side_left_elbow_wrist_rotate_up_angle_horizontal_elbow_elbow_wri: number;
-  side_left_elbow_wrist_rotate_up_velocity: number;
-  side_left_elbow_wrist_rotate_down_angle_elbow_wrist: number;
-  side_left_elbow_wrist_rotate_down_angle_horizontal_elbow_elbow_w: number;
-  side_left_elbow_wrist_rotate_down_velocity: number;
-  side_left_elbow_wrist_up_angle_under_elbow_elbow_wrist: number;
-  side_left_elbow_wrist_up_angle_shoulder_elbow_wrist: number;
-  side_left_elbow_wrist_up_velocity: number;
-  side_left_upper_body_down_angle_under_hip_hip_shoulder: number;
-  side_left_upper_body_down_angle_hip_shoulder: number;
-  side_left_upper_body_down_angle_hip_shoulder_wrist: number;
-  side_left_upper_body_down_angle_hip_knee_ankle: number;
-  side_left_upper_body_down_angle_knee_hip_shoulder: number;
-  side_left_upper_body_down_distance_toe_mid_finger: number;
-  side_left_upper_body_down_distance_toe_index_finger: number;
-  side_left_upper_body_down_velocity: number;
-  side_left_upper_body_back_angle_upper_hip_hip_shoulder: number;
-  side_left_upper_body_back_angle_hip_shoulder: number;
-  side_left_upper_body_back_angle_upper_hip_waist_shoulder: number;
-  side_left_upper_body_back_velocity: number;
-  side_left_leg_up_angle_under_hip_hip_ankle: number;
-  side_left_leg_up_angle_under_hip_hip_knee: number;
-  side_left_leg_up_angle_hip_knee_ankle: number;
-  side_left_leg_up_angle_hip_ankle: number;
-  side_left_leg_up_velocity: number;
-  side_left_leg_back_angle_under_hip_hip_ankle: number;
-  side_left_leg_back_angle_under_hip_hip_knee: number;
-  side_left_leg_back_angle_hip_knee_ankle: number;
-  side_left_leg_back_angle_hip_ankle: number;
-  side_left_leg_back_velocity: number;
-  side_left_knee_up_angle_under_knee_knee_ankle: number;
-  side_left_knee_up_angle_knee_ankle: number;
-  side_left_knee_up_velocity: number;
-  side_left_foot_up_angle_knee_ankle_toe: number;
-  side_left_foot_up_velocity: number;
-  side_left_foot_down_angle_knee_ankle_toe: number;
-  side_left_foot_down_velocity: number;
-  side_right_neck_down_angle_hip_ear: number;
-  side_right_neck_down_angle_shoulder_ear: number;
-  side_right_neck_down_angle_upper_hip_hip_ear: number;
-  side_right_neck_down_angle_upper_shoulder_shoulder_ear: number;
-  side_right_neck_down_velocity: number;
-  side_right_neck_up_angle_hip_ear: number;
-  side_right_neck_up_angle_shoulder_ear: number;
-  side_right_neck_up_angle_upper_hip_hip_ear: number;
-  side_right_neck_up_angle_upper_shoulder_shoulder_ear: number;
-  side_right_neck_up_velocity: number;
-  side_right_shoulder_up_angle_under_shoulder_shoulder_wrist: number;
-  side_right_shoulder_up_angle_under_shoulder_shoulder_elbow: number;
-  side_right_shoulder_up_angle_shoulder_elbow_wrist: number;
-  side_right_shoulder_up_angle_shoulder_wrist: number;
-  side_right_shoulder_up_angle_shoulder_elbow: number;
-  side_right_shoulder_up_velocity: number;
-  side_right_shoulder_back_angle_under_shoulder_shoulder_wrist: number;
-  side_right_shoulder_back_angle_under_shoulder_shoulder_elbow: number;
-  side_right_shoulder_back_angle_shoulder_elbow_wrist: number;
-  side_right_shoulder_back_angle_shoulder_wrist: number;
-  side_right_shoulder_back_angle_shoulder_elbow: number;
-  side_right_shoulder_back_velocity: number;
-  side_right_elbow_wrist_rotate_up_angle_elbow_wrist: number;
-  side_right_elbow_wrist_rotate_up_angle_horizontal_elbow_elbow_wr: number;
-  side_right_elbow_wrist_rotate_up_velocity: number;
-  side_right_elbow_wrist_rotate_down_angle_elbow_wrist: number;
-  side_right_elbow_wrist_rotate_down_angle_horizontal_elbow_elbow_: number;
-  side_right_elbow_wrist_rotate_down_velocity: number;
-  side_right_elbow_wrist_up_angle_under_elbow_elbow_wrist: number;
-  side_right_elbow_wrist_up_angle_shoulder_elbow_wrist: number;
-  side_right_elbow_wrist_up_velocity: number;
-  side_right_upper_body_down_angle_under_hip_hip_shoulder: number;
-  side_right_upper_body_down_angle_hip_shoulder: number;
-  side_right_upper_body_down_angle_hip_shoulder_wrist: number;
-  side_right_upper_body_down_angle_hip_knee_ankle: number;
-  side_right_upper_body_down_angle_knee_hip_shoulder: number;
-  side_right_upper_body_down_distance_toe_mid_finger: number;
-  side_right_upper_body_down_distance_toe_index_finger: number;
-  side_right_upper_body_down_velocity: number;
-  side_right_upper_body_back_angle_upper_hip_hip_shoulder: number;
-  side_right_upper_body_back_angle_hip_shoulder: number;
-  side_right_upper_body_back_angle_upper_hip_waist_shoulder: number;
-  side_right_upper_body_back_velocity: number;
-  side_right_leg_up_angle_under_hip_hip_ankle: number;
-  side_right_leg_up_angle_under_hip_hip_knee: number;
-  side_right_leg_up_angle_hip_knee_ankle: number;
-  side_right_leg_up_angle_hip_ankle: number;
-  side_right_leg_up_velocity: number;
-  side_right_leg_back_angle_under_hip_hip_ankle: number;
-  side_right_leg_back_angle_under_hip_hip_knee: number;
-  side_right_leg_back_angle_hip_knee_ankle: number;
-  side_right_leg_back_angle_hip_ankle: number;
-  side_right_leg_back_velocity: number;
-  side_right_knee_up_angle_under_knee_knee_ankle: number;
-  side_right_knee_up_angle_knee_ankle: number;
-  side_right_knee_up_velocity: number;
-  side_right_foot_up_angle_knee_ankle_toe: number;
-  side_right_foot_up_velocity: number;
-  side_right_foot_down_angle_knee_ankle_toe: number;
-  side_right_foot_down_velocity: number;
-  back_left_apley_distance_mid_finger: number;
-  back_left_apley_distance_index_finger: number;
-  back_left_apley_angle_left_shoulder_elbow_wrist: number;
-  back_left_apley_angle_right_shoulder_elbow_wrist: number;
-  back_right_apley_distance_mid_finger: number;
-  back_right_apley_distance_index_finger: number;
-  back_right_apley_angle_left_shoulder_elbow_wrist: number;
-  back_right_apley_angle_right_shoulder_elbow_wrist: number;
+// 🪷🪷🪷🪷 GAIT 🪷🪷🪷🪷
+export interface IMeasureGaitResponse {
+  data : IMeasureGaitDetail,
+  stepData : IGaitStep[],
+  strideData: IGaitStride[],
+}
+export interface IMeasureGaitMeta {
+  sn : number;
+  local_sn: number;
+  device_sn: number;
+  measure_sn	: number;
+  measure_server_sn: number;
+  user_uuid	 : string;
+  user_sn: number;
+  user_name : string;
+  measure_date : string;
+}
+export interface IMeasureGaitDetail {
+  gait_measure_info :IMeasureGaitInfo;
+  gait_sequence_result: IGaitSeqDetail[];
+  gait_step_data: IGaitStep[];
+  gait_stride_data: IGaitStride[];
+}
+export interface IMeasureGaitInfo extends IMeasureGaitMeta {
+  file_server_video_name : string;
+  file_server_gait_frame_name : string;
+  totalSequenceCount	: number;
+  averageStepLength	: number;
+  avgLeftStepLength	: number;
+  avgRightStepLength: number;
+  averageStrideLength	: number;
+  avgLeftStrideLength	: number;
+  avgRightStrideLength	: number;
+  averageStepWidth	: number;
+  overallGaitSpeed	: number;
+  cadence: number;
+  avgStancePhaseRatio	: number;
+  avgSwingPhaseRatio: number;
+  avgDoubleSupportRatio: number;
+  averageToeClearance: number;
+  avgLeftSingleSupportRatio: number;
+  avgRightSingleSupportRatio: number;
+  avgDoubleSupportTime: number;
+  avgLeftSingleSupportTime: number;
+  avgRightSingleSupportTime: number;
+  avgLeftStanceRatio: number;
+  avgLeftSwingRatio: number;
+  avgRightStanceRatio: number;
+  avgRightSwingRatio: number;
+  overallDataQualityScore: number;
+  avgMaxShoulderTilt	: number;
+  avgMaxTrunkFlexion	: number;
+  avgMaxTrunkSway	: number;
+  avgMaxPevisDrop: number;
+  avgArmSwingSymmetry	: number;
+  avgLeftArmSwingRange	: number;
+  avgRightArmSwingRange	: number;
+  avgMaxLeftKneeFlexion	: number;
+  avgMaxRightKneeFlexion	: number;
+  avgLeftStepSpeed	: number;
+  avgRightStepSpeed	: number;
+  avgOverallStepSpeed	: number;
+  avgLeftStrideSpeed	: number;
+  avgRightStrideSpeed	: number;
+  avgOverallStrideSpeed	: number;
+  resultToeClearanceRisk	: number;
+  resultDoubleSupportRisk	: number;
+  resultSpeedRisk	: number;
+  resultStepWidthRisk	: number;
+  resultLeftKneeFlexionRisk	: number;
+  resultRightKneeFlexionRisk	: number;
+  resultKneeFlexionRisk	: number;
+  resultSpeedDiffRatio	: number;
+  resultFallRiskScore	: number;
+  resultIsAsymmetric	: number;
+  resultGaitTypeGrade	: number;
+  resultGaitTypeTitle	: string;
+  resultGaitPatternGrade	: number;
+  resultGaitPatternTitle	: string;
+  resultGaitPatternDescription	: string;
+  resultGaitBalanceGrade	: number;
+  resultGaitBalanceTitle	: string;
+  resultGaitBalanceDescription	: string;
+  resultGaitEfficiencyGrade	: number;
+  resultGaitEfficiencyTitle	: string;
+  resultGaitEfficiencyDescription	: string;
+  resultGaitTotalCommentTitle	: string;
+  resultGaitTotalCommentDescription	: string;
+  resultGaitTotalCommentGrade	: number;
+  resultGaitRhythmTitle	: string;
+  resultGaitRhythmDescription	: string;
+  resultGaitRhythmGrade	: number;
+  resultFallRiskTitle	: string;
+  resultFallRiskDescription	: string;
+  resultFallRiskGrade	: number;
+  resultRecommendCommentTitle	: string;
+  resultRecommendCommentDescription	: string;
+  resultRecommendCommentGrade	: number;
+  resultLeftSingleSupportRisk	: number;
+  resultRightSingleSupportRisk	: number;
+  resultSingleRiskSupportDescription: string;
+  resultDoubleSupportRiskDescription	: string;
+  resultLeftStanceRisk	: number;
+  resultRightStanceRisk	: number;
+  resultStanceRiskDescription	: string;
+  resultSymmetryRisk	: number;
+  resultSymmetryDescription	: string;
+  resultPhaseMaxRisk	: number;
+  resultStepLengthRisk	: number;
+  resultStrideLengthRisk	: number;
+  resultStepLengthAsymmetry	: number;
+  resultStepLenthDescirption	: string;
+  ersultStrideLengthDescription: string;
+}
+
+export interface IGaitSeqDetail extends IMeasureGaitMeta {
+  file_name_kinematics_frame: string;
+  file_server_kinematics_frame: string;
+  sequenceIndex: string;
+  direction: string;
+  globalStartFrameIndex: string;
+  globalEndFrameIndex: string;
+  validStepCount: string;
+  validStrideCount: string;
+  sequenceTime: string;
+  gaitSpeed: string;
+  cadence: string;
+  doubleSupportTime: string;
+  leftSingleSupportTime: string;
+  rightSingleSupportTime: string;
+  avgLeftStanceTime: string;
+  avgLeftSwingTime: string;
+  avgRightStanceTime: string;
+  avgRightSwingTime: string;
+  doubleSupportRatio: string;
+  leftSingleSupportRatio: string;
+  rightSingleSupportRatio: string;
+  leftStanceRatio: string;
+  leftSwingRatio: string;
+  rightStanceRatio: string;
+  rightSwingRatio: string;
+  maxShoulderTilt: string;
+  maxTrunkFlexion: string;
+  maxTrunkSway: string;
+  maxPelvisDrop: string;
+  armSwingAsymmetry: string;
+  leftArmSwingRange: string;
+  rightArmSwingRange: string;
+}
+
+export interface IGaitSeqFrameData {
+  sequenceIndex: number;
+  frameIndex: number;
+  timestamp: number;
+  headLateralTilt: number;
+  headForwardTilt: number;
+  trunkSway: number;
+  trunkFlexion: number;
+  shoulderTilt: number;
+  leftArmAngle: number;
+  rightArmAngle: number;
+  pelvicDrop: number;
+  leftKneeAngle: number;
+  rightKneeAngle: number;
+}
+export interface IGaitStep extends IMeasureGaitMeta {
+  sn : number;
+  local_sn: number;
+  device_sn: number;
+  measure_sn	: number;
+  measure_server_sn: number;
+  user_uuid	 : string;
+  user_sn: number;
+  user_name : string;
+  measure_date : string;
+  sequenceIndex: 1 | 2;
+  direction: "Towards" | "Away";
+  stepIndex: 1 | 2;
+  startFrameIndex: number;
+  endFrameIndex: number;
+  foot: "Left" | "Right";
+  startTime: number;
+  endTime: number;
+  stepLength: number;
+  stepWidth: number;
+  stepTime: number;
+  stepSpeed: number;
+}
+
+export interface IGaitStride extends IMeasureGaitMeta {
+  sn : number;
+  local_sn: number;
+  device_sn: number;
+  measure_sn	: number;
+  measure_server_sn: number;
+  user_uuid	 : string;
+  user_sn: number;
+  user_name : string;
+  measure_date : string;
+  sequenceIndex: 1 | 2;
+  direction: "Towards" | "Away";
+  strideIndex: number;
+  startFrameIndex: number;
+  endFrameIndex: number;
+  foot: "Left" | "Right";
+  startTime: number;
+  endTime: number;
+  strideLength: number;
+  strideTime: number;
+  stanceRatio: number;
+  swingRatio: number;
+  stanceTime: number;
+  swingTime: number;
+  maxToeClearance: number;
+  strideSpeed: number;
+}
+
+export interface IGaitMeasureJson {
+  landmarks: I3DPoseLandmark[];
+  timestamp: number;
+  screen_landmarks: I2DPoseLandmark[];
+}
+
+
+// 🪷🪷🪷🪷 Moire 🪷🪷🪷🪷
+export interface IMeasureMoireDetail {
+  sn : number;
+  local_sn: number;
+  device_sn: number;
+  measure_sn	: number;
+  measure_server_sn: number;
+  user_uuid	 : string;
+  user_sn: number;
+  user_name : string;
+  measure_date : string;
+  measure_seq: number;
+  measure_type: number;
+  measure_photo_file_name: string;
+  measure_overlay_width : number;
+  measure_overlay_height: number;
+  measure_overlay_scale_factor_x: number;
+  measure_overlay_scale_factor_y: number;
+  server_file_name : string;
+  server_file_name_moire: string;
+  server_file_name_moire_json: string;
+  server_file_name_mat: string;
+  server_file_name_mat_json: string;
+  shoulder_left_peak_depth: number;
+  shoulder_left_peak_index: number;
+  shoulder_left_peak_x: number;
+  shoulder_left_peak_y: number;
+  shoulder_left_sx: number;
+  shoulder_left_sy: number;
+  shoulder_right_peak_depth: number;
+  shoulder_right_peak_index: number;
+  shoulder_right_peak_x: number;
+  shoulder_right_peak_y: number;
+  shoulder_right_sx: number;
+  shoulder_right_sy: number;
+  shoulder_peak_diff: number;
+  shoulder_left_depth: number;
+  shoulder_right_depth: number;
+  shoulder_landmark_diff: number;
+  waist_left_peak_depth: number;
+  waist_left_peak_index: number;
+  waist_left_peak_x: number;
+  waist_left_peak_y: number;
+  waist_left_sx: number;
+  waist_left_sy: number;
+  waist_right_peak_depth: number;
+  waist_right_peak_index: number;
+  waist_right_peak_x: number;
+  waist_right_peak_y: number;
+  waist_right_sx: number;
+  waist_right_sy: number;
+  waist_peak_diff: number;
+  waist_left_depth: number;
+  waist_right_depth: number;
+  waist_landmark_diff: number;
+  hip_left_peak_depth: number;
+  hip_left_peak_index: number;
+  hip_left_peak_x: number;
+  hip_left_peak_y: number;
+  hip_left_sx: number;
+  hip_left_sy: number;
+  hip_right_peak_depth: number;
+  hip_right_peak_index: number;
+  hip_right_peak_x: number;
+  hip_right_peak_y: number;
+  hip_right_sx: number;
+  hip_right_sy: number;
+  hip_peak_diff: number;
+  hip_left_depth: number;
+  hip_right_depth: number;
+  hip_landmark_diff: number;
+}
+
+export interface IMoireMeasureJson {
+  ProfileName: string;
+  DepthArray: number[];
+}
+
+export interface IMoireMatJson {
+  time :number; 
+  angle_left_foot :number; 
+  angle_right_foot :number; 
+  max_pressure_foot_front_x_left :number; 
+  max_pressure_foot_front_y_left :number; 
+  max_pressure_foot_front_value_left :number; 
+  max_pressure_foot_back_x_left :number; 
+  max_pressure_foot_back_y_left :number; 
+  max_pressure_foot_back_value_left :number; 
+  max_pressure_foot_front_x_right :number; 
+  max_pressure_foot_front_y_right :number; 
+  max_pressure_foot_front_value_right :number; 
+  max_pressure_foot_back_x_right :number; 
+  max_pressure_foot_back_y_right :number; 
+  max_pressure_foot_back_value_right :number; 
+  battery_pct :number; 
+  cop_left_x :number; 
+  cop_left_y :number; 
+  cop_right_x :number; 
+  cop_right_y :number; 
+  cop_combine_x :number; 
+  cop_combine_y :number; 
+  left_weight_pct :number; 
+  right_weight_pct :number; 
+  fore_weight_pct :number; 
+  heel_weight_pct :number; 
+  left_top_weight_pct :number; 
+  right_top_weight_pct :number; 
+  left_bottom_weight_pct :number; 
+  right_bottom_weight_pct :number; 
 }
