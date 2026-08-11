@@ -1,0 +1,262 @@
+# TangoBody 결과 페이지 GS 인증 대응 설계
+
+## 목적
+
+`/result-page`와 그 하위 경로에만 GS 인증 대응 기능을 적용한다. 관리자 페이지, ERP, 공용 컴포넌트, 공용 상태관리, 공용 API 클라이언트, 공용 인증 모듈, 전역 CSS의 기존 동작은 변경하지 않는다.
+
+제품 정보는 다음과 같다.
+
+- 제품명: TangoBody 결과 페이지
+- 제품 버전: V1.0
+- 제조사: ㈜옵토닉스
+- 세부 빌드 버전: 배포 Git commit SHA 우선, 결과 페이지 전용 fallback 사용
+
+## 변경 경계
+
+### 수정 가능한 기존 파일
+
+- `src/app/(resultPage)/layout.tsx`
+- `src/app/(resultPage)/_components/ResultPageAuthCheck.tsx`
+- `src/app/(resultPage)/result-page/page.tsx`
+- `src/app/(resultPage)/result-page/login/page.tsx`
+- `src/app/(resultPage)/result-page/login/_components/ResultPageLoginForm.tsx`
+- `src/components/User/My/ResultPageTab.tsx`
+- `src/hooks/api/ResultUser/useUserLogin.ts`
+- `src/services/user/postUserLogin.ts`
+- 기존 미커밋 초안인 `src/components/ResultPage/ResultPageProductInfoFooter.tsx`
+- 기존 미커밋 초안인 `src/utils/constants/resultPageProductInfo.ts`
+
+기존 파일 변경은 결과 페이지 전용 신규 모듈을 연결하는 최소 범위로 제한한다.
+
+### 읽기 전용 파일
+
+- `src/components/User/**` 중 관리자 페이지에서도 사용하는 파일
+- `src/components/Measure/**`
+- `src/hooks/api/user/**`
+- `src/hooks/api/measure/**`
+- `src/lib/axios.ts`
+- `src/stores/ResultPageUserStore.ts`
+- `src/app/actions/getCrypto.ts`
+- `src/app/actions/postKakaoSend.ts`
+- `src/app/actions/openMergedPrintPage.ts`
+- `src/components/ui/**`
+- `src/types/**`
+- 전역 CSS 및 공용 설정
+
+관리자 페이지에서 import하는 파일은 공용으로 보고 수정하지 않는다. 공용 변경이 필요한 요구사항은 구현하지 않고 완료 보고서의 별도 목록에 기록한다.
+
+## 아키텍처
+
+결과 페이지 전용 제어 계층을 추가하고 기존 공용 표시 컴포넌트는 읽기 전용으로 재사용한다. 공용 컴포넌트 내부 동작을 제어해야 하는 부분은 결과 페이지 전용 상위 컴포넌트 또는 Adapter에서 차단한다.
+
+주요 단위는 다음과 같다.
+
+- `ResultPageShell`: `data-app="tangobody-result-page"` namespace, 전용 오류 경계, 라벨 경계 제공
+- 결과 존재 Resolver: 검사 존재, 전송, 인쇄, 비교 조건과 비활성 사유 계산
+- 결과 페이지 측정 Controller: 선택 회차, 로딩, 빈 결과, 비동기 실행 잠금 관리
+- 결과 페이지 Action Adapter: 전송·인쇄의 UI 조건과 실제 호출 조건을 동일하게 적용
+- 결과 페이지 사용자 Form/Adapter: 수정 가능 필드 검증과 허용된 payload만 전송
+- 결과 페이지 Frame Control: 현재 결과 영역 영상과 프레임 입력 동기화
+- 결과 페이지 Label Mapper: 공용 상수를 바꾸지 않고 결과 페이지 namespace 내부 문구만 치환
+- 결과 페이지 Error Mapper/Boundary: 안전한 사용자 메시지와 요청 식별번호만 표시
+- 결과 페이지 전용 테스트: 순수 함수 단위 테스트와 컴포넌트 통합 테스트
+
+## 기능 설계
+
+### 제품 정보
+
+로그인 화면 footer와 결과 페이지 메뉴의 제품 정보 영역에서만 제품 정보를 표시한다. 세부 빌드 버전은 배포 환경의 Git SHA를 우선 사용하며, 값이 없을 때는 결과 페이지 전용 설정값을 사용한다. `package.json`의 버전이나 관리자용 버전 정보는 변경하지 않는다.
+
+### 결과 존재 여부
+
+GS 대상 결과는 `has_basic`, `has_rom`, `has_bia`로만 판단한다.
+
+- `hasSimpleResult`: `has_basic === 1`
+- `hasRomResult`: `has_rom === 1`
+- `hasBodyCompositionResult`: `has_bia === 1`
+- `hasAnyResult`: 위 세 값 중 하나 이상이 참
+- `canShareResult`: `hasAnyResult`이며 전송 중이 아님
+- `canPrintResult`: `hasAnyResult`이며 인쇄 생성 중이 아님
+
+세 검사 결과가 모두 없으면 상세 결과 대신 `조회 가능한 검사 결과가 없습니다.`를 표시한다. 결과전송과 인쇄하기는 HTML `disabled` 속성으로 차단한다. Action Adapter에서도 같은 Resolver를 호출해 빈 결과 요청을 이중 차단한다.
+
+측정일 변경 시 이전 상세 데이터, 선택 검사, 오류, 전송·인쇄 상태를 먼저 초기화하고 새 회차의 플래그를 재계산한다. 새 회차 로딩 중에는 빈 결과 상태를 표시하지 않는다.
+
+검사별 비활성 설명은 다음 문구를 사용하고 버튼과 `aria-describedby`로 연결한다.
+
+- 해당 회차에 간편 검사 결과가 없습니다.
+- 해당 회차에 ROM 검사 결과가 없습니다.
+- 해당 회차에 체성분 검사 결과가 없습니다.
+
+### 결과 비교
+
+비교 가능한 항목은 동일한 `user_sn`에 속하고 `has_basic === 1`인 다른 측정 회차다. ROM 또는 체성분 결과만 있는 회차는 간편 검사 비교 대상에서 제외한다. 비교 후보가 없으면 `비교할 항목이 없습니다.`를 표시하고, 비활성 사유는 `간편 검사 결과가 있는 측정 회차만 비교할 수 있습니다.`로 통일한다.
+
+버튼 표시 조건과 비교 선택/호출 직전 검증 조건은 같은 Resolver를 사용한다.
+
+### 명칭 통일
+
+결과 페이지 전용 Label Mapper는 다음 치환을 수행한다.
+
+- 기본 검사 → 간편 검사
+- 팔꿈치 → 팔꿉(주관절)
+
+결과 페이지 전용 컴포넌트는 Mapper를 직접 사용한다. 읽기 전용 공용 컴포넌트가 렌더링하는 문구는 `data-app="tangobody-result-page"` 내부에서만 동작하는 Label Boundary가 정확한 문자열과 접근성 속성을 변환한다. 관리자 DOM이나 전역 상수는 변경하지 않는다.
+
+외부 인쇄 서비스가 자체 생성하는 리포트 문구는 이 저장소의 결과 페이지가 직접 생성하지 않으므로 변경 대상에서 제외하고 별도 보고한다.
+
+### 로그인
+
+휴대폰은 앞뒤 공백과 하이픈을 제거하고 숫자만 유지한다. 정확히 11자리, `maxLength=11`, `inputMode="numeric"`를 적용한다. PIN은 숫자만 유지하고 정확히 4자리, `maxLength=4`, `inputMode="numeric"`를 적용하며 표시·숨김 버튼을 제공한다.
+
+Enter 제출을 지원하되 요청 중에는 제출을 막는다. 성공·실패 후 mutation pending 상태가 해제되는 기존 React Query 수명주기를 사용한다.
+
+검증 메시지는 요구사항의 문구와 정확히 일치시킨다. 서버의 400, 401, 422, 423 응답은 계정 존재 여부, 어느 필드가 틀렸는지, 남은 시도 횟수를 노출하지 않고 인증 실패 메시지로 매핑한다. 응답이 없는 Axios 오류와 timeout은 네트워크 실패 메시지로 매핑한다.
+
+### 사용자 정보
+
+결과 페이지 전용 Form은 다음 규칙을 적용한다.
+
+- 사용자 이름: 수정 가능, 최대 50자
+- 휴대폰: 읽기 전용이며 저장 payload에서 제외
+- 이메일: 읽기 전용, 최대 30자이며 저장 payload에서 제외
+- 주소: 수정 가능, 최대 60자
+- 상세주소: 수정 가능, 최대 30자
+- 성별: 남성 또는 여성
+- 생년월일: 실제 존재하는 날짜이며 미래 날짜 불가
+- 키와 몸무게: 최대 6자, 양수 정수 또는 소수 형식
+
+최소·최대 업무 범위는 코드에 없으므로 임의로 추가하지 않는다. 완료 보고서에 `키·몸무게 최소·최대 업무 규칙이 없어 제품 정책 확정 필요`라고 기록한다.
+
+저장 중에는 다시 저장할 수 없다. 취소하면 서버 조회 원본으로 복구한다. 저장 실패 시 편집 상태와 입력값을 유지한다. 결과 페이지 전용 Adapter가 허용 필드만 구성한 뒤 기존 결과 사용자 API를 호출한다.
+
+### 프레임 입력
+
+결과 페이지 전용 Frame Control은 결과 영역의 현재 영상 요소에만 연결한다. 영상 metadata의 재생시간과 현재 시스템의 30fps 기준으로 마지막 프레임을 계산한다.
+
+- 정수만 허용
+- 기본값과 최소값 0
+- 최대값은 마지막 프레임
+- 잘못된 입력은 `0부터 마지막 프레임 사이의 숫자를 입력해주세요.` 표시
+- 프레임 변경 시 `video.currentTime = frame / 30`
+- 영상 재생 시 입력 프레임 갱신
+- 영상 변경 시 프레임과 최대값 재계산
+- 영상 없음 또는 로딩 실패 시 재생·입력 비활성
+
+공용 VideoPlayer는 수정하지 않는다.
+
+### 결과 전송
+
+전송 버튼과 Adapter는 `canShareResult`를 공유한다. 결과가 없거나 전송 중이면 호출을 막는다. 전송 직전 `선택한 측정 결과를 카카오톡으로 전송하시겠습니까?`를 표시한다. 성공, 실패, 취소를 구분하고 지정 문구를 표시한다.
+
+기존 공유 action과 연동 형식은 변경하지 않는다. 전용 Adapter와 로그에는 PIN, 인증토큰, 전체 건강정보, 이메일 전체값, 휴대폰 전체값을 기록하지 않는다.
+
+### 인쇄
+
+인쇄 버튼과 Adapter는 `canPrintResult`를 공유한다. 결과가 없거나 생성 중이면 호출을 막는다. 선택 검사 값은 현재 회차의 존재 플래그와 교차 검증한다. `window.open` 반환값이 `null`이면 팝업 차단 메시지를 표시한다. 생성 실패, 팝업 차단, 결과 없음의 메시지를 구분한다.
+
+### 오류 처리
+
+결과 페이지 Error Mapper는 다음 범주를 구분한다.
+
+- 네트워크 연결 실패
+- 요청 시간 초과
+- 인증 만료
+- 권한 없음
+- 결과 없음
+- 서버 내부 오류
+- 이미지, 영상, 3D 데이터 로딩 실패
+- 인쇄 실패
+- 카카오 전송 실패
+- 사용자 정보 저장 실패
+
+화면에는 안전한 지정 메시지만 표시한다. stack trace, SQL 오류, 서버 파일 경로, 내부 IP, 토큰, DB 테이블명, 개발자 예외 원문을 노출하지 않는다. 기존 응답 헤더나 body에 요청 ID가 있을 때만 `문의 코드: ...`를 표시한다.
+
+렌더링 오류는 결과 페이지 전용 Error Boundary가 처리하고, 이벤트 핸들러와 비동기 요청 오류는 각 Adapter가 Error Mapper를 호출한다.
+
+### 로딩과 중복 실행 방지
+
+로그인, 측정일 변경, 결과 조회, 대시보드, ROM 상세, 비교 조회, 사용자 저장, 전송, 인쇄는 결과 페이지 전용 local state 또는 React Query의 상태를 사용한다. 전역 로딩 상태는 수정하지 않는다. 각 mutation/action은 실행 중 재진입을 거부한다.
+
+### 로그아웃과 세션
+
+로그아웃 확인 후 결과 페이지 Store를 초기화하고 결과 페이지 query cache를 제거한 다음 `router.replace("/result-page/login")`로 이동한다. 뒤로가기로 결과 route가 다시 활성화되면 기존 Auth Check가 로그인 상태 부재를 확인하고 로그인 화면으로 교체한다.
+
+401은 기존 공용 axios 동작으로 Store를 초기화하고 로그인으로 이동하며, 결과 페이지에서는 세션 만료 메시지를 표시할 수 있는 전용 상태 전달을 추가한다.
+
+서버 토큰 폐기와 세션 유지시간은 프론트엔드 저장소만으로 보장할 수 없다. 세션 유지시간이 없으므로 사전 만료 안내는 구현하지 않는다.
+
+### 접근성
+
+- 모든 결과 페이지 아이콘 버튼에 `aria-label`
+- 선택 탭에 `aria-selected`
+- 오류 및 상태 메시지에 `aria-live`
+- 필드와 오류 메시지를 `aria-describedby`로 연결
+- 포커스 표시 유지
+- disabled 버튼 사유를 별도 설명 텍스트로 제공
+- 상태 판정을 색상만으로 표현하지 않음
+
+## 테스트 설계
+
+기존 Vitest, jsdom, Testing Library를 사용한다. 새 의존성을 추가하지 않는다.
+
+### 단위 테스트
+
+- `hasAnyResult`
+- `canShareResult`
+- `canPrintResult`
+- `canCompareMeasurement`
+- 검사 비활성 사유
+- 휴대폰 11자리 검증
+- PIN 4자리 검증
+- 사용자 정보 maxlength, 날짜, 숫자 형식, 저장 payload
+- 스쿼트 프레임 범위
+- 결과 페이지 라벨 매핑
+- 오류 메시지 매핑과 민감정보 비노출
+
+### 통합 테스트
+
+- 정상 로그인
+- 잘못된 휴대폰 및 PIN 형식
+- 인증 실패 및 네트워크 실패
+- 결과가 있는 회차
+- 2026-08-06 및 2026-07-27 결과 없음 회차
+- 결과 없음 상태의 전송 및 인쇄 차단
+- 비교 가능 및 불가능 회차
+- 사용자 저장 성공 및 실패
+- 휴대폰·이메일 변경 불가
+- 로그아웃과 뒤로가기 재진입 보호
+- 중복 클릭 차단
+
+별도 E2E runner가 없으므로 이번 범위에서는 Vitest 컴포넌트 통합 테스트로 요구사항을 검증한다.
+
+### 전체 검증
+
+- lint
+- TypeScript type check
+- 결과 페이지 단위·통합 테스트
+- 전체 Vitest 회귀 테스트
+- production build
+- Git diff를 통한 공용·관리자 파일 수정 수 확인
+
+## 구현하지 않는 항목
+
+- 서버 로그인 rate limit과 서버 토큰 폐기: 백엔드 코드 없음
+- 세션 만료 사전 안내: 유지시간 정책 없음
+- 결과 페이지 감사 이벤트: 호출 가능한 Logger 없음
+- 키·몸무게 최소·최대: 업무 규칙 없음
+- 외부 인쇄 서비스가 생성하는 리포트 라벨: 저장소 범위 밖
+- 전송·인쇄 암호화 payload 형식 변경: 공용 action 및 기존 연동 형식 변경 필요
+
+위 항목은 코드를 변경하지 않고 파일 경로, 변경 이유, 영향 가능성, 대체 구현 방법과 함께 완료 보고서에 기록한다.
+
+## 완료 기준
+
+- 변경 효과가 `/result-page`와 하위 경로로 제한됨
+- 관리자 및 공용 파일의 수정 수가 0임
+- 결과 없는 회차에서 전송과 인쇄가 UI와 Adapter 양쪽에서 차단됨
+- 로그인 입력 범위와 모든 지정 문구가 일치함
+- 사용자 저장 요청에서 휴대폰과 이메일이 제외됨
+- 비동기 작업의 중복 실행이 차단됨
+- 사용자 화면에 내부 오류나 민감정보가 노출되지 않음
+- 신규 단위·통합 테스트와 회귀 검증 결과가 완료 보고서에 기록됨
