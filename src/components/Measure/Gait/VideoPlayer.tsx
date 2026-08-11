@@ -1,111 +1,118 @@
 'use client';
 
-import { Skeleton } from "@/components/ui/skeleton";
 import { IGaitMeasureJson } from "@/types/measure";
-import React, { useRef, useState, useEffect } from "react";
-import { midPoint2D } from "../Compare/utils/compareUtils";
+import React from "react";
+import { drawTrailSegment, mid2DPoint } from "../Compare/utils/compareUtils";
 import { drawSkeleton } from "../Compare/utils/DrawSkeleton";
+import { useVideoPlayer } from "../Compare/hooks/useVideoPlayer";
+import { setupHiDPICanvas } from "../DetailDynamic";
+import { cn } from "@/lib/utils";
+import { I2DPoseLandmark } from "@/types/pose";
 
 interface VideoPlayerProps {
   videoSrc?: string;
+  isRotated: boolean;
+  isCompare: boolean ;
   measureJson?: IGaitMeasureJson[] | undefined;
   isLoading?: boolean;
   isError?: boolean;
-  cropScale?: number;
-  fps?: number; // 기본값 30fps
-  romType?: number;
+  onFrameChange?: (frame: number) => void;
+  customCanvasTransform?: string; // 커스텀 canvas transform (선택적)
+  videoClassName?: string; // 커스텀 video className (선택적)
+  stageClassName?: string; // 커스텀 stage className (선택적)
+  containerClassName?: string; // 커스텀 container className (선택적)
+  children?: React.ReactNode; // 추가 컨텐츠 (예: DynamicDataContainer)
+  romType ?: number;
+  cropScale ?: number;
 }
 
 export default function VideoPlayer({
   videoSrc,
+  isRotated,
+  isCompare = false,
   measureJson,
-  isLoading = false,
-  isError = false,
-  cropScale = 1.0,
-  fps = 30,
+  isLoading,
+  isError,
+  onFrameChange,
+  customCanvasTransform,
+  videoClassName,
+  stageClassName,
+  containerClassName,
+  children,
   romType,
+  cropScale = 2.35,
 }: VideoPlayerProps) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasWhiteRef = useRef<HTMLCanvasElement>(null);
-  const canvasRedRef = useRef<HTMLCanvasElement>(null);
+  const {
+    stageRef,
+    videoRef,
+    canvasWhiteRef,
+    canvasRedRef,
+    canvasTrailRef,
+    fit,
+    canvasTransform,
+    frame,
+    duration,
+    currentTime,
+    setIsSeeking,
+    setCurrentTime,
+    isSeekingRef,
+    trailPrevRef,
+    toScreen,
+  } = useVideoPlayer({
+    videoSrc,
+    isRotated,
+    isCompare,
+    onFrameChange,
+    cropScale,
+  });
+  React.useEffect(() => {
+    const cw = canvasWhiteRef.current;
+    const cr = canvasRedRef.current;
+    const ct = canvasTrailRef.current;
+    if (!cw || !cr || !ct || fit.stageW === 0 || fit.stageH === 0) return;
 
-  const [frame, setFrame] = useState(0);
-  const [fit, setFit] = useState({ stageW: 0, stageH: 0 });
+    // Update canvas size when fit changes
+    setupHiDPICanvas(cw, fit.stageW, fit.stageH);
+    setupHiDPICanvas(cr, fit.stageW, fit.stageH);
+    setupHiDPICanvas(ct, fit.stageW, fit.stageH);
+  }, [fit.stageW, fit.stageH, fit.dpr, canvasWhiteRef, canvasRedRef, canvasTrailRef]);
 
-  const trailPrevRef = useRef<{
-    p15?: { x: number; y: number };
-    p16?: { x: number; y: number };
-    pMid?: { x: number; y: number };
-    p25?: { x: number; y: number };
-    p26?: { x: number; y: number };
-  }>({});
 
-  // 1. 비디오 시간 변경 시 현재 프레임 계산
-  const handleTimeUpdate = () => {
-    if (!videoRef.current) return;
-    const currentFrame = Math.floor(videoRef.current.currentTime * fps);
-    setFrame(currentFrame);
-  };
-
-  // 2. 캔버스 해상도를 컨테이너 크기에 맞춤
-  useEffect(() => {
-    const updateSize = () => {
-      if (!videoRef.current) return;
-      const { clientWidth, clientHeight } = videoRef.current;
-      setFit({ stageW: clientWidth, stageH: clientHeight });
-
-      [canvasWhiteRef, canvasRedRef].forEach((ref) => {
-        if (ref.current) {
-          ref.current.width = clientWidth;
-          ref.current.height = clientHeight;
-        }
-      });
-    };
-
-    updateSize();
-    window.addEventListener("resize", updateSize);
-    return () => window.removeEventListener("resize", updateSize);
-  }, [isLoading, videoSrc]);
-
-  // 3. 랜드마크 그려주는 Effect
-  useEffect(() => {
+  React.useEffect(() => {
     if (!measureJson) return;
 
     const item = measureJson[frame];
     if (!item || !item.screen_landmarks) return;
 
-    const lm = item.screen_landmarks;
+    const lm: I2DPoseLandmark[] = item.screen_landmarks;
+
     const cw = canvasWhiteRef.current;
     const cr = canvasRedRef.current;
+    const ct = canvasTrailRef.current;
+    if (!cw || !cr || !ct || fit.stageW === 0 || fit.stageH === 0) return;
 
-    if (!cw || !cr || fit.stageW === 0 || fit.stageH === 0) return;
-
-    // 💡 스케일링 없이 원데이터 절대 좌표(x, y) 그대로 사용
-    const toScreen = (sx: number, sy: number) => {
-      const baseScale = fit.stageH / 720;
-
-      // 1) object-cover 기준 좌표 (크롭 반영, 줌 반영 전)
-      const xCovered = sx * baseScale - (1280 * baseScale - fit.stageW) / 2;
-      const yCovered = sy * baseScale;
-
-      // 2) 중심 기준으로 cropScale 만큼 추가 확대
-      const x = fit.stageW / 2 + (xCovered - fit.stageW / 2) * cropScale;
-      const y = fit.stageH / 2 + (yCovered - fit.stageH / 2) * cropScale;
-      console.log(`${cropScale} ${baseScale} ${fit.stageW} ${fit.stageH}`)
-      return { x, y };
-    };
-    
     const ctxW = cw.getContext("2d");
     const ctxR = cr.getContext("2d");
-    if (!ctxW || !ctxR) return;
+    const ctxT = ct.getContext("2d");
+    if (!ctxW || !ctxR || !ctxT) return;
 
-    const p15 = { x: lm[15].x, y: lm[15].y };
-    const p16 = { x: lm[16].x, y: lm[16].y };
-    const mid = midPoint2D(lm[23], lm[24]);
-    const pMid = { x: mid.x, y: mid.y };
-    const p25 = { x: lm[25].x, y: lm[25].y };
-    const p26 = { x: lm[26].x, y: lm[26].y };
+    // Trail
+    ctxT.lineWidth = 1;
+    ctxT.strokeStyle = "#00FF00";
+    
+    const p15 = toScreen(lm[15].x, lm[15].y);
+    const p16 = toScreen(lm[16].x, lm[16].y);
+    const mid = mid2DPoint(lm[23], lm[24]);
+    const pMid = toScreen(mid.sx, mid.sy);
+    const p25 = toScreen(lm[25].x, lm[25].y);
+    const p26 = toScreen(lm[26].x, lm[26].y);
 
+    const prev = trailPrevRef.current;
+    drawTrailSegment(ctxT, prev.p15, p15);
+    drawTrailSegment(ctxT, prev.p16, p16);
+    drawTrailSegment(ctxT, prev.pMid, pMid);
+    drawTrailSegment(ctxT, prev.p25, p25);
+    drawTrailSegment(ctxT, prev.p26, p26);
 
     trailPrevRef.current = { p15, p16, pMid, p25, p26 };
 
@@ -115,97 +122,105 @@ export default function VideoPlayer({
 
     // Draw skeleton
     drawSkeleton(ctxW, ctxR, lm, toScreen);
-  }, [measureJson, frame, fit, romType, cropScale]);
-
-  // custom Player를 위한 
-  const [, setIsSeeking] = useState(false);
-  const isSeekingRef = useRef(false);
-  const [duration, setDuration] = useState(0);
-  const [currentTime, setCurrentTime] = useState(0);
+    
+    
+  }, [measureJson, frame, fit, toScreen, canvasWhiteRef, canvasRedRef, canvasTrailRef, trailPrevRef, romType]);
+  
+  
   const handlePlayPause = () => {
-    const v = videoRef.current;
-    if (!v) return;
-    if (v.paused) v.play();
-    else v.pause();
-  };
-
-  const handleSeekStart = () => {
-    setIsSeeking(true);
-    isSeekingRef.current = true;
-  };
-
-  const handleSeekEnd = (value: number) => {
-    const v = videoRef.current;
-    if (!v) return;
-    v.currentTime = value;
-    setIsSeeking(false);
-    isSeekingRef.current = false;
-  };
-useEffect(() => {
-    const v = videoRef.current;
-    if (!v || !videoSrc) return;
-
-    const onLoadedMetadata = () => {
-      setDuration(v.duration || 0);
-      setCurrentTime(v.currentTime || 0);
+      const v = videoRef.current;
+      if (!v) return;
+      if (v.paused) v.play();
+      else v.pause();
     };
-
-    const onTimeUpdate = () => {
-      if (!isSeekingRef.current) {
-        setCurrentTime(v.currentTime || 0);
-      }
+  
+    const handleSeekStart = () => {
+      setIsSeeking(true);
+      isSeekingRef.current = true;
     };
-
-    v.addEventListener("loadedmetadata", onLoadedMetadata);
-    v.addEventListener("timeupdate", onTimeUpdate);
-
-    if (v.readyState >= 1) onLoadedMetadata();
-
-    return () => {
-      v.removeEventListener("loadedmetadata", onLoadedMetadata);
-      v.removeEventListener("timeupdate", onTimeUpdate);
+  
+    const handleSeekEnd = (value: number) => {
+      const v = videoRef.current;
+      if (!v) return;
+      v.currentTime = value;
+      setIsSeeking(false);
+      isSeekingRef.current = false;
     };
-  }, [videoSrc]);
-  if (isLoading) {
-    return (
-      <div className="w-full aspect-[3/4] mx-auto rounded-xl overflow-hidden">
-        <Skeleton className="w-full h-full" />
-      </div>
+    const isSymmetryRange = romType && (romType >= 21 && romType <= 48);
+    const finalCanvasTransform = React.useMemo(() => {
+    const baseTransform = customCanvasTransform ?? canvasTransform;
+    // isRotated이고 대칭 범위일 때만 scaleX(-1) 추가
+    if (isRotated && isSymmetryRange) {
+      return `${baseTransform} scaleX(-1)`;
+    }
+    return baseTransform;
+  }, [customCanvasTransform, canvasTransform, isRotated, isSymmetryRange]);
+  
+    const defaultVideoBaseClasses = isRotated 
+      ? "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" 
+      : "w-full h-full";
+    const defaultVideoRotatedClasses = isRotated 
+      ? ` h-full w-auto ${isSymmetryRange ? "rotate-90 scale-x-[-1.75] scale-y-[1.75]" : "-rotate-90 scale-[1.75]"}` 
+      : "w-full h-full";
+    const finalVideoClassName = cn(
+      defaultVideoBaseClasses,
+      videoClassName ?? defaultVideoRotatedClasses
     );
-  }
-
-  if (isError || !videoSrc) {
-    return (
-      <div className="w-full aspect-[3/4] mx-auto rounded-xl bg-gray-100 flex flex-col items-center justify-center text-gray-400 gap-2 border border-sub200">
-        <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-        </svg>
-        <span className="text-sm font-medium">영상을 불러올 수 없습니다.</span>
-      </div>
-    );
-  }
-    return (
-    <div className="relative w-full aspect-[3/4] overflow-hidden flex flex-col items-center justify-center">
-      {/* video + canvas wrapper: 좌우반전 적용 */}
-      <div className="relative w-full flex-1" >
+    // 기본 stage className과 커스텀 className 병합
+    const defaultStageClasses = "relative mx-auto w-full h-[480px] md:h-[560px] lg:h-[680px] overflow-hidden";
+    const finalStageClassName = cn(defaultStageClasses, stageClassName);
+    
+    // 기본 container className과 커스텀 className 병합
+    const defaultContainerClasses = "flex flex-col justify-between gap-2 lg:gap-4";
+    const finalContainerClassName = cn(defaultContainerClasses, containerClassName);
+  
+  return (
+    <div className={finalContainerClassName}>
+      <div
+        ref={stageRef}
+        className={finalStageClassName}
+      >
         <video
           ref={videoRef}
-          src={videoSrc ? `https://gym.tangoplus.co.kr/data/Results/${videoSrc}` : undefined}
-          controlsList="nodownload"
+          muted
           playsInline
-          onTimeUpdate={handleTimeUpdate}
-          className="w-full h-full object-cover transition-transform duration-200 z-0"
-          style={{
-            transform: `scaleX(-1) scale(${cropScale})`,
-            transformOrigin: "center center",
-          }}
+          webkit-playsinline="true"
+          src={videoSrc ? `${process.env.NEXT_PUBLIC_FILE_URL}/${videoSrc}` : undefined}
+          className={finalVideoClassName}
         />
-        <canvas ref={canvasWhiteRef} className="absolute inset-0 w-full h-full pointer-events-none z-20" />
-        <canvas ref={canvasRedRef} className="absolute inset-0 w-full h-full pointer-events-none z-30" />
+
+        <canvas
+          ref={canvasTrailRef}
+          className="absolute inset-0 z-[9] origin-center pointer-events-none"
+          style={{ transform: finalCanvasTransform }}
+          // style={isRotated ? { transform: finalCanvasTransform } : {}}
+        />
+        <canvas
+          ref={canvasWhiteRef}
+          className="absolute inset-0 z-[9] origin-center pointer-events-none"
+          style={{ transform: finalCanvasTransform }}
+        />
+        <canvas
+          ref={canvasRedRef}
+          className="absolute inset-0 z-[10] origin-center pointer-events-none"
+          style={{ transform: finalCanvasTransform }}
+        />
+
+        {isLoading && (
+          <div className="absolute inset-0 z-[50] flex items-center justify-center bg-black/20">
+            <p className="text-white">로딩중...</p>
+          </div>
+        )}
+
+        {isError && (
+          <div className="absolute inset-0 z-[50] flex items-center justify-center bg-black/20">
+            <p className="text-white">오류가 발생했습니다</p>
+          </div>
+        )}
       </div>
 
-      {/* 커스텀 컨트롤바: 반전 영향 없음 */}
-      <div className="flex items-center gap-3 w-full px-1 py-2 z-40">
+      {/* Controls */}
+      <div className="flex items-center gap-3">
         <button
           type="button"
           className="px-3 py-2 rounded-xl bg-sub100 hover:bg-sub300 transition"
@@ -234,6 +249,7 @@ useEffect(() => {
           }}
         />
       </div>
+      {children}
     </div>
   );
 }

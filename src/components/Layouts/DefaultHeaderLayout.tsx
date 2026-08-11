@@ -98,7 +98,7 @@ export default function DefaultHeaderLayout() {
             <Balloon
               direction="top"
               className="top-[70px] right-[12px] md:right-[45px] w-[270px]"
-              message="📢 중요한 최근 공지사항이 등록되었습니다. 지금 확인해 보세요"
+              message="📢 최근 공지사항이 등록되었습니다. 지금 확인해 보세요"
               onClose={() => setHasUnreadNotice(false)}
             />
           )}

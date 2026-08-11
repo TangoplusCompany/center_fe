@@ -155,9 +155,8 @@ export default function GaitGaugeChart({ left, both, right }: GaitGaugeChartProp
                 );
               })}
 
-              {/* 수치 정보 */}
               <text x={txMid} y={tyMid - 4} textAnchor="middle" className="fill-white text-[18px] font-bold">
-                {item.percent}%
+                {item.percent.toFixed(1)}%
               </text>
               <text x={txMid} y={tyMid + 16} textAnchor="middle" className="fill-white text-[12px] px-2 py-1 bg-sub100/80">
                 {item.time}

@@ -74,7 +74,7 @@ function GaitItem({ item }: { item: ParameterItem }) {
         <span className="text-sm sm:text-base font-semibold text-sub700">{item.title}</span>
         
         <div className="flex gap-1 items-center">
-          <span className="text-xs sm:text-sm text-sub700 font-semibold">{item.value}{item.unit}</span>
+          <span className="text-xs sm:text-sm text-sub700 font-semibold">{item.value.toFixed(1)}{item.unit}</span>
           <span className={`px-3 py-1 rounded-full text-xs text-white text-center whitespace-normal break-keep ${riskInfo.badgeCss}`}>
             {riskInfo.label}
           </span>
@@ -124,41 +124,42 @@ function GaitItem({ item }: { item: ParameterItem }) {
 }
 
 export default function GaitParameter({ data }: GaitContainerProps) {
+  const iData = data.gait_measure_info
   const gaitItems: ParameterItem[] = [
     {
       title: "보행속도(Gait Speed)",
-      risk: Number(data?.resultSpeedRisk ?? 0),
-      value: data?.avgOverallStepSpeed ?? 1.1,
+      risk: Number(iData?.resultSpeedRisk ?? 0),
+      value: iData?.avgOverallStepSpeed ?? 1.1,
       threshold0: 0.8,
       threshold1: 1.3,
       unit: "m/s",
-      leftValue: `${data?.avgLeftStepSpeed ?? 1.5} m/s`,
-      rightValue: `${data?.avgRightStepSpeed ?? 1.2} m/s`,
+      leftValue: `${(iData?.avgLeftStepSpeed ?? 1.5).toFixed(1)} m/s`,
+      rightValue: `${(iData?.avgRightStepSpeed ?? 1.2).toFixed(1)} m/s`,
     },
     {
       title: "평균 보폭(Step Length)",
-      risk: Number(data?.resultStepLengthRisk ?? 0),
-      value: data?.averageStepLength ?? 0.65,
+      risk: Number(iData?.resultStepLengthRisk ?? 0),
+      value: iData?.averageStepLength ?? 0.65,
       threshold0: 0.5,
       threshold1: 0.75,
       unit: "m",
-      leftValue: `${data?.avgLeftStepLength ?? 0.65} %`,
-      rightValue: `${data?.avgRightStepLength ?? 0.65} %`,
+      leftValue: `${(iData?.avgLeftStepLength ?? 0.65).toFixed(1)} %`,
+      rightValue: `${(iData?.avgRightStepLength ?? 0.65).toFixed(1)} %`,
     },
     {
       title: "평균 활보장(Stride Length)",
-      risk: Number(data?.resultStrideLengthRisk ?? 1),
-      value: data?.avgLeftStrideLength ?? 0.6,
+      risk: Number(iData?.resultStrideLengthRisk ?? 1),
+      value: iData?.avgLeftStrideLength ?? 0.6,
       threshold0: 1.0,
       threshold1: 1.5,
       unit: "m",
-      leftValue: `${data?.avgLeftStepLength ?? 0.7} m`,
-      rightValue: `${data?.avgRightStepLength ?? 0.5} m`,
+      leftValue: `${(iData?.avgLeftStepLength ?? 0.7).toFixed(1)} m`,
+      rightValue: `${(iData?.avgRightStepLength ?? 0.5).toFixed(1)} m`,
     },
     {
       title: "케이던스(Cadence)",
       risk: 0,
-      value: data?.cadence ?? 95,
+      value: iData?.cadence ?? 95,
       threshold0: 90,
       threshold1: 120,
       unit: "steps/min",

@@ -6,7 +6,10 @@ export const midPoint = (a: { sx: number; sy: number }, b: { sx: number; sy: num
   sx: (a.sx + b.sx) / 2,
   sy: (a.sy + b.sy) / 2,
 });
-
+export const mid2DPoint = (a: { x: number; y: number }, b: { x: number; y: number }) => ({
+  sx: (a.x + b.x) / 2,
+  sy: (a.y + b.y) / 2,
+});
 export const midPoint2D = (a: { x: number; y: number }, b: { x: number; y: number }) => ({
   x: (a.x + b.x) / 2,
   y: (a.y + b.y) / 2,

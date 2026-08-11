@@ -8,7 +8,7 @@ export interface IMeasureResponse {
   rom_result?: IMeasureROMItemDetail[]
   bia_result?: IBiaData;
   gait_result?: IMeasureGaitDetail;
-  moire_result ?: IMeasureMoireDetail;
+  moire_result ?: IMeasureMoireDetail[];
 }
 
 export interface IMeasureBasic {
@@ -42,6 +42,8 @@ export interface IMeasureList {
   has_basic : 0 | 1;
   has_rom : 0 | 1;
   has_bia: 0 | 1;
+  has_gait: 0 | 1;
+  has_moire: 0 | 1;
 }
 export interface IMeasurementMeta {
   user_sn: number | string; // sn
@@ -57,6 +59,7 @@ export interface IMeasurementMeta {
   has_rom : 0 | 1;
   has_bia: 0 | 1;
   has_gait: 0 | 1;
+  has_moire: 0 | 1;
 }
 // 측정 한개 조회할 때 확인하는 것 
 export interface IMeasureInfo
@@ -443,8 +446,13 @@ export interface IMeasureGaitMeta {
   user_name : string;
   measure_date : string;
 }
-
-export interface IMeasureGaitDetail extends IMeasureGaitMeta {
+export interface IMeasureGaitDetail {
+  gait_measure_info :IMeasureGaitInfo;
+  gait_sequence_result: IGaitSeqDetail[];
+  gait_step_data: IGaitStep[];
+  gait_stride_data: IGaitStride[];
+}
+export interface IMeasureGaitInfo extends IMeasureGaitMeta {
   file_server_video_name : string;
   file_server_gait_frame_name : string;
   totalSequenceCount	: number;

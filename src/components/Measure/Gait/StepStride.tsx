@@ -23,7 +23,7 @@ export default function GaitStepStride({ data }: { data: IGaitStepStrideProps })
                 : "bg-sub100 text-sub600 hover:bg-sub200"
             }`}
           >
-            걸음 분석 (Step) ({stepData.length})
+            걸음 분석 (Step) ({stepData.length}개)
           </button>
           <button
             onClick={() => setActiveTab("stride")}
@@ -33,7 +33,7 @@ export default function GaitStepStride({ data }: { data: IGaitStepStrideProps })
                 : "bg-sub100 text-sub600 hover:bg-sub200"
             }`}
           >
-            보폭 분석 (Stride) ({strideData.length})
+            보폭 분석 (Stride) ({strideData.length}개)
           </button>
         </div>
       </div>
@@ -61,12 +61,12 @@ export default function GaitStepStride({ data }: { data: IGaitStepStrideProps })
                 {stepData.map((step) => (
                   <tr key={`step-${step.sn || step.sequenceIndex}-${step.stepIndex}-${step.foot}`} className="hover:bg-sub50/50 transition-colors">
                     <td className="p-3 whitespace-nowrap">
-                      <span className="font-semibold text-sub700">Seq {step.sequenceIndex}</span>
+                      {/* <span className="font-semibold text-sub700">Seq {step.sequenceIndex}</span> */}
                       <span className="ml-1.5 text-xs px-2 py-0.5 rounded bg-sub200 text-sub700">
-                        {step.direction === "Towards" ? "다가옴" : "멀어짐"}
+                        {step.direction === "Towards" ? "걸어옴" : "멀어짐"}
                       </span>
                     </td>
-                    <td className="p-3 font-medium">#{step.stepIndex}</td>
+                    <td className="p-3 font-medium">{step.stepIndex}번</td>
                     <td className="p-3">
                       <span
                         className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold ${
@@ -78,11 +78,11 @@ export default function GaitStepStride({ data }: { data: IGaitStepStrideProps })
                         {step.foot === "Left" ? "L (왼발)" : "R (오른발)"}
                       </span>
                     </td>
-                    <td className="p-3 text-right font-medium">{safeFixed(step.stepLength, 1)}</td>
-                    <td className="p-3 text-right font-medium">{safeFixed(step.stepWidth, 1)}</td>
-                    <td className="p-3 text-right">{safeFixed(step.stepTime, 2)}</td>
+                    <td className="p-3 text-right font-medium">{safeFixed(step.stepLength, 2)}</td>
+                    <td className="p-3 text-right font-medium">{safeFixed(step.stepWidth, 2)}</td>
+                    <td className="p-3 text-right">{safeFixed(step.stepTime, 3)}</td>
                     <td className="p-3 text-right font-semibold text-mainBlue-600">
-                      {safeFixed(step.stepSpeed, 2)}
+                      {safeFixed(step.stepSpeed, 3)}
                     </td>
                     <td className="p-3 text-center text-sub500 text-xs">
                       {step.startFrameIndex} ~ {step.endFrameIndex}
@@ -118,7 +118,7 @@ export default function GaitStepStride({ data }: { data: IGaitStepStrideProps })
                 {strideData.map((stride) => (
                   <tr key={`stride-${stride.sn || stride.sequenceIndex}-${stride.strideIndex}-${stride.foot}`} className="hover:bg-sub50/50 transition-colors">
                     <td className="p-3 whitespace-nowrap">
-                      <span className="font-semibold text-sub700">Seq {stride.sequenceIndex}</span>
+                      {/* <span className="font-semibold text-sub700">Seq {stride.sequenceIndex}</span> */}
                       <span className="ml-1.5 text-xs px-2 py-0.5 rounded bg-sub200 text-sub700">
                         {stride.direction === "Towards" ? "다가옴" : "멀어짐"}
                       </span>
@@ -135,16 +135,16 @@ export default function GaitStepStride({ data }: { data: IGaitStepStrideProps })
                         {stride.foot === "Left" ? "L (왼발)" : "R (오른발)"}
                       </span>
                     </td>
-                    <td className="p-3 text-right font-medium">{safeFixed(stride.strideLength, 1)}</td>
-                    <td className="p-3 text-right">{safeFixed(stride.strideTime, 2)}</td>
+                    <td className="p-3 text-right font-medium">{safeFixed(stride.strideLength, 2)}</td>
+                    <td className="p-3 text-right">{safeFixed(stride.strideTime, 3)}</td>
                     <td className="p-3 text-right whitespace-nowrap text-xs">
-                      <span className="font-semibold text-sub700">{safeFixed(stride.stanceRatio, 1)}%</span>
+                      <span className="font-semibold text-sub700">{safeFixed(stride.stanceRatio, 2)}%</span>
                       <span className="text-sub400"> / </span>
-                      <span className="text-sub600">{safeFixed(stride.swingRatio, 1)}%</span>
+                      <span className="text-sub600">{safeFixed(stride.swingRatio, 2)}%</span>
                     </td>
-                    <td className="p-3 text-right font-medium">{safeFixed(stride.maxToeClearance, 1)}</td>
+                    <td className="p-3 text-right font-medium">{safeFixed(stride.maxToeClearance, 3)}</td>
                     <td className="p-3 text-right font-semibold text-mainBlue-600">
-                      {safeFixed(stride.strideSpeed, 2)}
+                      {safeFixed(stride.strideSpeed, 3)}
                     </td>
                   </tr>
                 ))}

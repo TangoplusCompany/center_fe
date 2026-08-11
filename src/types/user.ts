@@ -76,6 +76,7 @@ export interface IUserMeasureListItem
   has_rom : 0 | 1;
   has_bia : 0 | 1;
   has_gait : 0 | 1;
+  has_moire: 0 | 1;
 }
 
 

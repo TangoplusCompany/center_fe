@@ -89,7 +89,7 @@ export function FallItem({ item }: { item: FallItemData }) {
       <div className="flex justify-between items-center">
         <span className="text-sm sm:text-base font-semibold text-sub700">{item.title}</span>
         <div className="flex items-center gap-1.5">
-          <span className="text-xs sm:text-sm font-semibold text-sub700">{item.value} {item.unit}</span>
+          <span className="text-xs sm:text-sm font-semibold text-sub700">{item.value.toFixed(1)} {item.unit}</span>
           <span className={`px-3 py-1 rounded-full text-xs text-white text-center whitespace-normal break-keep ${riskInfo.badgeCss}`}>
             {riskInfo.label}
           </span>
@@ -160,7 +160,7 @@ function  TiltItem ({title, value}: {title: string, value: number}) {
   return (
     <div className="grid grid-cols-[25%_10%_65%] item-center rounded-xl bg-sub200 px-2 py-1">
       <span className="text-sub700 text-xs sm:text-sm text-start font-semibold">{title}</span>
-      <span className="text-sub700 text-xs sm:text-sm font-semibold ">{value}</span>
+      <span className="text-sub700 text-xs sm:text-sm font-semibold ">{value.toFixed(1)}º</span>
       
       <div className="flex w-full rounded-r-lg overflow-hidden bg-sub100 items-center justify-between py-1">
         <div className="flex h-full  rounded-r-lg bg-sub400 py-1" style={{ width: `${80}%` }}>
@@ -171,10 +171,11 @@ function  TiltItem ({title, value}: {title: string, value: number}) {
 }
 
 export default function GaitFall({ data }: GaitContainerProps) {
+  const iData = data.gait_measure_info
   const fallItems: FallItemData[] = [
     {
       title: "발끝 들림 높이",
-      value: data?.averageToeClearance ?? 1.1,
+      value: iData?.averageToeClearance ?? 1.1,
       unit: "cm",
       gaugeType: "high", // 3단계: 위험 -> 주의 -> 정상
       threshold0: 1.0,
@@ -182,7 +183,7 @@ export default function GaitFall({ data }: GaitContainerProps) {
     },
     {
       title: "양발 지지 비율",
-      value: data?.avgDoubleSupportRatio ?? 15,
+      value: iData?.avgDoubleSupportRatio ?? 15,
       unit: "%",
       gaugeType: "low", // 3단계: 정상 -> 주의 -> 위험 (낮을수록 좋음)
       threshold0: 24,
@@ -190,7 +191,7 @@ export default function GaitFall({ data }: GaitContainerProps) {
     },
     {
       title: "보행 속도",
-      value: data?.overallGaitSpeed ?? 1.4,
+      value: iData?.overallGaitSpeed ?? 1.4,
       unit: "m/s",
       gaugeType: "high", // 5단계: 위험 -> 주의 -> 정상 -> 주의 -> 위험
       threshold0: 10,
@@ -200,7 +201,7 @@ export default function GaitFall({ data }: GaitContainerProps) {
     },
     {
       title: "보폭 너비",
-      value: data?.averageStepWidth ?? 16.3,
+      value: iData?.averageStepWidth ?? 16.3,
       unit: "cm",
       gaugeType: "center", // 5단계: 위험 -> 주의 -> 정상 -> 주의 -> 위험
       threshold0: 5,
@@ -210,27 +211,27 @@ export default function GaitFall({ data }: GaitContainerProps) {
     },
   ];
 
-  const kneeRisk = data.resultKneeFlexionRisk
+  const kneeRisk = iData.resultKneeFlexionRisk
   const riskInfo = RISK_RECORD[kneeRisk as keyof typeof RISK_RECORD] || RISK_RECORD[0];
-  const leftKneePosition = calculatePercentFromRaw(data.avgMaxLeftKneeFlexion, 40, 55);
-  const rightKneePosition = calculatePercentFromRaw(data.avgMaxRightKneeFlexion, 40, 55);
+  const leftKneePosition = calculatePercentFromRaw(iData.avgMaxLeftKneeFlexion, 40, 55);
+  const rightKneePosition = calculatePercentFromRaw(iData.avgMaxRightKneeFlexion, 40, 55);
 
   const tiltItems = [
     {
       title: "골반 틀어짐",
-      value: data.avgMaxPevisDrop
+      value: iData.avgMaxPevisDrop
     },
     {
       title: "상체 전방 숙임",
-      value: data.avgMaxTrunkFlexion
+      value: iData.avgMaxTrunkFlexion
     },
     {
       title: "상체 좌우 흔들림",
-      value: data.avgMaxTrunkSway
+      value: iData.avgMaxTrunkSway
     },
     {
       title: "팔 스윙 비대칭",
-      value: data.avgArmSwingSymmetry
+      value: iData.avgArmSwingSymmetry
     },
   ]
   return (
@@ -251,9 +252,9 @@ export default function GaitFall({ data }: GaitContainerProps) {
             <span className="text-sm sm:text-base font-semibold text-sub700">무릎 최대 굽힘</span>
             <div className="flex items-center gap-1.5">
               <div className="text-xs sm:text-sm flex gap-2 font-semibold">
-                <span className=" text-sub700">L {data.avgMaxLeftKneeFlexion}º</span>
+                <span className=" text-sub700">L {iData.avgMaxLeftKneeFlexion.toFixed(1)}º</span>
                 <span className=" text-sub700"> | </span>
-                <span className=" text-sub700">R {data.avgMaxRightKneeFlexion}º</span>
+                <span className=" text-sub700">R {iData.avgMaxRightKneeFlexion.toFixed(1)}º</span>
               </div>
               <span className={`px-3 py-1 rounded-full text-xs text-white text-center whitespace-normal break-keep ${riskInfo.badgeCss}`}>
                 {riskInfo.label}

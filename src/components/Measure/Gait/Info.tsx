@@ -68,52 +68,52 @@ export function GaitInfoVertiCard({ type, description, grade } : GaitInfoCardPro
 
 
 export default function GaitInfo({data}: GaitContainerProps) {
-
+  const iData = data.gait_measure_info
   const infoHorizonCards = [
     {
       type: "Pattern",
-      title: data.resultGaitPatternTitle,
-      description: data.resultGaitPatternDescription,
-      grade: data.resultGaitPatternGrade
+      title: iData.resultGaitPatternTitle,
+      description: iData.resultGaitPatternDescription,
+      grade: iData.resultGaitPatternGrade
     },
     {
       type: "Balance",
-      title: data.resultGaitBalanceTitle,
-      description: data.resultGaitBalanceDescription,
-      grade: data.resultGaitBalanceGrade
+      title: iData.resultGaitBalanceTitle,
+      description: iData.resultGaitBalanceDescription,
+      grade: iData.resultGaitBalanceGrade
     },
     {
       type: "Efficiency",
-      title: data.resultGaitEfficiencyTitle,
-      description: data.resultGaitEfficiencyDescription,
-      grade: data.resultGaitEfficiencyGrade
+      title: iData.resultGaitEfficiencyTitle,
+      description: iData.resultGaitEfficiencyDescription,
+      grade: iData.resultGaitEfficiencyGrade
     }
   ]
 
   const infoVertiCards = [
     {
       type: "TotalComment",
-      title: data.resultGaitTotalCommentTitle,
-      description: data.resultGaitTotalCommentDescription,
-      grade: data.resultGaitTotalCommentGrade
+      title: iData.resultGaitTotalCommentTitle,
+      description: iData.resultGaitTotalCommentDescription,
+      grade: iData.resultGaitTotalCommentGrade
     },
     {
       type: "Rhythm",
-      title: data.resultGaitRhythmTitle,
-      description: data.resultGaitRhythmDescription,
-      grade: data.resultGaitRhythmGrade
+      title: iData.resultGaitRhythmTitle,
+      description: iData.resultGaitRhythmDescription,
+      grade: iData.resultGaitRhythmGrade
     },
     {
       type: "FallRisk",
-      title: data.resultFallRiskTitle,
-      description: data.resultFallRiskDescription,
-      grade: data.resultFallRiskGrade
+      title: iData.resultFallRiskTitle,
+      description: iData.resultFallRiskDescription,
+      grade: iData.resultFallRiskGrade
     },
     {
       type: "RecommendComment",
-      title: data.resultRecommendCommentTitle,
-      description: data.resultRecommendCommentDescription,
-      grade: data.resultRecommendCommentGrade
+      title: iData.resultRecommendCommentTitle,
+      description: iData.resultRecommendCommentDescription,
+      grade: iData.resultRecommendCommentGrade
     }
   ]
   return (
@@ -127,7 +127,7 @@ export default function GaitInfo({data}: GaitContainerProps) {
           보행 패턴
         </div>
       </div>
-      <div className="relative w-full text-center font-semibold text-sub700 text-base sm:text-lg py-2">{data.resultGaitTypeTitle}</div>
+      <div className="relative w-full text-center font-semibold text-sub700 text-base sm:text-lg py-2">{iData.resultGaitTypeTitle}</div>
 
       <div className="grid grid-cols-3 gap-4 mb-4">
         {infoHorizonCards.map((card, id) => (

@@ -180,7 +180,6 @@ export function GaitGraphItem({
 }
 
 export default function GaitSeqResult({ data }: GaitContainerProps) {
-  console.log(data);
 
   const graphGroups = useMemo(() => {
     return {
