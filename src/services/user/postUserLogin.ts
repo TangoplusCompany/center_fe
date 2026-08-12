@@ -15,44 +15,14 @@ export class UserLoginError extends Error {
   };
 
   constructor(errorResponse: IResultPageLoginErrorResponse) {
-    const message = errorResponse.message?.[0] || "로그인에 실패했습니다.";
+    // GS 인증: 휴대폰·PIN 오류와 계정 잠금 여부를 구분하지 않는 동일 문구를 사용한다.
+    const message = "휴대폰 번호 또는 PIN 번호가 올바르지 않습니다.";
     super(message);
     this.name = "UserLoginError";
     this.status = errorResponse.status;
     this.message = message;
     
-    if (!Array.isArray(errorResponse.data) && errorResponse.data?.remaining_attempts !== undefined) {
-      this.remainingAttempts = errorResponse.data.remaining_attempts;
-    }
-
-    // API 응답 상태코드별 한글 메시지 및 필드 에러 설정
-    switch (errorResponse.status) {
-      case 400:
-        // 필수 파라미터 없을 경우
-        this.userMessage = "필수 정보가 누락되었습니다. 다시 확인해주세요.";
-        break;
-      case 422:
-        // 전화번호 등 유효하지 않은 입력 형식
-        this.userMessage = "전화번호 형식이 올바르지 않습니다.";
-        this.shouldSetFieldError = {
-          field: "phone",
-          message: "전화번호 형식이 올바르지 않습니다.",
-        };
-        break;
-      case 401:
-        // 전화번호 또는 비밀번호 오류 (존재하지 않는 번호 / 또는 남은 시도 횟수 있음)
-        this.userMessage =
-          this.remainingAttempts !== undefined
-            ? `전화번호 또는 비밀번호가 일치하지 않습니다. (남은 시도 횟수: ${this.remainingAttempts}회)`
-            : "전화번호 또는 비밀번호가 일치하지 않습니다.";
-        break;
-      case 423:
-        // 로그인 5회 이상 실패로 계정 잠금
-        this.userMessage = "로그인 시도가 5번 이상 실패하여 계정이 잠겼습니다.";
-        break;
-      default:
-        this.userMessage = "로그인에 실패했습니다. 잠시 후 다시 시도해주세요.";
-    }
+    this.userMessage = message;
   }
 }
 
