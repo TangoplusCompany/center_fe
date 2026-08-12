@@ -21,8 +21,8 @@ export type MoireBodyPart =
 export type IMoireMultiPartData = Record<MoireBodyPart, number[]>;
 
 export default function MoireContainer ({ data }: IMoireContainerProps) {
-  const leftFileName = data.front[0].server_file_name_moire_json
-  const rightFileName = data.back[0].server_file_name_moire_json
+  const leftFileName = data.front.server_file_name_moire_json
+  const rightFileName = data.back.server_file_name_moire_json
 
   const { data: measureJson0, isLoading: jsonLoading0, isError: jsonError0 } = useMeasureMoireStaticJson(leftFileName);
   const { data: measureJson1, isLoading: jsonLoading1, isError: jsonError1 } = useMeasureMoireStaticJson(rightFileName);
@@ -35,8 +35,8 @@ export default function MoireContainer ({ data }: IMoireContainerProps) {
   }
 
 
-  const frontD = data.front[0];
-  const backD = data.back[0];
+  const frontD = data.front;
+  const backD = data.back;
   const graphs = [
     {
       title: "전면 어깨 등고선" as IMoireGraphTitle,
@@ -111,30 +111,6 @@ export default function MoireContainer ({ data }: IMoireContainerProps) {
         {imageDatas.map((imageD, key) => (
           <MoireImage key={key} imageData={imageD}/>
         ))}
-      </div>
-      
-      <div className="flex flex-col md:grid md:grid-cols-2 gap-2 ">
-        
-        {/* <div className="flex flex-col gap-2 border-2 border-sub200 rounded-xl p-4">
-          <div className="flex items-center gap-2 ">
-            <div className="w-3 h-3 rounded-sm bg-mainBlue-600" />
-            <div className="text-mainBlue-600 text-sm sm:text-base font-bold ">
-              전면 부위별 결과
-            </div>
-          </div>
-
-        </div>
-
-        <div className="flex flex-col gap-2 border-2 border-sub200 rounded-xl p-4">
-          <div className="flex items-center gap-2 ">
-            <div className="w-3 h-3 rounded-sm bg-mainBlue-600" />
-            <div className="text-mainBlue-600 text-sm sm:text-base font-bold ">
-              후면 부위별 결과
-            </div>
-          </div>
-
-        </div> */}
-
       </div>
 
       <div className="flex items-center gap-2 mt-4 ml-2">

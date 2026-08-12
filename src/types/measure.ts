@@ -655,8 +655,8 @@ export interface IGaitMeasureJson {
 
 // 🪷🪷🪷🪷 Moire 🪷🪷🪷🪷
 export interface IMoireDetail {
-  front : IMeasureMoireSeq[]
-  back : IMeasureMoireSeq[]
+  front : IMeasureMoireSeq
+  back : IMeasureMoireSeq
 }
 export interface IMeasureMoireSeq {
   sn : number;
