@@ -41,39 +41,48 @@ export default function AnnouncementList({ Announcements, setAnnouncementSn }: I
             </TableRow>
           </TableHeader>
           <TableBody>
-            {Announcements.map((announcement) => (
-              <TableRow
-                key={announcement.sn}
-                onClick={() => setAnnouncementSn(announcement.sn)}
-                className="cursor-pointer hover:bg-gray-50/50"
-              >
-                {/* 유형 */}
-                <TableCell className="text-center font-medium whitespace-nowrap py-5 align-middle">
-                  <span className={`text-xs md:text-sm px-2.5 py-1 rounded-md font-semibold ${AnnouncementCategoryCss[announcement.category] || "bg-gray-100 text-gray-600"}`}>
-                    {AnnouncementCategoryRecord[announcement.category] || announcement.category}
-                  </span>
-                </TableCell>
-                
-                {/* 제목 및 본문 미리보기 */}
-                <TableCell className="text-left py-5 px-4 max-w-[400px]">
-                  {/* 읽음 여부에 따라 제목 색상 조절 (읽음: text-gray-400, 안읽음: text-gray-900) */}
-                  <div className={`text-base md:text-lg font-bold truncate ${announcement.is_read ? "text-gray-400 font-normal" : "text-gray-900"}`}>
-                    {announcement.title}
-                  </div>
-                  {/* 본문 미리보기 */}
-                  <div className="text-xs md:text-sm text-gray-400 truncate mt-1">
-                    {announcement.content_preview}
-                  </div>
-                </TableCell>
-
-                
-                
-                {/* 등록날짜 */}
-                <TableCell className="text-center whitespace-nowrap text-xs md:text-sm py-5 text-gray-400 align-middle">
-                  {announcement.published_at ? announcement.published_at.slice(0, 10).replaceAll("-", ".") : "-"}
+            
+            {Announcements.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={5} className="text-center py-10 text-sub500 text-sm">
+                  등록된 공지사항이 없습니다.
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              Announcements.map((announcement) => (
+                <TableRow
+                  key={announcement.sn}
+                  onClick={() => setAnnouncementSn(announcement.sn)}
+                  className="cursor-pointer hover:bg-gray-50/50"
+                >
+                  {/* 유형 */}
+                  <TableCell className="text-center font-medium whitespace-nowrap py-5 align-middle">
+                    <span className={`text-xs md:text-sm px-2.5 py-1 rounded-md font-semibold ${AnnouncementCategoryCss[announcement.category] || "bg-gray-100 text-gray-600"}`}>
+                      {AnnouncementCategoryRecord[announcement.category] || announcement.category}
+                    </span>
+                  </TableCell>
+                  
+                  {/* 제목 및 본문 미리보기 */}
+                  <TableCell className="text-left py-5 px-4 max-w-[400px]">
+                    {/* 읽음 여부에 따라 제목 색상 조절 (읽음: text-gray-400, 안읽음: text-gray-900) */}
+                    <div className={`text-base md:text-lg font-bold truncate ${announcement.is_read ? "text-gray-400 font-normal" : "text-gray-900"}`}>
+                      {announcement.title}
+                    </div>
+                    {/* 본문 미리보기 */}
+                    <div className="text-xs md:text-sm text-gray-400 truncate mt-1">
+                      {announcement.content_preview}
+                    </div>
+                  </TableCell>
+
+                  
+                  
+                  {/* 등록날짜 */}
+                  <TableCell className="text-center whitespace-nowrap text-xs md:text-sm py-5 text-gray-400 align-middle">
+                    {announcement.published_at ? announcement.published_at.slice(0, 10).replaceAll("-", ".") : "-"}
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>

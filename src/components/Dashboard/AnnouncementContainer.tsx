@@ -32,7 +32,14 @@ export default function DashboardannouncementContainer({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {recentAnnouncements.map((announcement) => (
+          {recentAnnouncements.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={5} className="text-center py-10 text-sub500 text-sm">
+                등록된 공지사항이 없습니다.
+              </TableCell>
+            </TableRow>
+          ) : (
+            recentAnnouncements.map((announcement) => (
             <TableRow
               key={announcement.sn}
               onClick={() => onSelectNotice(announcement.sn)} // 👈 2. 행 전체 클릭 시
@@ -72,7 +79,8 @@ export default function DashboardannouncementContainer({
                 </button>
               </TableCell>
             </TableRow>
-          ))}
+          ))
+          )}
         </TableBody>
       </Table>
     </div>
