@@ -46,10 +46,10 @@ const drawMap: Record<
  */
 export function useStaticLandmark(
   imageUrl: string,
-  measureJson: { pose_landmark: IPoseLandmark[] },
-  step: "first" | "second" | "third" | "fourth" | "fifth" | "sixth",
   cameraOrientation: 0 | 1,
-  showLine: boolean = true, // 기본값 true
+  showLine: boolean = true, 
+  step?: "first" | "second" | "third" | "fourth" | "fifth" | "sixth",
+  measureJson ?: { pose_landmark: IPoseLandmark[] },
 ): {
   resultUrl: string | null;
   loading: boolean;
@@ -88,7 +88,7 @@ export function useStaticLandmark(
         ctx.restore(); 
 
         // showLine이 true일 때만 랜드마크 그리기
-        if (showLine) {
+        if (showLine && measureJson&& step) {
           ctx.save();
 
           // 미러

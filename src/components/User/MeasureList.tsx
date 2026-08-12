@@ -34,9 +34,13 @@ export const CenterUserMeasureList = ({
     const hasBasic = measureItem.has_basic === 1;
     const hasRom = measureItem.has_rom === 1;
     const hasBia = measureItem.has_bia === 1;
+    const hasGait = measureItem.has_gait === 1;
+    const hasMoire = measureItem.has_moire === 1;
     if (hasBasic) labels.push("기본 검사");
     if (hasRom) labels.push("ROM");
     if (hasBia) labels.push("체성분")
+    if (hasGait) labels.push("보행 분석")
+    if (hasMoire) labels.push("모아레")
     return labels.length > 0 ? labels.join("/") : "";
   };
 
@@ -98,7 +102,6 @@ export const CenterUserMeasureList = ({
                   </div>
                 </TableCell>
                 <TableCell className="flex items-center justify-end gap-2 sm:gap-4 whitespace-nowrap mr-4">
-                  {/* TODO ROM도 비교가 가능해질 경우 여기 분기처리 변경 */}
                   {measure.has_basic === 1 && (
                     <button
                       type="button"

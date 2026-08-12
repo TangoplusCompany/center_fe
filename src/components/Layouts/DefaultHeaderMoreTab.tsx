@@ -3,7 +3,7 @@
 import { Menu, X } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useState } from "react";
-import NoticeContainer from "../notice/Container";
+import NoticeContainer from "../announcement/Container";
 
 
 

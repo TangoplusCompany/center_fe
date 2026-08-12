@@ -84,6 +84,8 @@ export const MeasureList = ({
     has_basic: 0 | 1,
     has_rom: 0 | 1,
     has_bia: 0 | 1,
+    has_gait: 0 | 1,
+    has_moire: 0 | 1,
   ) => {
     const encrypted = await actionMeasureEncrypt({
       measure_sn,
@@ -96,6 +98,10 @@ export const MeasureList = ({
       router.push(`/measure/rom?data=${encrypted}`);
     } else if (has_bia === 1) {
       router.push(`/measure/bia?data=${encrypted}`);
+    } else if (has_gait === 1) {
+      router.push(`/measure/gait?data=${encrypted}`);
+    } else if (has_moire === 1) {
+      router.push(`/measure/moire?data=${encrypted}`);
     }
   };
   const getMeasureTypeText = (measureItem: IMeasureList): string => {
@@ -103,9 +109,13 @@ export const MeasureList = ({
     const hasBasic = measureItem.has_basic === 1;
     const hasRom = measureItem.has_rom === 1;
     const hasBia = measureItem.has_bia === 1;
+    const hasGait = measureItem.has_gait === 1;
+    const hasMoire = measureItem.has_moire === 1;
     if (hasBasic) labels.push("기본 검사");
     if (hasRom) labels.push("ROM");
     if (hasBia) labels.push("체성분")
+    if (hasGait) labels.push("보행 분석")
+    if (hasMoire) labels.push("모아레")
 
     return labels.length > 0 ? labels.join("/") : "";
   };
@@ -135,6 +145,8 @@ export const MeasureList = ({
                 measurement.has_basic,
                 measurement.has_rom,
                 measurement.has_bia,
+                measurement.has_gait,
+                measurement.has_moire,
               )}
               className="cursor-pointer">
 
@@ -170,8 +182,10 @@ export const MeasureList = ({
                       measurement.mobile,
                       measurement.has_basic,
                       measurement.has_rom,
-                      measurement.has_bia,)
-                    }}
+                      measurement.has_bia,
+                      measurement.has_gait,
+                      measurement.has_moire,
+                    )}}
                   className="flex items-center gap-2 justify-end cursor-pointer"
                 >
                   <FileText className="w-4 h-4" />

@@ -51,8 +51,8 @@ const MeasureDetailQueryContainer = ({firstMeasureType}:MeasureDetailQueryProps)
   const [measureType, setMeasureType] = useState<measureType>(firstMeasureType);
   useEffect(() => {
     if (!measureData?.measurement_meta) return;
-    const { has_basic, has_rom, has_bia } = measureData.measurement_meta;
-    let initialType: "basic" | "rom" | "bia" | null = null;
+    const { has_basic, has_rom, has_bia, has_gait, has_moire } = measureData.measurement_meta;
+    let initialType: "basic" | "rom" | "bia" | "gait" | "moire" | null = null;
     
     if (has_basic === 1) {
       initialType = "basic"; // basic이 있으면 무조건 최우선
@@ -60,6 +60,10 @@ const MeasureDetailQueryContainer = ({firstMeasureType}:MeasureDetailQueryProps)
       initialType = "rom";   // basic이 없고 rom이 있으면 그 다음 우선
     } else if (has_bia === 1) {
       initialType = "bia";   // bia만 남은 경우
+    } else if (has_gait === 1) {
+      initialType = "gait";   // bia만 남은 경우
+    } else if (has_moire === 1) {
+      initialType = "moire";   // bia만 남은 경우
     }
 
     if (initialType && !measureType) {

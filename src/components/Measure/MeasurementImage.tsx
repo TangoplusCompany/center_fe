@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 
 interface MeasurementImageProps {
   imageUrl: string;
-  measureJson: { pose_landmark: IPoseLandmark[] };
+  measureJson?: { pose_landmark: IPoseLandmark[] };
   step: "first" | "second" | "third" | "fourth" | "fifth" | "sixth";
   cameraOrientation: 0 | 1;
   compareSlot?: 0 | 1;
@@ -26,7 +26,7 @@ export const MeasurementImage = ({
   const [showGrid, setShowGrid] = useState(true);
   const [showLine, setShowLine] = useState(true);
 
-  const { resultUrl, loading } = useStaticLandmark(imageUrl, measureJson, step, cameraOrientation, showLine);
+  const { resultUrl, loading } = useStaticLandmark(imageUrl, cameraOrientation, showLine, step,measureJson);
   useEffect(() => {
     if (resultUrl && onImageReady) {
       onImageReady(compareSlot ? compareSlot : (leftRight ? leftRight : 0), resultUrl);
@@ -55,7 +55,7 @@ export const MeasurementImage = ({
       <img
         src={resultUrl} 
         alt="측정 이미지" 
-        className="w-full rounded-2xl shadow-inner cursor-pointer" 
+        className="w-full rounded-2xl cursor-pointer" 
         onClick={() => setDialogOpen(true)}
       />
       {showGrid && (
