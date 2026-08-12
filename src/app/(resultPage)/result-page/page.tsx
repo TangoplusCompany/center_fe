@@ -39,7 +39,16 @@ export default function ResultPage() {
       setCurrentTab("latest"); // 기본값
     }
   }, [searchParams]);
+  const handleTabClick = (tabKey: viewType) => {
+    // 1. 탭을 누르면 무조건 comparePair 초기화
+    setComparePair([undefined, undefined]);
+    setCurrentTab(tabKey);
 
+    // 2. URL subTab 파라미터 업데이트
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set("subTab", tabKey);
+    router.push(`?${newParams.toString()}`);
+  };
   // persist 복원 완료 대기
   useEffect(() => {
     if (!hasHydrated) return;
@@ -111,6 +120,7 @@ export default function ResultPage() {
       <ResultPageTab 
         userName={decryptedData.user_name} 
         currentTab={currentTab} 
+        onTabClick={handleTabClick} // 전달
       />
       <UserDetail 
         userUUID={decryptedData.user_uuid} 
