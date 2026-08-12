@@ -313,7 +313,9 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
                 }}
               />
             )}
-            <SectionOverlay isFront={step === "first"} sectionData={moireSection ?? DUMMY_SECTION_DATA} />
+            {moireUrl && (
+              <SectionOverlay isFront={step === "first"} sectionData={moireSection ?? DUMMY_SECTION_DATA} />
+            )}
           </div>
         </div>
       </DialogContent>

@@ -3,7 +3,7 @@
 import DashboardCardWorst from "@/components/Measure/DashboardCardWorst";
 import DashboardCardBest from "@/components/Measure/DashboardCardBest";
 import MeasurePartHeatMap from "@/components/Measure/PartHeatmap";
-import { IUserDashBoard, MeasureHistory } from "@/types/measure";
+import { IUserDashBoard, IBasicHistoryUnit } from "@/types/measure";
 import { IDayData } from "@/types/IDayData";
 import { useGetUserDashboard } from "@/hooks/api/user/useGetUserDashboard";
 import { TWorstPart } from "@/types/dashboard";
@@ -99,7 +99,7 @@ const CenterUserNormalDashBoard = ({
 export default CenterUserNormalDashBoard;
 
 export function calculateExtremePart(
-  history: MeasureHistory[],
+  history: IBasicHistoryUnit[],
   mode: Mode
 ): TWorstPart {
   const maxCount = history.length;
@@ -162,13 +162,15 @@ export function calculateExtremePart(
 
 function formatDate(dateStr: string) {
   const date = new Date(dateStr);
-  return `${String(date.getMonth() + 1).padStart(2, "0")}/${String(
-    date.getDate()
-  ).padStart(2, "0")}`;
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}\n${month}.${day}`;
 }
 
 export function calculateIDayData(
-  history: MeasureHistory[]
+  history: IBasicHistoryUnit[]
 ): IDayData[] {
   return history.map((item) => {
     const riskValues = RISK_PART_KEYS.map((key) =>

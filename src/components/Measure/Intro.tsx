@@ -9,6 +9,8 @@ import KneeTrajectory from "./Mat/KneeTrajectoryContainer";
 import MeasureIntroUpper from "./IntroUpper";
 import MeasureIntroLower from "./IntroLower";
 import MeasureIntroPart from "./IntroPart";
+import MeasurePartHeatMap from "./PartHeatmap";
+import { calculateIDayData } from "../User/NormalDashBoard";
 
 const MeasureIntro = ({
   data,
@@ -165,6 +167,8 @@ const MeasureIntro = ({
   type PartKey = "neck" | "shoulder" | "elbow" | "hip" | "knee" | "ankle";
   type RiskLevelKey = `risk_level_${PartKey}`;
   type RangeLevelKey = `range_level_${PartKey}`;
+  const measureDate = calculateIDayData(data.basic_result?.result_history_data ? data.basic_result?.result_history_data.history_data : []);
+  
   return (
     <div className="flex flex-col gap-4">
       <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-4 items-stretch">
@@ -224,6 +228,9 @@ const MeasureIntro = ({
         </div>
 
       {footer}
+      <div className="w-full min-w-0 overflow-x-auto">
+        <MeasurePartHeatMap data={measureDate} />
+      </div>
     </div>
   );
 };
