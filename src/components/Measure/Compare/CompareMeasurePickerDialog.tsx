@@ -46,7 +46,6 @@ export const MeasurePickerDialog = ({
   );
 
   const page = useApiPagination ? (apiPagination?.page ?? 1) : localPage;
-  // API 페이지네이션 사용 시: API limit 사용, 로컬 페이지네이션 사용 시: 10개씩
   const itemsPerPage = useApiPagination ? (apiPagination?.limit ?? 2) : 10;
   const lastPage = useApiPagination
     ? (apiPagination?.last_page ?? 1)

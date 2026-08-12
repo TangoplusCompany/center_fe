@@ -28,7 +28,7 @@ const filledData = [...[...limitedData].reverse(), ...padding];
   };
 
   return (
-    <div className="w-full rounded-3xl border border-2 border-sub200 p-5 shadow-none">
+    <div className="w-full rounded-3xl border-2 border-sub200 p-5 shadow-none">
       <h2 className="text-xl font-bold mb-4">측정 한눈에 보기</h2>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -102,30 +102,7 @@ const filledData = [...[...limitedData].reverse(), ...padding];
           </div>
         </div>
 
-        {/* 두 번째: 내 근골격 유형 체크 (placeholder) */}
-        <div className="p-4 h-full flex flex-col gap-4 invisible">
-          <h3 className="text-lg font-semibold self-start">내 근골격 유형 체크</h3>
-          <div className="flex-1 flex flex-col items-center justify-center gap-4">
-            <div className="w-32 h-32 bg-gray-300 rounded-2xl flex items-center justify-center">
-              {/* TODO 여기에  근골격 유형 체크 이미지 받아와서 추가*/}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/default_body_type.svg"
-                alt="default_body_type"
-                className="lg:!w-full lg:!h-full m-2"
-              />
-            </div>
-            
-            <div className="flex flex-col items-center justify-center w-full h-32 bg-gray-100 rounded-xl p-4">
-              <div className="text-sm text-gray-600 text-center space-y-1">
-                <p>측정 기록이 부족합니다.</p>
-                <p>유형에 대한 결과는 최소 5회 이상이 필요합니다.</p>
-                <p>꾸준히 내 건강을 관리하여 나의 체형 유형을 파악해보세요.</p>
-              </div>
-            </div>
-          </div>
-          
-        </div>
+        
       </div>
     </div>
   );

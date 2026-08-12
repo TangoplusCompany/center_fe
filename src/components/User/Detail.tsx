@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import CenterUserInformation from "@/components/User/Information";
 import { ComparePair, CompareSlot } from "@/types/compare";
 import { useMeasureListForDetail } from "@/hooks/api/user/useMeasureListForDetail";
-import { useMeasureListForCompare } from "@/hooks/api/user/useMeasureListForCompare";
 import { MeasurePickerDialog } from "../Measure/Compare/CompareMeasurePickerDialog";
 import CenterUserMeasureListContainer from "./MeasureListContainer";
 import CompareContainer from "../Measure/Compare/CompareContainer";
@@ -14,6 +13,7 @@ import AIUserContainer from "./ai/UserContainer";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import { useGetUserMeasureList } from "@/hooks/api/user/useGetUserMeasureList";
 import { IUserMeasureList } from "@/types/user";
+import { useGetUserMeasureBasicList } from "@/hooks/api/user/useGetUserMeasureBasicList";
 
 
 export type viewType = "latest" | "dashboard" | "history" | "userInfo";
@@ -61,11 +61,10 @@ const UserDetail = ({
   const {
     measureList: compareMeasureListItems,
     pagination: comparePagination,
-  } = useMeasureListForCompare({
+  } = useGetUserMeasureBasicList({
     user_sn: userSn,
     isMyPage,
   });
-
   const {
     data: userMeasureList,
     isLoading: isListLoading
