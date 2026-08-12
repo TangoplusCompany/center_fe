@@ -16,6 +16,7 @@ export interface IMeasureBasic {
   static_mat_data: IStaticMat;
   dynamic_mat_data: IDynamicMat;
   detail_data: IPartDetailData;
+  result_history_data: IBasicHistory;
 }
 
 
@@ -225,8 +226,11 @@ export interface MeasureFootCOP extends IMatStatic, IMatOhs {
   mat_left_knee_trajectory_image_name: string;
   mat_right_knee_trajectory_image_name: string;
 }
-
-export interface MeasureHistory {
+export interface IBasicHistory {
+  count: number;
+  history_data: IBasicHistoryUnit[]
+}
+export interface IBasicHistoryUnit {
   measure_date: string;
   risk_level_neck: 1,
   range_level_neck: string;
@@ -265,7 +269,7 @@ export interface IUserDashBoard {
   upper_and_lower_measure_history: UpperAndLowerMeasureHistory[];
   foot_pressure_history: FootPressureHistory[];
   total_measure_count: number;
-  measure_history: MeasureHistory[];
+  measure_history: IBasicHistoryUnit[];
 }
 
 export interface IUserMeasureFileData {
