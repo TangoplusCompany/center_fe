@@ -2,7 +2,7 @@
 
 import { IGaitMeasureJson } from "@/types/measure";
 import React from "react";
-import { drawTrailSegment, mid2DPoint } from "../Compare/utils/compareUtils";
+import {  mid2DPoint } from "../Compare/utils/compareUtils";
 import { drawSkeleton } from "../Compare/utils/DrawSkeleton";
 import { useVideoPlayer } from "../Compare/hooks/useVideoPlayer";
 import { setupHiDPICanvas } from "../DetailDynamic";
@@ -106,13 +106,6 @@ export default function VideoPlayer({
     const pMid = toScreen(mid.sx, mid.sy);
     const p25 = toScreen(lm[25].x, lm[25].y);
     const p26 = toScreen(lm[26].x, lm[26].y);
-
-    const prev = trailPrevRef.current;
-    drawTrailSegment(ctxT, prev.p15, p15);
-    drawTrailSegment(ctxT, prev.p16, p16);
-    drawTrailSegment(ctxT, prev.pMid, pMid);
-    drawTrailSegment(ctxT, prev.p25, p25);
-    drawTrailSegment(ctxT, prev.p26, p26);
 
     trailPrevRef.current = { p15, p16, pMid, p25, p26 };
 

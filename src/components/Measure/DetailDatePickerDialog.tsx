@@ -57,6 +57,20 @@ export const MeasureDetailDatePickerDialog = ({
   useEffect(() => {
     if (open && !useApiPagination) setLocalPage(1);
   }, [open, useApiPagination]);
+  const getMeasureTypeText = (measureItem: IUserMeasureListItem): string => {
+    const labels: string[] = [];
+    const hasBasic = measureItem.has_basic === 1;
+    const hasRom = measureItem.has_rom === 1;
+    const hasBia = measureItem.has_bia === 1;
+    const hasGait = measureItem.has_gait === 1;
+    const hasMoire = measureItem.has_moire === 1;
+    if (hasBasic) labels.push("기본 검사");
+    if (hasRom) labels.push("ROM");
+    if (hasBia) labels.push("체성분")
+    if (hasGait) labels.push("보행 분석")
+    if (hasMoire) labels.push("모아레")
+    return labels.length > 0 ? labels.join("/") : "";
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -80,15 +94,20 @@ export const MeasureDetailDatePickerDialog = ({
                     "w-full text-left rounded-xl border px-3 py-2 hover:bg-gray-50 dark:hover:bg-white/10 transition-colors border-border text-foreground",
                     selectedMeasure != null &&
                       selectedMeasure === it.measure_sn &&
-                      "border-mainBlue-600 bg-sub100/50 dark:bg-mainBlue-100  dark:bg-mainBlue-900"
+                      "border-mainBlue-600 bg-sub100/50 dark:bg-mainBlue-100"
                   )}
                   onClick={() => {
                     onSelect(it.measure_sn);
                     onOpenChange(false);
                   }}
                 >
-                  <div className="text-sm font-medium">
-                    {formatDate(it.measure_date)}
+                  <div className="flex justify-between w-full">
+                    <div className="text-sm font-medium">
+                      {formatDate(it.measure_date)}
+                    </div>
+                    <div className="text-[10px] px-1.5 font-medium whitespace-nowrap text-mainBlue-600 bg-mainBlue-100  border border-mainBlue-600 rounded-full ">
+                      {getMeasureTypeText(it)}
+                    </div>
                   </div>
                   <div className="text-xs text-gray-500 dark:text-gray-400">
                     장치이름: {it.device_name}

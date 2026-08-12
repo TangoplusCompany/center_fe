@@ -1,4 +1,4 @@
-import { IMeasureMoireDetail } from "@/types/measure";
+import { IMeasureMoireSeq } from "@/types/measure";
 import FootStatic from "../Mat/FootStatic";
 import { useMeasureMoireMatJson } from "@/hooks/api/measure/moire/useMeasureMoireMatJson";
 import { useStaticLandmark } from "@/hooks/landmark/useStaticLandmark";
@@ -8,6 +8,7 @@ import { useState } from "react";
 import { IMoireSectionData, useDetectMoireSections } from "@/hooks/api/measure/moire/useDetectMoireSections";
 
 export const DUMMY_SECTION_DATA: IMoireSectionData = {
+  lineXPercent: 50,
   lineYPercents: [16, 28, 40, 55], 
   labels: ["횡단면1(어깨,흉부)", "횡단면2(허리)", "횡단면3(골반)"],
 };
@@ -18,7 +19,10 @@ export function SectionOverlay({isFront, sectionData = DUMMY_SECTION_DATA }: {is
   return (
     <div className="absolute inset-0 pointer-events-none select-none">
       {/* 1. 중앙 수직 레드 라인 */}
-      <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-[2px] bg-danger z-10" />
+      <div
+        className="absolute top-0 bottom-0 w-[2px] bg-danger z-10 -translate-x-1/2"
+        style={{ left: `${sectionData.lineXPercent}%` }}
+      />
 
       {/* 2. 상단 좌측/우측 뱃지 */}
       <div className="absolute top-8 left-1/2 -translate-x-1/2 flex w-full max-w-[300px] justify-between px-2 z-10">
@@ -70,7 +74,7 @@ export function SectionOverlay({isFront, sectionData = DUMMY_SECTION_DATA }: {is
 
 export interface IMoireImageProps {
   isFront: boolean;
-  data: IMeasureMoireDetail
+  data: IMeasureMoireSeq
 }
 
 export default function MoireImage({ imageData }: { imageData: IMoireImageProps }) {
@@ -112,15 +116,15 @@ export default function MoireImage({ imageData }: { imageData: IMoireImageProps 
   }
 
   // 💡 2. 로딩이 완벽히 종료된 후 '진짜 에러'일 때만 에러 문구 표시
-  if (jsonError || !matJson) {
-    return <div className="text-red-500">오류가 발생했습니다. Moire 데이터 데이터 누락</div>;
-  }
+  
 
   // 💡 3. 이미지 생성 실패 시 처리 (!sectionData 제거하여 무한 로딩 방지)
   if (!rgbResultUrl || !moireResultUrl) {
     return loadingPlaceholder;
   }
-
+  if (jsonError || !matJson) {
+    return <div className="text-red-500">오류가 발생했습니다. Moire 데이터 데이터 누락</div>;
+  }
   const pressures = {
     leftTopPressure: matJson.left_top_weight_pct,
     leftBottomPressure: matJson.left_bottom_weight_pct,

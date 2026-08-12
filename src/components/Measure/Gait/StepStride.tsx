@@ -23,7 +23,7 @@ export default function GaitStepStride({ data }: { data: IGaitStepStrideProps })
                 : "bg-sub100 text-sub600 hover:bg-sub200"
             }`}
           >
-            걸음 분석 (Step) ({stepData.length}개)
+            걸음 분석 (Step) 
           </button>
           <button
             onClick={() => setActiveTab("stride")}
@@ -33,7 +33,7 @@ export default function GaitStepStride({ data }: { data: IGaitStepStrideProps })
                 : "bg-sub100 text-sub600 hover:bg-sub200"
             }`}
           >
-            보폭 분석 (Stride) ({strideData.length}개)
+            보폭 분석 (Stride)
           </button>
         </div>
       </div>

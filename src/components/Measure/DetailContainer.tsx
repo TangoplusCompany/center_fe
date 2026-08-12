@@ -14,7 +14,7 @@ import { IUserMeasureListItem } from "@/types/user";
 import { DetailPagination } from "@/hooks/api/user/useMeasureListForDetail";
 import { formatDate } from "@/utils/formatDate";
 import { MeasureDetailDatePickerDialog } from "./DetailDatePickerDialog";
-import { IMeasurementMeta, IMeasureMoireDetail } from "@/types/measure";
+import { IMeasurementMeta } from "@/types/measure";
 import { Skeleton } from "../ui/skeleton";
 import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
 import GaitContainer from "./Gait/Container";
@@ -44,28 +44,36 @@ interface PrintSelectProps {
   hasBasic: boolean;
   hasRom: boolean;
   hasBia: boolean;
+  hasGait: boolean;
+  hasMoire: boolean;
   handlePrint: (selectedValues: string) => void;
 }
 
-export function PrintSelect({ hasBasic, hasRom, hasBia, handlePrint }: PrintSelectProps) {
+export function PrintSelect({ hasBasic, hasRom, hasBia, hasGait, hasMoire, handlePrint }: PrintSelectProps) {
   const [basicChecked, setBasicChecked] = useState(false);
   const [romChecked, setRomChecked] = useState(false);
   const [biaChecked, setBiaChecked] = useState(false);
+  const [gaitChecked, setGaitChecked] = useState(false);
+  const [moireChecked, setMoireChecked] = useState(false);
+
 
   // mType 변경 시 노출될 체크박스만 기본값으로 활성화
   useEffect(() => {
     setBasicChecked(hasBasic);
     setRomChecked(hasRom);
     setBiaChecked(hasBia);
-  }, [hasBasic, hasRom, hasBia]);
+    setGaitChecked(hasGait);
+    setMoireChecked(hasMoire);
+  }, [hasBasic, hasRom, hasBia, hasGait, hasMoire]);
 
   const onClickPrint = () => {
     // 자릿수 규칙에 맞게 문자열 조합 (Basic, Rom, Bia 순서)
     const char1 = basicChecked ? "1" : "0";
     const char2 = romChecked ? "1" : "0";
     const char3 = biaChecked ? "1" : "0";
-
-    handlePrint(`${char1}${char2}${char3}`);
+    const char4 = gaitChecked ? "1" : "0";
+    const char5 = moireChecked ? "1" : "0";
+    handlePrint(`${char1}${char2}${char3}${char4}${char5}`);
   };
 
   return (
@@ -134,13 +142,35 @@ export function PrintSelect({ hasBasic, hasRom, hasBia, handlePrint }: PrintSele
                 <span>체성분 검사</span>
               </label>
             )}
+            {hasGait && (
+              <label className="flex items-center gap-2 p-2 hover:bg-accent rounded-md cursor-pointer text-sm">
+                <input
+                  type="checkbox"
+                  checked={gaitChecked}
+                  onChange={(e) => setGaitChecked(e.target.checked)}
+                  className="rounded border-toggle-accent accent-toggle-accent"
+                />
+                <span>보행 분석 검사</span>
+              </label>
+            )}
+            {hasMoire && (
+              <label className="flex items-center gap-2 p-2 hover:bg-accent rounded-md cursor-pointer text-sm">
+                <input
+                  type="checkbox"
+                  checked={moireChecked}
+                  onChange={(e) => setMoireChecked(e.target.checked)}
+                  className="rounded border-toggle-accent accent-toggle-accent"
+                />
+                <span>모아레 검사</span>
+              </label>
+            )}
 
             <hr className="border-muted my-1" />
 
             <Popover.Close asChild>
               <button
                 onClick={onClickPrint}
-                disabled={!basicChecked && !romChecked && !biaChecked}
+                disabled={!basicChecked && !romChecked && !biaChecked && !gaitChecked && !moireChecked}
                 className="w-full bg-sub150 hover:bg-sub200 text-sub700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors disabled:opacity-50"
               >
                 선택 항목 인쇄
@@ -381,7 +411,7 @@ const MeasureDetailContainer = ({
               <span>결과전송</span>
             </Button>
             
-            <PrintSelect handlePrint={handlePrint} hasBasic={hasBasic} hasRom={hasRom} hasBia={hasBia} />
+            <PrintSelect handlePrint={handlePrint} hasBasic={hasBasic} hasRom={hasRom} hasBia={hasBia} hasGait={hasGait} hasMoire={hasMoire} />
           </div> 
         </div>
         )}
@@ -418,8 +448,8 @@ const MeasureDetailContainer = ({
       {(measureType === "gait" && hasGait && measureData.gait_result) && ( // && hasGait && measureData.gait_result
         <GaitContainer data={measureData.gait_result}/>
       )}
-      {(measureType === "moire" && hasMoire && measureData.moire_result?.length == 2) && ( // && hasMoire && measureData.moire_result
-        <MoireContainer data={[measureData.moire_result[0], measureData.moire_result[1]]}/>
+      {(measureType === "moire" && hasMoire && measureData.moire_result) && ( // && hasMoire && measureData.moire_result
+        <MoireContainer data={measureData.moire_result}/>
       )}
     </div>
   )
@@ -529,158 +559,158 @@ export default MeasureDetailContainer;
 //   ersultStrideLengthDescription: "보구 간격이 규칙적으로 측정되었습니다. 안정적인 걸음걸이입니다.",
 // };
 
-export const mockMeasureMoireDetailLeft: IMeasureMoireDetail = {
-  sn: 1,
-  local_sn: 1,
-  device_sn: 101,
-  measure_sn: 1001,
-  measure_server_sn: 5001,
-  user_uuid: "usr_9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
-  user_sn: 42,
-  user_name: "홍길동",
-  measure_date: "2026-08-10 10:00:00",
-  measure_seq: 1,
-  measure_type: 1,
-  measure_photo_file_name: "measure_photo_01.jpg",
-  measure_overlay_width: 1080,
-  measure_overlay_height: 1920,
-  measure_overlay_scale_factor_x: 1.0,
-  measure_overlay_scale_factor_y: 1.0,
-  server_file_name: "8-2834-1-1786070058.jpg",
-  server_file_name_moire: "8-2834-1-1786070754.png",
-  server_file_name_moire_json: "8-2834-1-1786077777.json",
-  server_file_name_mat: "8-2834-1-1786078423.png",
-  server_file_name_mat_json: "8-2834-1-1786084327.json",
+// export const mockMeasureMoireDetailLeft: IMeasureMoireDetail = {
+//   sn: 1,
+//   local_sn: 1,
+//   device_sn: 101,
+//   measure_sn: 1001,
+//   measure_server_sn: 5001,
+//   user_uuid: "usr_9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+//   user_sn: 42,
+//   user_name: "홍길동",
+//   measure_date: "2026-08-10 10:00:00",
+//   measure_seq: 1,
+//   measure_type: 1,
+//   measure_photo_file_name: "measure_photo_01.jpg",
+//   measure_overlay_width: 1080,
+//   measure_overlay_height: 1920,
+//   measure_overlay_scale_factor_x: 1.0,
+//   measure_overlay_scale_factor_y: 1.0,
+//   server_file_name: "8-2834-1-1786070058.jpg",
+//   server_file_name_moire: "8-2834-1-1786070754.png",
+//   server_file_name_moire_json: "8-2834-1-1786077777.json",
+//   server_file_name_mat: "8-2834-1-1786078423.png",
+//   server_file_name_mat_json: "8-2834-1-1786084327.json",
   
-  // 어깨 (Shoulder)
-  shoulder_left_peak_depth: 12.5,
-  shoulder_left_peak_index: 19,
-  shoulder_left_peak_x: 320.5,
-  shoulder_left_peak_y: 450.0,
-  shoulder_left_sx: 322.0,
-  shoulder_left_sy: 451.5,
-  shoulder_right_peak_depth: 14.2,
-  shoulder_right_peak_index: 91,
-  shoulder_right_peak_x: 760.5,
-  shoulder_right_peak_y: 455.0,
-  shoulder_right_sx: 758.0,
-  shoulder_right_sy: 456.0,
-  shoulder_peak_diff: 1.7,
-  shoulder_left_depth: 1200.0,
-  shoulder_right_depth: 1205.0,
-  shoulder_landmark_diff: 5.0,
+//   // 어깨 (Shoulder)
+//   shoulder_left_peak_depth: 12.5,
+//   shoulder_left_peak_index: 19,
+//   shoulder_left_peak_x: 320.5,
+//   shoulder_left_peak_y: 450.0,
+//   shoulder_left_sx: 322.0,
+//   shoulder_left_sy: 451.5,
+//   shoulder_right_peak_depth: 14.2,
+//   shoulder_right_peak_index: 91,
+//   shoulder_right_peak_x: 760.5,
+//   shoulder_right_peak_y: 455.0,
+//   shoulder_right_sx: 758.0,
+//   shoulder_right_sy: 456.0,
+//   shoulder_peak_diff: 1.7,
+//   shoulder_left_depth: 1200.0,
+//   shoulder_right_depth: 1205.0,
+//   shoulder_landmark_diff: 5.0,
 
-  // 허리 (Waist)
-  waist_left_peak_depth: 8.3,
-  waist_left_peak_index: 46,
-  waist_left_peak_x: 380.0,
-  waist_left_peak_y: 850.0,
-  waist_left_sx: 382.0,
-  waist_left_sy: 851.0,
-  waist_right_peak_depth: 9.1,
-  waist_right_peak_index: 64,
-  waist_right_peak_x: 700.0,
-  waist_right_peak_y: 852.0,
-  waist_right_sx: 698.0,
-  waist_right_sy: 853.0,
-  waist_peak_diff: 0.8,
-  waist_left_depth: 1180.0,
-  waist_right_depth: 1182.0,
-  waist_landmark_diff: 2.0,
+//   // 허리 (Waist)
+//   waist_left_peak_depth: 8.3,
+//   waist_left_peak_index: 46,
+//   waist_left_peak_x: 380.0,
+//   waist_left_peak_y: 850.0,
+//   waist_left_sx: 382.0,
+//   waist_left_sy: 851.0,
+//   waist_right_peak_depth: 9.1,
+//   waist_right_peak_index: 64,
+//   waist_right_peak_x: 700.0,
+//   waist_right_peak_y: 852.0,
+//   waist_right_sx: 698.0,
+//   waist_right_sy: 853.0,
+//   waist_peak_diff: 0.8,
+//   waist_left_depth: 1180.0,
+//   waist_right_depth: 1182.0,
+//   waist_landmark_diff: 2.0,
 
-  // 골반 (Hip)
-  hip_left_peak_depth: 15.0,
-  hip_left_peak_index: 48,
-  hip_left_peak_x: 350.0,
-  hip_left_peak_y: 1150.0,
-  hip_left_sx: 351.5,
-  hip_left_sy: 1151.0,
-  hip_right_peak_depth: 16.5,
-  hip_right_peak_index: 53,
-  hip_right_peak_x: 730.0,
-  hip_right_peak_y: 1155.0,
-  hip_right_sx: 728.5,
-  hip_right_sy: 1156.0,
-  hip_peak_diff: 1.5,
-  hip_left_depth: 1190.0,
-  hip_right_depth: 1195.0,
-  hip_landmark_diff: 5.0
-};
+//   // 골반 (Hip)
+//   hip_left_peak_depth: 15.0,
+//   hip_left_peak_index: 48,
+//   hip_left_peak_x: 350.0,
+//   hip_left_peak_y: 1150.0,
+//   hip_left_sx: 351.5,
+//   hip_left_sy: 1151.0,
+//   hip_right_peak_depth: 16.5,
+//   hip_right_peak_index: 53,
+//   hip_right_peak_x: 730.0,
+//   hip_right_peak_y: 1155.0,
+//   hip_right_sx: 728.5,
+//   hip_right_sy: 1156.0,
+//   hip_peak_diff: 1.5,
+//   hip_left_depth: 1190.0,
+//   hip_right_depth: 1195.0,
+//   hip_landmark_diff: 5.0
+// };
 
-export const mockMeasureMoireDetailRight: IMeasureMoireDetail = {
-  sn: 1,
-  local_sn: 1,
-  device_sn: 101,
-  measure_sn: 1001,
-  measure_server_sn: 5001,
-  user_uuid: "usr_9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
-  user_sn: 42,
-  user_name: "홍길동",
-  measure_date: "2026-08-10 10:00:00",
-  measure_seq: 1,
-  measure_type: 1,
-  measure_photo_file_name: "measure_photo_01.jpg",
-  measure_overlay_width: 1080,
-  measure_overlay_height: 1920,
-  measure_overlay_scale_factor_x: 1.0,
-  measure_overlay_scale_factor_y: 1.0,
-  server_file_name: "8-2834-2-1786070058.jpg",
-  server_file_name_moire: "8-2834-2-1786070755.png",
-  server_file_name_moire_json: "8-2834-2-1786077777.json",
-  server_file_name_mat: "8-2834-2-1786078423.png",
-  server_file_name_mat_json: "8-2834-2-1786084327.json",
+// export const mockMeasureMoireDetailRight: IMeasureMoireDetail = {
+//   sn: 1,
+//   local_sn: 1,
+//   device_sn: 101,
+//   measure_sn: 1001,
+//   measure_server_sn: 5001,
+//   user_uuid: "usr_9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+//   user_sn: 42,
+//   user_name: "홍길동",
+//   measure_date: "2026-08-10 10:00:00",
+//   measure_seq: 1,
+//   measure_type: 1,
+//   measure_photo_file_name: "measure_photo_01.jpg",
+//   measure_overlay_width: 1080,
+//   measure_overlay_height: 1920,
+//   measure_overlay_scale_factor_x: 1.0,
+//   measure_overlay_scale_factor_y: 1.0,
+//   server_file_name: "8-2834-2-1786070058.jpg",
+//   server_file_name_moire: "8-2834-2-1786070755.png",
+//   server_file_name_moire_json: "8-2834-2-1786077777.json",
+//   server_file_name_mat: "8-2834-2-1786078423.png",
+//   server_file_name_mat_json: "8-2834-2-1786084327.json",
   
-  // 어깨 (Shoulder)
-  shoulder_left_peak_depth: 13.5,
-  shoulder_left_peak_index: 12,
-  shoulder_left_peak_x: 220.5,
-  shoulder_left_peak_y: 350.0,
-  shoulder_left_sx: 222.0,
-  shoulder_left_sy: 341.5,
-  shoulder_right_peak_depth: 16.2,
-  shoulder_right_peak_index: 53,
-  shoulder_right_peak_x: 560.5,
-  shoulder_right_peak_y: 355.0,
-  shoulder_right_sx: 238.0,
-  shoulder_right_sy: 146.0,
-  shoulder_peak_diff: 3.7,
-  shoulder_left_depth: 330.0,
-  shoulder_right_depth: 635.0,
-  shoulder_landmark_diff: 2.0,
+//   // 어깨 (Shoulder)
+//   shoulder_left_peak_depth: 13.5,
+//   shoulder_left_peak_index: 12,
+//   shoulder_left_peak_x: 220.5,
+//   shoulder_left_peak_y: 350.0,
+//   shoulder_left_sx: 222.0,
+//   shoulder_left_sy: 341.5,
+//   shoulder_right_peak_depth: 16.2,
+//   shoulder_right_peak_index: 53,
+//   shoulder_right_peak_x: 560.5,
+//   shoulder_right_peak_y: 355.0,
+//   shoulder_right_sx: 238.0,
+//   shoulder_right_sy: 146.0,
+//   shoulder_peak_diff: 3.7,
+//   shoulder_left_depth: 330.0,
+//   shoulder_right_depth: 635.0,
+//   shoulder_landmark_diff: 2.0,
 
-  // 허리 (Waist)
-  waist_left_peak_depth: 6.3,
-  waist_left_peak_index: 9,
-  waist_left_peak_x: 250.0,
-  waist_left_peak_y: 450.0,
-  waist_left_sx: 292.0,
-  waist_left_sy: 381.0,
-  waist_right_peak_depth: 8.1,
-  waist_right_peak_index: 50,
-  waist_right_peak_x: 350.0,
-  waist_right_peak_y: 982.0,
-  waist_right_sx: 368.0,
-  waist_right_sy: 183.0,
-  waist_peak_diff: 1.8,
-  waist_left_depth: 380.0,
-  waist_right_depth: 218.0,
-  waist_landmark_diff: 52.0,
+//   // 허리 (Waist)
+//   waist_left_peak_depth: 6.3,
+//   waist_left_peak_index: 9,
+//   waist_left_peak_x: 250.0,
+//   waist_left_peak_y: 450.0,
+//   waist_left_sx: 292.0,
+//   waist_left_sy: 381.0,
+//   waist_right_peak_depth: 8.1,
+//   waist_right_peak_index: 50,
+//   waist_right_peak_x: 350.0,
+//   waist_right_peak_y: 982.0,
+//   waist_right_sx: 368.0,
+//   waist_right_sy: 183.0,
+//   waist_peak_diff: 1.8,
+//   waist_left_depth: 380.0,
+//   waist_right_depth: 218.0,
+//   waist_landmark_diff: 52.0,
 
-  // 골반 (Hip)
-  hip_left_peak_depth: 13.0,
-  hip_left_peak_index: 42,
-  hip_left_peak_x: 560.0,
-  hip_left_peak_y: 120.0,
-  hip_left_sx: 493.5,
-  hip_left_sy: 1251.0,
-  hip_right_peak_depth: 13.5,
-  hip_right_peak_index: 82,
-  hip_right_peak_x: 569.0,
-  hip_right_peak_y: 1155.0,
-  hip_right_sx: 728.5,
-  hip_right_sy: 1156.0,
-  hip_peak_diff: 1.5,
-  hip_left_depth: 1190.0,
-  hip_right_depth: 1195.0,
-  hip_landmark_diff: 5.0
-};
+//   // 골반 (Hip)
+//   hip_left_peak_depth: 13.0,
+//   hip_left_peak_index: 42,
+//   hip_left_peak_x: 560.0,
+//   hip_left_peak_y: 120.0,
+//   hip_left_sx: 493.5,
+//   hip_left_sy: 1251.0,
+//   hip_right_peak_depth: 13.5,
+//   hip_right_peak_index: 82,
+//   hip_right_peak_x: 569.0,
+//   hip_right_peak_y: 1155.0,
+//   hip_right_sx: 728.5,
+//   hip_right_sy: 1156.0,
+//   hip_peak_diff: 1.5,
+//   hip_left_depth: 1190.0,
+//   hip_right_depth: 1195.0,
+//   hip_landmark_diff: 5.0
+// };

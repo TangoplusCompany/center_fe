@@ -2,6 +2,7 @@ import { DUMMY_SECTION_DATA } from "@/components/Measure/Moire/Image";
 import { useState, useEffect } from "react";
 
 export interface IMoireSectionData {
+  lineXPercent: number;
   lineYPercents: number[];
   labels: string[];
 }
@@ -18,13 +19,12 @@ export function useDetectMoireSections(imageUrl: string | null) {
 
     const img = new Image();
 
-    // 💡 핵심 수정: Base64/Data URL인 경우 프록시와 crossOrigin을 거치지 않고 바로 사용!
     const isDataUrl = imageUrl.startsWith("data:");
     if (!isDataUrl) {
       img.crossOrigin = "Anonymous";
       img.src = `/api/proxy?url=${encodeURIComponent(imageUrl)}`;
     } else {
-      img.src = imageUrl; // data:image/png;base64,... 는 프록시 없이 바로 할당
+      img.src = imageUrl;
     }
 
     img.onload = () => {
@@ -43,17 +43,16 @@ export function useDetectMoireSections(imageUrl: string | null) {
 
       ctx.drawImage(img, 0, 0, w, h);
       const imageData = ctx.getImageData(0, 0, w, h);
-      const data = imageData.data; // RGBA 데이터
+      const data = imageData.data;
 
       let topY = -1;
       let bottomY = -1;
 
-      // 1. 위에서부터 아래로 스캔하여 불투명한 픽셀(머리 끝) 찾기
+      // 1. 머리 끝(topY) 스캔
       for (let y = 0; y < h; y++) {
         let hasPixel = false;
         for (let x = 0; x < w; x++) {
-          const alpha = data[(y * w + x) * 4 + 3];
-          if (alpha > 10) { // 투명이 아닌 픽셀 존재
+          if (data[(y * w + x) * 4 + 3] > 10) {
             hasPixel = true;
             break;
           }
@@ -64,12 +63,11 @@ export function useDetectMoireSections(imageUrl: string | null) {
         }
       }
 
-      // 2. 아래에서부터 위로 스캔하여 불투명한 픽셀(발 끝) 찾기
+      // 2. 발 끝(bottomY) 스캔
       for (let y = h - 1; y >= 0; y--) {
         let hasPixel = false;
         for (let x = 0; x < w; x++) {
-          const alpha = data[(y * w + x) * 4 + 3];
-          if (alpha > 10) {
+          if (data[(y * w + x) * 4 + 3] > 10) {
             hasPixel = true;
             break;
           }
@@ -80,10 +78,11 @@ export function useDetectMoireSections(imageUrl: string | null) {
         }
       }
 
-      // 인식을 못 한 경우 기본 비율 처리
-      if (topY === -1 || bottomY === -1) {
+      // 인식을 못 한 경우 기본값(50% 중앙) 반환
+      if (topY === -1 || bottomY === -1 || bottomY <= topY) {
         if (isMounted) {
           setSectionData({
+            lineXPercent: 50,
             lineYPercents: [16, 28, 40, 55],
             labels: ["목~명치 영역", "명치~배꼽 영역", "배꼽~허벅지 영역"],
           });
@@ -92,16 +91,44 @@ export function useDetectMoireSections(imageUrl: string | null) {
         return;
       }
 
-      // 3. 신체 높이 계산
       const bodyHeight = bottomY - topY;
 
-      // 4. 인체 비율에 따른 4개 Y 위치(픽셀) 계산
-      const neckY = topY + bodyHeight * 0.14;       // 목
-      const epigastriumY = topY + bodyHeight * 0.30;// 명치
-      const navelY = topY + bodyHeight * 0.42;      // 배꼽
-      const thighY = topY + bodyHeight * 0.62;      // 허벅지 중간
+      // 3. 발목 Y 위치 계산 (하단에서 신체 높이의 10% 위)
+      const ankleY = Math.round(bottomY - bodyHeight * 0.10);
 
-      // 5. 전체 이미지 높이(h) 기준 Y 백분율(%) 변환
+      // 4. 발목 Y 위치에서 좌/우 외곽 X 좌표 탐색
+      let leftAnkleX = -1;
+      let rightAnkleX = -1;
+
+      // 왼쪽에서 오른쪽으로 스캔
+      for (let x = 0; x < w; x++) {
+        if (data[(ankleY * w + x) * 4 + 3] > 10) {
+          leftAnkleX = x;
+          break;
+        }
+      }
+
+      // 오른쪽에서 왼쪽으로 스캔
+      for (let x = w - 1; x >= 0; x--) {
+        if (data[(ankleY * w + x) * 4 + 3] > 10) {
+          rightAnkleX = x;
+          break;
+        }
+      }
+
+      // 발목 좌/우 중앙 X 및 % 계산
+      let pX = 50; // 기본 중앙값
+      if (leftAnkleX !== -1 && rightAnkleX !== -1) {
+        const centerAnkleX = (leftAnkleX + rightAnkleX) / 2;
+        pX = Math.round((centerAnkleX / w) * 100);
+      }
+
+      // 5. Y 구간 백분율(%) 계산
+      const neckY = topY + bodyHeight * 0.14;
+      const epigastriumY = topY + bodyHeight * 0.30;
+      const navelY = topY + bodyHeight * 0.42;
+      const thighY = topY + bodyHeight * 0.62;
+
       const p1 = Math.round((neckY / h) * 100);
       const p2 = Math.round((epigastriumY / h) * 100);
       const p3 = Math.round((navelY / h) * 100);
@@ -109,6 +136,7 @@ export function useDetectMoireSections(imageUrl: string | null) {
 
       if (isMounted) {
         setSectionData({
+          lineXPercent: pX,
           lineYPercents: [p1, p2, p3, p4],
           labels: ["상체 상부(목~명치)", "상체 하부(명치~배꼽)", "하체 상부(배꼽~허벅지)"],
         });
@@ -118,7 +146,6 @@ export function useDetectMoireSections(imageUrl: string | null) {
 
     img.onerror = () => {
       if (isMounted) {
-        // 💡 에러 발생 시 DUMMY_SECTION_DATA로 Fallback
         setSectionData(DUMMY_SECTION_DATA);
         setIsLoading(false);
       }

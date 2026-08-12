@@ -9,16 +9,9 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { GaitContainerProps } from "./Container";
-import { IGaitSeqFrameData } from "@/types/measure";
+import { useMeasureGaitSeqJson } from "@/hooks/api/measure/gait/useMeasureGaitSeqJson";
+import { IMeasureGaitDetail } from "@/types/measure";
 
-const DUMMY_FRAMES: IGaitSeqFrameData[] = [
-  { sequenceIndex: 0, frameIndex: 6, timestamp: 1.373, headLateralTilt: 178.0, headForwardTilt: 175.7, trunkSway: 178.8, trunkFlexion: 178.4, shoulderTilt: 178.3, leftArmAngle: -176.8, rightArmAngle: -173.1, pelvicDrop: 178.3, leftKneeAngle: 9.7, rightKneeAngle: 54.4 },
-  { sequenceIndex: 0, frameIndex: 7, timestamp: 1.406, headLateralTilt: 177.5, headForwardTilt: 159.2, trunkSway: 177.9, trunkFlexion: 177.1, shoulderTilt: 177.5, leftArmAngle: -175.2, rightArmAngle: -171.8, pelvicDrop: 177.8, leftKneeAngle: 12.1, rightKneeAngle: 50.2 },
-  { sequenceIndex: 0, frameIndex: 8, timestamp: 1.439, headLateralTilt: 176.8, headForwardTilt: 170.9, trunkSway: 176.5, trunkFlexion: 176.0, shoulderTilt: 176.2, leftArmAngle: -172.9, rightArmAngle: -169.5, pelvicDrop: 176.9, leftKneeAngle: 18.5, rightKneeAngle: 42.1 },
-  { sequenceIndex: 0, frameIndex: 9, timestamp: 1.472, headLateralTilt: 177.2, headForwardTilt: 168.5, trunkSway: 177.1, trunkFlexion: 176.8, shoulderTilt: 177.0, leftArmAngle: -174.1, rightArmAngle: -170.8, pelvicDrop: 177.4, leftKneeAngle: 25.3, rightKneeAngle: 33.7 },
-  { sequenceIndex: 0, frameIndex: 10, timestamp: 1.505, headLateralTilt: 178.1, headForwardTilt: 176.1, trunkSway: 178.3, trunkFlexion: 178.0, shoulderTilt: 178.1, leftArmAngle: -176.0, rightArmAngle: -172.5, pelvicDrop: 178.1, leftKneeAngle: 31.0, rightKneeAngle: 22.8 },
-];
 
 export interface GraphUnit {
   title: string;
@@ -71,18 +64,25 @@ export function GaitGraphItem({
   }));
 
   const yDomain = useMemo(() => {
-    const combinedValues = [...data0.value, ...data1.value, ...(data2?.value || [])].filter(
-      (v) => typeof v === "number" && !isNaN(v)
-    );
+    const combinedValues = [
+      ...(data0.value || []),
+      ...(data1.value || []),
+      ...(data2?.value || []),
+    ].filter((v) => typeof v === "number" && !isNaN(v));
 
     if (combinedValues.length === 0) return [0, 100];
 
     const min = Math.min(...combinedValues);
     const max = Math.max(...combinedValues);
     const diff = max - min;
-    const padding = diff === 0 ? 10 : diff * 0.15;
 
-    return [Math.floor(min - padding), Math.ceil(max + padding)];
+    // 💡 패딩을 15% -> 5%로 축소 (전체 범위가 커서 5%만 줘도 충분함)
+    const padding = diff === 0 ? 5 : diff * 0.05;
+
+    return [
+      Number((min - padding).toFixed(1)),
+      Number((max + padding).toFixed(1)),
+    ];
   }, [data0, data1, data2]);
 
   const chartConfig = {
@@ -125,7 +125,7 @@ export function GaitGraphItem({
       </div>
 
       <ChartContainer config={chartConfig} className="aspect-auto h-[180px] w-full">
-        <AreaChart data={chartData}>
+        <AreaChart data={chartData} margin={{ top: 15, right: 10, left: 0, bottom: 20 }}>
           <defs>
             <linearGradient id={`fillVal0-${uniqueId}`} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor={getColor("val0")} stopOpacity={0.4} />
@@ -143,7 +143,17 @@ export function GaitGraphItem({
             )}
           </defs>
 
-          <YAxis domain={yDomain} hide />
+          <YAxis
+            domain={yDomain}
+            ticks={yDomain}
+            interval={0} // 👈 모든 ticks(최솟값, 최댓값)를 생략 없이 강제로 표시
+            allowDataOverflow={true} // 👈 도메인 경계선에 걸친 눈금이 숨겨지지 않도록 설정
+            tickFormatter={(value) => Number(value).toFixed(1)}
+            tickLine={false}
+            axisLine={false}
+            tick={{ fontSize: 11, fill: "#6B7280" }}
+            width={40}
+          />
           <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
 
           <ChartTooltip
@@ -179,34 +189,47 @@ export function GaitGraphItem({
   );
 }
 
-export default function GaitSeqResult({ data }: GaitContainerProps) {
+export default function GaitSeqResult({
+  isFront, 
+  data 
+}: {
+  isFront: boolean, 
+  data: IMeasureGaitDetail
+}) {
+  const { data: gaitSeq, isLoading: gaitLoading, isError: gaitError } = useMeasureGaitSeqJson(
+    data?.gait_sequence_result[isFront ? 0 : 1]?.file_server_kinematics_frame
+  );
 
   const graphGroups = useMemo(() => {
+    // gaitSeq가 없으면 안전하게 빈 배열 처리
+    const seq = gaitSeq ?? [];
+
     return {
       head: {
-        data0: { title: "머리 좌우 기울기", value: DUMMY_FRAMES.map((f) => f.headLateralTilt) },
-        data1: { title: "머리 전후 기울기", value: DUMMY_FRAMES.map((f) => f.headForwardTilt) },
+        data0: { title: "머리 좌우 기울기", value: seq.map((f) => f.headLateralTilt) },
+        data1: { title: "머리 전후 기울기", value: seq.map((f) => f.headForwardTilt) },
       },
       trunk: {
-        data0: { title: "몸통 흔들림", value: DUMMY_FRAMES.map((f) => f.trunkSway) },
-        data1: { title: "몸통 굽힘", value: DUMMY_FRAMES.map((f) => f.trunkFlexion) },
+        data0: { title: "몸통 흔들림", value: seq.map((f) => f.trunkSway) },
+        data1: { title: "몸통 굽힘", value: seq.map((f) => f.trunkFlexion) },
       },
       shoulderArm: {
-        data0: { title: "어깨 기울기", value: DUMMY_FRAMES.map((f) => f.shoulderTilt) },
-        data1: { title: "왼쪽 팔 각도", value: DUMMY_FRAMES.map((f) => f.leftArmAngle) },
-        data2: { title: "오른쪽 팔 각도", value: DUMMY_FRAMES.map((f) => f.rightArmAngle) },
+        data0: { title: "어깨 기울기", value: seq.map((f) => f.shoulderTilt) },
+        data1: { title: "왼쪽 팔 각도", value: seq.map((f) => f.leftArmAngle) },
+        data2: { title: "오른쪽 팔 각도", value: seq.map((f) => f.rightArmAngle) },
       },
       lowerBody: {
-        data0: { title: "골반 틀어짐", value: DUMMY_FRAMES.map((f) => f.pelvicDrop) },
-        data1: { title: "왼쪽 무릎 각도", value: DUMMY_FRAMES.map((f) => f.leftKneeAngle) },
-        data2: { title: "오른쪽 무릎 각도", value: DUMMY_FRAMES.map((f) => f.rightKneeAngle) },
+        data0: { title: "골반 틀어짐", value: seq.map((f) => f.pelvicDrop) },
+        data1: { title: "왼쪽 무릎 각도", value: seq.map((f) => f.leftKneeAngle) },
+        data2: { title: "오른쪽 무릎 각도", value: seq.map((f) => f.rightKneeAngle) },
       },
     };
-  }, []);
-
+  }, [gaitSeq]); // 💡 gaitSeq가 로드/변경될 때 감지하여 재계산하도록 의존성 배열 추가
+  if (gaitLoading) return <div>Loading...</div>;
+  if (gaitError) return <div>Error occured</div>
   return (
     <div className="bg-white rounded-xl border border-sub200 p-4">
-      <div className="text-lg font-semibold mb-2 text-sub700">편도 보행 결과</div>
+      <div className="text-lg font-semibold mb-2 text-sub700">편도 보행 결과 - {isFront ? "걸어옴" : "멀어짐"}</div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
         <GaitGraphItem data0={graphGroups.head.data0} data1={graphGroups.head.data1} />
         <GaitGraphItem data0={graphGroups.trunk.data0} data1={graphGroups.trunk.data1} />

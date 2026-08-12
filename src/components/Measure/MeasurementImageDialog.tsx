@@ -189,15 +189,28 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
                   <span className="text-xs sm:text-sm whitespace-nowrap">
                     모아레 투명도
                   </span>
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    step="25"
-                    value={moireOpacity}
-                    onChange={(e) => onMoireOpacityChange(Number(e.target.value))}
-                    className="w-20 sm:w-28 h-2 bg-white/30 rounded-lg appearance-none cursor-pointer accent-mainBlue-600"
-                  />
+                  <div className="relative flex items-center">
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      step="25"
+                      value={moireOpacity}
+                      onChange={(e) => onMoireOpacityChange(Number(e.target.value))}
+                      className="w-20 sm:w-28 h-2 bg-white/30 rounded-lg appearance-none cursor-pointer accent-mainBlue-600 relative z-10"
+                    />
+                    
+                    <div className="absolute inset-x-1.5 flex justify-between pointer-events-none z-0">
+                      {[0, 25, 50, 75, 100].map((val) => (
+                        <span
+                          key={val}
+                          className={`w-0.5 h-0.5 rounded-full ${
+                            val <= moireOpacity ? "bg-white/75" : "bg-white/25"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </div>
                   <span className="w-6 text-xs whitespace-nowrap">
                     {moireOpacity}%
                   </span>

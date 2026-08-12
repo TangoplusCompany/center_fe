@@ -155,20 +155,49 @@ export function FallItem({ item }: { item: FallItemData }) {
     </div>
   );
 }
-function  TiltItem ({title, value}: {title: string, value: number}) {
-  
+
+//📞📞📞📞 tiltItem 
+type TiltType = "deviation" | "zero";
+
+interface TiltItemData {
+  title: string;
+  value: number;
+  type: TiltType;
+  target?: number;      // type이 "deviation"일 때 기준값 (기본 180)
+  maxDeviation: number; // 이 편차 이상이면 0점
+}
+function calcScore({ value, type, target = 180, maxDeviation }: Omit<TiltItemData, "title">): number {
+  const deviation = type === "deviation" ? Math.abs(value - target) : Math.abs(value);
+  const score = 100 - (deviation / maxDeviation) * 100;
+  return Math.max(0, Math.min(100, score));
+}
+
+// 점수 구간별 색상
+function getScoreColor(score: number): string {
+  if (score >= 80) return "bg-sub-600";
+  if (score >= 50) return "bg-warning";
+  return "bg-danger";
+}
+
+function TiltItem({ title, value, type, target, maxDeviation }: TiltItemData) {
+  const score = calcScore({ value, type, target, maxDeviation });
+  const barColor = getScoreColor(score);
+
   return (
     <div className="grid grid-cols-[25%_10%_65%] item-center rounded-xl bg-sub200 px-2 py-1">
-      <span className="text-sub700 text-xs sm:text-sm text-start font-semibold">{title}</span>
-      <span className="text-sub700 text-xs sm:text-sm font-semibold ">{value.toFixed(1)}º</span>
-      
+      <span className="text-sub800 text-xs sm:text-sm text-start font-semibold">{title}</span>
+      <span className="text-sub800 text-xs sm:text-sm font-semibold">{value.toFixed(1)}º</span>
+
       <div className="flex w-full rounded-r-lg overflow-hidden bg-sub100 items-center justify-between py-1">
-        <div className="flex h-full  rounded-r-lg bg-sub400 py-1" style={{ width: `${80}%` }}>
-        </div>
+        <div
+          className={`flex h-2.5 rounded-r-lg ${barColor} transition-all duration-300`}
+          style={{ width: `${score}%` }}
+        />
       </div>
     </div>
-  )
+  );
 }
+
 
 export default function GaitFall({ data }: GaitContainerProps) {
   const iData = data.gait_measure_info
@@ -216,24 +245,34 @@ export default function GaitFall({ data }: GaitContainerProps) {
   const leftKneePosition = calculatePercentFromRaw(iData.avgMaxLeftKneeFlexion, 40, 55);
   const rightKneePosition = calculatePercentFromRaw(iData.avgMaxRightKneeFlexion, 40, 55);
 
-  const tiltItems = [
+  const tiltItems: TiltItemData[] = [
     {
       title: "골반 틀어짐",
-      value: iData.avgMaxPevisDrop
+      value: iData.avgMaxPevisDrop,
+      type: "deviation",
+      target: 180,
+      maxDeviation: 30, // 180에서 30도 이상 벗어나면 0점
     },
     {
       title: "상체 전방 숙임",
-      value: iData.avgMaxTrunkFlexion
+      value: iData.avgMaxTrunkFlexion,
+      type: "zero",
+      maxDeviation: 20, // 20도 이상이면 0점
     },
     {
       title: "상체 좌우 흔들림",
-      value: iData.avgMaxTrunkSway
+      value: iData.avgMaxTrunkSway,
+      type: "zero",
+      maxDeviation: 15,
     },
     {
       title: "팔 스윙 비대칭",
-      value: iData.avgArmSwingSymmetry
+      value: iData.avgArmSwingSymmetry,
+      type: "zero",
+      maxDeviation: 100, // 예: 179.8 같은 큰 값이 나올 수 있어 범위 넓게 잡음
     },
-  ]
+  ];
+
   return (
     <div className="flex flex-col flex-1 min-h-80 h-full border-2 border-sub100 rounded-xl p-4 gap-2">
       
@@ -324,8 +363,8 @@ export default function GaitFall({ data }: GaitContainerProps) {
             </span>
           </div>
           <div className="flex flex-col gap-2">
-            {tiltItems.map((item, idx) => (
-              <TiltItem key={idx} title={item.title} value={item.value} />
+            {tiltItems.map((item) => (
+              <TiltItem key={item.title} {...item} />
             ))}
           </div>
         </div>

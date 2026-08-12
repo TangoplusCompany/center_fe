@@ -10,17 +10,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ReactNode } from "react";
 import { useUserLogin } from "@/hooks/api/ResultUser/useUserLogin";
 
+// GS 인증: 결과 페이지 로그인은 휴대폰 숫자 11자리와 PIN 숫자 4자리만 허용한다.
 const resultPageLoginSchema = z.object({
   phone: z
     .string()
-    .min(10, { message: "전화번호는 최소 10자리 이상입니다." })
-    .max(15, { message: "전화번호는 최대 15자리 이하입니다." })
-    .regex(/^\d{10,15}$/, "전화번호는 숫자만 입력 가능합니다."),
+    .min(1, { message: "휴대폰 번호를 입력해주세요." })
+    .regex(/^\d{11}$/, "휴대폰 번호 11자리를 입력해주세요."),
   pin: z
     .string()
-    .min(4, { message: "PIN 번호는 최소 4자리 이상입니다." })
-    .max(8, { message: "PIN 번호는 최대 8자리 이하입니다." })
-    .regex(/^\d+$/, "PIN 번호는 숫자만 입력 가능합니다."),
+    .min(1, { message: "PIN 번호를 입력해주세요." })
+    .regex(/^\d{4}$/, "PIN 번호 4자리를 입력해주세요."),
 });
 
 const ErrorText = ({ children }: { children: ReactNode }) => {
@@ -49,27 +48,29 @@ export default function ResultPageLoginForm({
     });
   });
 
+  // GS 인증: 브라우저별 기본 문구 대신 제품에 정의된 네 가지 입력 오류 문구를 표시한다.
   return (
     <form
       className={cn("flex flex-col gap-6", className)}
       {...props}
       onSubmit={loginHandleSubmit}
+      noValidate
     >
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">결과 페이지 로그인</h1>
         <p className="text-balance text-sm text-muted-foreground">
-          핸드폰 번호와 PIN 번호를 입력하여 로그인해주세요.
+          휴대폰 번호와 PIN 번호를 입력하여 로그인해주세요.
         </p>
       </div>
       <div className="grid gap-6">
         <div className="grid gap-2">
-          <Label htmlFor="phone">핸드폰 번호</Label>
+          <Label htmlFor="phone">휴대폰 번호</Label>
           <Input
             id="phone"
             type="tel"
             placeholder="하이픈(-)없이 입력해주세요"
-            maxLength={15}
-            required
+            maxLength={11}
+            inputMode="numeric"
             autoComplete="off"
             {...register("phone")}
             className="bg-white dark:bg-border"
@@ -84,8 +85,8 @@ export default function ResultPageLoginForm({
             id="pin"
             type="password"
             placeholder="PIN 번호를 입력해주세요"
-            maxLength={8}
-            required
+            maxLength={4}
+            inputMode="numeric"
             autoComplete="off"
             className="bg-white dark:bg-border"
             {...register("pin")}
@@ -106,4 +107,3 @@ export default function ResultPageLoginForm({
     </form>
   );
 }
-

@@ -8,7 +8,7 @@ export interface IMeasureResponse {
   rom_result?: IMeasureROMItemDetail[]
   bia_result?: IBiaData;
   gait_result?: IMeasureGaitDetail;
-  moire_result ?: IMeasureMoireDetail[];
+  moire_result ?: IMoireDetail;
 }
 
 export interface IMeasureBasic {
@@ -579,7 +579,7 @@ export interface IGaitSeqDetail extends IMeasureGaitMeta {
   rightArmSwingRange: string;
 }
 
-export interface IGaitSeqFrameData {
+export interface IGaitSeqFrame {
   sequenceIndex: number;
   frameIndex: number;
   timestamp: number;
@@ -654,7 +654,11 @@ export interface IGaitMeasureJson {
 
 
 // 🪷🪷🪷🪷 Moire 🪷🪷🪷🪷
-export interface IMeasureMoireDetail {
+export interface IMoireDetail {
+  front : IMeasureMoireSeq
+  back : IMeasureMoireSeq
+}
+export interface IMeasureMoireSeq {
   sn : number;
   local_sn: number;
   device_sn: number;
