@@ -40,7 +40,8 @@ export const useUserLogin = (setError: UseFormSetError<FieldValues>) => {
         // axios 인터셉터는 같은 전역 store를 사용하므로 최신 토큰을 읽을 수 있음
         router.push(`/result-page?key=${encrypted}`);
       } else {
-        alert("암호화 중 오류가 발생했습니다.");
+        // GS 인증: 암호화 실패와 예기치 않은 로그인 처리 오류는 동일한 안내 문구로 표시한다.
+        alert("로그인을 처리할 수 없습니다. 잠시 후 다시 시도해주세요.");
       }
     },
     onError: (error: unknown) => {

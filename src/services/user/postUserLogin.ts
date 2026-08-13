@@ -74,6 +74,7 @@ export const postUserLogin = async ({
     if (error instanceof UserLoginError) {
       throw error;
     }
-    throw new Error("로그인에 실패했습니다. 잠시 후 다시 시도해주세요.");
+    // GS 인증: 암호화 실패와 예기치 않은 로그인 처리 오류는 동일한 안내 문구로 표시한다.
+    throw new Error("로그인을 처리할 수 없습니다. 잠시 후 다시 시도해주세요.");
   }
 };
