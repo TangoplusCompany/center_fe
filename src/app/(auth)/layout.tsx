@@ -7,6 +7,7 @@ import AuthStoreProvider from "@/providers/AuthProvider";
 import { useEffect } from "react";
 import { createAuthStore } from "@/stores/AuthStore";
 import { useRouter } from "next/navigation";
+import SubAdminRouteGuard from "./_components/SubAdminRouteGuard";
 
 export default function AuthLayout({
   children,
@@ -29,7 +30,9 @@ export default function AuthLayout({
       <SidebarProvider>
         <AuthStoreProvider>
           <DefaultSidebar />
-          <DefaultLayout>{children}</DefaultLayout>
+          <SubAdminRouteGuard>
+            <DefaultLayout>{children}</DefaultLayout>
+          </SubAdminRouteGuard>
         </AuthStoreProvider>
       </SidebarProvider>
     </div>
