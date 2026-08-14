@@ -40,26 +40,26 @@ export default function MoireContainer ({ data }: IMoireContainerProps) {
   const graphs = [
     ...(frontD ? [{
       title: "전면 어깨 등고선" as IMoireGraphTitle,
-      leftValue: frontD?.shoulder_left_peak_depth,
-      rightValue: frontD?.shoulder_right_peak_depth,
+      leftValue: frontD?.shoulder_left_peak_depth * 100,
+      rightValue: frontD?.shoulder_right_peak_depth * 100,
       leftIndex: frontD?.shoulder_left_peak_index,
       rightIndex: frontD?.shoulder_right_peak_index,
-      unit: "º",
+      unit: "cm",
       indexData: measureJson0?.[0]?.DepthArray ?? []
     }] : []),
     ...(backD ? [{
       title: "후면 어깨 등고선" as IMoireGraphTitle,
-      leftValue: backD?.shoulder_left_peak_depth,
-      rightValue: backD?.shoulder_right_peak_depth,
+      leftValue: backD?.shoulder_left_peak_depth * 100,
+      rightValue: backD?.shoulder_right_peak_depth * 100,
       leftIndex: backD?.shoulder_left_peak_index,
       rightIndex: backD?.shoulder_right_peak_index,
-      unit: "º",
+      unit: "cm",
       indexData: measureJson1?.[0]?.DepthArray ?? []
     }] : []),
     ...(frontD ? [{
       title: "전면 허리 등고선" as IMoireGraphTitle,
-      leftValue: frontD?.waist_left_peak_depth,
-      rightValue: frontD?.waist_right_peak_depth,
+      leftValue: frontD?.waist_left_peak_depth * 100,
+      rightValue: frontD?.waist_right_peak_depth * 100,
       leftIndex: frontD?.waist_left_peak_index,
       rightIndex: frontD?.waist_right_peak_index,
       unit: "cm",
@@ -67,8 +67,8 @@ export default function MoireContainer ({ data }: IMoireContainerProps) {
     }] : []),
     ...(backD ? [{
       title: "후면 허리 등고선" as IMoireGraphTitle,
-      leftValue: backD?.waist_left_peak_depth,
-      rightValue: backD?.waist_right_peak_depth,
+      leftValue: backD?.waist_left_peak_depth * 100,
+      rightValue: backD?.waist_right_peak_depth * 100,
       leftIndex: backD?.waist_left_peak_index,
       rightIndex: backD?.waist_right_peak_index,
       unit: "cm",
@@ -76,20 +76,20 @@ export default function MoireContainer ({ data }: IMoireContainerProps) {
     }] : []),
     ...(frontD ? [{
       title: "전면 골반 등고선" as IMoireGraphTitle,
-      leftValue: frontD?.hip_left_peak_depth,
-      rightValue: frontD?.hip_right_peak_depth,
+      leftValue: frontD?.hip_left_peak_depth * 100,
+      rightValue: frontD?.hip_right_peak_depth * 100,
       leftIndex: frontD?.hip_left_peak_index,
       rightIndex: frontD?.hip_right_peak_index,
-      unit: "º",
+      unit: "cm",
       indexData: measureJson0?.[2]?.DepthArray ?? []
     }] : []),
     ...(backD ? [{
       title: "후면 골반 등고선" as IMoireGraphTitle,
-      leftValue: backD?.hip_left_peak_depth,
-      rightValue: backD?.hip_right_peak_depth,
+      leftValue: backD?.hip_left_peak_depth * 100,
+      rightValue: backD?.hip_right_peak_depth * 100,
       leftIndex: backD?.hip_left_peak_index,
       rightIndex: backD?.hip_right_peak_index,
-      unit: "º",
+      unit: "cm",
       indexData: measureJson1?.[2]?.DepthArray ?? []
     }] : []),
   ]
