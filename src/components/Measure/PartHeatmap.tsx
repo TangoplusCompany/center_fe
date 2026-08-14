@@ -31,7 +31,7 @@ const filledData = [...[...limitedData].reverse(), ...padding];
     <div className="w-full rounded-3xl border-2 border-sub200 p-5 shadow-none">
       <h2 className="text-xl font-bold mb-4">측정 한눈에 보기</h2>
       
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
         {/* 첫 번째: 히트맵 */}
         <div className="p-4">
           <h3 className="text-xl font-semibold mb-4">각 측정 부위 결과</h3>
