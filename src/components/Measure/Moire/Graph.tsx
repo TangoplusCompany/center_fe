@@ -163,7 +163,7 @@ export default function MoireGraph({ graphData }: { graphData: IMoireGraphProps 
             {subTitle} {Math.abs(graphData.leftValue - graphData.rightValue).toFixed(1)} {graphData.unit}
           </span>
           <div className="flex gap-2 text-xs sm:text-sm font-semibold">
-            <span className="text-mainBlue-300">L {(graphData.leftValue / 100).toFixed(2)} {graphData.unit}</span>
+            <span className="text-mainBlue-300">L {(graphData.leftValue / 100).toFixed(2)} {graphData.unit.replace("c", "")}</span>
             <span className="text-mainGreen-600">R {(graphData.rightValue / 100).toFixed(2)} {graphData.unit.replace("c", "")}</span>
           </div>
         </div>
