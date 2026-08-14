@@ -37,12 +37,12 @@ const UserSubTabCard = ({encryptedParam, searchParams, currentSubTab} : UserSubT
   }, [encryptedParam]);
 
   return (
-    <div className="mx-4 my-2 p-4 bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-3 transition-all duration-300">
-      <div className="flex items-center gap-3 pb-2 border-b border-gray-200">
+    <div className="mx-4 my-2 p-4 bg-white dark:bg-black rounded-2xl flex flex-col gap-3 transition-all duration-300">
+      <div className="flex items-center gap-3 pb-2 border-b border-sub200">
         <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 text-sm font-semibold">
           {userName.charAt(0)}
         </div>
-        <span className="text-gray-800 font-medium text-base">{userName} 님</span>
+        <span className="text-sub700 font-medium text-base">{userName} 님</span>
       </div>
 
       <div className="flex flex-col gap-1">
