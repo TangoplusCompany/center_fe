@@ -5,14 +5,17 @@ import { removeBlackBackground } from "@/utils/removeBlackBackground";
 export interface FootStaticProps {
   fileName: string;
   matStatics: IMatStaticPressure;
+  footStaticType?: 0 | 1 ;
 }
 
 const FootStatic = ({ 
     fileName,
     matStatics,
+    footStaticType = 0,
   }: FootStaticProps) => {
     // lCase 0일 때 결과요약 Intro /  1 일 떄 frontMeasurement
   // 또는 환경변수에서 가져오기
+  const percentText = footStaticType === 0 ? "text-sub400" : "text-white"
   const baseUrl = process.env.NEXT_PUBLIC_FILE_URL || '';
   const imageUrl = `${baseUrl}/${fileName}`;
   const [processedImageSrc, setProcessedImageSrc] = useState<string>("");
@@ -42,22 +45,22 @@ const FootStatic = ({
         <div className="absolute left-1/2 top-[40%] h-1/5 w-[1px] bg-sub300 -translate-x-1/2" />
 
         {/* 상단 */}
-        <span className="absolute top-1 left-1/2 -translate-x-1/2 text-sub400 text-sm font-semibold">
+        <span className={`absolute top-1 left-1/2 -translate-x-1/2 ${percentText} text-sm font-semibold`}>
           {matStatics.topPressure}%
         </span>
 
         {/* 좌측 */}
-        <span className="absolute top-1/2 left-1 -translate-y-1/2 text-sub400 text-sm font-semibold">
+        <span className={`absolute top-1/2 left-1 -translate-y-1/2 ${percentText} text-sm font-semibold`}>
           {matStatics.leftPressure}%
         </span>
 
         {/* 우측 */}
-        <span className="absolute top-1/2 right-1 -translate-y-1/2 text-sub400 text-sm font-semibold">
+        <span className={`absolute top-1/2 right-1 -translate-y-1/2 ${percentText} text-sm font-semibold`}>
           {matStatics.rightPressure}%
         </span>
 
         {/* 하단 */}
-        <span className="absolute bottom-1 left-1/2 -translate-x-1/2 text-sub400 text-sm font-semibold">
+        <span className={`absolute bottom-1 left-1/2 -translate-x-1/2 ${percentText} text-sm font-semibold`}>
           {matStatics.bottomPressure}%
         </span>
       </div>

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { removeBlackBackground } from "@/utils/removeBlackBackground";
+import { preprocessTrajectoryImage } from "@/utils/preprocessTrajectoryImage";
 
 const HipTrajectory = ({   hipFileName }: {   hipFileName: string }) => {
   const baseUrl = process.env.NEXT_PUBLIC_FILE_URL || '';
   const [processedHipSrc, setProcessedHipSrc] = useState<string>("");
   const hipImageUrl = `${baseUrl}/${hipFileName}`;
   useEffect(() => {
-    removeBlackBackground(hipImageUrl)
+    preprocessTrajectoryImage(hipImageUrl)
       .then((result) => setProcessedHipSrc(result))
       .catch(() => setProcessedHipSrc("/images/measure_default.png"));
   }, [hipImageUrl]);
