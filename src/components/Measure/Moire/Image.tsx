@@ -254,8 +254,8 @@ export default function MoireImage({ imageData }: { imageData: IMoireImageProps 
         </div>
 
         {imageData.isFront && (
-          <div className="absolute bottom-16 right-4 w-28 h-28 sm:w-[120px] sm:h-[120px] bg-white/10 backdrop-blur-sm rounded-xl p-1.5">
-            <FootStatic fileName={imageData.data.server_file_name_mat} matStatics={pressures} />
+          <div className="absolute bottom-16 right-4 w-28 h-28 sm:w-[120px] sm:h-[120px] bg-white/25 backdrop-blur-sm rounded-xl p-1.5">
+            <FootStatic fileName={imageData.data.server_file_name_mat} matStatics={pressures} footStaticType={1} />
           </div>
         )}
       </div>

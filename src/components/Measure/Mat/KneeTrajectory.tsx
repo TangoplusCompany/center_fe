@@ -1,4 +1,4 @@
-import { removeDarkBackground } from "@/utils/removeDarkBackground";
+import { preprocessTrajectoryImage } from "@/utils/preprocessTrajectoryImage";
 import { useEffect, useState } from "react";
 
 export interface KneeTrajectoryProps {
@@ -15,7 +15,7 @@ const KneeTrajectory = ({
   const [processedKneeSrc, setProcessedKneeSrc] = useState<string>("");
   
   useEffect(() => {
-    removeDarkBackground(kneeImageUrl)
+    preprocessTrajectoryImage(kneeImageUrl)
       .then((result) => setProcessedKneeSrc(result))
       .catch(() => setProcessedKneeSrc("/images/measure_default.png"));
   }, [kneeImageUrl]);

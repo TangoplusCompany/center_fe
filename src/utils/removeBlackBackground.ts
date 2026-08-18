@@ -16,61 +16,44 @@ export async function removeBlackBackground(originalUrl: string): Promise<string
 
       canvas.width = img.width;
       canvas.height = img.height;
-
       ctx.drawImage(img, 0, 0);
 
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const data = imageData.data;
 
-      // 검정 배경 제거 + 가장자리 페더링
+      // 💡 성능 최적화: 루프를 하나로 합쳐서 한 번에 연산합니다.
       for (let i = 0; i < data.length; i += 4) {
         const r = data[i];
         const g = data[i + 1];
         const b = data[i + 2];
         const a = data[i + 3];
 
-        // 검정(0,0,0)과의 거리
+        // 1. RGB 거리 기준 1차 검증
         const distToBlack = Math.sqrt(r * r + g * g + b * b);
-
-        const HARD = 50; // 이 값 이하는 완전 투명
-        const SOFT = 200; // 이 값 이상은 원래 알파 유지
+        const HARD = 50;
+        const SOFT = 200;
 
         if (distToBlack <= HARD) {
-          // 완전 배경이라고 보고 날리기
           data[i + 3] = 0;
+          continue;
         } else if (distToBlack < SOFT) {
-          // 경계 영역 → 알파를 선형으로 줄이기 (feather)
-          const t = (distToBlack - HARD) / (SOFT - HARD); // 0~1
+          const t = (distToBlack - HARD) / (SOFT - HARD);
           data[i + 3] = a * t;
-        } else {
-          // 나머지는 그대로 두기
-          data[i + 3] = a;
+        }
+
+        // 2. 밝기(Luminance) 기준 2차 검증
+        const L = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+        const BG = 35;
+        const EDGE = 60;
+
+        if (L <= BG) {
+          data[i + 3] = 0;
+        } else if (L < EDGE) {
+          const t = (L - BG) / (EDGE - BG);
+          data[i + 3] = data[i + 3] * t; // 기존 알파값에 누적 페더링
         }
       }
 
-      for (let i = 0; i < data.length; i += 4) {
-        const r = data[i];
-        const g = data[i + 1];
-        const b = data[i + 2];
-        const a = data[i + 3];
-
-        // 밝기 계산
-        const L = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-
-        const BG = 35;   // 배경
-        const EDGE = 60; // 경계
-
-        if (L <= BG) {
-          // 완전 배경 → 투명화
-          data[i + 3] = 0;
-        } else if (L < EDGE) {
-          // 경계 → 페더링 (부드러운 투명)
-          const t = (L - BG) / (EDGE - BG); // 0~1
-          data[i + 3] = a * t;
-        } else {
-          // 선은 그대로 두기
-        }
-    }
       ctx.putImageData(imageData, 0, 0);
       resolve(canvas.toDataURL("image/png"));
     };
