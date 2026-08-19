@@ -15,7 +15,7 @@ type DashboardViewType = "normal" | "rom";
 export type ROMDashboardViewType = "default" | "detail";
 
 const dashboardTabs: Record<number, string> = {
-    0: "기본 검사",
+    0: "간편 검사",
     1: "ROM 검사"
   }
   

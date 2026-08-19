@@ -21,12 +21,9 @@ import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/providers/AuthProvider";
 import { postVerifyLoginOtp, Verify2FAError } from "@/services/auth/postVerifyLoginOtp";
 import { postRequestLogin2FAOtp } from "@/services/auth/postRequestLogin2FAOtp";
+import { useTranslations } from "next-intl";
 
-const FormSchema = z.object({
-  otp: z.string().min(6, {
-    message: "OTP는 6자리 숫자여야 합니다.",
-  }),
-});
+
 
 const INITIAL_TIME = 300; // 5분 = 300초
 
@@ -47,11 +44,20 @@ export const SettingOtpDialog = ({
   tempJwt,
   onTempJwtChange,
 }: SettingOtpDialogProps) => {
+  const t = useTranslations("Index");
   const router = useRouter();
   const setLogin = useAuthStore((state) => state.setLogin);
   const [timeLeft, setTimeLeft] = useState(INITIAL_TIME);
   const [verifyPending, setVerifyPending] = useState(false);
   const [resendPending, setResendPending] = useState(false);
+  const FormSchema = z.object({
+    otp: z.string().min(6, {
+      message: t('otp_input_6'),
+    }),
+  });
+  const isPhoneType = phone === "휴대폰" || phone === "phone" || phone === t("setting_account_mobile");
+  const isEmailType = phone === "이메일" || phone === "email";
+  const type = isPhoneType ? "mobile" : "email";
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -95,8 +101,6 @@ export const SettingOtpDialog = ({
   // 재전송 핸들러
   const handleResend = async () => {
     setTimeLeft(INITIAL_TIME);
-    // 현재는 휴대폰 라디오가 비활성화라 사실상 email만 사용됨
-    const type = phone === "휴대폰" ? "mobile" : "email";
 
     setResendPending(true);
     try {
@@ -105,7 +109,7 @@ export const SettingOtpDialog = ({
       onTempJwtChange?.(res.temp_token);
     } catch (e) {
       alert(
-        e instanceof Error ? e.message : "재전송에 실패했습니다. 잠시 후 다시 시도해주세요.",
+        e instanceof Error ? e.message : t('alert_otp_send_fail'),
       );
     } finally {
       setResendPending(false);
@@ -116,7 +120,6 @@ export const SettingOtpDialog = ({
     // 2차 인증 플로우: temp_token으로 OTP 검증 API 호출 (성공해야만 로그인 완료)
     setVerifyPending(true);
     try {
-      const type = phone === "휴대폰" ? "mobile" : "email";
       const loginDataRes = await postVerifyLoginOtp({
         otp: data.otp,
         type,
@@ -141,7 +144,7 @@ export const SettingOtpDialog = ({
       const message =
         error instanceof Verify2FAError
           ? error.userMessage
-          : "OTP가 올바르지 않습니다.";
+          : t('login_wrong_otp');
       form.setError("otp", {
         type: "manual",
         message,
@@ -157,11 +160,13 @@ export const SettingOtpDialog = ({
         <DialogHeader>
           <DialogTitle>이중 인증</DialogTitle>
           <DialogDescription>
-            {phone === "이메일" || phone === "휴대폰"
-              ? `등록된 ${phone}(으)로 OTP를 전송했습니다.`
-              : `등록된 핸드폰 번호(${phone})로 OTP를 전송했습니다.`}
+            {isEmailType || isPhoneType
+              ? t("otp_sent_to_target", {
+                  target: isEmailType ? t("target_email") : t("target_phone"),
+                })
+              : t("otp_sent_to_phone", { phone })}
             <br />
-            OTP를 입력해주세요.
+            {t("login_otp_input")}
           </DialogDescription>
         </DialogHeader>
         <form
@@ -188,7 +193,7 @@ export const SettingOtpDialog = ({
                 type="submit"
                 disabled={verifyPending}
               >
-                {verifyPending ? "확인 중..." : "확인"}
+                {verifyPending ? t('confirm_pending') : t('btn_confirm')}
               </Button>
             </div>
 
@@ -202,8 +207,8 @@ export const SettingOtpDialog = ({
           <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">
               {timeLeft > 0
-                ? `남은 시간: ${formatTime(timeLeft)}`
-                : "시간이 만료되었습니다."}
+                ? `${t('login_otp_remain_time')}: ${formatTime(timeLeft)}`
+                : t('login_otp_expired_time')}
             </span>
             <Button
               type="button"
@@ -213,7 +218,7 @@ export const SettingOtpDialog = ({
               className="text-sm bg-sub150 text-sub700 hover:bg-sub200 hover:text-sub800"
               disabled={resendPending}
             >
-              {resendPending ? "재전송 중..." : "재전송"}
+              {resendPending ? t('login_otp_resend_pending') : t('login_otp_resend')}
             </Button>
           </div>
         </form>

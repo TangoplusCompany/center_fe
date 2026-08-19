@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useState } from "react";
 import { postRequestLogin2FAOtp } from "@/services/auth/postRequestLogin2FAOtp";
+import { useTranslations } from "next-intl";
 
 export type Login2FAMethod = "email" | "mobile";
 
@@ -29,6 +30,7 @@ export const Login2FAMethodDialog = ({
   tempJwt,
   onNext,
 }: Login2FAMethodDialogProps) => {
+  const t = useTranslations("Index");
   const [method, setMethod] = useState<Login2FAMethod>("email");
   const [isPending, setIsPending] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -41,7 +43,7 @@ export const Login2FAMethodDialog = ({
       onOpenChange(false);
       onNext(method, res.temp_token);
     } catch (e) {
-      setErrorMessage(e instanceof Error ? e.message : "요청에 실패했습니다.");
+      setErrorMessage(e instanceof Error ? e.message : t('2fa_request_fail'));
     } finally {
       setIsPending(false);
     }
@@ -51,9 +53,9 @@ export const Login2FAMethodDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-[calc(100%-2rem)] sm:w-full sm:max-w-md" onKeyDown={(e) => { if (e.key === "Enter") handleNext(); }}>
         <DialogHeader>
-          <DialogTitle>2차 인증이 필요합니다</DialogTitle>
+          <DialogTitle>{t('2fa_select')}</DialogTitle>
           <DialogDescription>
-            인증 수단을 선택한 뒤 다음을 눌러주세요.
+            {t('2fa_select_select_explain')}
           </DialogDescription>
         </DialogHeader>
         <form
@@ -68,13 +70,13 @@ export const Login2FAMethodDialog = ({
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="email" id="2fa-email" />
               <Label htmlFor="2fa-email" className="cursor-pointer font-normal">
-                이메일 인증
+                {t('2fa_select_email')}
               </Label>
             </div>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="mobile" id="2fa-mobile" />
               <Label htmlFor="2fa-mobile" className="cursor-pointer font-normal">
-                휴대폰 인증
+                {t('2fa_select_mobile')}
               </Label>
             </div>
           </RadioGroup>
@@ -86,7 +88,7 @@ export const Login2FAMethodDialog = ({
             className="w-full"
             disabled={isPending}
           >
-            {isPending ? "요청 중..." : "다음"}
+            {isPending ? t('2fa_select_pending') : t('2fa_select_next')}
           </Button>
         </form>
       </DialogContent>

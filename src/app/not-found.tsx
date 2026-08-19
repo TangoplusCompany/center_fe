@@ -20,7 +20,7 @@ export default function NotFound() {
       <section className="w-full p-5 lg:py-0 max-w-[1200px] mx-auto my-2 md:my-5 lg:my-10">
         <div className="flex-1 flex flex-col items-center justify-center gap-5 p-5 lg:p-0 box-border">
           <Image
-            src={"/images/not_found.png"}
+            src={"../images/not_found.png"}
             width={1280}
             height={720}
             property="404 Error Page"

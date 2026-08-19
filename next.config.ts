@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
-
+import createNextIntlPlugin from "next-intl/plugin";
 import { resolve } from "path";
+
+const withNextIntl = createNextIntlPlugin();
+
 const nextConfig: NextConfig = {
   webpack(config: any) {
     config.resolve.alias = {
@@ -21,4 +24,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);

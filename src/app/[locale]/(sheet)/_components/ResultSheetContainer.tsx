@@ -2,12 +2,12 @@
 
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import GradientContainer from "../_components/GradientContainer";
-import DescriptionContainer from "../_components/DescriptionContainer";
-import BoxIcons from "../_components/icons/BoxIcons";
-import QRCodeView from "../_components/QRCodeView";
-import TitleLayout from "../_components/TitleLayout";
-import PoseImageResult from "../_components/PoseImageResult";
+import GradientContainer from "./GradientContainer";
+import DescriptionContainer from "./DescriptionContainer";
+import BoxIcons from "./icons/BoxIcons";
+import QRCodeView from "./QRCodeView";
+import TitleLayout from "./TitleLayout";
+import PoseImageResult from "./PoseImageResult";
 import { usePostUserReport } from "@/hooks/api/report/usePostUserReport";
 import { formatDate } from "@/utils/formatDate";
 import { useEffect, useState } from "react";

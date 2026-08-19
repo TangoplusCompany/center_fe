@@ -28,7 +28,7 @@ export const ROMRawDataGraph = ({
         </span>
 
         <div className="flex flex-col text-sm text-sub700 text-end">
-          <div>{graphType === 0 ? '최대 각도' : '최대 각속도'}: {Math.abs(maxValue).toFixed(1)}º</div>
+          <div>{graphType === 0 ? '최대 각도' : '최대 각도'}: {Math.abs(maxValue).toFixed(1)}º</div>
           <div>{graphType === 0 ? '최소 각속도' : '최소 각속도'}: {Math.abs(minValue).toFixed(1)}º</div>
         </div>
       </div>

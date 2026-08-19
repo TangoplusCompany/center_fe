@@ -36,7 +36,7 @@ export const CenterUserMeasureList = ({
     const hasBia = measureItem.has_bia === 1;
     const hasGait = measureItem.has_gait === 1;
     const hasMoire = measureItem.has_moire === 1;
-    if (hasBasic) labels.push("기본 검사");
+    if (hasBasic) labels.push("간편 검사");
     if (hasRom) labels.push("ROM");
     if (hasBia) labels.push("체성분")
     if (hasGait) labels.push("보행 분석")

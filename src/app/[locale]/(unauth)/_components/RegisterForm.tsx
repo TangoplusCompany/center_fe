@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { KAKAO_POSTCODE_SCRIPT_URL } from "@/lib/postcode";
@@ -32,51 +32,52 @@ import {
 } from "@/services/auth/getCheckDevice";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 /** 최초 가입 시에만 검사 (기존 관리자일 땐 빈 문자열 허용) */
-const passwordSchema = z
+const passwordSchema = (t: (key: string) => string) => z
   .string()
-  .min(8, "비밀번호는 최소 8글자 이상이여야 합니다.")
-  .max(16, "비밀번호는 최대 16글자 이하여야 합니다.")
+  .min(8, t('pw_min'))
+  .max(16, t('pw_max'))
   .regex(
     /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]+$/i,
-    "비밀번호는 영문, 숫자, ! ~ * 특수문자를 최소 1자리 이상 입력해야합니다.",
+    t('pw_zod'),
   );
-const nameSchema = z
+const nameSchema = (t: (key: string) => string) => z
   .string()
-  .min(2, "이름은 최소 2글자 이상이여야 합니다.")
-  .max(50, "이름은 최대 50글자 이하이여야 합니다.")
-  .regex(/^[가-힣]+$/, "이름은 한글(낱말)만 입력 가능합니다.");
-const phoneSchema = z
+  .min(2, t('name_min'))
+  .max(50, t('name_max'))
+  .regex(/^[가-힣]+$/, t('name_zod'));
+const phoneSchema = (t: (key: string) => string) => z
   .string()
   .trim()
-  .min(1, "전화번호를 입력해주세요.")
+  .min(1, t('mobile_hint'))
   .refine((val) => /^[0-9\s-]+$/.test(val), {
-    message: "숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
+    message: t('mobile_zod'),
   })
   .transform((val) => val.replace(/\D/g, ""))
   .pipe(
     z
       .string()
-      .min(9, "전화번호는 휴대폰(10~11자리) 형식이어야 합니다.")
-      .max(11, "전화번호는 휴대폰(10~11자리) 형식이어야 합니다.")
-      .regex(/^\d+$/, "전화번호는 숫자만 입력 가능합니다.")
+      .min(9, t('mobile_min_max'))
+      .max(11, t('mobile_min_max'))
+      .regex(/^\d+$/, t('mobile_zoe_1'))
       .refine(isValidKoreanPhone, { message: KOREAN_PHONE_ERROR_MESSAGE }),
   );
 
-const registerSchema = z
+const registerSchema = (t: (key: string) => string) => z
   .object({
     email: z
       .string()
-      .max(30, { message: "이메일은 최대 30자까지 입력 가능합니다." })
-      .email({ message: "이메일 형식이 올바르지 않습니다." }),
+      .max(30, { message: t('email_max') })
+      .email({ message: t('email_invalid') }),
     // 기존 관리자(이미 가입 이메일)일 때는 빈 문자열 허용 → 센터 정보만 검증
-    password: z.union([z.literal(""), passwordSchema]),
-    passwordConfirm: z.union([z.literal(""), passwordSchema]),
-    name: z.union([z.literal(""), nameSchema]),
-    phone: z.union([z.literal(""), phoneSchema]),
-    termsAccepted: z.boolean().refine((val) => val === true, "필수 동의 항목입니다."),
-    privacyAccepted: z.boolean().refine((val) => val === true, "필수 동의 항목입니다."),
+    password: z.union([z.literal(""), passwordSchema(t)]),
+    passwordConfirm: z.union([z.literal(""), passwordSchema(t)]),
+    name: z.union([z.literal(""), nameSchema(t)]),
+    phone: z.union([z.literal(""), phoneSchema(t)]),
+    termsAccepted: z.boolean().refine((val) => val === true, t('required_item')),
+    privacyAccepted: z.boolean().refine((val) => val === true, t('required_item')),
   })
   .merge(centerEditSchema)
   .superRefine((arg, ctx) => {
@@ -86,13 +87,13 @@ const registerSchema = z
     if (arg.password !== arg.passwordConfirm) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "비밀번호가 일치하지 않습니다.",
+        message: t('pw_invalid'),
         path: ["passwordConfirm"],
       });
     }
   });
 
-type RegisterFormValues = z.infer<typeof registerSchema>;
+type RegisterFormValues = z.infer<ReturnType<typeof registerSchema>>;
 
 // 에러메시지 커스텀
 const ErrorText = ({ children }: { children: ReactNode }) => {
@@ -103,7 +104,8 @@ export const RegisterContainer = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const deviceIdFromUrl = searchParams.get("device_id")?.trim() ?? "";
-
+  const t = useTranslations("Index");
+  const currentRegisterSchema = useMemo(() => registerSchema(t), [t]);
   const {
     register,
     handleSubmit,
@@ -111,7 +113,7 @@ export const RegisterContainer = () => {
     setValue,
     formState: { errors },
   } = useForm<RegisterFormValues>({
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(currentRegisterSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -190,12 +192,12 @@ export const RegisterContainer = () => {
   /** 주관리자 이메일 인증 OTP 요청 (temp_token 사용) - 최초 요청 시 다이얼로그 오픈 */
   const requestEmailVerificationOtp = async () => {
     if (!tempToken?.trim()) {
-      alert("기기 확인 후 이메일 인증을 진행해주세요.");
+      alert(t('signup_device_invalid'));
       return;
     }
     const email = emailValue.trim();
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      alert("이메일을 올바르게 입력해주세요.");
+      alert(t('signup_email_invalid'));
       return;
     }
     setIsOtpRequesting(true);
@@ -220,7 +222,7 @@ export const RegisterContainer = () => {
         setValue("phone", "");
         handleOtpVerified(true, token);
         setIsOtpDialogOpen(false);
-        alert("기존 관리자 계정이 확인되어 이메일 인증이 완료되었습니다.");
+        alert(t('admin_account_verified'));
         return;
       }
 
@@ -236,8 +238,8 @@ export const RegisterContainer = () => {
           : null;
       alert(
         remaining != null
-          ? `이메일로 인증번호가 전송되었습니다. (남은 발송 횟수: ${remaining}회)`
-          : "이메일로 인증번호가 전송되었습니다.",
+          ? `${t('verification_code_sent')} (${t('remaining_send_count')}: ${remaining}${t('unit_times')})`
+          : t('verification_code_sent'),
       );
     } catch (e) {
       const msg =
@@ -245,7 +247,7 @@ export const RegisterContainer = () => {
           ? getRequestEmailVerificationOtpErrorMessage(e.response?.status)
           : e && typeof e === "object" && "message" in e
             ? String((e as { message: unknown }).message)
-            : "OTP 요청에 실패했습니다.";
+            : t('alert_otp_error_etc');
       alert(msg);
     } finally {
       setIsOtpRequesting(false);
@@ -277,7 +279,7 @@ export const RegisterContainer = () => {
         setValue("phone", "");
         handleOtpVerified(true, token);
         setIsOtpDialogOpen(false);
-        alert("기존 관리자 계정이 확인되어 이메일 인증이 완료되었습니다.");
+        alert(t('admin_account_verified'));
         return;
       }
 
@@ -291,8 +293,8 @@ export const RegisterContainer = () => {
           : null;
       alert(
         remaining != null
-          ? `OTP가 재전송되었습니다. (남은 발송 횟수: ${remaining}회)`
-          : "OTP가 재전송되었습니다.",
+          ? `${t('alert_otp_request_again')} (${t('remaining_send_count')}: ${remaining}${t('unit_times')})`
+          : t('alert_otp_request_again'),
       );
     } catch (e) {
       const msg =
@@ -300,7 +302,7 @@ export const RegisterContainer = () => {
           ? getRequestEmailVerificationOtpErrorMessage(e.response?.status)
           : e && typeof e === "object" && "message" in e
             ? String((e as { message: unknown }).message)
-            : "OTP 재전송에 실패했습니다.";
+            : t('alert_otp_request_again_fail');
       alert(msg);
     }
   };
@@ -321,7 +323,7 @@ export const RegisterContainer = () => {
       return;
     }
     if (!emailVerificationTempToken?.trim()) {
-      alert("이메일 인증을 완료해주세요.");
+      alert(t('email_vertify_complete'));
       return;
     }
     setRegisterPending(true);
@@ -351,7 +353,7 @@ export const RegisterContainer = () => {
           emailVerificationTempToken,
         );
       }
-      alert("회원가입이 완료되었습니다. 로그인해주세요.");
+      alert(t('signup_success'));
       router.push("/login");
     } catch (e) {
       const msg =
@@ -359,7 +361,7 @@ export const RegisterContainer = () => {
           ? getRegisterAdminErrorMessage(e.response?.status)
           : e && typeof e === "object" && "message" in e
             ? String((e as { message: unknown }).message)
-            : "회원가입에 실패했습니다.";
+            : t('signup_failed');
       alert(msg);
     } finally {
       setRegisterPending(false);
@@ -374,12 +376,12 @@ export const RegisterContainer = () => {
       <div className="flex flex-col items-center gap-5 text-center">
         <legend className="sr-only">센터관리자 회원가입</legend>
         <h1 className="text-2xl font-bold mb-3 lg:mb-5">
-          <span className="block sm:inline">탱고플러스 센터관리자</span>{" "}
-          <span className="block sm:inline">회원가입</span>
+          <span className="block sm:inline">{t('signup_admin_title')}</span>{" "}
+          <span className="block sm:inline">{t('btn_signup')}</span>
         </h1>
         {!isCheckCenter ? (
           isAutoCheckingDevice ? (
-            <p className="text-muted-foreground">기기 확인 중...</p>
+            <p className="text-muted-foreground">{t('status_checking_device')}</p>
           ) : (
             <RegisterCenterCheckForm onCenterCheck={eventCenterCheck} />
           )
@@ -413,10 +415,10 @@ export const RegisterContainer = () => {
                   className="shrink-0 h-9 px-4"
                 >
                   {otpStatus === "verified"
-                    ? "인증완료"
+                    ? t('verification_completed')
                     : isOtpRequesting
-                      ? "전송중..."
-                      : "인증 번호 전송"}
+                      ? t('status_sending')
+                      : t('btn_send_code')}
                 </Button>
               </div>
               {errors.email?.message && (
@@ -430,8 +432,8 @@ export const RegisterContainer = () => {
                     otpStatus === "failed" && "text-red-500"
                   )}
                 >
-                  {otpStatus === "verified" && "인증완료"}
-                  {otpStatus === "failed" && "인증번호가 맞지 않습니다."}
+                  {otpStatus === "verified" && t('verification_completed')}
+                  {otpStatus === "failed" && t('verification_failed')}
                 </p>
               )}
             </div>
@@ -439,7 +441,7 @@ export const RegisterContainer = () => {
               <>
                 <div className="flex flex-col items-start gap-2">
                   <Label htmlFor="password" className="lg:text-lg">
-                    비밀번호
+                    {t('label_pw')}
                   </Label>
                   <Input
                     id="password"
@@ -456,7 +458,7 @@ export const RegisterContainer = () => {
                 </div>
                 <div className="flex flex-col items-start gap-2">
                   <Label htmlFor="passwordConfirm" className="lg:text-lg">
-                    비밀번호 확인
+                    {t('label_pw_confirm')}
                   </Label>
 
                   <Input
@@ -474,7 +476,7 @@ export const RegisterContainer = () => {
                 </div>
                 <div className="flex flex-col items-start gap-2">
                   <Label htmlFor="name" className="lg:text-lg">
-                    이름
+                    {t('label_name')}
                   </Label>
                   <Input
                     id="name"
@@ -491,7 +493,7 @@ export const RegisterContainer = () => {
                 </div>
                 <div className="flex flex-col items-start gap-2">
                   <Label htmlFor="phone" className="lg:text-lg">
-                    전화번호
+                    {t('label_mobile')}
                   </Label>
                   <Input
                     id="phone"
@@ -500,8 +502,8 @@ export const RegisterContainer = () => {
                     placeholder="전화번호"
                     required
                     {...register("phone", {
-                      required: "전화번호를 입력해주세요.",
-                      minLength: { value: 11, message: "휴대폰번호 11자리를 입력해야 합니다." },
+                      required: t('mobile_hint'),
+                      minLength: { value: 11, message: t('mobile_min_max') },
                       onChange: (e) => {
                         const onlyNumber = e.target.value.replace(/[^0-9]/g, "");
                         const truncated = onlyNumber.slice(0, 11);
@@ -518,12 +520,12 @@ export const RegisterContainer = () => {
             )}
             {isExistingAdmin && (
               <p className="text-sm text-muted-foreground text-center w-full py-2">
-                이미 가입된 이메일 입니다. 센터 정보만 입력해주세요.
+                {t('msg_existing_email_center_only')}
               </p>
             )}
             <div className="flex flex-col items-start gap-2">
               <Label htmlFor="centerName" className="lg:text-lg">
-                센터 이름
+                {t('label_center_name')}
               </Label>
               <Input
                 id="centerName"
@@ -539,7 +541,7 @@ export const RegisterContainer = () => {
             </div>
             <div className="flex flex-col items-start gap-2">
               <Label htmlFor="centerAddress" className="lg:text-lg">
-                센터 주소
+                {t('label_center_address')}
               </Label>
               <div className="flex gap-2 w-full">
                 <Input
@@ -557,7 +559,7 @@ export const RegisterContainer = () => {
                   onClick={handleAddressSearch}
                   className="shrink-0"
                 >
-                  주소 검색
+                  {t('btn_search_address')}
                 </Button>
               </div>
               <Input
@@ -577,7 +579,7 @@ export const RegisterContainer = () => {
             </div>
             <div className="flex flex-col items-start gap-2">
               <Label htmlFor="centerPhone" className="lg:text-lg">
-                센터 전화 번호
+                {t('label_center_phone')}
               </Label>
               <Input
                 id="centerPhone"
@@ -594,7 +596,7 @@ export const RegisterContainer = () => {
             </div>
             <div className="flex flex-col items-start gap-2">
               <Label htmlFor="centerPhone" className="lg:text-lg">
-                약관 동의
+                {t('label_terms_agreement')}
               </Label>
               <div className="flex flex-col gap-2 w-full border p-3 ">
                 {/* 서비스 이용약관 */}
@@ -602,7 +604,7 @@ export const RegisterContainer = () => {
                   <span onClick={() => {
                     window.open('https://tangobody-terms.vercel.app/admin_page/terms', '_blank');
                   }} className="text-sm text-muted-foreground underline cursor-pointer">
-                    [필수] 서비스 이용약관
+                    {t('terms_service_required')}
                   </span>
                   <input
                     type="checkbox"
@@ -617,7 +619,7 @@ export const RegisterContainer = () => {
                   <span onClick={() => {
                     window.open('https://tangobody-terms.vercel.app/admin_page/privacy', '_blank');
                   }} className="text-sm text-muted-foreground underline cursor-pointer">
-                    [필수] 개인정보 처리 방침
+                    {t('terms_privacy_required')}
                   </span>
                   <input
                     type="checkbox"
@@ -635,7 +637,7 @@ export const RegisterContainer = () => {
               className="w-full lg:text-lg"
               disabled={otpStatus !== "verified" || !isTermsAccepted || !isPrivacyAccepted || registerPending}
             >
-              {registerPending ? "가입 중..." : "회원가입"}
+              {registerPending ? t('status_signing_up') : t('btn_signup')}
             </Button>
 
             
@@ -653,3 +655,4 @@ export const RegisterContainer = () => {
     </form>
   );
 };
+    // TODO 여기서부터 하면 됨 부관리자 회원가입

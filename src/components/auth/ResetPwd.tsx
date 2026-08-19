@@ -6,34 +6,36 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useResetPwd } from "@/hooks/api/auth/useResetPwd";
+import { useTranslations } from "next-intl";
 
 const ResetPwd = ({ jwt, email }: { jwt: string; email: string }) => {
+  const t = useTranslations("Index");
   const formSchema = z
     .object({
       password: z
         .string()
-        .min(1, "새 비밀번호를 입력해주세요.")
-        .min(8, "비밀번호는 최소 8글자 이상이여야 합니다.")
-        .max(16, "비밀번호는 최대 16글자 이하여야 합니다.")
+        .min(1, t('reset_pw_hint'))
+        .min(8, t('pw_min'))
+        .max(16, t('pw_max'))
         .regex(
           /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]+$/i,
-          "비밀번호는 영문, 숫자, ! ~ * 특수문자를 최소 1자리 이상 입력해야합니다.",
+          t('pw_zod'),
         ),
       confirmPassword: z
         .string()
-        .min(1, "비밀번호 확인을 입력해주세요.")
-        .min(8, "비밀번호는 최소 8글자 이상이여야 합니다.")
-        .max(16, "비밀번호는 최대 16글자 이하여야 합니다.")
+        .min(1, t('reset_pw_confim_input'))
+        .min(8, t('pw_min'))
+        .max(16, t('pw_max'))
         .regex(
           /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]+$/i,
-          "비밀번호는 영문, 숫자, ! ~ * 특수문자를 최소 1자리 이상 입력해야합니다.",
+          t('pw_zod'),
         ),
     })
     .superRefine((arg, ctx) => {
       if (arg.password !== arg.confirmPassword) {
         return ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "비밀번호가 일치하지 않습니다.",
+          message: t('reset_mismatch'),
           path: ["confirmPassword"],
         });
       }
@@ -64,7 +66,7 @@ const ResetPwd = ({ jwt, email }: { jwt: string; email: string }) => {
       className="w-full flex flex-col gap-2"
     >
       <div className="flex flex-col gap-2">
-        <Label htmlFor="password">신규 비밀번호</Label>
+        <Label htmlFor="password">{t('reset_new_pw')}</Label>
         <Input
           {...form.register("password")}
           type="password"
@@ -80,7 +82,7 @@ const ResetPwd = ({ jwt, email }: { jwt: string; email: string }) => {
         )}
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="confirmPassword">비밀번호 확인</Label>
+        <Label htmlFor="confirmPassword">{t('reset_pw_confirm')}</Label>
         <Input
           {...form.register("confirmPassword")}
           type="password"
@@ -95,7 +97,7 @@ const ResetPwd = ({ jwt, email }: { jwt: string; email: string }) => {
           </p>
         )}
       </div>
-      <Button type="submit">비밀번호 변경</Button>
+      <Button type="submit">{t('reset_pw')}</Button>
     </form>
   );
 };
