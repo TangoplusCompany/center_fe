@@ -1,5 +1,6 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
 import FootDynamic from "./FootDynamic";
 import HipTrajectory from "./HipTrajectory";
 
@@ -31,7 +32,8 @@ const FootDynamicContainer = (
   lCase,
 }: FootDynamicContainerProps
 ) => {
-  
+  const t = useTranslations("Index");
+  const locale = useLocale();
   return (
     <div className="flex-1 p-4">
       {/* 헤더 */}
@@ -40,15 +42,15 @@ const FootDynamicContainer = (
           {/* 헤더 */}
           <div className="flex flex-col gap-4">
             <div className="flex justify-between items-center">
-              <h3 className="text-xl font-semibold">동적 족압, 관절 이동</h3>
+              <h3 className={`${locale == "ko" ? "text-xl" : "text-md mb-3"} font-semibold`}>{t('gait_dynamic_foot_pressure_joint_movement')}</h3>
             </div>
 
             <div className="flex justify-center gap-4">
 
               <div className="flex justify-center items-center">
                 <div className="flex flex-col items-center w-fit">
-                  <div className="w-full rounded-md border text-center py-1 mb-1">
-                    동적 족압 분석
+                  <div className={`${locale == "ko" ? "text-base" : "text-sm"} w-full rounded-md border text-center py-1 mb-1`}>
+                    {t('gait_dynamic_foot_pressure_analysis')}
                   </div>
                   <div className="w-32 h-32">
                     <FootDynamic footFileName={footFileName} matOhs={matOhs} />
@@ -59,8 +61,8 @@ const FootDynamicContainer = (
               <div className="flex justify-center items-center">
                 <div className="flex justify-center items-center">
                   <div className="flex flex-col items-center w-fit">
-                    <div className="w-full rounded-md border text-center py-1 mb-1">
-                      골반 이동 분석
+                    <div className={`${locale == "ko" ? "text-base" : "text-sm"} w-full rounded-md border text-center py-1 mb-1`}>
+                      {t('gait_pelvis_movement_analysis')}
                     </div>
                     <div className="w-32 h-32">
                       <HipTrajectory hipFileName={hipFileName} />
@@ -82,7 +84,7 @@ const FootDynamicContainer = (
           <div className="flex flex-col items-center">
             <div className="flex justify-between items-center mb-4 w-full">
               <div className="w-full rounded-md border text-center py-1 mb-1">
-                동적 족압 분석
+                {t('gait_dynamic_foot_pressure_analysis')}
               </div>
             </div>
             <FootDynamic footFileName={footFileName} matOhs={matOhs} />

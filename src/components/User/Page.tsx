@@ -11,8 +11,10 @@ import { useAuthStore } from "@/providers/AuthProvider";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import { CenterUserAddDialog } from "./AddDialog";
 import CenterUserPageSkeleton from "./PageSkeleton";
+import { useTranslations } from "next-intl";
 
 const CenterUserPage = () => {
+  const t = useTranslations("Index");
   const { adminRole } = useAuthStore((state) => state);
   const [dialogOpen, setDialogOpen] = useState(false);
   const { query, setQueryParam } = useQueryParams();
@@ -61,9 +63,9 @@ const CenterUserPage = () => {
     return (
       <div className="col-span-12 flex flex-col gap-5">
         <div className="col-span-12 flex justify-between">
-          <p>사용자가 존재하지 않습니다. 신규 사용자를 추가해주세요.</p>
+          <p>{t('message_user_empty')}</p>
           <Button className="" variant="outline" onClick={() => setDialogOpen(true)}>
-            사용자 추가
+            {t('btn_add_user')}
           </Button>
         </div>
         <CenterUserAddDialog

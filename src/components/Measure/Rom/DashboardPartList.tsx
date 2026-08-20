@@ -4,6 +4,7 @@ import { formatDate } from "@/utils/formatDate";
 import DashboardTypeContainer from "./DashboardTypeContainer";
 import { ComparePair } from "@/types/compare";
 import { Fragment } from "react";
+import { useLocale, useTranslations } from "next-intl";
 
 export interface ROMDashboardPartListProps {
   romTypeItems: IMeasureROMTypeItem[];
@@ -19,6 +20,8 @@ const ROMDashboardPartList = ({
   romHistorys,
   onROMItemSelect,
 }: ROMDashboardPartListProps) => {
+  const t= useTranslations("Index");
+  const locale = useLocale();
   const stateComp = (score: number) => {
     const scoreMap : Record<number, {label : string; className: string}> = {
       0 : {label: "위험", className: "border-danger text-danger"},
@@ -72,7 +75,7 @@ const ROMDashboardPartList = ({
                     {rom.title}
                   </TableCell>
                   <TableCell className="text-center whitespace-nowrap">
-                    {formatDate(rom.reg_date)}
+                    {formatDate(rom.reg_date, locale)}
                   </TableCell>
                   <TableCell className="text-center whitespace-nowrap">
                     {Math.abs(rom.value_1_max).toFixed(1)}º

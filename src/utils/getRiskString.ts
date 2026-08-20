@@ -1,8 +1,10 @@
-export const getRiskString = (level?: number | string) => {
-  if (level === undefined || level === null) return undefined; 
-  
+export const getRiskString = (level?: number | string, locale: string = "ko") => {
+  if (level === undefined || level === null) return undefined;
+
   const numLevel = Number(level);
-  if (numLevel >= 2) return "위험";
-  if (numLevel >= 1) return "주의";
-  return "정상";
+  const isKo = locale.startsWith("ko");
+
+  if (numLevel >= 2) return isKo ? "위험" : "Danger";
+  if (numLevel >= 1) return isKo ? "주의" : "Warning";
+  return isKo ? "정상" : "Normal";
 };

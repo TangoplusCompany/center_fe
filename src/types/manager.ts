@@ -38,7 +38,7 @@ export interface IAdminLoginNewSuccessResponse {
 
 /** auth/login-new 실패 응답 (401: 남은 시도 있음 / 403: 계정 잠김) */
 export interface IAdminLoginNewErrorResponse {
-  status: 401 | 403;
+  status: 401 | 403 | 500 ;
   success: false;
   message: string[];
   data: { remaining_attempts: number };

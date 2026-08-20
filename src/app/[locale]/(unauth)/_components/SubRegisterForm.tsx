@@ -15,67 +15,71 @@ import {
   isValidKoreanPhone,
   KOREAN_PHONE_ERROR_MESSAGE,
 } from "@/utils/validateKoreanPhone";
+import { useTranslations } from "next-intl";
 
 /** 부관리자 회원가입 API 실패 시 상태별 안내 메시지 */
-function getRegisterSubAdminErrorMessage(error: unknown): string {
+function getRegisterSubAdminErrorMessage(error: unknown, t: (key: string) => string): string {
   if (error instanceof AxiosError && error.response?.status) {
     switch (error.response.status) {
       case 400:
-        return "필수 정보가 누락되었거나 올바르지 않습니다.";
+        return t('alert_sub_admin_error_400');
       case 401:
-        return "유효하지 않은 초대 링크입니다. 링크를 다시 확인하거나 재발급 요청해주세요.";
+        return t('alert_sub_admin_error_429');
       case 409:
-        return "이미 해당 센터에 등록된 부관리자입니다.";
+        return t('alert_sub_admin_error_423');
       case 500:
-        return "회원가입 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
+        return t('alert_sub_admin_error_500');
       default:
         break;
     }
   }
-  return "회원가입에 실패했습니다. 다시 시도해주세요.";
+  return t('alert_sub_admin_error');
 }
 
-const subRegisterSchema = z
+const subRegisterSchema = (t: (key: string) => string) => z
   .object({
     email: z
       .string()
-      .max(30, { message: "이메일은 최대 30자까지 입력 가능합니다." })
-      .email({ message: "이메일 형식이 올바르지 않습니다." }),
+      .max(30, { message: t('email_max') })
+      .email({ message: t('email_invalid') }),
     password: z
       .string()
-      .min(8, "비밀번호는 최소 8글자 이상이여야 합니다.")
-      .max(16, "비밀번호는 최대 16글자 이하여야 합니다.")
+      .min(8, t('pw_min'))
+      .max(16, t('pw_max'))
       .regex(
         /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]+$/i,
-        "비밀번호는 영문, 숫자, ! ~ * 특수문자를 최소 1자리 이상 입력해야합니다.",
+        t('pw_zod'),
       ),
     passwordConfirm: z
       .string()
-      .min(8, "비밀번호는 최소 8글자 이상이여야 합니다.")
-      .max(16, "비밀번호는 최대 16글자 이하여야 합니다.")
+      .min(8, t('pw_min'))
+      .max(16, t('pw_max'))
       .regex(
         /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]+$/i,
-        "비밀번호는 영문, 숫자, ! ~ * 특수문자를 최소 1자리 이상 입력해야합니다.",
+        t('pw_zod'),
       ),
     name: z
       .string()
-      .min(2, "이름은 최소 2글자 이상이여야 합니다.")
-      .max(50, "이름은 최대 50글자 이하이여야 합니다.")
-      .regex(/^[가-힣]+$/, "이름은 한글(낱말)만 입력 가능합니다."),
+      .min(2, t('name_min'))
+      .max(50, t('name_max'))
+      .regex(
+        /^[가-힣a-zA-Z\s]+$/, 
+        t('name_zod')
+      ),
     phone: z
       .string()
       .trim()
-      .min(1, "전화번호를 입력해주세요.")
+      .min(1, t('mobile_hint'))
       .refine((val) => /^[0-9\s-]+$/.test(val), {
-        message: "숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
+        message: t('mobile_zod'),
       })
       .transform((val) => val.replace(/\D/g, ""))
       .pipe(
         z
           .string()
-          .min(9, "전화번호는 지역번호(9~10자리) 또는 휴대폰(10~11자리) 형식이어야 합니다.")
-          .max(11, "전화번호는 지역번호(9~10자리) 또는 휴대폰(10~11자리) 형식이어야 합니다.")
-          .regex(/^\d+$/, "전화번호는 숫자만 입력 가능합니다.")
+          .min(9, t('telephone_zod'))
+          .max(11, t('telephone_zod'))
+          .regex(/^\d+$/, t('mobile_zoe_1'))
           .refine(isValidKoreanPhone, { message: KOREAN_PHONE_ERROR_MESSAGE }),
       ),
   })
@@ -83,13 +87,13 @@ const subRegisterSchema = z
     if (arg.password !== arg.passwordConfirm) {
       return ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "비밀번호가 일치하지 않습니다.",
+        message: t('pw_invalid'),
         path: ["passwordConfirm"],
       });
     }
   });
 
-type SubRegisterFormValues = z.infer<typeof subRegisterSchema>;
+type SubRegisterFormValues = z.infer<ReturnType<typeof subRegisterSchema>>;
 
 const ErrorText = ({ children }: { children: ReactNode }) => {
   return <p className="text-sm text-red-500 text-start">{children}</p>;
@@ -102,16 +106,17 @@ export const SubRegisterContainer = ({
   token: string;
   email?: string;
 }) => {
+  const t = useTranslations("Index");
   const router = useRouter();
   const [submitPending, setSubmitPending] = useState(false);
-
+  const currentRegisterSchema = useMemo(() => subRegisterSchema(t), [t]);
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors, isValid },
   } = useForm<SubRegisterFormValues>({
-    resolver: zodResolver(subRegisterSchema),
+    resolver: zodResolver(currentRegisterSchema),
     defaultValues: {
       email: email || "",
       password: "",
@@ -148,7 +153,7 @@ export const SubRegisterContainer = ({
 
   const registerHandleSubmit = handleSubmit(async (data) => {
     if (!token?.trim()) {
-      alert("유효한 초대 링크가 아닙니다. 링크를 다시 확인해주세요.");
+      alert(t('invite_invalid'));
       return;
     }
     setSubmitPending(true);
@@ -160,10 +165,10 @@ export const SubRegisterContainer = ({
         admin_name: data.name,
         password: data.password,
       });
-      alert("회원가입이 완료되었습니다. 로그인해주세요.");
+      alert(t('signup_success'));
       router.push("/login");
     } catch (error) {
-      alert(getRegisterSubAdminErrorMessage(error));
+      alert(getRegisterSubAdminErrorMessage(error, t));
     } finally {
       setSubmitPending(false);
     }
@@ -175,15 +180,15 @@ export const SubRegisterContainer = ({
       onSubmit={registerHandleSubmit}
     >
       <div className="flex flex-col items-center gap-5 text-center">
-        <legend className="sr-only">회원가입</legend>
+        <legend className="sr-only">{t('btn_signup')}</legend>
         <h1 className="text-2xl font-bold mb-3 lg:mb-5">
-          <span className="block sm:inline">탱고플러스 센터 부관리자</span>{" "}
-          <span className="block sm:inline">회원가입</span>
+          <span className="block sm:inline">{t('signup_sub_admin_title')}</span>{" "}
+          <span className="block sm:inline">{t('btn_signup')}</span>
         </h1>
         <div className="flex flex-col gap-6 w-full">
           <div className="flex flex-col items-start gap-2">
             <Label htmlFor="email" className="lg:text-lg">
-              이메일
+              {t('target_email')}
             </Label>
             <Input
               id="email"
@@ -202,7 +207,7 @@ export const SubRegisterContainer = ({
           </div>
           <div className="flex flex-col items-start gap-2">
             <Label htmlFor="password" className="lg:text-lg">
-              비밀번호
+              {t('label_pw')}
             </Label>
             <Input
               id="password"
@@ -219,7 +224,7 @@ export const SubRegisterContainer = ({
           </div>
           <div className="flex flex-col items-start gap-2">
             <Label htmlFor="passwordConfirm" className="lg:text-lg">
-              비밀번호 확인
+              {t('label_pw_confirm')}
             </Label>
             <Input
               id="passwordConfirm"
@@ -236,7 +241,7 @@ export const SubRegisterContainer = ({
           </div>
           <div className="flex flex-col items-start gap-2">
             <Label htmlFor="name" className="lg:text-lg">
-              이름
+              {t('label_name')}
             </Label>
             <Input
               id="name"
@@ -253,7 +258,7 @@ export const SubRegisterContainer = ({
           </div>
           <div className="flex flex-col items-start gap-2">
             <Label htmlFor="phone" className="lg:text-lg">
-              전화번호
+              {t('label_mobile')}
             </Label>
             <Input
               id="phone"
@@ -261,14 +266,14 @@ export const SubRegisterContainer = ({
               placeholder="01012345678"
               required
               {...register("phone", {
-                required: "전화번호를 입력해주세요.",
+                required: t('mobile_hint'),
                 // 🔥 숫자 11자리 정규식 검사
                 pattern: {
                   value: /^010\d{8}$/,
                   message: "010으로 시작하는 11자리 숫자를 입력해주세요."
                 },
-                minLength: { value: 11, message: "휴대폰번호 11자리를 입력해야 합니다." },
-                maxLength: { value: 11, message: "11자 이상 입력할 수 없습니다." },
+                minLength: { value: 11, message: t('mobile_min_max') },
+                maxLength: { value: 11, message: t('mobile_min_max') },
                 onChange: (e) => {
                   // 1. 숫자 이외 문자 즉시 제거
                   const onlyNumber = e.target.value.replace(/[^0-9]/g, "");
@@ -291,7 +296,7 @@ export const SubRegisterContainer = ({
             className="w-full lg:text-lg"
             disabled={!isFormValid || submitPending}
           >
-            {submitPending ? "가입 중..." : "회원가입"}
+            {submitPending ? t('status_signing_up') : t('btn_signup')}
           </Button>
         </div>
       </div>

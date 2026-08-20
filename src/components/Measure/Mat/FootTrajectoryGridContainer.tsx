@@ -6,6 +6,7 @@ import HipTrajectory from "./HipTrajectory";
 import KneeTrajectory from "./KneeTrajectory";
 import { IMatStaticPressure } from "./FootStaticContainer";
 import { IMatOhsPressure } from "./FootDynamicContainer";
+import { useLocale, useTranslations } from "next-intl";
 
 const FootTrajectoryGridContainer = ({
   footOCP
@@ -13,6 +14,8 @@ const FootTrajectoryGridContainer = ({
   footOCP: MeasureFootCOP;
 }
 ) => {
+  const t= useTranslations("Index");
+  const locale = useLocale();
   const {
     mat_static_risk_level,
     mat_static_range_level,
@@ -91,7 +94,7 @@ const FootTrajectoryGridContainer = ({
             </div>
             {footOCP.measure_date && (
               <span className="text-sm text-sub300">
-                {formatDate(footOCP.measure_date)}
+                {formatDate(footOCP.measure_date, locale)}
               </span>
             )}
           </div>

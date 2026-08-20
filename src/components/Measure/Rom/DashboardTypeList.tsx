@@ -2,6 +2,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ComparePair } from "@/types/compare";
 import { IMeasureROMHistoryItem } from "@/types/measure";
 import { formatDate } from "@/utils/formatDate";
+import { useLocale, useTranslations } from "next-intl";
 
 export interface ROMDashboardTypeListProps {
   onROMItemSelect ?: (romSn: ComparePair) => void;
@@ -12,6 +13,8 @@ const ROMDashboardTypeList = ({
   onROMItemSelect,
   romHistorys
 }: ROMDashboardTypeListProps) => {
+  const t= useTranslations("Index");
+  const locale = useLocale();
   const stateString :Record<number, string> = {
     0 : "위험",
     1 : "주의",
@@ -63,7 +66,7 @@ const ROMDashboardTypeList = ({
               }}
               >
               <TableCell className="whitespace-nowrap text-start ">
-                {formatDate(romItem.reg_date)}
+                {formatDate(romItem.reg_date, locale)}
               </TableCell >
               <TableCell className="whitespace-nowrap text-center">
                 {romItem.center_name}

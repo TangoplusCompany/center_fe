@@ -101,6 +101,7 @@ export default function LoginForm({
       const res = await postLoginFor2FA({
         email: data.email,
         password: data.password,
+        translate : t
       });
       setTempJwt(res.temp_jwt);
       setLoginDataFor2FA({ email: data.email, password: data.password });

@@ -1,5 +1,6 @@
 import { parseString } from "@/utils/parseString";
 import { formatDate } from "@/utils/formatDate";
+import { useLocale, useTranslations } from "next-intl";
 
 export interface MeasureSummaryUnitProps {
   ment: string;
@@ -16,6 +17,8 @@ const MeasureSummaryUnit = ({
   title,
   measureDate,
 }: MeasureSummaryUnitProps) => {
+  const t= useTranslations("Index");
+  const locale = useLocale();
   const getRiskString = (level?: string) => 
   ({
     "0": "정상",
@@ -40,7 +43,7 @@ const MeasureSummaryUnit = ({
           <h2 className="text-xl font-semibold text-sub800 dark:text-sub100">{title}</h2>
           {measureDate && (
             <span className="text-sm text-sub300 dark:text-gray-400">
-              {formatDate(measureDate)}
+              {formatDate(measureDate, locale)}
             </span>
           )}
         </div>

@@ -1,24 +1,26 @@
+import { useTranslations } from "next-intl";
 import React from "react";
 
 interface LoginUserCircleProps {
   adminName: string;
   adminRole?: number;
 }
-const getRoleText = (role?: number): string => {
+const getRoleText = (t : (key : string) => string, role?: number ): string => {
   switch (role) {
     case 0:
       return "";
     case 1:
-      return "주관리자";
+      return t('main_admin');
     case 2:
-      return "부관리자"; // 2에 해당하는 역할을 추가하시면 됩니다
+      return t('sub_admin'); // 2에 해당하는 역할을 추가하시면 됩니다
     default:
-      return "센터직원";
+      return t('normal_admin');
   }
 };
 
 export default function LoginUserCircle({ adminName, adminRole }: LoginUserCircleProps) {
-  const roleText = getRoleText(adminRole);
+  const t = useTranslations("Index")
+  const roleText = getRoleText(t, adminRole);
 
   return (
     <div className="flex items-center gap-2">

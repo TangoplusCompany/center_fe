@@ -121,6 +121,7 @@ export const SettingOtpDialog = ({
     setVerifyPending(true);
     try {
       const loginDataRes = await postVerifyLoginOtp({
+        t,
         otp: data.otp,
         type,
         tempJwt,
@@ -158,7 +159,7 @@ export const SettingOtpDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>이중 인증</DialogTitle>
+          <DialogTitle>{t('double_verify_title')}</DialogTitle>
           <DialogDescription>
             {isEmailType || isPhoneType
               ? t("otp_sent_to_target", {

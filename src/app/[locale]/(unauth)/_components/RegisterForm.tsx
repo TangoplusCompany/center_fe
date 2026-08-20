@@ -481,7 +481,7 @@ export const RegisterContainer = () => {
                   <Input
                     id="name"
                     type="text"
-                    placeholder="홍길동"
+                    placeholder="Hong Gil Dong"
                     required
                     maxLength={50}
                     {...register("name")}
@@ -499,7 +499,7 @@ export const RegisterContainer = () => {
                     id="phone"
                     type="tel"
                     pattern="[0-9\\s-]*"
-                    placeholder="전화번호"
+                    placeholder={t('setting_account_phone')}
                     required
                     {...register("phone", {
                       required: t('mobile_hint'),
@@ -655,4 +655,3 @@ export const RegisterContainer = () => {
     </form>
   );
 };
-    // TODO 여기서부터 하면 됨 부관리자 회원가입

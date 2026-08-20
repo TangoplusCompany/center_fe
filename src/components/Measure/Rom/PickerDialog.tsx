@@ -4,6 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ComparePair, CompareSlot } from "@/types/compare";
 import { IMeasureROMItem } from "@/types/measure";
 import { formatDate } from "@/utils/formatDate";
+import { useLocale, useTranslations } from "next-intl";
 
 import { useEffect, useState } from "react";
 export interface ComparePagination {
@@ -39,7 +40,8 @@ export const ROMPickerDialog = ({
   isLoading,
   isError
 }: ROMPickerDialogProps) => {
-
+  const t= useTranslations("Index");
+  const locale = useLocale();
   const [localPage, setLocalPage] = useState(1);
   const useApiPagination = !!apiPagination;
   
@@ -109,7 +111,7 @@ export const ROMPickerDialog = ({
                     }}
                   >
                     <div className="text-sm font-medium">
-                      {formatDate(it.reg_date)}
+                      {formatDate(it.reg_date, locale)}
                     </div>
                     {/* <div className="text-xs text-gray-500 dark:text-gray-400">
                       {it.}

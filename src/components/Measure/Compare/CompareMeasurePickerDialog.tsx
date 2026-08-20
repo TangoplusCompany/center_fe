@@ -15,6 +15,7 @@ import { ComparePair, CompareSlot } from "@/types/compare";
 import { IUserMeasureListItem } from "@/types/user";
 import { formatDate } from "@/utils/formatDate";
 import type { ComparePagination } from "@/hooks/api/user/useMeasureListForCompare";
+import { useLocale, useTranslations } from "next-intl";
 
 type MeasurePickerDialogProps = {
   open: boolean;
@@ -36,6 +37,8 @@ export const MeasurePickerDialog = ({
   selectCompareSn,
   pagination: apiPagination,
 }: MeasurePickerDialogProps) => {
+  const t = useTranslations("Index");
+  const locale = useLocale()
   const [localPage, setLocalPage] = useState(1);
 
   const useApiPagination = !!apiPagination;
@@ -93,7 +96,7 @@ export const MeasurePickerDialog = ({
                   }}
                 >
                   <div className="text-sm font-medium">
-                    {formatDate(it.measure_date)}
+                    {formatDate(it.measure_date, locale)}
                   </div>
                   <div className="text-xs text-gray-500 dark:text-gray-400">
                     장치이름: {it.device_name}

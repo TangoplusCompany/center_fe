@@ -5,6 +5,7 @@ import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import { IDeviceStatus } from "@/types/device";
 import React from "react";
 import { Skeleton } from "../ui/skeleton";
+import { useTranslations } from "next-intl";
 
 const DummyMeasureDeviceTab = () => {
   return (
@@ -13,6 +14,7 @@ const DummyMeasureDeviceTab = () => {
 };
 
 const MeasureDeviceTab = () => {
+  const t= useTranslations("Index")
   const { query, setQueryParam } = useQueryParams();
   const deviceSn = query.device_sn || "0";
   const {
@@ -47,7 +49,7 @@ const MeasureDeviceTab = () => {
           } px-4 py-1 text-sm font-medium rounded-xl transition-all whitespace-nowrap`}
           onClick={() => handleDeviceClick(0)}
         >
-          전체 보기
+          {t('btn_search_view_all')}
         </button>
 
         {/* 디바이스 목록 */}

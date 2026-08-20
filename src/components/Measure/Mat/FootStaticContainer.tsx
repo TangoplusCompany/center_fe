@@ -2,6 +2,7 @@
 
 import { getRiskString } from "@/utils/getRiskString";
 import FootStatic from "./FootStatic";
+import { useLocale, useTranslations } from "next-intl";
 
 export interface IMatStaticPressure {
   leftTopPressure: number;
@@ -30,7 +31,9 @@ const FootStaticContainer = ({
     matStatics,
     lCase,
 }: FootStaticContainerProps) => {
-  const riskString = getRiskString(risk_level)
+  const t = useTranslations("Index")
+  const locale = useLocale();
+  const riskString = getRiskString(risk_level, locale)
   const bgCondition = {
     0: "bg-sub600 dark:bg-gray-600",
     1: "bg-warning",
@@ -47,9 +50,9 @@ const FootStaticContainer = ({
     <div className="flex-1 p-4">
       {/* 헤더 */}
       <div className="flex justify-between items-center mb-4">
-        <h2 className={`text-xl font-semibold text-sub800 dark:text-sub100`}>정적 족압</h2>
+        <h2 className={`text-xl font-semibold text-sub800 dark:text-sub100`}>{t('gait_static_foot_pressure')}</h2>
         <span className={`px-3 py-1 ${bgCondition} text-white rounded-xl text-xs`}>
-          {riskString} {range_level}단계
+          {riskString} {range_level}{t('rom_stage')}
         </span>
       </div>
       {lCase === 0 ? (

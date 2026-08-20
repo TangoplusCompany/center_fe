@@ -8,6 +8,7 @@ import CompareDefault from "./CompareDefault";
 import CompareSummaryFootStatic, { CompareSummaryFootStaticProps } from "./CompareSummaryFootStatic";
 import { extractMeasureData } from "./CompareIntro";
 import { CompareStaticProps } from "./CompareBody";
+import { useTranslations } from "next-intl";
 
 
 const MeasureStaticCompareFirst = React.memo(
@@ -19,7 +20,7 @@ const MeasureStaticCompareFirst = React.memo(
   onImageReady,
   isMyPage = false,
 }: CompareStaticProps) => {
-
+  const t = useTranslations("Index");
 
   const leftSummaryData = left?.basic_result?.result_summary_data
   const rightSummaryData = right?.basic_result?.result_summary_data
@@ -70,7 +71,7 @@ const MeasureStaticCompareFirst = React.memo(
   const measureData1 = extractMeasureData(right);
 
   const footStatic0 : CompareSummaryFootStaticProps = {
-    comment: `[좌우 무게 분석]\n${measureData0.mat_static_horizontal_ment ?? ""}\n[상하 무게 분석]\n${measureData0.mat_static_vertical_ment ?? ""}`,
+    comment: `[${t('foot_horizon_weight_analysis')}]\n${measureData0.mat_static_horizontal_ment ?? ""}\n[${t('foot_verti_weight_analysis')}]\n${measureData0.mat_static_vertical_ment ?? ""}`,
     risk_level: measureData0.mat_static_risk_level,
     range_level: measureData0.mat_static_range_level,
     fileName: measureData0.measure_server_mat_image_name,
@@ -79,7 +80,7 @@ const MeasureStaticCompareFirst = React.memo(
   }
 
   const footStatic1 = measureData1 ? {
-    comment: `[좌우 무게 분석]\n${measureData1.mat_static_horizontal_ment ?? ""}\n[상하 무게 분석]\n${measureData1.mat_static_vertical_ment ?? ""}`,
+    comment: `[${t('foot_horizon_weight_analysis')}]\n${measureData1.mat_static_horizontal_ment ?? ""}\n[${t('foot_verti_weight_analysis')}]\n${measureData1.mat_static_vertical_ment ?? ""}`,
     risk_level: measureData1.mat_static_risk_level,
     range_level: measureData1.mat_static_range_level,
     fileName: measureData1.measure_server_mat_image_name,
@@ -92,7 +93,7 @@ const MeasureStaticCompareFirst = React.memo(
     return <DummyStaticContainer />;
   }
   if (isError) {
-    return <div>에러가 발생했습니다.</div>;
+    return <div>c</div>;
   }
   if (!hasData0 && !hasData1) {
     return <DummyStaticContainer />;

@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 
 const SearchForm = ({
   setSearch,
@@ -17,6 +18,7 @@ const SearchForm = ({
   className?: string;
   placeholder ?: string;
 }) => {
+  const t = useTranslations("Index")
   const searchSchema = z.object({
     search: z
       .string()
@@ -24,9 +26,9 @@ const SearchForm = ({
       //   message:
       //     "검색어는 최소 1글자 이상입니다. 이름 혹은 전화번호를 입력해주세요.",
       // })
-      .max(50, { message: "검색어는 최대 50자까지 입력 가능합니다." })
+      .max(50, { message: t('search_hint') })
       .regex(/^[가-힣a-zA-Z0-9]*$/, {
-        message: "한글, 영어, 숫자만 입력해주세요.",
+        message: t('search_zod'),
       })
       .transform((value) => (value.trim() === "" ? "" : value))
       ,
@@ -55,11 +57,11 @@ const SearchForm = ({
           type="text"
           aria-invalid={!!errors.search}
           {...register("search")}
-          placeholder={`${placeholder ? placeholder : "이름 혹은 전화번호를 입력해주세요."}`}
+          placeholder={`${placeholder ? placeholder : t('search_placeholder_user')}`}
           maxLength={50}
           className="flex-1"
         />
-        <Button type="submit">검색</Button>
+        <Button type="submit">{t('btn_search')}</Button>
       </form>
 
       {errors.search?.message && (

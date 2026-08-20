@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader } from "../ui/card";
 import { ChartContainer, ChartTooltip } from "../ui/chart";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import React from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { getRiskString } from "@/utils/getRiskString";
 
 type MeasureSummaryGraphProps = 
   | {
@@ -21,7 +23,8 @@ const MeasureSummaryGraph = ({
   legendClick,
   dCase,
 }: MeasureSummaryGraphProps) => {
-
+  const t = useTranslations("Index");
+  const locale = useLocale();
   const { chartConfig } = useMeasureSummaryChartConfig(data);
 
   // 데이터 포인트 클릭 핸들러
@@ -90,15 +93,6 @@ const MeasureSummaryGraph = ({
     return '';
   };
 
-  const getRiskLevelText = (riskLevel: string) => {
-    const levels: { [key: string]: string } = {
-      '0': '정상',
-      '1': '주의',
-      '2': '위험'
-    };
-    return levels[riskLevel] || '알 수 없음';
-  };
-
   const getTextColor = (riskLevel: number) => {
     const levels: { [key: string]: string } = {
       '0': "text-secondary",
@@ -110,15 +104,15 @@ const MeasureSummaryGraph = ({
   
   const getTitle = (dCase: 0 | 1 | 2) => {
     const levels: { [key: string]: string } = {
-      0: "상지 기간별 추이",
-      1: "하지 기간별 추이",
-      2: "정적 족압 기간별 추이",
+      0: t('user_upper_body_trend'),
+      1: t('user_lower_body_trend'),
+      2: t('user_static_pressure_trend'),
     };
     return levels[dCase] || 'text-black';
   }
   // range_level을 단계로 변환하는 함수
   const getRangeLevelText = (rangeLevel: string) => {
-    return `${rangeLevel}단계`;
+    return `${rangeLevel}${t('unit_grade')}`;
   };
 
   return (
@@ -189,21 +183,21 @@ const MeasureSummaryGraph = ({
                         // 족압의 경우
                         <div className="flex items-center gap-2 text-sm">
                           <span className={`rounded-full px-2 py-1 ${getTextColor(data.mat_static_risk_level)}`}>
-                            족압: {getRiskLevelText(data.mat_static_risk_level)} {getRangeLevelText(data.mat_static_risk_level)}
+                            {t('foot_pressure')}: {getRiskString(data.mat_static_risk_level, locale)} {getRangeLevelText(data.mat_static_risk_level)}
                           </span>
                         </div>
                       ) : dCase === 0 ? (
                         // 상지의 경우 - 상체만
                         <div className="flex items-center gap-2 text-sm">
                           <span className={`rounded-full px-2 py-1 ${getTextColor(data.risk_upper_risk_level)}`}>
-                            상지: {getRiskLevelText(data.risk_upper_risk_level)} {getRangeLevelText(data.risk_upper_range_level)}
+                            {t('upper_body')}: {getRiskString(data.risk_upper_risk_level, locale)} {getRangeLevelText(data.risk_upper_range_level)}
                           </span>
                         </div>
                       ) : (
                         // 하지의 경우 - 하체만
                         <div className="flex items-center gap-2 text-sm">
                           <span className={`rounded-full px-2 py-1 ${getTextColor(data.risk_lower_risk_level)}`}>
-                            하지: {getRiskLevelText(data.risk_lower_risk_level)} {getRangeLevelText(data.risk_lower_range_level)}
+                            {t('lower_body')}: {getRiskString(data.risk_lower_risk_level, locale)} {getRangeLevelText(data.risk_lower_range_level)}
                           </span>
                         </div>
                       )}

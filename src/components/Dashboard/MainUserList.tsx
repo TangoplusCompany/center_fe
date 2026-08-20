@@ -14,6 +14,7 @@ import { IMeasureList } from "@/types/measure";
 import { formatDate } from "@/utils/formatDate";
 import { useRouter } from "next/navigation";
 import { actionMeasureEncrypt } from "@/app/actions/getCrypto";
+import { useLocale, useTranslations } from "next-intl";
 
 export const MainUserList = ({
   users,
@@ -27,18 +28,8 @@ export const MainUserList = ({
   useEffect(() => {
     setList(users);
   }, [users]);
-
-  // const handleUserNavigate = async (
-  //   user_uuid: string, 
-  //   user_sn: number, 
-  //   user_name: string
-  // ) => {
-  //   const encrypted = await actionUserEncrypt({ user_uuid, user_sn, user_name });
-  //   if (encrypted !== "ERROR") {
-  //     router.push(`/user/${encrypted}`);
-  //   }
-  // };
-
+  const t = useTranslations("Index")
+  const locale = useLocale();
   const handleMeasureNavigate = async (
     measure_sn: number,
     user_sn: number,
@@ -62,85 +53,50 @@ export const MainUserList = ({
   return (
     <div className="w-full overflow-x-auto">
       <Table>
-      {/* {path === "user" && (
-        <>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="text-center w-[100px] whitespace-nowrap">이름</TableHead>
-              <TableHead className="text-center whitespace-nowrap">전화번호</TableHead>
-              <TableHead className="text-center whitespace-nowrap">이메일</TableHead>
-              <TableHead className="text-right whitespace-nowrap"></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {(list as IUserData[]).map((user) => (
-              <TableRow key={user.user_uuid}>
-                <TableCell className="text-center font-medium whitespace-nowrap">
-                  {user.user_name}
-                </TableCell>
-                <TableCell className="text-center whitespace-nowrap">
-                  {phoneFiltering(user.mobile)}
-                </TableCell>
-
-                <TableCell className="text-center whitespace-nowrap">{emailFiltering(user.email)}</TableCell>
-                <TableCell className="flex items-center justify-end gap-2 whitespace-nowrap">
-                  <button
-                    onClick={() => handleUserNavigate(user.user_uuid, user.user_sn, user.user_name)}
-                    className="flex items-center gap-2 justify-end cursor-pointer"
-                  >
-                    <FileText className="w-4 h-4" />
-                    <span>상세보기</span>
-                  </button>
-                </TableCell>
+        {path === "measure" && (
+          <>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="text-center w-[100px] whitespace-nowrap">{t('col_name')}</TableHead>
+                <TableHead className="text-center whitespace-nowrap">{t('col_device_name')}</TableHead>
+                <TableHead className="text-center whitespace-nowrap">{t('col_measure_date')}</TableHead>
+                <TableHead className="text-right whitespace-nowrap"></TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </>
-      )} */}
-      {path === "measure" && (
-        <>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="text-center w-[100px] whitespace-nowrap">이름</TableHead>
-              <TableHead className="text-center whitespace-nowrap">디바이스 이름</TableHead>
-              <TableHead className="text-center whitespace-nowrap">측정일</TableHead>
-              <TableHead className="text-right whitespace-nowrap"></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {(list as IMeasureList[]).map((measure) => (
-              <TableRow key={measure.measure_sn ?? measure.sn}>
-                <TableCell className="text-center font-medium whitespace-nowrap">
-                  {measure.user_name}
-                </TableCell>
-                <TableCell className="text-center whitespace-nowrap">
-                  {measure.device_name}
-                </TableCell>
-                <TableCell className="text-center whitespace-nowrap">
-                  {formatDate(measure.measure_date)}
-                </TableCell>
-                <TableCell className="flex items-center justify-end gap-2 whitespace-nowrap">
-                  <button
-                    onClick={() => handleMeasureNavigate(
-                      measure.measure_sn ?? measure.measure_sn, 
-                      measure.user_sn, 
-                      measure.user_uuid, 
-                      measure.mobile,
-                      measure.has_basic,
-                      measure.has_rom,
-                      measure.has_bia
-                    )}
-                    className="flex items-center gap-2 justify-end cursor-pointer"
-                  >
-                    <FileText className="w-4 h-4" />
-                    <span>상세보기</span>
-                  </button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </>
-      )}
+            </TableHeader>
+            <TableBody>
+              {(list as IMeasureList[]).map((measure) => (
+                <TableRow key={measure.measure_sn ?? measure.sn}>
+                  <TableCell className="text-center font-medium whitespace-nowrap">
+                    {measure.user_name}
+                  </TableCell>
+                  <TableCell className="text-center whitespace-nowrap">
+                    {measure.device_name}
+                  </TableCell>
+                  <TableCell className="text-center whitespace-nowrap">
+                    {formatDate(measure.measure_date, locale)}
+                  </TableCell>
+                  <TableCell className="flex items-center justify-end gap-2 whitespace-nowrap">
+                    <button
+                      onClick={() => handleMeasureNavigate(
+                        measure.measure_sn ?? measure.measure_sn, 
+                        measure.user_sn, 
+                        measure.user_uuid, 
+                        measure.mobile,
+                        measure.has_basic,
+                        measure.has_rom,
+                        measure.has_bia
+                      )}
+                      className="flex items-center gap-2 justify-end cursor-pointer"
+                    >
+                      <FileText className="w-4 h-4" />
+                      <span>{t('btn_view_detail')}</span>
+                    </button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </>
+        )}
       </Table>
     </div>
   );

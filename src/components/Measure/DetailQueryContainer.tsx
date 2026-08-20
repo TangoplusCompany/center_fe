@@ -8,6 +8,7 @@ import { formatDate } from "@/utils/formatDate";
 import MeasureDetailContainer from "./DetailContainer";
 import { measureType } from "../User/Detail";
 import { useSearchParams } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 
 export const MeasureDetailSkeleton = () => {
   return (
@@ -30,7 +31,8 @@ export interface MeasureDetailQueryProps {
 }
 const MeasureDetailQueryContainer = ({firstMeasureType}:MeasureDetailQueryProps) => {
 
-  
+  const t= useTranslations("Index");
+  const locale = useLocale();
   const searchParams = useSearchParams();
   const encryptedParam = searchParams.get("data") ?? "";
   const {
@@ -82,7 +84,7 @@ const MeasureDetailQueryContainer = ({firstMeasureType}:MeasureDetailQueryProps)
         <div className="w-1 h-12 bg-mainBlue-600 rounded-full"></div>
         <h2 className="text-3xl font-semibold text-[#333] dark:text-white flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
           <span>{measureData.measurement_meta.user_name}님 측정 결과</span>
-          <span className="text-sm text-sub300 dark:text-sub200 sm:pl-2"> {formatDate(measureData.measurement_meta.measure_date)}</span>
+          <span className="text-sm text-sub300 dark:text-sub200 sm:pl-2"> {formatDate(measureData.measurement_meta.measure_date, locale)}</span>
         </h2>
       </div>
       {measureDataLoading && (

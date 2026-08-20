@@ -1,4 +1,5 @@
 import { actionUserDecrypt } from "@/app/actions/getCrypto";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -9,15 +10,16 @@ interface UserSubTabCardProps {
 }
 
 const USER_SUB_TABS = [
-  { key: "latest", title: "최근 측정" },
-  { key: "dashboard", title: "대시보드" },
-  { key: "history", title: "측정 이력" },
-  { key: "userInfo", title: "사용자 정보" },
+  { key: "latest", title: "user_side_tab_recent_measure" },
+  { key: "dashboard", title: "user_side_tab_dashboard" },
+  { key: "history", title: "user_side_tab_history" },
+  { key: "userInfo", title: "user_side_tab_info" },
 ];
 
 
 const UserSubTabCard = ({encryptedParam, searchParams, currentSubTab} : UserSubTabCardProps) => {
-  const [userName, setUserName] = useState<string>("사용자");
+  const t = useTranslations("Index");
+  const [userName, setUserName] = useState<string>(t('h_user'));
 
   // 컴포넌트 마운트 시 암호화 키를 복호화하여 이름 세팅
   useEffect(() => {
@@ -62,7 +64,7 @@ const UserSubTabCard = ({encryptedParam, searchParams, currentSubTab} : UserSubT
                   : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
               }`}
             >
-              {subTab.title}
+              {t(subTab.title)}
             </Link>
           );
         })}

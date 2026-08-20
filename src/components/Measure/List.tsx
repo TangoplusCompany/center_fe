@@ -15,6 +15,7 @@ import { formatDate } from "@/utils/formatDate";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { actionMeasureEncrypt } from "@/app/actions/getCrypto";
+import { useLocale, useTranslations } from "next-intl";
 
 export const MeasureDummyList = ({ limit }: { limit: number }) => {
   return (
@@ -70,7 +71,8 @@ export const MeasureList = ({
   measurements: IMeasureList[];
 }) => {
   const [list, setList] = useState<IMeasureList[]>(measurements);
-  
+  const t= useTranslations("Index");
+  const locale = useLocale();
   useEffect(() => {
     setList(measurements);
   }, [measurements]);
@@ -111,11 +113,11 @@ export const MeasureList = ({
     const hasBia = measureItem.has_bia === 1;
     const hasGait = measureItem.has_gait === 1;
     const hasMoire = measureItem.has_moire === 1;
-    if (hasBasic) labels.push("간편 검사");
-    if (hasRom) labels.push("ROM");
-    if (hasBia) labels.push("체성분")
-    if (hasGait) labels.push("보행 분석")
-    if (hasMoire) labels.push("모아레")
+    if (hasBasic) labels.push(t('m_basic').replaceAll("Test",""));
+    if (hasRom) labels.push(t('m_rom').replace("검사", "").replaceAll("Test",""));
+    if (hasBia) labels.push(t('m_bia'))
+    if (hasGait) labels.push(t('m_gait'))
+    if (hasMoire) labels.push(t('m_moire'))
 
     return labels.length > 0 ? labels.join("/") : "";
   };
@@ -125,10 +127,10 @@ export const MeasureList = ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[10%] text-center whitespace-nowrap">이름</TableHead>
-            <TableHead className="w-[20%] text-center whitespace-nowrap">전화번호</TableHead>
-            <TableHead className="w-[20%] text-center whitespace-nowrap">측정일</TableHead>
-            <TableHead className="w-[20%] text-center whitespace-nowrap">측정기기</TableHead>
+            <TableHead className="w-[10%] text-center whitespace-nowrap">{t('col_name')}</TableHead>
+            <TableHead className="w-[20%] text-center whitespace-nowrap">{t('m_mobile')}</TableHead>
+            <TableHead className="w-[20%] text-center whitespace-nowrap">{t('m_date')}</TableHead>
+            <TableHead className="w-[20%] text-center whitespace-nowrap">{t('m_device')}</TableHead>
             <TableHead className="w-[20%] text-center whitespace-nowrap"></TableHead>
             <TableHead className=" text-right whitespace-nowrap"></TableHead>
           </TableRow>
@@ -159,7 +161,7 @@ export const MeasureList = ({
                 {phoneFiltering(phoneHyphen(measurement.mobile))}
               </TableCell>
               <TableCell className="text-center whitespace-nowrap">
-                {formatDate(measurement.measure_date)}
+                {formatDate(measurement.measure_date, locale)}
               </TableCell>
               <TableCell className="text-center whitespace-nowrap">
                 {measurement.device_name}
@@ -189,7 +191,7 @@ export const MeasureList = ({
                   className="flex items-center gap-2 justify-end cursor-pointer"
                 >
                   <FileText className="w-4 h-4" />
-                  <span>상세보기</span>
+                  <span>{t('user_col_detail')}</span>
                 </button>
               </TableCell>
             </TableRow>

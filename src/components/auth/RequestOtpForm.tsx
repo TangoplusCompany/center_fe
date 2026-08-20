@@ -16,6 +16,7 @@ import { useUnlockAccountVerify } from "@/hooks/api/auth/useUnlockAccountVerify"
 import { postOtpRequest } from "@/services/auth/postOtpRequest";
 import { AxiosError } from "axios";
 import type { Purpose, Type } from "@/types/admin";
+import { useTranslations } from "next-intl";
 
 const FormSchema = z.object({
   otp: z.string().min(6, {
@@ -45,11 +46,13 @@ export const RequestOtpForm = ({
   /** OTP 전달 매개체: email | mobile */
   type?: Type;
 }) => {
+  const t = useTranslations("Index");
   const [timeLeft, setTimeLeft] = useState(OTP_VALID_SECONDS);
   const [resendPending, setResendPending] = useState(false);
 
   const { mutate: otpVerify } = useOtpVerify({ handleRequestOtp });
   const { mutate: unlockAccountVerify } = useUnlockAccountVerify({
+    t,
     onSuccess: handleRequestOtp,
   });
 
@@ -80,14 +83,14 @@ export const RequestOtpForm = ({
       setTimeLeft(OTP_VALID_SECONDS);
       form.setValue("otp", "");
       form.clearErrors("otp");
-      alert("OTP가 재전송되었습니다.");
+      alert(t('alert_otp_request_again'));
     } catch (err) {
       if (err instanceof AxiosError && err.response) {
         alert(
           getRequestOtpErrorMessage(err.response.status)
         );
       } else {
-        alert("재전송에 실패했습니다. 잠시 후 다시 시도해주세요.");
+        alert(t('alert_otp_send_fail'));
       }
     } finally {
       setResendPending(false);
@@ -98,7 +101,7 @@ export const RequestOtpForm = ({
     if (timeLeft <= 0) {
       form.setError("otp", {
         type: "manual",
-        message: "시간이 만료되었습니다. 재전송해주세요.",
+        message: t('alert_otp_submit_time_out'),
       });
       return;
     }
@@ -127,7 +130,7 @@ export const RequestOtpForm = ({
       className="w-full flex flex-col gap-4"
     >
       <legend className="text-lg">
-        {isAccountUnlock ? "잠긴 계정 해제용 OTP 입력" : "OTP 입력"}
+        {isAccountUnlock ? t('otp_input_unlock') : t('otp_input')}
       </legend>
       <div className="flex gap-2 items-center">
         <InputOTP
@@ -144,11 +147,11 @@ export const RequestOtpForm = ({
             <InputOTPSlot className="bg-white dark:bg-border" index={5} />
           </InputOTPGroup>
         </InputOTP>
-        <Button type="submit">확인</Button>
+        <Button type="submit">{t('btn_confirm')}</Button>
       </div>
       <div className="flex items-center gap-3 flex-wrap">
         <span className="text-sm text-muted-foreground">
-          유효시간 {formatTime(timeLeft)}
+          {t('vaild_time')} {formatTime(timeLeft)}
         </span>
         <Button
           type="button"
@@ -158,7 +161,7 @@ export const RequestOtpForm = ({
           disabled={resendPending}
           className="text-sm bg-sub150 text-sub700 hover:bg-sub200 hover:text-sub800"
         >
-          {resendPending ? "전송 중..." : "재전송"}
+          {resendPending ? t('btn_sub_admin_invite_pending') : t('login_otp_resend')}
         </Button>
       </div>
       {form.formState.errors.otp && (

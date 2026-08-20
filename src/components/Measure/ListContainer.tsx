@@ -12,6 +12,7 @@ import {
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import { Skeleton } from "../ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
+import { useTranslations } from "next-intl";
 
 const MeasureListContainer = ({
   handleTotalItems,
@@ -20,6 +21,7 @@ const MeasureListContainer = ({
   handleTotalItems: (totalItems: number) => void;
   searchValue: string;
 }) => {
+  const t = useTranslations("Index");
   const { query } = useQueryParams();
   const deviceSn = query.device_sn || "0";
   const page = parseInt(query.page || "1");
@@ -47,10 +49,10 @@ const MeasureListContainer = ({
         <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="text-center w-[200px] whitespace-nowrap">이름</TableHead>
-            <TableHead className="text-center whitespace-nowrap">전화번호</TableHead>
-            <TableHead className="text-center whitespace-nowrap">측정일</TableHead>
-            <TableHead className="text-center whitespace-nowrap">측정기기</TableHead>
+            <TableHead className="text-center w-[200px] whitespace-nowrap">{t('col_name')}</TableHead>
+            <TableHead className="text-center whitespace-nowrap">{t('m_mobile')}</TableHead>
+            <TableHead className="text-center whitespace-nowrap">{t('m_date')}</TableHead>
+            <TableHead className="text-center whitespace-nowrap">{t('m_device')}</TableHead>
             {/* <TableHead className="text-center whitespace-nowrap">측정점수</TableHead> */}
             <TableHead className="text-right whitespace-nowrap"></TableHead>
           </TableRow>

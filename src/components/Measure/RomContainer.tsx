@@ -18,9 +18,12 @@ import { formatDate } from "@/utils/formatDate";
 import { Button } from "../ui/button";
 import { actionPrintEncrypt } from "@/app/actions/getCrypto";
 import { getResultRomReportUrl } from "@/app/actions/openRomPrintPage";
+import { useLocale, useTranslations } from "next-intl";
 
 
 export const MeasureRomContainer = () => {
+  const t= useTranslations("Index");
+  const locale = useLocale();
   const { query } = useGetQuery();
   const encryptedParam = query['data'];  // measureSn → data로 변경
   const [measureType, setMeasureType] = useState(-1); // 이전 항목 선택을 관리하는 ROM 타입
@@ -135,7 +138,7 @@ export const MeasureRomContainer = () => {
           <div className="w-1 h-12 bg-mainBlue-600 rounded-full"></div>
           <h2 className="text-3xl font-semibold text-[#333] dark:text-white flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
             <span>{romItems[0].user_name}님 ROM 측정 결과</span>
-            <span className="text-sm text-sub300 dark:text-sub200 sm:pl-2"> {formatDate(romItems[0].reg_date.slice(0,16))}</span>
+            <span className="text-sm text-sub300 dark:text-sub200 sm:pl-2"> {formatDate(romItems[0].reg_date.slice(0,16), locale)}</span>
           </h2>
         </div>
       )}

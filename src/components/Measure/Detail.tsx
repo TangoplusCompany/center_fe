@@ -10,120 +10,10 @@ import MeasureIntro from "@/components/Measure/Intro"
 import { cn } from "@/lib/utils";
 import { IUserMeasureListItem } from "@/types/user";
 import { Button } from "../ui/button";
-// import * as Popover from "@radix-ui/react-popover";
 import { generatePrintUrls } from "@/hooks/api/measure/generatePrintUrls";
 import { actionPrintEncrypt } from "@/app/actions/getCrypto";
 import { IMeasureResponse } from "@/types/measure";
-
-// export interface BasicPrintItem {
-//   key: string; 
-//   label: string; 
-// }
-// interface BasicPrintSelectProps {
-//   items: BasicPrintItem[]; 
-//   handlePrint: (selectedKeys: string[]) => void; 
-// }
-// export function PrintSelect({ items, handlePrint }: BasicPrintSelectProps) {
-//   const [selectedItems, setSelectedItems] = useState<Record<string, boolean>>({});
-
-//   useEffect(() => {
-//     const defaultState = items.reduce((acc, item) => {
-//       acc[item.key] = true; // 기본값: 전체 선택 상태
-//       return acc;
-//     }, {} as Record<string, boolean>);
-
-//     setSelectedItems(defaultState);
-//   }, [items]);
-
-//   // 개별 체크박스 토글 핸들러
-//   const handleCheckboxChange = (key: string, checked: boolean) => {
-//     setSelectedItems((prev) => ({
-//       ...prev,
-//       [key]: checked,
-//     }));
-//   };
-
-//   const onClickPrint = () => {
-//     const activeKeys = Object.keys(selectedItems).filter((key) => selectedItems[key]);
-//     handlePrint(activeKeys);
-//   };
-//   const isNothingChecked = !Object.values(selectedItems).some((val) => val);
-//   return (
-//     <Popover.Root>
-//       <Popover.Trigger asChild>
-//         <Button className="px-6 sm:w-auto" variant="sub">
-//           {/* eslint-disable-next-line @next/next/no-img-element */}
-//           <img
-//             src="/icons/ic_people_image.svg"
-//             alt="인쇄하기"
-//             className="size-4 dark:[filter:brightness(0)_invert(1)]"
-//           />
-//           <span>측정 이미지 인쇄</span>
-//         </Button>
-//       </Popover.Trigger>
-
-//       <Popover.Portal>
-//         <Popover.Content
-//           className="z-20 w-56 rounded-xl border bg-popover dark:bg-sub750 dark:text-sub100 p-2 text-popover-foreground shadow-md outline-none
-//           data-[state=open]:animate-in
-//           data-[state=closed]:animate-out
-//           data-[state=open]:fade-in-0
-//           data-[state=closed]:fade-out-0
-//           data-[state=open]:zoom-in-95
-//           data-[state=closed]:zoom-out-95
-//           duration-200"
-//           sideOffset={4}
-//         >
-//           <div className="flex flex-col gap-1 p-1">
-            
-//             {/* items 배열을 기반으로 체크박스 동적 매핑 렌더링 */}
-//             {items.map((item) => (
-//               <label 
-//                 key={item.key} 
-//                 className="flex items-center gap-2 p-2 hover:bg-accent rounded-md cursor-pointer text-sm"
-//               >
-//                 <input
-//                   type="checkbox"
-//                   checked={!!selectedItems[item.key]}
-//                   onChange={(e) => handleCheckboxChange(item.key, e.target.checked)}
-//                   className="rounded border-toggle-accent accent-toggle-accent"
-//                 />
-//                 <span>{item.label}</span>
-//               </label>
-//             ))}
-
-//             <hr className="border-muted my-1" />
-
-//             <Popover.Close asChild>
-//               <button
-//                 onClick={onClickPrint}
-//                 disabled={isNothingChecked}
-//                 className="w-full bg-sub150 hover:bg-sub200 text-sub700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors disabled:opacity-50"
-//               >
-//                 선택 항목 인쇄
-//               </button>
-//             </Popover.Close>
-//           </div>
-//         </Popover.Content>
-//       </Popover.Portal>
-//     </Popover.Root>
-//   );
-// }
-
-// const tabItemsMap: Record<string, BasicPrintItem[]> = {
-//   frontTotal: [
-//     { key: "front", label: "정면 자세" },
-//     { key: "elbow", label: "팔꿈치 정렬" },
-//   ],
-//   sideTotal: [
-//     { key: "left", label: "좌측 자세" },
-//     { key: "right", label: "우측 자세" },
-//   ],
-//   backTotal: [
-//     { key: "back", label: "후면 자세" },
-//     { key: "back_sit", label: "앉은 후면" },
-//   ],
-// };
+import { useTranslations } from "next-intl";
 
 type MeasureListType = {
   title: string;
@@ -151,6 +41,7 @@ const MeasureDetail = ({
   aiExerciseOpen,
   setAiExerciseOpen
 }: UserMeasureDetailProps) => {
+  const t = useTranslations("Index");
   const [activeBasicTab, setActiveBasicTab] = useState('summary');
   const [, setIsPrinting] = useState(false);
   const [printImageMap, setPrintImageMap] = useState<Record<string, string>>({});
@@ -172,7 +63,7 @@ const MeasureDetail = ({
   
   const measureTabs: MeasureListType[] = [
     {
-      title: "결과 요약",
+      title: "result_summary",
       value: "summary",
       component: () => (
         <MeasureIntro 
@@ -180,7 +71,7 @@ const MeasureDetail = ({
       ),
     },
     {
-      title: "정면 자세",
+      title: "pose_front",
       value: "frontTotal",
       component: () => (
         <FrontMeasurement
@@ -196,7 +87,7 @@ const MeasureDetail = ({
       ),
     },
     {
-      title: "측면 자세",
+      title: "pose_side",
       value: "sideTotal",
       component: () => (
         <SideMeasurement
@@ -213,7 +104,7 @@ const MeasureDetail = ({
       ),
     },
     {
-      title: "후면 자세",
+      title: "pose_back",
       value: "backTotal",
       component: () => (
         <BackMeasurement
@@ -230,7 +121,7 @@ const MeasureDetail = ({
       ),
     },
     {
-      title: "스쿼트 자세",
+      title: "pose_squat",
       value: "dynamic",
       component: () => 
       <MeasureDetailDynamic 
@@ -307,7 +198,7 @@ const MeasureDetail = ({
                     "after:bg-sub200 data-[state=active]:after:bg-mainBlue-600 after:z-5"
                   )}
                 >
-                  {measure.title}
+                  {t(measure.title)}
 
                 </TabsTrigger>
               ))}
@@ -346,7 +237,7 @@ const MeasureDetail = ({
                   e.currentTarget.src = "/images/measure_default.png";
                 }}
               />
-              <span>AI 운동 추천</span>
+              <span>{t('user_ai_exercise_recommendation')}</span>
             </span>
           </button>
         )}
@@ -367,7 +258,7 @@ const MeasureDetail = ({
               alt="인쇄하기"
               className="size-4 dark:[filter:brightness(0)_invert(1)]"
             />
-            <span>측정 이미지 인쇄</span>
+            <span>{t('basic_image_print')}</span>
           </Button>
         )}
 

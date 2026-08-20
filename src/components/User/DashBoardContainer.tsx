@@ -5,6 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { useGetROMItemCount } from "@/hooks/api/measure/rom/useGetROMItemCount";
 import { useAuthStoreOptional } from "@/providers/AuthProvider";
 import { Skeleton } from "../ui/skeleton";
+import { useTranslations } from "next-intl";
 
 export interface CenterUserDashboardContainerProps {
   userSn: number;
@@ -15,8 +16,8 @@ type DashboardViewType = "normal" | "rom";
 export type ROMDashboardViewType = "default" | "detail";
 
 const dashboardTabs: Record<number, string> = {
-    0: "간편 검사",
-    1: "ROM 검사"
+    0: "m_basic",
+    1: "m_rom_test"
   }
   
 const CenterUserDashboardContainer = ({
@@ -24,6 +25,7 @@ const CenterUserDashboardContainer = ({
   isMyPage,
   fromROMContainer
 }: CenterUserDashboardContainerProps) => {
+  const t = useTranslations("Index");
   const [currentViewType, setCurrentViewType] = useState<DashboardViewType>(fromROMContainer ? "rom" : "normal")
   const [currentROMViewType, setCurrentROMViewType] = useState<ROMDashboardViewType>("default");
   
@@ -89,7 +91,7 @@ const CenterUserDashboardContainer = ({
                   }
                 `}
               >
-                {dashboard}
+                {t(dashboard)}
 
                 {/* ROM 탭이고 활성화일 때만 Select 표시 */}
                 {isROMTab && isActive && (currentROMViewType === "default") && (

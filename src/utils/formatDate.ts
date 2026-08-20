@@ -15,12 +15,15 @@ export const formatTime = (date: number) => {
  * @param date 날짜
  * @returns 년-월-일 시간 형식
  */
-export const formatDate = (date: string) => {
+export const formatDate = (date: string, locale: string = "ko") => {
   const dateObj = new Date(date);
   const year = dateObj.getFullYear();
   const month = String(dateObj.getMonth() + 1).padStart(2, "0");
   const day = String(dateObj.getDate()).padStart(2, "0");
   const hours = String(dateObj.getHours()).padStart(2, "0");
   const minutes = String(dateObj.getMinutes()).padStart(2, "0");
-  return `${year}.${month}.${day} ${hours}시 ${minutes}분`;
+  if (locale.startsWith("ko")) {
+    return `${year}.${month}.${day} ${hours}시 ${minutes}분`;
+  }
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
 };

@@ -22,9 +22,10 @@ import {
   postVerifyEmailOtp,
   getVerifyEmailOtpErrorMessage,
 } from "@/services/auth/postVerifyEmailOtp";
+import { useTranslations } from "next-intl";
 
 const OTP_FORM_SCHEMA = z.object({
-  otp: z.string().length(6, { message: "OTP는 6자리 숫자여야 합니다." }),
+  otp: z.string().length(6, { message: "otp_input_6" }),
 });
 
 const INITIAL_TIME = 300; // 5분 = 300초
@@ -51,6 +52,7 @@ export const RegisterOtpDialog = ({
   email,
   tempToken,
 }: RegisterOtpDialogProps) => {
+  const t = useTranslations("Index");
   const [timeLeft, setTimeLeft] = useState(INITIAL_TIME);
   const [resendPending, setResendPending] = useState(false);
   const [verifyPending, setVerifyPending] = useState(false);
@@ -110,7 +112,7 @@ export const RegisterOtpDialog = ({
 
   const onSubmit = async (data: z.infer<typeof OTP_FORM_SCHEMA>) => {
     if (timeLeft <= 0) {
-      form.setError("otp", { message: "시간이 만료되었습니다. 재전송해주세요." });
+      form.setError("otp", { message: t('alert_otp_submit_time_out') });
       return;
     }
 
@@ -125,6 +127,7 @@ export const RegisterOtpDialog = ({
             purpose: "verify_email",
           },
           tempToken,
+          t
         );
         const token = res?.data?.email_verification_temp_token;
         onVerified(true, token);
@@ -133,17 +136,18 @@ export const RegisterOtpDialog = ({
       } catch (err) {
         if (err instanceof AxiosError) {
           const message = getVerifyEmailOtpErrorMessage(
+            t,
             err.response?.status,
             err.response?.data,
           );
           alert(message);
         } else {
-          alert("OTP 인증에 실패했습니다.");
+          alert(t('verification_failed'));
         }
         onVerified(false);
         form.setError("otp", {
           type: "manual",
-          message: "인증번호가 맞지 않습니다.",
+          message: t('verification_failed'),
         });
       } finally {
         setVerifyPending(false);
@@ -159,7 +163,7 @@ export const RegisterOtpDialog = ({
       onVerified(false);
       form.setError("otp", {
         type: "manual",
-        message: "인증번호가 맞지 않습니다.",
+        message: t('verification_failed'),
       });
     }
   };
@@ -168,9 +172,9 @@ export const RegisterOtpDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-[calc(100%-2rem)] sm:w-full sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>OTP 인증</DialogTitle>
+          <DialogTitle>{t('otp_title')}</DialogTitle>
           <DialogDescription>
-            등록된 번호로 전송된 OTP 6자리를 입력해주세요.
+            {t('alert_otp_requet_description')}
           </DialogDescription>
         </DialogHeader>
         <form
@@ -194,7 +198,7 @@ export const RegisterOtpDialog = ({
                 </InputOTPGroup>
               </InputOTP>
               <Button type="submit" disabled={verifyPending}>
-                {verifyPending ? "확인 중..." : "확인"}
+                {verifyPending ? t('confirm_pending') : t('btn_confirm')}
               </Button>
             </div>
 
@@ -208,8 +212,8 @@ export const RegisterOtpDialog = ({
           <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">
               {timeLeft > 0
-                ? `남은 시간: ${formatTime(timeLeft)}`
-                : "시간이 만료되었습니다."}
+                ? `${t('header_time')}: ${formatTime(timeLeft)}`
+                : t('login_otp_expired_time')}
             </span>
             <Button
               type="button"
@@ -219,7 +223,7 @@ export const RegisterOtpDialog = ({
               disabled={resendPending}
               className="text-sm bg-sub700 text-sub150 hover:bg-sub600 hover:text-sub100"
             >
-              {resendPending ? "전송 중..." : "재전송"}
+              {resendPending ? t('btn_sub_admin_invite_pending') : t('login_otp_resend')}
             </Button>
           </div>
         </form>

@@ -6,6 +6,7 @@ import { CompareStaticProps } from "./CompareBody";
 import CompareFootTrajectoryGridContainer, { CompareFootTrajectoryGridProps } from "./CompareFootTrajectoryGridContainer";
 import { extractMeasureData } from "./CompareIntro";
 import VideoPlayer from "../VideoPlayer";
+import { useTranslations } from "next-intl";
 
 const MeasureDynamicCompare = ({
   left,
@@ -16,6 +17,7 @@ const MeasureDynamicCompare = ({
 }: CompareStaticProps) => {
   const leftSummaryData = left?.basic_result?.result_summary_data
   const rightSummaryData = right?.basic_result?.result_summary_data
+  const t = useTranslations("Index");
   const {
     data: measure0,
     isLoading: seqLoading0,
@@ -63,8 +65,8 @@ const MeasureDynamicCompare = ({
       measureData0.mat_left_knee_trajectory_image_name, 
       measureData0.mat_right_knee_trajectory_image_name
     ],
-    dynamicComment: `[좌우 무게 분석]\n${measureData0.mat_ohs_horizontal_ment ?? ""}\n[상하 무게 분석]\n${measureData0.mat_ohs_vertical_ment ?? ""}`,
-    kneeComment: `[무릎 흔들림 분석]\n${measureData0.mat_ohs_knee_ment ?? ""}`,
+    dynamicComment: `[${t('foot_horizon_weight_analysis')}]\n${measureData0.mat_ohs_horizontal_ment ?? ""}\n[${t('foot_verti_weight_analysis')}]\n${measureData0.mat_ohs_vertical_ment ?? ""}`,
+    kneeComment: `[${t('knee_instability_analysis')}]\n${measureData0.mat_ohs_knee_ment ?? ""}`,
     measure_date: measureData0.measure_date,
   };
   const footData1: CompareFootTrajectoryGridProps | undefined = measureData1 
@@ -78,8 +80,8 @@ const MeasureDynamicCompare = ({
         measureData1.mat_left_knee_trajectory_image_name, 
         measureData1.mat_right_knee_trajectory_image_name
       ],
-      dynamicComment: `[좌우 무게 분석]\n${measureData1.mat_ohs_horizontal_ment ?? ""}\n[상하 무게 분석]\n${measureData1.mat_ohs_vertical_ment ?? ""}`,
-      kneeComment: `[무릎 흔들림 분석]\n${measureData1.mat_ohs_knee_ment ?? ""}`,
+      dynamicComment: `[${t('foot_horizon_weight_analysis')}]\n${measureData1.mat_ohs_horizontal_ment ?? ""}\n[${t('foot_verti_weight_analysis')}]\n${measureData1.mat_ohs_vertical_ment ?? ""}`,
+      kneeComment: `[${t('knee_instability_analysis')}]\n${measureData1.mat_ohs_knee_ment ?? ""}`,
       measure_date: measureData1.measure_date,
     } 
   : undefined;
