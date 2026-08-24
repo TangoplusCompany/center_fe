@@ -8,6 +8,7 @@ import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { ICenterEditForm } from "@/schemas/centerSchema";
+import { useTranslations } from "next-intl";
 
 export type CenterInfoFieldsProps = {
   register: UseFormRegister<ICenterEditForm>;
@@ -26,6 +27,7 @@ const CenterInfoFields = ({
   setValue,
   disabled = false,
 }: CenterInfoFieldsProps) => {
+  const t = useTranslations("Index");
   const open = useDaumPostcodePopup(KAKAO_POSTCODE_SCRIPT_URL);
 
   const handleAddressSearch = () => {
@@ -39,13 +41,13 @@ const CenterInfoFields = ({
   return (
     <>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="centerName">센터 이름</Label>
+        <Label htmlFor="centerName">{t('setting_center_name')}</Label>
         <Input
           {...register("centerName")}
           type="text"
           id="centerName"
           disabled={disabled}
-          placeholder="센터 이름"
+          placeholder={t('setting_center_name')}
           maxLength={30}
         />
         {errors.centerName && (
@@ -55,7 +57,7 @@ const CenterInfoFields = ({
         )}
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="centerAddress">센터 주소</Label>
+        <Label htmlFor="centerAddress">{t('setting_center_address')}</Label>
         <div className="flex flex-col md:flex-row w-full gap-2">
           <div className="flex gap-2 md:flex-1 md:min-w-0">
             <Input
@@ -64,7 +66,7 @@ const CenterInfoFields = ({
               id="centerAddress"
               readOnly
               disabled={disabled}
-              placeholder="주소 검색으로 입력"
+              placeholder={t('setting_center_address_input')}
               maxLength={60}
               className="flex-1 min-w-0 bg-muted dark:bg-input"
             />
@@ -75,7 +77,7 @@ const CenterInfoFields = ({
               disabled={disabled}
               className="shrink-0"
             >
-              주소 검색
+              {t('setting_btn_search_address')}
             </Button>
           </div>
           <Input
@@ -83,7 +85,7 @@ const CenterInfoFields = ({
             type="text"
             id="centerAddressDetail"
             disabled={disabled}
-            placeholder="센터 상세 주소"
+            placeholder={t('label_center_address_detail')}
             maxLength={30}
             className="w-full md:flex-1 md:min-w-0"
           />
@@ -100,13 +102,13 @@ const CenterInfoFields = ({
         )}
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="centerPhone">센터 전화 번호</Label>
+        <Label htmlFor="centerPhone">{t('label_center_phone')}</Label>
         <Input
           {...register("centerPhone")}
           type="tel"
           id="centerPhone"
           disabled={disabled}
-          placeholder="센터 전화 번호"
+          placeholder={t('label_center_phone')}
           maxLength={20}
         />
         {errors.centerPhone && (

@@ -2,6 +2,7 @@
 
 import { IAnnouncementsItem } from "@/types/announcement";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
+import { useTranslations } from "next-intl";
 
 export interface IAnnouncementListProps {
   Announcements: IAnnouncementsItem[];
@@ -9,14 +10,14 @@ export interface IAnnouncementListProps {
 }
 
 export const AnnouncementCategoryRecord: Record<string, string> = {
-  ALL: "전체",
-  NOTICE: "일반 공지",
-  HOTFIX: "긴급 수정",
-  UPDATE: "신규 기능",
-  MAINTENANCE: "점검",
-  PROMOTION: "프로모션",
-  ETC: "기타",
-};
+  ALL: "announcement_category_all",
+  NOTICE: "announcement_category_notice",
+  HOTFIX: "announcement_category_hotfix",
+  UPDATE: "announcement_category_update",
+  MAINTENANCE: "announcement_category_maintenance",
+  PROMOTION: "announcement_category_promotion",
+  ETC: "announcement_category_etc",
+} as const;
 
 export const AnnouncementCategoryCss: Record<string, string> = {
   ALL: "bg-gray-100 text-gray-600",
@@ -29,15 +30,16 @@ export const AnnouncementCategoryCss: Record<string, string> = {
 };
 
 export default function AnnouncementList({ Announcements, setAnnouncementSn }: IAnnouncementListProps) {
+  const t = useTranslations("Index")
   return (
     <div className="w-full table table-fixed min-w-0">
       <div className="w-full overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[15%] text-center whitespace-nowrap py-4">유형</TableHead>
-              <TableHead className="w-[55%] text-start whitespace-nowrap py-4">제목 및 내용</TableHead>
-              <TableHead className="w-[15%] text-center whitespace-nowrap py-4">등록날짜</TableHead>
+              <TableHead className="w-[15%] text-center whitespace-nowrap py-4">{t('col_type')}</TableHead>
+              <TableHead className="w-[55%] text-start whitespace-nowrap py-4">{t('col_title')} {t('and')} {t('col_content')}</TableHead>
+              <TableHead className="w-[15%] text-center whitespace-nowrap py-4">{t('col_created_at')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -45,7 +47,7 @@ export default function AnnouncementList({ Announcements, setAnnouncementSn }: I
             {Announcements.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5} className="text-center py-10 text-sub500 text-sm">
-                  등록된 공지사항이 없습니다.
+                  {t('announcement_empty')}
                 </TableCell>
               </TableRow>
             ) : (
@@ -58,7 +60,7 @@ export default function AnnouncementList({ Announcements, setAnnouncementSn }: I
                   {/* 유형 */}
                   <TableCell className="text-center font-medium whitespace-nowrap py-5 align-middle">
                     <span className={`text-xs md:text-sm px-2.5 py-1 rounded-md font-semibold ${AnnouncementCategoryCss[announcement.category] || "bg-gray-100 text-gray-600"}`}>
-                      {AnnouncementCategoryRecord[announcement.category] || announcement.category}
+                      {t(AnnouncementCategoryRecord[announcement.category] || announcement.category)}
                     </span>
                   </TableCell>
                   

@@ -87,9 +87,9 @@ const MeasureSummaryGraph = ({
 
   // y축 라벨 포맷터
   const formatYAxis = (value: number) => {
-    if (value <= 1) return '정상';
-    if (value <= 4) return '주의'; // 정상은 생략
-    if (value <= 7) return '위험';
+    if (value <= 1) return t('status_normal');
+    if (value <= 4) return t('status_caution'); // 정상은 생략
+    if (value <= 7) return t('status_danger');
     return '';
   };
 

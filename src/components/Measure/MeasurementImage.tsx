@@ -3,6 +3,7 @@ import { useStaticLandmark } from "@/hooks/landmark/useStaticLandmark";
 import { useEffect, useState } from "react";
 import MeasurementImageDialog from "./MeasurementImageDialog";
 import { Button } from "../ui/button";
+import { useTranslations } from "next-intl";
 
 interface MeasurementImageProps {
   imageUrl: string;
@@ -22,6 +23,7 @@ export const MeasurementImage = ({
   leftRight,
   onImageReady
 }: MeasurementImageProps) => {
+  const t = useTranslations("Index")
   const [dialogOpen, setDialogOpen] = useState(false);
   const [showGrid, setShowGrid] = useState(true);
   const [showLine, setShowLine] = useState(true);
@@ -81,7 +83,7 @@ export const MeasurementImage = ({
       {step === "third" && (
         <div className="absolute top-0 left-1/2 -translate-x-1/2 z-5 mt-4">
           <p className="px-3 py-1 rounded-full text-white bg-white/10 backdrop-blur-sm whitespace-nowrap w-fit">
-            왼쪽
+            {t('left')}
           </p>
         </div>
       )}
@@ -89,7 +91,7 @@ export const MeasurementImage = ({
       {step === "fourth" && (
         <div className="absolute top-0 left-1/2 -translate-x-1/2 z-5 mt-4">
           <p className="px-3 py-1 rounded-full text-white bg-white/10 backdrop-blur-sm whitespace-nowrap w-fit">
-            오른쪽
+            {t('right')}
           </p>
         </div>
         )}
@@ -108,7 +110,7 @@ export const MeasurementImage = ({
               alt="그리드 라디오버튼"
               className="w-4 h-4"
             />
-          <span className="hidden sm:inline">{showGrid ? '그리드 끄기' : '그리드 켜기'}</span>
+          <span className="hidden sm:inline">{showGrid ? t('grid_off') : t('grid_on')}</span>
         </Button>
         <Button
           className="z-5 bg-white/10 backdrop-blur-sm hover:bg-white/20"
@@ -123,7 +125,7 @@ export const MeasurementImage = ({
             alt="랜드마크 라디오버튼"
             className="w-4 h-4"
           />
-          <span className="hidden sm:inline">{showLine ? '랜드마크 끄기' : '랜드마크 켜기'}</span>
+          <span className="hidden sm:inline">{showLine ? t('landmark_off') : t('landmark_on')}</span>
         </Button>
       </div>
 

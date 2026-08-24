@@ -16,10 +16,10 @@ const ROMDashboardTypeList = ({
   const t= useTranslations("Index");
   const locale = useLocale();
   const stateString :Record<number, string> = {
-    0 : "위험",
-    1 : "주의",
-    2 : "정상",
-    3 : "매우 양호"
+    0 : t('grade_danger'),
+    1 : t('grade_caution'),
+    2 : t('grade_normal'),
+    3 : t('grade_very_good')
   }
   const stateTextColor : Record<number, string> = {
     0 : "text-danger",
@@ -45,11 +45,11 @@ const ROMDashboardTypeList = ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="text-base text-start w-[25%] whitespace-nowrap">측정 날짜</TableHead>
-            <TableHead className="text-base text-center w-[20%] whitespace-nowrap">측정 센터</TableHead>
-            <TableHead className="text-base text-center w-[20%] whitespace-nowrap">측정 기기</TableHead>
-            <TableHead className="text-base text-center w-[20%] whitespace-nowrap">각도값</TableHead>
-            <TableHead className="text-base text-center w-[15%] whitespace-nowrap">결과</TableHead>
+            <TableHead className="text-base text-start w-[25%] whitespace-nowrap">{t('rom_date')}</TableHead>
+            <TableHead className="text-base text-center w-[20%] whitespace-nowrap">{t('rom_center')}</TableHead>
+            <TableHead className="text-base text-center w-[20%] whitespace-nowrap">{t('rom_device')}</TableHead>
+            <TableHead className="text-base text-center w-[20%] whitespace-nowrap">{t('rom_raw_data')}</TableHead>
+            <TableHead className="text-base text-center w-[15%] whitespace-nowrap">{t('rom_result')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

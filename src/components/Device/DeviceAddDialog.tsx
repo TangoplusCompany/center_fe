@@ -15,8 +15,10 @@ import { Separator } from "@/components/ui/separator";
 import { useDeviceAdd } from "@/hooks/api/device/useDeviceAdd";
 import { DeviceSearchForm } from "./DeviceSearchForm";
 import { useDeviceSearchForm } from "@/hooks/device/useDeviceSearchForm";
+import { useTranslations } from "next-intl";
 
 const DeviceAddDialog = () => {
+  const t = useTranslations("Index");
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -39,7 +41,7 @@ const DeviceAddDialog = () => {
                 strokeLinecap="round"
               />
             </svg>
-            기기 추가
+            {t('device_btn_add')}
           </div>
         </Button>
       </DialogTrigger>
@@ -58,11 +60,11 @@ const DeviceAddDialog = () => {
                   }}
                 />
               </div>
-              <span className="truncate">기기 등록하기</span>
+              <span className="truncate">{t('device_btn_register')}</span>
             </div>
           </DialogTitle>
           <DialogDescription className="text-sm break-words">
-            기기를 등록하기 위해서는 기기의 시리얼 넘버를 입력해야 합니다.
+            {t('device_register_desc')}
           </DialogDescription>
         </DialogHeader>
         <div className="min-w-0">
@@ -74,6 +76,7 @@ const DeviceAddDialog = () => {
 };
 
 const DeviceAddContainer = ({ deviceInfo }: { deviceInfo: IDeviceSearch }) => {
+  const t = useTranslations("Index");
   const mutateDeviceAdd = useDeviceAdd();
   const handlePostDeviceAdd = (deviceSn: number) => {
     mutateDeviceAdd.mutate({
@@ -85,26 +88,27 @@ const DeviceAddContainer = ({ deviceInfo }: { deviceInfo: IDeviceSearch }) => {
     <div className="w-full flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 min-w-0">
       <div className="flex-1 min-w-0 break-words">
         <p className="break-words">
-          기기 이름: {deviceInfo.data.device_name} (
+          {t('device_name')}: {deviceInfo.data.device_name} (
           {deviceInfo.data.serial_number})
         </p>
-        <p className="break-words">설치 장소: {deviceInfo.data.install_location}</p>
+        <p className="break-words">{t('device_label_install_location')}: {deviceInfo.data.install_location}</p>
         <p className="break-words">
           {deviceInfo.data.install_address_1 &&
-            `설치 주소: ${deviceInfo.data.install_address_1} ${deviceInfo.data.install_address_2 || ""}`}
+            `${t('device_label_install_address')}: ${deviceInfo.data.install_address_1} ${deviceInfo.data.install_address_2 || ""}`}
         </p>
       </div>
       <Button
         onClick={() => handlePostDeviceAdd(deviceInfo.data.device_sn)}
         className="shrink-0 w-full sm:w-auto"
       >
-        등록하기
+        {t('btn_add')}
       </Button>
     </div>
   );
 };
 
 const DeviceSearchContainer = () => {
+  const t = useTranslations("Index");
   const { deviceInfo, methods, handleSubmitDeviceAdd } = useDeviceSearchForm();
   return (
     <div className="w-full">
@@ -114,7 +118,7 @@ const DeviceSearchContainer = () => {
         errors={methods.formState.errors}
       />
       <div className="mt-4">
-        <h2 className="text-lg">기기 정보</h2>
+        <h2 className="text-lg">{t('device_info_title')}</h2>
 
         {deviceInfo && (
           <>

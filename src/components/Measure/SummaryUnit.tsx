@@ -1,6 +1,7 @@
 import { parseString } from "@/utils/parseString";
 import { formatDate } from "@/utils/formatDate";
 import { useLocale, useTranslations } from "next-intl";
+import { getRiskString } from "@/utils/getRiskString";
 
 export interface MeasureSummaryUnitProps {
   ment: string;
@@ -19,22 +20,16 @@ const MeasureSummaryUnit = ({
 }: MeasureSummaryUnitProps) => {
   const t= useTranslations("Index");
   const locale = useLocale();
-  const getRiskString = (level?: string) => 
+  const getRiskBgClass = (level?: number) =>
   ({
-    "0": "정상",
-    "1": "주의",
-    "2": "위험"
-  } as const)[level ?? "0"] ?? "정상";
-  const getRiskBgClass = (level?: string) =>
-  ({
-    정상: "bg-sub600 dark:bg-gray-600",
-    주의: "bg-warning",
-    위험: "bg-danger",
-  } as const)[level as "정상" | "주의" | "위험"] ?? "bg-primary-foreground";
+    0: "bg-sub600 dark:bg-gray-600",
+    1: "bg-warning",
+    2: "bg-danger",
+  } as const)[level as 0 | 1 | 2] ?? "bg-primary-foreground";
 
   // 사용
-  const riskString = getRiskString(risk_level);
-  const riskBg = getRiskBgClass(riskString);
+  const riskString = getRiskString(risk_level, locale);
+  const riskBg = getRiskBgClass(parseInt(risk_level));
 
   return (
     <div >
@@ -48,7 +43,7 @@ const MeasureSummaryUnit = ({
           )}
         </div>
         <span className={`px-3 py-1 ${riskBg} rounded-xl text-sm text-white`}>
-          {riskString} {range_level}단계
+          {riskString} {range_level}{t('unit_grade')}
         </span>
       </div>
 

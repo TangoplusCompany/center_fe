@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogTitle } from '../ui/dialog';
 import { Button } from '../ui/button';
 import { IMoireSectionData } from '@/hooks/api/measure/moire/useDetectMoireSections';
 import { DUMMY_SECTION_DATA, SectionOverlay } from './Moire/Image';
+import { useTranslations } from 'next-intl';
 
 interface MeasurementImageDialogProps {
   open: boolean;
@@ -45,6 +46,7 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
   moireSection,
   onMoireOpacityChange,
 }) => {
+  const t = useTranslations("Index")
   const [scale, setScale] = useState(1);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
@@ -233,7 +235,7 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
                   alt="그리드 라디오버튼"
                   className="w-4 h-4"
                 />
-                <span className="hidden sm:inline">{showGrid ? '그리드 끄기' : '그리드 켜기'}</span>
+                <span className="hidden sm:inline">{showGrid ? t('grid_off') : t('grid_on')}</span>
               </Button>
               {!moireUrl && (
                 <Button
@@ -249,7 +251,7 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
                     alt="랜드마크 라디오버튼"
                     className="w-4 h-4"
                   />
-                  <span className="hidden sm:inline">{showLine ? '랜드마크 끄기' : '랜드마크 켜기'}</span>
+                  <span className="hidden sm:inline">{showLine ? t('landmark_off') : t('landmark_on')}</span>
               </Button>
               )}
             </div>
@@ -268,7 +270,7 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
             <img
               ref={imageRef}
               src={imageUrl}
-              alt="측정 이미지 상세보r기"
+              alt="측정 이미지 상세보기"
               className={`block w-auto h-auto max-w-[90vw] max-h-[90vh] select-none ${
                 scale > 1 ? 'cursor-grab' : 'cursor-default'
               } ${isDragging ? 'cursor-grabbing' : ''} ${isDragging ? '' : 'transition-transform duration-300 ease-out'}`}

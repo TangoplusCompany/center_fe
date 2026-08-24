@@ -1,4 +1,5 @@
 import { useAuthStore } from "@/providers/AuthProvider";
+import { useTranslations } from "next-intl";
 
 interface SettingTabProps {
   nowTab: number;
@@ -10,13 +11,14 @@ export const SettingTab = ({
   nowTab,
   setNowTab
 }: SettingTabProps) => {
+  const t = useTranslations("Index")
   const { adminRole } = useAuthStore((state) => state);
   const isMainAdmin = adminRole === 1;
 
   return (
     <div className="w-full flex items-center justify-between gap-2">
       <div className="inline-flex rounded-xl bg-sub200 p-1 gap-1 w-max">
-        {["센터 설정", "계정 설정"].map((item, index) => {
+        {["setting_tab_center", "setting_tab_account"].map((item, index) => {
           const isLocked = index === 0 && !isMainAdmin;
           return (
             <button
@@ -34,7 +36,7 @@ export const SettingTab = ({
                 if (!isLocked) setNowTab(index);
               }}
             >
-              {item}
+              {t(item)}
             </button>
           );
         })}

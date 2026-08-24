@@ -1,5 +1,6 @@
 import { CompareSlot } from "@/types/compare";
 import { IMeasureROMItemDetail } from "@/types/measure";
+import { useTranslations } from "next-intl";
 
 
 
@@ -12,11 +13,12 @@ export const ROMRawDataUnit = ({
   onCompareDialogOpen: (slot: CompareSlot, selectedMeasureType?: number) => void;
   compareSlot: 0 | 1
 }) => {
+  const t = useTranslations("Index");
   const romStateMap : Record<number, string> = {
-    0: "위험",
-    1: "주의",
-    2: "정상",
-    3: "매우 양호"
+    0: t('grade_danger'),
+    1: t('grade_caution'),
+    2: t('grade_normal'),
+    3: t('grade_very_good')
   };
   const romState = data && (romStateMap[data.score] ?? "정상");
   const romValue = data && (Math.abs(data?.value_1_max).toFixed(1));
@@ -30,13 +32,13 @@ export const ROMRawDataUnit = ({
             <div 
               className="text-sm text-mainBlue-600 px-2 py-1 rounded-full border-2 border-mainBlue-600 bg-mainBlue-100  dark:bg-mainBlue-900 cursor-pointer hover:border-mainBlue-600/80 transition-colors" 
               onClick={() => onCompareDialogOpen(compareSlot, data?.measure_type)} 
-              >이전 기록과 비교</div>
+              >{t('rom_compare_previous')}</div>
           </div>
           
           <div className="grid grid-cols-[25%_25%_50%] items-center divide-x-2 divide-sub200">
-            <div className="h-full flex items-center justify-center py-2 ">최대 각도</div>
-            <div className="h-full flex items-center justify-center py-2 ">단계</div>
-            <div className="h-full flex py-2 pl-2">설명</div>
+            <div className="h-full flex items-center justify-center py-2 ">{t('rom_max_angle')}</div>
+            <div className="h-full flex items-center justify-center py-2 ">{t('rom_stage')}</div>
+            <div className="h-full flex py-2 pl-2">{t('rom_desc')}</div>
           </div>
           
         </div>

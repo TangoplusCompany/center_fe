@@ -30,13 +30,13 @@ const CenterUserDashboardContainer = ({
   const [currentROMViewType, setCurrentROMViewType] = useState<ROMDashboardViewType>("default");
   
   const bodyPartTabs = [
-    { id: 1, label: "목관절" },
-    { id: 2, label: "어깨" },
-    { id: 3, label: "팔꿉" },
-    { id: 4, label: "몸통" },
-    { id: 5, label: "골반" },
-    { id: 6, label: "무릎" },
-    { id: 7, label: "발목" },
+    { id: 1, label: t('neck_joint') },
+    { id: 2, label: t('part_shoulder') },
+    { id: 3, label:  t('part_elbow') },
+    { id: 4, label: t('upper_body_joint') },
+    { id: 5, label: t('part_hip') },
+    { id: 6, label: t('part_knee') },
+    { id: 7, label: t('part_ankle') },
   ];
   // ✅ index → DashboardViewType 매핑
   const viewTypeMap: Record<number, DashboardViewType> = {
@@ -69,7 +69,7 @@ const CenterUserDashboardContainer = ({
   if (countROMLoading) return (<Skeleton></Skeleton>);
   if (countROMError) return (
     <div className="flex items-center justify-center h-[200px] text-sm text-red-400">
-      오류가 발생했습니다. 잠시후 다시 시도해주세요.
+      {t('device_error_server')}
     </div>
   );
   return (

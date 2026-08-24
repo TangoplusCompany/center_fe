@@ -1,5 +1,6 @@
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { IMeasureROMItemCardData } from "@/types/measure";
+import { useTranslations } from "next-intl";
 import { Area, AreaChart, CartesianGrid } from "recharts";
 
 export interface RawDataGraphProps {
@@ -13,6 +14,7 @@ export const ROMRawDataGraph = ({
   data, // velocityData 또는 angleData
   maxMinValue
 }: RawDataGraphProps) => {
+  const t = useTranslations('Index');
   // 데이터를 차트에 맞게 변환 (index를 x축으로)
   const chartData = data.map((value, index) => ({
     frame: index,
@@ -24,19 +26,19 @@ export const ROMRawDataGraph = ({
     <div className="flex flex-col gap-2 rounded-xl p-4 bg-white dark:bg-black">
       <div className="flex justify-between">
         <span className="text-lg font-semibold">
-          {graphType === 0 ? '각도 변화' : '각속도 변화'}
+          {graphType === 0 ? t('rom_angle_change') : t('rom_angular_velocity_change')}
         </span>
 
         <div className="flex flex-col text-sm text-sub700 text-end">
-          <div>{graphType === 0 ? '최대 각도' : '최대 각도'}: {Math.abs(maxValue).toFixed(1)}º</div>
-          <div>{graphType === 0 ? '최소 각속도' : '최소 각속도'}: {Math.abs(minValue).toFixed(1)}º</div>
+          <div>{graphType === 0 ? t('rom_stat_min_angle') : t('rom_stat_max_angle')}: {Math.abs(maxValue).toFixed(1)}º</div>
+          <div>{graphType === 0 ? t('rom_stat_min_angular_velocity') : t('rom_stat_max_angular_velocity')}: {Math.abs(minValue).toFixed(1)}º</div>
         </div>
       </div>
 
       <ChartContainer
         config={{
           value: {
-            label: graphType === 0 ? "각도" : "각속도",
+            label: graphType === 0 ? t('rom_stat') : t('rom_velocity'),
             color: "#2563EB",
           },
         }}
@@ -63,7 +65,7 @@ export const ROMRawDataGraph = ({
           <ChartTooltip
             content={
               <ChartTooltipContent
-                labelFormatter={(value) => `관절 ${value}`}
+                labelFormatter={(value) => `${t('rom_joint')} ${value}`}
               />
             }
           />

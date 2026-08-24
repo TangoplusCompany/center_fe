@@ -6,13 +6,15 @@ import { IAdminCenterListItem } from "@/types/center";
 import { phoneHyphen } from "@/utils/regexFiltering";
 import { useAuthStore } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
-const ADMIN_ROLE_LABEL: Record<1 | 2, string> = {
-  1: "주관리자",
-  2: "부관리자",
+const ADMIN_ROLE_LABEL: Record<1 | 2, string> =  {
+  1: "main_admin",
+  2: "sub_admin",
 };
 
 export const CenterCard = ({ center }: { center: IAdminCenterListItem }) => {
+  const t = useTranslations("Index");
   const setCenterSn = useAuthStore((state) => state.setCenterSn);
   const router = useRouter();
 
@@ -37,7 +39,7 @@ export const CenterCard = ({ center }: { center: IAdminCenterListItem }) => {
             <span className="truncate">{center.center_name}</span>
             {managerLabel != null && (
               <span className="shrink-0 text-sm font-normal text-sub600 dark:text-muted-foreground px-2 py-0.5 rounded-md bg-sub100 dark:bg-muted">
-                {managerLabel}
+                {t('managerLabel')}
               </span>
             )}
           </div>

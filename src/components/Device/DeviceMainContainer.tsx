@@ -7,8 +7,10 @@ import { DeviceStatusItems } from "@/components/Device/DeviceStatusItems";
 import DeviceAddDialog from "./DeviceAddDialog";
 import { useAuthStore } from "@/providers/AuthProvider";
 import SkeletonDeviceCard from "@/components/Device/SkeletonDeviceCard";
+import { useTranslations } from "next-intl";
 
 export const DeviceMainContainer = () => {
+  const t = useTranslations("Index");
   const { adminRole } = useAuthStore((state) => state);
   const { data: deviceStatus, isLoading } = useGetDeviceStatus<IDeviceStatus>();
   if (isLoading) return <div className="flex w-full"><SkeletonDeviceCard /></div>;
@@ -18,7 +20,7 @@ export const DeviceMainContainer = () => {
   if (!deviceStatus.data || deviceStatus.data.length === 0) {
     return (
       <div className="col-span-12 flex items-start justify-center flex-col gap-4">
-        <p>센터에 등록된 기기가 존재하지 않습니다. 기기를 등록해주세요.</p>
+        <p>{t('device_empty')}</p>
         <div className="flex items-center justify-center">
           <DeviceAddDialog />
         </div>
@@ -32,7 +34,7 @@ export const DeviceMainContainer = () => {
         <div className="flex gap-2 items-center">
           <div className="w-1 h-12 bg-mainBlue-600 rounded-full"></div>
           <h2 className="text-2xl font-semibold text-sub700 dark:text-white">
-            센터 기기 관리
+            {t('h_device')}
           </h2>
         </div>
         <article>{adminRole < 2 && <DeviceAddDialog />}</article>

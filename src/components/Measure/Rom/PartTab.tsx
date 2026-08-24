@@ -1,6 +1,7 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { ComparePair } from "@/types/compare";
+import { useTranslations } from "next-intl";
 import {  useState } from "react";
 
 export interface ROMSelectProps {
@@ -20,36 +21,37 @@ export const ROMPartTab = ({
   onROMItemSelect,
   
 } : ROMSelectProps) => {
+  const t = useTranslations("Index");
   const [activeIdx, setActiveIdx] = useState(0);
   // const prevActiveIdxRef = useRef(activeIdx); // ✅ 이전 activeIdx 추적
   
   const partTabs: ROMPart[] = [
     {
-      title: "목관절",
+      title: t('neck_joint'),
       value: 1,
     },
     {
-      title: "어깨",
+      title: t('part_shoulder'),
       value: 2,
     },
     {
-      title: "팔꿈치",
+      title: t('part_elbow'),
       value: 3,
     },
     {
-      title: "몸통",
+      title: t('upper_body_joint'),
       value: 4,
     },
     {
-      title: "골반",
+      title: t('part_hip'),
       value: 5,
     },
     {
-      title: "무릎",
+      title: t('part_knee'),
       value: 6,
     },
     {
-      title: "발목",
+      title: t('part_ankle'),
       value: 7
     },
     

@@ -7,6 +7,7 @@ import KneeTrajectory from "./KneeTrajectory";
 import { IMatStaticPressure } from "./FootStaticContainer";
 import { IMatOhsPressure } from "./FootDynamicContainer";
 import { useLocale, useTranslations } from "next-intl";
+import { getRiskString } from "@/utils/getRiskString";
 
 const FootTrajectoryGridContainer = ({
   footOCP
@@ -63,20 +64,15 @@ const FootTrajectoryGridContainer = ({
     topPressure: Math.round(mat_ohs_top_pressure),
     bottomPressure: Math.round(mat_ohs_bottom_pressure),
   };
-  const getRiskString = (level?: number) => 
+  
+  const getRiskBgClass = (level : number) =>
   ({
-    0: "정상",
-    1: "주의",
-    2: "위험"
-  } as const)[level ?? "0"] ?? "정상";
-  const getRiskBgClass = (level?: string) =>
-  ({
-    정상: "bg-sub600 dark:bg-gray-600",
-    주의: "bg-warning",
-    위험: "bg-danger",
-  } as const)[level as "정상" | "주의" | "위험"] ?? "bg-primary-foreground";
-  const riskString = getRiskString(parseInt(mat_static_risk_level));
-  const riskBg = getRiskBgClass(riskString);
+    0: "bg-sub600 dark:bg-gray-600",
+    1: "bg-warning",
+    2: "bg-danger",
+  } as const)[level as 0 | 1 | 2] ?? "bg-primary-foreground";
+  const riskString = getRiskString(parseInt(mat_static_risk_level), locale);
+  const riskBg = getRiskBgClass(parseInt(mat_static_risk_level));
   
   return (
     <div className="flex flex-col gap-2">
@@ -86,10 +82,10 @@ const FootTrajectoryGridContainer = ({
           <div className="flex flex-col">
             <div className="flex justify-between items-center py-2">
               <div className="flex items-center gap-2">
-                <h2 className="text-xl font-semibold">정적 족압 결과</h2>
+                <h2 className="text-xl font-semibold">{t('user_static_pressure_result')}</h2>
               </div>
               <span className={`px-3 py-1 ${riskBg} rounded-xl text-sm text-white`}>
-                {riskString} {mat_static_range_level}단계
+                {riskString} {mat_static_range_level}{t('unit_grade')}
               </span>
             </div>
             {footOCP.measure_date && (
@@ -114,7 +110,7 @@ const FootTrajectoryGridContainer = ({
           <div className="col-span-1 lg:row-span-1 flex items-center justify-center">
             <div className="flex flex-col items-center w-full max-w-[200px] lg:max-w-none">
               <div className="w-full rounded-md border text-center py-1 mb-1 text-xs sm:text-sm">
-                동적 족압 분석
+                {t('gait_dynamic_foot_pressure_analysis')}
               </div>
               <div className="w-full aspect-square max-w-[200px] lg:max-w-none mx-auto">
                 <FootDynamic footFileName={mat_hip_down_image_name} matOhs={ohsFourCorners} />
@@ -126,7 +122,7 @@ const FootTrajectoryGridContainer = ({
           <div className="col-span-1 lg:row-span-1 flex items-center justify-center">
             <div className="flex flex-col items-center w-full max-w-[200px] lg:max-w-none">
               <div className="w-full rounded-md border text-center py-1 mb-1 text-xs sm:text-sm">
-                골반 이동 분석
+                {t('gait_pelvis_movement_analysis')}
               </div>
               <div className="w-full aspect-square max-w-[200px] lg:max-w-none mx-auto">
                 <HipTrajectory hipFileName={mat_hip_trajectory_image_name} />
@@ -138,7 +134,7 @@ const FootTrajectoryGridContainer = ({
           <div className="col-span-1 lg:row-span-1 flex items-center justify-center">
             <div className="flex flex-col items-center w-full max-w-[200px] lg:max-w-none">
               <div className="w-full rounded-md border text-center py-1 mb-1 text-xs sm:text-sm">
-                무릎이동 궤적(L)
+                {t('gait_knee_trajectory_l')}
               </div>
               <div className="w-full aspect-square max-w-[200px] lg:max-w-none mx-auto">
                 <KneeTrajectory kneeFileName={mat_left_knee_trajectory_image_name} />
@@ -150,7 +146,7 @@ const FootTrajectoryGridContainer = ({
           <div className="col-span-1 lg:row-span-1 flex items-center justify-center">
             <div className="flex flex-col items-center w-full max-w-[200px] lg:max-w-none">
               <div className="w-full rounded-md border text-center py-1 mb-1 text-xs sm:text-sm">
-                무릎이동 궤적(R)
+                {t('gait_knee_trajectory_r')}
               </div>
               <div className="w-full aspect-square max-w-[200px] lg:max-w-none mx-auto">
                 <KneeTrajectory kneeFileName={mat_right_knee_trajectory_image_name} />

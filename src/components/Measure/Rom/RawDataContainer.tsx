@@ -4,6 +4,7 @@ import ROMRawDataUnit from "./RawDataUnit";
 import { useGetMeasureROMGraphJson } from "@/hooks/api/measure/rom/useGetMeasureROMGraphJson";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CompareSlot } from "@/types/compare";
+import { useTranslations } from "next-intl";
 
 interface ROMRawDataContainerProps {
   left?: IMeasureROMItemDetail;
@@ -16,6 +17,7 @@ export const ROMRawDataContainer = ({
   right,
   onCompareDialogOpen,
 } : ROMRawDataContainerProps) => {
+  const t = useTranslations("Index");
   const { data: measureJson0, isLoading: jsonLoading0, isError: jsonError0 } = useGetMeasureROMGraphJson(
     left?.measure_server_data_json_name
   );
@@ -26,40 +28,40 @@ export const ROMRawDataContainer = ({
   const rangeComponent0 = (
     <div className="grid grid-cols-4 w-full h-full rounded-xl bg-sub100 items-center divide-x-2 divide-sub200">
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
-        <span>매우 양호</span>
-        <span>{left?.normal_normal}º 이상</span>
+        <span>{t('grade_very_good')}</span>
+        <span>{left?.normal_normal}º {t('data_more')}</span>
       </div>
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
-        <span>정상</span>
+        <span>{t('grade_normal')}</span>
         <span>{left?.normal_warning}º~{left?.normal_normal}º</span>
       </div>
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
-        <span>주의</span>
+        <span>{t('grade_caution')}</span>
         <span>{left?.normal_bad}º~{left?.normal_warning}º</span>
       </div>
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
-        <span>위험</span>
-        <span>{left?.normal_bad}º미만</span>
+        <span>{t('grade_danger')}</span>
+        <span>{left?.normal_bad}º{t('data_less')}</span>
       </div>
     </div>
   )
   const rangeComponent1 = right ? (
     <div className="grid grid-cols-4 w-full h-full rounded-xl bg-sub100 items-center divide-x-2 divide-sub200">
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
-        <span>매우 양호</span>
-        <span>{right?.normal_normal}º 이상</span>
+        <span>{t('grade_very_good')}</span>
+        <span>{right?.normal_normal}º {t('data_more')}</span>
       </div>
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
-        <span>정상</span>
+        <span>{t('grade_normal')}</span>
         <span>{right?.normal_warning}º~{right?.normal_normal}º</span>
       </div>
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
-        <span>주의</span>
+        <span>{t('grade_caution')}</span>
         <span>{right?.normal_bad}º~{right?.normal_warning}º</span>
       </div>
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
-        <span>위험</span>
-        <span>{right?.normal_bad}º미만</span>
+        <span>{t('grade_danger')}</span>
+        <span>{right?.normal_bad}º{t('data_less')}</span>
       </div>
     </div>
   ) : undefined

@@ -5,6 +5,7 @@ import { ComparePair, CompareSlot } from "@/types/compare";
 import { IMeasureROMItemDetail } from "@/types/measure";
 import CompareBodySkeleton from "../Compare/CompareBodySkeleton";
 import { ROMDashboardViewType } from "@/components/User/DashBoardContainer";
+import { useTranslations } from "next-intl";
 
 export interface ROMBodyProps {
   data0?: IMeasureROMItemDetail;
@@ -29,6 +30,7 @@ export const ROMBody = ({
   isError1,
   setCurrentView
 }: ROMBodyProps) => {
+  const t = useTranslations("Index");
   // const [romCompareMode, setRomCompareMode] = useState(false);
   // const toggleRomCompareMode = {
 
@@ -72,37 +74,10 @@ export const ROMBody = ({
           }}
           className="px-3 py-1 rounded-md text-base text-sub700"
         >
-          ← 목록으로
+          ← {t('go_list')}
         </button>
-
-        {/* <button>
-          type="button"
-          onClick={() => {
-            if (onROMItemSelect) {
-              onROMItemSelect([undefined, undefined])
-            };
-          }}
-          className="px-3 py-1 rounded-md text-sm text-sub700"
-        </button> */}
       </div>
-      {/* <div className="grid grid-cols-2 gap-4 items-stretch w-full">
-        <div className="min-w-0">
-          <CompareDateCard 
-            regDate={leftData ? data0.reg_date : ""}
-            currentSlot={leftSlot}
-            measureType={data1?.measure_type}
-            onCardClick={onCompareDialogOpen} />
-        </div>
-        {data1 && (
-          <div className="min-w-0">
-            <CompareDateCard 
-              regDate={data1 ? data1.reg_date : ""}
-              currentSlot={rightSlot}
-              measureType={leftData.measure_type ?? -1}
-              onCardClick={onCompareDialogOpen} />
-          </div>
-        )}
-      </div> */}
+
       <RawDataDynamic left={leftData} right={rightData} onCompareDialogOpen={onCompareDialogOpen} /> 
       <ROMRawDataContainer 
         left={data0}
