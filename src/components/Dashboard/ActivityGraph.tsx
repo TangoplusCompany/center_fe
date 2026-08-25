@@ -1,6 +1,6 @@
 import React from "react";
 import { graphDetailCardProps  } from "./ActivityContainer";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 
 
@@ -10,6 +10,7 @@ const ActivityGraph = ({
   data: graphDetailCardProps ;
 }) => {
   const t = useTranslations("Index")  
+  const locale = useLocale();
   const barData = React.useMemo(() => {
     if (data.case === 0) {
       if (!data.usage) return [];
@@ -129,7 +130,7 @@ const ActivityGraph = ({
                 
                 {/* 라벨 */}
                 {data.case === 0 ? (
-                  <div className={`px-2 py-1 text-xs font-medium relative ${
+                  <div className={`${locale === "ko" ? "px-2" : "px-0.5"} py-1 text-xs font-medium relative ${
                     index === barData.length - 1 
                       ? 'rounded-full bg-chartLegendActive text-chartLegendActive-foreground' 
                       : 'text-sub600'

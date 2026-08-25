@@ -30,7 +30,7 @@ export const UserList = ({
   const locale = useLocale();
   const [list, setList] = useState<IUserData[]>(users);
   const router = useRouter();
-  const mutationDeleteUser = useDeleteUser(refetch);
+  const mutationDeleteUser = useDeleteUser(refetch, t);
   const handleRemoveUser = (sn: number) => {
     mutationDeleteUser.mutate({ sn });
   };

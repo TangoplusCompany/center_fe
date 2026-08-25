@@ -114,10 +114,10 @@ export const MeasureList = ({
     const hasGait = measureItem.has_gait === 1;
     const hasMoire = measureItem.has_moire === 1;
     if (hasBasic) labels.push(t('m_basic').replaceAll("Test",""));
-    if (hasRom) labels.push(t('m_rom').replace("검사", "").replaceAll("Test",""));
-    if (hasBia) labels.push(t('m_bia'))
-    if (hasGait) labels.push(t('m_gait'))
-    if (hasMoire) labels.push(t('m_moire'))
+    if (hasRom) labels.push(t('m_rom_test').replace("검사", "").replaceAll("Test",""));
+    if (hasBia) labels.push(t('m_bia_test'))
+    if (hasGait) labels.push(t('m_gait_test'))
+    if (hasMoire) labels.push(t('m_moire_test'))
 
     return labels.length > 0 ? labels.join("/") : "";
   };

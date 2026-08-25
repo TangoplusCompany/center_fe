@@ -38,7 +38,7 @@ export const CenterUserAddDialog: React.FC<CenterUserAddDialogProps> = ({
 }) => {
   const t = useTranslations("Index");
   const { users, setUsers, getUserData } = useUsers([]);
-  const mutationAddUser = useAddUser();
+  const mutationAddUser = useAddUser(t);
 
   // Dialog가 다시 열릴 때(재오픈) 선택된 사용자 목록 초기화
   useEffect(() => {

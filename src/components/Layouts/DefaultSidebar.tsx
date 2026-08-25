@@ -58,15 +58,10 @@ const sideTabs = [
     icon: "/icons/ic_settings.svg",
   },
 ];
-const getInitialFromCenter = () => {
-  if (typeof window === "undefined") return false;
-  const stored = sessionStorage.getItem("fromCenter") === "true";
-  const path = window.location.pathname;
-  return path === "/center" || (path === "/setting" && stored);
-};
+
 
 export default function DefaultSidebar() {
-  const t = useTranslations("Index")
+  const t = useTranslations("Index");
   const logoutMutation = useLogout();
   const { adminRole, centerSn, centerName, adminSn, setCenterSn } = useAuthStore((state) => state);
   const pathname = usePathname();
@@ -74,15 +69,21 @@ export default function DefaultSidebar() {
   const menuItemRefs = React.useRef<(HTMLLIElement | null)[]>([]);
   const { state, openMobile, setOpenMobile } = useSidebar();
   const isMobile = useIsMobile();
+
   const handleLogout = () => {
     logoutMutation.mutate();
   };
-  const [isFromCenter, setIsFromCenter] = React.useState(getInitialFromCenter);
+
+  // 초기값을 false로 고정하여 서버-클라이언트 첫 렌더링을 일치시킴
+  const [isFromCenter, setIsFromCenter] = React.useState(false);
+
   React.useEffect(() => {
+    const isStored = sessionStorage.getItem("fromCenter") === "true";
+
     if (pathname === "/center") {
       sessionStorage.setItem("fromCenter", "true");
       setIsFromCenter(true);
-    } else if (pathname === "/setting" && sessionStorage.getItem("fromCenter") === "true") {
+    } else if (pathname === "/setting" && isStored) {
       setIsFromCenter(true);
     } else {
       sessionStorage.removeItem("fromCenter");

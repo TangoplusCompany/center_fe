@@ -26,8 +26,8 @@ export const CenterCard = ({ center }: { center: IAdminCenterListItem }) => {
   const fullAddress = [center.center_address, center.center_address_detail]
     .filter(Boolean)
     .join(" ");
+  
   const managerLabel = center.admin_role ? ADMIN_ROLE_LABEL[center.admin_role] : null;
-
   return (
     <div
       className="col-span-1 items-center justify-between rounded-xl border-2 border-mainBlue-100 dark:border-mainBlue-600 dark:border-border relative transition-colors overflow-hidden cursor-pointer hover:border-mainBlue-600"
@@ -39,7 +39,7 @@ export const CenterCard = ({ center }: { center: IAdminCenterListItem }) => {
             <span className="truncate">{center.center_name}</span>
             {managerLabel != null && (
               <span className="shrink-0 text-sm font-normal text-sub600 dark:text-muted-foreground px-2 py-0.5 rounded-md bg-sub100 dark:bg-muted">
-                {t('managerLabel')}
+                {t(managerLabel)}
               </span>
             )}
           </div>

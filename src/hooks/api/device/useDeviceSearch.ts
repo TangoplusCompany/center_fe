@@ -5,6 +5,7 @@ import { IDeviceSearch } from "@/types/device";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { UseFormSetError } from "react-hook-form";
+import { useTranslations } from "next-intl";
 
 /**
  * 센터 기기 검색 Hooks
@@ -17,6 +18,7 @@ export const useGetDeviceSearch = (
   getDeviceInfo: (data: IDeviceSearch | null) => void,
 ) => {
   const centerSn = useAuthStore((state) => state.centerSn);
+  const t = useTranslations();
 
   return useMutation({
     mutationFn: ({ deviceId }: { deviceId: string }) =>
@@ -36,17 +38,15 @@ export const useGetDeviceSearch = (
       if (data.status === 404) {
         setError("serial_number", {
           type: "custom",
-          message: "존재하지 않는 기기 입니다. 다시 확인바랍니다.",
+          message: t("device_search_error_404"),
         });
       }
       if (data.status === 409) {
         setError("serial_number", {
           type: "custom",
-          message: "이미 등록된 기기입니다. 다시 확인바랍니다.",
+          message: t("device_search_error_409"),
         });
       }
-
-      return;
     },
   });
 };

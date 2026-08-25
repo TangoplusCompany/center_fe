@@ -72,7 +72,7 @@ const filledData = [...[...limitedData].reverse(), ...padding];
             {bodyParts.map((part, rowIdx) => (
               <div key={part} className="flex items-center gap-2">
                 {/* 부위 이름 */}
-                <div className="w-14 items-center text-sm text-gray-700">{t(part)}</div>
+                <div className={`w-16 items-center text-sm text-gray-700`}>{t(part)}</div>
                 
                 {/* 그리드 셀들 */}
                 <div className="w-full grid grid-cols-10 gap-2">

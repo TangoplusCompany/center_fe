@@ -23,12 +23,12 @@ interface MeasurementImageDialogProps {
 }
 
 const stepLabels = {
-  first: "정면 측정",
-  second: "팔꿉 측정",
-  third: "왼쪽 측정",
-  fourth: "오른쪽 측정",
-  fifth: "후면 측정",
-  sixth: "앉은 후면",
+  first: "pose_seq_0",
+  second: "pose_seq_1",
+  third: "pose_seq_2",
+  fourth: "pose_seq_3",
+  fifth: "pose_seq_4",
+  sixth: "pose_seq_5",
 };
 
 export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
@@ -134,13 +134,13 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="p-0 border-none bg-transparent w-fit h-fit [&>button]:hidden" aria-describedby={undefined}>
-        <DialogTitle className="sr-only">{stepLabels[step]} 이미지 확대</DialogTitle>
+        <DialogTitle className="sr-only">{stepLabels[step]}</DialogTitle>
         <div className="relative">
           {/* Header */}
           <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between p-4 pointer-events-none">
             {!moireUrl && (
               <div className="px-4 py-2 rounded-full text-white bg-white/10 backdrop-blur-sm pointer-events-auto">
-                {stepLabels[step]}
+                {t(stepLabels[step])}
               </div>
             )}
             
