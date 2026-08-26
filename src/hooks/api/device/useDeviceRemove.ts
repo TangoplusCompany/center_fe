@@ -14,7 +14,7 @@ export const useDeviceRemove = (
 ) => {
   const queryClient = useQueryClient();
   const centerSn = useAuthStore((state) => state.centerSn);
-  const t = useTranslations();
+  const t = useTranslations("Index");
 
   return useMutation({
     mutationFn: (sn: number) => deleteDeviceCenter(sn, centerSn),

@@ -12,7 +12,7 @@ import { useTranslations } from "next-intl";
 export const usePatchManagerInformation = () => {
   const queryClient = useQueryClient();
   const setAdminProfile = useAuthStore((state) => state.setAdminProfile);
-  const t = useTranslations();
+  const t = useTranslations("Index");
 
   return useMutation({
     mutationFn: patchCenterManagerInformation,

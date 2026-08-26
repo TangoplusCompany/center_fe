@@ -76,7 +76,7 @@ export default function AnnouncementDetail({
             <div className="flex flex-col text-sub800 gap-2 border-b pb-4 shrink-0">
               <div className="flex items-center gap-3">
                 <span className={`text-xs md:text-sm px-2.5 py-1 rounded-md font-semibold ${AnnouncementCategoryCss[announcement.category] || "bg-gray-100 text-gray-600"}`}>
-                  {AnnouncementCategoryRecord[announcement.category] || announcement.category}
+                  {t(AnnouncementCategoryRecord[announcement.category] || announcement.category)}
                 </span>
                 <h1 className="md:text-2xl text-lg font-bold">{announcement.title}</h1>
               </div>

@@ -11,7 +11,7 @@ import { useTranslations } from "next-intl";
 export const useDeviceAdd = () => {
   const queryClient = useQueryClient();
   const centerSn = useAuthStore((state) => state.centerSn);
-  const t = useTranslations();
+  const t = useTranslations("Index");
 
   return useMutation({
     mutationFn: ({ deviceSn }: { deviceSn: number }) =>
@@ -43,6 +43,8 @@ export const useDeviceAdd = () => {
         alert(t("device_add_error_404"));
       } else if (status === 409) {
         alert(t("device_add_error_409"));
+      } else if (status === 422) {
+        alert(t("device_add_error_422"));
       } else if (status === 500) {
         alert(t("device_add_error_500"));
       } else {

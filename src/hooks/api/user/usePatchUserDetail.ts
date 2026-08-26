@@ -15,7 +15,7 @@ type PatchResultUserDetailParams = Parameters<typeof patchResultUserDetail>[0];
  */
 export const usePatchUserDetail = (userSn: string, isMyPage = false) => {
   const queryClient = useQueryClient();
-  const t = useTranslations();
+  const t = useTranslations("Index");
   // result-page에서는 AuthStoreProvider가 없으므로 optional 사용
   const centerSn = useAuthStoreOptional((state) => state.centerSn, 0);
 
