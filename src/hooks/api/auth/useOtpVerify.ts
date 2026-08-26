@@ -7,21 +7,21 @@ export const useOtpVerify = ({
 }: {
   handleRequestOtp: (jwt: string) => void;
 }) => {
-  const t = useTranslations();
+  const t = useTranslations("Index");
 
   return useMutation({
     mutationFn: postOtpVerify,
     onSuccess: (data) => {
       const otpJwt = data?.data?.otp_jwt;
       if (!otpJwt) {
-        alert(t("otp_verify_no_token"));
+        alert(t('otp_verify_no_token'));
         return;
       }
-      alert(t("otp_verify_success"));
+      alert(t('otp_verify_success'));
       handleRequestOtp(otpJwt);
     },
     onError: () => {
-      alert(t("otp_verify_fail"));
+      alert(t('otp_verify_fail'));
     },
   });
 };

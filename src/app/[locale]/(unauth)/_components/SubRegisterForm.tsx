@@ -116,6 +116,7 @@ export const SubRegisterContainer = ({
     formState: { errors, isValid },
   } = useForm<SubRegisterFormValues>({
     resolver: zodResolver(currentRegisterSchema),
+    mode: "onChange", // ← 입력할 때마다 실시간 유효성 검사 실행
     defaultValues: {
       email: email || "",
       password: "",
@@ -123,7 +124,6 @@ export const SubRegisterContainer = ({
       name: "",
       phone: "",
     },
-    mode: "onChange",
   });
 
   const password = watch("password");
