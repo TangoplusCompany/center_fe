@@ -165,7 +165,7 @@ export default function AnnouncementContainer({ onClose }: AnnouncementContainer
                         : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                     }`}
                   >
-                    {type}
+                    {t(AnnouncementTypeRecord[type])}
                   </button>
                 ))}
               </div>

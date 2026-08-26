@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 
 export const useResetPwd = () => {
   const router = useRouter();
-  const t = useTranslations();
+  const t = useTranslations("Index");
 
   return useMutation({
     mutationFn: postResetPwd,

@@ -777,9 +777,9 @@
     "right": "오른쪽",
     "announcement_search_hint": "검색어를 입력해주세요",
     "and": "및",
-
     "hook_delete_user": "사용자 제거에 성공했습니다.",
     "hook_add_user": "사용자 추가에 성공했습니다.",
+
     "otp_error_400": "필수 파라미터가 누락되었거나, type/purpose 값이 올바르지 않습니다.",
     "otp_error_429": "OTP 발행 허용 횟수(10회)를 초과했습니다. 탱고바디 관리자에게 문의해주세요.",
     "otp_error_423": "OTP 요청 횟수 초과 또는 5회 검증 실패로 잠겼습니다. 탱고바디 관리자에게 문의해주세요.",
@@ -796,6 +796,7 @@
     "device_add_error_403": "권한이 없습니다. 관리자에게 문의하세요.",
     "device_add_error_404": "등록할 기기를 찾을 수 없습니다. 시리얼 번호를 확인해주세요.",
     "device_add_error_409": "이미 등록된 기기입니다.",
+    "device_add_error_422": "더 이상 기기를 등록할 수 없습니다.",
     "device_add_error_500": "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
     "device_add_error_default": "기기 추가에 실패했습니다. (오류 코드: {status})",
     "center_info_edit_success": "정상적으로 센터 정보를 수정하였습니다.",

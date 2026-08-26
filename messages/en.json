@@ -751,6 +751,7 @@
     "setting_account_role": "Role",
     "setting_account_registered_at": "Registered At",
     "edit_center_information": "Edit Center Information",
+
     "search_hint": "You can enter up to 50 characters for the search term.",
     "search_zod": "Please enter only Korean characters, English letters, and numbers.",
 
@@ -795,6 +796,7 @@
     "device_add_error_403": "Permission denied. Please contact the administrator.",
     "device_add_error_404": "Device not found. Please check the serial number.",
     "device_add_error_409": "Device is already registered.",
+    "device_add_error_422": "You cannot register any more devices.",
     "device_add_error_500": "A server error occurred. Please try again later.",
     "device_add_error_default": "Failed to add device. (Error code: {status})",
     "center_info_edit_success": "Center information successfully updated.",

@@ -39,7 +39,7 @@ function getPasswordChangeErrorMessage(
 export const usePatchManagerPassword = (
   setError: UseFormSetError<IManagerPasswordForm>,
 ) => {
-  const t = useTranslations();
+  const t = useTranslations("Index");
 
   return useMutation({
     mutationFn: patchAdminPassword,
