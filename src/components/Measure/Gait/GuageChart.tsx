@@ -1,5 +1,6 @@
 import React from "react";
 import FootPrintIcon from "./FootPrintIcon";
+import { useTranslations } from "next-intl";
 
 interface GaitData {
   label: string;
@@ -69,6 +70,7 @@ function describeOuterArc(
 }
 
 export default function GaitGaugeChart({ left, both, right }: GaitGaugeChartProps) {
+  const t = useTranslations("Index");
   const cx = 200;
   const cy = 200;
   const innerR = 100;
@@ -169,7 +171,7 @@ export default function GaitGaugeChart({ left, both, right }: GaitGaugeChartProp
         <g transform={`translate(${cx - 55}, ${cy - 35})`}>
           <rect x="0" y="0" width="110" height="26" rx="13" fill="#EDEDED" stroke="#EDEDED" strokeWidth="1.5" />
           <text x="55" y="13" textAnchor="middle" dominantBaseline="central" className="text-sub700 text-[11px] font-medium">
-            좌우 균형 분석
+            {t('gait_lr_balance_analysis')}
           </text>
         </g>
 

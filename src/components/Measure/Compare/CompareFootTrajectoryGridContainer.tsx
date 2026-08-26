@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import FootDynamic, { FootDynamicProps } from "../Mat/FootDynamic";
 import HipTrajectory from "../Mat/HipTrajectory";
 import KneeTrajectory from "../Mat/KneeTrajectory";
@@ -19,7 +20,7 @@ const CompareFootTrajectoryGridContainer = ({
   data0: CompareFootTrajectoryGridProps;
   data1?: CompareFootTrajectoryGridProps;
 }) => {
-    
+  const t = useTranslations("Index");
   const footContainer = (data: CompareFootTrajectoryGridProps, isRight: boolean) => (
     <div className="flex flex-col gap-2 w-full md:w-[50%]">
       <div className="flex gap-4 items-center bg-sub100 dark:bg-muted border-b-2 border-sub200 dark:border-border py-1 px-4">
@@ -33,7 +34,7 @@ const CompareFootTrajectoryGridContainer = ({
             <FootDynamic footFileName={data.dynamic.footFileName} matOhs={data.dynamic.matOhs} />
           </div>
           <div className="w-28 rounded-md border dark:border-border text-center py-1 mb-1 text-xs sm:text-sm text-black dark:text-muted-foreground">
-            동적 족압 분석
+            {t('gait_dynamic_foot_pressure_analysis')}
           </div>
         </div>
 
@@ -42,7 +43,7 @@ const CompareFootTrajectoryGridContainer = ({
             <HipTrajectory hipFileName={data.hipFileName} />
           </div>
           <div className="w-28 rounded-md border dark:border-border text-center py-1 mb-1 text-xs sm:text-sm text-black dark:text-muted-foreground">
-            골반 이동 분석
+            {t('gait_pelvis_movement_analysis')}
           </div>
         </div>
         
@@ -51,7 +52,7 @@ const CompareFootTrajectoryGridContainer = ({
             <KneeTrajectory kneeFileName={data.kneeFileNames[0]} />
           </div>
           <div className="w-28 rounded-md border dark:border-border text-center py-1 mb-1 text-xs sm:text-sm text-black dark:text-muted-foreground">
-            무릎이동 궤적(L)
+            {t('gait_knee_trajectory_l')}
           </div>
         </div>
         
@@ -60,7 +61,7 @@ const CompareFootTrajectoryGridContainer = ({
             <KneeTrajectory kneeFileName={data.kneeFileNames[1]} />
           </div>
           <div className="w-28 rounded-md border dark:border-border text-center py-1 mb-1 text-xs sm:text-sm text-black dark:text-muted-foreground">
-            무릎이동 궤적(R)
+            {t('gait_knee_trajectory_r')}
           </div>
         </div>
 
@@ -72,7 +73,7 @@ const CompareFootTrajectoryGridContainer = ({
     <div className="flex flex-col gap-2 border-l-0 md:border-l-2 border-sub200 dark:border-border w-full md:w-[50%]">
       {dynamicComment !== "" && kneeComment !== "" && (
         <div className="flex bg-sub100 dark:bg-muted border-b-2 border-sub200 dark:border-border text-base text-black dark:text-foreground px-4 py-1.5">
-          분석 설명
+          {t('compare_analysis_desc')}
         </div>
       )}
       <div className="flex flex-col justify-center h-full py-2">
@@ -87,7 +88,7 @@ const CompareFootTrajectoryGridContainer = ({
       <div className="flex flex-col overflow-x-auto overflow-y-hidden w-full min-w-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
       {/* 상지요약 타이틀 */}
       <div className="bg-sub100 dark:bg-muted text-xl font-semibold text-black dark:text-foreground px-4 py-2 border-t-2 border-b-2 border-sub200 dark:border-border">
-        동적 족압 및 이동 궤적
+        {t('compare_dynamic_trajectory')}
       </div>
 
       {/* 2개의 카드 영역 */}

@@ -11,28 +11,31 @@ export type RequestOtpErrorResponse = {
 };
 
 export function getRequestOtpErrorMessage(
-  status: number | undefined
+  status: number | undefined,
+  t: (key: string) => string
 ): string {
   switch (status) {
     case 400:
-      return "필수 파라미터가 누락되었거나, type/purpose 값이 올바르지 않습니다.";
+      return t("otp_error_400");
     case 429:
-      return "OTP 발행 허용 횟수(10회)를 초과했습니다. 탱고바디 관리자에게 문의해주세요.";
+      return t("otp_error_429");
     case 423:
-      return "OTP 요청 횟수 초과 또는 5회 검증 실패로 잠겼습니다. 탱고바디 관리자에게 문의해주세요.";
+      return t("otp_error_423");
     case 500:
-      return "OTP 메일 발송에 실패했습니다.";
+      return t("otp_error_500");
     default:
-      return "OTP 요청에 실패했습니다.";
+      return t("otp_error_default");
   }
 }
 
 export const useOtpRequest = ({
   setEmail,
+  t,
 }: {
   value: string;
   setEmail: (email: string) => void;
   purpose?: Purpose;
+  t: (key : string) => string;
 }) => {
   return useMutation({
     mutationFn: (params: {
@@ -46,7 +49,7 @@ export const useOtpRequest = ({
     },
     onError: (error: AxiosError<RequestOtpErrorResponse>) => {
       const status = error.response?.status;
-      const message = getRequestOtpErrorMessage(status);
+      const message = getRequestOtpErrorMessage(status, t);
       alert(message);
     },
   });

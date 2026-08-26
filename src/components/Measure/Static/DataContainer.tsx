@@ -1,5 +1,6 @@
 import { IMeasureResponse } from "@/types/measure";
 import FootStaticContainer, { IMatStaticPressure } from "../Mat/FootStaticContainer";
+import { useTranslations } from "next-intl";
 
 const StaticDataContainer = ({
   measureData,
@@ -7,6 +8,7 @@ const StaticDataContainer = ({
   measureData: IMeasureResponse;
 
 }) => {
+  const t = useTranslations("Index");
   if (!measureData?.basic_result?.result_summary_data) {
       return undefined;
     }
@@ -60,9 +62,9 @@ const StaticDataContainer = ({
       <div className={`rounded-2xl border-2 border-sub200 dark:border-border ${borderCondition} ${bgCondition}`}>
         <FootStaticContainer
         comment={
-          "[좌우 무게 분석]\n" +
+          `[${t('foot_horizon_weight_analysis')}]\n` +
           (mat_static_horizontal_ment ?? "\n") +
-          "\n[상하 무게 분석]\n" +
+          `[${t('foot_verti_weight_analysis')}]\n` +
           (mat_static_vertical_ment ?? "\n")
         }
         risk_level={mat_static_risk_level}

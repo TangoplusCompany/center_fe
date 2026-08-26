@@ -10,16 +10,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useTranslations } from "next-intl";
 
 const CenterUserMeasureListSkeleton = () => {
+  const t = useTranslations("Index");
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="text-center text-xs sm:text-sm">측정 위치</TableHead>
-          <TableHead className="text-center text-xs sm:text-sm">측정 일자</TableHead>
-          <TableHead className="text-center text-xs sm:text-sm">측정 기기</TableHead>
-          <TableHead className="text-center text-xs sm:text-sm">측정 요약</TableHead>
+          <TableHead className="text-center text-xs sm:text-sm">{t('m_history_col_location')}</TableHead>
+          <TableHead className="text-center text-xs sm:text-sm">{t('m_history_col_date')}</TableHead>
+          <TableHead className="text-center text-xs sm:text-sm">{t('m_history_col_device')}</TableHead>
+          <TableHead className="text-center text-xs sm:text-sm">{t('m_history_col_explain')}</TableHead>
         </TableRow>
       </TableHeader>
 

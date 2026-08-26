@@ -6,14 +6,15 @@ import { Button } from "@/components/ui/button";
 import MeasurementImageDialog from "../MeasurementImageDialog";
 import { useState } from "react";
 import { IMoireSectionData, useDetectMoireSections } from "@/hooks/api/measure/moire/useDetectMoireSections";
+import { useTranslations } from "next-intl";
 
 export const DUMMY_SECTION_DATA: IMoireSectionData = {
   lineXPercent: 50,
   lineYPercents: [16, 28, 40, 55], 
-  labels: ["횡단면1(어깨,흉부)", "횡단면2(허리)", "횡단면3(골반)"],
+  labels: ["body_part_upper_top", "body_part_upper_bottom", "body_part_lower_top"],
 };
-
-export function SectionOverlay({isFront, sectionData = DUMMY_SECTION_DATA }: {isFront: boolean, sectionData : IMoireSectionData}) {
+export function SectionOverlay({ isFront, sectionData = DUMMY_SECTION_DATA }: { isFront: boolean; sectionData: IMoireSectionData }) {
+  const t = useTranslations("Index");
   const { lineYPercents, labels } = sectionData;
 
   return (
@@ -27,10 +28,10 @@ export function SectionOverlay({isFront, sectionData = DUMMY_SECTION_DATA }: {is
       {/* 2. 상단 좌측/우측 뱃지 */}
       <div className="absolute top-8 left-1/2 -translate-x-1/2 flex w-full max-w-[300px] justify-between px-2 z-10">
         <span className="bg-white/10 text-white text-xs px-2.5 py-0.5 rounded-full backdrop-blur-sm">
-          {isFront ? "좌측" : "우측"}
+          {isFront ? t('side_left') : t('side_right')}
         </span>
         <span className="bg-white/10 text-white text-xs px-2.5 py-0.5 rounded-full backdrop-blur-sm">
-          {isFront ? "우측" : "좌측"}
+          {isFront ? t('side_right') : t('side_left')}
         </span>
       </div>
 
@@ -41,13 +42,8 @@ export function SectionOverlay({isFront, sectionData = DUMMY_SECTION_DATA }: {is
           className="absolute left-3 right-3 flex items-center z-10"
           style={{ top: `${yPercent}%` }}
         >
-          {/* 좌측 점 */}
           <div className="w-1 h-1 rounded-full bg-white/80 shrink-0" />
-          
-          {/* 중앙 점선: h-0으로 박스 높이를 없애고 border-b로 1px 단일 하단선만 적용 */}
           <div className="flex-1 h-0 border-b border-dashed border-white/60" />
-          
-          {/* 우측 점 */}
           <div className="w-1 h-1 rounded-full bg-white/80 shrink-0" />
         </div>
       ))}
@@ -56,7 +52,11 @@ export function SectionOverlay({isFront, sectionData = DUMMY_SECTION_DATA }: {is
       {labels.map((label, idx) => {
         const topY = lineYPercents[idx];
         const bottomY = lineYPercents[idx + 1];
-        const midY = (topY + bottomY) / 2; // 두 선의 중앙 Y 위치
+        const midY = (topY + bottomY) / 2;
+
+        // DUMMY_SECTION_DATA의 label 키인지 체크
+        const isTranslationKey = DUMMY_SECTION_DATA.labels.includes(label);
+        const displayLabel = isTranslationKey ? t(label) : label;
 
         return (
           <div
@@ -64,7 +64,7 @@ export function SectionOverlay({isFront, sectionData = DUMMY_SECTION_DATA }: {is
             className="absolute left-5 -translate-y-1/2 bg-white/10 backdrop-blur-sm z-20 rounded-full px-2 py-0.5"
             style={{ top: `${midY}%` }}
           >
-            <span className="text-white text-xs sm:text-sm text-center">{label}</span>
+            <span className="text-white text-xs sm:text-sm text-center">{displayLabel}</span>
           </div>
         );
       })}
@@ -78,6 +78,7 @@ export interface IMoireImageProps {
 }
 
 export default function MoireImage({ imageData }: { imageData: IMoireImageProps }) {
+  const t = useTranslations("Index")
   const originFileName = imageData.data.server_file_name;
   const moireFileName = imageData.data.server_file_name_moire;
   const rgbUrl = `${process.env.NEXT_PUBLIC_FILE_URL ?? ""}/${originFileName}`;
@@ -123,7 +124,7 @@ export default function MoireImage({ imageData }: { imageData: IMoireImageProps 
     return loadingPlaceholder;
   }
   if (jsonError || !matJson) {
-    return <div className="text-red-500">오류가 발생했습니다. Moire 데이터 데이터 누락</div>;
+    return <div className="text-red-500">{t('moire_data_error')}</div>;
   }
   const pressures = {
     leftTopPressure: matJson.left_top_weight_pct,
@@ -141,7 +142,7 @@ export default function MoireImage({ imageData }: { imageData: IMoireImageProps 
       <div className="flex items-center gap-2">
         <div className="w-3 h-3 rounded-sm bg-mainBlue-600" />
         <div className="text-mainBlue-600 text-sm sm:text-base font-bold">
-          {imageData.isFront ? "모아레 측정(전면)" : "모아레 측정(후면)"}
+          {imageData.isFront ? t('moire_measure_front') : t('moire_measure_back')}
         </div>
       </div>
 
@@ -151,7 +152,7 @@ export default function MoireImage({ imageData }: { imageData: IMoireImageProps 
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={rgbResultUrl}
-              alt="측정 RGB 이미지"
+              alt="rgb image"
               className="w-full rounded-2xl cursor-pointer block"
               onClick={() => setDialogOpen(true)}
             />
@@ -159,7 +160,7 @@ export default function MoireImage({ imageData }: { imageData: IMoireImageProps 
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={moireResultUrl}
-              alt="모아레 오버레이"
+              alt="moire overlay"
               className="absolute inset-0 w-full h-full rounded-2xl cursor-pointer pointer-events-none transition-opacity duration-150"
               style={{ opacity: moireOpacity / 100 }}
             />
@@ -185,7 +186,7 @@ export default function MoireImage({ imageData }: { imageData: IMoireImageProps 
                 className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white pointer-events-auto"
               >
                 <span className="text-xs sm:text-sm whitespace-nowrap">
-                  모아레 투명도
+                  {t('moire_alpha')}
                 </span>
                 <div className="relative flex items-center">
                   <input
@@ -224,11 +225,11 @@ export default function MoireImage({ imageData }: { imageData: IMoireImageProps 
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/icons/ic_grid.svg"
-                  alt="그리드 라디오버튼"
+                  alt="grid button"
                   className="w-4 h-4"
                 />
                 <span className="hidden sm:inline">
-                  {showGrid ? "그리드 끄기" : "그리드 켜기"}
+                  {showGrid ? t('grid_off') : t('grid_on')}
                 </span>
               </Button>
             </div>

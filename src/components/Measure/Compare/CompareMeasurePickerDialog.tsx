@@ -15,6 +15,7 @@ import { ComparePair, CompareSlot } from "@/types/compare";
 import { IUserMeasureListItem } from "@/types/user";
 import { formatDate } from "@/utils/formatDate";
 import type { ComparePagination } from "@/hooks/api/user/useMeasureListForCompare";
+import { useLocale, useTranslations } from "next-intl";
 
 type MeasurePickerDialogProps = {
   open: boolean;
@@ -36,6 +37,8 @@ export const MeasurePickerDialog = ({
   selectCompareSn,
   pagination: apiPagination,
 }: MeasurePickerDialogProps) => {
+  const t = useTranslations("Index");
+  const locale = useLocale()
   const [localPage, setLocalPage] = useState(1);
 
   const useApiPagination = !!apiPagination;
@@ -65,20 +68,20 @@ export const MeasurePickerDialog = ({
   useEffect(() => {
     if (open && !useApiPagination) setLocalPage(1);
   }, [open, useApiPagination]);
-
+  // 여기서부터 해야함
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-full max-w-md rounded-2xl bg-white dark:bg-card p-4" aria-describedby={undefined}>
         {/* 헤더 */}
         <DialogTitle className="text-base font-semibold mb-3 text-foreground">
-          측정 목록 선택
+          {t('measure_date_picker')}
         </DialogTitle>
 
         {/* 내용 영역 */}
         <div className="max-h-[360px] overflow-auto">
           {filteredItems.length === 0 ? (
             <div className="flex items-center justify-center h-[200px] text-sm text-gray-400 dark:text-gray-500">
-              비교할 항목이 없습니다.
+              {t('measure_no_compare')}
             </div>
           ) : (
             <div className="space-y-2">
@@ -93,10 +96,10 @@ export const MeasurePickerDialog = ({
                   }}
                 >
                   <div className="text-sm font-medium">
-                    {formatDate(it.measure_date)}
+                    {formatDate(it.measure_date, locale)}
                   </div>
                   <div className="text-xs text-gray-500 dark:text-gray-400">
-                    장치이름: {it.device_name}
+                    {t('device_name')}: {it.device_name}
                   </div>
                 </button>
               ))}

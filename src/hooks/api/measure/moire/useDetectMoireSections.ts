@@ -1,4 +1,5 @@
 import { DUMMY_SECTION_DATA } from "@/components/Measure/Moire/Image";
+import { useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
 
 export interface IMoireSectionData {
@@ -10,7 +11,7 @@ export interface IMoireSectionData {
 export function useDetectMoireSections(imageUrl: string | null) {
   const [sectionData, setSectionData] = useState<IMoireSectionData | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const t = useTranslations("Index");
   useEffect(() => {
     if (!imageUrl) return;
 
@@ -84,7 +85,11 @@ export function useDetectMoireSections(imageUrl: string | null) {
           setSectionData({
             lineXPercent: 50,
             lineYPercents: [16, 28, 40, 55],
-            labels: ["목~명치 영역", "명치~배꼽 영역", "배꼽~허벅지 영역"],
+            labels: [
+              t("body_area_neck_chest"),
+              t("body_area_chest_navel"),
+              t("body_area_navel_thigh")
+            ],
           });
           setIsLoading(false);
         }
@@ -138,7 +143,11 @@ export function useDetectMoireSections(imageUrl: string | null) {
         setSectionData({
           lineXPercent: pX,
           lineYPercents: [p1, p2, p3, p4],
-          labels: ["상체 상부(목~명치)", "상체 하부(명치~배꼽)", "하체 상부(배꼽~허벅지)"],
+          labels: [
+            t("body_part_upper_top"),
+            t("body_part_upper_bottom"),
+            t("body_part_lower_top"),
+          ],
         });
         setIsLoading(false);
       }
@@ -154,7 +163,7 @@ export function useDetectMoireSections(imageUrl: string | null) {
     return () => {
       isMounted = false;
     };
-  }, [imageUrl]);
+  }, [imageUrl, t]);
 
   return { sectionData, isLoading };
 }

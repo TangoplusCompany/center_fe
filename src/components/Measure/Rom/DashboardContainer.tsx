@@ -10,6 +10,7 @@ import { useGetROMItemHistory } from "@/hooks/api/measure/rom/useGetROMItemHisto
 import { useAuthStoreOptional } from "@/providers/AuthProvider";
 import { ROMDashboardViewType } from "@/components/User/DashBoardContainer";
 import { IMeasureROMCount } from "@/types/measure";
+import { useTranslations } from "next-intl";
 
 export interface ROMDashboardContainerProps {
   userSn: number;
@@ -28,6 +29,7 @@ const ROMDashboardContainer = ({
   setCurrentROMViewType,
   romCount,
 }: ROMDashboardContainerProps ) => {
+  const t = useTranslations("Index");
   // 0. DP type (대시보드 컨테이너 안에서 화면 전환)
   const centerSn = useAuthStoreOptional((state) => state.centerSn, 0);
   
@@ -117,23 +119,23 @@ const ROMDashboardContainer = ({
     3 : "bg-mainBlue-600"
   }
   const countMap = [
-    { state: 3,  label: "매우 양호", count: romCount.good_score_count },
-    { state: 2,  label: "정상", count: romCount.normal_score_count },
-    { state: 1,  label: "주의", count: romCount.warning_score_count },
-    { state: 0,  label: "위험", count: romCount.bad_score_count },
+    { state: 3,  label: t('grade_very_good'), count: romCount.good_score_count },
+    { state: 2,  label: t('grade_normal'), count: romCount.normal_score_count },
+    { state: 1,  label: t('grade_caution'), count: romCount.warning_score_count },
+    { state: 0,  label: t('grade_danger'), count: romCount.bad_score_count },
   ]
 
 
   if (jointROMLoading) return (<Skeleton></Skeleton>);
   if (jointROMError) return (
     <div className="flex items-center justify-center h-[200px] text-sm text-red-400">
-      오류가 발생했습니다. 잠시후 다시 시도해주세요.
+      {t('device_error_server')}
     </div>
   );
   if (romHLoading) return (<Skeleton></Skeleton>);
   if (romHError) return (
     <div className="flex items-center justify-center h-[200px] text-sm text-red-400">
-      오류가 발생했습니다. 잠시후 다시 시도해주세요.
+      {t('device_error_server')}
     </div>
   );
 
@@ -158,7 +160,7 @@ const ROMDashboardContainer = ({
                     {label}
                   </div>
                 )}
-                <span className="text-base text-sub700">: {count}건</span>
+                <span className="text-base text-sub700">: {count}{t('unit_cases')}</span>
               </div>
             ))}
           </div>

@@ -10,6 +10,7 @@ import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import SearchForm from "@/components/Util/SearchForm";
 import { Button } from "@/components/ui/button";
 import MeasureDeviceTab from "../Measure/DeviceTab";
+import { useTranslations } from "next-intl";
 
 export const DummyOptionBar = () => {
   return (
@@ -46,6 +47,7 @@ const OptionBar = ({
   showAddButton = false,
   setDialogOpen 
 }: OptionBarProps) => {
+  const t = useTranslations("Index");
   const { setQueryParam, query } = useQueryParams();
   const defaultLimit = query.limit || 20;
   
@@ -61,7 +63,7 @@ const OptionBar = ({
       {/* 첫 번째 줄: 검색결과, SearchForm, 버튼들 */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-0">
         <p className="text-xl shrink-0">
-          검색결과: {totalItems ?? 0}건
+          {t('search_result')}: {totalItems ?? 0}{t('unit_cases')}
         </p>
 
         <div className="flex items-center gap-4 flex-1 justify-end">
@@ -71,7 +73,7 @@ const OptionBar = ({
 
           {showAddButton && setDialogOpen && (
             <Button className="" variant="outline" onClick={() => setDialogOpen(true)}>
-              사용자 추가
+              {t('btn_add_user')}
             </Button>
             
           )}
@@ -97,9 +99,9 @@ const OptionBar = ({
               <SelectValue placeholder="행 갯수" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="10">10건</SelectItem>
-              <SelectItem value="20">20건</SelectItem>
-              <SelectItem value="50">50건</SelectItem>
+              <SelectItem value="10">10{t('unit_cases')}</SelectItem>
+              <SelectItem value="20">20{t('unit_cases')}</SelectItem>
+              <SelectItem value="50">50{t('unit_cases')}</SelectItem>
             </SelectContent>
           </Select>
         </div>

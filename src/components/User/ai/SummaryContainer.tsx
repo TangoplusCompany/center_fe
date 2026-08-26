@@ -1,4 +1,5 @@
 import { ProblemArea, ProblemAreas } from "@/types/aiAnalysis";
+import { useTranslations } from "next-intl";
 
 interface AISummaryProps {
   problem_areas ?: ProblemAreas;
@@ -9,16 +10,17 @@ const AISummaryContainer = ({
   problem_areas,
   summary
 }: AISummaryProps) => {
+  const t = useTranslations("Index");
   const RadialGradientColor = 'radial-gradient(circle, #6BA0EF 45%, #2C4FD0 100%)'
   const RadialGradientShadow = 'inset 0 0 12px rgba(255, 255, 255, 0.75)'
   const partString = (partKey: string): string => {
     const partMap: { [key: string]: string } = {
-      "1": "목관절",
-      "2": "어깨",
-      "3": "팔꿈치",
-      "8": "골반",
-      "9": "무릎",
-      "10": "발목"
+      "1": t('neck_joint'),
+      "2": t('part_shoulder'),
+      "3": t('part_elbow'),
+      "8": t('part_hip'),
+      "9": t('part_knee'),
+      "10": t('part_ankle')
     };
     
     return partMap[partKey] || "";
@@ -68,7 +70,7 @@ const AISummaryContainer = ({
         className="flex flex-col h-full rounded-2xl border-2 border-sub100 dark:border-border">
       <div className="flex items-center text-white text-lg font-semibold px-4 py-2">
         <SparkleSvg />
-        AI 골격 상태 요약
+        {t('ai_title')}
       </div>
       <div className="flex flex-col bg-white dark:bg-muted shadow-sm rounded-xl p-4 gap-4">
         <div className="grid gric-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -98,7 +100,7 @@ const AISummaryContainer = ({
           className="flex flex-col gap-4 w-full p-2 rounded-xl">
           <div className="flex items-center text-white text-lg font-semibold">
             <SparkleSvg />
-            AI 결과 요약
+            {t('ai_title')}
           </div>
           <div className="text-base text-white px-2">
             {summary}

@@ -1,14 +1,16 @@
+import { useTranslations } from "next-intl";
 import { GaitContainerProps } from "./Container";
 import FootPrintIcon from "./FootPrintIcon";
 import GaitGaugeChart from "./GuageChart";
 
 export default function GaitBalance({data}: GaitContainerProps) {
   const iData = data.gait_measure_info
+  const t = useTranslations("Index")
   return (
     <div className="flex flex-col flex-1 min-h-80 h-full border-2 border-sub200 rounded-xl p-4 gap-2">
 
       <div className="text-lg font-semibold mb-2 text-sub700">
-        보행 밸런스(Single, Double Support)
+        {t('gait_balance')}(Single, Double Support)
       </div>
 
 
@@ -17,25 +19,25 @@ export default function GaitBalance({data}: GaitContainerProps) {
           <div className="flex items-center gap-2 ">
             <div className="w-3 h-3 rounded-sm bg-mainBlue-600" />
             <div className="text-mainBlue-600 text-sm sm:text-base font-bold ">
-              보행 좌우 균형
+              {t('gait_lr_balance')}
             </div>
           </div>
           <div className="flex flex-1 w-full justify-center">
             <GaitGaugeChart
               left={{
-                label: "왼발",
+                label: t('gait_left_support'),
                 percent: iData.avgLeftSingleSupportRatio,
                 time: `${iData.avgDoubleSupportTime.toFixed(1)}초`,
                 color: { id: "leftGrad", start: "#5B93FF00", end: "#5B93FF" },
               }}
               both={{
-                label: "양발 지지",
+                label: t('gait_double_support'),
                 percent: iData.avgDoubleSupportRatio,
                 time: `${iData.avgLeftSingleSupportTime.toFixed(1)}초`,
                 color: { id: "bothGrad", start: "#7E7E7E00", end: "#7E7E7E" },
               }}
               right={{
-                label: "오른발 지지",
+                label: t('gait_right_support'),
                 percent: iData.avgRightSingleSupportRatio,
                 time: `${iData.avgRightSingleSupportTime.toFixed(1)}초`,
                 color: { id: "rightGrad", start: "#49D68F00", end: "#49D68F" },
@@ -52,7 +54,7 @@ export default function GaitBalance({data}: GaitContainerProps) {
           <div className="flex items-center gap-2 ">
             <div className="w-3 h-3 rounded-sm bg-mainBlue-600" />
             <div className="text-mainBlue-600 text-sm sm:text-base font-bold ">
-              보행 주기 균형
+              {t('gait_cycle_balance')}
             </div>
           </div>
 
@@ -74,11 +76,11 @@ export default function GaitBalance({data}: GaitContainerProps) {
                   className="h-full bg-gradient-to-r from-mainBlue-300/90 to-mainBlue-300/30 rounded-xl flex items-center justify-between px-4 text-white font-bold shrink-0"
                   style={{ width: `${iData.avgLeftStanceRatio}%` }}
                 >
-                  <span>왼발 보행 입각기</span>
+                  <span>{t('gait_left_stance_phase')}</span>
                   <span className="bg-sub100/20 text-sub700 px-2.5 py-1 rounded-full text-xs">{iData.avgLeftStanceRatio.toFixed(1)}%</span>
                 </div>
                 <div className="flex-1 flex items-center justify-between px-4 text-sub700 font-bold">
-                  <span>유각기</span>
+                  <span>{t('gait_swing_phase')}</span>
                   <span className="bg-sub100/20 px-2.5 py-1 rounded-full text-xs">{iData.avgLeftSwingRatio.toFixed(1)}%</span>
                 </div>
               </div>
@@ -101,11 +103,11 @@ export default function GaitBalance({data}: GaitContainerProps) {
                   className="h-full bg-gradient-to-r from-mainGreen-600/90 to-mainGreen-600/30 rounded-xl flex items-center justify-between px-4 text-white font-bold shrink-0"
                   style={{ width: `${iData.avgRightStanceRatio}%` }}
                 >
-                  <span>오른발 보행 입각기</span>
+                  <span>{t('gait_right_stance_phase')}</span>
                   <span className="bg-sub100/20 text-sub700 px-2.5 py-1 rounded-full text-xs">{iData.avgRightStanceRatio.toFixed(1)}%</span>
                 </div>
                 <div className="flex-1 flex items-center justify-between px-4 text-sub700 font-bold">
-                  <span>유각기</span>
+                  <span>{t('gait_swing_phase')}</span>
                   <span className="bg-sub100/20 px-2.5 py-1 rounded-full text-xs">{iData.avgRightSwingRatio.toFixed(1)}%</span>
                 </div>
               </div>
@@ -128,11 +130,11 @@ export default function GaitBalance({data}: GaitContainerProps) {
                   className="h-full bg-gradient-to-r from-sub700/90 to-sub700/30 rounded-xl flex items-center justify-between px-4 text-white font-bold shrink-0"
                   style={{ width: `${iData.avgStancePhaseRatio}%` }}
                 >
-                  <span>양발 보행 입각기</span>
+                  <span>{t('gait_double_stance_phase')}</span>
                   <span className="bg-sub100/20 text-white px-2.5 py-1 rounded-full text-xs">{iData.avgStancePhaseRatio.toFixed(1)}%</span>
                 </div>
                 <div className="flex-1 flex items-center justify-between px-4 text-sub700 font-bold">
-                  <span>유각기</span>
+                  <span>{t('gait_swing_phase')}</span>
                   <span className="bg-sub100/20 px-2.5 py-1 rounded-full text-xs">{iData.avgSwingPhaseRatio.toFixed(1)}%</span>
                 </div>
               </div>

@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/chart";
 import { useMeasureGaitSeqJson } from "@/hooks/api/measure/gait/useMeasureGaitSeqJson";
 import { IMeasureGaitDetail } from "@/types/measure";
+import { useTranslations } from "next-intl";
 
 
 export interface GraphUnit {
@@ -27,6 +28,7 @@ export function GaitGraphItem({
   data1: GraphUnit;
   data2?: GraphUnit;
 }) {
+  const t = useTranslations("Index")
   const uniqueId = useId().replace(/:/g, "");
   
   // 단일 선택 상태 (null일 때는 아무것도 선택 안 됨 = 기본 상태)
@@ -117,7 +119,7 @@ export function GaitGraphItem({
                 style={{ backgroundColor: color }}
               />
               <span className={isActive ? "text-gray-900 font-bold" : "text-gray-400"}>
-                {item.title}
+                {t(item.title)}
               </span>
             </button>
           );
@@ -196,6 +198,7 @@ export default function GaitSeqResult({
   isFront: boolean, 
   data: IMeasureGaitDetail
 }) {
+  const t = useTranslations("Index")
   const { data: gaitSeq, isLoading: gaitLoading, isError: gaitError } = useMeasureGaitSeqJson(
     data?.gait_sequence_result[isFront ? 0 : 1]?.file_server_kinematics_frame
   );
@@ -206,22 +209,22 @@ export default function GaitSeqResult({
 
     return {
       head: {
-        data0: { title: "머리 좌우 기울기", value: seq.map((f) => f.headLateralTilt) },
-        data1: { title: "머리 전후 기울기", value: seq.map((f) => f.headForwardTilt) },
+        data0: { title: "gait_head_lr_tilt", value: seq.map((f) => f.headLateralTilt) },
+        data1: { title: "gait_head_ap_tilt", value: seq.map((f) => f.headForwardTilt) },
       },
       trunk: {
-        data0: { title: "몸통 흔들림", value: seq.map((f) => f.trunkSway) },
-        data1: { title: "몸통 굽힘", value: seq.map((f) => f.trunkFlexion) },
+        data0: { title: "gait_trunk_sway", value: seq.map((f) => f.trunkSway) },
+        data1: { title: "gait_trunk_flexion", value: seq.map((f) => f.trunkFlexion) },
       },
       shoulderArm: {
-        data0: { title: "어깨 기울기", value: seq.map((f) => f.shoulderTilt) },
-        data1: { title: "왼쪽 팔 각도", value: seq.map((f) => f.leftArmAngle) },
-        data2: { title: "오른쪽 팔 각도", value: seq.map((f) => f.rightArmAngle) },
+        data0: { title: "gait_shoulder_slope", value: seq.map((f) => f.shoulderTilt) },
+        data1: { title: "gait_left_arm_angle", value: seq.map((f) => f.leftArmAngle) },
+        data2: { title: "gait_right_arm_angle", value: seq.map((f) => f.rightArmAngle) },
       },
       lowerBody: {
-        data0: { title: "골반 틀어짐", value: seq.map((f) => f.pelvicDrop) },
-        data1: { title: "왼쪽 무릎 각도", value: seq.map((f) => f.leftKneeAngle) },
-        data2: { title: "오른쪽 무릎 각도", value: seq.map((f) => f.rightKneeAngle) },
+        data0: { title: "gait_pelvis_distortion", value: seq.map((f) => f.pelvicDrop) },
+        data1: { title: "gait_left_knee_angle", value: seq.map((f) => f.leftKneeAngle) },
+        data2: { title: "gait_right_knee_angle", value: seq.map((f) => f.rightKneeAngle) },
       },
     };
   }, [gaitSeq]); // 💡 gaitSeq가 로드/변경될 때 감지하여 재계산하도록 의존성 배열 추가
@@ -229,7 +232,7 @@ export default function GaitSeqResult({
   if (gaitError) return <div>Error occured</div>
   return (
     <div className="bg-white rounded-xl border border-sub200 p-4">
-      <div className="text-lg font-semibold mb-2 text-sub700">편도 보행 결과 - {isFront ? "걸어옴" : "멀어짐"}</div>
+      <div className="text-lg font-semibold mb-2 text-sub700">{t('gait_oneway_result')} - {isFront ? t('gait_direction_toward') : t('gait_direction_away')}</div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
         <GaitGraphItem data0={graphGroups.head.data0} data1={graphGroups.head.data1} />
         <GaitGraphItem data0={graphGroups.trunk.data0} data1={graphGroups.trunk.data1} />

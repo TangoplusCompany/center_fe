@@ -3,6 +3,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { IPartDetail } from "@/types/measure";
+import { useTranslations } from "next-intl";
 
 const conditionBg: Record<0 | 1 | 2, string> = {
   0: "bg-sub600 dark:bg-gray-600",
@@ -30,29 +31,29 @@ const levelCellBg: Record<0 | 1 | 2, string> = {
 };
 
 export const MEASURE_NAME_MAP: Record<string, string> = {
-  turtle_neck: "거북목",
-  scoliosis: "경추 측만",
-  side_neck_balance: "측면 목 근육",
+  turtle_neck: "info_part_data_neck_0",
+  scoliosis: "info_part_data_neck_1",
+  side_neck_balance: "info_part_data_neck_2",
 
-  shoulder_tilit: "어깨 기울기",
-  frozen_shoulder: "오십견",
-  shoulder_impingement: "어깨 충돌 증후군",
+  shoulder_tilit: "info_part_data_shoulder_slope",
+  frozen_shoulder: "info_part_data_frozen_shoulder",
+  shoulder_impingement: "info_part_data_impingement",
 
-  bicep_tension: "이두근 긴장",
-  elbow_disorder: "팔꿈치 질환",
-  elbow_muscle_tension: "팔꿈치 아래팔 근육 긴장",
+  bicep_tension: "info_part_data_biceps_tension",
+  elbow_disorder: "info_part_data_elbow_disease",
+  elbow_muscle_tension: "info_part_data_forearm_tension",
 
-  hip_tilit: "골반 기울기",
-  hip_disorder: "골반 질환",
-  hip_knee_tilit: "골반과 무릎 기울기(측면)",
+  hip_tilit: "info_part_data_pelvis_slope",
+  hip_disorder: "info_part_data_pelvis_disease",
+  hip_knee_tilit: "info_part_data_pelvis_knee_slope_side",
 
-  knee_angle: "골반 무릎 각도(정면)",
-  knee_disorder: "무릎 질환 (OHS)",
-  hip_knee_ankle_tilit: "골반, 무릎, 발목 기울기(OHS)",
+  knee_angle: "info_part_data_pelvis_knee_angle_front",
+  knee_disorder: "info_part_data_knee_disease_ohs",
+  hip_knee_ankle_tilit: "info_part_data_pelvis_knee_ankle_slope_ohs",
 
-  ankle_angle: "발목 각도",
-  left_right_balance: "좌우 무게 균형",
-  uppper_lower_balance: "상하 무게 균형",
+  ankle_angle: "info_part_data_ankle_angle",
+  left_right_balance: "info_part_data_weight_balance_lr",
+  uppper_lower_balance: "info_part_data_weight_balance_tb",
 };
 
 const MeasureIntroPart = ({ 
@@ -66,13 +67,14 @@ const MeasureIntroPart = ({
   riskLevel: number;
   rangeLevel: number;
 }) => {
+  const t = useTranslations("Index");
   const items = Object.entries(cardData);
   const badgeBg = conditionBg[(riskLevel ?? 0) as 0 | 1 | 2];
   
   const levelString = {
-    0:"정상",
-    1:"주의",
-    2:"위험",
+    0:"grade_normal",
+    1:"grade_caution",
+    2:"grade_danger",
   }[riskLevel];
   // 한 줄 렌더링 함수
   
@@ -120,7 +122,7 @@ const MeasureIntroPart = ({
 
               <div className="flex-[1] bg-white dark:bg-sub800 flex items-center justify-center">
                 {isActive && (
-                  <div className="text-xs leading-none text-sub800 dark:text-sub100">{safeRange + 1}단계</div>
+                  <div className="text-xs leading-none text-sub800 dark:text-sub100">{safeRange + 1}{t('rom_stage')}</div>
                 )}
               </div>
             </div>
@@ -134,14 +136,14 @@ const MeasureIntroPart = ({
     <div className="flex rounded-xl border-2 border-sub100 dark:border-border bg-white dark:bg-sub700 shadow-sm h-full">
       {/* 전체 grid */}
       <div className="flex flex-col w-1/4 items-center justify-center text-base font-semibold gap-1 text-sub800 dark:text-sub100">
-        <div className="text-center whitespace-normal break-keep">{title}</div>
+        <div className="text-center whitespace-normal break-keep">{t(title)}</div>
         <div
           className={cn(
             "px-3 py-1 rounded-full text-xs text-white text-center whitespace-normal break-keep",
             badgeBg,
           )}
         >
-          {`${levelString} ${Number(rangeLevel)}단계`}
+          {`${t(levelString!)} ${Number(rangeLevel)}${t('rom_stage')}`}
         </div>
       </div>
       
@@ -152,7 +154,7 @@ const MeasureIntroPart = ({
             "flex flex-1 min-h-0 items-stretch",
             idx !== items.length - 1 && "border-b dark:border-border"
           )}>
-            <div className="flex w-1/2 text-sm items-center justify-center border-r dark:border-border px-2 py-1 text-center whitespace-normal break-keep text-sub800 dark:text-sub100">{MEASURE_NAME_MAP[measureName] ?? item?.measure_unit ?? measureName}</div>
+            <div className="flex w-1/2 text-sm items-center justify-center border-r dark:border-border px-2 py-1 text-center whitespace-normal break-keep text-sub800 dark:text-sub100">{t(MEASURE_NAME_MAP[measureName]) ?? item?.measure_unit ?? measureName}</div>
             <div className="flex w-1/2 items-stretch">{renderRangeBoxes(item?.risk_level, item?.range_level, idx, items?.length)}</div>
           </div>
         ))}

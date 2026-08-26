@@ -4,6 +4,7 @@ import { formatDate } from "@/utils/formatDate";
 import DashboardTypeContainer from "./DashboardTypeContainer";
 import { ComparePair } from "@/types/compare";
 import { Fragment } from "react";
+import { useLocale, useTranslations } from "next-intl";
 
 export interface ROMDashboardPartListProps {
   romTypeItems: IMeasureROMTypeItem[];
@@ -19,12 +20,14 @@ const ROMDashboardPartList = ({
   romHistorys,
   onROMItemSelect,
 }: ROMDashboardPartListProps) => {
+  const t= useTranslations("Index");
+  const locale = useLocale();
   const stateComp = (score: number) => {
     const scoreMap : Record<number, {label : string; className: string}> = {
-      0 : {label: "위험", className: "border-danger text-danger"},
-      1 : {label: "주의", className: "border-warning text-warning"},
-      2 : {label: "정상", className: "border-mainBlue-600 text-mainBlue-600"},
-      3 : {label: "매우 양호", className: "border-mainBlue-600 text-mainBlue-600"}
+      0 : {label: t('grade_danger'), className: "border-danger text-danger"},
+      1 : {label: t('grade_caution'), className: "border-warning text-warning"},
+      2 : {label: t('grade_normal'), className: "border-mainBlue-600 text-mainBlue-600"},
+      3 : {label: t('grade_very_good'), className: "border-mainBlue-600 text-mainBlue-600"}
     }
     const stateCircle : Record<number, string> = {
       0 : "bg-danger",
@@ -47,11 +50,11 @@ const ROMDashboardPartList = ({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="text-start px-2 text-base w-[25%] whitespace-nowrap">검사종류</TableHead>
-              <TableHead className="text-center text-base w-[25%] whitespace-nowrap">최근 측정 날짜</TableHead>
-              <TableHead className="text-center text-base w-[20%] whitespace-nowrap">최근 각도값</TableHead>
-              <TableHead className="text-center text-base w-[20%] whitespace-nowrap">최근 상태</TableHead>
-              <TableHead className="text-center text-base w-[10%] whitespace-nowrap">측정 횟수</TableHead>
+              <TableHead className="text-start px-2 text-base w-[25%] whitespace-nowrap">{t('history_col_exam_type')}</TableHead>
+              <TableHead className="text-center text-base w-[25%] whitespace-nowrap">{t('history_col_recent_date')}</TableHead>
+              <TableHead className="text-center text-base w-[20%] whitespace-nowrap">{t('history_col_recent_angle')}</TableHead>
+              <TableHead className="text-center text-base w-[20%] whitespace-nowrap">{t('history_col_recent_status')}</TableHead>
+              <TableHead className="text-center text-base w-[10%] whitespace-nowrap">{t('history_col_measure_count')}</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -72,7 +75,7 @@ const ROMDashboardPartList = ({
                     {rom.title}
                   </TableCell>
                   <TableCell className="text-center whitespace-nowrap">
-                    {formatDate(rom.reg_date)}
+                    {formatDate(rom.reg_date, locale)}
                   </TableCell>
                   <TableCell className="text-center whitespace-nowrap">
                     {Math.abs(rom.value_1_max).toFixed(1)}º
@@ -83,7 +86,7 @@ const ROMDashboardPartList = ({
                     </div>
                   </TableCell>
                   <TableCell className="text-center whitespace-nowrap">
-                    {rom.measurement_count}회
+                    {rom.measurement_count}{t('unit_times')}
                   </TableCell>
                 </TableRow>
 

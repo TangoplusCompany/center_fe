@@ -15,6 +15,7 @@ import { IUserData } from "@/types/user";
 import { useDeleteUser } from "@/hooks/api/user/useDeleteUser";
 import { useRouter } from "next/navigation";
 import { actionUserEncrypt } from "@/app/actions/getCrypto";
+import { useLocale, useTranslations } from "next-intl";
 
 export const UserList = ({
   users,
@@ -25,9 +26,11 @@ export const UserList = ({
   refetch: () => void;
   adminRole: number;
 }) => {
+  const t = useTranslations("Index");
+  const locale = useLocale();
   const [list, setList] = useState<IUserData[]>(users);
   const router = useRouter();
-  const mutationDeleteUser = useDeleteUser(refetch);
+  const mutationDeleteUser = useDeleteUser(refetch, t);
   const handleRemoveUser = (sn: number) => {
     mutationDeleteUser.mutate({ sn });
   };
@@ -47,10 +50,10 @@ export const UserList = ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="text-center w-[100px] whitespace-nowrap">이름</TableHead>
-            <TableHead className="text-center whitespace-nowrap">전화번호</TableHead>
-            <TableHead className="text-center whitespace-nowrap">성별</TableHead>
-            <TableHead className="text-center whitespace-nowrap">이메일</TableHead>
+            <TableHead className="text-center w-[100px] whitespace-nowrap">{t('user_col_name')}</TableHead>
+            <TableHead className="text-center whitespace-nowrap">{t('user_col_phone')}</TableHead>
+            <TableHead className="text-center whitespace-nowrap">{t('user_col_gender')}</TableHead>
+            <TableHead className="text-center whitespace-nowrap">{t('user_col_email')}</TableHead>
             <TableHead className="text-right whitespace-nowrap"></TableHead>
           </TableRow>
         </TableHeader>
@@ -71,19 +74,19 @@ export const UserList = ({
                   className="flex items-center gap-2 justify-end cursor-pointer"
                 >
                   <FileText className="w-4 h-4" />
-                  <span>상세보기</span>
+                  <span>{t('user_col_detail')}</span>
                 </button>
                 {adminRole < 3 && (
                   <button
                     onClick={() => {
-                      if (window.confirm(`${user.user_name} 사용자를 제거하시습니까?`)) {
+                      if (window.confirm(`${locale === "ko" ? `${user.user_name} 사용자를 제거하시습니까?` : `Do you want to delete ${user.user_name}?` }`)) {
                         handleRemoveUser(user.user_sn);
                       }
                     }}
                     className="flex items-center gap-2 justify-end cursor-pointer text-red-500"
                   >
                     <Trash className="w-4 h-4" />
-                    <span>제거</span>
+                    <span>{t('delete')}</span>
                   </button>
                 )}
               </TableCell>

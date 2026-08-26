@@ -14,9 +14,11 @@ import { useDeleteManager } from "@/hooks/api/manager/useDeleteManager";
 import { useBoolean } from "@/hooks/utils/useBoolean";
 import { ICenterManagerData } from "@/types/manager";
 import { Trash } from "lucide-react";
+import { useTranslations } from "next-intl";
 import React from "react";
 
 const ManagerRemoveDialog = ({ manager }: { manager: ICenterManagerData }) => {
+  const t = useTranslations("Index")
   const {
     isBoolean: open,
     setToggle: setOpen,
@@ -32,22 +34,22 @@ const ManagerRemoveDialog = ({ manager }: { manager: ICenterManagerData }) => {
       <DialogTrigger asChild>
         <button className="flex items-center gap-0.5 text-sm text-red-500">
           <Trash className="w-4 h-4" />
-          <span className="">삭제</span>
+          <span className="">{t('btn_delete')}</span>
         </button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>매니저 제거하기</DialogTitle>
+          <DialogTitle>{t('delete_manager')}</DialogTitle>
           <DialogDescription className="text-red-500 text-sm">
-            {`정말로 ${manager.admin_name}님을 제거하시겠습니까?`}
+            {`${t('delete_manager_desc_0')} ${manager.admin_name}${t('delete_manager_desc_1')}`}
           </DialogDescription>
 
           <div className="flex items-center justify-end gap-3 mt-4">
             <DialogClose asChild>
-              <Button>취소하기</Button>
+              <Button>{t('btn_cancel')}</Button>
             </DialogClose>
             <Button variant={"outline"} onClick={handleDeviceRemove}>
-              제거하기
+              {t('btn_delete_confirm')}
             </Button>
           </div>
         </DialogHeader>

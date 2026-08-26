@@ -1,17 +1,19 @@
 "use client";
 
 import { TWorstPart } from "@/types/dashboard";
+import { useTranslations } from "next-intl";
 
 
 const DashboardCardWorst = ({ data }: { data: TWorstPart }) => {
+  const t = useTranslations("Index");
 
   const imageSrc = {
-    "목": "img_neck_2.svg",
-    "어깨": "img_shoulder_2.svg",
-    "팔꿉": "img_elbow_2.svg",
-    "골반": "img_hip_2.svg",
-    "무릎": "img_knee_2.svg",
-    "발목": "img_ankle_2.svg"
+    "part_neck": "img_neck_2.svg",
+    "part_shoulder": "img_shoulder_2.svg",
+    "part_elbow": "img_elbow_2.svg",
+    "part_hip": "img_hip_2.svg",
+    "part_knee": "img_knee_2.svg",
+    "part_ankle": "img_ankle_2.svg"
   }[data.partName]
 
   return (
@@ -37,7 +39,7 @@ const DashboardCardWorst = ({ data }: { data: TWorstPart }) => {
           alt=""
           className="w-10 h-10 rounded-full"
         />
-        <h2 className="text-xl font-bold text-black dark:text-foreground">가장 취약 부위</h2>
+        <h2 className="text-xl font-bold text-black dark:text-foreground">{t('user_most_vulnerable_part')}</h2>
       </div>
 
       {/* 왼쪽 내용 */}
@@ -46,7 +48,7 @@ const DashboardCardWorst = ({ data }: { data: TWorstPart }) => {
         <div className={`w-fit px-3 py-1 ${
           data.level === 2 ? "bg-danger" : "bg-warning"
         } text-white text-lg font-semibold rounded-xl`}>
-          {data.partName}
+          {t(data.partName)}
         </div>
 
         {/* 설명 박스 */}

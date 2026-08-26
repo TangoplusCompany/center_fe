@@ -3,6 +3,7 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useOtpRequest } from "@/hooks/api/auth/useOtpRequest";
+import { useTranslations } from "next-intl";
 
 type OtpPurpose = "password" | "account";
 
@@ -13,11 +14,13 @@ const InputEmail = ({
   setEmail: (email: string) => void;
   purpose?: OtpPurpose;
 }) => {
+  const t = useTranslations("Index");
   const [value, setValue] = useState("");
   const { mutate: otpRequest, isPending: isSending } = useOtpRequest({
     value,
     setEmail,
     purpose,
+    t
   });
 
   const changeCenterCode = (e: React.ChangeEvent<HTMLInputElement>) => {

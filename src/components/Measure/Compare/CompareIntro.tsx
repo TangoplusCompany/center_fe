@@ -5,6 +5,7 @@ import CompareFootTrajectoryGridContainer, { CompareFootTrajectoryGridProps } fr
 import CompareDefault from "./CompareDefault";
 import CompareSummaryFootStatic, { CompareSummaryFootStaticProps } from "./CompareSummaryFootStatic";
 import SkeletonContainer from "../Skeleton/SkeletonContainer";
+import { useTranslations } from "next-intl";
 
 export const extractMeasureData = (data: IMeasureResponse  | undefined) => {
     if (!data?.basic_result?.result_summary_data) {
@@ -121,6 +122,7 @@ const CompareIntro = ({
   onCompareDialogOpen? : (slot: CompareSlot) => void;
   currentSlot?: CompareSlot;
 }) => {
+  const t = useTranslations("Index");
 
   
   const measureData0 = extractMeasureData(data0);
@@ -150,7 +152,7 @@ const CompareIntro = ({
 
   // 정적 족압 
   const footStatic0 : CompareSummaryFootStaticProps = {
-    comment: `[좌우 무게 분석]\n${measureData0.mat_static_horizontal_ment ?? ""}\n[상하 무게 분석]\n${measureData0.mat_static_vertical_ment ?? ""}`,
+    comment: `[${t('foot_horizon_weight_analysis')}]\n${measureData0.mat_static_horizontal_ment ?? ""}\n[${t('foot_verti_weight_analysis')}]\n${measureData0.mat_static_vertical_ment ?? ""}`,
     risk_level: measureData0.mat_static_risk_level,
     range_level: measureData0.mat_static_range_level,
     fileName: measureData0.measure_server_mat_image_name,
@@ -159,7 +161,7 @@ const CompareIntro = ({
   }
 
   const footStatic1 = measureData1 ? {
-    comment: `[좌우 무게 분석]\n${measureData1.mat_static_horizontal_ment ?? ""}\n[상하 무게 분석]\n${measureData1.mat_static_vertical_ment ?? ""}`,
+    comment: `[${t('foot_horizon_weight_analysis')}]\n${measureData1.mat_static_horizontal_ment ?? ""}\n[${t('foot_verti_weight_analysis')}]\n${measureData1.mat_static_vertical_ment ?? ""}`,
     risk_level: measureData1.mat_static_risk_level,
     range_level: measureData1.mat_static_range_level,
     fileName: measureData1.measure_server_mat_image_name,
@@ -179,8 +181,8 @@ const CompareIntro = ({
       measureData0.mat_left_knee_trajectory_image_name, 
       measureData0.mat_right_knee_trajectory_image_name
     ],
-    dynamicComment: `[좌우 무게 분석]\n${measureData0.mat_ohs_horizontal_ment ?? ""}\n[상하 무게 분석]\n${measureData0.mat_ohs_vertical_ment ?? ""}`,
-    kneeComment: `[무릎 흔들림 분석]\n${measureData0.mat_ohs_knee_ment ?? ""}`,
+    dynamicComment: `[${t('foot_horizon_weight_analysis')}]\n${measureData0.mat_ohs_horizontal_ment ?? ""}\n[${t('foot_verti_weight_analysis')}]\n${measureData0.mat_ohs_vertical_ment ?? ""}`,
+    kneeComment: `[${t('knee_instability_analysis')}]\n${measureData0.mat_ohs_knee_ment ?? ""}`,
     measure_date: measureData0.measure_date,
   };
   const footData1: CompareFootTrajectoryGridProps | undefined = measureData1 
@@ -194,8 +196,8 @@ const CompareIntro = ({
         measureData1.mat_left_knee_trajectory_image_name, 
         measureData1.mat_right_knee_trajectory_image_name
       ],
-      dynamicComment: `[좌우 무게 분석]\n${measureData1.mat_ohs_horizontal_ment ?? ""}\n[상하 무게 분석]\n${measureData1.mat_ohs_vertical_ment ?? ""}`,
-      kneeComment: `[무릎 흔들림 분석]\n${measureData1.mat_ohs_knee_ment ?? ""}`,
+      dynamicComment: `[${t('foot_horizon_weight_analysis')}]\n${measureData1.mat_ohs_horizontal_ment ?? ""}\n[${t('foot_verti_weight_analysis')}]\n${measureData1.mat_ohs_vertical_ment ?? ""}`,
+      kneeComment: `[${t('knee_instability_analysis')}]\n${measureData1.mat_ohs_knee_ment ?? ""}`,
       measure_date: measureData1.measure_date,
     } 
   : undefined;

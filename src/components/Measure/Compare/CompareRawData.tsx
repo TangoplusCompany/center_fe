@@ -4,6 +4,7 @@ import { IUserMeasureDetailData } from "@/types/measure";
 import { compareTrendState } from "@/utils/compareTrendState";
 import { getRawDataMark } from "@/utils/getRawDataMark";
 import { getRiskScore } from "@/utils/getRiskScore";
+import { useTranslations } from "next-intl";
 
 export interface IStaticRawDataProps {
   measure_type: number;
@@ -29,7 +30,7 @@ export const CompareRawData = ({
   measure_date0: string;
   measure_date1: string;
 }) => {
-
+  const t = useTranslations("Index");
   const isArrayDataTop0 = Array.isArray(data0);
   const dataTop0 = isArrayDataTop0 ? data0[0] : data0;
   const dataBottom0 = isArrayDataTop0 && data0.length === 2 ? data0[1] : undefined;
@@ -62,15 +63,15 @@ export const CompareRawData = ({
     const formattedData0 = (dataTop?.measure_unit?.includes("거리") ? Math.abs(dataTop?.data) : dataTop?.data)?.toFixed(1);
     const unit0 = getRawDataMark(dataTop?.measure_unit)
     const leftRightString0 = {
-      0: "좌측",
-      1: "우측"
+      0: "side_left",
+      1: "side_right"
     }[dataTop?.left_right] ?? "";
     
     const levelString0 = {
-      0: "정상",
-      1: "주의",
-      2: "위험"
-    }[dataTop?.risk_level] ?? "정상";
+      0: "grade_normal",
+      1: "grade_caution",
+      2: "grade_danger"
+    }[dataTop?.risk_level] ?? "grade_normal";
 
 
     const formattedData1 = dataBottom?.measure_unit?.includes("거리") 
@@ -78,38 +79,38 @@ export const CompareRawData = ({
     : dataBottom?.data?.toFixed(1) ?? undefined;
     const unit1 = getRawDataMark(dataBottom?.measure_unit)
     const leftRightString1 = dataBottom ? ({
-      0: "좌측",
-      1: "우측"
+      0: "side_left",
+      1: "side_right"
     }[dataBottom?.left_right] ?? "") : undefined;
 
     const levelString1 = dataBottom ? ({
-      0: "정상",
-      1: "주의",
-      2: "위험"
-    }[dataBottom?.risk_level] ?? "정상") : undefined;
+      0: "grade_normal",
+      1: "grade_caution",
+      2: "grade_danger"
+    }[dataBottom?.risk_level] ?? "grade_normal") : undefined;
 
     const textBgCondition0 = {
-      정상: "bg-sub600 dark:bg-gray-600",
-      주의: "bg-warning",
-      위험: "bg-danger",
-    }[levelString0] ?? "bg-sub600 dark:bg-gray-600";
+      0: "bg-sub600 dark:bg-gray-600",
+      1: "bg-warning",
+      2: "bg-danger",
+    }[dataTop?.risk_level] ?? "bg-sub600 dark:bg-gray-600";
 
     const textBgCondition1 = {
-      정상: "bg-sub600 dark:bg-gray-600",
-      주의: "bg-warning",
-      위험: "bg-danger",
-    }[levelString1 ?? "정상"] ?? "bg-sub600 dark:bg-gray-600";
+      0: "bg-sub600 dark:bg-gray-600",
+      1: "bg-warning",
+      2: "bg-danger",
+    }[dataBottom?.risk_level ?? 0] ?? "bg-sub600 dark:bg-gray-600";
 
     const textCondition0 = {
-      정상: "text-sub600 dark:text-muted-foreground",
-      주의: "text-warningDeep dark:text-warning-foreground",
-      위험: "text-dangerDeep dark:text-danger",
-    }[levelString0] ?? "text-sub600 dark:text-muted-foreground";
+      0: "text-sub600 dark:text-muted-foreground",
+      1: "text-warningDeep dark:text-warning-foreground",
+      2: "text-dangerDeep dark:text-danger",
+    }[dataTop?.risk_level] ?? "text-sub600 dark:text-muted-foreground";
     const textCondition1 = {
-      정상: "text-sub600 dark:text-muted-foreground",
-      주의: "text-warningDeep dark:text-warning-foreground",
-      위험: "text-dangerDeep dark:text-danger",
-    }[levelString1 ?? "정상"] ?? "text-sub600 dark:text-muted-foreground";
+      0: "text-sub600 dark:text-muted-foreground",
+      1: "text-warningDeep dark:text-warning-foreground",
+      2: "text-dangerDeep dark:text-danger",
+    }[dataBottom?.risk_level ?? 0] ?? "text-sub600 dark:text-muted-foreground";
 
     const data0 = dataTop?.measure_unit?.includes("거리") 
       ? Math.abs(dataTop?.data) 
@@ -138,7 +139,7 @@ export const CompareRawData = ({
         <div className={`grid items-center h-full`}>
           <div className="flex">
             <span className={`flex text-sm items-center justify-center ${isRight ? 'text-sub600 dark:text-muted-foreground' : 'text-black dark:text-foreground'} px-2 py-1 rounded-full bg-sub100 dark:bg-muted mx-2 my-2 ${!dataBottom && 'invisible'}`}>
-              {leftRightString0}
+              {t(leftRightString0)}
             </span>
             <span className={`flex items-center text-lg font-medium leading-none px-2 ${isRight ? 'text-sub600 dark:text-muted-foreground' : 'text-black dark:text-foreground'}`}>
               {formattedData0} {unit0}
@@ -147,7 +148,7 @@ export const CompareRawData = ({
           {dataBottom && (
             <div className="flex">
               <span className={`text-sm flex items-center justify-center ${isRight ? 'text-sub600 dark:text-muted-foreground' : 'text-black dark:text-foreground'} px-2 py-1 rounded-full bg-sub100 dark:bg-muted mx-2 my-2`}>
-                {leftRightString1}
+                {t(leftRightString1 ?? "")}
               </span>
               <span className={`flex items-center text-lg text-black dark:text-foreground font-medium leading-none px-2 ${isRight ? 'text-sub600 dark:text-muted-foreground' : 'text-black dark:text-foreground'}`}>
                 {formattedData1} {unit1}

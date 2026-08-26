@@ -1,7 +1,9 @@
 import PieChartBar, { SegmentData } from "@/components/ui/PieChartBar";
 import type { IBiaData } from "../../../types/bia";
+import { useTranslations } from "next-intl";
 
 interface CompositionCardProps {
+  idx: number;
   title: string;
   weight: number;
   value: number;
@@ -10,20 +12,21 @@ interface CompositionCardProps {
   prevValue?: number; // 직전 데이터 추가
 }
 
-export function CompositionCard({ title, weight, value, low, high, prevValue }: CompositionCardProps) {
+export function CompositionCard({idx, title, weight, value, low, high, prevValue }: CompositionCardProps) {
+  const t = useTranslations("Index")
   const stateColor = {
-    "체수분": "bg-mainBlue-600",
-    "단백질": "bg-warning",
-    "무기질": "bg-sub750 ",
-    "체지방": "bg-danger"
-  }[title];
+    0: "bg-mainBlue-600",
+    1: "bg-warning",
+    2: "bg-sub750 ",
+    3: "bg-danger"
+  }[idx];
   
   const textColor = {
-    "체수분": "text-mainBlue-600",
-    "단백질": "text-warning",
-    "무기질": "text-sub750 ",
-    "체지방": "text-danger"
-  }[title];
+    0: "text-mainBlue-600",
+    1: "text-warning",
+    2: "text-sub750 ",
+    3: "text-danger"
+  }[idx];
 
   const percentage = ((value / weight) * 100).toFixed(1);
   const calculatePosition = (val: number) => {
@@ -58,8 +61,8 @@ export function CompositionCard({ title, weight, value, low, high, prevValue }: 
 
   return (
     <div className="flex items-center gap-1 w-full h-full ">
-      <div className={`flex items-center h-full w-20 p-2 text-sm leading-tight font-bold text-white rounded-[4px] justify-center ${stateColor}`}>
-        {title}
+      <div className={`flex items-center h-full w-20 p-2 text-sm text-center leading-tight font-bold text-white rounded-[4px] justify-center ${stateColor}`}>
+        {t(title)}
       </div>
 
       {/* 메인 데이터 영역 */}
@@ -117,6 +120,7 @@ export function CompositionCard({ title, weight, value, low, high, prevValue }: 
 
 
 export default function Composition({data}: {data: IBiaData}) {
+  const t = useTranslations("Index")
   const splitMessage = (message: string) => {
     const match = message.match(/\[(.*?)\]\s*(.*)/);
     
@@ -132,14 +136,14 @@ export default function Composition({data}: {data: IBiaData}) {
   const { title, description } = splitMessage(data.result_body_composition_description);
   const mainComps = [
     {
-      title: "체수분",
+      title: "bia_body_water",
       value: data.moisture_content,
       low: data.moisture_content_std_min,
       high: data.moisture_content_std_max,
       prevValue: data.most_previous_data.moisture_content
     },
     {
-      title: "단백질",
+      title: "bia_protein",
       value: data.protein_mass,
       low: data.protein_mass_std_min,
       high: data.protein_mass_std_max,
@@ -147,14 +151,14 @@ export default function Composition({data}: {data: IBiaData}) {
       
     },
     {
-      title: "무기질",
+      title: "bia_minerals",
       value: data.amount_of_inorganic_salt,
       low: data.amount_of_inorganic_salt_std_min,
       high: data.amount_of_inorganic_salt_std_max,
       prevValue: data.most_previous_data.amount_of_inorganic_salt
     },
     {
-      title: "체지방",
+      title: "bia_body_fat",
       value: data.body_fat_mass,
       low: data.body_fat_mass_std_min,
       high: data.body_fat_mass_std_max,
@@ -163,22 +167,22 @@ export default function Composition({data}: {data: IBiaData}) {
   ];
   const donutComps : SegmentData[] = [
     {
-      label: "체수분",
+      label: "bia_body_water",
       percentage: Number(((data.moisture_content / data.weight) * 100).toFixed(1)),
       color: "#5B93FF"
     },
     {
-      label: "단백질",
+      label: "bia_protein",
       percentage: Number(((data.protein_mass / data.weight) * 100).toFixed(1)),
       color: "#FFA546"
     },
     {
-      label: "무기질",
+      label: "bia_minerals",
       percentage: Number(((data.amount_of_inorganic_salt / data.weight) * 100).toFixed(1)),
       color: "#7A828A"
     },
     {
-      label: "체지방",
+      label: "bia_body_fat",
       percentage: Number(((data.body_fat_mass / data.weight) * 100).toFixed(1)),
       color: "#FF766C"
     }
@@ -189,7 +193,7 @@ export default function Composition({data}: {data: IBiaData}) {
       <div className="flex items-center gap-2 ">
         <div className="w-3 h-3 rounded-[3px] bg-mainBlue-600" />
         <div className="text-mainBlue-600 text-sm font-bold ">
-          체성분 & 체수분 밸런스
+          {t('bia_body_comp_water_balance')}
         </div>
       </div>
 
@@ -210,31 +214,32 @@ export default function Composition({data}: {data: IBiaData}) {
 
               {/* 표준 영역: 하단 프로그레스 바와 수직으로 일치하게 됨 */}
               <div className="flex-1 grid grid-cols-3 text-center py-1">
-                <span>표준 이하</span>
-                <span>표준</span>
-                <span>표준 이상</span>
+                <span>{t('bia_level_under')}</span>
+                <span>{t('bia_level_normal')}</span>
+                <span>{t('bia_level_over')}</span>
               </div>
 
               {/* 변화 영역 */}
               <div className="w-16 text-right pr-3">
-                <span>변화</span>
+                <span>{t('bia_change')}</span>
               </div>
             </div>
             {/* 카드 리스트 컨테이너 (차트 높이에 맞춰 카드 간격이 자동 조절되도록 justify-between 사용 가능) */}
             <div className="flex flex-col flex-1 gap-1">
               <div className="flex items-center gap-1 w-full ">
                 {/* 타이틀 박스 */}
-                <div className={`flex items-center w-20 justify-center h-fit px-2 py-1 text-sm font-bold text-white rounded-[4px] bg-sub400`}>
-                  평균 비율
+                <div className={`flex items-center w-20 text-center justify-center h-fit px-2 py-1 text-sm font-bold text-white rounded-[4px] bg-sub400`}>
+                  {t('bia_avg_ratio')}
                 </div>
 
                 {/* 메인 데이터 영역 */}
                 <div className="flex h-fit flex-1 text-xs text-sub600 pl-6 items-center bg-sub100 rounded-sm px-2 py-1 gap-1">
-                  체수분 : 55~65% / 단백질 : 15~18% / 무기질 : 5~6% / 체지방 :10~20%
+                  {t('bia_body_water')} : 55~65% / {t('bia_protein')} : 15~18% / {t('bia_minerals')} : 5~6% / {t('bia_body_fat')} :10~20%
                 </div>
               </div>
-              {mainComps.map((comp) => (
+              {mainComps.map((comp, idx) => (
                 <CompositionCard
+                  idx={idx}
                   key={comp.title}
                   title={comp.title}
                   weight={data.weight} 

@@ -1,4 +1,5 @@
 import { CompareSlot } from "@/types/compare";
+import { useTranslations } from "next-intl";
 
 
 type CompareCardProps = {
@@ -10,6 +11,7 @@ type CompareCardProps = {
 };
 
 const CompareDateCard = ({ regDate, currentSlot, measureType, onCardClick }: CompareCardProps) => {
+  const t = useTranslations("Index");
   return (
     <div 
       onClick={onCardClick ? () => onCardClick(currentSlot, measureType) : undefined}
@@ -28,7 +30,7 @@ const CompareDateCard = ({ regDate, currentSlot, measureType, onCardClick }: Com
           </div>
         ) : (
           <button className="text-base text-sub700 dark:text-muted-foreground font-medium">
-            비교할 항목을 선택해주세요
+            {t('compare_guide')}
           </button>
         )}
       </div>

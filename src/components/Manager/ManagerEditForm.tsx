@@ -13,6 +13,7 @@ import {
   IManagerInformationForm,
   managerInformationSchema,
 } from "@/schemas/managerSchema";
+import { useTranslations } from "next-intl";
 
 // ManagerEditForm에서 실제로 사용하는 속성만 포함하는 타입
 type ManagerEditData = Pick<ICenterManagerData, 'sn' | 'admin_name' | 'mobile' | 'admin_email' | 'admin_role'>;
@@ -24,6 +25,7 @@ const ManagerEditForm = ({
   managerData: ManagerEditData;
   onUpdateSuccess?: () => void;
 }) => {
+  const t = useTranslations("Index");
   const { isBoolean: editState, setToggle: setEditState } = useBoolean();
 
   const {
@@ -33,7 +35,7 @@ const ManagerEditForm = ({
     watch,
     formState: { errors },
   } = useForm<IManagerInformationForm>({
-    resolver: zodResolver(managerInformationSchema),
+    resolver: zodResolver(managerInformationSchema(t) ),
     mode: "onChange",
     defaultValues: {
       managerName: managerData.admin_name ?? "",
@@ -76,27 +78,27 @@ const ManagerEditForm = ({
     >
       <div className="flex w-full justify-between items-center">
         <legend className="text-xl">
-          {editState ? "계정 정보 수정" : "계정 정보"}
+          {editState ? t('setting_account_info_title_1') : t('setting_account_info_title_0')}
         </legend>
         <div className="flex items-center justify-center gap-2">
           <Button variant="outline" onClick={handleEditState} type="button">
-            {editState ? "취소하기" : "수정하기"}
+            {editState ? t('btn_cancel') : t('btn_edit_submit')}
           </Button>
           {editState && (
             <Button type="submit" variant="default">
-              저장하기
+              {t('btn_save')}
             </Button>
           )}
         </div>
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="managerName">이름</Label>
+        <Label htmlFor="managerName">{t('setting_account_name')}</Label>
         <Input
           {...register("managerName")}
           type="text"
           id="managerName"
           disabled={!editState}
-          placeholder="이름"
+          placeholder={t('setting_account_name')}
           maxLength={50}
           value={watch("managerName") ?? ""}
         />
@@ -107,13 +109,13 @@ const ManagerEditForm = ({
         )}
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="managerMobile">전화번호</Label>
+        <Label htmlFor="managerMobile">{t('setting_account_phone')}</Label>
         {editState ? (
           <Input
             {...register("managerMobile")}
             type="text"
             id="managerMobile"
-            placeholder="전화번호"
+            placeholder={t('setting_account_phone')}
             maxLength={15}
             value={watch("managerMobile") ?? ""}
           />
@@ -123,7 +125,7 @@ const ManagerEditForm = ({
             id="managerMobile"
             disabled
             value={phoneHyphen(managerData.mobile ?? "") ?? ""}
-            placeholder="전화번호"
+            placeholder={t('setting_account_phone')}
             readOnly
           />
         )}
@@ -134,26 +136,26 @@ const ManagerEditForm = ({
         )}
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="managerEmail">이메일</Label>
+        <Label htmlFor="managerEmail">{t('setting_account_email')}</Label>
         <Input
           type="email"
           id="managerEmail"
           disabled
           value={managerData.admin_email ?? ""}
-          placeholder="이메일"
+          placeholder={t('setting_account_email')}
           readOnly
         />
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="managerGrade">등급</Label>
+        <Label htmlFor="managerGrade">{t('setting_account_role')}</Label>
         <Input
           type="text"
           id="managerGrade"
           disabled
           value={
-            ADMIN_ROLE[managerData.admin_role as keyof typeof ADMIN_ROLE] ?? ""
+            t(ADMIN_ROLE[managerData.admin_role as keyof typeof ADMIN_ROLE] ?? "")
           }
-          placeholder="등급"
+          placeholder={t('setting_account_role')}
           readOnly
         />
       </div>

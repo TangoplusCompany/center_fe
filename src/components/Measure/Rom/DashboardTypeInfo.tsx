@@ -1,5 +1,6 @@
 import { IMeasureROMHistoryItem } from "@/types/measure";
 import ROMDashboardTypeGraph from "./DashboardTypeGraph";
+import { useTranslations } from "next-intl";
 
 
 export interface ROMDashboardTypeInfoProps {
@@ -9,25 +10,26 @@ export interface ROMDashboardTypeInfoProps {
 export const ROMDashboardTypeInfo = ({
   datas,
 }: ROMDashboardTypeInfoProps) => {
+  const t = useTranslations("Index");
   const data = datas[0];
 
   const rangeComponent = (
     <div className="grid grid-cols-4 w-full h-fit py-2 items-center divide-x-2 divide-sub200">
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
-        <span>매우 양호</span>
-        <span>{data.normal_normal}º 이상</span>
+        <span>{t('grade_very_good')}</span>
+        <span>{data.normal_normal}º {t('data_more')}</span>
       </div>
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
-        <span>정상</span>
+        <span>{t('grade_normal')}</span>
         <span>{data.normal_warning}º~{data.normal_normal}º</span>
       </div>
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
-        <span>주의</span>
+        <span>{t('grade_caution')}</span>
         <span>{data.normal_bad}º~{data.normal_warning}º</span>
       </div>
       <div className="flex flex-col gap-1 w-full items-center py-2 ">
-        <span>위험</span>
-        <span>{data.normal_bad}º미만</span>
+        <span>{t('grade_danger')}</span>
+        <span>{data.normal_bad}º{t('data_less')}</span>
       </div>
     </div>
   )

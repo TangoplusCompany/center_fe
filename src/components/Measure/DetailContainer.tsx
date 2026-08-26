@@ -19,15 +19,16 @@ import { Skeleton } from "../ui/skeleton";
 import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
 import GaitContainer from "./Gait/Container";
 import MoireContainer from "./Moire/Container";
+import { useLocale, useTranslations } from "next-intl";
 
 // Select 
 
 const MEASURE_TYPE = [
-  { key: "basic", title: "간편 검사" },
-  { key: "rom", title: "ROM 검사" },
-  { key: "bia", title: "체성분 검사" },
-  { key: "gait", title: "보행 검사" },
-  { key: "moire", title: "모아레 검사" },
+  { key: "basic", title: "m_basic" },
+  { key: "rom", title: "m_rom_test" },
+  { key: "bia", title: "m_bia_test" },
+  { key: "gait", title: "m_gait_test" },
+  { key: "moire", title: "m_moire_test" },
 ];
 
 export interface SkeletonDatePickerProps {
@@ -47,9 +48,10 @@ interface PrintSelectProps {
   hasGait: boolean;
   hasMoire: boolean;
   handlePrint: (selectedValues: string) => void;
+  t: (key : string) => string
 }
 
-export function PrintSelect({ hasBasic, hasRom, hasBia, hasGait, hasMoire, handlePrint }: PrintSelectProps) {
+export function PrintSelect({ hasBasic, hasRom, hasBia, hasGait, hasMoire, handlePrint, t }: PrintSelectProps) {
   const [basicChecked, setBasicChecked] = useState(false);
   const [romChecked, setRomChecked] = useState(false);
   const [biaChecked, setBiaChecked] = useState(false);
@@ -86,7 +88,7 @@ export function PrintSelect({ hasBasic, hasRom, hasBia, hasGait, hasMoire, handl
             alt="인쇄하기"
             className="size-4 dark:[filter:brightness(0)_invert(1)]"
           />
-          <span>인쇄하기</span>
+          <span>{t('btn_print')}</span>
         </Button>
       </Popover.Trigger>
 
@@ -113,7 +115,7 @@ export function PrintSelect({ hasBasic, hasRom, hasBia, hasGait, hasMoire, handl
                   onChange={(e) => setBasicChecked(e.target.checked)}
                   className="rounded border-toggle-accent accent-toggle-accent"
                 />
-                <span>간편 검사</span>
+                <span>{t('m_basic')}</span>
               </label>
             )}
 
@@ -126,7 +128,7 @@ export function PrintSelect({ hasBasic, hasRom, hasBia, hasGait, hasMoire, handl
                   onChange={(e) => setRomChecked(e.target.checked)}
                   className="rounded border-toggle-accent accent-toggle-accent"
                 />
-                <span>ROM 검사</span>
+                <span>{t('m_rom_test')}</span>
               </label>
             )}
 
@@ -139,7 +141,7 @@ export function PrintSelect({ hasBasic, hasRom, hasBia, hasGait, hasMoire, handl
                   onChange={(e) => setBiaChecked(e.target.checked)}
                   className="rounded border-toggle-accent accent-toggle-accent"
                 />
-                <span>체성분 검사</span>
+                <span>{t('m_bia_test')}</span>
               </label>
             )}
             {hasGait && (
@@ -150,7 +152,7 @@ export function PrintSelect({ hasBasic, hasRom, hasBia, hasGait, hasMoire, handl
                   onChange={(e) => setGaitChecked(e.target.checked)}
                   className="rounded border-toggle-accent accent-toggle-accent"
                 />
-                <span>보행 분석 검사</span>
+                <span>{t('m_gait')}</span>
               </label>
             )}
             {hasMoire && (
@@ -161,7 +163,7 @@ export function PrintSelect({ hasBasic, hasRom, hasBia, hasGait, hasMoire, handl
                   onChange={(e) => setMoireChecked(e.target.checked)}
                   className="rounded border-toggle-accent accent-toggle-accent"
                 />
-                <span>모아레 검사</span>
+                <span>{t('m_moire_test')}</span>
               </label>
             )}
 
@@ -173,7 +175,7 @@ export function PrintSelect({ hasBasic, hasRom, hasBia, hasGait, hasMoire, handl
                 disabled={!basicChecked && !romChecked && !biaChecked && !gaitChecked && !moireChecked}
                 className="w-full bg-sub150 hover:bg-sub200 text-sub700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors disabled:opacity-50"
               >
-                선택 항목 인쇄
+                {t('btn_select_print')}
               </button>
             </Popover.Close>
           </div>
@@ -218,6 +220,8 @@ const MeasureDetailContainer = ({
   aiExerciseOpen = false,
   setAiExerciseOpen
 }: CenterUserMeasureProps) => {
+  const t = useTranslations("Index");
+  const locale = useLocale();
   const measureMetaData = measureList 
     ? measureList.find((measure) => measure.measure_sn === measureSn)
     : externalMeasureData;
@@ -366,7 +370,7 @@ const MeasureDetailContainer = ({
                   } px-2 sm:px-4 py-1 text-xs sm:text-sm font-medium rounded-xl transition-all whitespace-normal sm:whitespace-nowrap text-center leading-tight`}
                   onClick={() => setMeasureType?.(type.key as measureType)} // 💡 옵셔널 체이닝(?.) 적용
                 >
-                  {type.title}
+                  {t(type.title)}
                 </button>
               );
             })}
@@ -384,7 +388,7 @@ const MeasureDetailContainer = ({
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src="/icons/ic_calendar.svg" alt="date_select" className="lg:!w-5 lg:!h-5" />
                   <span>
-                    {selectedMeasure ? formatDate(selectedMeasure.measure_date) : "측정일 선택"}
+                    {selectedMeasure ? formatDate(selectedMeasure.measure_date, locale) : "측정일 선택"}
                   </span>
                 </button>
                 <MeasureDetailDatePickerDialog
@@ -402,16 +406,16 @@ const MeasureDetailContainer = ({
               className="w-full sm:w-auto px-6 "
               variant="sub"
               onClick={() => {
-                if (window.confirm(`${measureMetaData.user_name}로 카카오톡 결과를 전송하시습니까?`)) {
+                if (window.confirm(`${locale == "ko" ?`${measureMetaData.user_name}로 카카오톡 결과를 전송하시습니까?` :`Do you want to send the KakaoTalk results to ${measureMetaData.user_name}?`}`)) {
                   handleKakaoSend()
                 }
               }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/icons/ic_send.svg" alt="카카오톡 결과 전송" className="gap-4 size-4 dark:[filter:brightness(0)_invert(1)]" />
-              <span>결과전송</span>
+              <span>{t('btn_send_kakao')}</span>
             </Button>
             
-            <PrintSelect handlePrint={handlePrint} hasBasic={hasBasic} hasRom={hasRom} hasBia={hasBia} hasGait={hasGait} hasMoire={hasMoire} />
+            <PrintSelect handlePrint={handlePrint} hasBasic={hasBasic} hasRom={hasRom} hasBia={hasBia} hasGait={hasGait} hasMoire={hasMoire} t={t} />
           </div> 
         </div>
         )}

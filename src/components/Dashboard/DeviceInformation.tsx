@@ -6,12 +6,14 @@ import { useGetDeviceStatus } from "@/hooks/api/device/useDeviceStatus"
 import { Skeleton } from "../ui/skeleton";
 import DeviceChartContainer from "./DeviceChartContainer";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 const DashboardDeviceStatus = ({
   device,
 }: {
   device: IDeviceStatusCardProps;
 }) => {
+  const t = useTranslations("Index");
   const router = useRouter();
 
   const handleClick = () => {
@@ -38,7 +40,7 @@ const DashboardDeviceStatus = ({
                 {`[${device.install_location.trim()}]`}
               </p>
               <p className="text-base ">
-                {`주소: ${device.install_address_1 ?? ""} ${device.install_address_2 ?? ""}`}
+                {`${t('address')}: ${device.install_address_1 ?? ""} ${device.install_address_2 ?? ""}`}
               </p>
             </div>
           </div>
@@ -47,12 +49,12 @@ const DashboardDeviceStatus = ({
             <div className="flex rounded-xl bg-mainBlue-100  dark:bg-mainBlue-900 p-2 m-0 xl:m-2 w-fit h-fit shrink-0">
               <div className="flex flex-col gap-2">
                 <div className="text-sm text-mainBlue-600 dark:text-white whitespace-nowrap">
-                  일일 측정 건수
+                  {t('stat_daily_measure_count')}
                 </div>
                 <div className="flex items-center justify-end gap-2">
                   <span className="text-sm text-mainBlue-600 dark:text-white font-semibold">
                     {device.trend === 0 ? '▼ ' : (device.trend === 1 ? '- ' : '▲ ')}
-                    {device.today_count} 건
+                    {device.today_count} {t('unit_cases')}
                   </span>
                 </div>
               </div>
@@ -73,6 +75,7 @@ const DashboardDeviceStatus = ({
 };
 
 export const DeviceInformation = () => {
+  const t = useTranslations("Index");
   const { data: deviceStatus, isLoading } = useGetDeviceStatus<IDeviceStatus>();
   const [isExpanded, setIsExpanded] = useState(false);
   if (isLoading) return (
@@ -92,7 +95,7 @@ export const DeviceInformation = () => {
       <div className="w-full flex flex-col gap-4">
         <div className="w-full flex items-center gap-3">
           <div className="w-1 h-10 bg-mainBlue-600 rounded-full"></div>
-          <h2 className="text-2xl col-span-2">기기 현황</h2>
+          <h2 className="text-2xl col-span-2">{t('h_device_status')}</h2>
         </div>
 
         <div className="w-full grid grid-cols-1 xl:grid-cols-2 gap-4">
@@ -106,7 +109,7 @@ export const DeviceInformation = () => {
             onClick={() => setIsExpanded(!isExpanded)}
             className="w-full py-2 px-4 text-sm text-mainBlue-600 dark:text-white rounded-xl hover:bg-mainBlue-100  dark:bg-mainBlue-900 transition-colors"
           >
-            {isExpanded ? '접기' : `더보기`}
+            {isExpanded ? t('show_less') : t('show_more')}
           </button>
         )}
       </div>

@@ -6,6 +6,7 @@ import { useAddUser } from '@/hooks/api/user/useAddUser';
 import { emailFiltering, phoneFiltering } from '@/utils/regexFiltering';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Button } from '../ui/button';
+import { useTranslations } from 'next-intl';
 
 interface CenterUserAddDialogProps {
   open: boolean;
@@ -35,8 +36,9 @@ export const CenterUserAddDialog: React.FC<CenterUserAddDialogProps> = ({
   open,
   onClose,
 }) => {
+  const t = useTranslations("Index");
   const { users, setUsers, getUserData } = useUsers([]);
-  const mutationAddUser = useAddUser();
+  const mutationAddUser = useAddUser(t);
 
   // Dialog가 다시 열릴 때(재오픈) 선택된 사용자 목록 초기화
   useEffect(() => {
@@ -72,7 +74,7 @@ export const CenterUserAddDialog: React.FC<CenterUserAddDialogProps> = ({
         <DialogHeader className="p-4 sm:p-6 border-b shrink-0 min-w-0">
           <div className="flex items-center justify-between gap-2">
             <DialogTitle className="text-lg sm:text-2xl font-semibold truncate">
-              센터 사용자 추가
+              {t('dialog_add_center_user_title')}
             </DialogTitle>
             <button
               type="button"
@@ -95,7 +97,7 @@ export const CenterUserAddDialog: React.FC<CenterUserAddDialogProps> = ({
 
             {/* 추가된 사용자 목록 */}
             <div className="flex flex-col gap-4 min-w-0">
-              <h2 className="text-lg sm:text-xl font-semibold">추가된 사용자</h2>
+              <h2 className="text-lg sm:text-xl font-semibold">{t('label_added_users')}</h2>
 
               {users.length > 0 ? (
                 <div className="rounded-xl border-2 border-sub200 bg-transparent shadow-sm overflow-hidden min-w-0">
@@ -103,9 +105,9 @@ export const CenterUserAddDialog: React.FC<CenterUserAddDialogProps> = ({
                   <div className="overflow-x-auto">
                     <div className="min-w-[280px]">
                       <div className="grid grid-cols-3 gap-2 px-3 py-3 bg-sub100 dark:bg-sub750 border-b border-sub200 dark:border-sub700">
-                        <p className="text-center text-sm font-medium">이름</p>
-                        <p className="text-center text-sm font-medium">이메일</p>
-                        <p className="text-center text-sm font-medium">전화번호</p>
+                        <p className="text-center text-sm font-medium">{t('label_name')}</p>
+                        <p className="text-center text-sm font-medium">{t('target_email')}</p>
+                        <p className="text-center text-sm font-medium">{t('label_mobile')}</p>
                       </div>
                       {users.map((user) => (
                         <div
@@ -128,7 +130,7 @@ export const CenterUserAddDialog: React.FC<CenterUserAddDialogProps> = ({
                 </div>
               ) : (
                 <div className="text-center py-8 text-sub600 text-sm sm:text-base">
-                  추가된 사용자가 없습니다
+                  {t('msg_no_added_users')}
                 </div>
               )}
             </div>
@@ -143,14 +145,14 @@ export const CenterUserAddDialog: React.FC<CenterUserAddDialogProps> = ({
                 onClick={handleClose}
                 className="w-full sm:w-auto px-4 py-2 rounded-xl"
                 variant="sub" >
-                취소
+                {t('cancel')}
               </Button>
 
               <Button onClick={handleAddUser}
                 disabled={mutationAddUser.isPending}
                 variant="default"
                 className="w-full sm:w-auto px-4 py-2 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed">
-                {mutationAddUser.isPending ? '추가 중...' : '사용자 추가'}
+                {mutationAddUser.isPending ? t('user_add_pending') : t('btn_add_user')}
               </Button>
             </div>
           </DialogFooter>

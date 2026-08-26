@@ -17,6 +17,7 @@ import CompareBodySkeleton from "./CompareBodySkeleton";
 import { generatePrintUrls } from "@/hooks/api/measure/generatePrintUrls";
 import { actionPrintEncrypt } from "@/app/actions/getCrypto";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 type CompareTab = {
   title: string;
@@ -44,6 +45,7 @@ const CompareBody = ({
   onCompareDialogOpen: (slot: CompareSlot) => void;
   isMyPage: boolean;
 }) => {
+  const t = useTranslations("Index");
   const leftSn = comparePair[0];
   const rightSn = comparePair[1];
 
@@ -93,14 +95,14 @@ const CompareBody = ({
   }
 
   if (leftError || rightError) {
-    return <div>데이터 로딩 중 오류가 발생했습니다.</div>;
+    return <div>{t('etc_error')}</div>;
   }
 
   const leftSlot: CompareSlot = 0;  // 또는 1
   const rightSlot: CompareSlot = 1;
   const compareTabs: CompareTab[] = [
     {
-      title: "결과 요약",
+      title: t('result_summary'),
       value: "summary",
       
       render: (left, right) => (
@@ -108,7 +110,7 @@ const CompareBody = ({
       ),
     },
     {
-      title: "정면 측정",
+      title: t('pose_seq_0'),
       value: "first",
       render: (left, right) => {
         return (
@@ -126,7 +128,7 @@ const CompareBody = ({
       },
     },
     {
-      title: "팔꿉 측정",
+      title: t('pose_seq_1'),
       value: "second",
       render: (left, right) => {
         return (
@@ -144,7 +146,7 @@ const CompareBody = ({
       },
     },
     {
-      title: "좌측 측정",
+      title: t('pose_seq_2'),
       value: "third",
       render: (left, right) => {
         return (
@@ -162,7 +164,7 @@ const CompareBody = ({
       },
     },
     {
-      title: "우측 측정",
+      title: t('pose_seq_3'),
       value: "fourth",
       render: (left, right) => {
         return (
@@ -180,7 +182,7 @@ const CompareBody = ({
       },
     },
     {
-      title: "후면 측정",
+      title: t('pose_seq_4'),
       value: "fifth",
       render: (left, right) => {
         return (
@@ -198,7 +200,7 @@ const CompareBody = ({
       },
     },
     {
-      title: "앉은 후면",
+      title: t('pose_seq_5'),
       value: "sixth",
       render: (left, right) => {
         return (
@@ -216,7 +218,7 @@ const CompareBody = ({
       },
     },
     {
-      title: "오버헤드 스쿼트",
+      title: t('pose_seq_6'),
       value: "squart",
       render: (left, right) => {
         return (
@@ -322,10 +324,10 @@ const CompareBody = ({
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/icons/ic_people_image.svg"
-                  alt="인쇄하기"
+                  alt={t('btn_print')}
                   className="size-4 dark:[filter:brightness(0)_invert(1)]"
                 />
-                <span>측정 이미지 인쇄</span>
+                <span>{t('basic_image_print')}</span>
               </Button>
             )}
         </div>

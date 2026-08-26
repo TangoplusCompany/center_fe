@@ -1,4 +1,5 @@
 import { IUserMeasureDetailData } from "@/types/measure";
+import { useTranslations } from "next-intl";
 
 
 interface RawDataTabProps {
@@ -6,17 +7,18 @@ interface RawDataTabProps {
   onSelectPart: (part: 0 | 1 | 2 | 3 | 4 | 5 | 6) => void;
   mergedDetailData:  IUserMeasureDetailData[];
 }
-
-const RawDataTab = ({ selectedPart, onSelectPart, mergedDetailData }: RawDataTabProps) => {
-  const tabs = [
-    { id: 0, label: "전체보기" },
-    { id: 1, label: "목(경추)" },
-    { id: 2, label: "어깨(견관절)" },
-    { id: 3, label: "팔꿉(주관절)" },
-    { id: 4, label: "골반(고관절)" },
-    { id: 5, label: "무릎(슬관절)" },
-    { id: 6, label: "발목(족관절)" },
+const tabs = [
+    { id: 0, label: "btn_view_all" },
+    { id: 1, label: "btn_view_neck" },
+    { id: 2, label: "btn_view_shoulder" },
+    { id: 3, label: "btn_view_elbow" },
+    { id: 4, label: "btn_view_hip" },
+    { id: 5, label: "btn_view_knee" },
+    { id: 6, label: "btn_view_ankle" },
   ] as const;
+const RawDataTab = ({ selectedPart, onSelectPart, mergedDetailData }: RawDataTabProps) => {
+  const t = useTranslations("Index");
+  
    const partLandmarkMap: { [key: number]: number[] } = {
       0: [], // 전체보기는 항상 표시
       1: [0], 
@@ -48,7 +50,7 @@ const RawDataTab = ({ selectedPart, onSelectPart, mergedDetailData }: RawDataTab
             }
           `}
         >
-          {tab.label}
+          {t(tab.label)}
         </button>
       ))}
     </div>

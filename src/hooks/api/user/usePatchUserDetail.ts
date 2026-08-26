@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { patchUserDetail } from "@/services/user/patchUserDetail";
 import { patchResultUserDetail } from "@/services/user/patchResultUserDetail";
 import { useAuthStoreOptional } from "@/providers/AuthProvider";
+import { useTranslations } from "next-intl";
 
 type PatchUserDetailParams = Parameters<typeof patchUserDetail>[0];
 type PatchResultUserDetailParams = Parameters<typeof patchResultUserDetail>[0];
@@ -14,15 +15,17 @@ type PatchResultUserDetailParams = Parameters<typeof patchResultUserDetail>[0];
  */
 export const usePatchUserDetail = (userSn: string, isMyPage = false) => {
   const queryClient = useQueryClient();
+  const t = useTranslations();
   // result-page에서는 AuthStoreProvider가 없으므로 optional 사용
   const centerSn = useAuthStoreOptional((state) => state.centerSn, 0);
+
   return useMutation({
     mutationFn: isMyPage
       ? (params: PatchResultUserDetailParams) => patchResultUserDetail(params)
       : (params: Omit<PatchUserDetailParams, "center_sn">) =>
           patchUserDetail({ ...params, center_sn: centerSn }),
     onSuccess: () => {
-      alert("성공적으로 사용자의 데이터가 수정되었습니다.");
+      alert(t("user_detail_patch_success"));
       // queryKey를 isMyPage에 따라 다르게 무효화
       if (isMyPage) {
         queryClient.invalidateQueries({ queryKey: ["userResultDetail", userSn] });

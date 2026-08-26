@@ -2,6 +2,7 @@ import { getRiskString } from "@/utils/getRiskString";
 import { IMatStaticPressure } from "../Mat/FootStaticContainer";
 import FootStatic from "../Mat/FootStatic";
 import { getRiskScore } from "@/utils/getRiskScore";
+import { useLocale, useTranslations } from "next-intl";
 
 export interface CompareSummaryFootStaticProps {
   comment: string;
@@ -20,6 +21,8 @@ const CompareSummaryFootStatic = ({
   static0: CompareSummaryFootStaticProps;
   static1?: CompareSummaryFootStaticProps;
 }) => {
+  const t = useTranslations("Index");
+  const locale = useLocale();
   const riskString1 = getRiskString(static0?.risk_level) ?? " ";
   
   const score0 = getRiskScore(static0.risk_level, static0.range_level);
@@ -33,9 +36,9 @@ const CompareSummaryFootStatic = ({
   const getTrendText = () => {
     if (!static0 || score1 === undefined) return "";
     const diff = score1 - score0 ;
-    if (diff > 0) return `${diff}단계 완화`;
-    if (diff < 0) return `${Math.abs(diff)}단계 악화`;
-    return "변화 없음";
+    if (diff > 0) return `${diff}v ${t('compare_better')}`;
+    if (diff < 0) return `${Math.abs(diff)}${t('unit_grade')} ${t('compare_worse')}`;
+    return t('compare_none');
   };
   
 
@@ -58,7 +61,7 @@ const CompareSummaryFootStatic = ({
   }[static0.risk_level] ?? "" : "";
 
   const summaryMent = (footStatic: CompareSummaryFootStaticProps, isRight: boolean) => {
-    const riskString = getRiskString(footStatic.risk_level);
+    const riskString = getRiskString(footStatic.risk_level, locale);
 
     const textBgCondition0 = {
       "0": "bg-sub600 dark:bg-gray-600",
@@ -73,7 +76,7 @@ const CompareSummaryFootStatic = ({
             <span className="text-lg">{isRight ? '②' : '①'}</span>
             <span className={`text-base ${isRight ? 'text-sub600 dark:text-muted-foreground' : 'text-black dark:text-foreground'}`}>{footStatic.measure_date.slice(0, 11)}</span>
           </div>
-          <span className={`${textBgCondition0} text-white text-sm px-2 py-1 rounded-full`}>{riskString} {footStatic.range_level}단계</span>
+          <span className={`${textBgCondition0} text-white text-sm px-2 py-1 rounded-full`}>{riskString} {footStatic.range_level}{t('rom_stage')}</span>
         </div>
         <div className="flex gap-4 p-2 relative">
           <div className="w-[20%] flex items-center justify-center border-r-2 border-sub200 dark:border-border pr-2 md:pr-0"  >
@@ -99,7 +102,7 @@ const CompareSummaryFootStatic = ({
       <div className="flex flex-col overflow-x-auto overflow-y-hidden w-full min-w-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {/* 상지요약 타이틀 */}
           <div className="bg-sub100 dark:bg-muted min-w-[700px] text-xl font-semibold text-black dark:text-foreground px-4 py-2 border-t-2 border-b-2 border-sub200 dark:border-border">
-            정면 족압
+            {t('user_static_pressure')}
           </div>
 
           {/* 2개의 카드 영역 */}

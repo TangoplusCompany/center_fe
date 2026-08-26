@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react";
 import { resultPageUserStore } from "@/stores/ResultPageUserStore";
 import { useRouter } from "next/navigation";
 import { viewType } from "../Detail";
+import { useTranslations } from "next-intl";
 
 interface ResultPageTabProps {
   userName: string;
@@ -14,10 +15,10 @@ interface ResultPageTabProps {
 }
 
 const USER_SUB_TABS = [
-  { key: "latest", title: "최근 측정" },
-  { key: "dashboard", title: "대시보드" },
-  { key: "history", title: "측정 이력" },
-  { key: "userInfo", title: "사용자 정보" },
+  { key: "latest", title: "user_side_tab_recent_measure" },
+  { key: "dashboard", title: "user_side_tab_dashboard" },
+  { key: "history", title: "user_side_tab_history" },
+  { key: "userInfo", title: "user_side_tab_info" },
 ];
 
 const ResultPageTab = ({
@@ -25,10 +26,11 @@ const ResultPageTab = ({
   currentTab,
   onTabClick,
 }: ResultPageTabProps) => {
+  const t = useTranslations("Index");
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const handleLogout = () => {
-    if (confirm("로그아웃 하시겠습니까?")) {
+    if (confirm(t('alert_logout'))) {
       resultPageUserStore.getState().setLogout();
       router.push("/result-page/login");
     }
@@ -40,7 +42,7 @@ const ResultPageTab = ({
       <div className="flex items-center gap-3 flex-1">
         <div className="w-1 h-12 bg-mainBlue-600 rounded-full"></div>
         <h2 className="text-3xl font-semibold text-[#333] dark:text-white flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-          {userName ? `${userName}님` : "사용자"} 측정 결과
+          {userName ? `${userName}${t('h_user_title')}` : t('h_user')} {t('h_user_measure_result')}
         </h2>
       </div>
 
@@ -73,7 +75,7 @@ const ResultPageTab = ({
                       : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
                   }`}
                 >
-                  {subTab.title}
+                  {t(subTab.title)}
                 </button>
               );
             })}
@@ -95,7 +97,7 @@ const ResultPageTab = ({
                 height={20}
                 className="w-5 h-5"
               />
-              <span>로그아웃</span>
+              <span>{t('logout')}</span>
             </button>
           </div>
         </>

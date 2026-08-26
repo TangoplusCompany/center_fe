@@ -3,6 +3,7 @@
 import { formatComment } from "@/utils/formatComment";
 import React from "react";
 import { getRiskString } from "../../utils/getRiskString";
+import { useLocale, useTranslations } from "next-intl";
 
 export interface UpperLowerProps {
   comment: string;
@@ -18,7 +19,9 @@ const MeasureIntroLower  = (
   }:
   UpperLowerProps
 ) => {
-  const riskString = getRiskString(risk_level)
+  const t= useTranslations("Index");
+  const locale = useLocale();
+  const riskString = getRiskString(risk_level, locale)
   const formattedComment = formatComment(comment);
   const borderCondition = {
       0: "border-sub300/50",
@@ -46,9 +49,9 @@ const MeasureIntroLower  = (
       className={`flex flex-1 flex-col h-full p-4 border-2 ${borderCondition} ${bgCondition} rounded-3xl shadow-[inset_0_4px_8px_rgba(255,255,255,0.25)] dark:shadow-none`}>
       {/* 헤더 */}
       <div className="flex justify-between items-center mb-4">
-        <h2 className={`text-xl font-semibold ${textCondition}`}>하지 결과</h2>
+        <h2 className={`text-xl font-semibold ${textCondition}`}>{t('user_lower_body_result')}</h2>
         <span className={`px-3 py-1 ${textBgCondition} rounded-xl text-sm text-white`}>
-          {riskString} {range_level}단계
+          {riskString} {range_level}{t('unit_grade')}
         </span>
       </div>
       {/* 코멘트 */}

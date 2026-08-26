@@ -11,15 +11,18 @@ import MeasureIntroLower from "./IntroLower";
 import MeasureIntroPart from "./IntroPart";
 import MeasurePartHeatMap from "./PartHeatmap";
 import { calculateIDayData } from "../User/NormalDashBoard";
+import { useTranslations } from "next-intl";
 
 const MeasureIntro = ({
   data,
 }: {
   data: IMeasureResponse;
 }) => {
+  const t = useTranslations("Index");
   if (!data?.basic_result?.result_summary_data) {
     return <p className="py-8 text-center text-sub400">측정 기본 데이터가 존재하지 않습니다.</p>;
   }
+  
   const {
     risk_upper_ment,
     risk_upper_risk_level,
@@ -87,12 +90,12 @@ const MeasureIntro = ({
   } = data?.basic_result.dynamic_mat_data;
 
   const PART_ORDER: { key: keyof IPartDetailData; label: string }[] = [
-    { key: "neck", label: "목" },
-    { key: "shoulder", label: "어깨" },
-    { key: "elbow", label: "팔꿈치" },
-    { key: "hip", label: "고관절" },
-    { key: "knee", label: "무릎" },
-    { key: "ankle", label: "발목" },
+    { key: "neck", label: "part_neck" },
+    { key: "shoulder", label: "part_shoulder" },
+    { key: "elbow", label: "part_elbow" },
+    { key: "hip", label: "part_hip" },
+    { key: "knee", label: "part_knee" },
+    { key: "ankle", label: "part_ankle" },
   ];
 
   const topLeft = (
@@ -126,9 +129,9 @@ const MeasureIntro = ({
       <div className="w-full md:col-span-2 lg:col-span-1">
         <FootStaticContainer
           comment={
-            "[좌우 무게 분석]\n" +
+            `[${t('foot_horizon_weight_analysis')}]\n` +
             (mat_static_horizontal_ment ?? "\n") +
-            "\n[상하 무게 분석]\n" +
+            `\n[${t('foot_verti_weight_analysis')}]\n` +
             (mat_static_vertical_ment ?? "\n")
           }
           risk_level={mat_static_risk_level}
@@ -143,9 +146,9 @@ const MeasureIntro = ({
       <div className="w-full md:col-span-1 lg:col-span-1">
         <FootDynamicContainer
           comment={
-            "[좌우 무게 분석]\n" +
+            `[${t('foot_horizon_weight_analysis')}]\n` +
             (mat_ohs_horizontal_ment ?? "\n") +
-            "\n[상하 무게 분석]\n" +
+            `\n[${t('foot_verti_weight_analysis')}]\n` +
             (mat_ohs_vertical_ment ?? "\n")
           }
           footFileName={mat_hip_down_image_name}
@@ -158,7 +161,7 @@ const MeasureIntro = ({
       {/* 무릎이동 - 웹: 세 번째, 태블릿: 네 번째(아래 오른쪽), 모바일: 세 번째 */}
       <div className="w-full md:col-span-1 lg:col-span-1">
         <KneeTrajectory
-          comment={"무릎 흔들림 분석\n" + (mat_ohs_knee_ment ?? "")}
+          comment={`${t('knee_instability_analysis')}\n` + (mat_ohs_knee_ment ?? "")}
           leftKneeFileName={mat_left_knee_trajectory_image_name}
           rightKneeFileName={mat_right_knee_trajectory_image_name}
         />
@@ -177,7 +180,7 @@ const MeasureIntro = ({
       </div>
       <div className="rounded-3xl border-2 border-sub200 p-4">
           {/* 상체 */}
-          <div className="text-base font-semibold mb-2">상체 분석</div>
+          <div className="text-base font-semibold mb-2">{t("analysis_upper_body")}</div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-4">
             {PART_ORDER.slice(0, 3).map(({ key, label }) => {
               const partData = data?.basic_result?.detail_data[key];
@@ -202,7 +205,7 @@ const MeasureIntro = ({
           </div>
 
           {/* 하체 */}
-          <div className="text-base font-semibold mt-4 mb-2">하체 분석</div>
+          <div className="text-base font-semibold mt-4 mb-2">{t('analysis_lower_body')}</div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-4">
             {PART_ORDER.slice(3, 6).map(({ key, label }) => {
               const partData = data?.basic_result?.detail_data[key];

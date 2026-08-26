@@ -8,14 +8,14 @@ import { useAuthStore } from "@/providers/AuthProvider";
  * @param refetch 사용자 목록 조회 함수
  * @returns 사용자 삭제 뮤테이션
  */
-export const useDeleteUser = (refetch: () => void) => {
+export const useDeleteUser = (refetch: () => void, t : (key:string) => string) => {
   const centerSn = useAuthStore((state) => state.centerSn);
   return useMutation({
     mutationFn: ({ sn }: { sn: number }) =>
       deleteUser({ sn, center_sn: centerSn }),
     onSuccess: (data) => {
       console.log(data.message);
-      alert("사용자 제거에 성공했습니다.");
+      alert(t('hook_delete_user'));
       refetch();
     },
     onError: (

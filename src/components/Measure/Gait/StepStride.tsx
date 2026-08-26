@@ -1,4 +1,5 @@
 import { IGaitStep, IGaitStride } from "@/types/measure"
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 export interface IGaitStepStrideProps {
@@ -7,6 +8,7 @@ export interface IGaitStepStrideProps {
 }
 
 export default function GaitStepStride({ data }: { data: IGaitStepStrideProps }) {
+  const t = useTranslations("Index")
   const { stepData = [], strideData = [] } = data;
   const [activeTab, setActiveTab] = useState<"step" | "stride">("step");
 
@@ -23,7 +25,7 @@ export default function GaitStepStride({ data }: { data: IGaitStepStrideProps })
                 : "bg-sub100 text-sub600 hover:bg-sub200"
             }`}
           >
-            걸음 분석 (Step) 
+            {t('gait_step_analysis')}
           </button>
           <button
             onClick={() => setActiveTab("stride")}
@@ -33,7 +35,7 @@ export default function GaitStepStride({ data }: { data: IGaitStepStrideProps })
                 : "bg-sub100 text-sub600 hover:bg-sub200"
             }`}
           >
-            보폭 분석 (Stride)
+            {t('gait_stride_analysis')}
           </button>
         </div>
       </div>
@@ -42,19 +44,19 @@ export default function GaitStepStride({ data }: { data: IGaitStepStrideProps })
       {activeTab === "step" && (
         <div className="overflow-x-auto">
           {stepData.length === 0 ? (
-            <div className="py-8 text-center text-sub400 text-sm">Step 데이터가 없습니다.</div>
+            <div className="py-8 text-center text-sub400 text-sm">{t('no_step_data')}</div>
           ) : (
             <table className="w-full text-xs sm:text-sm text-left border-collapse">
               <thead className="bg-sub100 text-sub700 font-semibold border-b border-sub200">
                 <tr>
-                  <th className="p-3">Seq / 방향</th>
-                  <th className="p-3">Step No</th>
-                  <th className="p-3">발 위치</th>
-                  <th className="p-3 text-right">Step 길이 (cm)</th>
-                  <th className="p-3 text-right">Step 폭 (cm)</th>
-                  <th className="p-3 text-right">Step 시간 (s)</th>
-                  <th className="p-3 text-right">Step 속도 (m/s)</th>
-                  <th className="p-3 text-center">프레임 (시작-끝)</th>
+                  <th className="p-3">{t('th_seq_direction')}</th>
+                  <th className="p-3">{t('th_step_no')}</th>
+                  <th className="p-3">{t('th_foot_position')}</th>
+                  <th className="p-3 text-right">{t('th_step_length')}</th>
+                  <th className="p-3 text-right">{t('th_step_width')}</th>
+                  <th className="p-3 text-right">{t('th_step_time')}</th>
+                  <th className="p-3 text-right">{t('th_step_speed')}</th>
+                  <th className="p-3 text-center">{t('th_frames')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-sub200 text-sub800">
@@ -63,10 +65,10 @@ export default function GaitStepStride({ data }: { data: IGaitStepStrideProps })
                     <td className="p-3 whitespace-nowrap">
                       {/* <span className="font-semibold text-sub700">Seq {step.sequenceIndex}</span> */}
                       <span className="ml-1.5 text-xs px-2 py-0.5 rounded bg-sub200 text-sub700">
-                        {step.direction === "Towards" ? "걸어옴" : "멀어짐"}
+                        {step.direction === "Towards" ? t('gait_direction_toward') : t('gait_direction_away')}
                       </span>
                     </td>
-                    <td className="p-3 font-medium">{step.stepIndex}번</td>
+                    <td className="p-3 font-medium">{step.stepIndex}{t('unit_index')}</td>
                     <td className="p-3">
                       <span
                         className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold ${
@@ -75,7 +77,7 @@ export default function GaitStepStride({ data }: { data: IGaitStepStrideProps })
                             : "bg-emerald-100 text-emerald-600"
                         }`}
                       >
-                        {step.foot === "Left" ? "L (왼발)" : "R (오른발)"}
+                        {step.foot === "Left" ? `L (${t('foot_left')})` : `R (${t('foot_right')})`}
                       </span>
                     </td>
                     <td className="p-3 text-right font-medium">{safeFixed(step.stepLength, 2)}</td>
@@ -99,19 +101,19 @@ export default function GaitStepStride({ data }: { data: IGaitStepStrideProps })
       {activeTab === "stride" && (
         <div className="overflow-x-auto">
           {strideData.length === 0 ? (
-            <div className="py-8 text-center text-sub400 text-sm">Stride 데이터가 없습니다.</div>
+            <div className="py-8 text-center text-sub400 text-sm">{t('no_stride_data')}</div>
           ) : (
             <table className="w-full text-xs sm:text-sm text-left border-collapse">
               <thead className="bg-sub100 text-sub700 font-semibold border-b border-sub200">
                 <tr>
-                  <th className="p-3">Seq / 방향</th>
-                  <th className="p-3">Stride No</th>
-                  <th className="p-3">기준 발</th>
-                  <th className="p-3 text-right">Stride 길이 (cm)</th>
-                  <th className="p-3 text-right">Stride 시간 (s)</th>
-                  <th className="p-3 text-right">Stance / Swing 비율</th>
-                  <th className="p-3 text-right">최대 발가락 높이 (cm)</th>
-                  <th className="p-3 text-right">Stride 속도 (m/s)</th>
+                  <th className="p-3">{t('th_seq_direction')}</th>
+                  <th className="p-3">{t('th_stride_no')}</th>
+                  <th className="p-3">{t('th_reference_foot')}</th>
+                  <th className="p-3 text-right">{t('th_stride_length')}</th>
+                  <th className="p-3 text-right">{t('th_stride_time')}</th>
+                  <th className="p-3 text-right">{t('th_stance_swing_ratio')}</th>
+                  <th className="p-3 text-right">{t('th_max_toe_clearance')}</th>
+                  <th className="p-3 text-right">{t('th_stride_speed')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-sub200 text-sub800">
@@ -120,7 +122,7 @@ export default function GaitStepStride({ data }: { data: IGaitStepStrideProps })
                     <td className="p-3 whitespace-nowrap">
                       {/* <span className="font-semibold text-sub700">Seq {stride.sequenceIndex}</span> */}
                       <span className="ml-1.5 text-xs px-2 py-0.5 rounded bg-sub200 text-sub700">
-                        {stride.direction === "Towards" ? "다가옴" : "멀어짐"}
+                        {stride.direction === "Towards" ? t('gait_direction_toward') : t('gait_direction_away')}
                       </span>
                     </td>
                     <td className="p-3 font-medium">#{stride.strideIndex}</td>
@@ -132,7 +134,7 @@ export default function GaitStepStride({ data }: { data: IGaitStepStrideProps })
                             : "bg-emerald-100 text-emerald-600"
                         }`}
                       >
-                        {stride.foot === "Left" ? "L (왼발)" : "R (오른발)"}
+                        {stride.foot === "Left" ? `L (${t('foot_left')})` : `R (${t('foot_right')})`}
                       </span>
                     </td>
                     <td className="p-3 text-right font-medium">{safeFixed(stride.strideLength, 2)}</td>

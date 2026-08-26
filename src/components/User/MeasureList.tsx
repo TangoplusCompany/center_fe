@@ -11,6 +11,7 @@ import { IUserMeasureListItem } from "@/types/user";
 import { formatDate } from "@/utils/formatDate";
 import { usePathname, useRouter } from "next/navigation";
 import { measureType, viewType } from "./Detail";
+import { useLocale, useTranslations } from "next-intl";
 
 export const CenterUserMeasureList = ({
   measures,
@@ -29,6 +30,8 @@ export const CenterUserMeasureList = ({
 }) => {
   const router = useRouter();
   const pathname = usePathname();
+  const t = useTranslations("Index");
+  const locale = useLocale();
   const getMeasureTypeText = (measureItem: IUserMeasureListItem): string => {
     const labels: string[] = [];
     const hasBasic = measureItem.has_basic === 1;
@@ -36,11 +39,11 @@ export const CenterUserMeasureList = ({
     const hasBia = measureItem.has_bia === 1;
     const hasGait = measureItem.has_gait === 1;
     const hasMoire = measureItem.has_moire === 1;
-    if (hasBasic) labels.push("기본 검사");
-    if (hasRom) labels.push("ROM");
-    if (hasBia) labels.push("체성분")
-    if (hasGait) labels.push("보행 분석")
-    if (hasMoire) labels.push("모아레")
+    if (hasBasic) labels.push(t('m_basic'));
+    if (hasRom) labels.push(t('m_rom'));
+    if (hasBia) labels.push(t('m_bia'))
+    if (hasGait) labels.push(t('m_gait'))
+    if (hasMoire) labels.push(t('m_moire'))
     return labels.length > 0 ? labels.join("/") : "";
   };
 
@@ -50,9 +53,9 @@ export const CenterUserMeasureList = ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-1/6 text-center text-xs sm:text-sm whitespace-nowrap">측정 일자</TableHead>
-            <TableHead className="w-1/6 text-center text-xs sm:text-sm whitespace-nowrap">측정 위치</TableHead>
-            <TableHead className="w-1/6 text-center text-xs sm:text-sm whitespace-nowrap">측정 기기</TableHead>
+            <TableHead className="w-1/6 text-center text-xs sm:text-sm whitespace-nowrap">{t('m_history_col_date')}</TableHead>
+            <TableHead className="w-1/6 text-center text-xs sm:text-sm whitespace-nowrap">{t('m_history_col_location')}</TableHead>
+            <TableHead className="w-1/6 text-center text-xs sm:text-sm whitespace-nowrap">{t('m_history_col_device')}</TableHead>
           </TableRow>
         </TableHeader>
 
@@ -91,7 +94,7 @@ export const CenterUserMeasureList = ({
                 className={"cursor-pointer hover:bg-sub100"}
               >
 
-                <TableCell className="text-center text-xs sm:text-sm whitespace-nowrap">{formatDate(measure.measure_date)}</TableCell>
+                <TableCell className="text-center text-xs sm:text-sm whitespace-nowrap">{formatDate(measure.measure_date, locale)}</TableCell>
                 <TableCell className="text-center font-medium text-xs sm:text-sm whitespace-nowrap">
                   {measure.center_name ?? "-"}
                 </TableCell>
@@ -117,7 +120,7 @@ export const CenterUserMeasureList = ({
                         alt="비교하기"
                         className="w-4 h-4 sm:w-5 sm:h-5"
                       />
-                      <span className="text-xs sm:text-sm">결과비교</span>
+                      <span className="text-xs sm:text-sm">{t('m_history_compare')}</span>
                     </button>
                   )}
                 </TableCell>

@@ -5,6 +5,7 @@ import ActivityCard from "./ActivityCard";
 import ActivityGraph from "./ActivityGraph";
 import { ICenterActivityAgeGroup, ICenterActivityUsage } from "@/types/center";
 import { Skeleton } from "../ui/skeleton";
+import { useTranslations } from "next-intl";
 
 
 export type countDetailCardProps = {
@@ -20,6 +21,7 @@ export type graphDetailCardProps = GraphData;
 
 
 const ActivityContainer = () => {
+  const t = useTranslations("Index")
   const { data: activityResponse, isLoading } = useGetCenterActivity();
   if (isLoading) return (
     <div className="grid grid-cols-4 gap-4">
@@ -62,7 +64,7 @@ const graphData_1: graphDetailCardProps  = {
     <div className="w-full flex flex-col gap-6">
       <div className="w-full flex items-center gap-3">
         <div className="w-1 h-10 bg-mainBlue-600 rounded-full"></div>
-        <h2 className="text-2xl col-span-2">활동 요약</h2>
+        <h2 className="text-2xl col-span-2">{t('h_activity')}</h2>
       </div>
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4  gap-4">
         <ActivityCard data={dailyCardData} />

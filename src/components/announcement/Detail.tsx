@@ -4,6 +4,7 @@ import { IAnnouncementDetail } from "@/types/announcement";
 import { Skeleton } from "../ui/skeleton";
 import { AnnouncementCategoryCss, AnnouncementCategoryRecord } from "./List";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 export interface AnnouncementDetailProps {
   announcement: IAnnouncementDetail;
@@ -28,7 +29,7 @@ export default function AnnouncementDetail({
   setAnnouncementSn,
 }: AnnouncementDetailProps) {
   const queryClient = useQueryClient();
-
+  const t = useTranslations('Index')
   const handleBack = () => {
     queryClient.invalidateQueries({ queryKey: ["adminList"] }); 
     setAnnouncementSn(undefined);
@@ -38,7 +39,7 @@ export default function AnnouncementDetail({
     window.location.href = proxyUrl;
   };
   if (isLoading) return <Skeleton className="w-full h-96" />;
-  if (isError || !announcement) return <div className="p-4 text-center text-red-500">공지사항을 불러오지 못했습니다.</div>;
+  if (isError || !announcement) return <div className="p-4 text-center text-red-500">{t('announcement_error')}</div>;
   
   return (
     // 1. 최상위 루트 div에 h-full, min-h-0, overflow-hidden 추가

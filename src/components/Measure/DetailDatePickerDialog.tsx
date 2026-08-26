@@ -15,6 +15,7 @@ import { formatDate } from "@/utils/formatDate";
 import { cn } from "@/lib/utils";
 import type { DetailPagination } from "@/hooks/api/user/useMeasureListForDetail";
 import { IUserMeasureListItem } from "@/types/user";
+import { useLocale, useTranslations } from "next-intl";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -37,7 +38,8 @@ export const MeasureDetailDatePickerDialog = ({
   pagination: apiPagination,
 }: MeasureDetailDatePickerDialogProps) => {
   const [localPage, setLocalPage] = useState(1);
-
+  const t = useTranslations("Index");
+  const locale = useLocale();
   const useApiPagination = !!apiPagination;
   const page = useApiPagination ? (apiPagination?.page ?? 1) : localPage;
   const lastPage = useApiPagination
@@ -64,11 +66,11 @@ export const MeasureDetailDatePickerDialog = ({
     const hasBia = measureItem.has_bia === 1;
     const hasGait = measureItem.has_gait === 1;
     const hasMoire = measureItem.has_moire === 1;
-    if (hasBasic) labels.push("기본 검사");
-    if (hasRom) labels.push("ROM");
-    if (hasBia) labels.push("체성분")
-    if (hasGait) labels.push("보행 분석")
-    if (hasMoire) labels.push("모아레")
+    if (hasBasic) labels.push(t('m_basic'));
+    if (hasRom) labels.push(t('m_rom'));
+    if (hasBia) labels.push(t('m_bia'))
+    if (hasGait) labels.push(t('m_gait'))
+    if (hasMoire) labels.push(t('m_moire'))
     return labels.length > 0 ? labels.join("/") : "";
   };
 
@@ -76,13 +78,13 @@ export const MeasureDetailDatePickerDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-full max-w-md rounded-2xl bg-white dark:bg-card p-4" aria-describedby={undefined}>
         <DialogTitle className="text-base font-semibold mb-3 text-foreground">
-          측정 목록 선택
+          {t('measure_date_picker')}
         </DialogTitle>
 
         <div className="max-h-[360px] overflow-auto">
           {items.length === 0 ? (
             <div className="flex items-center justify-center h-[200px] text-sm text-gray-400 dark:text-gray-500">
-              측정 목록이 없습니다.
+              {t('measure_date_picker_empty')}
             </div>
           ) : (
             <div className="space-y-2">
@@ -103,14 +105,14 @@ export const MeasureDetailDatePickerDialog = ({
                 >
                   <div className="flex justify-between w-full">
                     <div className="text-sm font-medium">
-                      {formatDate(it.measure_date)}
+                      {formatDate(it.measure_date, locale)}
                     </div>
                     <div className="text-[10px] px-1.5 font-medium whitespace-nowrap text-mainBlue-600 bg-mainBlue-100  border border-mainBlue-600 rounded-full ">
                       {getMeasureTypeText(it)}
                     </div>
                   </div>
                   <div className="text-xs text-gray-500 dark:text-gray-400">
-                    장치이름: {it.device_name}
+                    {t('device_name')}: {it.device_name}
                   </div>
                 </button>
               ))}

@@ -9,6 +9,7 @@ import { Skeleton } from "../ui/skeleton";
 import { useGetAnnouncements } from "@/hooks/api/announcement/useGetAnnouncements";
 import { useGetAnnouncement } from "@/hooks/api/announcement/useGetAnnouncement"; // 1. 상세 조회 훅 추가
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
+import { useTranslations } from "next-intl";
 
 interface AnnouncementContainerProps {
   onClose?: () => void;
@@ -16,37 +17,40 @@ interface AnnouncementContainerProps {
 }
 
 export type AnnouncementType =
-  | "전체"
-  | "일반 공지"
-  | "긴급 수정"
-  | "신규 기능"
-  | "점검"
-  | "프로모션"
-  | "기타";
+  | "ALL"
+  | "NOTICE"
+  | "HOTFIX"
+  | "UPDATE"
+  | "MAINTENANCE"
+  | "PROMOTION"
+  | "ETC";
 
+// 2. 카테고리 목록 배열
 export const ANNOUNCEMENT_TYPES: AnnouncementType[] = [
-  "전체",
-  "일반 공지",
-  "긴급 수정",
-  "신규 기능",
-  "점검",
-  "프로모션",
-  "기타",
+  "ALL",
+  "NOTICE",
+  "HOTFIX",
+  "UPDATE",
+  "MAINTENANCE",
+  "PROMOTION",
+  "ETC",
 ];
 
-export const AnnouncementTypeRecord: Record<string, string> = {
-  ALL: "전체",
-  NOTICE: "일반 공지",
-  HOTFIX: "긴급 수정",
-  UPDATE: "신규 기능",
-  MAINTENANCE: "점검",
-  PROMOTION: "프로모션",
-  ETC: "기타",
-};
+// 3. 번역 키 매핑 객체
+export const AnnouncementTypeRecord: Record<AnnouncementType, string> = {
+  ALL: "announcement_category_all",
+  NOTICE: "announcement_category_notice",
+  HOTFIX: "announcement_category_hotfix",
+  UPDATE: "announcement_category_update",
+  MAINTENANCE: "announcement_category_maintenance",
+  PROMOTION: "announcement_category_promotion",
+  ETC: "announcement_category_etc",
+} as const;
 
 export default function AnnouncementContainer({ onClose }: AnnouncementContainerProps) {
+  const t = useTranslations("Index");
   const [announcementSn, setAnnouncementSn] = useState<number>();
-  const [currentType, setCurrentType] = useState<AnnouncementType>("전체");
+  const [currentType, setCurrentType] = useState<AnnouncementType>("ALL");
   const [searchValue, setSearchValue] = useState("");
   const limit = 8;
   const { query, setQueryParam } = useQueryParams();
@@ -74,8 +78,10 @@ export default function AnnouncementContainer({ onClose }: AnnouncementContainer
     const rawList = announcements?.announcements || [];
 
     const filtered = rawList.filter((announcement) => {
+      // 💡 category 값을 currentType과 직접 비교 (또는 타입 단언 as AnnouncementType 적용)
       const matchesType =
-        currentType === "전체" || AnnouncementTypeRecord[announcement.category] === currentType;
+        currentType === "ALL" || announcement.category === currentType;
+
       const matchesSearch = announcement.title
         .toLowerCase()
         .includes(searchValue.toLowerCase());
@@ -109,7 +115,7 @@ export default function AnnouncementContainer({ onClose }: AnnouncementContainer
       </div>
     );
   }
-
+  // TODO 여기서부터 translate
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-sub700/30 backdrop-blur-sm p-4">
       <div 
@@ -117,7 +123,7 @@ export default function AnnouncementContainer({ onClose }: AnnouncementContainer
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between w-full">
-          <div className="text-xl font-bold p-2">공지사항</div>
+          <div className="text-xl font-bold p-2">{t('announcement')}</div>
 
           <button 
             type="button"
@@ -165,7 +171,7 @@ export default function AnnouncementContainer({ onClose }: AnnouncementContainer
               </div>
 
               <div className="flex flex-col w-full md:w-1/2">
-                <SearchForm setSearch={onChangeSearch} search={searchValue} placeholder="검색어를 입력해주세요" />
+                <SearchForm setSearch={onChangeSearch} search={searchValue} placeholder={t('announcement_search_hint')} />
               </div>
             </div>
 

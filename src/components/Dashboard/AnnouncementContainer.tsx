@@ -2,6 +2,7 @@ import { IAnnouncementsItem, ANNOUNCEMENT_TYPE_LIST } from "@/types/announcement
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { FileText } from "lucide-react";
 import { formatDate } from "@/utils/formatDate";
+import { useLocale, useTranslations } from "next-intl";
 
 export interface DashboardannouncementContainerProps {
   announcementsItem: IAnnouncementsItem[];
@@ -12,22 +13,24 @@ export default function DashboardannouncementContainer({
   announcementsItem,
   onSelectNotice 
 }: DashboardannouncementContainerProps) {
+  const t = useTranslations("Index");
+  const locale = useLocale();
   const recentAnnouncements = (announcementsItem || []).slice(0, 5);
 
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center gap-3">
         <div className="w-1 h-10 bg-mainBlue-600 rounded-full"></div>
-        <h2 className="text-2xl col-span-2">공지사항</h2>
+        <h2 className="text-2xl col-span-2">{t('h_announcement')}</h2>
       </div>
 
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[10%] text-center whitespace-nowrap">유형</TableHead>
-            <TableHead className="w-[25%] text-center whitespace-nowrap">제목</TableHead>
-            <TableHead className="w-[35%] text-center whitespace-nowrap">내용</TableHead>
-            <TableHead className="w-[20%] text-center whitespace-nowrap">등록날짜</TableHead>
+            <TableHead className="w-[10%] text-center whitespace-nowrap">{t('col_type')}</TableHead>
+            <TableHead className="w-[25%] text-center whitespace-nowrap">{t('col_title')}</TableHead>
+            <TableHead className="w-[35%] text-center whitespace-nowrap">{t('col_content')}</TableHead>
+            <TableHead className="w-[20%] text-center whitespace-nowrap">{t('col_created_at')}</TableHead>
             <TableHead className="w-[10%] text-right whitespace-nowrap"></TableHead>
           </TableRow>
         </TableHeader>
@@ -35,7 +38,7 @@ export default function DashboardannouncementContainer({
           {recentAnnouncements.length === 0 ? (
             <TableRow>
               <TableCell colSpan={5} className="text-center py-10 text-sub500 text-sm">
-                등록된 공지사항이 없습니다.
+                {t('announcement_empty')}
               </TableCell>
             </TableRow>
           ) : (
@@ -62,7 +65,7 @@ export default function DashboardannouncementContainer({
               </TableCell>
 
               <TableCell className="text-center whitespace-nowrap text-sub700">
-                {announcement.published_at ? formatDate(announcement.published_at): '-'}
+                {announcement.published_at ? formatDate(announcement.published_at, locale): '-'}
               </TableCell>
 
               <TableCell className="flex items-center justify-end gap-2 whitespace-nowrap">
@@ -75,7 +78,7 @@ export default function DashboardannouncementContainer({
                   className="flex items-center gap-2 justify-end cursor-pointer hover:text-mainBlue-600"
                 >
                   <FileText className="w-4 h-4" />
-                  <span>상세보기</span>
+                  <span>{t('btn_view_detail')}</span>
                 </button>
               </TableCell>
             </TableRow>

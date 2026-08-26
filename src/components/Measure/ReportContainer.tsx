@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import MeasureSummaryContainer from "./SummaryContainer";
 import FootTrajectoryContainer from "./Mat/FootTrajectoryContainer";
 import { useGetMeasureFoot } from "@/hooks/api/measure/useGetMeasureFoot";
+import { useTranslations } from "next-intl";
 
 export interface MeasureReportProps {
   userSn: number;
@@ -21,7 +22,7 @@ const MeasureReportContainer = ({
   isMyPage = false,
  }: MeasureReportProps 
 ) => {
-
+  const t = useTranslations("Index");
   const [selectedMeasureSn, setSelectedMeasureSn] = useState<number | undefined>();
     
     const {
@@ -61,7 +62,7 @@ const MeasureReportContainer = ({
   return (
     <div className="flex flex-col gap-6">
 
-      {summaryLoading && <div>로딩 중...</div>}
+      {summaryLoading && <div>{t('loading_1')}</div>}
       {summaryError && <div>데이터를 불러오는데 실패했습니다.</div>}
       {/* 상지 */}
       <MeasureSummaryContainer 
@@ -71,7 +72,7 @@ const MeasureReportContainer = ({
         summaryData={summaryData} 
         handleLegendClick={handleLegendClick} 
         dCase={0}
-        title="상지 결과"
+        title={t('result_upper_body')}
         selectedMeasureSn={selectedMeasureSn}
       />
       {/* 하지 */}
@@ -82,12 +83,12 @@ const MeasureReportContainer = ({
         summaryData={summaryData} 
         handleLegendClick={handleLegendClick} 
         dCase={1}
-        title="하지 결과"
+        title={t('result_lower_body')}
         selectedMeasureSn={selectedMeasureSn}
       />
             {/* 족압 */}
-      {footLoading && <div>로딩 중...</div>}
-      {footError && <div>데이터를 불러오는데 실패했습니다.</div>}
+      {footLoading && <div>{t('loading_1')}</div>}
+      {footError && <div>{t('date_fetch_failed')}</div>}
       <div>
         <FootTrajectoryContainer 
           footOCP={selectedFootOCP} 

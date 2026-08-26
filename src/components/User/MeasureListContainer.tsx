@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import CustomPagination from "../common/Pagination";
 import { measureType, viewType } from "./Detail";
 import { IUserMeasureList } from "@/types/user";
+import { useTranslations } from "next-intl";
 
 const CenterUserMeasureListContainer = ({ 
   userMeasureList,
@@ -30,7 +31,7 @@ const CenterUserMeasureListContainer = ({
   isMyPage: boolean;
   isListLoading: boolean;
 }) => {
-  
+  const t = useTranslations("Index");
   return (
     <>
       {/* ✅ 삭제 버튼 영역 (항상 공간 확보) */}
@@ -41,7 +42,7 @@ const CenterUserMeasureListContainer = ({
             {/* 총 갯수 표시 */}
             {userMeasureList && (
               <div className="text-base text-sub800 dark:text-sub100 ">
-                총 <span className="font-semibold text-black dark:text-white">{userMeasureList.total}</span>건
+                {t('_all')} <span className="font-semibold text-black dark:text-white">{userMeasureList.total}</span>{t('unit_cases')}
               </div>
             )}
             <div className="flex items-center gap-4 ">
@@ -51,11 +52,11 @@ const CenterUserMeasureListContainer = ({
                 defaultValue={sort}
               >
                 <SelectTrigger className="max-w-[120px]">
-                  <SelectValue placeholder="최신순" />
+                  <SelectValue placeholder={t('select_desc')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="desc">최신순</SelectItem>
-                  <SelectItem value="asc">오래된순</SelectItem>
+                  <SelectItem value="desc">{t('select_desc')}</SelectItem>
+                  <SelectItem value="asc">{t('select_asc')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>

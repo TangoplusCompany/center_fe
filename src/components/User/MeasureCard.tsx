@@ -2,6 +2,7 @@ import { CompareSlot } from "@/types/compare";
 import { IUserMeasureListItem } from "@/types/user";
 import { getRiskString } from "@/utils/getRiskString";
 import { CalendarDays, MapPin } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 
 export interface CenterUserMeasureCardProps {
@@ -14,6 +15,8 @@ export const CenterUserMeasureCard = ({
   onToggleCompareSn, 
   onOpenCompareMode
 }: CenterUserMeasureCardProps) => {
+  const t = useTranslations("Index")
+  const locale = useLocale();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
 
@@ -27,8 +30,8 @@ export const CenterUserMeasureCard = ({
   const upperRangeLevel = measure.risk_upper_range_level
   const lowerRiskLevel = measure.risk_lower_risk_level
   const lowerRangeLevel = measure.risk_upper_range_level
-  const upperRiskString = getRiskString(upperRiskLevel);
-  const lowerRiskString = getRiskString(lowerRiskLevel);
+  const upperRiskString = getRiskString(upperRiskLevel, locale);
+  const lowerRiskString = getRiskString(lowerRiskLevel, locale);
 
   const upperTextBgCondition = {
     0: "bg-sub600 dark:bg-gray-600",
@@ -62,7 +65,7 @@ export const CenterUserMeasureCard = ({
           </div>
 
           <div className="rounded-xl text-sm px-2 py-1 text-mainBlue-600 border border-mainBlue-600 bg-mainBlue-100  dark:bg-mainBlue-900">
-            {(measure.has_basic === 1 && measure.has_rom === 1) ? '기본검사/ROM검사' : '기본검사'}
+            {(measure.has_basic === 1 && measure.has_rom === 1) ? `${t('m_basic')}/${t('m_rom')}` : t('m_basic')}
           </div>
         </div>
 
@@ -70,18 +73,18 @@ export const CenterUserMeasureCard = ({
 
         <div className="grid grid-cols-[1fr_auto_1fr] gap-4 mx-auto items-center">
           <div className="flex gap-2 items-center w-fit">
-            <span className="text-sm text-sub800 dark:text-sub100">상지 결과 요약</span>
+            <span className="text-sm text-sub800 dark:text-sub100">{t('result_upper_body_summary')}</span>
             <span className={`px-3 py-1 ${upperTextBgCondition} rounded-xl text-xs text-white`}>
-              {upperRiskString} {upperRangeLevel}단계
+              {upperRiskString} {upperRangeLevel}{t('unit_grade')}
             </span>  
           </div>
 
           <div className="w-1 h-full rounded-xl bg-sub100"/>
 
           <div className="flex gap-2 items-center w-fit">
-            <span className="text-sm text-sub800 dark:text-sub100">하지 결과 요약</span>
+            <span className="text-sm text-sub800 dark:text-sub100">{t('result_lower_body_summary')}</span>
             <span className={`px-3 py-1 ${lowerTextBgCondition} rounded-xl text-xs text-white`}>
-              {lowerRiskString} {lowerRangeLevel}단계
+              {lowerRiskString} {lowerRangeLevel}{t('unit_grade')}
             </span>
           </div>
         </div>

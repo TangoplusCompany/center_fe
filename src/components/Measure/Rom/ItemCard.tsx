@@ -1,5 +1,6 @@
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 import { IMeasureROMItem } from "@/types/measure";
+import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 import { Area, AreaChart, DotProps, XAxis, YAxis } from "recharts";
 
@@ -13,7 +14,7 @@ export const ROMItemCard = ({
   romItem,
   handleROMItemSelect,
 } : ROMItemCardProps) => {
-
+  const t = useTranslations("Index");
   const chartData = useMemo(() => {
     const sorted = Object.entries(romItem.history_by_measure_type)
      .map(([date, value]) => ({date, value}))
@@ -42,10 +43,10 @@ export const ROMItemCard = ({
   );
 
   const stateString :Record<number, string> = {
-    0 : "위험",
-    1 : "주의",
-    2 : "정상",
-    3 : "매우 양호"
+    0 : t('grade_danger'),
+    1 : t('grade_caution'),
+    2 : t('grade_normal'),
+    3 : t('grade_very_good')
   }
   const stateTextColor : Record<number, string> = {
     0 : "text-danger",
@@ -88,7 +89,7 @@ export const ROMItemCard = ({
         <div className="flex flex-col w-full min-h-32 gap-2 p-2">
           <div className="flex flex-col gap-1 px-2">
             <p className="text-base font-semibold">
-              최대각도: { Math.abs(currentValue).toFixed(1) }º
+              {t('rom_max_angle')}: { Math.abs(currentValue).toFixed(1) }º
             </p>
             <p className="text-base ">
               {romItem.howto}

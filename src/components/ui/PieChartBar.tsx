@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
 export interface SegmentData {
@@ -17,6 +18,7 @@ export default function PieChartBar({
   innerRadius = 50,
   outerRadius = 80,
 }: PieChartBarProps) {
+  const t = useTranslations("Index")
   return (
     <div className="w-48 h-48">
       <ResponsiveContainer width="100%" height="100%">
@@ -24,7 +26,7 @@ export default function PieChartBar({
           <Tooltip 
             contentStyle={{ backgroundColor: "#fff", borderRadius: "8px", border: "1px solid #e5e7eb" }}
             itemStyle={{ fontSize: "12px" }}
-            formatter={(value: number, name: string) => [`${value}%`, name]}
+            formatter={(value: number, name: string) => [`${value}%`, t(name)]}
           />
           <Pie
             data={data}
