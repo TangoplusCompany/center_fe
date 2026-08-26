@@ -1,12 +1,13 @@
+import { useLocale, useTranslations } from "next-intl";
 import type { IBiaData } from "../../../types/bia";
 
 
 const CATEGORIES = [
-  { id: 'score', label: '통합점수', unit: '점' },
-  { id: 'sarcopenia', label: '근감소증 수치', unit: '%' },
-  { id: 'weight', label: '몸무게', unit: 'kg' },
-  { id: 'skeletal', label: '골격근량', unit: 'kg' },
-  { id: 'fat', label: '지방량', unit: 'kg' },
+  { id: 'score', label: 'bia_total_score', unit: 'unit_score' },
+  { id: 'sarcopenia', label: 'bia_sarcopenia_value', unit: 'unit_percent' },
+  { id: 'weight', label: 'bia_body_weight', unit: 'unit_kg' },
+  { id: 'skeletal', label: 'bia_skeletal_muscle_mass_detail', unit: 'unit_kg' },
+  { id: 'fat', label: 'bia_fat_mass', unit: 'unit_kg' },
 ];
 
 const transformToTrend = (
@@ -51,6 +52,7 @@ const transformToTrend = (
 
 // 2. 개별 데이터 셀 컴포넌트
 const DataCell = ({ value, diff, status, unit, up }: { value: string, diff: string, status: string, unit: string, up: boolean }) => {
+  const t = useTranslations("Index")
   const colorClass = 
     status === 'red' ? ' text-danger' : 
     status === 'blue' ? ' text-mainBlue-600' :
@@ -58,7 +60,7 @@ const DataCell = ({ value, diff, status, unit, up }: { value: string, diff: stri
 
   return (
     <div className={`flex flex-col items-center justify-center rounded-sm py-1 px-1 w-full min-w-[40px] h-[48px] leading-none border border-sub200 ${colorClass}`}>
-      <span className="text-sm font-bold leading-tight">{value}{unit}</span>
+      <span className="text-sm font-bold leading-tight">{value}{t(unit)}</span>
       <div className="flex items-center gap-0.5 text-xs mt-1">
         <span>{up ? '▲' : '▼'}</span>
         <span>{diff}</span>
@@ -68,6 +70,8 @@ const DataCell = ({ value, diff, status, unit, up }: { value: string, diff: stri
 };
 
 export default function TrendGraph({data}: {data:IBiaData}) {
+  const t = useTranslations("Index")
+  const locale = useLocale();
   const sortedHistory = [...data.history_data].slice(0, 7).reverse();
   const dates = sortedHistory.map((h) => h.measure_date);
 
@@ -83,11 +87,11 @@ export default function TrendGraph({data}: {data:IBiaData}) {
       <div className="flex justify-between items-center ">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-mainBlue-600 rounded-[4px]" />
-          <h2 className="text-sm font-bold text-mainBlue-600">측정 이력</h2>
+          <h2 className="text-sm font-bold text-mainBlue-600">{t('bia_measure_history')}</h2>
         </div>
         <div className="flex items-center gap-1.5">
           <div className="w-2 h-2 bg-sub600 rounded-[2px]" />
-          <span className="text-xs text-gray-500 font-medium">최근이력</span>
+          <span className="text-xs text-gray-500 font-medium">{t('bia_recent_history')}</span>
         </div>
       </div>
 
@@ -97,7 +101,7 @@ export default function TrendGraph({data}: {data:IBiaData}) {
           
           {/* 상단 날짜 헤더 구역 */}
           {/* gap-2에서 아래 데이터 행과 맞추기 위해 gap-0.5로 통일하고 w-full 부여 */}
-          <div className="grid grid-cols-[80px_repeat(7,1fr)] gap-0.5 mb-1 w-full">
+          <div className={`grid ${locale === "ko" ? "grid-cols-[80px_repeat(7,1fr)]" : "grid-cols-[96px_repeat(7,1fr)]"} gap-0.5 items-center mb-1 w-full`}>
             <div /> 
             {Array.from({ length: 7 }).map((_, i) => (
               <div key={i} className="text-center text-sm text-gray-400 font-medium min-h-[12px] truncate">
@@ -121,12 +125,12 @@ export default function TrendGraph({data}: {data:IBiaData}) {
           {/* 데이터 행 구역 */}
           <div className="flex flex-col w-full gap-0.5">
             {CATEGORIES.map((cat) => (
-              <div key={cat.id} className="grid grid-cols-[80px_repeat(7,1fr)] gap-0.5 items-center w-full">
+              <div key={cat.id} className={`grid ${locale === "ko" ? "grid-cols-[80px_repeat(7,1fr)]" : "grid-cols-[96px_repeat(7,1fr)]"} gap-0.5 items-center w-full`}>
                 
                 {/* 카테고리 이름 영역 */}
                 <div className="flex flex-col items-center justify-center bg-gray-100 rounded-sm h-[48px] text-center leading-tight">
-                  <span className="text-sm font-bold text-gray-700 leading-tight">{cat.label}</span>
-                  <span className="text-xs text-gray-500 font-medium">({cat.unit})</span>
+                  <span className="text-sm font-bold text-gray-700 leading-tight">{t(cat.label)}</span>
+                  <span className="text-xs text-gray-500 font-medium">({t(cat.unit)})</span>
                 </div>
 
                 {/* 7개 데이터 셀 영역 */}

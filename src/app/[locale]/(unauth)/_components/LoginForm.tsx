@@ -71,8 +71,8 @@ export default function LoginForm({
         message: t('pw_max'),
       })
       .regex(
-        /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]+$/i,
-        t('pw_zod')
+        /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*~])[a-z\d!@#$%^&*~]+$/i,
+        t('pw_zod'),
       ),
   });
   const {

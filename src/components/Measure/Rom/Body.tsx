@@ -58,7 +58,7 @@ export const ROMBody = ({
   }
 
   if (isError0 || isError1) {
-    return <div>데이터 로딩 중 오류가 발생했습니다.</div>;
+    return <div>{t('moire_data_loading_error')}</div>;
   }
 
   return (

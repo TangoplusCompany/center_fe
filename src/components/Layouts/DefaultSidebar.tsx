@@ -246,7 +246,7 @@ export default function DefaultSidebar() {
               <div className="max-h-80 overflow-y-auto">
                 {isLoading ? (
                   <div className="flex items-center justify-center py-8">
-                    <span className="text-sm text-gray-400">{t('loading')}</span>
+                    <span className="text-sm text-gray-400">{t('loading_0')}</span>
                   </div>
                 ) : (
                   centers.map((center) => (

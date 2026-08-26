@@ -77,7 +77,7 @@ export const ROMPickerDialog = ({
         {/* 헤더 */}
         <DialogTitle className="text-base font-semibold mb-3 text-foreground">
           <span>{title}</span> <br/>
-          <span className="text-sm text-sub400">날짜를 선택해 이전 기록과 비교해보세요</span>
+          <span className="text-sm text-sub400">{t('measure_compare_guide')}</span>
           
         </DialogTitle>
         {isLoading ? (
@@ -90,13 +90,13 @@ export const ROMPickerDialog = ({
           </div>
         ) : isError ? (
           <div className="flex items-center justify-center h-[200px] text-sm text-red-400">
-            오류가 발생했습니다. 잠시후 다시 시도해주세요.
+            {t('device_error_server')}
           </div>
         ) : (
           <div className="max-h-[360px] overflow-auto">
             {filteredItems.length === 0 ? (
               <div className="flex items-center justify-center h-[200px] text-sm text-gray-400 dark:text-gray-500">
-                선택할 항목이 없습니다.
+                {t('measure_no_compare')}
               </div>
             ) : (
               <div className="space-y-2">

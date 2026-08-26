@@ -18,7 +18,7 @@ const ResetPwd = ({ jwt, email }: { jwt: string; email: string }) => {
         .min(8, t('pw_min'))
         .max(16, t('pw_max'))
         .regex(
-          /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]+$/i,
+          /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*~])[a-z\d!@#$%^&*~]+$/i,
           t('pw_zod'),
         ),
       confirmPassword: z
@@ -27,7 +27,7 @@ const ResetPwd = ({ jwt, email }: { jwt: string; email: string }) => {
         .min(8, t('pw_min'))
         .max(16, t('pw_max'))
         .regex(
-          /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]+$/i,
+          /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*~])[a-z\d!@#$%^&*~]+$/i,
           t('pw_zod'),
         ),
     })

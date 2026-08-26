@@ -35,7 +35,7 @@ const ManagerEditForm = ({
     watch,
     formState: { errors },
   } = useForm<IManagerInformationForm>({
-    resolver: zodResolver(managerInformationSchema),
+    resolver: zodResolver(managerInformationSchema(t) ),
     mode: "onChange",
     defaultValues: {
       managerName: managerData.admin_name ?? "",

@@ -77,7 +77,7 @@ export const MeasureRomContainer = () => {
       window.open(url, "_blank", "noopener,noreferrer");
     } catch (e) {
       console.error("리포트 URL 생성 실패:", e);
-      alert("리포트 페이지를 생성하는 중 오류가 발생했습니다.");
+      alert(t('report_page_error'));
     }
   };
 
@@ -153,7 +153,7 @@ export const MeasureRomContainer = () => {
           </div>
         ) : romError ? (
           <div className="flex items-center justify-center h-[200px] text-sm text-red-400">
-            오류가 발생했습니다. 잠시후 다시 시도해주세요.
+            {t('etc_error')}
           </div>
         ) : (
           <div className="flex flex-col items-start gap-4">
@@ -165,7 +165,7 @@ export const MeasureRomContainer = () => {
                 }}
                 className="py-1 rounded-md text-base text-sub700"
               >
-                ← 목록으로
+                ← {t('go_list')}
               </button>
               
               <Button 
@@ -180,7 +180,7 @@ export const MeasureRomContainer = () => {
                   alt="인쇄하기"
                   className="gap-4 size-4 dark:[filter:brightness(0)_invert(1)]"
                 />
-                인쇄하기
+                {t("btn_print")}
               </Button>
             </div>
             <ROMItemContainer datas={romItems ?? []} onROMItemSelect={onROMItemSelect} isUserPage={false} />

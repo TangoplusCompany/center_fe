@@ -87,7 +87,7 @@ export const RequestOtpForm = ({
     } catch (err) {
       if (err instanceof AxiosError && err.response) {
         alert(
-          getRequestOtpErrorMessage(err.response.status)
+          getRequestOtpErrorMessage(err.response.status, t)
         );
       } else {
         alert(t('alert_otp_send_fail'));

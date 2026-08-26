@@ -14,10 +14,7 @@ import { KAKAO_POSTCODE_SCRIPT_URL } from "@/lib/postcode";
 import RegisterCenterCheckForm from "./RegisterCenterCheckForm";
 import { RegisterOtpDialog } from "@/components/auth/RegisterOtpDialog";
 import { centerEditSchema } from "@/schemas/centerSchema";
-import {
-  isValidKoreanPhone,
-  KOREAN_PHONE_ERROR_MESSAGE,
-} from "@/utils/validateKoreanPhone";
+
 import {
   postRequestEmailVerificationOtp,
   getRequestEmailVerificationOtpErrorMessage,
@@ -40,7 +37,7 @@ const passwordSchema = (t: (key: string) => string) => z
   .min(8, t('pw_min'))
   .max(16, t('pw_max'))
   .regex(
-    /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]+$/i,
+    /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*~])[a-z\d!@#$%^&*~]+$/i,
     t('pw_zod'),
   );
 const nameSchema = (t: (key: string) => string) => z
@@ -48,22 +45,26 @@ const nameSchema = (t: (key: string) => string) => z
   .min(2, t('name_min'))
   .max(50, t('name_max'))
   .regex(/^[가-힣]+$/, t('name_zod'));
-const phoneSchema = (t: (key: string) => string) => z
-  .string()
-  .trim()
-  .min(1, t('mobile_hint'))
-  .refine((val) => /^[0-9\s-]+$/.test(val), {
-    message: t('mobile_zod'),
-  })
-  .transform((val) => val.replace(/\D/g, ""))
-  .pipe(
-    z
-      .string()
-      .min(9, t('mobile_min_max'))
-      .max(11, t('mobile_min_max'))
-      .regex(/^\d+$/, t('mobile_zoe_1'))
-      .refine(isValidKoreanPhone, { message: KOREAN_PHONE_ERROR_MESSAGE }),
-  );
+export const phoneSchema = (t: (key: string) => string) =>
+  z
+    .string()
+    .trim()
+    .min(1, t('mobile_hint'))
+    // +, 숫자, 공백, 하이픈 허용
+    .refine((val) => /^\+?[0-9\s-]+$/.test(val), {
+      message: t('mobile_zod'),
+    })
+    // 맨 앞 '+' 제외 나머지 숫자 이외의 문자 제거
+    .transform((val) => val.replace(/(?!^\+)\D/g, ""))
+    .pipe(
+      z
+        .string()
+        // 국가번호 포함 국제 표준(E.164) 최소 7자리 ~ 최대 15자리 (앞의 '+' 제외)
+        .refine((val) => {
+          const digitsOnly = val.replace(/^\+/, "");
+          return digitsOnly.length >= 7 && digitsOnly.length <= 15;
+        }, { message: t('mobile_min_max') })
+    );
 
 const registerSchema = (t: (key: string) => string) => z
   .object({
@@ -114,6 +115,7 @@ export const RegisterContainer = () => {
     formState: { errors },
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(currentRegisterSchema),
+    mode: "onChange", // ← 입력할 때마다 실시간 유효성 검사 실행
     defaultValues: {
       email: "",
       password: "",
@@ -389,7 +391,7 @@ export const RegisterContainer = () => {
           <div className="flex flex-col gap-6 w-full">
             <div className="flex flex-col items-start gap-2">
               <Label htmlFor="email" className="lg:text-lg">
-                이메일
+                {t('user_col_email')}
               </Label>
               <div className="flex gap-2 w-full items-stretch">
                 <Input
@@ -530,7 +532,7 @@ export const RegisterContainer = () => {
               <Input
                 id="centerName"
                 type="text"
-                placeholder="센터 이름"
+                placeholder={t('label_center_name')}
                 maxLength={30}
                 {...register("centerName")}
                 className="bg-white dark:bg-border"
@@ -548,7 +550,7 @@ export const RegisterContainer = () => {
                   id="centerAddress"
                   type="text"
                   readOnly
-                  placeholder="주소 검색으로 입력"
+                  placeholder={t('setting_center_address_input')}
                   maxLength={60}
                   {...register("centerAddress")}
                   className="flex-1 min-w-0 bg-white dark:bg-border"
@@ -565,7 +567,7 @@ export const RegisterContainer = () => {
               <Input
                 id="centerAddressDetail"
                 type="text"
-                placeholder="센터 상세 주소"
+                placeholder={t('label_center_address_detail')}
                 maxLength={30}
                 {...register("centerAddressDetail")}
                 className="w-full bg-white dark:bg-border"
@@ -584,7 +586,7 @@ export const RegisterContainer = () => {
               <Input
                 id="centerPhone"
                 type="tel"
-                placeholder="센터 전화 번호"
+                placeholder={t('label_center_phone')}
                 maxLength={15}
                 minLength={10}
                 {...register("centerPhone")}

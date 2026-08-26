@@ -6,6 +6,7 @@ import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
 import RawDataContainer from "../RawDataContainer";
 import CompareDefault from "./CompareDefault";
 import { CompareStaticProps } from "./CompareBody";
+import { useTranslations } from "next-intl";
 
 const MeasureStaticCompareFifth  = React.memo(
 ({
@@ -16,7 +17,7 @@ const MeasureStaticCompareFifth  = React.memo(
   onImageReady,
   isMyPage = false,
 }: CompareStaticProps) => {
-  // TODO 정적 조회하는 api를 사용 + 하단의 useMeasureJson을 써야함 (+ Raw Data card도 넣어줘야함)
+  const t = useTranslations("Index")
   const leftSummaryData = left?.basic_result?.result_summary_data
   const rightSummaryData = right?.basic_result?.result_summary_data
   const {
@@ -60,7 +61,7 @@ const MeasureStaticCompareFifth  = React.memo(
     return <DummyStaticContainer />;
   }
   if (isError) {
-    return <div>에러가 발생했습니다.</div>;
+    return <div>{t('etc_error')}</div>;
   }
   if (!hasData0 && !hasData1) {
     return <DummyStaticContainer />;

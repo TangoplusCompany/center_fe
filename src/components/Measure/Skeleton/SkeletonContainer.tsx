@@ -4,6 +4,7 @@ import { IMeasureInfo } from "@/types/measure";
 import React from "react";
 
 import { FullBodySkeleton3D } from "../FullBodySkeleton3D";
+import { useTranslations } from "next-intl";
 // import UnitySkeleton from "./UnitySkeleton";
 // import { useTheme } from "next-themes";
 
@@ -14,7 +15,7 @@ const SkeletonContainer = ({
 }: {
   data:  IMeasureInfo;
 }) => {
-
+  const t = useTranslations("Index")
 
   return (
     <div className="relative box-border flex h-full flex-col items-center rounded-3xl border-2 border-sub200 p-4 text-black focus-visible:outline-none">
@@ -48,13 +49,13 @@ const SkeletonContainer = ({
         {/* 상단 3단 바 */}
         <div className="flex overflow-hidden rounded-md mx-auto w-full" style={{ borderColor: "#E5E5E5" }}>
           <div className="flex-1 py-1 text-center font-semibold" style={{ backgroundColor: "#F5F5F5", color: "#555555" }}>
-            정상
+            {t('grade_normal')}
           </div>
           <div className="flex-1 py-1 text-center font-semibold" style={{ backgroundColor: "#F5DDC3", color: "#B5741A" }}>
-            주의
+            {t('grade_caution')}
           </div>
           <div className="flex-1 py-1 text-center font-semibold" style={{ backgroundColor: "#C77C82", color: "#81363D" }}>
-            위험
+            {t('grade_danger')}
           </div>
         </div>
 
@@ -62,17 +63,17 @@ const SkeletonContainer = ({
         <div className="flex text-sm mt-3"> {/* justify-between 대신 flex만 사용 */}
           {/* 정상 - 1/3 너비 및 중앙 정렬 */}
           <div className="flex-1 text-center">
-            <span style={{ color: "#9A9A9A" }}>상태 유지 강화 권장</span>
+            <span style={{ color: "#9A9A9A" }}>{t('grade_normal_desc')}</span>
           </div>
 
           {/* 주의 - 1/3 너비 및 중앙 정렬 */}
           <div className="flex-1 text-center">
-            <span style={{ color: "#B5741A" }}>제공되는 맨몸<br />운동 권장</span>
+            <span style={{ color: "#B5741A" }}>{t('grade_caution_desc_0')}<br />{t('grade_caution_desc_1')}</span>
           </div>
 
           {/* 위험 - 1/3 너비 및 중앙 정렬 */}
           <div className="flex-1 text-center">
-            <span style={{ color: "#81363D" }}>전문가 상담 권장</span>
+            <span style={{ color: "#81363D" }}>{t('grade_danger_desc')}</span>
           </div>
         </div>
       </div>

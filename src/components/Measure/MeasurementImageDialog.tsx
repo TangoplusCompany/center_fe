@@ -189,7 +189,7 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
                   className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white pointer-events-auto"
                 >
                   <span className="text-xs sm:text-sm whitespace-nowrap">
-                    모아레 투명도
+                    {t('moire_alpha')}
                   </span>
                   <div className="relative flex items-center">
                     <input

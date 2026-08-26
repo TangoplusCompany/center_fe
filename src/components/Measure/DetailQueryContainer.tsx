@@ -83,7 +83,7 @@ const MeasureDetailQueryContainer = ({firstMeasureType}:MeasureDetailQueryProps)
       <div className="flex items-center gap-3">
         <div className="w-1 h-12 bg-mainBlue-600 rounded-full"></div>
         <h2 className="text-3xl font-semibold text-[#333] dark:text-white flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-          <span>{measureData.measurement_meta.user_name}님 측정 결과</span>
+          <span>{measureData.measurement_meta.user_name}{t('h_user_title')} {t('h_user_measure_result')}</span>
           <span className="text-sm text-sub300 dark:text-sub200 sm:pl-2"> {formatDate(measureData.measurement_meta.measure_date, locale)}</span>
         </h2>
       </div>
@@ -93,7 +93,7 @@ const MeasureDetailQueryContainer = ({firstMeasureType}:MeasureDetailQueryProps)
 
       {measureDataError && (
         <p className="py-8 text-center text-red-500">
-          측정 데이터를 불러오는 중 오류가 발생했습니다.
+          {t('measurement_data_error_msg')}
         </p>
       )}
 
