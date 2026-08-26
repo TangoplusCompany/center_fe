@@ -43,6 +43,7 @@ const ResetPwd = ({ jwt, email }: { jwt: string; email: string }) => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    mode: "onChange", // ← 입력할 때마다 실시간 유효성 검사 실행
     defaultValues: {
       password: "",
       confirmPassword: "",
@@ -72,7 +73,7 @@ const ResetPwd = ({ jwt, email }: { jwt: string; email: string }) => {
           type="password"
           id="password"
           defaultValue=""
-          placeholder="새 비밀번호"
+          placeholder={t('reset_new_pw')}
           className="bg-white"
         />
         {form.formState.errors.password?.message && (
@@ -88,7 +89,7 @@ const ResetPwd = ({ jwt, email }: { jwt: string; email: string }) => {
           type="password"
           id="confirmPassword"
           defaultValue=""
-          placeholder="비밀번호 확인"
+          placeholder={t('reset_pw_confirm')}
           className="bg-white"
         />
         {form.formState.errors.confirmPassword?.message && (
@@ -97,7 +98,7 @@ const ResetPwd = ({ jwt, email }: { jwt: string; email: string }) => {
           </p>
         )}
       </div>
-      <Button type="submit">{t('reset_pw')}</Button>
+      <Button type="submit" className="mt-4">{t('reset_pw')}</Button>
     </form>
   );
 };

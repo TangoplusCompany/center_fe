@@ -4,8 +4,10 @@ import React, { useState } from "react";
 import { RequestOtpForm } from "@/components/auth/RequestOtpForm";
 import InputEmail from "@/components/auth/InputEmail";
 import ResetPwd from "@/components/auth/ResetPwd";
+import { useTranslations } from "next-intl";
 
 const FindPasswordPage = () => {
+  const t = useTranslations("Index")
   const [email, setEmail] = useState("");
   const [jwt, setJwt] = useState("");
   const [step, setStep] = useState(0);
@@ -23,7 +25,7 @@ const FindPasswordPage = () => {
       <div className="w-full max-w-[480px]">
         <div className="w-full flex flex-col items-start gap-2">
           <h1 className="text-2xl font-bold mb-3 lg:mb-5 text-center">
-            탱고플러스 센터관리자 비밀번호 찾기
+            {t('login_find_pw_title')}
           </h1>
           {step === 0 && <InputEmail setEmail={handleInputEmail} />}
           {step === 1 && (

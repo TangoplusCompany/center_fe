@@ -14,7 +14,10 @@ import { KAKAO_POSTCODE_SCRIPT_URL } from "@/lib/postcode";
 import RegisterCenterCheckForm from "./RegisterCenterCheckForm";
 import { RegisterOtpDialog } from "@/components/auth/RegisterOtpDialog";
 import { centerEditSchema } from "@/schemas/centerSchema";
-
+import {
+  isValidKoreanPhone,
+  KOREAN_PHONE_ERROR_MESSAGE,
+} from "@/utils/validateKoreanPhone";
 import {
   postRequestEmailVerificationOtp,
   getRequestEmailVerificationOtpErrorMessage,
@@ -45,26 +48,22 @@ const nameSchema = (t: (key: string) => string) => z
   .min(2, t('name_min'))
   .max(50, t('name_max'))
   .regex(/^[가-힣]+$/, t('name_zod'));
-export const phoneSchema = (t: (key: string) => string) =>
-  z
-    .string()
-    .trim()
-    .min(1, t('mobile_hint'))
-    // +, 숫자, 공백, 하이픈 허용
-    .refine((val) => /^\+?[0-9\s-]+$/.test(val), {
-      message: t('mobile_zod'),
-    })
-    // 맨 앞 '+' 제외 나머지 숫자 이외의 문자 제거
-    .transform((val) => val.replace(/(?!^\+)\D/g, ""))
-    .pipe(
-      z
-        .string()
-        // 국가번호 포함 국제 표준(E.164) 최소 7자리 ~ 최대 15자리 (앞의 '+' 제외)
-        .refine((val) => {
-          const digitsOnly = val.replace(/^\+/, "");
-          return digitsOnly.length >= 7 && digitsOnly.length <= 15;
-        }, { message: t('mobile_min_max') })
-    );
+const phoneSchema = (t: (key: string) => string) => z
+  .string()
+  .trim()
+  .min(1, t('mobile_hint'))
+  .refine((val) => /^[0-9\s-]+$/.test(val), {
+    message: t('mobile_zod'),
+  })
+  .transform((val) => val.replace(/\D/g, ""))
+  .pipe(
+    z
+      .string()
+      .min(9, t('mobile_min_max'))
+      .max(11, t('mobile_min_max'))
+      .regex(/^\d+$/, t('mobile_zoe_1'))
+      .refine(isValidKoreanPhone, { message: KOREAN_PHONE_ERROR_MESSAGE }),
+  );
 
 const registerSchema = (t: (key: string) => string) => z
   .object({
@@ -391,7 +390,7 @@ export const RegisterContainer = () => {
           <div className="flex flex-col gap-6 w-full">
             <div className="flex flex-col items-start gap-2">
               <Label htmlFor="email" className="lg:text-lg">
-                {t('user_col_email')}
+                이메일
               </Label>
               <div className="flex gap-2 w-full items-stretch">
                 <Input
