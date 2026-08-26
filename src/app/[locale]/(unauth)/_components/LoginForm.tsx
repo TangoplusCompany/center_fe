@@ -15,8 +15,8 @@ import { postLoginFor2FA, AdminLoginError } from "@/services/auth/postLogin";
 import { Login2FAMethodDialog } from "@/components/auth/Login2FAMethodDialog";
 import type { Login2FAMethod } from "@/components/auth/Login2FAMethodDialog";
 import { LoginOtpDialog } from "@/components/auth/LoginOtpDialog";
-import { useLocale, useTranslations } from "next-intl";
-import { Globe, Check } from "lucide-react";
+import { useTranslations } from "next-intl";
+
 
 
 
@@ -31,8 +31,6 @@ export default function LoginForm({
   const router = useRouter();
   const t = useTranslations("Index");
 
-  const currentLocale = useLocale();
-  const [isLangOpen, setIsLangOpen] = useState(false);
 
   const [is2FADialogOpen, setIs2FADialogOpen] = useState(false);
   const [tempJwt, setTempJwt] = useState<string | null>(null);
@@ -83,17 +81,6 @@ export default function LoginForm({
     resolver: zodResolver(loginSchema),
   });
 
-  // 언어 변경 핸들러
-  const handleLanguageChange = (newLocale: string) => {
-    setIsLangOpen(false);
-    if (newLocale === currentLocale) return;
-
-    // NEXT_LOCALE 쿠키 설정
-    document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
-    
-    // 페이지 새로고침
-    window.location.reload();
-  };
 
   const loginHandleSubmit = handleSubmit(async (data) => {
     setIsLoginPending(true);
@@ -136,54 +123,7 @@ export default function LoginForm({
         {...props}
         onSubmit={loginHandleSubmit}
       >
-        {/* 🌐 우측 상단 다국어 선택 드롭다운 */}
-        <div className="flex justify-end relative">
-          <button
-            type="button"
-            onClick={() => setIsLangOpen((prev) => !prev)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg border border-border hover:bg-sub100 dark:hover:bg-sub800 transition-colors"
-          >
-            <Globe className="w-4 h-4 text-sub500" />
-            <span>{currentLocale === "ko" ? "한국어" : "English"}</span>
-          </button>
-
-          {isLangOpen && (
-            <>
-              {/* 바깥 클릭 시 닫히는 오버레이 */}
-              <div
-                className="fixed inset-0 z-40"
-                onClick={() => setIsLangOpen(false)}
-              />
-              {/* 드롭다운 팝업 메뉴 */}
-              <div className="absolute right-0 top-full mt-1.5 w-32 bg-white dark:bg-sub900 border border-sub200 dark:border-sub700 rounded-xl shadow-lg z-50 py-1 overflow-hidden">
-                <button
-                  type="button"
-                  onClick={() => handleLanguageChange("ko")}
-                  className={`w-full px-3 py-2 text-left text-xs flex items-center justify-between hover:bg-sub100 dark:hover:bg-sub800 transition-colors ${
-                    currentLocale === "ko"
-                      ? "font-semibold text-mainBlue-600 dark:text-mainBlue-400"
-                      : "text-sub700 dark:text-sub200"
-                  }`}
-                >
-                  <span>한국어</span>
-                  {currentLocale === "ko" && <Check className="w-3.5 h-3.5" />}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleLanguageChange("en")}
-                  className={`w-full px-3 py-2 text-left text-xs flex items-center justify-between hover:bg-sub100 dark:hover:bg-sub800 transition-colors ${
-                    currentLocale === "en"
-                      ? "font-semibold text-mainBlue-600 dark:text-mainBlue-400"
-                      : "text-sub700 dark:text-sub200"
-                  }`}
-                >
-                  <span>English</span>
-                  {currentLocale === "en" && <Check className="w-3.5 h-3.5" />}
-                </button>
-              </div>
-            </>
-          )}
-        </div>
+        
 
         <div className="flex flex-col items-center gap-2 text-center">
           <h1 className="text-2xl font-bold">{t("login_title")}</h1>
