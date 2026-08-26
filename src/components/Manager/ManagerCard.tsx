@@ -8,12 +8,14 @@ import ManagerRemoveDialog from "./ManagerRemoveDialog";
 import ManagerRoleChangeDialog from "./ManagerRoleChangeDialog";
 import { User } from "lucide-react";
 import { useAuthStore } from "@/providers/AuthProvider";
+import { useTranslations } from "next-intl";
 
 type ManagerCardProps = {
   manager: ICenterManagerData;
 };
 
 export const ManagerCard = React.memo(({ manager }: ManagerCardProps) => {
+  const t = useTranslations("Index");
   const { adminSn } = useAuthStore((state) => state);
   const canChangeRole = adminSn !== manager.sn;
   const canRemove = adminSn !== manager.sn;
@@ -35,16 +37,16 @@ export const ManagerCard = React.memo(({ manager }: ManagerCardProps) => {
           <div className="flex flex-col justify-between flex-1">
             <div className="flex flex-col gap-1 px-4 py-2">
               <p className="text-base">
-                <span className="text-muted-foreground">전화번호 </span>
+                <span className="text-muted-foreground">{t('setting_account_phone')} </span>
                 {phoneHyphen(manager.mobile)}
               </p>
               <p className="text-base truncate" title={manager.admin_email}>
-                <span className="text-muted-foreground">이메일 </span>
+                <span className="text-muted-foreground">{t('target_email')} </span>
                 {manager.admin_email}
               </p>
               <p className="text-base">
-                <span className="text-muted-foreground">등급 </span>
-                {ADMIN_ROLE[manager.admin_role as keyof typeof ADMIN_ROLE]}
+                <span className="text-muted-foreground">{t('setting_account_role')} </span>
+                {t(ADMIN_ROLE[manager.admin_role as keyof typeof ADMIN_ROLE])}
               </p>
             </div>
           </div>

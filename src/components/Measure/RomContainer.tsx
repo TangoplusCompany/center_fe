@@ -18,9 +18,12 @@ import { formatDate } from "@/utils/formatDate";
 import { Button } from "../ui/button";
 import { actionPrintEncrypt } from "@/app/actions/getCrypto";
 import { getResultRomReportUrl } from "@/app/actions/openRomPrintPage";
+import { useLocale, useTranslations } from "next-intl";
 
 
 export const MeasureRomContainer = () => {
+  const t= useTranslations("Index");
+  const locale = useLocale();
   const { query } = useGetQuery();
   const encryptedParam = query['data'];  // measureSn → data로 변경
   const [measureType, setMeasureType] = useState(-1); // 이전 항목 선택을 관리하는 ROM 타입
@@ -74,7 +77,7 @@ export const MeasureRomContainer = () => {
       window.open(url, "_blank", "noopener,noreferrer");
     } catch (e) {
       console.error("리포트 URL 생성 실패:", e);
-      alert("리포트 페이지를 생성하는 중 오류가 발생했습니다.");
+      alert(t('report_page_error'));
     }
   };
 
@@ -135,7 +138,7 @@ export const MeasureRomContainer = () => {
           <div className="w-1 h-12 bg-mainBlue-600 rounded-full"></div>
           <h2 className="text-3xl font-semibold text-[#333] dark:text-white flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
             <span>{romItems[0].user_name}님 ROM 측정 결과</span>
-            <span className="text-sm text-sub300 dark:text-sub200 sm:pl-2"> {formatDate(romItems[0].reg_date.slice(0,16))}</span>
+            <span className="text-sm text-sub300 dark:text-sub200 sm:pl-2"> {formatDate(romItems[0].reg_date.slice(0,16), locale)}</span>
           </h2>
         </div>
       )}
@@ -150,7 +153,7 @@ export const MeasureRomContainer = () => {
           </div>
         ) : romError ? (
           <div className="flex items-center justify-center h-[200px] text-sm text-red-400">
-            오류가 발생했습니다. 잠시후 다시 시도해주세요.
+            {t('etc_error')}
           </div>
         ) : (
           <div className="flex flex-col items-start gap-4">
@@ -162,7 +165,7 @@ export const MeasureRomContainer = () => {
                 }}
                 className="py-1 rounded-md text-base text-sub700"
               >
-                ← 목록으로
+                ← {t('go_list')}
               </button>
               
               <Button 
@@ -177,7 +180,7 @@ export const MeasureRomContainer = () => {
                   alt="인쇄하기"
                   className="gap-4 size-4 dark:[filter:brightness(0)_invert(1)]"
                 />
-                인쇄하기
+                {t("btn_print")}
               </Button>
             </div>
             <ROMItemContainer datas={romItems ?? []} onROMItemSelect={onROMItemSelect} isUserPage={false} />

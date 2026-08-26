@@ -1,6 +1,7 @@
 import { patchCenterManagerRole } from "@/services/center/patchCenterManagerRole";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "@/providers/AuthProvider";
+import { useTranslations } from "next-intl";
 
 /**
  * 센터 관리자 권한 수정 Hooks
@@ -9,12 +10,13 @@ import { useAuthStore } from "@/providers/AuthProvider";
 export const usePatchManagerRole = () => {
   const queryClient = useQueryClient();
   const centerSn = useAuthStore((state) => state.centerSn);
+  const t = useTranslations();
 
   return useMutation({
     mutationFn: (data: { sn: number; role: number }) =>
       patchCenterManagerRole({ center_sn: centerSn, ...data }),
     onSuccess: async () => {
-      alert("해당 매니저의 권한이 성공적으로 변경되었습니다.");
+      alert(t("manager_role_patch_success"));
       await queryClient.invalidateQueries({ queryKey: ["adminList"] });
       await queryClient.invalidateQueries({ queryKey: ["ManagerDetails"] });
     },

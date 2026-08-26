@@ -1,18 +1,21 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 type TWorstPart = {
   partName: string;   // 예: '목', '어깨'
   level: number;      // 예: '위험', '주의'
   description: string // 설명
 };
 const DashboardCardBest = ({ data }: { data: TWorstPart }) => {
-    const imageSrc = {
-    "목": "img_neck_0.svg",
-    "어깨": "img_shoulder_0.svg",
-    "팔꿈치": "img_elbow_0.svg",
-    "골반": "img_hip_0.svg",
-    "무릎": "img_knee_0.svg",
-    "발목": "img_ankle_0.svg"
+  const t = useTranslations("Index");
+  const imageSrc = {
+    "part_neck": "img_neck_0.svg",
+    "part_shoulder": "img_shoulder_0.svg",
+    "part_elbow": "img_elbow_0.svg",
+    "part_hip": "img_hip_0.svg",
+    "part_knee": "img_knee_0.svg",
+    "part_ankle": "img_ankle_0.svg"
   }[data.partName]
   return (
     <div className="flex flex-col h-full w-full rounded-3xl border-2 border-sub200 dark:border-border shadow-none bg-white dark:bg-muted relative overflow-hidden">
@@ -36,7 +39,7 @@ const DashboardCardBest = ({ data }: { data: TWorstPart }) => {
           alt=""
           className="w-10 h-10 rounded-full"
         />
-        <h2 className="text-xl font-bold text-sub700">유지 추천 부위</h2>
+        <h2 className="text-xl font-bold text-sub700">{t('user_maintenance_recommended_part')}</h2>
       </div>
 
       {/* 왼쪽 내용 */}
@@ -49,7 +52,7 @@ const DashboardCardBest = ({ data }: { data: TWorstPart }) => {
               : "bg-secondary text-secondary-foreground"
           } text-lg font-semibold rounded-xl`}
         >
-          {data.partName}
+          {t(data.partName)}
         </div>
 
           {/* 설명 박스 */}

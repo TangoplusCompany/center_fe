@@ -18,17 +18,18 @@ import { z } from "zod";
 import { AxiosError } from "axios";
 import { postSendManagerInvitation } from "@/services/manager/postSendManagerInvitation";
 import { useAuthStore } from "@/providers/AuthProvider";
+import { useTranslations } from "next-intl";
 
 /** 부관리자 초대 API 실패 시 상태별 안내 메시지 */
-function getSendInvitationErrorMessage(error: unknown): string {
+function getSendInvitationErrorMessage(error: unknown, t: (key : string) => string): string {
   if (error instanceof AxiosError && error.response?.status) {
     switch (error.response.status) {
       case 400:
-        return "필수 정보가 누락되었거나 올바르지 않습니다.";
+        return t('alert_sub_admin_invite_error_400');
       case 403:
         return "주관리자만 매니저 초대를 보낼 수 있습니다.";
       case 409:
-        return "이미 해당 센터에 등록된 매니저입니다.";
+        return "이미 해당 센터에 등록된 부관리자입니다.";
       case 500:
         return "초대 메일 전송 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
       default:
@@ -61,6 +62,7 @@ export const ManagerInviteDialog = ({
   onOpenChange,
   onSuccess,
 }: ManagerInviteDialogProps) => {
+  const t = useTranslations("Index");
   const centerSn = useAuthStore((state) => state.centerSn);
   const [role, setRole] = useState<number>(ROLE_VALUE.SUB);
   const [submitPending, setSubmitPending] = useState(false);
@@ -78,18 +80,18 @@ export const ManagerInviteDialog = ({
         admin_role: role,
       });
       if (res.status === 201) {
-        alert("초대 링크가 발송되었습니다. (신규 부관리자 가입)");
+        alert(t('alert_sub_admin_invite_201'));
       } else if (res.status === 200) {
-        alert("해당 센터에 부관리자가 되었습니다.");
+        alert(t('alert_sub_admin_invite_200'));
       } else {
-        alert("매니저 초대가 전송되었습니다.");
+        alert(t('alert_sub_admin_invite_etc'));
       }
       onOpenChange(false);
       onSuccess?.();
       form.reset();
       setRole(ROLE_VALUE.SUB);
     } catch (error) {
-      alert(getSendInvitationErrorMessage(error));
+      alert(getSendInvitationErrorMessage(error, t));
     } finally {
       setSubmitPending(false);
     }
@@ -107,16 +109,16 @@ export const ManagerInviteDialog = ({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="w-[calc(100%-2rem)] sm:w-full sm:max-w-md bg-white dark:bg-sub800">
         <DialogHeader>
-          <DialogTitle>매니저 초대</DialogTitle>
+          <DialogTitle>{t('manager_btn_invite')}</DialogTitle>
           <DialogDescription className="text-sub800 dark:text-sub100">
-            이메일을 작성해 초대 링크를 전송하세요. <br />
-            초대된 매니저는 부관리자로 측정 결과 조회만 가능합니다.
+            {t('manager_invite_desc_0')} <br />
+            {t('manager_invite_desc_1')}
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="space-y-2">
-            <Label htmlFor="invite-email">초대 매니저 이메일</Label>
+            <Label htmlFor="invite-email">{t('manager_invite_email_label')}</Label>
             <Input
               id="invite-email"
               type="email"
@@ -165,7 +167,7 @@ export const ManagerInviteDialog = ({
           </div>
 
           <Button type="submit" disabled={submitPending}>
-            {submitPending ? "전송 중..." : "매니저 초대 전송"}
+            {submitPending ? t('btn_sub_admin_invite_pending') : t('btn_sub_admin_invite')}
           </Button>
         </form>
       </DialogContent>

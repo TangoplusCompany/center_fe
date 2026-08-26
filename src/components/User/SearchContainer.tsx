@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { useTranslations } from "next-intl";
 
 const useUserSearch = (list: IUnregisterUserData[]) => {
   const [userList, setUserList] = useState<IUnregisterUserData[]>(list);
@@ -22,6 +23,7 @@ const CenterUserSearchContainer = ({
 }: {
   updateUser: (user: IUnregisterUserData) => void;
 }) => {
+  const t = useTranslations("Index")
   const { register, handleSubmit } = useForm({
     resolver: zodResolver(userSearchSchema),
   });
@@ -32,7 +34,7 @@ const CenterUserSearchContainer = ({
       searchValue: data.name,
     });
     if (result.data.users.length === 0) {
-      alert("조회된 사용자가 없습니다.");
+      alert(t('msg_no_user_found'));
       return;
     }
     setUserList(result.data.users);
@@ -48,31 +50,31 @@ const CenterUserSearchContainer = ({
     <article className="w-full min-w-0">
       <form className="w-full flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4 sm:mb-5" onSubmit={searchUserHandler}>
         <Input
-          placeholder="이름 혹은 전화번호를 입력해주세요."
+          placeholder={t('search_placeholder_user')}
           type="text"
           maxLength={50}
           className="min-w-0 flex-1"
           {...register("name")}
         />
         <Button variant="outline" type="submit" className="shrink-0 w-full sm:w-auto bg-mainBlue-600 text-white hover:bg-mainBlue-600/90 hover:text-white">
-          조회하기
+          {t('btn_search_lookup')}
         </Button>
       </form>
       <div className="flex flex-col w-full min-w-0 rounded-xl border-2 border-sub300 bg-transparent text-base shadow-sm overflow-hidden">
         {userList.length === 0 ? (
           <div className="w-full flex items-center justify-center py-10">
             <p className="text-sm sm:text-base font-medium text-sub700">
-              조회된 사용자가 없습니다.
+              {t('msg_no_user_found')}
             </p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <div className="min-w-[280px]">
               <div className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 px-3 py-2 border-b border-solid border-gray-300">
-                <p className="text-center text-sm font-medium">이름</p>
-                <p className="text-center text-sm font-medium">이메일</p>
-                <p className="text-center text-sm font-medium">전화번호</p>
-                <p className="text-center text-sm font-medium w-14 shrink-0">선택</p>
+                <p className="text-center text-sm font-medium">{t('user_col_name')}</p>
+                <p className="text-center text-sm font-medium">{t('user_col_email')}</p>
+                <p className="text-center text-sm font-medium">{t('user_col_phone')}</p>
+                <p className="text-center text-sm font-medium w-14 shrink-0">{t('select')}</p>
               </div>
               {userList.map((user) => (
                 <div
@@ -94,7 +96,7 @@ const CenterUserSearchContainer = ({
                     onClick={() => selectUserHandler(user.user_uuid)}
                     className="shrink-0 w-14 py-1.5 rounded-lgtransition-colors"
                   >
-                    선택
+                    {t('select')}
                   </Button>
                 </div>
               ))}

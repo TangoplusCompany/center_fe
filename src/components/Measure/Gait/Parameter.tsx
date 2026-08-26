@@ -1,19 +1,20 @@
+import { useTranslations } from "next-intl";
 import { GaitContainerProps } from "./Container";
 
 // 1. 위험도 레코드 (뱃지 스타일 및 활성화 바 색상)
 export const RISK_RECORD = {
   0: {
-    label: "정상",
+    label: "grade_normal",
     badgeCss: "bg-sub600 dark:bg-gray-600",
     activeBarCss: "bg-mainBlue-300",
   },
   1: {
-    label: "주의",
+    label: "grade_caution",
     badgeCss: "bg-warning",
     activeBarCss: "bg-warning",
   },
   2: {
-    label: "위험",
+    label: "grade_danger",
     badgeCss: "bg-danger",
     activeBarCss: "bg-danger",
   },
@@ -52,6 +53,7 @@ export interface ParameterItem {
   rightValue?: string;
 }
 function GaitItem({ item }: { item: ParameterItem }) {
+  const t = useTranslations("Index")
   // 💡 risk 값이 넘어오지 않거나 자동 계산이 필요한 경우 수치 기반으로 판정
   const calculatedRisk = getRiskFromValue(item.value, item.threshold0, item.threshold1);
   const riskKey = item.risk ?? calculatedRisk;
@@ -71,12 +73,12 @@ function GaitItem({ item }: { item: ParameterItem }) {
     <div className="flex flex-col justify-center w-full h-full mb-2">
       {/* 헤더 */}
       <div className="flex justify-between items-center">
-        <span className="text-sm sm:text-base font-semibold text-sub700">{item.title}</span>
+        <span className="text-sm sm:text-base font-semibold text-sub700">{t(item.title)}</span>
         
         <div className="flex gap-1 items-center">
           <span className="text-xs sm:text-sm text-sub700 font-semibold">{item.value.toFixed(1)}{item.unit}</span>
           <span className={`px-3 py-1 rounded-full text-xs text-white text-center whitespace-normal break-keep ${riskInfo.badgeCss}`}>
-            {riskInfo.label}
+            {t(riskInfo.label)}
           </span>
         </div>
       </div>
@@ -124,10 +126,11 @@ function GaitItem({ item }: { item: ParameterItem }) {
 }
 
 export default function GaitParameter({ data }: GaitContainerProps) {
+  const t = useTranslations("Index")
   const iData = data.gait_measure_info
   const gaitItems: ParameterItem[] = [
     {
-      title: "보행속도(Gait Speed)",
+      title: "gait_speed",
       risk: Number(iData?.resultSpeedRisk ?? 0),
       value: iData?.avgOverallStepSpeed ?? 1.1,
       threshold0: 0.8,
@@ -137,7 +140,7 @@ export default function GaitParameter({ data }: GaitContainerProps) {
       rightValue: `${(iData?.avgRightStepSpeed ?? 1.2).toFixed(1)} m/s`,
     },
     {
-      title: "평균 보폭(Step Length)",
+      title: "gait_avg_step_length",
       risk: Number(iData?.resultStepLengthRisk ?? 0),
       value: iData?.averageStepLength ?? 0.65,
       threshold0: 0.5,
@@ -147,7 +150,7 @@ export default function GaitParameter({ data }: GaitContainerProps) {
       rightValue: `${(iData?.avgRightStepLength ?? 0.65).toFixed(1)} m`,
     },
     {
-      title: "평균 활보장(Stride Length)",
+      title: "gait_avg_stride_length",
       risk: Number(iData?.resultStrideLengthRisk ?? 1),
       value: iData?.avgLeftStrideLength ?? 0.6,
       threshold0: 1.0,
@@ -157,7 +160,7 @@ export default function GaitParameter({ data }: GaitContainerProps) {
       rightValue: `${(iData?.avgRightStrideLength ?? 0.5).toFixed(1)} m`,
     },
     {
-      title: "케이던스(Cadence)",
+      title: "gait_cadence",
       risk: 0,
       value: iData?.cadence ?? 95,
       threshold0: 90,
@@ -169,7 +172,7 @@ export default function GaitParameter({ data }: GaitContainerProps) {
   return (
     <div className="flex flex-col gap-2 w-full p-4 bg-white rounded-xl border-2 border-sub100">
       <div className="text-lg font-semibold mb-2 text-sub700">
-        보행 분석 파라미터
+        {t('gait_analysis_parameters')}
       </div>
       <div className="grid grid-rows-4 gap-2 h-full">
         {gaitItems.map((item, index) => (

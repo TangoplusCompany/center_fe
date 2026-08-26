@@ -1,4 +1,5 @@
 
+import { useLocale, useTranslations } from "next-intl";
 import { GaitContainerProps } from "./Container";
 import { RISK_RECORD } from "./Parameter";
 
@@ -77,6 +78,8 @@ export const calculatePercentFromRaw = (
 };
 
 export function FallItem({ item }: { item: FallItemData }) {
+  const t = useTranslations("Index")
+  const locale = useLocale();
   const gaugeType = item.gaugeType ?? "high";
   const calculatedRisk = getRiskFromValue(item);
   const riskKey = item.risk ?? calculatedRisk;
@@ -87,11 +90,11 @@ export function FallItem({ item }: { item: FallItemData }) {
     <div className="flex flex-col w-full gap-4 mb-2 ">
       {/* 헤더 */}
       <div className="flex justify-between items-center">
-        <span className="text-sm sm:text-base font-semibold text-sub700">{item.title}</span>
+        <span className={`${locale === "ko" ? "text-sm sm:text-base": "text-xs sm:text-sm"} font-semibold text-sub700`}>{item.title}</span>
         <div className="flex items-center gap-1.5">
           <span className="text-xs sm:text-sm font-semibold text-sub700">{item.value.toFixed(1)} {item.unit}</span>
           <span className={`px-3 py-1 rounded-full text-xs text-white text-center whitespace-normal break-keep ${riskInfo.badgeCss}`}>
-            {riskInfo.label}
+            {t(riskInfo.label)}
           </span>
         </div>
       </div>
@@ -200,10 +203,12 @@ function TiltItem({ title, value, type, target, maxDeviation }: TiltItemData) {
 
 
 export default function GaitFall({ data }: GaitContainerProps) {
+  const t = useTranslations("Index");
+  const locale = useLocale()
   const iData = data.gait_measure_info
   const fallItems: FallItemData[] = [
     {
-      title: "발끝 들림 높이",
+      title: t('gait_toe_clearance_height'),
       value: (iData?.averageToeClearance ?? 0.011) * 100,
       unit: "cm",
       gaugeType: "high", // 3단계: 위험 -> 주의 -> 정상
@@ -211,7 +216,7 @@ export default function GaitFall({ data }: GaitContainerProps) {
       threshold1: 2.0,
     },
     {
-      title: "양발 지지 비율",
+      title: t('gait_double_support_ratio'),
       value: iData?.avgDoubleSupportRatio ?? 15,
       unit: "%",
       gaugeType: "low", // 3단계: 정상 -> 주의 -> 위험 (낮을수록 좋음)
@@ -219,7 +224,7 @@ export default function GaitFall({ data }: GaitContainerProps) {
       threshold1: 30,
     },
     {
-      title: "보행 속도",
+      title: t('gait_walking_speed'),
       value: iData?.overallGaitSpeed ?? 1.4,
       unit: "m/s",
       gaugeType: "high", // 5단계: 위험 -> 주의 -> 정상 -> 주의 -> 위험
@@ -227,7 +232,7 @@ export default function GaitFall({ data }: GaitContainerProps) {
       threshold1: 1,
     },
     {
-      title: "보폭 너비",
+      title: t('gait_step_width'),
       value: iData?.averageStepWidth ?? 16.3,
       unit: "cm",
       gaugeType: "center", // 5단계: 위험 -> 주의 -> 정상 -> 주의 -> 위험
@@ -245,26 +250,26 @@ export default function GaitFall({ data }: GaitContainerProps) {
 
   const tiltItems: TiltItemData[] = [
     {
-      title: "골반 틀어짐",
+      title: t('gait_pelvis_distortion_check'),
       value: iData.avgMaxPevisDrop,
       type: "deviation",
       target: 180,
       maxDeviation: 30, // 180에서 30도 이상 벗어나면 0점
     },
     {
-      title: "상체 전방 숙임",
+      title: t('gait_trunk_forward_lean'),
       value: iData.avgMaxTrunkFlexion,
       type: "zero",
       maxDeviation: 20, // 20도 이상이면 0점
     },
     {
-      title: "상체 좌우 흔들림",
+      title: t('gait_trunk_lateral_sway'),
       value: iData.avgMaxTrunkSway,
       type: "zero",
       maxDeviation: 15,
     },
     {
-      title: "팔 스윙 비대칭",
+      title: t('gait_arm_swing_asymmetry'),
       value: iData.avgArmSwingSymmetry,
       type: "zero",
       maxDeviation: 100, // 예: 179.8 같은 큰 값이 나올 수 있어 범위 넓게 잡음
@@ -275,7 +280,7 @@ export default function GaitFall({ data }: GaitContainerProps) {
     <div className="flex flex-col flex-1 min-h-80 h-full border-2 border-sub100 rounded-xl p-4 gap-2">
       
       <div className="text-lg font-semibold mb-2 text-sub700">
-        낙상 주요 지표
+        {t('gait_fall_key_indicators')}
       </div>
       <div className="grid grid-cols-2 grid-rows-2 gap-2">
         {fallItems.map((item, index) => (
@@ -286,7 +291,7 @@ export default function GaitFall({ data }: GaitContainerProps) {
       <div className="flex flex-col gap-4 mt-4">
         <div className="flex flex-col w-full gap-4 mb-2 ">
           <div className="flex justify-between items-center">
-            <span className="text-sm sm:text-base font-semibold text-sub700">무릎 최대 굽힘</span>
+            <span className="text-sm sm:text-base font-semibold text-sub700">{t('gait_knee_max_flexion')}</span>
             <div className="flex items-center gap-1.5">
               <div className="text-xs sm:text-sm flex gap-2 font-semibold">
                 <span className=" text-sub700">L {iData.avgMaxLeftKneeFlexion.toFixed(1)}º</span>
@@ -294,7 +299,7 @@ export default function GaitFall({ data }: GaitContainerProps) {
                 <span className=" text-sub700">R {iData.avgMaxRightKneeFlexion.toFixed(1)}º</span>
               </div>
               <span className={`px-3 py-1 rounded-full text-xs text-white text-center whitespace-normal break-keep ${riskInfo.badgeCss}`}>
-                {riskInfo.label}
+                {t(riskInfo.label)}
               </span>
             </div>
           </div>
@@ -302,7 +307,7 @@ export default function GaitFall({ data }: GaitContainerProps) {
             {/* 1. 좌측 게이지 바 */}
             <div className="flex items-center gap-2 w-full">
               <div className="shrink-0 whitespace-nowrap text-sm font-medium text-sub700 w-8">
-                좌측
+                {t('side_left')}
               </div>
               <div className="relative w-full py-2">
                 <div className="relative w-full h-3 rounded-full overflow-hidden flex">
@@ -325,7 +330,7 @@ export default function GaitFall({ data }: GaitContainerProps) {
             {/* 2. 우측 게이지 바 */}
             <div className="flex items-center gap-2 w-full">
               <div className="shrink-0 whitespace-nowrap text-sm font-medium text-sub700 w-8">
-                우측
+                {t('side_right')}
               </div>
               <div className="relative w-full py-2">
                 <div className="relative w-full h-3 rounded-full overflow-hidden flex">
@@ -355,9 +360,9 @@ export default function GaitFall({ data }: GaitContainerProps) {
         
         <div className="flex flex-col w-full gap-4 mb-2 ">
           <div className="flex justify-between items-center">
-            <span className="text-sm sm:text-base font-semibold text-sub700">보행 균형</span>
+            <span className={`${locale === "ko" ? "text-sm sm:text-base" : "text-xs sm:text-sm"} font-semibold text-sub700`}>{t('gait_walking_balance')}</span>
             <span className={`px-3 py-1 rounded-full text-xs text-white text-center whitespace-normal break-keep ${riskInfo.badgeCss}`}>
-              {riskInfo.label}
+              {t(riskInfo.label)}
             </span>
           </div>
           <div className="flex flex-col gap-2">

@@ -15,6 +15,7 @@ import {
   CardTitle,
   CardContent,
 } from "../ui/card";
+import { useTranslations } from "next-intl";
 
 interface TransformedChartData {
   date: string;
@@ -43,6 +44,7 @@ const DeviceChart = ({
   chartConfig: ChartConfig;
   chartData: DeviceDailyUsage[];
 }) => {
+  const t = useTranslations("Index")
   const [selectedLegend, setSelectedLegend] = React.useState<string | null>('all');
   
 
@@ -105,7 +107,7 @@ const DeviceChart = ({
     <Card className="rounded-lg shadow-none border-2 border-mainBlue-100 dark:border-mainBlue-600 bg-transparent">
       <CardHeader className="flex items-center gap-2 space-y-0 border-b-2 border-mainBlue-100 dark:border-mainBlue-600 py-2 sm:flex-row bg-mainBlue-100  dark:bg-mainBlue-900 rounded-t-lg">
         <div className="grid flex-1 gap-1 text-center sm:text-left">
-          <CardTitle className="text-mainBlue-600 text-xl dark:text-white ">센터 키오스크 사용자 추이</CardTitle>
+          <CardTitle className="text-mainBlue-600 text-xl dark:text-white ">{t('chart_kiosk_user_trend')}</CardTitle>
         </div>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6 bg-white dark:bg-black">
@@ -223,7 +225,7 @@ const DeviceChart = ({
                             className="inline-block h-2.5 w-2.5 rounded-full"
                             style={{ backgroundColor: dotColor }}
                           />
-                          {isAll ? "전체보기" : (chartConfig[key]?.label ?? key)}
+                          {isAll ? t('btn_view_all') : (chartConfig[key]?.label ?? key)}
                         </button>
                       );
                     })}

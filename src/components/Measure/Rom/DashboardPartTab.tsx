@@ -1,5 +1,6 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 export interface ROMDashboardPartTabProps {
   onSelectBodyPart : (selectedPartNumber: number) => void;
@@ -12,14 +13,15 @@ export const ROMDashboardPartTab = ({
   currentBodyPart,
   setMeasureType,
 } : ROMDashboardPartTabProps) => {
+  const t = useTranslations('Index');
   const measureTabs :Record<number, string> = {
-    1 : "목관절", 
-    2 : "어깨", 
-    3 : "팔꿉", 
-    4: "몸통", 
-    5: "골반", 
-    6: "무릎", 
-    7: "발목"
+    1 : t('neck_joint'), 
+    2 : t('part_shoulder'), 
+    3 : t('part_elbow'), 
+    4: t('upper_body_joint'), 
+    5: t('part_hip'), 
+    6: t('part_knee'), 
+    7: t('part_ankle')
   }
   return (
     <div className="overflow-x-auto overflow-y-hidden w-full min-w-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">

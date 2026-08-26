@@ -1,25 +1,26 @@
+import { useTranslations } from "next-intl";
 import type { IBiaData } from "../../../types/bia";
 
 export default function BodyTypeChart({data}: {data: IBiaData}) {
-
+  const t = useTranslations("Index")
   const maxBodyFatMass = 30; // 체지방률 최대치
-const maxBMI = 33.5;       // BMI 최대치
+  const maxBMI = 33.5;       // BMI 최대치
 
 
-const bodyFatMassPos = Math.min((data.body_fat_mass / maxBodyFatMass) * 100, 100);
-const bmiPos = Math.min((data.bmi / maxBMI) * 100, 100);
+  const bodyFatMassPos = Math.min((data.body_fat_mass / maxBodyFatMass) * 100, 100);
+  const bmiPos = Math.min((data.bmi / maxBMI) * 100, 100);
 
-const myDotPosition = {
-  left: `${bodyFatMassPos}%`,
-  bottom: `${100 - bmiPos}%`, 
-};
+  const myDotPosition = {
+    left: `${bodyFatMassPos}%`,
+    bottom: `${100 - bmiPos}%`, 
+  };
   return (
     <div className="flex flex-col px-2 w-full h-full rounded-lg border border-sub200  p-2">
       {/* 1. 타이틀 영역 */}
       <div className="flex gap-2 items-center mb-2 text-mainBlue-600 font-bold">
         <div className="w-3 h-3 rounded-[3px] bg-mainBlue-600" />
         <div className="text-mainBlue-600 font-bold text-sm">
-          바디 타입 세부 분석
+          {t('bia_body_type_detail_analysis')}
         </div>
       </div>
 
@@ -38,25 +39,25 @@ const myDotPosition = {
         <div className="grid grid-cols-3 grid-rows-4 w-full h-[256px] border border-sub200 rounded-md text-xs text-sub800 bg-white relative">
           
           {/* Row 1 */}
-          <div className="border-b border-r border-sub200 flex items-center justify-center">우람한</div>
-          <div className="row-span-2 border-b border-r border-sub200 flex items-center justify-center">건장한</div>
-          <div className="border-b border-sub200 flex items-center justify-center">뚱뚱한</div>
+          <div className="border-b border-r border-sub200 flex items-center justify-center">{t('body_type_bulky')}</div>
+          <div className="row-span-2 border-b border-r border-sub200 flex items-center justify-center">{t('body_type_robust')}</div>
+          <div className="border-b border-sub200 flex items-center justify-center">{t('body_type_obese')}</div>
 
           {/* Row 2 */}
-          <div className="border-b border-r border-sub200 flex items-center justify-center">다부진</div>
-          <div className="border-b border-sub200 flex items-center justify-center">통통한</div>
+          <div className="border-b border-r border-sub200 flex items-center justify-center">{t('body_type_solid')}</div>
+          <div className="border-b border-sub200 flex items-center justify-center">{t('body_type_plump')}</div>
 
           {/* Row 3 */}
-          <div className="border-b border-r border-sub200 flex items-center justify-center">날씬한</div>
-          <div className="border-b border-r border-sub200 flex items-center justify-center">평범한</div>
+          <div className="border-b border-r border-sub200 flex items-center justify-center">{t('body_type_slim')}</div>
+          <div className="border-b border-r border-sub200 flex items-center justify-center">{t('body_type_standard')}</div>
           <div className="row-span-2 border-sub200 flex flex-col items-center justify-center leading-tight">
-            <span>부분적으로</span>
-            <span>뚱뚱한</span>
+            <span>{t('body_type_partially_obese_0')}</span>
+            <span>{t('body_type_partially_obese_1')}</span>
           </div>
 
           {/* Row 4 */}
-          <div className="border-r border-sub200 flex items-center justify-center">홀쭉한</div>
-          <div className="border-r border-sub200 flex items-center justify-center">마른</div>
+          <div className="border-r border-sub200 flex items-center justify-center">{t('body_type_slender')}</div>
+          <div className="border-r border-sub200 flex items-center justify-center">{t('body_type_skinny')}</div>
 
           {/* --- 내 위치 마커 --- */}
           <div
@@ -69,7 +70,7 @@ const myDotPosition = {
         <div className="absolute -bottom-2 left-0 w-full text-xs text-sub400 pb-2">
           <span className="absolute left-[33.33%] -translate-x-1/2">10.0</span>
           <span className="absolute left-[66.66%] -translate-x-1/2">20.0</span>
-          <span className="absolute right-0">체지방률</span>
+          <span className="absolute right-0">{t('body_fat_rate')}</span>
         </div>
 
       </div>

@@ -3,6 +3,7 @@ import { IDeviceStatusCardProps } from "@/types/device";
 import React from "react";
 import DeviceRemoveDialog from "@/components/Device/DeviceRemoveDialog";
 import DeviceEditDialog from "./DeviceEditDialog";
+import { useTranslations } from "next-intl";
 
 export const DeviceStatusItems = React.memo(
   ({
@@ -12,6 +13,7 @@ export const DeviceStatusItems = React.memo(
     device: IDeviceStatusCardProps;
     adminRole: number;
   }) => {
+    const t = useTranslations("Index");
     return (
       <div
         key={device.device_sn}
@@ -35,7 +37,7 @@ export const DeviceStatusItems = React.memo(
                   {`[${device.install_location.trim()}]`}
                 </p>
                 <p className="text-base ">
-                  {`주소: ${device.install_address_1 ?? ""} ${device.install_address_2 ?? ""}`}
+                  {`${t('label_address')}: ${device.install_address_1 ?? ""} ${device.install_address_2 ?? ""}`}
                 </p>
               </div>
             </div>

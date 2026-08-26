@@ -3,6 +3,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid } from "recharts";
 import { useId, useMemo } from "react";
 import { IMoireGraphTitle } from "./Container";
 import { removeOutliersIQR } from "@/utils/graph";
+import { useTranslations } from "next-intl";
 
 export const RISK_RECORD = {
   0: { label: "정상", badgeCss: "bg-sub600 dark:bg-gray-600" },
@@ -27,6 +28,7 @@ interface CustomDotProps {
 }
 
 export default function MoireGraph({ graphData }: { graphData: IMoireGraphProps }) {
+  const t = useTranslations("Index")
   const uniqueId = useId().replace(/:/g, "");
 
   // 1차원 숫자 배열을 Recharts용 데이터로 변환
@@ -99,7 +101,7 @@ export default function MoireGraph({ graphData }: { graphData: IMoireGraphProps 
     );
   };
 
-  const subTitle: string = graphData.title.includes("허리") ? "중심선 편위" : "높이 차";
+  const subTitle: string = (graphData.title.includes("허리")) || (graphData.title.includes("Waist")) ? t('moire_centerline_deviation') : t('moire_height_difference');
 
   return (
     <div className="flex flex-col rounded-xl border-2 border-sub200 p-4 bg-white">

@@ -2,6 +2,7 @@ import { IMoireDetail } from "@/types/measure"
 import MoireImage, { IMoireImageProps } from "./Image";
 import MoireGraph, { IMoireGraphProps } from "./Graph";
 import { useMeasureMoireStaticJson } from "@/hooks/api/measure/moire/useMeasureMoireStaticJson";
+import { useTranslations } from "next-intl";
 
 export interface IMoireContainerProps {
   data : IMoireDetail
@@ -21,6 +22,7 @@ export type MoireBodyPart =
 export type IMoireMultiPartData = Record<MoireBodyPart, number[]>;
 
 export default function MoireContainer ({ data }: IMoireContainerProps) {
+  const t = useTranslations("Index")
   const leftFileName = data?.front?.server_file_name_moire_json
   const rightFileName = data?.back?.server_file_name_moire_json
 
@@ -28,10 +30,10 @@ export default function MoireContainer ({ data }: IMoireContainerProps) {
   const { data: measureJson1, isLoading: jsonLoading1, isError: jsonError1 } = useMeasureMoireStaticJson(rightFileName);
 
   if (jsonLoading0 || jsonLoading1) {
-    return <div className="text-sub400">로딩중입니다.</div>;
+    return <div className="text-sub400">{t('loading_1')}</div>;
   }
   if (jsonError0 || jsonError1) {
-    return <div className="text-red-500">오류가 발생했습니다. Moire 데이터 데이터 누락</div>;
+    return <div className="text-red-500">{t('moire_data_error')}</div>;
   }
 
 
@@ -39,7 +41,7 @@ export default function MoireContainer ({ data }: IMoireContainerProps) {
   const backD = data.back;
   const graphs = [
     ...(frontD ? [{
-      title: "전면 어깨 등고선" as IMoireGraphTitle,
+      title: t('moire_contour_front_shoulder') as IMoireGraphTitle,
       leftValue: frontD?.shoulder_left_peak_depth * 100,
       rightValue: frontD?.shoulder_right_peak_depth * 100,
       leftIndex: frontD?.shoulder_left_peak_index,
@@ -48,7 +50,7 @@ export default function MoireContainer ({ data }: IMoireContainerProps) {
       indexData: measureJson0?.[0]?.DepthArray ?? []
     }] : []),
     ...(backD ? [{
-      title: "후면 어깨 등고선" as IMoireGraphTitle,
+      title: t('moire_contour_back_shoulder') as IMoireGraphTitle,
       leftValue: backD?.shoulder_left_peak_depth * 100,
       rightValue: backD?.shoulder_right_peak_depth * 100,
       leftIndex: backD?.shoulder_left_peak_index,
@@ -57,7 +59,7 @@ export default function MoireContainer ({ data }: IMoireContainerProps) {
       indexData: measureJson1?.[0]?.DepthArray ?? []
     }] : []),
     ...(frontD ? [{
-      title: "전면 허리 등고선" as IMoireGraphTitle,
+      title: t('moire_contour_front_waist') as IMoireGraphTitle,
       leftValue: frontD?.waist_left_peak_depth * 100,
       rightValue: frontD?.waist_right_peak_depth * 100,
       leftIndex: frontD?.waist_left_peak_index,
@@ -66,7 +68,7 @@ export default function MoireContainer ({ data }: IMoireContainerProps) {
       indexData: measureJson0?.[1]?.DepthArray ?? []
     }] : []),
     ...(backD ? [{
-      title: "후면 허리 등고선" as IMoireGraphTitle,
+      title: t('moire_contour_back_waist') as IMoireGraphTitle,
       leftValue: backD?.waist_left_peak_depth * 100,
       rightValue: backD?.waist_right_peak_depth * 100,
       leftIndex: backD?.waist_left_peak_index,
@@ -75,7 +77,7 @@ export default function MoireContainer ({ data }: IMoireContainerProps) {
       indexData: measureJson1?.[1]?.DepthArray ?? []
     }] : []),
     ...(frontD ? [{
-      title: "전면 골반 등고선" as IMoireGraphTitle,
+      title: t('moire_contour_front_pelvis') as IMoireGraphTitle,
       leftValue: frontD?.hip_left_peak_depth * 100,
       rightValue: frontD?.hip_right_peak_depth * 100,
       leftIndex: frontD?.hip_left_peak_index,
@@ -84,7 +86,7 @@ export default function MoireContainer ({ data }: IMoireContainerProps) {
       indexData: measureJson0?.[2]?.DepthArray ?? []
     }] : []),
     ...(backD ? [{
-      title: "후면 골반 등고선" as IMoireGraphTitle,
+      title: t('moire_contour_back_pelvis') as IMoireGraphTitle,
       leftValue: backD?.hip_left_peak_depth * 100,
       rightValue: backD?.hip_right_peak_depth * 100,
       leftIndex: backD?.hip_left_peak_index,
@@ -117,7 +119,7 @@ export default function MoireContainer ({ data }: IMoireContainerProps) {
       <div className="flex items-center gap-2 mt-4 ml-2">
         <div className="w-3 h-3 rounded-sm bg-mainBlue-600" />
         <div className="text-mainBlue-600 text-sm sm:text-base font-bold ">
-          전/후면 등고선
+          {t('moire_contour_front_back')}
         </div>
       </div>
 

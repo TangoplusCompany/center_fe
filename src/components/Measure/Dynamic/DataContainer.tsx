@@ -2,6 +2,7 @@ import { IUserMeasureDetailData, IUserMeasureDynamicFileData } from "@/types/mea
 import FootDynamic, { IMatOhsPressure } from "../Mat/FootDynamicContainer";
 import MeasureKneeTrajectory from "../Mat/KneeTrajectoryContainer";
 import RawDataContainer from "../RawDataContainer";
+import { useTranslations } from "next-intl";
 
 const DynamicDataContainer = (
   {
@@ -14,7 +15,8 @@ const DynamicDataContainer = (
     isCompare: 0 | 1 ; // isCompare==0 이면 compare임. 
   }
 ) => {
-    const {
+  const t = useTranslations("Index");
+  const {
     mat_hip_down_image_name,
     mat_hip_trajectory_image_name,
     mat_left_knee_trajectory_image_name,
@@ -51,9 +53,9 @@ const DynamicDataContainer = (
         <div className="flex-1 p-4">
           <FootDynamic
             comment={
-              "[좌우 무게 분석]\n" +
+              `[${t('foot_horizon_weight_analysis')}]\n` +
               (mat_ohs_horizontal_ment ?? "\n") +
-              "\n[상하 무게 분석]\n" +
+              `\n[${t('foot_verti_weight_analysis')}]\n` +
               (mat_ohs_vertical_ment ?? "\n")
             }
             footFileName={mat_hip_down_image_name}
@@ -64,7 +66,7 @@ const DynamicDataContainer = (
         </div>
         <div className="flex-1 p-4">
           <MeasureKneeTrajectory
-            comment={"[무릎 흔들림 분석]\n" + (mat_ohs_knee_ment ?? "")}
+            comment={`[${t('knee_instability_analysis')}]\n` + (mat_ohs_knee_ment ?? "")}
             leftKneeFileName={mat_left_knee_trajectory_image_name}
             rightKneeFileName={mat_right_knee_trajectory_image_name}
           />

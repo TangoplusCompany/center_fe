@@ -2,6 +2,7 @@ import { postDeviceAdd } from "@/services/device/postDeviceAdd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useAuthStore } from "@/providers/AuthProvider";
+import { useTranslations } from "next-intl";
 
 /**
  * 센터 기기 추가 Hooks
@@ -10,12 +11,13 @@ import { useAuthStore } from "@/providers/AuthProvider";
 export const useDeviceAdd = () => {
   const queryClient = useQueryClient();
   const centerSn = useAuthStore((state) => state.centerSn);
+  const t = useTranslations();
 
   return useMutation({
     mutationFn: ({ deviceSn }: { deviceSn: number }) =>
       postDeviceAdd({ centerSn, deviceSn }),
     onSuccess: () => {
-      alert("성공적으로 기기가 추가되었습니다.");
+      alert(t("device_add_success"));
       queryClient.invalidateQueries({ queryKey: ["deviceStatusList"] });
     },
     onError: (
@@ -27,24 +29,24 @@ export const useDeviceAdd = () => {
       }>,
     ) => {
       if (!data.response) {
-        alert("서버와 연결할 수 없습니다. 잠시 후 다시 시도해주세요.");
+        alert(t("device_add_network_error"));
         return;
       }
-      
+
       const { status } = data.response;
-      
+
       if (status === 400) {
-        alert("잘못된 요청입니다. 시리얼 번호를 확인해주세요.");
+        alert(t("device_add_error_400"));
       } else if (status === 403) {
-        alert("권한이 없습니다. 관리자에게 문의하세요.");
+        alert(t("device_add_error_403"));
       } else if (status === 404) {
-        alert("등록할 기기를 찾을 수 없습니다. 시리얼 번호를 확인해주세요.");
+        alert(t("device_add_error_404"));
       } else if (status === 409) {
-        alert("이미 등록된 기기입니다.");
+        alert(t("device_add_error_409"));
       } else if (status === 500) {
-        alert("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+        alert(t("device_add_error_500"));
       } else {
-        alert(`기기 추가에 실패했습니다. (오류 코드: ${status})`);
+        alert(t("device_add_error_default", { status }));
       }
     },
   });

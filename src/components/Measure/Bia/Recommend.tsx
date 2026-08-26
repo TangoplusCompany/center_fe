@@ -1,12 +1,14 @@
 
+import { useTranslations } from "next-intl";
 import type { IBiaRecommend } from "../../../types/bia";
 
 
 export function RecommendCard ({type, title, description} : {type: string, title: string, description: string}) {
+  const t = useTranslations("Index")
   const iconMap: Record<string, string> = {
-    "영양처방": "/images/ic_nutrition.png",
-    "운동처방": "/images/ic_exercise.png",
-    "생활습관": "/images/ic_habit.png",
+    "bia_nutrition_prescription": "/images/ic_nutrition.png",
+    "bia_exercise_prescription": "/images/ic_exercise.png",
+    "bia_lifestyle_prescription": "/images/ic_habit.png",
   };
   return (
     <div className="flex w-full gap-2">
@@ -17,7 +19,7 @@ export function RecommendCard ({type, title, description} : {type: string, title
       <div className="flex flex-col gap-1 w-full">
         <div className="flex w-full justify-between items-center">
           <span className="text-sm font-bold text-blackk ">{title}</span>
-          <div className="px-2 py-1 rounded-[4px] bg-mainBlue-600 text-xs text-white">{type}</div>
+          <div className="px-2 py-1 rounded-[4px] bg-mainBlue-600 text-xs text-white">{t(type)}</div>
         </div>
 
         <div className="text-xs text-start leading-tight text-sub600">
@@ -31,20 +33,20 @@ export function RecommendCard ({type, title, description} : {type: string, title
 
 
 export default function Recommend({data}: {data: IBiaRecommend}) {
-  
+  const t = useTranslations("Index")
   const types = [
     {
-        type: "영양처방",
+        type: "bia_nutrition_prescription",
         title: data.result_nutrition_title,
         description: data.result_nutrition_description
     },
     {
-        type: "운동처방",
+        type: "bia_exercise_prescription",
         title: data.result_exercise_title,
         description: data.result_exercise_description
     },
     {
-        type: "생활습관",
+        type: "bia_lifestyle_prescription",
         title: data.result_habits_title,
         description: data.result_habits_description
     },
@@ -56,7 +58,7 @@ export default function Recommend({data}: {data: IBiaRecommend}) {
       <div className="flex gap-2 items-center text-mainBlue-600 font-bold">
         <div className="w-3 h-3 rounded-[3px] bg-mainBlue-600" />
         <div className="text-mainBlue-600 font-bold text-sm ">
-          체중조절/처방
+          {t('bia_weight_control_prescription')}
         </div>
       </div>
 

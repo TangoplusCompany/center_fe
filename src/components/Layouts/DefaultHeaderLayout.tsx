@@ -11,13 +11,15 @@ import { useNoticeStore } from "@/stores/noticeStore";
 import Balloon from "../common/Balloon";
 import { usePathname } from "next/navigation";
 import { useGetAnnouncements } from "@/hooks/api/announcement/useGetAnnouncements";
+import { useTranslations } from "next-intl";
 
 const USER_SUB_TABS = [
-  { key: "notice", title: "공지사항" },
-  { key: "darkMode", title: "다크모드" },
+  { key: "notice", title: "announcement" },
+  { key: "darkMode", title: "theme" },
 ];
 
 export default function DefaultHeaderLayout() {
+  const t = useTranslations("Index");
   const adminName = useAuthStore((state) => state.adminName);
   const adminRole = useAuthStore((state) => state.adminRole);
   const pathname = usePathname();
@@ -69,8 +71,8 @@ export default function DefaultHeaderLayout() {
           <Balloon
             direction="left"
             className="left-[86px] top-1/2 -translate-y-1/2 w-[220px]"
-            message="숨겨진 메뉴 탭을 확인해보세요!"
-            buttonText="다시 보지 않기"
+            message={`${t('tooltip_hidden_menu')}`}
+            buttonText={`${t('btn_do_not_show_again')}`}
             onClickButton={handleCloseHint} 
             onClose={handleCloseHint}      
           />
@@ -90,7 +92,7 @@ export default function DefaultHeaderLayout() {
             disabled={logoutMutation.isPending}
             className="text-sm md:text-base"
           >
-            로그아웃
+            {t('logout')}
           </Button>
         </div>
         <DefaultHeaderMoreTab tabs={filteredTabs} />
@@ -98,7 +100,7 @@ export default function DefaultHeaderLayout() {
             <Balloon
               direction="top"
               className="top-[70px] right-[12px] md:right-[45px] w-[270px]"
-              message="📢 최근 공지사항이 등록되었습니다. 지금 확인해 보세요"
+              message={`📢 ${t('banner_recent_notice')}`}
               onClose={() => setHasUnreadNotice(false)}
             />
           )}

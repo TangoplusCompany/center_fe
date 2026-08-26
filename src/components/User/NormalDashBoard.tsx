@@ -9,15 +9,17 @@ import { useGetUserDashboard } from "@/hooks/api/user/useGetUserDashboard";
 import { TWorstPart } from "@/types/dashboard";
 import MeasureReportContainer from "../Measure/ReportContainer";
 import CenterUserDashBoardSkeleton from "./DashBoardSkeleton";
+import { useLocale } from "next-intl";
+import { getRiskString } from "@/utils/getRiskString";
 
 type Mode = "worst" | "best";
 const PARTS = [
-  { key: "ankle", label: "발목" },
-  { key: "knee", label: "무릎" },
-  { key: "hip", label: "골반" },
-  { key: "elbow", label: "팔꿈치" },
-  { key: "shoulder", label: "어깨" },
-  { key: "neck", label: "목" },
+  { key: "ankle", label: "part_ankle" },
+  { key: "knee", label: "part_knee" },
+  { key: "hip", label: "part_hip" },
+  { key: "elbow", label: "part_elbow" },
+  { key: "shoulder", label: "part_shoulder" },
+  { key: "neck", label: "part_neck" },
 ] as const;
 const RISK_PART_KEYS = [
   "neck",
@@ -35,6 +37,8 @@ const CenterUserNormalDashBoard = ({
   userSn?: number;
   isMyPage?: boolean;
 }) => {
+  // TODO 사용자 대시보드 + 사용자 정보 이후 + 디바이스 + 매니저 + 설정 
+  const locale = useLocale();
   const {
     data: dashboardData,
     isLoading: dashboardDataLoading,
@@ -57,8 +61,8 @@ const CenterUserNormalDashBoard = ({
   }
   
   // 탭 0에서 쓸 더미/요약용 데이터 (기존 코드 유지)
-  const worstPart = calculateExtremePart(dashboardData ? dashboardData?.measure_history : [], "worst");
-  const bestPart = calculateExtremePart(dashboardData ? dashboardData?.measure_history : [], "best");
+  const worstPart = calculateExtremePart(locale, dashboardData ? dashboardData?.measure_history : [], "worst");
+  const bestPart = calculateExtremePart(locale, dashboardData ? dashboardData?.measure_history : [], "best");
   const measureDate = calculateIDayData(dashboardData ? dashboardData?.measure_history : []);
   return (
     <div className="w-full px-2 sm:px-4 md:px-0">
@@ -99,6 +103,7 @@ const CenterUserNormalDashBoard = ({
 export default CenterUserNormalDashBoard;
 
 export function calculateExtremePart(
+  locale: string,
   history: IBasicHistoryUnit[],
   mode: Mode
 ): TWorstPart {
@@ -146,17 +151,13 @@ export function calculateExtremePart(
   };
 }
 
-  const levelText =
-    result.level === 2
-      ? "위험"
-      : result.level === 1
-      ? "주의"
-      : "정상";
+  const levelText = getRiskString(result.level, locale)
+
 
   return {
     partName: result.partName,
     level: result.level,
-    description: `최근 ${maxCount}회 측정에서 ${result.partName} 부위의 ${levelText} 판단이 ${result.count}회 발생했습니다.`,
+    description: locale === "ko" ? `최근 ${maxCount}회 측정에서 ${result.partName} 부위의 ${levelText} 판단이 ${result.count}회 발생했습니다.` : `In the last ${maxCount} measurements, a ${levelText} assessment for the ${result.partName} area occurred ${result.count} times.`,
   };
 }
 

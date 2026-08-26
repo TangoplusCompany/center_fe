@@ -1,6 +1,7 @@
 import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer } from "recharts";
 import type { IBiaData } from "../../../types/bia";
 import { SVGProps } from "react";
+import { useTranslations } from "next-intl";
 
 interface PentagonChartDataItem {
   subject: string; 
@@ -28,7 +29,7 @@ export function PentagonChart({
   data: PentagonChartDataItem[];
   isMuscle: boolean;
 }) {
-  
+  const t = useTranslations("Index")
   const CustomAngleAxis = (props: RechartsTickProps) => {
     const { payload, x, y } = props;
     
@@ -47,7 +48,7 @@ export function PentagonChart({
           fontWeight="bold"
           dy="-12"
         >
-          {item.subject}
+          {t(item.subject)}
         </text>
 
         <text textAnchor="middle" fill="#666" dy="1">
@@ -68,10 +69,10 @@ export function PentagonChart({
             className={`
               text-xs text-white text-center rounded-[2px] 
               py-[2px] leading-none flex items-center justify-center min-w-[64px]
-              ${item.status === "표준이상" ? "bg-mainBlue-600/30" : "bg-sub400/30"}
+              ${item.status === "bia_above_standard" ? "bg-mainBlue-600/30" : "bg-sub400/30"}
             `}
           >
-            {item.status}
+            {t(item.status)}
           </div>
         </foreignObject>
       </g>
@@ -103,7 +104,7 @@ export function PentagonChart({
               axisLine={false}
             />
             <Radar
-              name="근육량"
+              name={t('bia_muscle_mass')}
               dataKey="lastValue"
               stroke="#7E7E7E"
               fill="#C1C1C1"
@@ -111,7 +112,7 @@ export function PentagonChart({
               strokeDasharray="4 4"
             />
             <Radar
-              name="근육량"
+              name={t('bia_muscle_mass')}
               dataKey="value"
               stroke="#5B93FF"
               fill="#5B93FF"
@@ -132,15 +133,15 @@ export default function BodyModel({data} : {data: IBiaData}) {
 
   const getStatusLabel = (status: number): string => {
     const statusMap: Record<number, string> = {
-      0: "표준이하",
-      1: "표준",
-      2: "표준이상"
+      0: "bia_substandard",
+      1: "bia_standard",
+      2: "bia_above_standard"
     };
 
     return statusMap[status] ?? "데이터 없음";
   };
   const muscleData = [
-    { subject: "복부", 
+    { subject: "bia_part_abdomen", 
       value: data.trunk_muscle_ratio, 
       lastValue: data.most_previous_data.trunk_muscle_ratio,
       fullMark: 150, 
@@ -148,7 +149,7 @@ export default function BodyModel({data} : {data: IBiaData}) {
       percent: data.trunk_muscle_ratio + "%", 
       status: getStatusLabel(data.muscle_std_trunk)
     },
-    { subject: "왼팔", 
+    { subject: "bia_part_left_arm", 
       value: data.left_hand_muscle_ratio, 
       lastValue: data.most_previous_data.left_hand_muscle_ratio,
       fullMark: 150, 
@@ -156,7 +157,7 @@ export default function BodyModel({data} : {data: IBiaData}) {
       percent: data.left_hand_muscle_ratio + "%", 
       status: getStatusLabel(data.muscle_std_left_hand)
     },
-    { subject: "왼다리", 
+    { subject: "bia_part_left_leg", 
       value: data.left_foot_muscle_ratio, 
       lastValue: data.most_previous_data.left_foot_muscle_ratio,
       fullMark: 150, 
@@ -164,7 +165,7 @@ export default function BodyModel({data} : {data: IBiaData}) {
       percent: data.left_foot_muscle_ratio + "%", 
       status: getStatusLabel(data.muscle_std_left_foot) 
     },
-    { subject: "오른다리", 
+    { subject: "bia_part_right_leg", 
       value: data.right_foot_muscle_ratio, 
       lastValue: data.most_previous_data.right_foot_muscle_ratio,
       fullMark: 150, 
@@ -172,7 +173,7 @@ export default function BodyModel({data} : {data: IBiaData}) {
       percent: data.right_foot_muscle_ratio + "%", 
       status: getStatusLabel(data.muscle_std_right_foot) 
     },
-    { subject: "오른팔", 
+    { subject: "bia_part_right_arm", 
       value: data.right_hand_muscle_ratio, 
       lastValue: data.most_previous_data.right_hand_muscle_ratio,
       fullMark: 150, 
@@ -183,7 +184,7 @@ export default function BodyModel({data} : {data: IBiaData}) {
   ];
 
   const fatData = [
-    { subject: "복부", 
+    { subject: "bia_part_abdomen", 
       value: data.trunk_fat_percentage, 
       lastValue: data.most_previous_data.trunk_fat_percentage,
       fullMark: 350, 
@@ -191,7 +192,7 @@ export default function BodyModel({data} : {data: IBiaData}) {
       percent: data.trunk_fat_percentage + "%", 
       status: getStatusLabel(data.fat_std_trunk)
     },
-    { subject: "왼팔", 
+    { subject: "bia_part_left_arm", 
       value: data.left_hand_fat_percentage, 
       lastValue: data.most_previous_data.left_hand_fat_percentage,
       fullMark: 300, 
@@ -199,7 +200,7 @@ export default function BodyModel({data} : {data: IBiaData}) {
       percent: data.left_hand_fat_percentage + "%", 
       status: getStatusLabel(data.fat_std_left_hand) 
     },
-    { subject: "왼다리", 
+    { subject: "bia_part_left_leg", 
       value: data.left_foot_fat_percentage, 
       lastValue: data.most_previous_data.left_foot_fat_percentage,
       fullMark: 300, 
@@ -207,7 +208,7 @@ export default function BodyModel({data} : {data: IBiaData}) {
       percent: data.left_foot_fat_percentage + "%", 
       status: getStatusLabel(data.fat_std_left_foot) 
     },
-    { subject: "오른다리", 
+    { subject: "bia_part_right_leg", 
       value: data.right_foot_fat_percentage, 
       lastValue: data.most_previous_data.right_foot_fat_percentage,
       fullMark: 300, 
@@ -215,7 +216,7 @@ export default function BodyModel({data} : {data: IBiaData}) {
       percent: data.right_foot_fat_percentage + "%", 
       status: getStatusLabel(data.fat_std_right_foot) 
     },
-    { subject: "오른팔", 
+    { subject: "bia_part_right_arm", 
       value: data.right_hand_fat_percentage, 
       lastValue: data.most_previous_data.right_hand_fat_percentage,
       fullMark: 300, 

@@ -9,40 +9,48 @@ import {
 } from "@/types/manager";
 
 type ILoginResponse = { data: ILoginData } & IResponseDefault;
-
+type TranslateFn = (key: string, values?: Record<string, unknown>) => string;
 /**
  * 관리자 로그인 에러 클래스 (auth/login-new 실패 시)
  */
+
 export class AdminLoginError extends Error {
   status: number;
   message: string;
   remainingAttempts?: number;
   userMessage: string;
 
-  constructor(errorResponse: IAdminLoginNewErrorResponse) {
+  constructor(errorResponse: IAdminLoginNewErrorResponse, t?: TranslateFn) {
     const message = errorResponse.message?.[0] ?? "로그인에 실패했습니다.";
     super(message);
     this.name = "AdminLoginError";
     this.status = errorResponse.status;
     this.message = message;
+
     const attempts = errorResponse.data?.remaining_attempts;
     if (attempts !== undefined) {
       this.remainingAttempts = attempts;
     }
 
+    // t가 제공되지 않았을 때의 기본 번역/폴백 함수
+    const translate = t ?? ((key: string) => key);
+
     switch (errorResponse.status) {
       case 401:
         this.userMessage =
           this.remainingAttempts !== undefined
-            ? `이메일 또는 비밀번호가 일치하지 않습니다. (남은 시도 횟수: ${this.remainingAttempts}회)`
-            : "이메일 또는 비밀번호가 일치하지 않습니다.";
+            ? `${translate('alert_login_error')} (${translate('alert_login_error_count')}: ${this.remainingAttempts}${translate('unit_times')})`
+            : `${translate('alert_login_error')}`;
         break;
       case 403:
         this.userMessage =
-          "로그인 시도가 5번 이상 실패하여 계정이 잠겼습니다. 관리자에게 문의하세요.";
+          translate('alert_login_error_lock');
         break;
+      case 500: 
+        this.userMessage = 
+          translate('device_error_network')
       default:
-        this.userMessage = "로그인에 실패했습니다. 잠시 후 다시 시도해주세요.";
+        this.userMessage = translate('login_error_general');
     }
   }
 }
@@ -81,9 +89,11 @@ export const postLogin = async ({
 export const postLoginFor2FA = async ({
   email,
   password,
+  translate,
 }: {
   email: string;
   password: string;
+  translate : (key : string) => string
 }): Promise<ILoginTempJwtResponse> => {
   try {
     const { data } = await customUnAuthAxios.post<IAdminLoginNewResponse>(
@@ -96,18 +106,17 @@ export const postLoginFor2FA = async ({
       return { temp_jwt: data.data.temp_token };
     }
 
-    throw new AdminLoginError(data as IAdminLoginNewErrorResponse);
+    throw new AdminLoginError(data as unknown as IAdminLoginNewErrorResponse, translate);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError<IAdminLoginNewErrorResponse>;
       if (axiosError.response?.data) {
-        throw new AdminLoginError(axiosError.response.data);
+        throw new AdminLoginError(axiosError.response.data, translate);
       }
-      throw new Error("서버와 연결할 수 없습니다. 잠시 후 다시 시도해주세요.");
     }
     if (error instanceof AdminLoginError) {
       throw error;
     }
-    throw new Error("로그인에 실패했습니다. 잠시 후 다시 시도해주세요.");
+    throw error;
   }
 };

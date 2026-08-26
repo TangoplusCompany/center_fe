@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogTitle } from '../ui/dialog';
 import { Button } from '../ui/button';
 import { IMoireSectionData } from '@/hooks/api/measure/moire/useDetectMoireSections';
 import { DUMMY_SECTION_DATA, SectionOverlay } from './Moire/Image';
+import { useTranslations } from 'next-intl';
 
 interface MeasurementImageDialogProps {
   open: boolean;
@@ -22,12 +23,12 @@ interface MeasurementImageDialogProps {
 }
 
 const stepLabels = {
-  first: "정면 측정",
-  second: "팔꿉 측정",
-  third: "왼쪽 측정",
-  fourth: "오른쪽 측정",
-  fifth: "후면 측정",
-  sixth: "앉은 후면",
+  first: "pose_seq_0",
+  second: "pose_seq_1",
+  third: "pose_seq_2",
+  fourth: "pose_seq_3",
+  fifth: "pose_seq_4",
+  sixth: "pose_seq_5",
 };
 
 export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
@@ -45,6 +46,7 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
   moireSection,
   onMoireOpacityChange,
 }) => {
+  const t = useTranslations("Index")
   const [scale, setScale] = useState(1);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
@@ -132,13 +134,13 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="p-0 border-none bg-transparent w-fit h-fit [&>button]:hidden" aria-describedby={undefined}>
-        <DialogTitle className="sr-only">{stepLabels[step]} 이미지 확대</DialogTitle>
+        <DialogTitle className="sr-only">{stepLabels[step]}</DialogTitle>
         <div className="relative">
           {/* Header */}
           <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between p-4 pointer-events-none">
             {!moireUrl && (
               <div className="px-4 py-2 rounded-full text-white bg-white/10 backdrop-blur-sm pointer-events-auto">
-                {stepLabels[step]}
+                {t(stepLabels[step])}
               </div>
             )}
             
@@ -187,7 +189,7 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
                   className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white pointer-events-auto"
                 >
                   <span className="text-xs sm:text-sm whitespace-nowrap">
-                    모아레 투명도
+                    {t('moire_alpha')}
                   </span>
                   <div className="relative flex items-center">
                     <input
@@ -233,7 +235,7 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
                   alt="그리드 라디오버튼"
                   className="w-4 h-4"
                 />
-                <span className="hidden sm:inline">{showGrid ? '그리드 끄기' : '그리드 켜기'}</span>
+                <span className="hidden sm:inline">{showGrid ? t('grid_off') : t('grid_on')}</span>
               </Button>
               {!moireUrl && (
                 <Button
@@ -249,7 +251,7 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
                     alt="랜드마크 라디오버튼"
                     className="w-4 h-4"
                   />
-                  <span className="hidden sm:inline">{showLine ? '랜드마크 끄기' : '랜드마크 켜기'}</span>
+                  <span className="hidden sm:inline">{showLine ? t('landmark_off') : t('landmark_on')}</span>
               </Button>
               )}
             </div>
@@ -268,7 +270,7 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
             <img
               ref={imageRef}
               src={imageUrl}
-              alt="측정 이미지 상세보r기"
+              alt="측정 이미지 상세보기"
               className={`block w-auto h-auto max-w-[90vw] max-h-[90vh] select-none ${
                 scale > 1 ? 'cursor-grab' : 'cursor-default'
               } ${isDragging ? 'cursor-grabbing' : ''} ${isDragging ? '' : 'transition-transform duration-300 ease-out'}`}

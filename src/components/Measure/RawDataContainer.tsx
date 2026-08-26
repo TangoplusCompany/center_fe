@@ -3,6 +3,7 @@ import RawDataDetailContainer from "./RawDataDetailContainer";
 import RawDataTab from "./RawDataTab";
 import CompareRawDataDetailContainer from "./Compare/CompareRawDataDetailContainer";
 import { IUserMeasureDetailData } from "@/types/measure";
+import { useTranslations } from "next-intl";
 
 export interface CompareRawDataProps {
   mergedDetailData0: IUserMeasureDetailData[];
@@ -17,7 +18,7 @@ const RawDataContainer = ({
   measure_date0,
   measure_date1,
 } :CompareRawDataProps) => {
-
+  const t = useTranslations("Index");
   const [selectedPart, setSelectedPart] = useState<0 | 1 | 2 | 3 | 4 | 5 | 6>(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -43,7 +44,7 @@ const RawDataContainer = ({
         <div className="flex items-center gap-3">
           <div className="w-1 h-10 bg-mainBlue-600 rounded-full"></div>
           <h2 className="text-xl font-semibold text-sub800 dark:text-sub100">
-            측정 결과 부위별 선택 보기
+            {t('h_basic_info_title')}
           </h2>
         </div>
         

@@ -1,6 +1,7 @@
 import { deleteCenterManager } from "@/services/center/deleteCenterManager";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "@/providers/AuthProvider";
+import { useTranslations } from "next-intl";
 
 /**
  * 센터 관리자 삭제 Hooks
@@ -9,12 +10,13 @@ import { useAuthStore } from "@/providers/AuthProvider";
 export const useDeleteManager = () => {
   const queryClient = useQueryClient();
   const centerSn = useAuthStore((state) => state.centerSn);
+  const t = useTranslations();
 
   return useMutation({
     mutationFn: (data: { sn: number }) =>
       deleteCenterManager({ center_sn: centerSn, sn: data.sn }),
     onSuccess: () => {
-      alert("해당 매니저가 센터에서 성공적으로 삭제되었습니다.");
+      alert(t("manager_delete_success"));
       queryClient.invalidateQueries({ queryKey: ["adminList"] });
     },
   });

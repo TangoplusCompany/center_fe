@@ -1,6 +1,8 @@
 "use client";
 
 import { IUserMeasureDetailData } from "@/types/measure";
+import { getRiskString } from "@/utils/getRiskString";
+import { useLocale, useTranslations } from "next-intl";
 
 export const RawData = (
   {
@@ -10,6 +12,8 @@ export const RawData = (
     data: IUserMeasureDetailData | [IUserMeasureDetailData, IUserMeasureDetailData];
   }
 ) => {
+  const t = useTranslations("Index")
+  const locale = useLocale();
   const isArrayData = Array.isArray(data);
   const data0 = isArrayData ? data[0] : data;
   const data1 = isArrayData && data.length === 2 ? data[1] : undefined;
@@ -22,15 +26,11 @@ export const RawData = (
       ? "cm" 
       : "°";
   const leftRightString0 = {
-    0: "좌측",
-    1: "우측"
+    0: t('side_left'),
+    1: t('side_right')
   }[data0.left_right] ?? "";
 
-  const levelString0 = {
-    0: "정상",
-    1: "주의",
-    2: "위험"
-  }[data0.risk_level] ?? "정상";
+  const levelString0 = getRiskString(data0.risk_level, locale)
 
   // data1용 변수들 (존재할 경우에만)
   const formattedData1 = data1?.measure_unit?.includes("거리") 
@@ -42,37 +42,33 @@ export const RawData = (
       ? "cm" 
       : "°";
   const leftRightString1 = data1 ? ({
-    0: "좌측",
-    1: "우측"
+    0: t('side_left'),
+    1: t('side_right')
   }[data1.left_right] ?? "") : undefined;
 
-  const levelString1 = data1 ? ({
-    0: "정상",
-    1: "주의",
-    2: "위험"
-  }[data1.risk_level] ?? "정상") : null;
+  const levelString1 = data1 ? getRiskString(data1.risk_level, locale) : null;
 
   const textCondition0 = {
-    정상: "text-sub600 dark:text-sub100",
-    주의: "text-warningDeep dark:text-warning-foreground",
-    위험: "text-dangerDeep dark:text-danger",
-  }[levelString0] ?? "bg-primary-foreground";
+    0: "text-sub600 dark:text-sub100",
+    1: "text-warningDeep dark:text-warning-foreground",
+    2: "text-dangerDeep dark:text-danger",
+  }[data0.risk_level] ?? "bg-primary-foreground";
   const textBgCondition0 = {
-    정상: "bg-sub600 dark:bg-gray-600",
-    주의: "bg-warning",
-    위험: "bg-danger",
-  }[levelString0] ?? "bg-primary-foreground";
+    0: "bg-sub600 dark:bg-gray-600",
+    1: "bg-warning",
+    2: "bg-danger",
+  }[data0.risk_level] ?? "bg-primary-foreground";
 
   const textCondition1 = {
-    정상: "text-sub600 dark:text-sub100",
-    주의: "text-warningDeep dark:text-warning-foreground",
-    위험: "text-dangerDeep dark:text-danger",
-  }[levelString1 ?? "정상"] ?? "bg-primary-foreground";
+    0: "text-sub600 dark:text-sub100",
+    1: "text-warningDeep dark:text-warning-foreground",
+    2: "text-dangerDeep dark:text-danger",
+  }[data1?.risk_level ?? 0] ?? "bg-primary-foreground";
   const textBgCondition1 = {
-    정상: "bg-sub600 dark:bg-gray-600",
-    주의: "bg-warning",
-    위험: "bg-danger",
-  }[levelString1 ?? "정상"] ?? "bg-primary-foreground";
+    0: "bg-sub600 dark:bg-gray-600",
+    1: "bg-warning",
+    2: "bg-danger",
+  }[data1?.risk_level ?? 0] ?? "bg-primary-foreground";
   const getStandard = (unit: string | undefined) => {
     if (unit?.includes("기울기")) return "0°";
     if (unit?.includes("족압 분포-상하")) return "40%/60%";
@@ -83,11 +79,11 @@ export const RawData = (
     <div className="w-full table table-fixed min-w-0 overflow-hidden">
       <div className="flex flex-col overflow-x-auto overflow-y-hidden w-full min-w-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         <div className="flex flex-col border-b-2 border-sub200 min-w-[800px]">
-          <div className="grid grid-cols-[18%_10%_12%_60%] items-center border-b-2 border-sub200 dark:border-border bg-sub100 dark:bg-sub750 dark:bg-muted py-2">
+          <div className="grid grid-cols-[18%_10%_12%_60%] items-center border-b-2 border-sub200 dark:border-border bg-sub100 dark:bg-sub750  py-2">
             <span className="text-base font-semibold text-black dark:text-foreground px-4 whitespace-normal break-keep">{data0.measure_unit}</span>
-            <span className={`flex flex-1 justify-center text-base text-sub600 dark:text-muted-foreground`}>{!data1 ? '' : '기준값'}</span>
-            <span className="flex justify-center text-base text-sub600 dark:text-muted-foreground">단계표시</span>
-            <span className="text-base text-sub600 dark:text-muted-foreground px-4">분석설명</span>
+            <span className={`flex flex-1 justify-center text-base text-sub600 dark:text-muted-foreground`}>{!data1 ? '' : t('label_set_point')}</span>
+            <span className="flex justify-center text-base text-sub600 dark:text-muted-foreground">{t('label_stage_indicator')}</span>
+            <span className="text-base text-sub600 dark:text-muted-foreground px-4">{t('label_analysis_desc')}</span>
           </div>
 
           <div className="flex flex-col">
@@ -132,7 +128,7 @@ export const RawData = (
               px-2 py-1 ${textBgCondition0} text-white
               text-xs rounded-full whitespace-normal break-keep text-center
             `}>
-              {levelString0} {data0?.range_level}단계
+              {levelString0} {data0?.range_level}{t('rom_stage')}
             </span>
             {data1 && (
               <span className={`
@@ -140,7 +136,7 @@ export const RawData = (
                 px-2 py-1 ${textBgCondition1} text-white
                 text-xs rounded-full whitespace-normal break-keep text-center
               `}>
-                {levelString1} {data1?.range_level}단계
+                {levelString1} {data1?.range_level}{t('rom_stage')}
               </span>
             )}
             {data1 && (

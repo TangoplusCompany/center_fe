@@ -11,6 +11,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useGetDeviceDetail } from "@/hooks/api/device/useDeviceDetail";
 import { useEffect } from "react";
+import { useTranslations } from "next-intl";
 // import {
 //   Select,
 //   SelectContent,
@@ -24,6 +25,7 @@ const DeviceEditDialog = ({
 }: {
   deviceSn: number;
 }) => {
+  const t = useTranslations("Index");
   const { isBoolean: open, setToggle, setFalse } = useBoolean(false);
   const { data: deviceDetail } = useGetDeviceDetail<IDeviceDetail>(deviceSn);
   const mutationDeviceUpdate = useDeviceUpdate();
@@ -59,7 +61,7 @@ const DeviceEditDialog = ({
       <DialogTrigger asChild>
         <button className="flex items-center gap-0.5 text-sm text-gray-500">
           <PencilLine className="w-4 h-4 text-mainBlue-600 dark:text-white" />
-          <span className="text-mainBlue-600 dark:text-white">수정하기</span>
+          <span className="text-mainBlue-600 dark:text-white">{t('btn_edit_submit')}</span>
         </button>
       </DialogTrigger>
       <DialogContent className="w-[calc(100%-2rem)] sm:w-full max-w-2xl rounded-2xl sm:rounded-xl">
@@ -67,11 +69,11 @@ const DeviceEditDialog = ({
           <DialogTitle className="text-xl font-semibold">
             <div className="flex gap-2 text-xl items-center">
               <div className="rounded-full p-2 bg-sub100"><Pencil className="w-4 h-4" /></div>
-              기기 수정하기
+              {t('device_btn_edit')}
             </div>
             </DialogTitle>
           <DialogDescription className="text-sm">
-            Tango Body에 대한 정보를 수정합니다.
+            {t('device_edit_desc')}
           </DialogDescription>
           <form onSubmit={handleDeviceUpdate} className="flex flex-col gap-4">
             {/* TODO: 기기 타입 연동 전까지 드롭다운 숨김 처리 */}
@@ -94,7 +96,7 @@ const DeviceEditDialog = ({
             */}
 
             <Label className="w-full flex flex-col gap-1" htmlFor="device_name">
-              <h3 className="text-sm">키오스크 명칭</h3>
+              <h3 className="text-sm">{t('device_label_kiosk_name')}</h3>
               <Input
                 {...methods.register("device_name")}
                 className="w-full"
@@ -109,7 +111,7 @@ const DeviceEditDialog = ({
             </Label>
 
             <Label className="w-full flex flex-col gap-1" htmlFor="install_location">
-              <h3 className="text-sm">설치 장소</h3>
+              <h3 className="text-sm">{t('device_label_install_location')}</h3>
               <Input
                 {...methods.register("install_location")}
                 className="w-full"
@@ -124,7 +126,7 @@ const DeviceEditDialog = ({
             </Label>
 
             <Label className="w-full flex flex-col gap-1" htmlFor="install_address_1">
-              <h3 className="text-sm">설치 주소</h3>
+              <h3 className="text-sm">{t('device_label_install_address')}</h3>
               <Input
                 {...methods.register("install_address_1")}
                 className="w-full"
@@ -139,7 +141,7 @@ const DeviceEditDialog = ({
             </Label>
 
             <Label className="w-full flex flex-col gap-1" htmlFor="install_address_2">
-              <h3 className="text-sm">설치 상세 주소</h3>
+              <h3 className="text-sm">{t('device_label_install_address_detail')}</h3>
               <Input
                 {...methods.register("install_address_2")}
                 className="w-full"
@@ -156,11 +158,11 @@ const DeviceEditDialog = ({
             <div className="grid grid-cols-2 items-center gap-4 mt-4">
               <DialogClose asChild>
                 <Button type="button" variant="outline" className="shadow-none border-sub200 border bg-white hover:sub300">
-                  취소하기
+                  {t('btn_cancel')}
                 </Button>
               </DialogClose>
               <Button type="submit" className="border border-mainBlue-600 bg-mainBlue-100  dark:bg-mainBlue-900 hover:bg-white text-mainBlue-600 hover:text-mainBlue-600">
-                수정하기
+                {t('btn_edit_submit')}
               </Button>
             </div>
           </form>

@@ -1,4 +1,5 @@
 import { CompareSlot } from "@/types/compare";
+import { useTranslations } from "next-intl";
 
 const CompareDefault = ({ 
   className,
@@ -9,8 +10,9 @@ const CompareDefault = ({
   onCompareDialogOpen?: (slot: CompareSlot) => void;
   currentSlot?: CompareSlot;
 }) => {
+  const t = useTranslations("Index")
   return (
-
+    
     <div className="flex flex-col h-full min-h-0 gap-4">
       {/* ✅ 상단(좌/우) 영역: 남는 높이 전부 */}
       <div className="flex-1 min-h-0">
@@ -29,7 +31,7 @@ const CompareDefault = ({
           >
 
             <div className="absolute inset-0 flex items-center justify-center text-center">
-              비교할 항목을 선택해주세요
+              {t('compare_guide')}
             </div>
           </div>
         </div>

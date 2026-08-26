@@ -1,24 +1,27 @@
 import { useMutation } from "@tanstack/react-query";
 import { postOtpVerify } from "@/services/auth/postOtpVerify";
+import { useTranslations } from "next-intl";
 
 export const useOtpVerify = ({
   handleRequestOtp,
 }: {
   handleRequestOtp: (jwt: string) => void;
 }) => {
+  const t = useTranslations();
+
   return useMutation({
     mutationFn: postOtpVerify,
     onSuccess: (data) => {
       const otpJwt = data?.data?.otp_jwt;
       if (!otpJwt) {
-        alert("OTP 인증 응답에 토큰이 없습니다. 다시 시도해주세요.");
+        alert(t("otp_verify_no_token"));
         return;
       }
-      alert("OTP 인증이 완료되었습니다.");
+      alert(t("otp_verify_success"));
       handleRequestOtp(otpJwt);
     },
     onError: () => {
-      alert("OTP 인증에 실패했습니다.");
+      alert(t("otp_verify_fail"));
     },
   });
 };

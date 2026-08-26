@@ -1,4 +1,5 @@
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
+import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 import { Area, AreaChart, DotProps, XAxis, YAxis } from "recharts";
 
@@ -12,7 +13,7 @@ const ROMDashboardTypeGraph = ({
   romGraph
 }: ROMDashboardTypeGraphProps
 ) => {
-  
+  const t = useTranslations("Index");
   const chartData = useMemo(() => {
   const sorted = Object.entries(romGraph)
     .map(([date, score]) => ({ date, score }))
@@ -26,10 +27,10 @@ const ROMDashboardTypeGraph = ({
     return [...sorted, ...dummy]  // 데이터 먼저, 더미 뒤에
   }, [romGraph])
   const stateString = (score: number) => {
-    if (score === 3) return "매우 양호"
-    if (score === 2) return "정상"
-    if (score === 1) return "주의"
-    if (score === 0) return "위험"
+    if (score === 3) return t('grade_very_good')
+    if (score === 2) return t('grade_normal')
+    if (score === 1) return t('grade_caution')
+    if (score === 0) return t('grade_danger')
   };
 
   return (

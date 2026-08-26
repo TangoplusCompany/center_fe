@@ -13,63 +13,55 @@ import { ChevronsUpDown } from "lucide-react";
 import { getAdminCenters } from "@/services/auth/getAdminCenters";
 import { useQuery } from "@tanstack/react-query";
 import UserSubTabCard from "../User/SubTabCard";
+import { useTranslations } from "next-intl";
 
 const sideTabs = [
   {
-    title: "대시보드",
+    title: "dashboard",
     url: "/",
     icon: "/icons/ic_dashboard.svg",
   },
   {
-    title: "센터 측정 현황",
+    title: "center_measure",
     url: "/measure",
     icon: "/icons/ic_measure.svg",
   },
   {
-    title: "사용자 회원 관리",
+    title: "user_management",
     url: "/user",
     icon: "/icons/ic_users.svg",
   },
-  // {
-  //   title: "코치 관리",
-  //   url: "/coach",
-  //   icon: Building2,
-  // },
   {
-    title: "기기 관리",
+    title: "device_management",
     url: "/device",
     icon: "/icons/ic_device.svg",
   },
   {
-    title: "매니저 관리",
+    title: "manager_management",
     url: "/manager",
     icon: "/icons/ic_manager.svg",
   },
   {
-    title: "로그인 기록 관리",
+    title: "login_log_management",
     url: "https://gym.tangoplus.co.kr/admin_api/login_page.php",
     icon: "/icons/ic_paper.svg",
     external: true,
   },
   {
-    title: "센터 목록",
+    title: "h_center",
     url: "/center",
     icon: "/icons/ic_paper.svg",
   },
   {
-    title: "설정",
+    title: "settings",
     url: "/setting",
     icon: "/icons/ic_settings.svg",
   },
 ];
-const getInitialFromCenter = () => {
-  if (typeof window === "undefined") return false;
-  const stored = sessionStorage.getItem("fromCenter") === "true";
-  const path = window.location.pathname;
-  return path === "/center" || (path === "/setting" && stored);
-};
+
 
 export default function DefaultSidebar() {
+  const t = useTranslations("Index");
   const logoutMutation = useLogout();
   const { adminRole, centerSn, centerName, adminSn, setCenterSn } = useAuthStore((state) => state);
   const pathname = usePathname();
@@ -77,15 +69,21 @@ export default function DefaultSidebar() {
   const menuItemRefs = React.useRef<(HTMLLIElement | null)[]>([]);
   const { state, openMobile, setOpenMobile } = useSidebar();
   const isMobile = useIsMobile();
+
   const handleLogout = () => {
     logoutMutation.mutate();
   };
-  const [isFromCenter, setIsFromCenter] = React.useState(getInitialFromCenter);
+
+  // 초기값을 false로 고정하여 서버-클라이언트 첫 렌더링을 일치시킴
+  const [isFromCenter, setIsFromCenter] = React.useState(false);
+
   React.useEffect(() => {
+    const isStored = sessionStorage.getItem("fromCenter") === "true";
+
     if (pathname === "/center") {
       sessionStorage.setItem("fromCenter", "true");
       setIsFromCenter(true);
-    } else if (pathname === "/setting" && sessionStorage.getItem("fromCenter") === "true") {
+    } else if (pathname === "/setting" && isStored) {
       setIsFromCenter(true);
     } else {
       sessionStorage.removeItem("fromCenter");
@@ -100,15 +98,15 @@ export default function DefaultSidebar() {
 
   const filteredDashboard = React.useMemo(() => {
     if (isFromCenter) {
-      return sideTabs.filter((item) => item.title === "센터 목록" || item.title === "설정");
+      return sideTabs.filter((item) => item.title === "h_center" || item.title === "settings");
     }
 
     return sideTabs
-      .filter((item) => item.title !== "센터 목록")
+      .filter((item) => item.title !== "h_center")
       .filter((item) => {
         if (adminRole === 1) return true;
         if (adminRole === 2) {
-          return ["대시보드", "센터 측정 현황", "사용자 회원 관리", "설정"].includes(item.title);
+          return ["dashboard", "center_measure", "user_management", "settings"].includes(item.title);
         }
         return true;
       });
@@ -198,7 +196,7 @@ export default function DefaultSidebar() {
                 isMobile && !openMobile ? "opacity-0 -translate-x-2 scale-95" : "opacity-100 translate-x-0 scale-100"
               }`}
             >
-              <span className="font-semibold text-xl whitespace-nowrap">탱고바디</span>
+              <span className="font-semibold text-xl whitespace-nowrap">{t('tangobody')}</span>
             </div>
           </SidebarMenuButton>
         </div>
@@ -242,13 +240,13 @@ export default function DefaultSidebar() {
                 }`}
             >
               <div className="p-3">
-                <span className="text-sm font-semibold text-gray-500">센터 목록</span>
+                <span className="text-sm font-semibold text-gray-500">{t('h_center')}</span>
               </div>
 
               <div className="max-h-80 overflow-y-auto">
                 {isLoading ? (
                   <div className="flex items-center justify-center py-8">
-                    <span className="text-sm text-gray-400">불러오는 중...</span>
+                    <span className="text-sm text-gray-400">{t('loading_0')}</span>
                   </div>
                 ) : (
                   centers.map((center) => (
@@ -291,7 +289,7 @@ export default function DefaultSidebar() {
                   }}
                   className="w-full text-sm text-center text-mainBlue-600 hover:text-mainBlue-600/90 font-medium py-1"
                 >
-                  센터 선택 화면
+                  {t('center_select_screen')}
                 </button>
               </div>
             </div>
@@ -322,7 +320,7 @@ export default function DefaultSidebar() {
                 }}
               />
               {filteredDashboard.map((item, index) => {
-                const isUserMenu = item.title === "사용자 회원 관리";
+                const isUserMenu = item.title === "user_management";
                 const isActive = item.url === "/" 
                   ? pathname === item.url 
                   : isUserMenu && isUserDetailRoute 
@@ -376,7 +374,7 @@ export default function DefaultSidebar() {
                                 : ""
                             }`}
                           >
-                            {item.title}
+                            {t(item.title)}
                           </span>
                         </Link>
                       </div>
@@ -402,7 +400,7 @@ export default function DefaultSidebar() {
               <Button type="button" onClick={handleLogout} variant="ghost" className="inline-flex justify-start w-full ml-3">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="/icons/ic_logout.svg" alt="logout" className="lg:!w-5 lg:!h-5" />
-                <p>로그아웃</p>
+                <p>{t('logout')}</p>
               </Button>
             </SidebarMenuButton>
           </SidebarMenuItem>

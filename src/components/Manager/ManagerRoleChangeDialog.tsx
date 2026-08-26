@@ -19,6 +19,7 @@ import { Label } from "../ui/label";
 import { usePatchManagerRole } from "@/hooks/api/manager/usePatchManagerRole";
 import { useBoolean } from "@/hooks/utils/useBoolean";
 import { useManagerRole } from "@/hooks/manager/useManagerRole";
+import { useTranslations } from "next-intl";
 
 const ManagerRoleRadioGroup = ({
   nowRole,
@@ -49,6 +50,7 @@ const ManagerRoleChangeDialog = ({
 }: {
   manager: ICenterManagerData;
 }) => {
+  const t = useTranslations("Index")
   const {
     isBoolean: open,
     setToggle: setOpen,
@@ -75,20 +77,20 @@ const ManagerRoleChangeDialog = ({
       </DialogTrigger>
       <DialogContent className="gap-4">
         <DialogHeader>
-          <DialogTitle>등급 수정</DialogTitle>
+          <DialogTitle>{t('manager_role_change')}</DialogTitle>
           <DialogDescription>
             {`현재 ${manager.admin_name}님의 등급은 ${
-              ADMIN_ROLE[manager.admin_role as keyof typeof ADMIN_ROLE]
+              t(ADMIN_ROLE[manager.admin_role as keyof typeof ADMIN_ROLE])
             }입니다.`}
           </DialogDescription>
         </DialogHeader>
         <ManagerRoleRadioGroup nowRole={role} updateRole={handleRoleChange} />
         <div className="flex items-center justify-start gap-3">
           <DialogClose asChild>
-            <Button>취소하기</Button>
+            <Button>{t('btn_cancel')}</Button>
           </DialogClose>
           <Button variant={"outline"} onClick={handleManagerRole}>
-            수정하기
+            {t('btn_edit_submit')}
           </Button>
         </div>
       </DialogContent>

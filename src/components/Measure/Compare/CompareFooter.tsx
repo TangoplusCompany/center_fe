@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 type MeasureItem = {
   measure_sn: number;
   user_name: string;
@@ -16,6 +18,7 @@ const CompareFooter = ({
   measureList = [],
   compareSelectedSns,
 }: Props) => {
+  const t = useTranslations("Index")
   const selected = compareSelectedSns
     .map((sn) => measureList.find((m) => m.measure_sn === sn))
     .filter(Boolean) as MeasureItem[];
@@ -43,7 +46,7 @@ const CompareFooter = ({
           {/* 1개만 선택된 경우 우측 카드 자리 표시(원하시면) */}
           {selected.length === 1 && (
             <div className="flex-1 rounded-2xl border border-dashed p-3 text-sm text-gray-400 flex items-center justify-center">
-              비교할 측정을 추가로 선택하세요
+              {t('compare_guide')}
             </div>
           )}
         </div>

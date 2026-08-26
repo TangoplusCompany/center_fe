@@ -1,4 +1,5 @@
 import { CompareSlot } from "@/types/compare";
+import { useTranslations } from "next-intl";
 
 const ROMCompareDefault = ({ 
   className,
@@ -9,6 +10,7 @@ const ROMCompareDefault = ({
   onCompareDialogOpen?: (slot: CompareSlot, selectedMeasureType: number) => void;
   currentSlot?: CompareSlot;
 }) => {
+  const t = useTranslations("Index")
   return (
 
     <div className="flex flex-col h-full min-h-0 gap-4">
@@ -29,7 +31,7 @@ const ROMCompareDefault = ({
           >
 
             <div className="absolute inset-0 flex items-center justify-center text-center">
-              비교할 항목을 선택해주세요
+              {t('compare_guide')}
             </div>
           </div>
         </div>

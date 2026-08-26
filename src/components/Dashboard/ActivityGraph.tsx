@@ -1,5 +1,6 @@
 import React from "react";
 import { graphDetailCardProps  } from "./ActivityContainer";
+import { useLocale, useTranslations } from "next-intl";
 
 
 
@@ -8,16 +9,15 @@ const ActivityGraph = ({
 }: {
   data: graphDetailCardProps ;
 }) => {
-  // ICenterActivityGraph 객체를 배열로 변환
-  // ICenterActivityGraph 객체를 배열로 변환
-  
+  const t = useTranslations("Index")  
+  const locale = useLocale();
   const barData = React.useMemo(() => {
     if (data.case === 0) {
       if (!data.usage) return [];
       
       // 오늘 요일 구하기 (0: 일요일, 1: 월요일, ..., 6: 토요일)
       const today = new Date().getDay();
-      const allDays = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+      const allDays = ["day_sun", "day_mon", "day_tue", "day_wed", "day_thu", "day_fri", "day_sat"];
       
       // 오늘을 기준으로 7일 재배열 (오늘이 맨 오른쪽)
       const result = [];
@@ -25,7 +25,7 @@ const ActivityGraph = ({
         const dayIndex = (today - i + 7) % 7;
         const dayData = data.usage.find(u => u.day === allDays[dayIndex]);
         result.push({
-          label: allDays[dayIndex].replace("요일", ""),
+          label: allDays[dayIndex],
           value: dayData?.measure_count ?? 0,
         });
       }
@@ -36,12 +36,12 @@ const ActivityGraph = ({
       
       const ageData = data.ageGroup.measure_count_by_age_group;
       return [
-        { label: "10대", value: ageData.teens },
-        { label: "20대", value: ageData.twenties },
-        { label: "30대", value: ageData.thirties },
-        { label: "40대", value: ageData.forties },
-        { label: "50대", value: ageData.fifties },
-        { label: "60대+", value: ageData.sixties + ageData.seventies + ageData.eighties + ageData.nineties },
+        { label: "age_10s", value: ageData.teens },
+        { label: "age_20s", value: ageData.twenties },
+        { label: "age_30s", value: ageData.thirties },
+        { label: "age_40s", value: ageData.forties },
+        { label: "age_50s", value: ageData.fifties },
+        { label: "age_60s_plus", value: ageData.sixties + ageData.seventies + ageData.eighties + ageData.nineties },
 
       ];
     }
@@ -61,8 +61,8 @@ const ActivityGraph = ({
     <div className="w-full flex flex-col border-2 border-mainBlue-100 dark:border-mainBlue-600 rounded-xl gap-6 bg-gradient-to-b from-[#2c4fd0]/10 from-[2%] to-white to-[40%] dark:from-[#2c4fd0]/20 dark:to-black/20">
       <div className="w-full p-4 flex justify-between items-center">
         <div className="text-xl font-semibold text-mainBlue-600 dark:text-white">
-          {data.case === 0 && "요일별 사용량"}
-          {data.case === 1 && "회원 연령대"}
+          {data.case === 0 && t('stat_usage_by_day')}
+          {data.case === 1 && t('stat_age')}
         </div>
         {/* case 0일 때만 날짜 표시 */}
         {data.case === 0 && (
@@ -130,7 +130,7 @@ const ActivityGraph = ({
                 
                 {/* 라벨 */}
                 {data.case === 0 ? (
-                  <div className={`px-2 py-1 text-xs font-medium relative ${
+                  <div className={`${locale === "ko" ? "px-2" : "px-0.5"} py-1 text-xs font-medium relative ${
                     index === barData.length - 1 
                       ? 'rounded-full bg-chartLegendActive text-chartLegendActive-foreground' 
                       : 'text-sub600'
@@ -141,11 +141,11 @@ const ActivityGraph = ({
                         style={{ animation: 'pulseRing 2s cubic-bezier(0, 0, 0.2, 1) infinite' }}
                       />
                     )}
-                    {item.label}
+                    {t(item.label)}
                   </div>
                 ) : (
                   <div className="text-xs font-medium text-sub600">
-                    {item.label}
+                     {t(item.label)}
                   </div>
                 )}
               </div>

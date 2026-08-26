@@ -6,12 +6,14 @@ import React from "react";
 import DeviceChart from "./DeviceChart";
 import { useDevicePeriodData } from "@/hooks/api/device/useDevicePeriodData";
 import { Skeleton } from "../ui/skeleton";
+import { useTranslations } from "next-intl";
 
 const DeviceChartContainer = ({
   deviceList,
 }: {
   deviceList: IDeviceStatusCardProps[];
 }) => {
+  const t = useTranslations("Index");
   const { chartConfig } = useDeviceChartConfig(deviceList);
   const { data: chartData, isLoading } = useDevicePeriodData();
   
@@ -22,7 +24,7 @@ const DeviceChartContainer = ({
     <div className="w-full flex flex-col gap-4">
       <div className="flex items-center gap-3">
         <div className="w-1 h-10 bg-mainBlue-600 rounded-full"></div>
-        <h2 className="text-2xl col-span-2">키오스크 사용자 추이</h2>
+        <h2 className="text-2xl col-span-2">{t('h_kiosk_user_stat')}</h2>
       </div>
       <div className="w-full">
         <DeviceChart chartConfig={chartConfig} chartData={chartData} />

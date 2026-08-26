@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { countDetailCardProps } from "./ActivityContainer";
 
 
@@ -6,6 +7,7 @@ const ActivityCard = ({
 }: {
   data: countDetailCardProps;
 }) => {
+  const t = useTranslations("Index");
   const getPath = (upDown: 0 | 1 | 2) => {
     const centerY = 15;
     const startYIncreased = 35;
@@ -24,8 +26,8 @@ const ActivityCard = ({
   return (
     <div className="w-full flex flex-col border-2 border-mainBlue-100 dark:border-mainBlue-600 rounded-xl gap-6 bg-gradient-to-b from-[#2c4fd0]/10 from-[2%] to-white to-[40%] dark:from-[#2c4fd0]/20 dark:to-black/20">
       <div className="p-4 text-xl font-semibold text-mainBlue-600 dark:text-white">
-        {data.case === 0 && "센터 일간 측정"}
-        {data.case === 1 && "센터 주간 측정"}
+        {data.case === 0 && t('measure_daily')}
+        {data.case === 1 && t('measure_weekly')}
       </div>
       <div className="px-4 pb-4 relative">
         <svg
@@ -111,7 +113,7 @@ const ActivityCard = ({
             {data.upDown === 1 && "―"}
             {data.upDown === 0 && "▼"}
           </span>
-          <span>{data.count} 건</span>
+          <span>{data.count} {t('unit_cases')}</span>
         </div>
       </div>
     </div>

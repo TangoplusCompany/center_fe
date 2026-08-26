@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { GaitContainerProps } from "./Container"
+import { useTranslations } from "next-intl";
 
 export interface GaitInfoCardProps {
   type: string//"Pattern" | "Balance" | "Efficiency"
@@ -8,6 +9,7 @@ export interface GaitInfoCardProps {
   grade: number;
 }
 export function GaitInfoHorizonCard({ type, title,  grade } : GaitInfoCardProps) {
+  const t= useTranslations("Index")
   const borderColor = {
     0 : " border-sub200",
     1 : "border-warning",
@@ -19,46 +21,46 @@ export function GaitInfoHorizonCard({ type, title,  grade } : GaitInfoCardProps)
     2: "text-danger"
   } [grade];
   const typeTitle = {
-    "Pattern" : "보행 패턴",
-    "Balance" : "동적 균형",
-    "Efficiency": "보행 효율"
+    "Pattern" : "gait_pattern",
+    "Balance" : "gait_dynamic_balance",
+    "Efficiency": "gait_efficiency"
   } [type];
   return (
     <div className={`flex flex-col p-2 rounded-xl items-center border ${borderColor}`}>
-      <div className={` text-xs sm:text-sm `}>{typeTitle}</div>
+      <div className={` text-xs sm:text-sm `}>{t(typeTitle ?? "")}</div>
       <div className={`text-sm sm:text-base ${textColor}`}>{title}</div>
     </div>
   )
 }
 
 export function GaitInfoVertiCard({ type, description, grade } : GaitInfoCardProps) {
-
+  const t = useTranslations("Index")
   const textBg = {
     0: "bg-sub600 dark:bg-gray-600",
     1: "bg-warning",
     2: "bg-danger",
   } [grade];
   const typeTitle = {
-    "TotalComment" : "종합 요약",
-    "Rhythm" : "리듬 및 속도",
-    "FallRisk": "자세 및 낙상 지표",
-    "RecommendComment": "추천"
+    "TotalComment" : "summary_comprehensive",
+    "Rhythm" : "gait_rhythm_speed",
+    "FallRisk": "gait_posture_fall_risk",
+    "RecommendComment": "label_recommendation"
   } [type];
 
   const gradeTitle = {
-    0 : "정상",
-    1 : "주의",
-    2: "위험",
+    0 : "status_normal",
+    1 : "status_caution",
+    2: "status_danger",
   } [grade];
 
   return (
     <div className={`flex flex-col gap-2 `}>
       <div className="flex w-full justify-between">
-        <div className={` text-sm sm:text-base font-semibold`}>{typeTitle}</div>
+        <div className={` text-sm sm:text-base font-semibold`}>{t(typeTitle ?? "")}</div>
         <div className={cn(
           "px-3 py-1 rounded-full text-xs text-white text-center whitespace-normal break-keep",
           textBg,
-        )}>{gradeTitle}</div>
+        )}>{t(gradeTitle ?? "")}</div>
       </div>
       <div className={`text-sm sm:text-base text-sub700`}>{description}</div>
     </div>
@@ -68,6 +70,7 @@ export function GaitInfoVertiCard({ type, description, grade } : GaitInfoCardPro
 
 
 export default function GaitInfo({data}: GaitContainerProps) {
+  const t = useTranslations("Index")
   const iData = data.gait_measure_info
   const infoHorizonCards = [
     {
@@ -115,12 +118,12 @@ export default function GaitInfo({data}: GaitContainerProps) {
   return (
     <div className="flex flex-col rounded-3xl border-2 border-sub200 p-4">
       <div className="text-lg font-semibold mb-2 text-sub700">
-        전체 보행 결과 
+        {t('gait_overview_result')}
       </div>
       <div className="flex items-center gap-2 ">
         <div className="w-3 h-3 rounded-sm bg-mainBlue-600" />
         <div className="text-mainBlue-600 text-sm sm:text-base font-bold ">
-          보행 패턴
+          {t('gait_pattern')}
         </div>
       </div>
       <div className="relative w-full text-center font-semibold text-sub700 text-base sm:text-lg py-2">{iData.resultGaitTypeTitle}</div>
@@ -135,7 +138,7 @@ export default function GaitInfo({data}: GaitContainerProps) {
       <div className="flex items-center gap-2 ">
         <div className="w-3 h-3 rounded-sm bg-mainBlue-600" />
         <div className="text-mainBlue-600 text-sm sm:text-base font-bold ">
-          설명
+          {t('label_description')}
         </div>
       </div>
       <div className="grid grid-rows-4 h-full gap-2 mt-4">

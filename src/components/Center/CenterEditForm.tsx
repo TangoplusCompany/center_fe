@@ -10,6 +10,7 @@ import { Button } from "../ui/button";
 import { useAuthStore } from "@/providers/AuthProvider";
 import { centerEditSchema, ICenterEditForm } from "@/schemas/centerSchema";
 import CenterInfoFields from "@/components/Center/CenterInfoFields";
+import { useTranslations } from "next-intl";
 
 export type CenterEditFormProps = {
   centerData: ICenterInformation;
@@ -27,6 +28,7 @@ const CenterEditForm = ({
   onCancel,
   variant = "inline",
 }: CenterEditFormProps) => {
+  const t = useTranslations("Index");
   const { adminRole } = useAuthStore((state) => state);
 
   const { isBoolean: editState, setToggle: setEditState } = useBoolean();
@@ -82,16 +84,16 @@ const CenterEditForm = ({
       {variant === "inline" && (
         <div className="flex w-full justify-between items-center">
           <legend className="text-xl">
-            {editState ? "센터 정보 수정" : "센터 정보"}
+            {editState ? t('edit_center_information') : t('setting_center_info_title')}
           </legend>
           {adminRole < 2 && (
             <div className="flex items-center justify-center gap-2">
               <Button variant="outline" onClick={handleEditState} type="button">
-                {editState ? "취소하기" : "수정하기"}
+                {editState ? t('btn_cancel') : t('btn_edit_submit')}
               </Button>
               {editState && (
                 <Button type="submit" variant="default">
-                  저장하기
+                  {t('btn_save')}
                 </Button>
               )}
             </div>
@@ -103,11 +105,11 @@ const CenterEditForm = ({
           {adminRole < 2 && (
             <>
               <Button variant="outline" onClick={handleEditState} type="button">
-                {editState ? "취소하기" : "수정하기"}
+                {editState ? t('btn_cancel') : t('btn_edit_submit')}
               </Button>
               {editState && (
                 <Button type="submit" variant="default">
-                  저장하기
+                  {t('btn_save')}
                 </Button>
               )}
             </>
