@@ -18,7 +18,7 @@ export const useGetDeviceSearch = (
   getDeviceInfo: (data: IDeviceSearch | null) => void,
 ) => {
   const centerSn = useAuthStore((state) => state.centerSn);
-  const t = useTranslations();
+  const t = useTranslations("Index");
 
   return useMutation({
     mutationFn: ({ deviceId }: { deviceId: string }) =>

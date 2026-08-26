@@ -10,7 +10,7 @@ import { useTranslations } from "next-intl";
 export const usePatchManagerRole = () => {
   const queryClient = useQueryClient();
   const centerSn = useAuthStore((state) => state.centerSn);
-  const t = useTranslations();
+  const t = useTranslations("Index");
 
   return useMutation({
     mutationFn: (data: { sn: number; role: number }) =>
