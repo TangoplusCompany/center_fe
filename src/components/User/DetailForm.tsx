@@ -244,18 +244,6 @@ const UserDetailForm = ({
             />
           </div>
         </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="email" className="text-sm sm:text-base">{t("label_email")}</Label>
-          <Input
-            type="email"
-            id="email"
-            disabled
-            defaultValue={userData.email}
-            placeholder={t("label_email")}
-            maxLength={30}
-            className="text-sm sm:text-base"
-          />
-        </div>
       </div>
       <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3">
         <div className="flex flex-col gap-2">

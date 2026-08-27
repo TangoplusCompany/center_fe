@@ -17,12 +17,13 @@ export const DeviceMainContainer = () => {
   if (!deviceStatus) {
     return <p>잘못된 요청입니다. 잠시 후 다시 시도바랍니다.</p>;
   }
+  const deviceCount = deviceStatus.data?.length ?? 0;
   if (!deviceStatus.data || deviceStatus.data.length === 0) {
     return (
       <div className="col-span-12 flex items-start justify-center flex-col gap-4">
         <p>{t('device_empty')}</p>
         <div className="flex items-center justify-center">
-          <DeviceAddDialog />
+          <DeviceAddDialog deviceCount={deviceCount} />
         </div>
       </div>
     );
@@ -37,7 +38,7 @@ export const DeviceMainContainer = () => {
             {t('h_device')}
           </h2>
         </div>
-        <article>{adminRole < 2 && <DeviceAddDialog />}</article>
+        <article>{adminRole < 2 && <DeviceAddDialog deviceCount={deviceCount} />}</article>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
         {deviceStatus.data.map((device, index) => (
