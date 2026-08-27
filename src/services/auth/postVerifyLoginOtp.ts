@@ -72,11 +72,6 @@ export class Verify2FAError extends Error {
               `${translate("alert_login_error_count")} ${this.remainingFailCount}${translate("unit_times")}`
             );
           }
-          if (this.remainingIssueCount !== undefined) {
-            parts.push(
-              `${translate("alert_login_error_count")} ${this.remainingIssueCount}${translate("unit_times")}`
-            );
-          }
           baseMsg += ` (${parts.join(", ")})`;
         }
         this.userMessage = baseMsg;

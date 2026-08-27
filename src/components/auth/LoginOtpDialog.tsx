@@ -20,8 +20,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/providers/AuthProvider";
 import { postVerifyLoginOtp, Verify2FAError } from "@/services/auth/postVerifyLoginOtp";
-import { postRequestLogin2FAOtp } from "@/services/auth/postRequestLogin2FAOtp";
+import { ApiStatusError, postRequestLogin2FAOtp } from "@/services/auth/postRequestLogin2FAOtp";
 import { useTranslations } from "next-intl";
+import axios from "axios";
 
 
 
@@ -37,6 +38,8 @@ type LoginOtpDialogProps = {
   /** request-2fa 재전송 등으로 토큰이 갱신될 수 있어 외부에 반영 */
   onTempJwtChange?: (jwt: string) => void;
 };
+const MAX_VERIFY_ATTEMPTS = 5;
+const MAX_RESEND_ATTEMPTS = 10;
 
 export const LoginOtpDialog = ({
   open,
@@ -54,6 +57,8 @@ export const LoginOtpDialog = ({
   const isPhoneType = phone === "휴대폰" || phone === "phone" || phone === t("setting_account_mobile");
   const isEmailType = phone === "이메일" || phone === "email";
   const type = isPhoneType ? "mobile" : "email";
+  const [resendCount, setResendCount] = useState(0);
+  const [verifyFailCount, setVerifyFailCount] = useState(0);
 
   const FormSchema = z.object({
     otp: z.string().min(6, {
@@ -102,35 +107,46 @@ export const LoginOtpDialog = ({
 
   // 재전송 핸들러
   const handleResend = async () => {
+    if (resendCount >= MAX_RESEND_ATTEMPTS) {
+      alert(t('alert_otp_send_max_fail'));
+      return;
+    }
+
     setTimeLeft(INITIAL_TIME);
-    // 현재는 휴대폰 라디오가 비활성화라 사실상 email만 사용됨
     const type = phone === "휴대폰" ? "mobile" : "email";
 
     setResendPending(true);
     try {
       const res = await postRequestLogin2FAOtp({ type, tempJwt });
-      // 재전송 성공 시 서버가 새 temp_token을 주므로 갱신
+      setResendCount((prev) => prev + 1);
       onTempJwtChange?.(res.temp_token);
+      alert(t('alert_otp_request_again'));
     } catch (e) {
-      alert(
-        e instanceof Error ? e.message : t('alert_otp_send_fail'),
-      );
+      // 429(발급 초과) 또는 423(잠김) 시 즉시 MAX로 설정
+      if (e instanceof ApiStatusError && (e.status === 429 || e.status === 423)) {
+        setResendCount(MAX_RESEND_ATTEMPTS);
+      }
+      alert(e instanceof Error ? e.message : t('alert_otp_send_fail'));
     } finally {
       setResendPending(false);
     }
   };
 
   const handleOtpSuccess = async (data: z.infer<typeof FormSchema>) => {
-    // 2차 인증 플로우: temp_token으로 OTP 검증 API 호출 (성공해야만 로그인 완료)
+    if (verifyFailCount >= MAX_VERIFY_ATTEMPTS) {
+      alert(t('alert_otp_verify_max_fail'));
+      return;
+    }
+
     setVerifyPending(true);
     try {
-      
       const loginDataRes = await postVerifyLoginOtp({
         t,
         otp: data.otp,
         type,
         tempJwt,
       });
+
       setLogin({
         isLogin: true,
         adminName: loginDataRes.admin_info.admin_name,
@@ -146,20 +162,47 @@ export const LoginOtpDialog = ({
       onOpenChange(false);
       form.reset();
       router.push("/center");
-    } catch (error) {
+    } catch (error: unknown) {
+      // 상태 코드 확인을 위한 타입 가드
+      let status: number | undefined;
+      if (axios.isAxiosError(error)) {
+        status = error.response?.status;
+      } else if (error instanceof ApiStatusError) {
+        status = error.status;
+      }
+
+      // 서버 잠김/초과 응답(422, 423, 429) 시 카운트 동기화
+      if (status === 422 || status === 423 || status === 429) {
+        setVerifyFailCount(MAX_VERIFY_ATTEMPTS);
+        if (status === 429 || status === 423) {
+          setResendCount(MAX_RESEND_ATTEMPTS);
+        }
+        alert(t('alert_otp_verify_max_fail'));
+        return;
+      }
+
+      // 일반 검증 실패 시 카운트 증가
+      setVerifyFailCount((prev) => {
+        const next = prev + 1;
+        if (next >= MAX_VERIFY_ATTEMPTS) {
+          alert(t('alert_otp_verify_max_fail'));
+        }
+        return next;
+      });
+
       const message =
         error instanceof Verify2FAError
           ? error.userMessage
           : t('login_wrong_otp');
+
       form.setError("otp", {
         type: "manual",
-        message,
+        message: `${message} (${Math.min(verifyFailCount + 1, MAX_VERIFY_ATTEMPTS)}/${MAX_VERIFY_ATTEMPTS})`,
       });
     } finally {
       setVerifyPending(false);
     }
   };
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">

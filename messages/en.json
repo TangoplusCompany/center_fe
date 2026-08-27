@@ -63,6 +63,8 @@
     "alert_otp_error_500": "Failed to send OTP email.",
     "alert_otp_error_etc": "Failed to request OTP.",
     "alert_otp_send_fail": "Failed to resend. Please try again in a moment.",
+    "alert_otp_verify_max_fail": "The maximum number of authentication attempts (5) has been exceeded. Please contact the administrator.",
+    "alert_otp_send_max_fail": "The maximum number of retries (10) has been exceeded. Please contact the administrator.",
     "alert_otp_submit_time_out": "Time has expired. Please resend.",
     "alert_otp_request_again_fail": "OTP resend failed.",
 
@@ -715,6 +717,7 @@
     "device_error_nonexistent": "Device does not exist. Please check again.",
     "device_error_already_registered_retry": "This device is already registered. Please check again.",
     "device_success_updated": "Device information has been updated.",
+    "device_max_count": "You can register up to four devices.",
 
     "manager_btn_invite": "Invite Manager",
     "manager_add": "Add Manager",

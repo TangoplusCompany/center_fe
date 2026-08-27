@@ -11,7 +11,14 @@ type IRequest2FASuccessResponse = IResponseDefault & {
     temp_token: string;
   };
 };
-
+export class ApiStatusError extends Error {
+  status?: number;
+  constructor(message: string, status?: number) {
+    super(message);
+    this.name = "ApiStatusError";
+    this.status = status;
+  }
+}
 /** 실패 시 응답 (429: OTP 발급 횟수 제한, 423: OTP 요청 잠김) */
 type IRequest2FAErrorResponse = IResponseDefault & {
   status: 429 | 423;
@@ -47,8 +54,9 @@ export const postRequestLogin2FAOtp = async ({
   } catch (err) {
     if (axios.isAxiosError(err)) {
       const axiosError = err as AxiosError<IRequest2FAErrorResponse>;
-      const message = axiosError.response?.data?.message?.[0];
-      if (message) throw new Error(message);
+      const message = axiosError.response?.data?.message?.[0] || "요청에 실패했습니다.";
+      const status = axiosError.response?.status;
+      throw new ApiStatusError(message, status);
     }
     throw err;
   }

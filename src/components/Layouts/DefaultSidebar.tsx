@@ -41,12 +41,7 @@ const sideTabs = [
     url: "/manager",
     icon: "/icons/ic_manager.svg",
   },
-  {
-    title: "login_log_management",
-    url: "https://gym.tangoplus.co.kr/admin_api/login_page.php",
-    icon: "/icons/ic_paper.svg",
-    external: true,
-  },
+  
   {
     title: "h_center",
     url: "/center",
@@ -348,7 +343,7 @@ export default function DefaultSidebar() {
                         <Link
                           href={item.url}
                           className="flex items-center gap-3 w-full"
-                          {...(item.external && { target: "_blank", rel: "noopener noreferrer" })}
+                          
                         >
                           
                         <div className="lg:w-5 lg:h-5 ml-4 overflow-hidden relative">
