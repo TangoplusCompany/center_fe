@@ -89,11 +89,24 @@ const UserDetail = ({
     }
     if (measureSn) return;
 
-    // 처음 user에 들어왔을 때 선택된 Sn이 없을 때만 
-    const latestMeasureSn = dateChangeMeasureList?.measurement_list?.[0]?.measure_sn;
-    if (!measureSn && latestMeasureSn) {
-      setMeasureSn(latestMeasureSn);
+    // 처음 user에 들어왔을 때 선택된 Sn이 없을 때만
+    if (!measureSn && dateChangeMeasureList?.measurement_list) {
+      const list = dateChangeMeasureList.measurement_list;
+      const targetIndex = list.findIndex(
+        (m) =>
+          m.has_basic === 1 ||
+          m.has_rom === 1 ||
+          m.has_bia === 1 ||
+          m.has_gait === 1 ||
+          m.has_moire === 1
+      );
+      if (targetIndex !== -1) {
+        const selectedMeasure = list[targetIndex];
+        setMeasureSn(selectedMeasure.measure_sn);
+      } 
     }
+
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTab, dateChangeMeasureList, isListClick, measureSn]); 
 
