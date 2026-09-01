@@ -36,7 +36,6 @@ type LoginOtpDialogProps = {
   /** 2차 인증 플로우: request-2fa 이후 받은 temp_token */
   tempJwt: string;
   /** request-2fa 재전송 등으로 토큰이 갱신될 수 있어 외부에 반영 */
-  remainingIssueCount: number | null;
   onTempJwtChange?: (jwt: string) => void;
 };
 const MAX_VERIFY_ATTEMPTS = 5;
@@ -47,7 +46,6 @@ export const LoginOtpDialog = ({
   onOpenChange,
   phone,
   tempJwt,
-  remainingIssueCount,
   onTempJwtChange,
 }: LoginOtpDialogProps) => {
   const t = useTranslations("Index");
@@ -120,6 +118,7 @@ export const LoginOtpDialog = ({
     setResendPending(true);
     try {
       const res = await postRequestLogin2FAOtp({ type, tempJwt });
+      const remainingIssueCount = res.remaining_issue_count
       setResendCount((prev) => prev + 1);
       onTempJwtChange?.(res.temp_token);
       alert(`${t('alert_otp_request_again')} (${t('remaining_send_count')}: ${remainingIssueCount}${t('unit_times')})`);

@@ -19,7 +19,6 @@ const EditCenterContainer = () => {
   const [isInviteOpen, setIsInviteOpen] = useState(false);
   const [tempJwt, setTempJwt] = useState<string | null>(null);
   const { isOtpDialogOpen, phone, openDialog,  setIsOtpDialogOpen, updateTempJwt } = useOtpDialog();
-  const [remainingIssueCount, setRemainingIssueCount] = useState<number | null>(null);
   
   const prevOtpOpen = React.useRef(false);
   useEffect(() => {
@@ -29,11 +28,10 @@ const EditCenterContainer = () => {
     prevOtpOpen.current = isOtpDialogOpen;
   }, [isOtpDialogOpen]);
 
-  const handle2FANext = (method: Login2FAMethod, remainingIssueCount: number, requestedTempToken: string) => {
+  const handle2FANext = (method: Login2FAMethod, requestedTempToken: string) => {
     const contact = method === "email" ? "이메일" : "휴대폰";
     setTempJwt(requestedTempToken);
     updateTempJwt(requestedTempToken);
-    setRemainingIssueCount(remainingIssueCount);
     openDialog(contact, EMPTY_LOGIN_DATA, requestedTempToken);
   };
 
@@ -69,9 +67,9 @@ const EditCenterContainer = () => {
         open={is2FAMethodOpen}
         onOpenChange={setIs2FAMethodOpen}
         tempJwt={tempJwt ?? ""}
-        onNext={(method, remainingIssueCount,token) => {
+        onNext={(method, token) => {
           setIs2FAMethodOpen(false);
-          handle2FANext(method, remainingIssueCount, token);
+          handle2FANext(method, token);
         }}
       />
 
@@ -80,7 +78,6 @@ const EditCenterContainer = () => {
         onOpenChange={setIsOtpDialogOpen}
         phone={phone}
         tempJwt={tempJwt ?? ""}
-        remainingIssueCount={remainingIssueCount}
         onTempJwtChange={updateTempJwt}
       />
 
