@@ -45,7 +45,7 @@ export interface IMeasureList {
   has_bia: 0 | 1;
   has_gait: 0 | 1;
   has_moire: 0 | 1;
-  isWrongMeasre: 0 | 1;
+  isWrongMeasure: 0 | 1;
 }
 export interface IMeasurementMeta {
   user_sn: number | string; // sn
