@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { AlertCircle, FileText } from "lucide-react";
+import { FileText } from "lucide-react";
 import { phoneFiltering, phoneHyphen } from "@/utils/regexFiltering";
 import { formatDate } from "@/utils/formatDate";
 import { useEffect, useState } from "react";
@@ -141,7 +141,6 @@ export const MeasureList = ({
           </TableHeader>
           <TableBody>
             {list.map((measurement, index) => {
-              const isError = measurement.isWrongMeasre === 1;
 
               return (
                 <TableRow
@@ -183,12 +182,6 @@ export const MeasureList = ({
                   {/* 끄트머리 영역: 오류 뱃지 + 상세보기 버튼 */}
                   <TableCell className="text-right whitespace-nowrap">
                     <div className="flex items-center justify-end gap-2.5">
-                      {isError && (
-                        <div className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium text-red-600 dark:text-red-300 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-md">
-                          <AlertCircle className="w-3.5 h-3.5 text-red-500 shrink-0" />
-                          <span>측정오류</span>
-                        </div>
-                      )}
 
                       <button
                         type="button"

@@ -245,8 +245,6 @@ const MeasureDetailContainer = ({
     user_sn: `${userSn}`,
     isMyPage,
   });
-
-  const isWrongMeasure = measureData?.isWrongMeasure ?? 0;
   useEffect(() => {
     if (!measureMetaData || !setMeasureType) return;
 
@@ -339,50 +337,6 @@ const MeasureDetailContainer = ({
 
   if (measureDataLoading) {
     return <p className="py-8 text-center">로딩중입니다</p>;
-  }
-
-  // 1. 측정 오류일 때 분기 렌더링
-  if (isWrongMeasure === 1) {
-    return (
-      <div className="flex flex-col gap-4">
-        {/* 우측 날짜 선택 버튼 */}
-        <div className="flex justify-end">
-          {dateProps.measureList && dateProps.setMeasureSn && (
-            <>
-              <button
-                type="button"
-                onClick={() => setDatePickerOpen?.(true)}
-                className="w-full sm:w-fit flex items-center justify-center gap-2 border-2 border-sub300 rounded-xl px-3 py-1.5 text-sm text-sub700 dark:text-sub100 hover:border-mainBlue-600 focus:outline-none focus:ring-2 focus:border-blue-500 transition"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/icons/ic_calendar.svg" alt="date_select" className="lg:!w-5 lg:!h-5" />
-                <span>
-                  {selectedMeasure ? formatDate(selectedMeasure.measure_date, locale) : "측정일 선택"}
-                </span>
-              </button>
-              <MeasureDetailDatePickerDialog
-                open={datePickerOpen ?? false}
-                onOpenChange={setDatePickerOpen}
-                items={dateProps.measureList}
-                selectedMeasure={dateProps.selectedMeasure}
-                onSelect={(sn) => dateProps.setMeasureSn?.(sn)}
-                pagination={dateProps.pagination}
-              />
-            </>
-          )}
-        </div>
-
-        {/* 측정 오류 안내 문구 */}
-        <div className="flex flex-col items-center justify-center min-h-[400px] gap-2 text-center">
-          <p className="text-base sm:text-lg font-semibold text-sub900 dark:text-sub50">
-            정상적인 측정 기록이 아닙니다.
-          </p>
-          <p className="text-sm sm:text-base text-sub500 dark:text-sub300">
-            키오스크의 안내에 따라 측정을 다시 시작해주세요. 
-          </p>
-        </div>
-      </div>
-    );
   }
 
   if (!measureData || !measureData.measurement_meta) {
