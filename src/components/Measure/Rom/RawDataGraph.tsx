@@ -11,15 +11,16 @@ export interface RawDataGraphProps {
 
 export const ROMRawDataGraph = ({
   graphType,
-  data, // velocityData 또는 angleData
+  data, 
   maxMinValue
 }: RawDataGraphProps) => {
   const t = useTranslations('Index');
-  // 데이터를 차트에 맞게 변환 (index를 x축으로)
-  const chartData = data.map((value, index) => ({
-    frame: index,
-    value: value
-  }));
+  const chartData = Array.isArray(data)
+    ? data.map((value, index) => ({
+        frame: index,
+        value: value,
+      }))
+    : [];
   const maxValue = (graphType === 0 ? maxMinValue?.value_1_max : maxMinValue?.value_2_max) ?? 0
   const minValue = (graphType === 0 ? maxMinValue?.value_1_min : maxMinValue?.value_2_min) ?? 0
   return (
@@ -30,8 +31,8 @@ export const ROMRawDataGraph = ({
         </span>
 
         <div className="flex flex-col text-sm text-sub700 text-end">
-          <div>{graphType === 0 ? t('rom_stat_min_angle') : t('rom_stat_max_angle')}: {Math.abs(maxValue).toFixed(1)}º</div>
-          <div>{graphType === 0 ? t('rom_stat_min_angular_velocity') : t('rom_stat_max_angular_velocity')}: {Math.abs(minValue).toFixed(1)}º</div>
+          <div>{graphType === 0 ? t('rom_stat_min_angle') : t('rom_stat_min_angular_velocity')}: {Math.abs(maxValue).toFixed(1)}º</div>
+          <div>{graphType === 0 ? t('rom_stat_max_angle') : t('rom_stat_max_angular_velocity')}: {Math.abs(minValue).toFixed(1)}º</div>
         </div>
       </div>
 

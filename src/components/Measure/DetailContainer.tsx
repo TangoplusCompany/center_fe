@@ -218,11 +218,11 @@ const MeasureDetailContainer = ({
   isDatePickerOpen = false,
   onDatePickerOpenChange,
   aiExerciseOpen = false,
-  setAiExerciseOpen
+  setAiExerciseOpen,
 }: CenterUserMeasureProps) => {
   const t = useTranslations("Index");
   const locale = useLocale();
-  const measureMetaData = measureList 
+  const measureMetaData = measureList
     ? measureList.find((measure) => measure.measure_sn === measureSn)
     : externalMeasureData;
   const [internalDatePickerOpen, setInternalDatePickerOpen] = useState(false);
@@ -246,11 +246,11 @@ const MeasureDetailContainer = ({
     isMyPage,
   });
 
-  // 💡 2. 계산된 플래그를 useEffect 내부에서 재사용
+  const isWrongMeasure = measureData?.isWrongMeasure ?? 0;
   useEffect(() => {
     if (!measureMetaData || !setMeasureType) return;
 
-    const availableType = MEASURE_TYPE.find(type => {
+    const availableType = MEASURE_TYPE.find((type) => {
       if (type.key === "basic") return hasBasic;
       if (type.key === "rom") return hasRom;
       if (type.key === "bia") return hasBia;
@@ -264,26 +264,8 @@ const MeasureDetailContainer = ({
     }
   }, [measureMetaData, setMeasureType, hasBasic, hasRom, hasBia, hasGait, hasMoire]);
 
-  if (!measureMetaData) {
-    return (
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between">
-          <Skeleton className="w-64 h-12"/>
-          <Skeleton className="w-64 h-12"/>
-        </div>
-        <div className="grid grid-cols-[1fr_2fr] gap-4">
-          <Skeleton className="w-full h-[512px]"/>
-          <div className="w-full h-fit flex flex-col gap-4">
-            <Skeleton className="w-full h-[248px]"/>
-            <Skeleton className="w-full h-[248px]"/>
-          </div>
-        </div>
-        <Skeleton className="w-full h-64"/>
-      </div>
-    );
-  }
-
   const handleKakaoSend = async () => {
+    if (!measureMetaData) return;
     const cryptoData = {
       device_sn: Number(measureMetaData.device_sn),
       sn: Number(measureMetaData.measure_sn),
@@ -291,7 +273,7 @@ const MeasureDetailContainer = ({
       user_uuid: uuid,
       receiver: measureMetaData.mobile,
       receiver_name: measureMetaData.user_name,
-      measure_date: measureMetaData.measure_date
+      measure_date: measureMetaData.measure_date,
     };
     const encryptData = await actionKakaoEncrypt(cryptoData);
     try {
@@ -304,7 +286,7 @@ const MeasureDetailContainer = ({
   };
 
   const handlePrint = async (selectedValues: string) => {
-    if (selectedValues.length === 0) return;
+    if (!measureMetaData || selectedValues.length === 0) return;
     const cryptoData = {
       sn: Number(measureMetaData.measure_sn),
       user_uuid: uuid,
@@ -321,29 +303,93 @@ const MeasureDetailContainer = ({
     }
   };
 
-  // 💡 3. 하단에 있던 중복 선언문 제거됨 (상단에서 구출한 hasBasic, hasRom 등 그대로 사용)
-  
-  const dateProps : SkeletonDatePickerProps = {
+  const dateProps: SkeletonDatePickerProps = {
     measureList: measureList,
     selectedMeasure: measureSn,
     isDatePickerOpen: isDatePickerOpen,
     setMeasureSn: setMeasureSn,
     onDatePickerOpenChange: onDatePickerOpenChange,
-  }
-  const isControlled = dateProps.onDatePickerOpenChange != undefined;
+  };
+  const isControlled = dateProps.onDatePickerOpenChange !== undefined;
   const datePickerOpen = isControlled ? dateProps.isDatePickerOpen : internalDatePickerOpen;
   const setDatePickerOpen = dateProps.onDatePickerOpenChange ?? setInternalDatePickerOpen;
   const selectedMeasure =
-    dateProps.measureList && dateProps.selectedMeasure != undefined
+    dateProps.measureList && dateProps.selectedMeasure !== undefined
       ? dateProps.measureList.find((item) => item.measure_sn === dateProps.selectedMeasure)
       : undefined;
+
+  if (!measureMetaData) {
+    return (
+      <div className="flex flex-col gap-4">
+        <div className="flex justify-between">
+          <Skeleton className="w-64 h-12" />
+          <Skeleton className="w-64 h-12" />
+        </div>
+        <div className="grid grid-cols-[1fr_2fr] gap-4">
+          <Skeleton className="w-full h-[512px]" />
+          <div className="w-full h-fit flex flex-col gap-4">
+            <Skeleton className="w-full h-[248px]" />
+            <Skeleton className="w-full h-[248px]" />
+          </div>
+        </div>
+        <Skeleton className="w-full h-64" />
+      </div>
+    );
+  }
 
   if (measureDataLoading) {
     return <p className="py-8 text-center">로딩중입니다</p>;
   }
+
+  // 1. 측정 오류일 때 분기 렌더링
+  if (isWrongMeasure === 1) {
+    return (
+      <div className="flex flex-col gap-4">
+        {/* 우측 날짜 선택 버튼 */}
+        <div className="flex justify-end">
+          {dateProps.measureList && dateProps.setMeasureSn && (
+            <>
+              <button
+                type="button"
+                onClick={() => setDatePickerOpen?.(true)}
+                className="w-full sm:w-fit flex items-center justify-center gap-2 border-2 border-sub300 rounded-xl px-3 py-1.5 text-sm text-sub700 dark:text-sub100 hover:border-mainBlue-600 focus:outline-none focus:ring-2 focus:border-blue-500 transition"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/icons/ic_calendar.svg" alt="date_select" className="lg:!w-5 lg:!h-5" />
+                <span>
+                  {selectedMeasure ? formatDate(selectedMeasure.measure_date, locale) : "측정일 선택"}
+                </span>
+              </button>
+              <MeasureDetailDatePickerDialog
+                open={datePickerOpen ?? false}
+                onOpenChange={setDatePickerOpen}
+                items={dateProps.measureList}
+                selectedMeasure={dateProps.selectedMeasure}
+                onSelect={(sn) => dateProps.setMeasureSn?.(sn)}
+                pagination={dateProps.pagination}
+              />
+            </>
+          )}
+        </div>
+
+        {/* 측정 오류 안내 문구 */}
+        <div className="flex flex-col items-center justify-center min-h-[400px] gap-2 text-center">
+          <p className="text-base sm:text-lg font-semibold text-sub900 dark:text-sub50">
+            정상적인 측정 기록이 아닙니다.
+          </p>
+          <p className="text-sm sm:text-base text-sub500 dark:text-sub300">
+            키오스크의 안내에 따라 측정을 다시 시작해주세요. 
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   if (!measureData || !measureData.measurement_meta) {
     return <p className="py-8 text-center">데이터가 존재하지 않습니다</p>;
   }
+
+  // 2. 정상 측정일 때 렌더링
   return (
     <div className="flex flex-col gap-4">
       {!aiExerciseOpen && (
@@ -368,7 +414,7 @@ const MeasureDetailContainer = ({
                   } ${
                     !isAvailable ? "opacity-40 cursor-not-allowed bg-transparent" : ""
                   } px-2 sm:px-4 py-1 text-xs sm:text-sm font-medium rounded-xl transition-all whitespace-normal sm:whitespace-nowrap text-center leading-tight`}
-                  onClick={() => setMeasureType?.(type.key as measureType)} // 💡 옵셔널 체이닝(?.) 적용
+                  onClick={() => setMeasureType?.(type.key as measureType)}
                 >
                   {t(type.title)}
                 </button>
@@ -376,14 +422,13 @@ const MeasureDetailContainer = ({
             })}
           </div>
 
-          {/* 우측 버튼 */}
           <div className="flex flex-col items-stretch justify-end sm:flex-row sm:items-center gap-2 sm:gap-4 flex-shrink-0">
             {dateProps.measureList && dateProps.setMeasureSn && (
               <>
                 <button
                   type="button"
                   onClick={() => setDatePickerOpen?.(true)}
-                  className="w-full sm:w-fit flex items-center justify-center gap-2 border-2 border-sub300 rounded-xl px-3 py-1.5 text-sm text-sub700 dark:text-sub100 hover:border-mainBlue-600 focus:outline-none focus:ring-2  focus:border-blue-500 transition"
+                  className="w-full sm:w-fit flex items-center justify-center gap-2 border-2 border-sub300 rounded-xl px-3 py-1.5 text-sm text-sub700 dark:text-sub100 hover:border-mainBlue-600 focus:outline-none focus:ring-2 focus:border-blue-500 transition"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src="/icons/ic_calendar.svg" alt="date_select" className="lg:!w-5 lg:!h-5" />
@@ -396,36 +441,57 @@ const MeasureDetailContainer = ({
                   onOpenChange={setDatePickerOpen}
                   items={dateProps.measureList}
                   selectedMeasure={dateProps.selectedMeasure}
-                  onSelect={(sn) => dateProps.setMeasureSn?.(sn)} 
+                  onSelect={(sn) => dateProps.setMeasureSn?.(sn)}
                   pagination={dateProps.pagination}
                 />
               </>
             )}
-            
-            <Button 
-              className="w-full sm:w-auto px-6 "
+
+            <Button
+              className="w-full sm:w-auto px-6"
               variant="sub"
               onClick={() => {
-                if (window.confirm(`${locale == "ko" ?`${measureMetaData.user_name}로 카카오톡 결과를 전송하시습니까?` :`Do you want to send the KakaoTalk results to ${measureMetaData.user_name}?`}`)) {
-                  handleKakaoSend()
+                if (
+                  window.confirm(
+                    `${
+                      locale === "ko"
+                        ? `${measureMetaData.user_name}로 카카오톡 결과를 전송하시습니까?`
+                        : `Do you want to send the KakaoTalk results to ${measureMetaData.user_name}?`
+                    }`
+                  )
+                ) {
+                  handleKakaoSend();
                 }
-              }}>
+              }}
+            >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/icons/ic_send.svg" alt="카카오톡 결과 전송" className="gap-4 size-4 dark:[filter:brightness(0)_invert(1)]" />
-              <span>{t('btn_send_kakao')}</span>
+              <img
+                src="/icons/ic_send.svg"
+                alt="카카오톡 결과 전송"
+                className="gap-4 size-4 dark:[filter:brightness(0)_invert(1)]"
+              />
+              <span>{t("btn_send_kakao")}</span>
             </Button>
-            
-            <PrintSelect handlePrint={handlePrint} hasBasic={hasBasic} hasRom={hasRom} hasBia={hasBia} hasGait={hasGait} hasMoire={hasMoire} t={t} />
-          </div> 
-        </div>
-        )}
 
-      {(measureType === "basic" && hasBasic) && (
-        <MeasureDetail 
+            <PrintSelect
+              handlePrint={handlePrint}
+              hasBasic={hasBasic}
+              hasRom={hasRom}
+              hasBia={hasBia}
+              hasGait={hasGait}
+              hasMoire={hasMoire}
+              t={t}
+            />
+          </div>
+        </div>
+      )}
+
+      {measureType === "basic" && hasBasic && (
+        <MeasureDetail
           measureList={measureList}
           userSn={userSn}
           measureData={measureData}
-          setMeasureSn={setMeasureSn} 
+          setMeasureSn={setMeasureSn}
           isMyPage={isMyPage}
           isUserPage={isUserPage}
           isDatePickerOpen={isDatePickerOpen}
@@ -434,30 +500,30 @@ const MeasureDetailContainer = ({
           setAiExerciseOpen={setAiExerciseOpen}
         />
       )}
-      
-      {(measureType === "rom" && hasRom) && (
-        <CenterUserROMContainer 
-          userSn={parseInt(userSn)} 
-          measureSn={measureSn ?? 0} 
-          isMyPage={isMyPage} 
-          uuid={uuid} 
-          mobile={measureMetaData.mobile ?? ""} 
+
+      {measureType === "rom" && hasRom && (
+        <CenterUserROMContainer
+          userSn={parseInt(userSn)}
+          measureSn={measureSn ?? 0}
+          isMyPage={isMyPage}
+          uuid={uuid}
+          mobile={measureMetaData.mobile ?? ""}
         />
       )}
 
-      {(measureType === "bia" && hasBia && measureData.bia_result) && (
-        <BiaContainer data={measureData.bia_result}/>
+      {measureType === "bia" && hasBia && measureData.bia_result && (
+        <BiaContainer data={measureData.bia_result} />
       )}
 
-      {(measureType === "gait" && hasGait && measureData.gait_result) && ( // && hasGait && measureData.gait_result
-        <GaitContainer data={measureData.gait_result}/>
+      {measureType === "gait" && hasGait && measureData.gait_result && (
+        <GaitContainer data={measureData.gait_result} />
       )}
-      {(measureType === "moire" && hasMoire && measureData.moire_result) && ( // && hasMoire && measureData.moire_result
-        <MoireContainer data={measureData.moire_result}/>
+
+      {measureType === "moire" && hasMoire && measureData.moire_result && (
+        <MoireContainer data={measureData.moire_result} />
       )}
     </div>
-  )
-}
+  );
+};
 
 export default MeasureDetailContainer;
-

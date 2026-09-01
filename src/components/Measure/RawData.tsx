@@ -52,23 +52,23 @@ export const RawData = (
     0: "text-sub600 dark:text-sub100",
     1: "text-warningDeep dark:text-warning-foreground",
     2: "text-dangerDeep dark:text-danger",
-  }[data0.risk_level] ?? "bg-primary-foreground";
+  }[data0.risk_level] ?? "";
   const textBgCondition0 = {
     0: "bg-sub600 dark:bg-gray-600",
     1: "bg-warning",
     2: "bg-danger",
-  }[data0.risk_level] ?? "bg-primary-foreground";
+  }[data0.risk_level] ?? "bg-sub150";
 
   const textCondition1 = {
     0: "text-sub600 dark:text-sub100",
     1: "text-warningDeep dark:text-warning-foreground",
     2: "text-dangerDeep dark:text-danger",
-  }[data1?.risk_level ?? 0] ?? "bg-primary-foreground";
+  }[data1?.risk_level ?? 0] ?? "";
   const textBgCondition1 = {
     0: "bg-sub600 dark:bg-gray-600",
     1: "bg-warning",
     2: "bg-danger",
-  }[data1?.risk_level ?? 0] ?? "bg-primary-foreground";
+  }[data1?.risk_level ?? 0] ?? "bg-sub150";
   const getStandard = (unit: string | undefined) => {
     if (unit?.includes("기울기")) return "0°";
     if (unit?.includes("족압 분포-상하")) return "40%/60%";

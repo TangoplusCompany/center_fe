@@ -49,7 +49,7 @@ export default function LoginForm({
     openDialog,
     closeDialog,
   } = useOtpDialog();
-
+  const [remainingIssueCount, setRemainingIssueCount] = useState<number | null>(null);
   const showUnlockLink = true;
   const loginSchema = z.object({
     email: z
@@ -81,7 +81,6 @@ export default function LoginForm({
     resolver: zodResolver(loginSchema),
   });
 
-
   const loginHandleSubmit = handleSubmit(async (data) => {
     setIsLoginPending(true);
     try {
@@ -108,11 +107,12 @@ export default function LoginForm({
     }
   });
 
-  const handle2FANext = (method: Login2FAMethod, requestedTempToken: string) => {
+  const handle2FANext = (method: Login2FAMethod, remainingIssueCount: number, requestedTempToken: string) => {
     if (!loginDataFor2FA || !tempJwt) return;
     const contact = method === "email" ? t('setting_account_email') : t('setting_account_mobile');
     setTempJwt(requestedTempToken);
     updateTempJwt(requestedTempToken);
+    setRemainingIssueCount(remainingIssueCount);
     openDialog(contact, loginDataFor2FA, requestedTempToken);
   };
 
@@ -196,7 +196,6 @@ export default function LoginForm({
         </div>
       </form>
 
-      {/* 다이얼로그는 form 밖에 렌더링 */}
       {tempJwt && (
         <Login2FAMethodDialog
           open={is2FADialogOpen}
@@ -214,6 +213,7 @@ export default function LoginForm({
           }}
           phone={phone}
           tempJwt={otpDialogTempJwt}
+          remainingIssueCount={remainingIssueCount}
           onTempJwtChange={(jwt) => {
             setTempJwt(jwt);
             updateTempJwt(jwt);

@@ -1,4 +1,3 @@
-import { IMeasureList } from "@/types/measure";
 import CompareBody from "./CompareBody";
 import { ComparePair, CompareSlot } from "@/types/compare";
 
@@ -9,7 +8,6 @@ const CompareContainer = ({
   isMyPage = false,
 }: {
   userSn: string;
-  measureList? : IMeasureList[];
   comparePair: ComparePair;
   onCompareDialogOpen: (slot: CompareSlot) => void;
   isMyPage: boolean;

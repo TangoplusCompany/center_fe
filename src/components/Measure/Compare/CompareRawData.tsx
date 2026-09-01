@@ -129,9 +129,9 @@ export const CompareRawData = ({
           <span className="text-lg font-semibold text-black dark:text-foreground">{isRight ? '②' : '①'}</span>
           <span className={`text-base ${isRight ? 'text-sub600 dark:text-muted-foreground' : 'text-black dark:text-foreground'}`}>{isRight ? measure_date1.slice(0, 11) : measure_date0.slice(0, 11)}</span>
         </div>
-        <span className={`flex flex-1 justify-center text-base text-sub600 dark:text-muted-foreground`}>{!dataBottom ? '기준값' : '차이값'}</span>
-        <span className="flex justify-center text-base text-sub600 dark:text-muted-foreground">단계표시</span>
-        <span className="text-base text-sub600 dark:text-muted-foreground px-4">분석설명</span>
+        <span className={`flex flex-1 justify-center text-base text-sub600 dark:text-muted-foreground`}>{!dataBottom ? t('label_set_point') : t('label_diff_point')}</span>
+        <span className="flex justify-center text-base text-sub600 dark:text-muted-foreground">{t('label_stage_indicator')}</span>
+        <span className="text-base text-sub600 dark:text-muted-foreground px-4">{t('label_analysis_desc')}</span>
       </div>
 
       <div  className={`grid grid-cols-[18%_10%_12%_60%] items-center h-full w-full divide-x-2 divide-sub200 dark:divide-border`}>

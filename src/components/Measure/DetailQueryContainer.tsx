@@ -49,7 +49,7 @@ const MeasureDetailQueryContainer = ({firstMeasureType}:MeasureDetailQueryProps)
     measure_sn: decryptedData?.measure_sn ?? 0,
     user_sn: decryptedData?.user_sn ? `${decryptedData.user_sn}` : "",
   });
-
+  const isWrongMeasure = measureData?.isWrongMeasure ?? 0;
   const [measureType, setMeasureType] = useState<measureType>(firstMeasureType);
   useEffect(() => {
     if (!measureData?.measurement_meta) return;
@@ -77,7 +77,16 @@ const MeasureDetailQueryContainer = ({firstMeasureType}:MeasureDetailQueryProps)
   if (measureDataLoading) return <MeasureDetailSkeleton />;
   if (measureDataError) return <div>Error...</div>;
   if (!measureData) return <div>No data</div>;
-
+  if (isWrongMeasure) return (
+    <div className="flex flex-col items-center justify-center min-h-[400px] gap-2 text-center">
+      <p className="text-base sm:text-lg font-semibold text-sub900 dark:text-sub50">
+        정상적인 측정 기록이 아닙니다.
+      </p>
+      <p className="text-sm sm:text-base text-sub500 dark:text-sub300">
+        키오스크의 안내에 따라 측정을 다시 시작해주세요. 
+      </p>
+    </div>
+  )
   return (
     <div className="w-full h-full flex flex-col gap-4">
       <div className="flex items-center gap-3">

@@ -83,7 +83,7 @@ export const RequestOtpForm = ({
       setTimeLeft(OTP_VALID_SECONDS);
       form.setValue("otp", "");
       form.clearErrors("otp");
-      alert(t('alert_otp_request_again'));
+      alert(`${t('alert_otp_request_again')} `);
     } catch (err) {
       if (err instanceof AxiosError && err.response) {
         alert(

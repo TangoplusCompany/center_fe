@@ -21,7 +21,7 @@ type Login2FAMethodDialogProps = {
   onOpenChange: (open: boolean) => void;
   tempJwt: string;
   /** request-2fa 성공 후 반환된 temp_token을 함께 넘김 */
-  onNext: (method: Login2FAMethod, requestedTempToken: string) => void;
+  onNext: (method: Login2FAMethod, remainingIssueCount: number, requestedTempToken: string) => void;
 };
 
 export const Login2FAMethodDialog = ({
@@ -40,8 +40,9 @@ export const Login2FAMethodDialog = ({
     setIsPending(true);
     try {
       const res = await postRequestLogin2FAOtp({ type: method, tempJwt });
+      const remainingIssueCount = res.remaining_issue_count
       onOpenChange(false);
-      onNext(method, res.temp_token);
+      onNext(method, remainingIssueCount, res.temp_token);
     } catch (e) {
       setErrorMessage(e instanceof Error ? e.message : t('2fa_request_fail'));
     } finally {

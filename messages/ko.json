@@ -339,6 +339,7 @@
     "label_stage_indicator": "단계표시",
     "label_analysis_desc": "분석설명",
     "label_set_point": "기준값",
+    "label_diff_point": "차이값",
     "basic_image_print": "측정 이미지 인쇄",
     "h_basic_info_title": "측정 결과 부위별 선택 보기",
 
@@ -582,7 +583,7 @@
     "rom_max_angle": "최대 각도",
     "rom_stage": "단계",
     "rom_desc": "설명",
-    "rom_angle_change": "각도 1",
+    "rom_angle_change": "각도 변화",
     "rom_angular_velocity_change": "각속도 변화",
     "rom_stat_max_angle": "최대 각도",
     "rom_stat_min_angle": "최소 각도",
