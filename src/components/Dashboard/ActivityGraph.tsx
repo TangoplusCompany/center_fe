@@ -9,6 +9,7 @@ const ActivityGraph = ({
 }: {
   data: graphDetailCardProps ;
 }) => {
+  console.log(data)
   const t = useTranslations("Index")  
   const locale = useLocale();
   const barData = React.useMemo(() => {
@@ -23,7 +24,10 @@ const ActivityGraph = ({
       const result = [];
       for (let i = 6; i >= 0; i--) {
         const dayIndex = (today - i + 7) % 7;
-        const dayData = data.usage.find(u => u.day === allDays[dayIndex]);
+        const dayData = data.usage.find((u) => {
+          const targetDay = t(allDays[dayIndex]);
+          return u.day.trim().startsWith(targetDay);
+        });
         result.push({
           label: allDays[dayIndex],
           value: dayData?.measure_count ?? 0,
