@@ -36,6 +36,7 @@ type LoginOtpDialogProps = {
   /** 2차 인증 플로우: request-2fa 이후 받은 temp_token */
   tempJwt: string;
   /** request-2fa 재전송 등으로 토큰이 갱신될 수 있어 외부에 반영 */
+  remainingIssueCount: number | null;
   onTempJwtChange?: (jwt: string) => void;
 };
 const MAX_VERIFY_ATTEMPTS = 5;
@@ -46,6 +47,7 @@ export const LoginOtpDialog = ({
   onOpenChange,
   phone,
   tempJwt,
+  remainingIssueCount,
   onTempJwtChange,
 }: LoginOtpDialogProps) => {
   const t = useTranslations("Index");
@@ -105,7 +107,7 @@ export const LoginOtpDialog = ({
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
-  // 재전송 핸들러
+
   const handleResend = async () => {
     if (resendCount >= MAX_RESEND_ATTEMPTS) {
       alert(t('alert_otp_send_max_fail'));
@@ -114,13 +116,13 @@ export const LoginOtpDialog = ({
 
     setTimeLeft(INITIAL_TIME);
     const type = phone === "휴대폰" ? "mobile" : "email";
-
+    // remaining issue count / remaining fail count 둘다 옴-> 
     setResendPending(true);
     try {
       const res = await postRequestLogin2FAOtp({ type, tempJwt });
       setResendCount((prev) => prev + 1);
       onTempJwtChange?.(res.temp_token);
-      alert(t('alert_otp_request_again'));
+      alert(`${t('alert_otp_request_again')} (${t('remaining_send_count')}: ${remainingIssueCount}${t('unit_times')})`);
     } catch (e) {
       // 429(발급 초과) 또는 423(잠김) 시 즉시 MAX로 설정
       if (e instanceof ApiStatusError && (e.status === 429 || e.status === 423)) {

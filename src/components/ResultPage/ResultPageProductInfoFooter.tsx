@@ -3,7 +3,7 @@ const ResultPageProductInfoFooter = () => {
   return (
     <footer className="shrink-0 px-4 py-3 text-center">
       <p className="text-sm text-muted-foreground">
-        TangoBody 결과 페이지 V1.0
+        TangoBody V3.0 개인 웹 서비스
       </p>
     </footer>
   );

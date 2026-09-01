@@ -15,7 +15,7 @@ export default function UnAuthorizationLayout({
           {children}
           <div className="flex-1" />
           <div className="text-center text-sm text-muted-foreground">
-            TangoBody V1.1 Web
+            TangoBody V3.0 관리자 웹 서비스
           </div>
         </div>
       </div>

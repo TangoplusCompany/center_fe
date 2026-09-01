@@ -16,14 +16,15 @@ import { IUserMeasureListItem } from "@/types/user";
 import { formatDate } from "@/utils/formatDate";
 import type { ComparePagination } from "@/hooks/api/user/useMeasureListForCompare";
 import { useLocale, useTranslations } from "next-intl";
+import { AlertCircle } from "lucide-react";
 
 type MeasurePickerDialogProps = {
   open: boolean;
-  items: IUserMeasureListItem[];
+  items: (IUserMeasureListItem & { isWrongMeasure?: 0 | 1; isWrongMeasre?: 0 | 1 })[];
   comparePair: ComparePair;
   activeSlot: CompareSlot;
   onOpenChange: (v: boolean) => void;
-  selectCompareSn: (measureSn : number, slot: CompareSlot) => void;
+  selectCompareSn: (measureSn: number, slot: CompareSlot) => void;
   /** useMeasureListForCompare 연동 시 전달. 있으면 API 페이지네이션 사용 */
   pagination?: ComparePagination;
 };
@@ -38,14 +39,14 @@ export const MeasurePickerDialog = ({
   pagination: apiPagination,
 }: MeasurePickerDialogProps) => {
   const t = useTranslations("Index");
-  const locale = useLocale()
+  const locale = useLocale();
   const [localPage, setLocalPage] = useState(1);
 
   const useApiPagination = !!apiPagination;
-  
+
   // comparePair에 포함된 항목 제외
-  const filteredItems = items.filter((it) =>
-    !comparePair.includes(it.measure_sn)
+  const filteredItems = items.filter(
+    (it) => !comparePair.includes(it.measure_sn)
   );
 
   const page = useApiPagination ? (apiPagination?.page ?? 1) : localPage;
@@ -53,7 +54,7 @@ export const MeasurePickerDialog = ({
   const lastPage = useApiPagination
     ? (apiPagination?.last_page ?? 1)
     : Math.max(1, Math.ceil(filteredItems.length / itemsPerPage));
-  
+
   const setPage = useApiPagination
     ? (p: number) => apiPagination?.setPage(Math.max(1, p))
     : (p: number) => setLocalPage(Math.max(1, Math.min(p, lastPage)));
@@ -68,41 +69,60 @@ export const MeasurePickerDialog = ({
   useEffect(() => {
     if (open && !useApiPagination) setLocalPage(1);
   }, [open, useApiPagination]);
-  // 여기서부터 해야함
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-full max-w-md rounded-2xl bg-white dark:bg-card p-4" aria-describedby={undefined}>
         {/* 헤더 */}
         <DialogTitle className="text-base font-semibold mb-3 text-foreground">
-          {t('measure_date_picker')}
+          {t("measure_date_picker")}
         </DialogTitle>
 
         {/* 내용 영역 */}
         <div className="max-h-[360px] overflow-auto">
           {filteredItems.length === 0 ? (
             <div className="flex items-center justify-center h-[200px] text-sm text-gray-400 dark:text-gray-500">
-              {t('measure_no_compare')}
+              {t("measure_no_compare")}
             </div>
           ) : (
             <div className="space-y-2">
-              {displayItems.map((it) => (
-                <button
-                  key={it.measure_sn}
-                  type="button"
-                  className="w-full text-left rounded-xl border border-border px-3 py-2 hover:bg-gray-50 dark:hover:bg-white/10 transition-colors text-foreground"
-                  onClick={() => {
-                    selectCompareSn(it.measure_sn, activeSlot);
-                    onOpenChange(false);
-                  }}
-                >
-                  <div className="text-sm font-medium">
-                    {formatDate(it.measure_date, locale)}
-                  </div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400">
-                    {t('device_name')}: {it.device_name}
-                  </div>
-                </button>
-              ))}
+              {displayItems.map((it) => {
+                const isError = (it.isWrongMeasure ?? it.isWrongMeasre) === 1;
+
+                return (
+                  <button
+                    key={it.measure_sn}
+                    type="button"
+                    disabled={isError}
+                    className={`w-full flex items-center justify-between text-left rounded-xl border border-border px-3 py-2 transition-colors ${
+                      isError
+                        ? "cursor-not-allowed opacity-50 bg-gray-50 dark:bg-zinc-800/50"
+                        : "cursor-pointer hover:bg-gray-50 dark:hover:bg-white/10 text-foreground"
+                    }`}
+                    onClick={() => {
+                      if (isError) return;
+                      selectCompareSn(it.measure_sn, activeSlot);
+                      onOpenChange(false);
+                    }}
+                  >
+                    <div>
+                      <div className="text-sm font-medium text-foreground">
+                        {formatDate(it.measure_date, locale)}
+                      </div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">
+                        {t("device_name")}: {it.device_name}
+                      </div>
+                    </div>
+
+                    {isError && (
+                      <div className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium text-red-600 dark:text-red-300 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-md shrink-0">
+                        <AlertCircle className="w-3.5 h-3.5 text-red-500 shrink-0" />
+                        <span>측정오류</span>
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>

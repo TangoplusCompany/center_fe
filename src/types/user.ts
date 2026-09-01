@@ -77,6 +77,7 @@ export interface IUserMeasureListItem
   has_bia : 0 | 1;
   has_gait : 0 | 1;
   has_moire: 0 | 1;
+  isWrongMeasure: 0 | 1;
 }
 
 
