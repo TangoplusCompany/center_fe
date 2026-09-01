@@ -74,7 +74,8 @@ export const useMeasureListForDetail = ({
       has_rom: 0,
       has_bia: 0,
       has_gait: 0,
-      has_moire: 0
+      has_moire: 0,
+      isWrongMeasre : 0,
     }));
   }, [filteredItems]);
 

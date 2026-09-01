@@ -339,6 +339,7 @@
     "label_stage_indicator": "Stage Indicator",
     "label_analysis_desc": "Analysis Description",
     "label_set_point": "Set Point",
+    "label_diff_point": "Different Point",
     "basic_image_print": "Print Image",
     "h_basic_info_title": "View Measurement Results by Area",
 
