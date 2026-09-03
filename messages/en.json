@@ -341,6 +341,7 @@
     "label_set_point": "Set Point",
     "label_diff_point": "Different Point",
     "basic_image_print": "Print Image",
+    "basic_image_print_pending": "Processing image...",
     "h_basic_info_title": "View Measurement Results by Area",
 
     "raw_d_head_slope": "Head Slope",

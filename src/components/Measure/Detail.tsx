@@ -14,6 +14,7 @@ import { generatePrintUrls } from "@/hooks/api/measure/generatePrintUrls";
 import { actionPrintEncrypt } from "@/app/actions/getCrypto";
 import { IMeasureResponse } from "@/types/measure";
 import { useTranslations } from "next-intl";
+import { Loader2 } from "lucide-react";
 
 type MeasureListType = {
   title: string;
@@ -41,7 +42,7 @@ const MeasureDetail = ({
 }: UserMeasureDetailProps) => {
   const t = useTranslations("Index");
   const [activeBasicTab, setActiveBasicTab] = useState('summary');
-  const [, setIsPrinting] = useState(false);
+  const [isPrinting, setIsPrinting] = useState(false);
   const [printImageMap, setPrintImageMap] = useState<Record<string, string>>({});
   const handleImageReady = React.useCallback((idx: 0 | 1, url: string) => {
   setPrintImageMap((prev) => {
@@ -244,19 +245,23 @@ const MeasureDetail = ({
           <Button 
             className="px-6 sm:w-auto" 
             variant="sub"
+            disabled={isPrinting}
             onClick={() => {
-              // 'frontTotal' -> 'front' 형태로 변환
               const seq = activeBasicTab.replace('Total', ''); 
               handlePrintProcess(seq);
             }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/icons/ic_people_image.svg"
-              alt="인쇄하기"
-              className="size-4 dark:[filter:brightness(0)_invert(1)]"
-            />
-            <span>{t('basic_image_print')}</span>
+            {isPrinting ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src="/icons/ic_people_image.svg"
+                alt="인쇄하기"
+                className="size-4 dark:[filter:brightness(0)_invert(1)]"
+              />
+            )}
+            <span>{isPrinting ? t('basic_image_print_pending') : t('basic_image_print') }</span>
           </Button>
         )}
 

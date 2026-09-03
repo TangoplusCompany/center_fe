@@ -341,6 +341,7 @@
     "label_set_point": "기준값",
     "label_diff_point": "차이값",
     "basic_image_print": "측정 이미지 인쇄",
+    "basic_image_print_pending": "이미지 모자이크 처리 중...",
     "h_basic_info_title": "측정 결과 부위별 선택 보기",
 
     "raw_d_head_slope": "머리 기울기",
