@@ -47,7 +47,10 @@ const nameSchema = (t: (key: string) => string) => z
   .string()
   .min(2, t('name_min'))
   .max(50, t('name_max'))
-  .regex(/^[가-힣]+$/, t('name_zod'));
+  .regex(
+    /^[가-힣a-zA-Z\s]+$/, 
+    t('name_zod')
+  )
 const phoneSchema = (t: (key: string) => string) => z
   .string()
   .trim()

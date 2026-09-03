@@ -32,8 +32,8 @@ const MEASURE_TYPE = [
 ];
 
 export interface SkeletonDatePickerProps {
-  measureList?: IUserMeasureListItem[];              // 전체 측정 리스트 (현재 페이지)
-  selectedMeasure?: number | undefined;         // 현재 선택된 sn
+  measureList?: IUserMeasureListItem[];
+  selectedMeasure?: number | undefined;
   isDatePickerOpen?: boolean;
   onDatePickerOpenChange?: (open: boolean) => void;
   setMeasureSn?: (sn: number) => void;
@@ -197,7 +197,6 @@ export type CenterUserMeasureProps = {
   setMeasureSn?: (sn: number) => void;
   uuid: string;
   isMyPage: boolean;
-  isUserPage : boolean;
   isDatePickerOpen?: boolean;
   onDatePickerOpenChange?: (open: boolean) => void;
   aiExerciseOpen?: boolean;
@@ -214,7 +213,6 @@ const MeasureDetailContainer = ({
   setMeasureSn,
   uuid,
   isMyPage = false,
-  isUserPage = false,
   isDatePickerOpen = false,
   onDatePickerOpenChange,
   aiExerciseOpen = false,
@@ -297,7 +295,7 @@ const MeasureDetailContainer = ({
       window.open(url, "_blank", "noopener,noreferrer");
     } catch (e) {
       console.error("리포트 URL 생성 실패:", e);
-      alert("리포트 페이지를 생성하는 중 오류가 발생했습니다.");
+      alert(t('report_page_error'));
     }
   };
 
@@ -447,7 +445,6 @@ const MeasureDetailContainer = ({
           measureData={measureData}
           setMeasureSn={setMeasureSn}
           isMyPage={isMyPage}
-          isUserPage={isUserPage}
           isDatePickerOpen={isDatePickerOpen}
           onDatePickerOpenChange={onDatePickerOpenChange}
           aiExerciseOpen={aiExerciseOpen}

@@ -53,7 +53,6 @@ export const UserList = ({
             <TableHead className="text-center w-[100px] whitespace-nowrap">{t('user_col_name')}</TableHead>
             <TableHead className="text-center whitespace-nowrap">{t('user_col_phone')}</TableHead>
             <TableHead className="text-center whitespace-nowrap">{t('user_col_gender')}</TableHead>
-            <TableHead className="text-center whitespace-nowrap">{t('user_col_email')}</TableHead>
             <TableHead className="text-right whitespace-nowrap"></TableHead>
           </TableRow>
         </TableHeader>
@@ -67,7 +66,6 @@ export const UserList = ({
                 {phoneFiltering(phoneHyphen(user.mobile))}
               </TableCell>
               <TableCell className="text-center whitespace-nowrap">{user.gender === "남성" || user.gender === "여성" ? user.gender : "미설정"}</TableCell>
-              <TableCell className="text-center whitespace-nowrap">{user.email}</TableCell>
               <TableCell className="flex items-center justify-end gap-2 whitespace-nowrap">
                 <button
                   onClick={() => handleNavigate(user.user_uuid, user.user_sn, user.user_name)}

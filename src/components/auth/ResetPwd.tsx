@@ -72,6 +72,7 @@ const ResetPwd = ({ jwt, email }: { jwt: string; email: string }) => {
           {...form.register("password")}
           type="password"
           id="password"
+          maxLength={16}
           defaultValue=""
           placeholder={t('reset_new_pw')}
           className="bg-white"
@@ -88,6 +89,7 @@ const ResetPwd = ({ jwt, email }: { jwt: string; email: string }) => {
           {...form.register("confirmPassword")}
           type="password"
           id="confirmPassword"
+          maxLength={16}
           defaultValue=""
           placeholder={t('reset_pw_confirm')}
           className="bg-white"
