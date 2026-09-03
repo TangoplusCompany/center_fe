@@ -36,10 +36,13 @@ export class UserLoginError extends Error {
 export const postUserLogin = async ({
   mobile,
   pin_password,
+  t,
 }: {
   mobile: string;
   pin_password: string;
+  t: (key: string) => string;
 }): Promise<IResultPageLoginSuccessResponse["data"]> => {
+  
   try {
     // 사용자 로그인 API 호출
     // TODO: 백엔드에서 CORS 설정 완료되면 직접 호출 가능
@@ -69,7 +72,7 @@ export const postUserLogin = async ({
       if (axiosError.response?.data) {
         throw new UserLoginError(axiosError.response.data);
       }
-      throw new Error("서버와 연결할 수 없습니다. 잠시 후 다시 시도해주세요.");
+      throw new Error(t('device_error_network'));
     }
     if (error instanceof UserLoginError) {
       throw error;

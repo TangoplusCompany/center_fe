@@ -49,6 +49,7 @@ export class AdminLoginError extends Error {
       case 500: 
         this.userMessage = 
           translate('device_error_network')
+        break;
       default:
         this.userMessage = translate('login_error_general');
     }

@@ -9,8 +9,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReactNode } from "react";
 import { useUserLogin } from "@/hooks/api/ResultUser/useUserLogin";
+import { useTranslations } from "next-intl";
 
-// GS 인증: 결과 페이지 로그인은 휴대폰 숫자 11자리와 PIN 숫자 4자리만 허용한다.
 const resultPageLoginSchema = z.object({
   phone: z
     .string()
@@ -40,11 +40,12 @@ export default function ResultPageLoginForm({
   });
 
   const { mutate: login, isPending } = useUserLogin(setError);
-
+  const t = useTranslations("Index")
   const loginHandleSubmit = handleSubmit((data) => {
     login({
       mobile: data.phone,
       pin_password: data.pin,
+      t : t
     });
   });
 

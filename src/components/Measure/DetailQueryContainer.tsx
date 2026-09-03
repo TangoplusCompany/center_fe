@@ -119,7 +119,6 @@ const MeasureDetailQueryContainer = ({firstMeasureType}:MeasureDetailQueryProps)
           measureSn={decryptedData.measure_sn}
           uuid={`${decryptedData.uuid}`} 
           isMyPage={false} 
-          isUserPage={false}
                       />
       )}
     </div>
