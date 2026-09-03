@@ -155,6 +155,7 @@ export default function LoginForm({
             <Input
               id="password"
               type="password"
+              maxLength={16}
               placeholder="********"
               required
               className="bg-white dark:bg-border"

@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { FieldValues, UseFormSetError } from "react-hook-form";
 import { actionUserEncrypt } from "@/app/actions/getCrypto";
+import { useTranslations } from "next-intl";
 
 /**
  * 사용자 로그인 Hooks
@@ -12,6 +13,7 @@ import { actionUserEncrypt } from "@/app/actions/getCrypto";
  * @returns 로그인 뮤테이션
  */
 export const useUserLogin = (setError: UseFormSetError<FieldValues>) => {
+  const t = useTranslations("Index")
   const router = useRouter();
   const setLoginFromResponse = useResultPageUserStore((state) => state.setLoginFromResponse);
   
@@ -60,8 +62,8 @@ export const useUserLogin = (setError: UseFormSetError<FieldValues>) => {
         return;
       }
 
-      // 네트워크 에러 등
-      alert(error instanceof Error ? error.message : "서버와 연결할 수 없습니다. 잠시 후 다시 시도해주세요.");
+      
+      alert(error instanceof Error ? error.message : t('device_error_network'));
     },
   });
 };

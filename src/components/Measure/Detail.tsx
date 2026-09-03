@@ -27,7 +27,6 @@ export type UserMeasureDetailProps = {
   measureData: IMeasureResponse 
   setMeasureSn?: (sn: number) => void;
   isMyPage: boolean;
-  isUserPage: boolean;
   isDatePickerOpen?: boolean;
   onDatePickerOpenChange?: (open: boolean) => void;
   aiExerciseOpen?: boolean;
@@ -37,7 +36,6 @@ const MeasureDetail = ({
   userSn,
   measureData,
   isMyPage = false,
-  isUserPage = false,
   aiExerciseOpen,
   setAiExerciseOpen
 }: UserMeasureDetailProps) => {
@@ -207,7 +205,7 @@ const MeasureDetail = ({
         ) }
 
         
-        {isUserPage && !isMyPage && (
+        {isMyPage && (
           <button 
             onClick={() => setAiExerciseOpen && (setAiExerciseOpen(true))}
             className={`relative h-full overflow-hidden px-2 py-1.5 sm:px-3 rounded-xl text-white transition-all duration-500 hover:scale-105 active:scale-95 isolate border-2 sm:border-4 border-toggleAccent/25 ${

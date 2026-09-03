@@ -176,7 +176,6 @@ const UserDetail = ({
             setMeasureSn={setMeasureSn}
             uuid={userUUID}
             isMyPage={isMyPage}
-            isUserPage={true}
             isDatePickerOpen={isDatePickerOpen}
             onDatePickerOpenChange={setIsDatePickerOpen}
             aiExerciseOpen={aiExerciseOpen}
