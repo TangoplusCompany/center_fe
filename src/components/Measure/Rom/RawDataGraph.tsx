@@ -1,5 +1,6 @@
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { IMeasureROMItemCardData } from "@/types/measure";
+import { getRomDisplayMaxAngle, getRomDisplayMinAngle } from "@/utils/romAngle";
 import { useTranslations } from "next-intl";
 import { Area, AreaChart, CartesianGrid } from "recharts";
 
@@ -23,6 +24,8 @@ export const ROMRawDataGraph = ({
     : [];
   const maxValue = (graphType === 0 ? maxMinValue?.value_1_max : maxMinValue?.value_2_max) ?? 0
   const minValue = (graphType === 0 ? maxMinValue?.value_1_min : maxMinValue?.value_2_min) ?? 0
+  const displayMin = graphType === 0 ? (getRomDisplayMinAngle(maxValue) ?? 0) : Math.abs(minValue)
+  const displayMax = graphType === 0 ? (getRomDisplayMaxAngle(minValue) ?? 0) : Math.abs(maxValue)
   return (
     <div className="flex flex-col gap-2 rounded-xl p-4 bg-white dark:bg-black">
       <div className="flex justify-between">
@@ -31,8 +34,8 @@ export const ROMRawDataGraph = ({
         </span>
 
         <div className="flex flex-col text-sm text-sub700 text-end">
-          <div>{graphType === 0 ? t('rom_stat_min_angle') : t('rom_stat_min_angular_velocity')}: {Math.abs(maxValue).toFixed(1)}º</div>
-          <div>{graphType === 0 ? t('rom_stat_max_angle') : t('rom_stat_max_angular_velocity')}: {Math.abs(minValue).toFixed(1)}º</div>
+          <div>{graphType === 0 ? t('rom_stat_min_angle') : t('rom_stat_min_angular_velocity')}: {displayMin.toFixed(1)}º</div>
+          <div>{graphType === 0 ? t('rom_stat_max_angle') : t('rom_stat_max_angular_velocity')}: {displayMax.toFixed(1)}º</div>
         </div>
       </div>
 

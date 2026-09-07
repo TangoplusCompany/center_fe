@@ -183,7 +183,14 @@ export const MeasureRomContainer = () => {
                 {t("btn_print")}
               </Button>
             </div>
-            <ROMItemContainer datas={romItems ?? []} onROMItemSelect={onROMItemSelect} isUserPage={false} />
+            <ROMItemContainer
+              datas={romItems ?? []}
+              onROMItemSelect={onROMItemSelect}
+              isUserPage={false}
+              userSn={userSn}
+              centerSn={centerSn}
+              isMyPage={false}
+            />
           </div>
           
         )

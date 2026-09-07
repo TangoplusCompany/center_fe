@@ -1,5 +1,6 @@
 import { CompareSlot } from "@/types/compare";
 import { IMeasureROMItemDetail } from "@/types/measure";
+import { getRomDisplayMaxAngle } from "@/utils/romAngle";
 import { useTranslations } from "next-intl";
 
 
@@ -21,7 +22,7 @@ export const ROMRawDataUnit = ({
     3: t('grade_very_good')
   };
   const romState = data && (romStateMap[data.score] ?? "정상");
-  const romValue = data && (Math.abs(data?.value_1_max).toFixed(1));
+  const romValue = data && getRomDisplayMaxAngle(data.value_1_min)?.toFixed(1);
   return (
     <div className="flex flex-col w-full h-full gap-4">
       <div>
