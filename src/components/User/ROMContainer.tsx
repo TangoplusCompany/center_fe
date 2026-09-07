@@ -108,7 +108,14 @@ export const CenterUserROMContainer = ({
             오류가 발생했습니다. 잠시후 다시 시도해주세요.
           </div>
         ) : (
-          <ROMItemContainer datas={romItems ?? []} onROMItemSelect={onROMItemSelect} isUserPage={true} />
+          <ROMItemContainer
+            datas={romItems ?? []}
+            onROMItemSelect={onROMItemSelect}
+            isUserPage={true}
+            userSn={userSn}
+            centerSn={centerSn}
+            isMyPage={isMyPage}
+          />
         )
       )}
 

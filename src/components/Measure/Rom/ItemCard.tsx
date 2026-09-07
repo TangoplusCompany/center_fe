@@ -1,5 +1,7 @@
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
+import { useGetROMItemDetail } from "@/hooks/api/measure/rom/useGetROMItemDetail";
 import { IMeasureROMItem } from "@/types/measure";
+import { getRomDisplayMaxAngle } from "@/utils/romAngle";
 import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 import { Area, AreaChart, DotProps, XAxis, YAxis } from "recharts";
@@ -7,14 +9,27 @@ import { Area, AreaChart, DotProps, XAxis, YAxis } from "recharts";
 export interface ROMItemCardProps {
   romItem: IMeasureROMItem
   handleROMItemSelect : (measureType: number) => void
+  userSn: number
+  centerSn?: number
+  isMyPage: boolean
 }
 const FIXED_SLOTS = 5;
 
 export const ROMItemCard = ({
   romItem,
   handleROMItemSelect,
+  userSn,
+  centerSn,
+  isMyPage,
 } : ROMItemCardProps) => {
   const t = useTranslations("Index");
+  const { data: romDetail } = useGetROMItemDetail({
+    user_sn: userSn,
+    center_sn: centerSn,
+    rom_result_sn: romItem.sn,
+    isMyPage,
+  });
+
   const chartData = useMemo(() => {
     const sorted = Object.entries(romItem.history_by_measure_type)
      .map(([date, value]) => ({date, value}))
@@ -37,10 +52,7 @@ export const ROMItemCard = ({
     [chartData]
   );
 
-  const currentValue = useMemo(
-    () => chartData.find((d) => d.date === romItem.reg_date)?.value ?? 0,
-    [chartData, romItem.reg_date]
-  );
+  const displayMaxAngle = getRomDisplayMaxAngle(romDetail?.value_1_min);
 
   const stateString :Record<number, string> = {
     0 : t('grade_danger'),
@@ -89,7 +101,7 @@ export const ROMItemCard = ({
         <div className="flex flex-col w-full min-h-32 gap-2 p-2">
           <div className="flex flex-col gap-1 px-2">
             <p className="text-base font-semibold">
-              {t('rom_max_angle')}: { Math.abs(currentValue).toFixed(1) }º
+              {t('rom_max_angle')}: {displayMaxAngle !== null ? `${displayMaxAngle.toFixed(1)}º` : '-'}
             </p>
             <p className="text-base ">
               {romItem.howto}
