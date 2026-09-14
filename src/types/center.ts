@@ -20,6 +20,7 @@ export interface ICenterUserDetail {
   user_name: string;
   user_sn: number;
   user_uuid: string;
+  user_job: string;
   weight: string;
 }
 

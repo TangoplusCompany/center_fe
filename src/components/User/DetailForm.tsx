@@ -82,6 +82,12 @@ const UserDetailForm = ({
         message: t('validation_address_regex'),
       })
       .optional(),
+    job: z.string()
+      .max(25, { message: t('validation_job_max') })
+      .regex(/^[가-힣a-zA-Z0-9\s-]*$/, {
+        message: '',
+      })
+      .optional(),
     addressDetail: z.string()
       .max(30, { message: t('validation_address_detail_max') })
       .regex(/^[가-힣a-zA-Z0-9\s-]*$/, {
@@ -108,6 +114,7 @@ const UserDetailForm = ({
       addressDetail: userData.address_detail || "",
       height: userData.height || "",
       weight: userData.weight || "",
+      job: userData.user_job || "",
       birthday: "",
       pinPW: "",
     },
@@ -119,6 +126,7 @@ const UserDetailForm = ({
     setValue("gender", userData.gender || null);
     setValue("address", userData.address || "");
     setValue("addressDetail", userData.address_detail || "");
+    setValue("job", userData.user_job || "");
     setValue("height", userData.height || "");
     setValue("weight", userData.weight || "");
   }, [userData, setValue]);
@@ -160,7 +168,7 @@ const UserDetailForm = ({
 
   const mutationPatchUserDetail = usePatchUserDetail(userData.user_sn.toString(), isMyPage);
   const submitUserDetailForm = handleSubmit(async (data) => {
-    const { userName, gender, height, weight, address, addressDetail, birthday } = data;
+    const { userName, gender, height, weight, address, addressDetail, job, birthday } = data;
     
     if (isMyPage) {
       // result-page용 요청 데이터 (birthday, mobile 포함)
@@ -173,6 +181,7 @@ const UserDetailForm = ({
           weight: weight,
           address: address,
           address_detail: addressDetail,
+          user_job: job,
           birthday: birthday,
           mobile: userData.mobile,
         },
@@ -188,6 +197,7 @@ const UserDetailForm = ({
           weight: weight,
           address: address,
           address_detail: addressDetail,
+          user_job: job,
         },
       } as Parameters<typeof mutationPatchUserDetail.mutateAsync>[0]);
     }
@@ -272,7 +282,6 @@ const UserDetailForm = ({
             id="addressDetail"
             disabled={!editState}
             defaultValue={userData.address_detail}
-            
             placeholder={t('label_address_detail')}
             maxLength={30}
             className={cn("text-sm sm:text-base", editableFieldClass)}
@@ -317,7 +326,7 @@ const UserDetailForm = ({
         )}
       </div>
       {/* 웹: 생년월일·키·몸무게 한 줄 / 태블릿·모바일: 세로 배치 */}
-      <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-2 sm:gap-3">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-2 sm:gap-3">
         <div className="flex flex-col gap-2">
           <Label htmlFor="birthday" className="text-sm sm:text-base">{t('label_birth')}</Label>
           {editState ? (
@@ -369,6 +378,24 @@ const UserDetailForm = ({
           {errors.birthday && (
             <p className="text-xs sm:text-sm text-red-500">
               {errors.birthday.message?.toString()}
+            </p>
+          )}
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="height" className="text-sm sm:text-base">{t('label_job')}</Label>
+          <Input
+            {...register("job")}
+            type="text"
+            id="job"
+            disabled={!editState}
+            defaultValue={userData.user_job}
+            placeholder={t('label_job')}
+            maxLength={25}
+            className={cn("text-sm sm:text-base", editableFieldClass)}
+          />
+          {errors.job && (
+            <p className="text-xs sm:text-sm text-red-500">
+              {errors.job.message?.toString()}
             </p>
           )}
         </div>
