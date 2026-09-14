@@ -13,7 +13,7 @@ export const patchResultUserDetail = async ({
   userData,
 }: {
   sn: string;
-  userData: Pick<ICenterUserDetail, 'user_name' | 'address' | 'address_detail' | 'gender' | 'weight' | 'height' | 'birthday' | 'mobile'>;
+  userData: Pick<ICenterUserDetail, 'user_name' | 'address' | 'address_detail' | 'gender' | 'weight' | 'height'| 'user_job' | 'birthday' | 'mobile'>;
 }) => {
   // 요청 데이터 준비
   const requestData: Record<string, string | number> = {
@@ -50,6 +50,9 @@ export const patchResultUserDetail = async ({
       requestData.weight = parseFloat(weightValue.toFixed(1));
     }
   }
+  if (userData.user_job !== undefined && userData.user_job !== null) {
+    requestData.user_job = userData.user_job.trim();
+  }
 
   // birthday는 "yyyy-mm-dd" 형식
   if (userData.birthday && userData.birthday.trim()) {
@@ -62,7 +65,7 @@ export const patchResultUserDetail = async ({
   }
 
   // 디버깅: 요청 데이터 로깅
-  // console.log("patchResultUserDetail 요청 데이터:", requestData);
+  console.log("patchResultUserDetail 요청 데이터:", requestData);
   
   const { data } = await customUserAxios.patch<IResponseDefault>(`/users/${sn}`, requestData);
   return data;
