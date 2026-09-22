@@ -5,7 +5,8 @@ import { useMeasureMoireStaticJson } from "@/hooks/api/measure/moire/useMeasureM
 import { useTranslations } from "next-intl";
 
 export interface IMoireContainerProps {
-  data : IMoireDetail
+  data : IMoireDetail,
+  isCompare: boolean
 }
 export type IMoireGraphTitle = "어깨 등고선" | "허리 등고선" | "골반 등고선"
 
@@ -21,7 +22,7 @@ export type MoireBodyPart =
 
 export type IMoireMultiPartData = Record<MoireBodyPart, number[]>;
 
-export default function MoireContainer ({ data }: IMoireContainerProps) {
+export default function MoireContainer ({ data, isCompare }: IMoireContainerProps) {
   const t = useTranslations("Index")
   const leftFileName = data?.front?.server_file_name_moire_json
   const rightFileName = data?.back?.server_file_name_moire_json
@@ -108,7 +109,7 @@ export default function MoireContainer ({ data }: IMoireContainerProps) {
   return (
     <div className="flex flex-col gap-2">
 
-      <div className="flex flex-col md:grid md:grid-cols-2 gap-2">
+      <div className={`${isCompare ? "flex flex-col" : "flex flex-col md:grid md:grid-cols-2"} gap-2`}>
         {imageDatas
           .filter((imageD): imageD is IMoireImageProps => !!imageD?.data)
           .map((imageD, key) => (
@@ -124,7 +125,7 @@ export default function MoireContainer ({ data }: IMoireContainerProps) {
       </div>
 
 
-      <div className="flex flex-col md:grid md:grid-cols-2 md:grid-rows-3 gap-2">
+      <div className={`${isCompare ? "flex flex-col" : "flex flex-col md:grid md:grid-cols-2 md:grid-rows-3"}  gap-2`}>
         {graphs
         .filter((graphData): graphData is IMoireGraphProps => !!graphData)
         .map((graphData, key) => (

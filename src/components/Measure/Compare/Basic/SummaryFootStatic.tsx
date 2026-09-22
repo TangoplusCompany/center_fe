@@ -1,6 +1,6 @@
 import { getRiskString } from "@/utils/getRiskString";
-import { IMatStaticPressure } from "../Mat/FootStaticContainer";
-import FootStatic from "../Mat/FootStatic";
+import { IMatStaticPressure } from "../../Mat/FootStaticContainer";
+import FootStatic from "../../Mat/FootStatic";
 import { getRiskScore } from "@/utils/getRiskScore";
 import { useLocale, useTranslations } from "next-intl";
 
@@ -12,7 +12,6 @@ export interface CompareSummaryFootStaticProps {
   matStatics: IMatStaticPressure;
   measure_date: string;
 }
-
 
 const CompareSummaryFootStatic = ({
   static0,

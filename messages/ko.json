@@ -280,6 +280,8 @@
     "pose_seq_4": "후면 측정",
     "pose_seq_5": "앉은 후면",
     "pose_seq_6": "오버헤드 스쿼트",
+    "compare_upper_summary": "상지요약",
+    "compare_lower_summary": "하지요약",
 
     "result_upper_body": "상지 결과",
     "result_lower_body": "하지 결과",
@@ -836,6 +838,18 @@
     "body_part_upper_top": "상체 상부(목~명치)",
     "body_part_upper_bottom": "상체 하부(명치~배꼽)",
     "body_part_lower_top": "하체 상부(배꼽~허벅지)",
-    "user_detail_patch_success": "성공적으로 사용자의 데이터가 수정되었습니다."
+    "user_detail_patch_success": "성공적으로 사용자의 데이터가 수정되었습니다.",
+    "btn_previous": "이전으로",
+
+    "result_page_pending": "인증 정보를 확인 중입니다...",
+    "result_page_title": "결과 페이지 로그인",
+    "result_page_subtitle": "휴대폰 번호와 PIN 번호를 입력하여 로그인해주세요.",
+    "result_page_mobile": "휴대폰 번호",
+    "result_page_mobile_hint": "하이픈(-)없이 입력해주세요",
+    "result_page_pin": "PIN 번호",
+    "result_page_pin_hint": "PIN 번호를 입력해주세요",
+    "result_page_login_fail": "휴대폰 번호 또는 PIN 번호가 올바르지 않습니다.",
+    "measure_result_loading": "로딩중입니다",
+    "measure_fail_result": "불완전 측정"
   }
 }

@@ -280,6 +280,8 @@
     "pose_seq_4": "Back Step",
     "pose_seq_5": "Back Sit Step",
     "pose_seq_6": "Overhead Squat",
+    "compare_upper_summary": "Upper Body Summary",
+    "compare_lower_summary": "Lower Body Summary",
 
     "result_upper_body": "Upper Body Results",
     "result_lower_body": "Lower Body Results",
@@ -336,7 +338,7 @@
     "overview_measure_at_a_glance": "Measurement at a Glance",
     "overview_part_measure_results": "Results by Measurement Area",
 
-    "label_stage_indicator": "Stage Indicator",
+    "label_stage_indicator": "Stage",
     "label_analysis_desc": "Analysis Description",
     "label_set_point": "Set Point",
     "label_diff_point": "Different Point",
@@ -705,7 +707,7 @@
     "device_label_install_address": "Installation Address",
     "device_label_install_address_detail": "Installation Detailed Address",
     "btn_cancel": "Cancel",
-    "btn_edit_submit": "Save Changes",
+    "btn_edit_submit": "Edit",
     "device_btn_delete": "Remove Device",
     "device_delete_confirm_msg_0": "Device data will be ",
     "device_delete_confirm_msg_1": "deleted",
@@ -836,6 +838,18 @@
     "body_part_upper_top": "Upper Torso (Neck-Solar Plexus)",
     "body_part_upper_bottom": "Lower Torso (Solar Plexus-Navel)",
     "body_part_lower_top": "Upper Lower Body (Navel-Thigh)",
-    "user_detail_patch_success": "User data has been successfully updated."
+    "user_detail_patch_success": "User data has been successfully updated.",
+    "btn_previous": "Go Back",
+
+    "result_page_pending": "Verifying authentication information.",
+    "result_page_title": "Login to the results page",
+    "result_page_subtitle": "Please log in by entering your mobile phone number and PIN.",
+    "result_page_mobile": "Mobile Number",
+    "result_page_mobile_hint": "Please enter without hyphens (-).",
+    "result_page_pin": "PIN Number",
+    "result_page_pin_hint": "Please enter your PIN.",
+    "result_page_login_fail": "The mobile phone number or PIN is incorrect.",
+    "measure_result_loading": "Loading,,,",
+    "measure_fail_result": "Incompleted"
   }
 }

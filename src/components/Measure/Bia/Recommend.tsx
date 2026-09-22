@@ -32,7 +32,12 @@ export function RecommendCard ({type, title, description} : {type: string, title
 }
 
 
-export default function Recommend({data}: {data: IBiaRecommend}) {
+export default function Recommend({
+  data,
+}: {
+  data: IBiaRecommend;
+  isCompare: boolean
+}) {
   const t = useTranslations("Index")
   const types = [
     {

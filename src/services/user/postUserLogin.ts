@@ -14,9 +14,9 @@ export class UserLoginError extends Error {
     message: string;
   };
 
-  constructor(errorResponse: IResultPageLoginErrorResponse) {
+  constructor(errorResponse: IResultPageLoginErrorResponse, t : (key: string) => string) {
     // GS 인증: 휴대폰·PIN 오류와 계정 잠금 여부를 구분하지 않는 동일 문구를 사용한다.
-    const message = "휴대폰 번호 또는 PIN 번호가 올바르지 않습니다.";
+    const message = t('result_page_login_fail');
     super(message);
     this.name = "UserLoginError";
     this.status = errorResponse.status;
@@ -61,7 +61,7 @@ export const postUserLogin = async ({
     );
 
     if (!data.success || data.status !== 200) {
-      throw new UserLoginError(data as IResultPageLoginErrorResponse);
+      throw new UserLoginError(data as IResultPageLoginErrorResponse, t);
     }
 
     return data.data;
@@ -70,7 +70,7 @@ export const postUserLogin = async ({
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError<IResultPageLoginErrorResponse>;
       if (axiosError.response?.data) {
-        throw new UserLoginError(axiosError.response.data);
+        throw new UserLoginError(axiosError.response.data, t);
       }
       throw new Error(t('device_error_network'));
     }

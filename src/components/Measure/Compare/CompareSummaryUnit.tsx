@@ -1,6 +1,7 @@
 import { compareTrendState } from "@/utils/compareTrendState";
 import { formatText } from "@/utils/formatText";
 import { getRiskScore } from "@/utils/getRiskScore";
+import { useTranslations } from "next-intl";
 
 
 export interface CompareSummaryUnitProps {
@@ -19,12 +20,13 @@ const CompareSummaryUnit = ({
   summaryUnit1?: CompareSummaryUnitProps;
   title: string;
 }) => {
+  const t = useTranslations("Index")
   const getRiskString = (level?: number | string) => {
     if (level === undefined || level === null) return undefined; 
     const numLevel = Number(level);
-    if (numLevel >= 2) return "위험";
-    if (numLevel >= 1) return "주의";
-    return "정상";
+    if (numLevel >= 2) return t('grade_danger');
+    if (numLevel >= 1) return t('grade_caution');
+    return t('grade_normal');
   };
 
   const riskString1 = getRiskString(summaryUnit0?.risk_level) ?? " ";
@@ -52,9 +54,9 @@ const CompareSummaryUnit = ({
     score1 < score0 ? "▲" :  // 점수가 낮아짐 = 좋아짐
     score1 > score0 ? "▼" :  // 점수가 높아짐 = 나빠짐
     " ";
-  const trendString = riskString1 === " " ? " " : riskString1 + " " + summaryUnit0?.range_level + "단계"
+  const trendString = riskString1 === " " ? " " : riskString1 + " " + summaryUnit0?.range_level + t('rom_stage')
 
-  const trendCount = compareTrendState(score0, score1);
+  const trendCount = compareTrendState(score0, score1, t);
 
   const summaryMent = (summaryUnit: CompareSummaryUnitProps, isRight: boolean) => {
     const riskString = getRiskString(summaryUnit.risk_level);
@@ -72,7 +74,7 @@ const CompareSummaryUnit = ({
             <span className="text-lg">{isRight ? '②' : '①'}</span>
             <span className={`text-base ${isRight ? 'text-sub600 dark:text-muted-foreground' : 'text-black dark:text-foreground'}`}>{summaryUnit.measure_date.slice(0, 11)}</span>
           </div>
-          <span className={`${textBgCondition0} text-white text-sm px-2 py-1 rounded-full`}>{riskString} {summaryUnit.range_level}단계</span>
+          <span className={`${textBgCondition0} text-white text-sm px-2 py-1 rounded-full`}>{riskString} {summaryUnit.range_level}{t('rom_stage')}</span>
         </div>
         <div className={`flex items-center justify-start text-base ${isRight ? 'text-sub600 dark:text-muted-foreground' : 'text-black dark:text-foreground'} px-4 py-2 whitespace-pre-line`}>{formatText(summaryUnit.ment)}</div>
       </div>

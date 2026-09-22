@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
-import FootDynamic, { FootDynamicProps } from "../Mat/FootDynamic";
-import HipTrajectory from "../Mat/HipTrajectory";
-import KneeTrajectory from "../Mat/KneeTrajectory";
+import FootDynamic, { FootDynamicProps } from "../../Mat/FootDynamic";
+import HipTrajectory from "../../Mat/HipTrajectory";
+import KneeTrajectory from "../../Mat/KneeTrajectory";
 
 export interface CompareFootTrajectoryGridProps {
   // static: FootStaticContainerProps;

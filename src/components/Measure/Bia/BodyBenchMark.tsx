@@ -24,10 +24,8 @@ function MetricList({ title, titleValue, items }: MetricListProps) {
         {title}: {titleValue}
       </div>
 
-      {/* 구분선 */}
       <div className="relative h-[2px] rounded-full bg-sub800 shrink-0 mr-2" />
 
-      {/* 리스트 영역 */}
       <div className="flex flex-col text-sm text-black leading-[1.75]">
         {items.map((item, index) => (
           <div key={index} className="flex justify-between items-center ">
@@ -43,7 +41,13 @@ function MetricList({ title, titleValue, items }: MetricListProps) {
   );
 }
 
-export default function BodyBenchMark({data}: {data: IBiaBodyBenchmark}) {
+export default function BodyBenchMark({
+  data,
+  isCompare
+}: {
+  data: IBiaBodyBenchmark;
+  isCompare: boolean
+}) {
   const t = useTranslations("Index")
   const radius = 80;
   const strokeWidth = 12;
@@ -88,48 +92,49 @@ export default function BodyBenchMark({data}: {data: IBiaBodyBenchmark}) {
     9 : '/images/bt_9.png',
   }[data.body_type]
   return (
-    <div className='flex flex-col rounded-xl border border-sub200'>
-      <div className='flex w-fit bg-mainBlue-600 rounded-br-xl rounded-tl-xl text-base text-white font-semibold px-2 py-1'>
-        {t('bia_key_health_indicators')}
-      </div>
+    <div className={`${isCompare ? "grid grid-cols-2 gap-2" : "flex flex-col rounded-xl border border-sub200"}`}>
+      <div className='flex flex-col '>
+        <div className='flex w-fit bg-mainBlue-600 rounded-br-xl rounded-tl-xl text-base text-white font-semibold px-2 py-1'>
+          {t('bia_key_health_indicators')}
+        </div>
 
-     
-      <div className="flex justify-center items-center py-6 relative">
-        <svg
-          height={radius * 2}
-          width={radius * 2}
-          className="transform -rotate-90" 
-        >
+        <div className="flex justify-center items-center py-6 relative">
+          <svg
+            height={radius * 2}
+            width={radius * 2}
+            className="transform -rotate-90" 
+          >
+            
+            <circle
+              stroke="#E5E7EB" 
+              fill="transparent"
+              strokeWidth={strokeWidth}
+              r={normalizedRadius}
+              cx={radius}
+              cy={radius}
+            />
+            
+            <circle
+              stroke="#5D8DFF" 
+              fill="transparent"
+              strokeWidth={strokeWidth}
+              strokeDasharray={circumference + ' ' + circumference}
+              style={{ strokeDashoffset, transition: 'stroke-dashoffset 0.8s ease-in-out' }}
+              strokeLinecap="round"
+              r={normalizedRadius}
+              cx={radius}
+              cy={radius}
+            />
+          </svg>
           
-          <circle
-            stroke="#E5E7EB" 
-            fill="transparent"
-            strokeWidth={strokeWidth}
-            r={normalizedRadius}
-            cx={radius}
-            cy={radius}
-          />
           
-          <circle
-            stroke="#5D8DFF" 
-            fill="transparent"
-            strokeWidth={strokeWidth}
-            strokeDasharray={circumference + ' ' + circumference}
-            style={{ strokeDashoffset, transition: 'stroke-dashoffset 0.8s ease-in-out' }}
-            strokeLinecap="round"
-            r={normalizedRadius}
-            cx={radius}
-            cy={radius}
-          />
-        </svg>
-        
-        
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="flex items-baseline">
-            <span className="text-5xl font-bebas font-semibold text-sub800 leading-none">
-              {data.body_score}
-            </span>
-            <span className="text-lg font-bold text-sub600 ml-1">{t('unit_score')}</span>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="flex items-baseline">
+              <span className="text-5xl font-bebas font-semibold text-sub800 leading-none">
+                {data.body_score}
+              </span>
+              <span className="text-lg font-bold text-sub600 ml-1">{t('unit_score')}</span>
+            </div>
           </div>
         </div>
       </div>

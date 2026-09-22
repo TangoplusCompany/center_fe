@@ -4,8 +4,10 @@ import React from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 const CompareBodySkeleton = () => {
+  const t = useTranslations("Index")
   const measureTabs = [
     { title: "결과 요약", value: "summary" },
     { title: "정면 측정", value: "first" },
@@ -80,7 +82,7 @@ const CompareBodySkeleton = () => {
             <div className="w-full table table-fixed min-w-0 overflow-hidden">
               <div className="flex flex-col overflow-x-auto overflow-y-hidden w-full min-w-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                 <div className="bg-sub100 min-w-[700px] text-xl font-semibold px-4 py-2 border-t-2 border-b-2 border-sub200">
-                  상지요약
+                  {t('compare_upper_summary')}
                 </div>
                 <div className="flex min-w-[700px]">
                   <div className="flex flex-col w-[20%] min-w-[120px] items-center justify-center gap-2 px-4 md:px-8 flex-shrink-0 bg-sub100">
@@ -97,7 +99,7 @@ const CompareBodySkeleton = () => {
             <div className="w-full table table-fixed min-w-0 overflow-hidden">
               <div className="flex flex-col overflow-x-auto overflow-y-hidden w-full min-w-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                 <div className="bg-sub100 min-w-[700px] text-xl font-semibold px-4 py-2 border-t-2 border-b-2 border-sub200">
-                  하지요약
+                  {t('compare_lower_summary')}
                 </div>
                 <div className="flex min-w-[700px]">
                   <div className="flex flex-col w-[20%] min-w-[120px] items-center justify-center gap-2 px-4 md:px-8 flex-shrink-0 bg-sub100">
@@ -114,7 +116,7 @@ const CompareBodySkeleton = () => {
             <div className="w-full table table-fixed min-w-0 overflow-hidden">
               <div className="flex flex-col overflow-x-auto overflow-y-hidden w-full min-w-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                 <div className="bg-sub100 min-w-[700px] text-xl font-semibold px-4 py-2 border-t-2 border-b-2 border-sub200">
-                  정면 족압
+                  {t('user_static_pressure')}
                 </div>
                 <div className="flex w-full min-w-[700px]">
                   <div className="flex flex-col w-[20%] items-center justify-center gap-2 px-8 flex-shrink-0 bg-sub100">
@@ -131,7 +133,7 @@ const CompareBodySkeleton = () => {
             <div className="w-full table table-fixed min-w-0 overflow-hidden">
               <div className="flex flex-col overflow-x-auto overflow-y-hidden w-full min-w-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                 <div className="bg-sub100 text-xl font-semibold px-4 py-2 border-t-2 border-b-2 border-sub200">
-                  동적 족압 및 이동 궤적
+                  {t('compare_dynamic_trajectory')}
                 </div>
                 <div className="flex flex-col">
                   <div className="flex flex-col md:flex-row w-full">
@@ -151,7 +153,7 @@ const CompareBodySkeleton = () => {
                     </div>
                     <div className="flex flex-col gap-2 border-l-0 md:border-l-2 border-sub200 w-full md:w-[50%]">
                       <div className="flex bg-sub100 border-b-2 border-sub200 text-base px-4 py-1.5">
-                        분석 설명
+                        {t('compare_analysis_desc')}
                       </div>
                       <div className="flex flex-col justify-center h-full px-4">
                         <Skeleton className="h-20 w-full" />

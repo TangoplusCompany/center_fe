@@ -1,7 +1,12 @@
 import { useTranslations } from "next-intl";
 import type { IBiaData } from "../../../types/bia";
 
-export default function BodyTypeChart({data}: {data: IBiaData}) {
+export default function BodyTypeChart({
+  data,
+}: {
+  data: IBiaData;
+  isCompare: boolean
+}) {
   const t = useTranslations("Index")
   const maxBodyFatMass = 30; // 체지방률 최대치
   const maxBMI = 33.5;       // BMI 최대치

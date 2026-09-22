@@ -1,9 +1,9 @@
 import { useRef, useState } from "react";
 import RawDataDetailContainer from "./RawDataDetailContainer";
 import RawDataTab from "./RawDataTab";
-import CompareRawDataDetailContainer from "./Compare/CompareRawDataDetailContainer";
 import { IUserMeasureDetailData } from "@/types/measure";
 import { useTranslations } from "next-intl";
+import CompareRawDataDetailContainer from "./Compare/Basic/RawDataDetailContainer";
 
 export interface CompareRawDataProps {
   mergedDetailData0: IUserMeasureDetailData[];

@@ -1,13 +1,13 @@
 import React from "react";
 import { useMeasureJson } from "@/hooks/api/measure/useMeasureJson";
-import DummyStaticContainer from "../DummyStaticContainer";
-import { MeasurementImage } from "../MeasurementImage";
+import DummyStaticContainer from "../../DummyStaticContainer";
+import { MeasurementImage } from "../../MeasurementImage";
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
-import RawDataContainer from "../RawDataContainer";
-import CompareDefault from "./CompareDefault";
-import { CompareStaticProps } from "./CompareBody";
+import RawDataContainer from "../../RawDataContainer";
+import CompareDefault from "../CompareDefault";
+import { CompareStaticProps } from "./Body";
 
-const MeasureStaticCompareSixth = React.memo(
+const MeasureStaticCompareThird = React.memo(
 ({
   left,
   right,
@@ -16,7 +16,6 @@ const MeasureStaticCompareSixth = React.memo(
   onImageReady,
   isMyPage = false,
 }: CompareStaticProps) => {
-  // TODO 정적 조회하는 api를 사용 + 하단의 useMeasureJson을 써야함 (+ Raw Data card도 넣어줘야함)
   const leftSummaryData = left?.basic_result?.result_summary_data
   const rightSummaryData = right?.basic_result?.result_summary_data
   const {
@@ -26,7 +25,7 @@ const MeasureStaticCompareSixth = React.memo(
   } = useMeasureSequence({
     measure_sn: leftSummaryData?.measure_sn ? String(leftSummaryData.measure_sn) : undefined,
     user_sn: String(userSn),
-    sequence_number: 7,
+    sequence_number: 2,
     isMyPage,
   });
   const {
@@ -36,7 +35,7 @@ const MeasureStaticCompareSixth = React.memo(
   } = useMeasureSequence({
     measure_sn: rightSummaryData?.measure_sn ? String(rightSummaryData.measure_sn) : undefined,
     user_sn: String(userSn),
-    sequence_number: 7,
+    sequence_number: 2,
     isMyPage,
   });
   const {
@@ -77,7 +76,7 @@ const MeasureStaticCompareSixth = React.memo(
               measure0?.file_data?.measure_server_file_name
             }
             measureJson={measureJson0}
-            step="sixth"
+            step="third"
             cameraOrientation={leftSummaryData?.camera_orientation ?? 0}
             compareSlot={0}
             onImageReady={onImageReady}
@@ -92,7 +91,7 @@ const MeasureStaticCompareSixth = React.memo(
                 measure1?.file_data?.measure_server_file_name
               }
               measureJson={measureJson1}
-              step="sixth"
+              step="third"
               cameraOrientation={rightSummaryData?.camera_orientation ?? 0}
               compareSlot={1}
               onImageReady={onImageReady}
@@ -110,9 +109,8 @@ const MeasureStaticCompareSixth = React.memo(
         />
     </div>
   );
-},
-);
+});
 
-MeasureStaticCompareSixth.displayName = "MeasureStaticSixth";
+MeasureStaticCompareThird.displayName = "MeasureStaticThird";
 
-export default MeasureStaticCompareSixth;
+export default MeasureStaticCompareThird;

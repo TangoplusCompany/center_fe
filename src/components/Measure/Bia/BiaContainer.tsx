@@ -10,43 +10,63 @@ import Recommend from "./Recommend";
 import BodyTypeChart from "./BodyTypeChart";
 
 export interface BiaContainerProps {
-  data : IBiaData
+  data: IBiaData;
+  isCompare: boolean;
 }
-const BiaContainer = ({
-  data
-}: BiaContainerProps) => {
-  
+
+const BiaContainer = ({ data, isCompare }: BiaContainerProps) => {
+
+  if (isCompare) {
+    return (
+      <div className="flex flex-col gap-2">
+        <BodyBenchMark data={data} isCompare={isCompare} />
+        <Composition data={data} isCompare={isCompare} />
+        <MainAnalysis
+          data={data}
+          prevMuscleMassIndex={data?.most_previous_data.skeletal_muscle_mass_index}
+          isCompare={isCompare}
+        />
+        <BodyModel data={data} isCompare={isCompare} />
+        <Recommend data={data} isCompare={isCompare} />
+        <BodyTypeChart data={data} isCompare={isCompare} />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col md:flex-row flex-1 w-full gap-4 md:gap-2">
-      {/* 🥘🥘🥘🥘 left 🥘🥘🥘🥘 */}
       <div className="flex flex-col w-full md:w-2/3 gap-4 order-1 md:order-none">
         <div className="order-1 md:order-none">
-          <Composition data={data} />
+          <Composition data={data} isCompare={isCompare} />
         </div>
         <div className="order-3 md:order-none">
-          <MainAnalysis data={data} prevMuscleMassIndex={data?.most_previous_data.skeletal_muscle_mass_index}/>
+          <MainAnalysis
+            data={data}
+            prevMuscleMassIndex={data?.most_previous_data.skeletal_muscle_mass_index}
+            isCompare={isCompare}
+          />
         </div>
         <div className="order-4 md:order-none">
-          <BodyModel data={data} />
+          <BodyModel data={data} isCompare={isCompare} />
         </div>
         <div className="order-7 md:order-none">
           <TrendGraph data={data} />
         </div>
       </div>
 
-      {/* 🍲🍲🍲🍲 right 🍲🍲🍲🍲 */}
       <div className="flex flex-col w-full md:w-1/3 gap-4 order-2 md:order-none">
         <div className="order-2 md:order-none">
-          <BodyBenchMark data={data} />
+          <BodyBenchMark data={data} isCompare={isCompare} />
         </div>
         <div className="order-5 md:order-none">
-          <Recommend data={data} />
+          <Recommend data={data} isCompare={isCompare} />
         </div>
         <div className="order-6 md:order-none">
-          <BodyTypeChart data={data} />
+          <BodyTypeChart data={data} isCompare={isCompare} />
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
+
 export default BiaContainer;
