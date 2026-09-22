@@ -38,7 +38,7 @@ const SkeletonContainer = ({
         
         <div className="flex items-center justify-between">
           <p className="text-sm text-sub400" >
-            * 측정 기준 설명
+            * {t('grade_skeleton')}
           </p>
           <p className="text-sm text-sub400">
             Polyon Studio (CC BY)

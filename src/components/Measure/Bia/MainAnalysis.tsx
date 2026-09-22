@@ -145,10 +145,11 @@ const AnalysisCard = ({ label, value, unit, grade }: IAnalysisCardProps) => {
 
 export default function MainAnalysis({
   data,
-  prevMuscleMassIndex
+  prevMuscleMassIndex,
 }: {
   data: IBiaData
-  prevMuscleMassIndex?: number
+  prevMuscleMassIndex?: number;
+  isCompare: boolean
 }) {
   const t = useTranslations("Index")
   const typeInitial = ({

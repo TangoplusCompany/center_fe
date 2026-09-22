@@ -9,7 +9,7 @@ import { useGetUserDashboard } from "@/hooks/api/user/useGetUserDashboard";
 import { TWorstPart } from "@/types/dashboard";
 import MeasureReportContainer from "../Measure/ReportContainer";
 import CenterUserDashBoardSkeleton from "./DashBoardSkeleton";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { getRiskString } from "@/utils/getRiskString";
 
 type Mode = "worst" | "best";
@@ -38,6 +38,7 @@ const CenterUserNormalDashBoard = ({
   isMyPage?: boolean;
 }) => {
   // TODO 사용자 대시보드 + 사용자 정보 이후 + 디바이스 + 매니저 + 설정 
+  const t = useTranslations("Index");
   const locale = useLocale();
   const {
     data: dashboardData,
@@ -61,8 +62,8 @@ const CenterUserNormalDashBoard = ({
   }
   
   // 탭 0에서 쓸 더미/요약용 데이터 (기존 코드 유지)
-  const worstPart = calculateExtremePart(locale, dashboardData ? dashboardData?.measure_history : [], "worst");
-  const bestPart = calculateExtremePart(locale, dashboardData ? dashboardData?.measure_history : [], "best");
+  const worstPart = calculateExtremePart(locale, dashboardData ? dashboardData?.measure_history : [], "worst", t);
+  const bestPart = calculateExtremePart(locale, dashboardData ? dashboardData?.measure_history : [], "best", t);
   const measureDate = calculateIDayData(dashboardData ? dashboardData?.measure_history : []);
   return (
     <div className="w-full px-2 sm:px-4 md:px-0">
@@ -105,8 +106,10 @@ export default CenterUserNormalDashBoard;
 export function calculateExtremePart(
   locale: string,
   history: IBasicHistoryUnit[],
-  mode: Mode
+  mode: Mode,
+  t : (key: string) => string
 ): TWorstPart {
+  
   const maxCount = history.length;
 
   const levelPriority =
@@ -157,7 +160,7 @@ export function calculateExtremePart(
   return {
     partName: result.partName,
     level: result.level,
-    description: locale === "ko" ? `최근 ${maxCount}회 측정에서 ${result.partName} 부위의 ${levelText} 판단이 ${result.count}회 발생했습니다.` : `In the last ${maxCount} measurements, a ${levelText} assessment for the ${result.partName} area occurred ${result.count} times.`,
+    description: locale === "ko" ? `최근 ${maxCount}회 측정에서 ${t(result.partName)} 부위의 ${levelText} 판단이 ${result.count}회 발생했습니다.` : `In the last ${maxCount} measurements, a ${levelText} assessment for the ${result.partName} area occurred ${result.count} times.`,
   };
 }
 

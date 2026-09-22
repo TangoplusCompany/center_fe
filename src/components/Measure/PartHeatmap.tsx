@@ -57,7 +57,7 @@ const filledData = [...[...limitedData].reverse(), ...padding];
 
           {/* 날짜 헤더 */}
           <div className="flex mb-2">
-            <div className="w-16"></div>
+            <div className="w-16 mr-2"></div>
             <div className="w-full grid grid-cols-10 gap-2 text-xs text-sub600">
               {filledData.map((data, idx) => (
                 <div key={idx} className="text-center">

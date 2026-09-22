@@ -104,7 +104,7 @@ export default function MoireImage({ imageData }: { imageData: IMoireImageProps 
         aria-hidden
       />
       <p className="text-sub400 dark:text-sub300 text-sm font-medium animate-pulse">
-        로딩중입니다
+        {t('measure_result_loading')}
       </p>
     </div>
   );

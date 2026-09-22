@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
-import CompareRawData from "./CompareRawData";
+import CompareRawData from "./RawData";
 import { IUserMeasureDetailData } from "@/types/measure";
-import { CompareRawDataProps } from "../RawDataContainer";
+import { CompareRawDataProps } from "../../RawDataContainer";
 
 const partLandmarkMap: { [key: number]: number[] } = {
   0: [], 

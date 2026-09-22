@@ -1,11 +1,11 @@
 import React from "react";
 import { useMeasureJson } from "@/hooks/api/measure/useMeasureJson";
-import DummyStaticContainer from "../DummyStaticContainer";
-import { MeasurementImage } from "../MeasurementImage";
+import DummyStaticContainer from "../../DummyStaticContainer";
+import { MeasurementImage } from "../../MeasurementImage";
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
-import RawDataContainer from "../RawDataContainer";
-import CompareDefault from "./CompareDefault";
-import { CompareStaticProps } from "./CompareBody";
+import RawDataContainer from "../../RawDataContainer";
+import CompareDefault from ".././CompareDefault";
+import { CompareStaticProps } from "./Body";
 
 const MeasureStaticCompareSecond = React.memo(
 ({

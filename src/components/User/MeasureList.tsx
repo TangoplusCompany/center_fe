@@ -12,6 +12,22 @@ import { formatDate } from "@/utils/formatDate";
 import { usePathname, useRouter } from "next/navigation";
 import { measureType, viewType } from "./Detail";
 import { useLocale, useTranslations } from "next-intl";
+import { MeasureType } from "@/types/measure";
+
+export const getFirstAvailableMeasureType = (item?: IUserMeasureListItem): MeasureType | undefined => {
+  if (!item) return undefined;
+
+  const typeMap: [keyof IUserMeasureListItem, MeasureType][] = [
+    ['has_basic', 'basic'],
+    ['has_rom', 'rom'],
+    ['has_bia', 'bia'],
+    ['has_gait', 'gait'],
+    ['has_moire', 'moire'],
+  ];
+
+  return typeMap.find(([key]) => item[key] === 1)?.[1];
+};
+
 
 export const CenterUserMeasureList = ({
   measures,
@@ -19,6 +35,7 @@ export const CenterUserMeasureList = ({
   setMeasureType,
   setCurrentTab,
   selectCompareSn,
+  setCompareType,
   isMyPage,
 }: {
   measures: IUserMeasureListItem[];
@@ -26,6 +43,7 @@ export const CenterUserMeasureList = ({
   setMeasureType: (tab: measureType) => void;
   setCurrentTab?: (tab: viewType) => void;
   selectCompareSn?: (sn: number, slot: CompareSlot) => void;
+  setCompareType : (ct: MeasureType) => void;
   isMyPage: boolean;
 }) => {
   const router = useRouter();
@@ -92,6 +110,11 @@ export const CenterUserMeasureList = ({
                 }
               };
 
+              const firstType = getFirstAvailableMeasureType(measure);
+              if (firstType) {
+                setCompareType(firstType);
+              }
+
               return (
                 <TableRow
                   key={sn}
@@ -124,7 +147,7 @@ export const CenterUserMeasureList = ({
                         {/* 불완전 측정 안내 뱃지/텍스트 */}
                         {isWrongMeasure && (
                           <span className="text-[11px] sm:text-xs text-amber-600 bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 px-1.5 py-0.5 rounded whitespace-nowrap">
-                            (불완전 측정)
+                            ({t('measure_fail_result')})
                           </span>
                         )}
                       </div>
@@ -137,6 +160,7 @@ export const CenterUserMeasureList = ({
                         onClick={(e) => {
                           e.stopPropagation();
                           selectCompareSn?.(sn, 0);
+                          setCompareType(firstType!)
                         }}
                         className="flex items-center gap-1 sm:gap-2 justify-center cursor-pointer"
                       >

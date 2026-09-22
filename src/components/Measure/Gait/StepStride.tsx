@@ -46,7 +46,7 @@ export default function GaitStepStride({ data }: { data: IGaitStepStrideProps })
           {stepData.length === 0 ? (
             <div className="py-8 text-center text-sub400 text-sm">{t('no_step_data')}</div>
           ) : (
-            <table className="w-full text-xs sm:text-sm text-left border-collapse">
+            <table className="min-w-[800px] w-full text-sm text-left border-collapse whitespace-nowrap">
               <thead className="bg-sub100 text-sub700 font-semibold border-b border-sub200">
                 <tr>
                   <th className="p-3">{t('th_seq_direction')}</th>
@@ -103,7 +103,7 @@ export default function GaitStepStride({ data }: { data: IGaitStepStrideProps })
           {strideData.length === 0 ? (
             <div className="py-8 text-center text-sub400 text-sm">{t('no_stride_data')}</div>
           ) : (
-            <table className="w-full text-xs sm:text-sm text-left border-collapse">
+            <table className="min-w-[800px] w-full text-sm text-left border-collapse whitespace-nowrap">
               <thead className="bg-sub100 text-sub700 font-semibold border-b border-sub200">
                 <tr>
                   <th className="p-3">{t('th_seq_direction')}</th>

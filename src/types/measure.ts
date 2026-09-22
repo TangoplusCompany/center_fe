@@ -772,3 +772,5 @@ export interface IMoireMatJson {
   left_bottom_weight_pct :number; 
   right_bottom_weight_pct :number; 
 }
+
+export type MeasureType = "basic" | "rom" | "bia" | "gait" | "moire"

@@ -16,6 +16,8 @@ export interface IGetUserMeasureListParams {
  * - isMyPage: true → result-page(내 결과 페이지)용 엔드포인트/파라미터
  * - isMyPage: false → admin 페이지용 엔드포인트/파라미터
  */
+
+// TODO 여기서 basic 및 다른 것들을 전부 나눌지 판단해야함.
 export const getUserMeasureBasicList = async <T>({
   page,
   limit,

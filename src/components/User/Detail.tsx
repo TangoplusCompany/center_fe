@@ -14,6 +14,7 @@ import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import { useGetUserMeasureList } from "@/hooks/api/user/useGetUserMeasureList";
 import { IUserMeasureList } from "@/types/user";
 import { useGetUserMeasureBasicList } from "@/hooks/api/user/useGetUserMeasureBasicList";
+import { MeasureType } from "@/types/measure";
 
 
 export type viewType = "latest" | "dashboard" | "history" | "userInfo";
@@ -25,6 +26,8 @@ const UserDetail = ({
   setCurrentTab,
   comparePair,
   setComparePair,
+  compareType,
+  setCompareType,
   isMyPage = false,
 }: {
   userUUID: string;
@@ -33,10 +36,12 @@ const UserDetail = ({
   setCurrentTab ?: (tab : viewType) => void;
   comparePair: ComparePair;
   setComparePair: React.Dispatch<React.SetStateAction<ComparePair>>;
+  compareType: MeasureType | undefined;
+  setCompareType: (ct: measureType) => void;
   isMyPage?: boolean;
 }) => {
   const [measureSn, setMeasureSn] = useState<number>();
-  const [measureType, setMeasureType] = useState<measureType>();
+  const [measureType, setMeasureType] = useState<measureType>(); // 측정 클릭했을 때 처음 나올 measureType 및 tab으로 관리될 type
   const [isListClick, setIsListClick] = useState(false); 
 
   const [isDatePickerOpen, setIsDatePickerOpen] = React.useState(false);
@@ -197,7 +202,10 @@ const UserDetail = ({
             <CompareContainer
               userSn={String(userSn)}
               comparePair={comparePair}
+              setComparePair={setComparePair}
               onCompareDialogOpen={onCompareDialogOpen}
+              compareType={compareType}
+              setCompareType={setCompareType}
               isMyPage={isMyPage}
             />
           ) :  (
@@ -205,8 +213,9 @@ const UserDetail = ({
               userMeasureList={userMeasureList!}
               handleSortChange={handleSortChange}
               sort={sort}
-              setMeasureSn={setMeasureSn}
-              setMeasureType={setMeasureType}
+              setMeasureSn={ setMeasureSn }
+              setMeasureType={ setMeasureType }
+              setCompareType={ setCompareType }
               setCurrentTab={ setCurrentTab }
               selectCompareSn={selectCompareSn}
               isMyPage={isMyPage}

@@ -1,11 +1,11 @@
 import { CompareSlot } from "@/types/compare";
 import { IMeasureResponse } from "@/types/measure";
-import CompareSummaryUnit from "./CompareSummaryUnit";
-import CompareFootTrajectoryGridContainer, { CompareFootTrajectoryGridProps } from "./CompareFootTrajectoryGridContainer";
-import CompareDefault from "./CompareDefault";
-import CompareSummaryFootStatic, { CompareSummaryFootStaticProps } from "./CompareSummaryFootStatic";
-import SkeletonContainer from "../Skeleton/SkeletonContainer";
+import CompareFootTrajectoryGridContainer, { CompareFootTrajectoryGridProps } from "./FootTrajectoryGridContainer";
+import CompareSummaryFootStatic, { CompareSummaryFootStaticProps } from "./SummaryFootStatic";
 import { useTranslations } from "next-intl";
+import SkeletonContainer from "../../Skeleton/SkeletonContainer";
+import CompareDefault from "../CompareDefault";
+import CompareSummaryUnit from "../CompareSummaryUnit";
 
 export const extractMeasureData = (data: IMeasureResponse  | undefined) => {
     if (!data?.basic_result?.result_summary_data) {
@@ -145,8 +145,8 @@ const CompareIntro = ({
   )
   const summaryUnits = (
     <div className="flex flex-col gap-4">
-      <CompareSummaryUnit summaryUnit0={measureData0.upper} summaryUnit1={measureData1?.upper} title={"상지요약"} />
-      <CompareSummaryUnit summaryUnit0={measureData0.lower} summaryUnit1={measureData1?.lower} title={"하지요약"} />
+      <CompareSummaryUnit summaryUnit0={measureData0.upper} summaryUnit1={measureData1?.upper} title={t('compare_upper_summary')} />
+      <CompareSummaryUnit summaryUnit0={measureData0.lower} summaryUnit1={measureData1?.lower} title={t('compare_lower_summary')} />
     </div>
   );
 

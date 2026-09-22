@@ -1,11 +1,11 @@
 import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
-import CompareDefault from "./CompareDefault";
-import RawDataContainer from "../RawDataContainer";
+import CompareDefault from ".././CompareDefault";
+import RawDataContainer from "../../RawDataContainer";
 import { useMeasureDynamicJson } from "@/hooks/api/measure/useMeasureDynamicJson";
-import { CompareStaticProps } from "./CompareBody";
-import CompareFootTrajectoryGridContainer, { CompareFootTrajectoryGridProps } from "./CompareFootTrajectoryGridContainer";
-import { extractMeasureData } from "./CompareIntro";
-import VideoPlayer from "../VideoPlayer";
+import { CompareStaticProps } from "./Body";
+import CompareFootTrajectoryGridContainer, { CompareFootTrajectoryGridProps } from "./FootTrajectoryGridContainer";
+import { extractMeasureData } from "./Intro";
+import VideoPlayer from "../../VideoPlayer";
 import { useTranslations } from "next-intl";
 
 const MeasureDynamicCompare = ({

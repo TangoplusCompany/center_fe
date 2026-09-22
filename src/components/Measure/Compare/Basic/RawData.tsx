@@ -4,7 +4,7 @@ import { IUserMeasureDetailData } from "@/types/measure";
 import { compareTrendState } from "@/utils/compareTrendState";
 import { getRawDataMark } from "@/utils/getRawDataMark";
 import { getRiskScore } from "@/utils/getRiskScore";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 export interface IStaticRawDataProps {
   measure_type: number;
@@ -31,6 +31,7 @@ export const CompareRawData = ({
   measure_date1: string;
 }) => {
   const t = useTranslations("Index");
+  const locale = useLocale();
   const isArrayDataTop0 = Array.isArray(data0);
   const dataTop0 = isArrayDataTop0 ? data0[0] : data0;
   const dataBottom0 = isArrayDataTop0 && data0.length === 2 ? data0[1] : undefined;
@@ -167,19 +168,19 @@ export const CompareRawData = ({
 
         <div className={`grid items-center justify-center h-full`}>
           <span className={`
-            flex inline-flex items-center justify-center mx-auto
+            flex items-center justify-center mx-auto
             px-2 py-1 ${textBgCondition0} 
-            text-sm rounded-full text-white
+            ${locale === "ko" ? "text-sm" : "text-xs"} rounded-full text-white
           `}>
-            {levelString0} {dataTop?.range_level}단계
+            {t(levelString0)} {dataTop?.range_level}{t('unit_grade')}
           </span>
           {dataBottom && (
             <span className={`
-              flex inline-flex items-center justify-center mx-auto
+              flex items-center justify-center mx-auto
               px-2 py-1 ${textBgCondition1}
-              text-sm rounded-full text-white
+               ${locale === "ko" ? "text-sm" : "text-xs"} rounded-full text-white
             `}>
-              {levelString1} {dataBottom?.range_level}단계
+              {t(levelString1 ?? "")} {dataBottom?.range_level}{t('unit_grade')}
             </span>
           )}
         </div>
@@ -210,8 +211,8 @@ export const CompareRawData = ({
     scoreBottom1 < scoreBottom0 ? "▲" :  // 점수가 낮아짐 = 좋아짐
     scoreBottom1 > scoreBottom0 ? "▼" :  // 점수가 높아짐 = 나빠짐
     "-";
-  const trendCount0 = compareTrendState(scoreTop0, scoreTop1);
-  const trendCount1 = compareTrendState(scoreBottom0, scoreBottom1);
+  const trendCount0 = compareTrendState(scoreTop0, scoreTop1, t);
+  const trendCount1 = compareTrendState(scoreBottom0, scoreBottom1, t);
 
   const trendBgCondition0 = dataTop0 ? {
     "0": "bg-sub100",

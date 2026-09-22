@@ -3,18 +3,18 @@ import { GaitContainerProps } from "./Container";
 import FootPrintIcon from "./FootPrintIcon";
 import GaitGaugeChart from "./GuageChart";
 
-export default function GaitBalance({data}: GaitContainerProps) {
+export default function GaitBalance({data, isCompare}: GaitContainerProps) {
   const iData = data.gait_measure_info
   const t = useTranslations("Index")
   return (
-    <div className="flex flex-col flex-1 min-h-80 h-full border-2 border-sub200 rounded-xl p-4 gap-2">
+    <div className="flex flex-col flex-1 min-h-120 h-full border-2 border-sub200 rounded-xl p-4 gap-2">
 
       <div className="text-lg font-semibold mb-2 text-sub700">
         {t('gait_balance')}(Single, Double Support)
       </div>
 
 
-      <div className="flex flex-col md:grid md:grid-cols-2 gap-2">
+      <div className={`${isCompare ? "flex flex-col": "flex flex-col md:grid md:grid-cols-2"} gap-2`}>
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2 ">
             <div className="w-3 h-3 rounded-sm bg-mainBlue-600" />
@@ -50,7 +50,7 @@ export default function GaitBalance({data}: GaitContainerProps) {
           </div>
         </div>
         
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col h-full gap-2">
           <div className="flex items-center gap-2 ">
             <div className="w-3 h-3 rounded-sm bg-mainBlue-600" />
             <div className="text-mainBlue-600 text-sm sm:text-base font-bold ">

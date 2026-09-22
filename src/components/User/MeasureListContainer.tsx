@@ -16,6 +16,7 @@ const CenterUserMeasureListContainer = ({
   sort,
   setMeasureSn,
   setMeasureType,
+  setCompareType,
   setCurrentTab,
   selectCompareSn, 
   isMyPage = false,
@@ -26,6 +27,7 @@ const CenterUserMeasureListContainer = ({
   sort: string;
   setMeasureSn: (measureSn: number) => void;
   setMeasureType: (mt: measureType) => void;
+  setCompareType: (ct: measureType) => void;
   setCurrentTab ?: (tab : viewType) => void;
   selectCompareSn: (sn: number, slot: CompareSlot) => void;
   isMyPage: boolean;
@@ -75,6 +77,7 @@ const CenterUserMeasureListContainer = ({
               setMeasureType={setMeasureType}
               setCurrentTab={setCurrentTab}
               selectCompareSn={selectCompareSn}
+              setCompareType={setCompareType}
               isMyPage={isMyPage}
             />
             <CustomPagination

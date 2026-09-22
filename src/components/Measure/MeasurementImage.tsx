@@ -35,7 +35,6 @@ export const MeasurementImage = ({
     }
   }, [compareSlot, leftRight, onImageReady, resultUrl]);
   const RadialGradientShadow = 'inset 0 0 12px rgba(255, 255, 255, 0.75)'
-
   const loadingPlaceholder = (
     <div className="w-full h-[720px] rounded-2xl bg-sub100 animate-pulse flex flex-col items-center justify-center gap-4">
       <div
@@ -43,14 +42,13 @@ export const MeasurementImage = ({
         aria-hidden
       />
       <p className="text-sub400 dark:text-sub300 text-sm font-medium animate-pulse">
-        로딩중입니다
+        {t('measure_result_loading')}
       </p>
     </div>
   );
 
   if (loading) return loadingPlaceholder;
   if (!resultUrl) return loadingPlaceholder;
-  
   return (
     <div className="relative w-full mx-auto">
       {/* eslint-disable-next-line @next/next/no-img-element */}
