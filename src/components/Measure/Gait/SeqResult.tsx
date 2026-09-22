@@ -193,9 +193,11 @@ export function GaitGraphItem({
 
 export default function GaitSeqResult({
   isFront, 
+  isCompare,
   data 
 }: {
   isFront: boolean, 
+  isCompare: boolean,
   data: IMeasureGaitDetail
 }) {
   const t = useTranslations("Index")
@@ -233,7 +235,7 @@ export default function GaitSeqResult({
   return (
     <div className="bg-white rounded-xl border border-sub200 p-4">
       <div className="text-lg font-semibold mb-2 text-sub700">{t('gait_oneway_result')} - {isFront ? t('gait_direction_toward') : t('gait_direction_away')}</div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+      <div className={`${isCompare ? "flex flex-col" : "grid grid-cols-1 md:grid-cols-2 "} gap-4 w-full`}>
         <GaitGraphItem data0={graphGroups.head.data0} data1={graphGroups.head.data1} />
         <GaitGraphItem data0={graphGroups.trunk.data0} data1={graphGroups.trunk.data1} />
         <GaitGraphItem

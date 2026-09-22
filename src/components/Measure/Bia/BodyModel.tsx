@@ -129,7 +129,12 @@ export function PentagonChart({
   );
 }
 
-export default function BodyModel({data} : {data: IBiaData}) {
+export default function BodyModel({
+  data,
+} : {
+  data: IBiaData;
+  isCompare: boolean
+}) {
 
   const getStatusLabel = (status: number): string => {
     const statusMap: Record<number, string> = {

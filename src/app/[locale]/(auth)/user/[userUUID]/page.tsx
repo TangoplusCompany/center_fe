@@ -5,6 +5,7 @@ import UserDetail from "@/components/User/Detail";
 import { notFound } from "next/navigation";
 import { actionUserDecrypt } from "@/app/actions/getCrypto";
 import { ComparePair } from "@/types/compare";
+import { MeasureType } from "@/types/measure";
 
 interface UserDetailPageProps {
   params: Promise<{ userUUID: string }>;
@@ -13,7 +14,7 @@ interface UserDetailPageProps {
 
 const UserDetailPage = ({ params, searchParams }: UserDetailPageProps) => {
   const [comparePair, setComparePair] = useState<ComparePair>([undefined, undefined]);
-  
+  const [compareType, setCompareType] = useState<MeasureType>();
   // ⭐️ 복호화 결과를 담을 상태 추가
   const [decryptedData, setDecryptedData] = useState<{ user_uuid: string; user_sn: number } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -25,6 +26,7 @@ const UserDetailPage = ({ params, searchParams }: UserDetailPageProps) => {
 
   useEffect(() => {
     setComparePair([undefined, undefined]);
+    setCompareType(undefined)
   }, [currentTab]);
 
   useEffect(() => {
@@ -63,6 +65,8 @@ const UserDetailPage = ({ params, searchParams }: UserDetailPageProps) => {
         currentTab={currentTab} 
         comparePair={comparePair} 
         setComparePair={setComparePair} 
+        compareType={compareType}
+        setCompareType={setCompareType}
       />
     );
   }
@@ -77,6 +81,8 @@ const UserDetailPage = ({ params, searchParams }: UserDetailPageProps) => {
           currentTab={currentTab} 
           comparePair={comparePair} 
           setComparePair={setComparePair} 
+          compareType={compareType}
+          setCompareType={setCompareType}
         />
       );
     }

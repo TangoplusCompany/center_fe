@@ -1,23 +1,23 @@
 import { IMeasureResponse } from "@/types/measure";
 import React, { useCallback, useState } from "react";
-import MeasureStaticCompareFirst from "./CompareFirst";
-import MeasureStaticCompareSecond from "./CompareSecond";
-import MeasureStaticCompareThird from "./CompareThird";
-import MeasureStaticCompareFourth from "./CompareFourth";
-import MeasureStaticCompareFifth from "./CompareFifth";
-import MeasureStaticCompareSixth from "./CompareSixth";
-import CompareDateCard from "./CompareDateCard";
+import MeasureStaticCompareFirst from "./First";
+import MeasureStaticCompareSecond from "./Second";
+import MeasureStaticCompareFourth from "./Fourth";
+import MeasureStaticCompareFifth from "./Fifth";
+import MeasureStaticCompareSixth from "./Sixth";
+import CompareDateCard from "./DateCard";
 import { ComparePair, CompareSlot } from "@/types/compare";
 import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import CompareIntro from "./CompareIntro";
-import MeasureDynamicCompare from "./CompareSeventh";
-import CompareBodySkeleton from "./CompareBodySkeleton";
+import CompareIntro from "./Intro";
+import MeasureDynamicCompare from "./Seventh";
+import CompareBodySkeleton from "./BodySkeleton";
 import { generatePrintUrls } from "@/hooks/api/measure/generatePrintUrls";
 import { actionPrintEncrypt } from "@/app/actions/getCrypto";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
+import MeasureStaticCompareThird from "./Third";
 
 type CompareTab = {
   title: string;
@@ -98,8 +98,7 @@ const CompareBody = ({
     return <div>{t('etc_error')}</div>;
   }
 
-  const leftSlot: CompareSlot = 0;  // 또는 1
-  const rightSlot: CompareSlot = 1;
+
   const compareTabs: CompareTab[] = [
     {
       title: t('result_summary'),
@@ -336,28 +335,28 @@ const CompareBody = ({
           <div className="min-w-0">
             <CompareDateCard 
               regDate={leftData ? leftData?.basic_result?.result_summary_data.measure_date : ""}
-              currentSlot={leftSlot}
+              currentSlot={0}
               onCardClick={onCompareDialogOpen} />
           </div>
           <div className="min-w-0">
             <CompareDateCard 
               regDate={rightData ? rightData?.basic_result?.result_summary_data.measure_date : ""}
-              currentSlot={rightSlot}
+              currentSlot={1}
               onCardClick={onCompareDialogOpen} />
           </div>
         </div>
 
         {true && (
-        compareTabs.map((compareTab) => (
-          <TabsContent
-            key={compareTab.value}
-            value={compareTab.value}
-            className="!mt-0"
-          >
-            {compareTab.render(leftData, rightData)}
-          </TabsContent>
-        ))
-      ) }
+          compareTabs.map((compareTab) => (
+            <TabsContent
+              key={compareTab.value}
+              value={compareTab.value}
+              className="!mt-0"
+            >
+              {compareTab.render(leftData, rightData)}
+            </TabsContent>
+          ))
+        )}
       </Tabs>
 
   );

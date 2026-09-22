@@ -7,17 +7,20 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { actionUserDecrypt } from "@/app/actions/getCrypto";
 import ResultPageTab from "@/components/User/My/ResultPageTab";
 import { ComparePair } from "@/types/compare";
+import { useTranslations } from "next-intl";
+import { MeasureType } from "@/types/measure";
 
 export default function ResultPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [currentTab, setCurrentTab] = useState<viewType>("latest");
   const [comparePair, setComparePair] = React.useState<ComparePair>([undefined, undefined]);
+  const [compareType, setCompareType] = useState<MeasureType>();
   // Store 상태
   const user = useResultPageUserStore((state) => state.user);
   const isLogin = useResultPageUserStore((state) => state.isLogin);
   const hasHydrated = useResultPageUserStore((state) => state._hasHydrated);
-
+  const t = useTranslations("Index")
   const [decryptedData, setDecryptedData] = useState<{
     user_uuid: string;
     user_sn: number;
@@ -35,6 +38,7 @@ export default function ResultPage() {
     if (subTabParam) {
       setCurrentTab(subTabParam);
       setComparePair([undefined, undefined]);
+      setCompareType(undefined);
     } else {
       setCurrentTab("latest"); // 기본값
     }
@@ -42,9 +46,9 @@ export default function ResultPage() {
   const handleTabClick = (tabKey: viewType) => {
     // 1. 탭을 누르면 무조건 comparePair 초기화
     setComparePair([undefined, undefined]);
+    setCompareType(undefined);
     setCurrentTab(tabKey);
 
-    // 2. URL subTab 파라미터 업데이트
     const newParams = new URLSearchParams(searchParams.toString());
     newParams.set("subTab", tabKey);
     router.push(`?${newParams.toString()}`);
@@ -110,7 +114,7 @@ export default function ResultPage() {
   if (isInitialLoading || !isLogin || !user || !decryptedData) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <p className="text-sm text-muted-foreground">인증 정보를 확인 중입니다...</p>
+        <p className="text-sm text-muted-foreground">{t('result_page_pending')}</p>
       </div>
     );
   }
@@ -129,6 +133,8 @@ export default function ResultPage() {
         setCurrentTab={setCurrentTab}
         comparePair={comparePair} 
         setComparePair={setComparePair}
+        compareType={compareType}
+        setCompareType={setCompareType}
         isMyPage={true}
       />
     </div>

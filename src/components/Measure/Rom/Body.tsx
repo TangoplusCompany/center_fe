@@ -3,9 +3,9 @@ import RawDataDynamic, { ROMRawDataDynamicProps } from "./RawDataDynamic";
 import { ComparePair, CompareSlot } from "@/types/compare";
 // import CompareDateCard from "../Compare/CompareDateCard";
 import { IMeasureROMItemDetail } from "@/types/measure";
-import CompareBodySkeleton from "../Compare/CompareBodySkeleton";
 import { ROMDashboardViewType } from "@/components/User/DashBoardContainer";
 import { useTranslations } from "next-intl";
+import CompareBodySkeleton from "../Compare/Basic/BodySkeleton";
 
 export interface ROMBodyProps {
   data0?: IMeasureROMItemDetail;

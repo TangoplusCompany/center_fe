@@ -334,7 +334,7 @@ const MeasureDetailContainer = ({
   }
 
   if (measureDataLoading) {
-    return <p className="py-8 text-center">로딩중입니다</p>;
+    return <p className="py-8 text-center">{t('measure_result_loading')}</p>;
   }
 
   if (!measureData || !measureData.measurement_meta) {
@@ -463,15 +463,15 @@ const MeasureDetailContainer = ({
       )}
 
       {measureType === "bia" && hasBia && measureData.bia_result && (
-        <BiaContainer data={measureData.bia_result} />
+        <BiaContainer data={measureData.bia_result} isCompare={false} />
       )}
 
       {measureType === "gait" && hasGait && measureData.gait_result && (
-        <GaitContainer data={measureData.gait_result} />
+        <GaitContainer data={measureData.gait_result} isCompare={false} />
       )}
 
       {measureType === "moire" && hasMoire && measureData.moire_result && (
-        <MoireContainer data={measureData.moire_result} />
+        <MoireContainer data={measureData.moire_result} isCompare={false} />
       )}
     </div>
   );

@@ -119,19 +119,24 @@ export function CompositionCard({idx, title, weight, value, low, high, prevValue
 }
 
 
-export default function Composition({data}: {data: IBiaData}) {
+export default function Composition({
+  data,
+}: {
+  data: IBiaData,
+  isCompare: boolean
+}) {
   const t = useTranslations("Index")
   const splitMessage = (message: string) => {
     const match = message.match(/\[(.*?)\]\s*(.*)/);
     
     if (match) {
       return {
-        title: `[${match[1]}]`, // 좌측에 넣을 타이틀 (대괄호 포함)
-        description: match[2]   // 우측에 넣을 나머지 본문
+        title: `[${match[1]}]`,
+        description: match[2]  
       };
     }
 
-    return { title: "", description: message }; // 형식이 다를 경우 예외 처리
+    return { title: "", description: message };
   };
   const { title, description } = splitMessage(data.result_body_composition_description);
   const mainComps = [
@@ -255,8 +260,8 @@ export default function Composition({data}: {data: IBiaData}) {
       </div>
 
       <div className="flex gap-2 px-4 py-2  bg-sub100 border border-sub200 rounded-sm items-center ">
-          <span className="font-bold text-sub800 text-sm text-center">{title}</span>
-          <span className="text-sub800 text-sm] leading-none">{description}</span>
+        <span className="font-bold text-sub800 text-sm text-center">{title}</span>
+        <span className="text-sub800 text-sm] leading-none">{description}</span>
       </div>
     </div>
   );

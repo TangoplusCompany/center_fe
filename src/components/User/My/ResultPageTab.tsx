@@ -6,7 +6,7 @@ import { Menu, X } from "lucide-react";
 import { resultPageUserStore } from "@/stores/ResultPageUserStore";
 import { useRouter } from "next/navigation";
 import { viewType } from "../Detail";
-import { useTranslations } from "next-intl";
+import {  useTranslations } from "next-intl";
 
 interface ResultPageTabProps {
   userName: string;
@@ -27,6 +27,8 @@ const ResultPageTab = ({
   onTabClick,
 }: ResultPageTabProps) => {
   const t = useTranslations("Index");
+  // const locale = useLocale(); 
+  // const [isLangOpen, setIsLangOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const handleLogout = () => {
@@ -36,6 +38,14 @@ const ResultPageTab = ({
     }
   };
 
+  // const handleLanguageChange = (newLocale: string) => {
+  //   setIsLangOpen(false);
+  //   if (newLocale === locale) return;
+  //   document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
+  //   window.location.reload();
+  //   setIsLangOpen(false);
+  //   setIsOpen(false);
+  // };
   return (
     <div className="relative w-full p-2 flex items-center justify-between">
       
@@ -81,6 +91,20 @@ const ResultPageTab = ({
             })}
 
             <div className="border-t border-gray-100 my-1" />
+            {/* <button
+              onClick={() => setIsLangOpen(!isLangOpen)}
+              className={`w-full text-left px-4 py-2 text-sm hover:bg-sub100/50 rounded-xl transition-colors flex items-center justify-between ${
+                isLangOpen ? "bg-sub100/70 dark:bg-sub700 font-semibold" : ""
+              }`}
+            >
+              <div className="flex items-center gap-2 w-full justify-center">
+                <Globe className="w-4 h-4 text-sub600 dark:text-sub200" />
+                <span className="text-sm text-sub700 dark:text-sub100">
+                  {locale === "ko" ? "한국어" : "English"}
+                </span>
+              </div>
+            </button> */}
+
             <button
               onClick={() => {
                 handleLogout();
@@ -99,6 +123,33 @@ const ResultPageTab = ({
               />
               <span>{t('logout')}</span>
             </button>
+
+            {/* {isLangOpen && (
+              <div className="absolute right-10 top-24 w-40 bg-white dark:bg-sub800 border border-gray-200 dark:border-sub600 rounded-2xl shadow-2xl p-2 z-50 flex flex-col gap-1 animate-in fade-in slide-in-from-top-2 duration-150">
+                <button
+                  onClick={() => handleLanguageChange("ko")}
+                  className={`w-full text-left px-3 py-2 text-sm rounded-xl transition-colors flex items-center justify-between ${
+                    locale === "ko"
+                      ? "text-primary font-bold bg-primary/10"
+                      : "text-sub700 dark:text-sub100 hover:bg-sub100/50"
+                  }`}
+                >
+                  <span>한국어</span>
+                  {locale === "ko" && <span className="w-1.5 h-1.5 rounded-full bg-primary" />}
+                </button>
+                <button
+                  onClick={() => handleLanguageChange("en")}
+                  className={`w-full text-left px-3 py-2 text-sm rounded-xl transition-colors flex items-center justify-between ${
+                    locale === "en"
+                      ? "text-primary font-bold bg-primary/10"
+                      : "text-sub700 dark:text-sub100 hover:bg-sub100/50"
+                  }`}
+                >
+                  <span>English</span>
+                  {locale === "en" && <span className="w-1.5 h-1.5 rounded-full bg-primary" />}
+                </button>
+              </div>
+            )} */}
           </div>
         </>
       )}

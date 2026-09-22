@@ -8,7 +8,7 @@ export default function GaitDynamic({ data }: GaitContainerProps) {
     data?.gait_measure_info?.file_server_gait_frame_name
   );
   return (
-    <div className="flex flex-col w-full h-full gap-4 rounded-xl">
+    <div className="flex flex-col w-full gap-4 rounded-xl">
       <VideoPlayer
         videoSrc={data?.gait_measure_info?.file_server_video_name}
         measureJson={measureJson0}
