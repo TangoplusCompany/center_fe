@@ -5,7 +5,6 @@ export default function BodyTypeChart({
   data,
 }: {
   data: IBiaData;
-  isCompare: boolean
 }) {
   const t = useTranslations("Index")
   const maxBodyFatMass = 30; // 체지방률 최대치

@@ -154,7 +154,7 @@ export const CenterUserMeasureList = ({
                     )}
                   </TableCell>
                   <TableCell className="flex items-center justify-end gap-2 sm:gap-4 whitespace-nowrap mr-4">
-                    {measure.has_basic === 1 && !isError && (
+                    {!isError && (
                       <button
                         type="button"
                         onClick={(e) => {

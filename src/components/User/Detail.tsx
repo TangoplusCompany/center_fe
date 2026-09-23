@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { ComponentProps, useEffect, useMemo, useState } from "react";
 import CenterUserInformation from "@/components/User/Information";
 import { ComparePair, CompareSlot } from "@/types/compare";
 import { useMeasureListForDetail } from "@/hooks/api/user/useMeasureListForDetail";
@@ -13,8 +13,8 @@ import AIUserContainer from "./ai/UserContainer";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import { useGetUserMeasureList } from "@/hooks/api/user/useGetUserMeasureList";
 import { IUserMeasureList } from "@/types/user";
-import { useGetUserMeasureBasicList } from "@/hooks/api/user/useGetUserMeasureBasicList";
 import { MeasureType } from "@/types/measure";
+import { ComparePagination } from "../Measure/Rom/PickerDialog";
 
 
 export type viewType = "latest" | "dashboard" | "history" | "userInfo";
@@ -48,7 +48,7 @@ const UserDetail = ({
   const [aiExerciseOpen, setAiExerciseOpen] = React.useState(false);
   const [isCompareDialogOpen, setIsCompareDialogOpen] = React.useState(false);
   const [activeSlot, setActiveSlot] = React.useState<CompareSlot>(0);
-
+  type DialogPaginationType = ComponentProps<typeof MeasurePickerDialog>["pagination"];
   // 1. URL 쿼리 파라미터 가져오기
   const { setQueryParam, query } = useQueryParams();
   const page = query.page || "1";
@@ -63,13 +63,7 @@ const UserDetail = ({
     isMyPage,
   });
 
-  const {
-    measureList: compareMeasureListItems,
-    pagination: comparePagination,
-  } = useGetUserMeasureBasicList({
-    user_sn: userSn,
-    isMyPage,
-  });
+
   const {
     data: userMeasureList,
     isLoading: isListLoading
@@ -82,6 +76,46 @@ const UserDetail = ({
     sort,
     isMyPage,
   });
+  const filteredItems = useMemo(() => {
+    const list = userMeasureList?.measurement_list;
+    if (!list) return [];
+    if (!compareType) return list;
+
+    const flagKey = `has_${compareType}` as const; 
+    return list.filter((item) => item[flagKey] === 1);
+  }, [userMeasureList?.measurement_list, compareType]);
+
+  // 1. 다이얼로그용 페이지 상태 (부모에 선언)
+  const [dialogPage, setDialogPage] = useState(1);
+  const DIALOG_LIMIT = 10; // 페이지당 노출 개수
+
+  // 2. compareType 변경 시 1페이지로 리셋
+  useEffect(() => {
+    setDialogPage(1);
+  }, [compareType]);
+
+  // 3. 필터링된 전체 목록 기반 pagination 객체 구성
+  const dialogPagination: ComparePagination = useMemo(() => {
+    const total = filteredItems.length;
+    const last_page = Math.max(1, Math.ceil(total / DIALOG_LIMIT));
+
+    return {
+      page: dialogPage,
+      total,
+      limit: DIALOG_LIMIT,
+      last_page,
+      setPage: setDialogPage,
+    };
+  }, [filteredItems.length, dialogPage]);
+
+  // 4. 현재 페이지에 해당하는 데이터만 슬라이싱 (다이얼로그 내부가 아닌 외부에서 처리 시)
+  // *다이얼로그 내부에서 pagination 정보를 보고 자체 slice를 수행한다면 filteredItems 전체를 넘겨도 됩니다.
+  const pagedItems = useMemo(() => {
+    const start = (dialogPage - 1) * DIALOG_LIMIT;
+    return filteredItems.slice(start, start + DIALOG_LIMIT);
+  }, [filteredItems, dialogPage]);
+
+
   useEffect(() => {
     if (currentTab !== "latest" && (!comparePair[0] || !comparePair[1])) {
       setComparePair([undefined, undefined]);
@@ -227,7 +261,7 @@ const UserDetail = ({
 
       <MeasurePickerDialog
         open={isCompareDialogOpen}
-        items={compareMeasureListItems} 
+        items={pagedItems} 
         comparePair={comparePair}
         activeSlot={ activeSlot }
         onOpenChange={setIsCompareDialogOpen}
@@ -235,7 +269,7 @@ const UserDetail = ({
           selectCompareSn(sn, slot);
           setIsCompareDialogOpen(false);
         }}
-        pagination={comparePagination}
+        pagination={dialogPagination as DialogPaginationType}
       />
 
       {currentTab === "userInfo" && 

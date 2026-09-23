@@ -133,7 +133,6 @@ export default function BodyModel({
   data,
 } : {
   data: IBiaData;
-  isCompare: boolean
 }) {
 
   const getStatusLabel = (status: number): string => {

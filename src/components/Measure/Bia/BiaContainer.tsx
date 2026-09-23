@@ -26,9 +26,9 @@ const BiaContainer = ({ data, isCompare }: BiaContainerProps) => {
           prevMuscleMassIndex={data?.most_previous_data.skeletal_muscle_mass_index}
           isCompare={isCompare}
         />
-        <BodyModel data={data} isCompare={isCompare} />
-        <Recommend data={data} isCompare={isCompare} />
-        <BodyTypeChart data={data} isCompare={isCompare} />
+        <BodyModel data={data} />
+        <Recommend data={data}  />
+        <BodyTypeChart data={data} />
       </div>
     );
   }
@@ -47,7 +47,7 @@ const BiaContainer = ({ data, isCompare }: BiaContainerProps) => {
           />
         </div>
         <div className="order-4 md:order-none">
-          <BodyModel data={data} isCompare={isCompare} />
+          <BodyModel data={data} />
         </div>
         <div className="order-7 md:order-none">
           <TrendGraph data={data} />
@@ -59,10 +59,10 @@ const BiaContainer = ({ data, isCompare }: BiaContainerProps) => {
           <BodyBenchMark data={data} isCompare={isCompare} />
         </div>
         <div className="order-5 md:order-none">
-          <Recommend data={data} isCompare={isCompare} />
+          <Recommend data={data} />
         </div>
         <div className="order-6 md:order-none">
-          <BodyTypeChart data={data} isCompare={isCompare} />
+          <BodyTypeChart data={data} />
         </div>
       </div>
     </div>

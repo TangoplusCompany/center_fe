@@ -36,7 +36,6 @@ export default function Recommend({
   data,
 }: {
   data: IBiaRecommend;
-  isCompare: boolean
 }) {
   const t = useTranslations("Index")
   const types = [

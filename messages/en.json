@@ -565,7 +565,8 @@
     "moire_contour_pelvis": "Pelvis Contour",
     "moire_data_loading_error": "An error occurred while loading data.",
 
-    "go_list": "Back to list",
+    "go_list": "Back to List",
+    "go_rom_list": "Back to Item List",
     "grade_very_good": "Excellent",
     "grade_normal": "Normal",
     "grade_caution": "Caution",
@@ -850,6 +851,7 @@
     "result_page_pin_hint": "Please enter your PIN.",
     "result_page_login_fail": "The mobile phone number or PIN is incorrect.",
     "measure_result_loading": "Loading,,,",
-    "measure_fail_result": "Incompleted"
+    "measure_fail_result": "Incompleted",
+    "compare": ""
   }
 }

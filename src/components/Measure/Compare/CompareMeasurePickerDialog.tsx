@@ -76,6 +76,7 @@ export const MeasurePickerDialog = ({
         {/* 헤더 */}
         <DialogTitle className="text-base font-semibold mb-3 text-foreground">
           {t("measure_date_picker")}
+          {/* TODO 여기다가 비교하는 dialog title+현재 필터링된 검사들 고르기 (radio로 그냥 모든 검사 보이게 해도됨) */}
         </DialogTitle>
 
         {/* 내용 영역 */}

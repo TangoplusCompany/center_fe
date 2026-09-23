@@ -92,7 +92,7 @@ export default function BodyBenchMark({
     9 : '/images/bt_9.png',
   }[data.body_type]
   return (
-    <div className={`${isCompare ? "grid grid-cols-2 gap-2" : "flex flex-col rounded-xl border border-sub200"}`}>
+    <div className={`${isCompare ? "grid grid-cols-2" : "flex flex-col rounded-xl border border-sub200"}`}>
       <div className='flex flex-col '>
         <div className='flex w-fit bg-mainBlue-600 rounded-br-xl rounded-tl-xl text-base text-white font-semibold px-2 py-1'>
           {t('bia_key_health_indicators')}
@@ -137,10 +137,7 @@ export default function BodyBenchMark({
             </div>
           </div>
         </div>
-      </div>
 
-
-      <div className='flex flex-1 flex-col gap-2 px-2'>
         <div className='flex gap-2'>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img 
@@ -158,6 +155,11 @@ export default function BodyBenchMark({
             </div>
           </div>
         </div>
+      </div>
+
+
+      <div className='flex flex-1 flex-col gap-2 px-2'>
+        
 
         <div className='grid grid-rows-[40%_60%] gap-4 h-full'>
           <MetricList 

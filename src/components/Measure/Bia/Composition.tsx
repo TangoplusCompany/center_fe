@@ -1,6 +1,7 @@
 import PieChartBar, { SegmentData } from "@/components/ui/PieChartBar";
 import type { IBiaData } from "../../../types/bia";
 import { useTranslations } from "next-intl";
+import VerticalStackedBar from "@/components/ui/VerticalStackedBar";
 
 interface CompositionCardProps {
   idx: number;
@@ -121,6 +122,7 @@ export function CompositionCard({idx, title, weight, value, low, high, prevValue
 
 export default function Composition({
   data,
+  isCompare
 }: {
   data: IBiaData,
   isCompare: boolean
@@ -193,7 +195,7 @@ export default function Composition({
     }
   ]
   return (
-    <div className="flex flex-col rounded-lg border border-sub200 p-2">
+    <div className={`flex flex-col rounded-lg border border-sub200 p-2`}>
       
       <div className="flex items-center gap-2 ">
         <div className="w-3 h-3 rounded-[3px] bg-mainBlue-600" />
@@ -209,9 +211,15 @@ export default function Composition({
         {/* 2. 하단 컨텐츠 영역 (차트와 카드 리스트가 같은 높이를 공유) */}
         <div className="flex flex-col sm:flex-row flex-1 gap-1 items-stretch">
           {/* 도넛 차트 컨테이너 (정중앙 배치) */}
-          <div className="flex items-center justify-center">
-            <PieChartBar data={donutComps} />
-          </div>
+          { isCompare ? (
+            <div className="flex items-center mx-4">
+              <VerticalStackedBar data={donutComps} />
+            </div>
+          ) : (
+            <div className="flex items-center justify-center">
+              <PieChartBar data={donutComps} />
+            </div>
+          )}
 
           <div className="flex flex-col flex-1 w-full h-full">
             <div className="flex w-full items-center text-xs text-sub800 font-bold">

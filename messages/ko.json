@@ -566,6 +566,7 @@
     "moire_data_loading_error": "데이터 로딩 중 오류가 발생했습니다.",
 
     "go_list": "목록으로",
+    "go_rom_list": "검사 목록으로",
     "grade_very_good": "매우 양호",
     "grade_normal": "정상",
     "grade_caution": "주의",
@@ -850,6 +851,7 @@
     "result_page_pin_hint": "PIN 번호를 입력해주세요",
     "result_page_login_fail": "휴대폰 번호 또는 PIN 번호가 올바르지 않습니다.",
     "measure_result_loading": "로딩중입니다",
-    "measure_fail_result": "불완전 측정"
+    "measure_fail_result": "불완전 측정",
+    "compare": "비교"
   }
 }

@@ -27,6 +27,6 @@ export const useGetROMItemHistory = ({
     queryKey: ["userROMItemHistory", user_sn, center_sn, measure_type, isMyPage, page, limit],
     queryFn: () => getROMItemHistory({ user_sn, center_sn, measure_type, isMyPage, page, limit }),
     enabled: measure_type >= 13,
-    placeholderData: keepPreviousData, // measure_type < 13일 때 빈 배열 반환
+    placeholderData: keepPreviousData,
   });
 };

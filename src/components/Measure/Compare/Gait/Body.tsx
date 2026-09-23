@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
 import CompareBodySkeleton from "../Basic/BodySkeleton";
 import { CompareGaitContainer } from "./Container";
+import CompareDefault from "../CompareDefault";
 
 const CompareGaitBody = ({
   userSn,
@@ -72,9 +73,7 @@ const CompareGaitBody = ({
           {leftData?.gait_result ? (
             <CompareGaitContainer data={leftData.gait_result} isCompare={true} /> 
           ) : (
-            <div className="w-full h-[733px] px-4 py-2 transition flex items-center justify-center border-dashed border-2 border-sub200 rounded-xl text-center  dark:border-border  bg-white dark:bg-black cursor-pointer hover:border-sub400 dark:hover:border-sub300 active:border-sub400">
-              선택된 항목이 없습니다
-            </div>
+            <CompareDefault className="w-full h-[733px]" onCompareDialogOpen={onCompareDialogOpen} currentSlot={0} />
           )}
         </>
         
@@ -82,9 +81,7 @@ const CompareGaitBody = ({
           {rightData?.gait_result ? (
             <CompareGaitContainer data={rightData.gait_result} isCompare={true} /> 
           ) : (
-            <div className="w-full h-[733px] px-4 py-2 transition flex items-center justify-center border-dashed border-2 border-sub200 rounded-xl text-center  dark:border-border  bg-white dark:bg-black cursor-pointer hover:border-sub400 dark:hover:border-sub300 active:border-sub400">
-              선택된 항목이 없습니다
-            </div>
+            <CompareDefault className="w-full h-[733px]" onCompareDialogOpen={onCompareDialogOpen} currentSlot={1} />
           )}
         </>
       </div>

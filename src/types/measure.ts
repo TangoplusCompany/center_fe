@@ -432,6 +432,7 @@ export interface IMeasureROMItemDetail extends IMeasureROMItemCardData {
   title: string;
   howto: string;
   camera_orientation: 0 | 1; 
+  history_by_measure_type: Record<string, number>;
 }
 
 // 🪷🪷🪷🪷 GAIT 🪷🪷🪷🪷

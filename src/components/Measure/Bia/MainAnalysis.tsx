@@ -146,6 +146,7 @@ const AnalysisCard = ({ label, value, unit, grade }: IAnalysisCardProps) => {
 export default function MainAnalysis({
   data,
   prevMuscleMassIndex,
+  isCompare,
 }: {
   data: IBiaData
   prevMuscleMassIndex?: number;
@@ -182,7 +183,7 @@ const muscleMassIndex = (() => {
   }
 })();
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 w-full gap-4 rounded-lg border border-sub200 p-2 h-auto items-stretch">
+    <div className={`${isCompare ? "flex flex-col": "grid grid-cols-1 sm:grid-cols-2 rounded-lg border border-sub200"} w-full gap-4  p-2 h-auto items-stretch`}>
       
       <div className="flex flex-col gap-2 w-full h-full justify-between">
         <div className="flex flex-col flex-1 w-full justify-center items-center gap-4 py-4"> 
@@ -232,48 +233,50 @@ const muscleMassIndex = (() => {
       </div>
 
       <div className="flex flex-col gap-4 w-full h-full justify-between">
+        
         <div className="flex flex-col flex-1  bg-sub100 border border-sub200 rounded-[2px] pt-1 pb-8 px-2">
-            <div className="flex items-center gap-2 ">
-              <div className="w-3 h-3 rounded-[3px] bg-mainBlue-600" />
-              <div className="text-mainBlue-600 font-bold text-sm">
-                {t('bia_sarcopenia_score')}
-              </div>
+          
+          <div className="flex items-center gap-2 ">
+            <div className="w-3 h-3 rounded-[3px] bg-mainBlue-600" />
+            <div className="text-mainBlue-600 font-bold text-sm">
+              {t('bia_sarcopenia_score')} 
             </div>
+          </div>
 
-            <div className="flex flex-col gap-2 items-center leading-none">
-                    
-              {/* 수치 */}
-              <div className="flex flex-col text-center">
-                <span className="text-base font-bold text-sub800">{data.skeletal_muscle_mass_index.toFixed(1)}</span>
-                <span className="text-sm font-bold text-sub800">({t('bia_compared_to_previous')} {-diffMuscleMassIndex.toFixed(1)})</span>
-              </div>
-
-              {/* 게이지 바 */}
-              <div className="flex flex-col w-48 gap-2">
-                {/* 상단 라벨 영역: justify-between으로 양 끝과 중앙 배치 */}
-                <div className="flex justify-between w-full px-0.5 items-center">
-                  <span className="text-xs text-center font-bold text-gray-400">{t('bia_status_below_avg')}</span>
-                  <span className="text-xs font-bold text-gray-400">{t('bia_status_avg')}</span>
-                  <span className="text-xs text-center font-bold text-gray-400">{t('bia_status_above_avg')}</span>
-                </div>
-
-                {/* 게이지 바 영역 */}
-                <div className="relative flex items-center w-full ">
-                  {/* 배경 바 */}
-                  <div className="w-full h-1.5 bg-sub200 rounded-full"></div>
+          <div className="flex flex-col gap-2 items-center leading-none">
                   
-                  {/* 현재 수치 포인트 */}
-                  <div 
-                    className="absolute w-3.5 h-3.5 bg-accent rounded-full border-2 border-white shadow-sm"
-                    style={{ 
-                      left: (muscleMassIndex === 1 ? "50%" : muscleMassIndex === 2 ? "90%" : "10%"), 
-                      transform: "translate(-50%, 0)"
-                    }}
-                  ></div>
-                </div>
+            {/* 수치 */}
+            <div className="flex flex-col text-center">
+              <span className="text-base font-bold text-sub800">{data.skeletal_muscle_mass_index.toFixed(1)}</span>
+              <span className="text-sm font-bold text-sub800">({t('bia_compared_to_previous')} {-diffMuscleMassIndex.toFixed(1)})</span>
+            </div>
+
+            {/* 게이지 바 */}
+            <div className="flex flex-col w-48 gap-2">
+              {/* 상단 라벨 영역: justify-between으로 양 끝과 중앙 배치 */}
+              <div className="flex justify-between w-full px-0.5 items-center">
+                <span className="text-xs text-center font-bold text-gray-400">{t('bia_status_below_avg')}</span>
+                <span className="text-xs font-bold text-gray-400">{t('bia_status_avg')}</span>
+                <span className="text-xs text-center font-bold text-gray-400">{t('bia_status_above_avg')}</span>
               </div>
 
+              {/* 게이지 바 영역 */}
+              <div className="relative flex items-center w-full ">
+                {/* 배경 바 */}
+                <div className="w-full h-1.5 bg-sub200 rounded-full"></div>
+                
+                {/* 현재 수치 포인트 */}
+                <div 
+                  className="absolute w-3.5 h-3.5 bg-accent rounded-full border-2 border-white shadow-sm"
+                  style={{ 
+                    left: (muscleMassIndex === 1 ? "50%" : muscleMassIndex === 2 ? "90%" : "10%"), 
+                    transform: "translate(-50%, 0)"
+                  }}
+                ></div>
+              </div>
             </div>
+
+          </div>
         </div>
 
         <div className="grid grid-cols-3 grid-rows-2 gap-2 pt-2">

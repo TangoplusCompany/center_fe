@@ -24,7 +24,7 @@ export const getROMItemHistory = async ({
 }) => {
   const axiosInstance = isMyPage ? customUserAxios : customAxios;
   const apiPath = isMyPage
-    ? `/users/${user_sn}/rom-results/measure-type/${measure_type}` 
+    ? `/users/${user_sn}/rom-results/measure-type/${measure_type}`
     : `/members/${user_sn}/centers/${center_sn}/rom-results/measure-type/${measure_type}`;
   const { data } = await axiosInstance.get(apiPath, {
     params: { page, limit },
