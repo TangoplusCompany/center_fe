@@ -277,7 +277,7 @@ export default function GaitFall({ data }: GaitContainerProps) {
   ];
 
   return (
-    <div className="flex flex-col flex-1 min-h-80 h-full border-2 border-sub100 rounded-xl p-4 gap-2">
+    <div className="flex flex-col min-h-[580px] border-2 border-sub100 rounded-xl p-4 gap-2">
       
       <div className="text-lg font-semibold mb-2 text-sub700">
         {t('gait_fall_key_indicators')}

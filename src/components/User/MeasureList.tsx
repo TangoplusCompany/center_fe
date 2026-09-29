@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -6,6 +7,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { CompareSlot } from "@/types/compare";
 import { IUserMeasureListItem } from "@/types/user";
 import { formatDate } from "@/utils/formatDate";
@@ -28,7 +38,6 @@ export const getFirstAvailableMeasureType = (item?: IUserMeasureListItem): Measu
   return typeMap.find(([key]) => item[key] === 1)?.[1];
 };
 
-
 export const CenterUserMeasureList = ({
   measures,
   setMeasureSn,
@@ -43,13 +52,16 @@ export const CenterUserMeasureList = ({
   setMeasureType: (tab: measureType) => void;
   setCurrentTab?: (tab: viewType) => void;
   selectCompareSn?: (sn: number, slot: CompareSlot) => void;
-  setCompareType : (ct: MeasureType) => void;
+  setCompareType: (ct: MeasureType) => void;
   isMyPage: boolean;
 }) => {
   const router = useRouter();
   const pathname = usePathname();
   const t = useTranslations("Index");
   const locale = useLocale();
+
+  const [isNoticeOpen, setIsNoticeOpen] = useState(false);
+  const [pendingCompare, setPendingCompare] = useState<{ sn: number; type: MeasureType } | null>(null);
 
   const getMeasureTypeText = (measureItem: IUserMeasureListItem): string => {
     const labels: string[] = [];
@@ -59,6 +71,22 @@ export const CenterUserMeasureList = ({
     if (measureItem.has_gait === 1) labels.push(t('m_gait'));
     if (measureItem.has_moire === 1) labels.push(t('m_moire'));
     return labels.length > 0 ? labels.join("/") : "";
+  };
+
+  const executeCompare = (targetSn: number, targetType: MeasureType) => {
+    selectCompareSn?.(targetSn, 0);
+    setCompareType(targetType);
+  };
+
+  const handleCompareClick = (e: React.MouseEvent, targetSn: number, targetType: MeasureType) => {
+    e.stopPropagation();
+
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      setPendingCompare({ sn: targetSn, type: targetType });
+      setIsNoticeOpen(true);
+    } else {
+      executeCompare(targetSn, targetType);
+    }
   };
 
   return (
@@ -77,11 +105,12 @@ export const CenterUserMeasureList = ({
             {measures.map((measure) => {
               const sn = measure.measure_sn;
               const measureTypeText = getMeasureTypeText(measure);
-              const isWrongMeasure = measure?.isWrongMeasure === 1; // 1이면 불완전 측정
-              const isError = !measureTypeText; // 빈 문자열일 때만 클릭 불가(완전 오류)
+              const isWrongMeasure = measure?.isWrongMeasure === 1;
+              const isError = !measureTypeText;
+              const firstType = getFirstAvailableMeasureType(measure);
 
               const handleRowClick = () => {
-                if (isError || !setMeasureSn) return; // isError일 때만 차단, isWrongMeasure는 통과
+                if (isError || !setMeasureSn) return;
 
                 setMeasureSn(sn);
 
@@ -109,11 +138,6 @@ export const CenterUserMeasureList = ({
                   router.push(`?${currentParams.toString()}`);
                 }
               };
-
-              const firstType = getFirstAvailableMeasureType(measure);
-              if (firstType) {
-                setCompareType(firstType);
-              }
 
               return (
                 <TableRow
@@ -144,7 +168,6 @@ export const CenterUserMeasureList = ({
                         <div className="w-fit px-2 text-xs sm:text-sm text-center whitespace-nowrap text-mainBlue-600 dark:text-white bg-mainBlue-100 dark:bg-mainBlue-600 border border-mainBlue-600 rounded-full">
                           {measureTypeText}
                         </div>
-                        {/* 불완전 측정 안내 뱃지/텍스트 */}
                         {isWrongMeasure && (
                           <span className="text-[11px] sm:text-xs text-amber-600 bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 px-1.5 py-0.5 rounded whitespace-nowrap">
                             ({t('measure_fail_result')})
@@ -154,14 +177,10 @@ export const CenterUserMeasureList = ({
                     )}
                   </TableCell>
                   <TableCell className="flex items-center justify-end gap-2 sm:gap-4 whitespace-nowrap mr-4">
-                    {!isError && (
+                    {!isError && firstType && (
                       <button
                         type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          selectCompareSn?.(sn, 0);
-                          setCompareType(firstType!)
-                        }}
+                        onClick={(e) => handleCompareClick(e, sn, firstType)}
                         className="flex items-center gap-1 sm:gap-2 justify-center cursor-pointer"
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -180,6 +199,36 @@ export const CenterUserMeasureList = ({
           </TableBody>
         </Table>
       </div>
+
+      {/* 모바일 화면 최적화 안내 팝업 */}
+      <Dialog open={isNoticeOpen} onOpenChange={setIsNoticeOpen}>
+        <DialogContent className="max-w-[320px] rounded-2xl p-6 sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-base font-semibold">화면 안내</DialogTitle>
+            <DialogDescription className="text-sm text-gray-500 pt-2">
+              비교 화면은 PC 및 태블릿 환경에 최적화되어 있습니다. 계속 진행하시겠습니까?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex flex-row gap-2 mt-4 justify-end">
+            <Button variant="outline" size="sm" onClick={() => setIsNoticeOpen(false)}>
+              취소
+            </Button>
+            <Button
+              size="sm"
+              onClick={() => {
+                if (pendingCompare) {
+                  executeCompare(pendingCompare.sn, pendingCompare.type);
+                }
+                setIsNoticeOpen(false);
+              }}
+            >
+              확인
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
+
+export default CenterUserMeasureList;

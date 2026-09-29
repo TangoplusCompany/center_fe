@@ -68,7 +68,7 @@ if (seq5Error || seq6Error) {
   return (
         <div className="flex flex-col gap-5">
       {/* 상단: 이미지 2개 */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="flex flex-col md:grid md:grid-cols-2 gap-4">
         <div className="col-span-1">
           <MeasureStaticFifth files={measureFifth?.file_data} cameraOrientation={cameraOrientation} onImageReady={onImageReady} />
         </div>

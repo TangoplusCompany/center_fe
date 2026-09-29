@@ -205,13 +205,10 @@ export default function Composition({
       </div>
 
       <div className="flex flex-col my-2 h-full w-full gap-2">
-        {/* 1. 상단 헤더 영역 (전체 너비를 사용하며 하단 카드들의 바 위치와 정렬) */}
-        
-
         {/* 2. 하단 컨텐츠 영역 (차트와 카드 리스트가 같은 높이를 공유) */}
         <div className="flex flex-col sm:flex-row flex-1 gap-1 items-stretch">
           {/* 도넛 차트 컨테이너 (정중앙 배치) */}
-          { isCompare ? (
+          {isCompare ? (
             <div className="flex items-center mx-4">
               <VerticalStackedBar data={donutComps} />
             </div>
@@ -269,7 +266,7 @@ export default function Composition({
 
       <div className="flex gap-2 px-4 py-2  bg-sub100 border border-sub200 rounded-sm items-center ">
         <span className="font-bold text-sub800 text-sm text-center">{title}</span>
-        <span className="text-sub800 text-sm] leading-none">{description}</span>
+        <span className="text-sub800 text-xs sm:text-sm leading-none h-[20px] sm:h-[40px]">{description}</span>
       </div>
     </div>
   );

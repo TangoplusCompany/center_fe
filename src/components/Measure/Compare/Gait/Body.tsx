@@ -53,7 +53,7 @@ const CompareGaitBody = ({
   }
   return (
     <div>
-      <div className="grid grid-cols-2 gap-4 items-stretch w-full">
+      <div className="grid grid-cols-2 gap-4 items-stretch w-full h-full">
         <div className="min-w-0">
           <CompareDateCard 
             regDate={leftData ? leftData?.gait_result?.gait_measure_info.measure_date : ""}

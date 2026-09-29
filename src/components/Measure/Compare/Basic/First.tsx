@@ -101,7 +101,7 @@ const MeasureStaticCompareFirst = React.memo(
   
   return (
     <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="flex flex-col md:grid md:grid-cols-2 gap-4">
         <div className={`flex flex-col gap-4 lg:gap-10`}>
           {measureJson0 && measure0 && (
             <MeasurementImage

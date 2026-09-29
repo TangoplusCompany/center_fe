@@ -106,37 +106,23 @@ interface IAnalysisCardProps {
   label: string;
   value: number;
   unit: string;
-  grade: number; // 0: 낮음, 1: 보통, 2: 높음
+  grade: number; 
 }
 
-const labelMap = { 1: "status_normal_bia", 2: "status_caution", 3: "status_danger" };
-const labelBgMap = { 1: "bg-sub300", 2: "bg-warning", 3: "bg-danger" };
+const labelMap = { 0: "", 1: "status_normal_bia", 2: "status_caution", 3: "status_danger" };
+const labelBgMap = { 0: "", 1: "bg-sub300", 2: "bg-warning", 3: "bg-danger" };
 const AnalysisCard = ({ label, value, unit, grade }: IAnalysisCardProps) => {
   const t = useTranslations("Index")
   const statusLabel = labelMap[grade as keyof typeof labelMap];
-
   return (
     <div className="h-full bg-sub100 border border-sub200 rounded-[3px] py-1 flex flex-col items-center justify-center gap-1 leading-[2.0]">
-      {/* 라벨 */}
       <span className="text-sm font-bold text-sub800 mb-0.5 text-center">{t(label)}</span>
-      
-      {/* 수치 */}
       <div className="flex items-baseline gap-0.5 leading-[1]">
         <span className="text-xs font-bold text-sub800">{value.toFixed(1)}</span>
         <span className="text-xs text-sub400 font-medium">{unit}</span>
       </div>
-
-      {/* 게이지 바 */}
-      {/* <div className="relative w-12 h-1 bg-sub300 rounded-full my-0.5">
-        <div 
-          className="absolute top-1/2 -translate-y-1/2 w-2 h-2 bg-sub400 border border-sub100 rounded-full transition-all duration-300"
-          style={{ left: leftPos, transform: `translate(-50%, -50%)` }}
-        />
-      </div> */}
-
-      {/* 하단 등급 표시 */}
       <div className={`mt-0.5 px-1 ${labelBgMap[grade as keyof typeof labelMap]} rounded-[3px] text-white text-[10px] font-bold text-center`}>
-        {t(statusLabel)}
+        {statusLabel ? t(statusLabel) : "."}
       </div>
     </div>
   );
@@ -309,12 +295,12 @@ const muscleMassIndex = (() => {
             value={data.basal_metabolism_kcal} 
             unit="kcal" 
             grade={data.result_basal_metabolism_kcal_grade} 
-          />
+          />  
           <AnalysisCard 
             label="bia_bmi" 
             value={data.bmi} 
             unit="" 
-            grade={data.result_basal_metabolism_kcal_grade} 
+            grade={0} 
           />
         </div>
       </div>

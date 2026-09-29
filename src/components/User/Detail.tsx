@@ -87,7 +87,7 @@ const UserDetail = ({
 
   // 1. 다이얼로그용 페이지 상태 (부모에 선언)
   const [dialogPage, setDialogPage] = useState(1);
-  const DIALOG_LIMIT = 10; // 페이지당 노출 개수
+  const DIALOG_LIMIT = 5; // 페이지당 노출 개수
 
   // 2. compareType 변경 시 1페이지로 리셋
   useEffect(() => {

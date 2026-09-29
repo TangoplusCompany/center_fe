@@ -62,7 +62,9 @@ export function GaitInfoVertiCard({ type, description, grade } : GaitInfoCardPro
           textBg,
         )}>{t(gradeTitle ?? "")}</div>
       </div>
-      <div className={`text-sm sm:text-base text-sub700`}>{description}</div>
+      <div className="text-sm sm:text-base text-sub700 line-clamp-3 h-[3.75rem] sm:h-[4.5rem]">
+        {description}
+      </div>
     </div>
   )
 }
