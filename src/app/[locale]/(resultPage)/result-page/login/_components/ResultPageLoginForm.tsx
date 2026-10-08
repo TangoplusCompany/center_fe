@@ -7,10 +7,18 @@ import { Label } from "@/components/ui/label";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { useUserLogin } from "@/hooks/api/ResultUser/useUserLogin";
 import { useTranslations } from "next-intl";
 // import { Check, Globe } from "lucide-react";
+
+const prefillParentOrigins = new Set([
+  "https://www.tangohouse.co.kr",
+  "https://tangohouse.co.kr",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  "http://[::1]:3000",
+]);
 
 const resultPageLoginSchema = z.object({
   phone: z
@@ -39,9 +47,35 @@ export default function ResultPageLoginForm({
     handleSubmit,
     formState: { errors },
     setError,
+    setValue,
   } = useForm({
     resolver: zodResolver(resultPageLoginSchema),
   });
+
+  useEffect(() => {
+    if (window.parent === window) return;
+    let prefilled = false;
+    const receivePrefill = (event: MessageEvent) => {
+      if (event.source !== window.parent || !prefillParentOrigins.has(event.origin)) return;
+      if (event.data?.type === "tangobody-login-prefill-request") {
+        window.parent.postMessage({ type: "tangobody-login-ready" }, event.origin);
+        return;
+      }
+      if (prefilled || event.data?.type !== "tangobody-login-prefill") return;
+      const values = resultPageLoginSchema.safeParse({
+        phone: event.data.mobile,
+        pin: event.data.pin_password,
+      });
+      if (!values.success) return;
+      setValue("phone", values.data.phone);
+      setValue("pin", values.data.pin);
+      prefilled = true;
+    };
+    window.addEventListener("message", receivePrefill);
+    // Only the non-sensitive readiness signal is broadcast; credentials use exact origins.
+    window.parent.postMessage({ type: "tangobody-login-ready" }, "*");
+    return () => window.removeEventListener("message", receivePrefill);
+  }, [setValue]);
 
   const { mutate: login, isPending } = useUserLogin(setError);
   
