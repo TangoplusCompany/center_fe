@@ -7,8 +7,7 @@ export default function GaitBalance({data, isCompare}: GaitContainerProps) {
   const iData = data.gait_measure_info
   const t = useTranslations("Index")
   return (
-    <div className="flex flex-col min-h-[820px] border-2 border-sub200 rounded-xl p-4 gap-2">
-
+    <div className={`flex flex-col ${isCompare ? "min-h-[820px]" : "h-full"} border-2 border-sub200 rounded-xl p-4 gap-2`}>
       <div className="text-lg font-semibold mb-2 text-sub700">
         {t('gait_balance')}(Single, Double Support)
       </div>

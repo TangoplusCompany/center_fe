@@ -88,9 +88,9 @@ export function GaitGraphItem({
   }, [data0, data1, data2]);
 
   const chartConfig = {
-    val0: { label: data0.title, color: getColor("val0") },
-    val1: { label: data1.title, color: getColor("val1") },
-    ...(data2 && { val2: { label: data2.title, color: getColor("val2") } }),
+    val0: { label: t(data0.title), color: getColor("val0") },
+    val1: { label: t(data1.title), color: getColor("val1") },
+    ...(data2 && { val2: { label: t(data2.title), color: getColor("val2") } }),
   } satisfies ChartConfig;
 
   const legendList = [
@@ -159,7 +159,7 @@ export function GaitGraphItem({
           <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
 
           <ChartTooltip
-            content={<ChartTooltipContent labelFormatter={(value) => `${value} 프레임`} />}
+            content={<ChartTooltipContent labelFormatter={(value) => `${t(value)} 프레임`} />}
           />
 
           <Area
