@@ -29,7 +29,7 @@ const CompareFooter = ({
         {/* 선택 요약(1~2개) */}
         <div className="flex flex-1 gap-2">
           {selected.length === 0 && (
-            <div className="text-sm text-gray-500">선택된 측정이 없습니다.</div>
+            <div className="text-sm text-gray-500">{t("compare_empty")}</div>
           )}
 
           {selected.map((m) => (
@@ -52,18 +52,7 @@ const CompareFooter = ({
         </div>
 
         {/* 우측 버튼 영역(선택) */}
-        <div className="flex items-center gap-2">
-          {/* {onClear && (
-            <button
-              type="button"
-              onClick={onClear}
-              className="h-10 px-3 rounded-xl border text-sm"
-            >
-              선택 초기화
-            </button>
-          )} */}
-          
-        </div>
+        <div className="flex items-center gap-2" />
       </div>
     </div>
   );

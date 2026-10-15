@@ -125,7 +125,7 @@ export const MeasureDetailDatePickerDialog = ({
                       {/* 뱃지 영역 */}
                       {isError ? (
                         <div className="text-[10px] px-2 py-0.5 font-medium whitespace-nowrap text-danger bg-danger/20 border border-red-400 rounded-full">
-                          측정오류
+                          {t("measure_error")}
                         </div>
                       ) : (
                         <div className="flex items-center gap-1.5 flex-wrap">
@@ -134,7 +134,7 @@ export const MeasureDetailDatePickerDialog = ({
                           </div>
                           {isWrongMeasure && (
                             <span className="text-[10px] text-amber-600 bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 px-1 py-0.2 rounded whitespace-nowrap">
-                              (불완전 측정)
+                              ({t("measure_fail_result")})
                             </span>
                           )}
                         </div>

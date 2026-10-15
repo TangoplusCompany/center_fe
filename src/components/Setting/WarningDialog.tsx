@@ -1,8 +1,9 @@
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
-export type WarningType = "delegate" | "userDelete"
+export type WarningType = "delegate" | "userDelete";
 export const WarningDialog = ({
   open,
   onOpenChange,
@@ -12,8 +13,9 @@ export const WarningDialog = ({
   open: boolean;
   onOpenChange: (v: boolean) => void;
   onConfirm: () => void;
-  warningType: WarningType
+  warningType: WarningType;
 }) => {
+  const t = useTranslations("Index");
   const [checked, setChecked] = useState(false);
 
   const handleOpenChange = (v: boolean) => {
@@ -22,23 +24,26 @@ export const WarningDialog = ({
   };
   const description = (warningType: WarningType) => {
     switch (warningType) {
-      case "delegate" :
-        return (<>
-          관리자 권한을 위임하기전에
-          <span className="text-danger font-semibold"> 사용자 인증</span>
-          이 필요합니다. 또한, 관리자 권한을 위임한 후에는 해당 센터와 연결이
-          <span className="text-danger font-semibold"> 즉시 종료</span>
-          되며 이전 상태로 되돌릴 수 없습니다. 계속하시겠습니까?
-        </>
-        )
+      case "delegate":
+        return (
+          <>
+            {t("warning_delegate_desc_1")}
+            <span className="text-danger font-semibold"> {t("warning_auth_required")}</span>
+            {t("warning_delegate_desc_2")}
+            <span className="text-danger font-semibold"> {t("warning_immediate_terminate")}</span>
+            {t("warning_delegate_desc_3")}
+          </>
+        );
       case "userDelete":
-        return (<>
-          계정을 탈퇴하기 전에 
-          <span className="text-danger font-semibold"> 사용자 인증</span>
-          이 필요합니다. 또한, 탈퇴 신청을 한 이후에는
-          <span className="text-danger font-semibold"> 즉시 탈퇴</span>
-          되며 이전 상태로 되돌릴 수 없습니다. 계속하시겠습니까?
-        </>)
+        return (
+          <>
+            {t("warning_user_delete_desc_1")}
+            <span className="text-danger font-semibold"> {t("warning_auth_required")}</span>
+            {t("warning_user_delete_desc_2")}
+            <span className="text-danger font-semibold"> {t("warning_immediate_withdraw")}</span>
+            {t("warning_user_delete_desc_3")}
+          </>
+        );
     }
   };
 
@@ -46,7 +51,9 @@ export const WarningDialog = ({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-sub700 font-semibold">관리자 권한 위임</DialogTitle>
+          <DialogTitle className="text-sub700 font-semibold">
+            {warningType === "delegate" ? t("delegate_admin_title") : t("withdraw_membership")}
+          </DialogTitle>
           <DialogDescription>
             {description(warningType)}
           </DialogDescription>
@@ -64,20 +71,20 @@ export const WarningDialog = ({
             htmlFor="delegate-confirm"
             className="text-sm text-sub600 cursor-pointer select-none"
           >
-            위 내용을 확인했으며 권한을 위임하는데 동의합니다.
+            {warningType === "delegate" ? t("warning_delegate_agree") : t("warning_user_delete_agree")}
           </label>
         </div>
 
         <DialogFooter className="flex gap-2">
           <Button variant="outline" onClick={() => handleOpenChange(false)}>
-            취소
+            {t("btn_cancel")}
           </Button>
           <Button
             onClick={onConfirm}
             disabled={!checked}
             className="bg-sub700 hover:bg-sub700/90 disabled:opacity-40"
           >
-            계속하기
+            {t("btn_continue")}
           </Button>
         </DialogFooter>
       </DialogContent>

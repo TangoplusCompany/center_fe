@@ -3,6 +3,7 @@
 import { useDrawCanvas } from "@/hooks/utils";
 import { IMeasureJson } from "@/types/measure";
 import React, { useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 
 const ShoulderMoveLine = ({
   nowWidth,
@@ -13,6 +14,7 @@ const ShoulderMoveLine = ({
   nowHeight: number;
   measureJson: IMeasureJson[];
 }) => {
+  const t = useTranslations("Index");
   const canvasLeftBlueRef = useRef<HTMLCanvasElement | null>(null);
   const canvasLeftRedRef = useRef<HTMLCanvasElement | null>(null);
   const canvasRightBlueRef = useRef<HTMLCanvasElement | null>(null);
@@ -147,7 +149,7 @@ const ShoulderMoveLine = ({
   return (
     <div className="relative w-full p-5 flex items-center justify-center overflow-hidden bg-border rounded gap-10">
       <div className="flex items-start justify-center gap-5">
-        <p>좌측 어깨 이동 궤적</p>
+        <p>{t("trajectory_shoulder_left")}</p>
         <div className="relative w-[200px] h-[200px] overflow-hidden rounded bg-white">
           <canvas
             ref={canvasLeftBlueRef}
@@ -164,7 +166,7 @@ const ShoulderMoveLine = ({
         </div>
       </div>
       <div className="flex items-start justify-center gap-5">
-        <p>우측 어깨 이동 궤적</p>
+        <p>{t("trajectory_shoulder_right")}</p>
         <div className="relative w-[200px] h-[200px] overflow-hidden rounded bg-white">
           <canvas
             ref={canvasRightBlueRef}

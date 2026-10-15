@@ -37,18 +37,33 @@ export type IRegisterAdminResponse = IResponseDefault & {
  */
 export function getRegisterAdminErrorMessage(
   status: number | undefined,
+  t?: (key: string) => string,
 ): string {
+  if (t) {
+    switch (status) {
+      case 401:
+        return t("alert_email_token_invalid");
+      case 400:
+        return t("alert_register_missing_fields");
+      case 409:
+        return t("alert_register_already_registered");
+      case 500:
+        return t("alert_sub_admin_error_500");
+      default:
+        return t("signup_failed");
+    }
+  }
   switch (status) {
     case 401:
-      return "유효하지 않은 이메일 인증 토큰입니다. 이메일 인증부터 다시 진행해주세요.";
+      return "Invalid email verification token. Please restart email verification.";
     case 400:
-      return "필수 항목이 누락되었거나 입력 형식이 올바르지 않습니다.";
+      return "Required fields are missing or the format is invalid.";
     case 409:
-      return "이미 등록된 계정입니다.";
+      return "This account is already registered.";
     case 500:
-      return "회원가입 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
+      return "An error occurred during registration. Please try again in a moment.";
     default:
-      return "회원가입에 실패했습니다.";
+      return "Registration failed.";
   }
 }
 
@@ -62,7 +77,7 @@ export const postRegisterAdmin = async (
   token: string,
 ) => {
   if (!token?.trim()) {
-    throw new Error("이메일 인증이 필요합니다. OTP 인증을 완료해주세요.");
+    throw new Error("Email verification is required. Please complete OTP verification.");
   }
   const { data } = await customUnAuthAxios.post<IRegisterAdminResponse>(
     "/auth/register-admin",

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { UseFormReturn } from "react-hook-form";
 import { IDeviceSearchForm } from "@/schemas/deviceSchema";
 import { Search } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export const DeviceSearchForm = ({
   register,
@@ -14,18 +15,19 @@ export const DeviceSearchForm = ({
   handleSubmitDeviceAdd: () => void;
   errors: UseFormReturn<IDeviceSearchForm>["formState"]["errors"];
 }) => {
+  const t = useTranslations("Index");
   return (
     <form className="my-5 min-w-0" onSubmit={handleSubmitDeviceAdd}>
-      <legend className="sr-only">센터 기기 등록</legend>
+      <legend className="sr-only">{t("device_btn_register")}</legend>
       <div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-3 min-w-0">
         <Label htmlFor="serial_number" className="text-sm font-medium sr-only">
-          기기 시리얼 넘버
+          {t("label_check_serial_number")}
         </Label>
         <div className="min-w-0 flex-1">
           <Input
             id="serial_number"
             type="text"
-            placeholder="기기 시리얼 넘버를 입력하세요."
+            placeholder={t("device_serial_placeholder")}
             className="min-w-0"
             {...register("serial_number")}
             maxLength={50}
@@ -43,7 +45,7 @@ export const DeviceSearchForm = ({
           className="shrink-0"
         >
           <Search className="w-4 h-4" />
-          기기 검색
+          {t("device_btn_search")}
         </Button>
       </div>
     </form>

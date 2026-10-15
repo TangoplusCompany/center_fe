@@ -54,7 +54,7 @@ export const MeasurementImage = ({
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={resultUrl} 
-        alt="측정 이미지" 
+        alt={t("alt_measure_image")} 
         className="w-full rounded-2xl cursor-pointer" 
         onClick={() => setDialogOpen(true)}
       />
@@ -105,7 +105,7 @@ export const MeasurementImage = ({
           {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/icons/ic_grid.svg"
-              alt="그리드 라디오버튼"
+              alt={t("alt_grid_radio")}
               className="w-4 h-4"
             />
           <span className="hidden sm:inline">{showGrid ? t('grid_off') : t('grid_on')}</span>
@@ -120,7 +120,7 @@ export const MeasurementImage = ({
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/icons/ic_skeleton.svg"
-            alt="랜드마크 라디오버튼"
+            alt={t("alt_landmark_radio")}
             className="w-4 h-4"
           />
           <span className="hidden sm:inline">{showLine ? t('landmark_off') : t('landmark_on')}</span>

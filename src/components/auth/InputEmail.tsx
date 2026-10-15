@@ -29,7 +29,7 @@ const InputEmail = ({
   };
   const handleEmailCheck = () => {
     if (!value) {
-      alert("이메일을 입력해주세요.");
+      alert(t("alert_sub_admin_invite_meail_min"));
       return;
     }
     otpRequest({
@@ -42,7 +42,7 @@ const InputEmail = ({
   return (
     <div className="w-full flex flex-col gap-2">
       <Label htmlFor="centerCheck" className="lg:text-lg">
-        {isAccountUnlock ? "이메일 입력 (잠긴 계정 해제)" : "이메일 입력"}
+        {isAccountUnlock ? t("login_unlock_title_1") : t("login_find_email")}
       </Label>
       <div className="w-full flex items-center gap-2">
         <Input
@@ -53,14 +53,14 @@ const InputEmail = ({
           onChange={changeCenterCode}
           placeholder={
             isAccountUnlock
-              ? "가입 시 등록한 이메일을 입력해주세요."
-              : "회원가입 하신 이메일을 입력해주세요."
+              ? t("login_unlock_input_eamil_hint")
+              : t("login_find_email_hint")
           }
           required
           className="bg-white dark:bg-border"
         />
         <Button onClick={handleEmailCheck} disabled={isSending}>
-          {isSending ? "전송중..." : "확인"}
+          {isSending ? t("btn_sub_admin_invite_pending") : t("btn_confirm")}
         </Button>
       </div>
     </div>

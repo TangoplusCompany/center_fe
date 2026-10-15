@@ -63,7 +63,7 @@ const MeasureReportContainer = ({
     <div className="flex flex-col gap-6">
 
       {summaryLoading && <div>{t('loading_1')}</div>}
-      {summaryError && <div>데이터를 불러오는데 실패했습니다.</div>}
+      {summaryError && <div>{t("date_fetch_failed")}</div>}
       {/* 상지 */}
       <MeasureSummaryContainer 
         ment={selectedSummary?.risk_upper_ment} 

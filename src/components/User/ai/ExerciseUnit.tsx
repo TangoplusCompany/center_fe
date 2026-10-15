@@ -1,6 +1,7 @@
 import { ExerciseDetail } from "@/types/aiAnalysis";
 import { useState } from "react";
 import ExercisePlayDialog from "./ExercisePlayDialog";
+import { useTranslations } from "next-intl";
 
 interface AIExerciseUnitProps {
   ed : ExerciseDetail;
@@ -8,8 +9,9 @@ interface AIExerciseUnitProps {
 const AIExerciseUnit = ( {
   ed
 }: AIExerciseUnitProps) => {
+  const t = useTranslations("Index");
   const [isVideoOpen, setIsVideoOpen] = useState(false);
-  const reasonUnitTitles = ['운동 추천 이유', '운동 주의 사항']
+  const reasonUnitTitles = [t("ai_exercise_recommend_reason"), t("ai_exercise_precautions")];
   const ExerciseReasonUnit = ({idx, text} : {idx: 0 | 1, text: string}) => {
     return (
       <div className="flex flex-col gap-4">
@@ -38,7 +40,7 @@ const AIExerciseUnit = ( {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={`${ed.image_filepath_real}`}
-            alt="운동 썸네일"
+            alt={t("alt_exercise_thumbnail")}
             className="w-full h-full bg-sub300 rounded-xl object-cover"
             onError={(e) => {
               e.currentTarget.src = "/images/measure_default.png";
@@ -50,7 +52,7 @@ const AIExerciseUnit = ( {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={`/icons/ic_play.svg`}
-              alt="재생버튼"
+              alt={t("alt_play_button")}
               className="w-12 h-12"
               onError={(e) => {
                 e.currentTarget.src = "/images/measure_default.png";
@@ -69,7 +71,7 @@ const AIExerciseUnit = ( {
         open={isVideoOpen}
         onOpenChange={setIsVideoOpen}
         videoUrl={ed.video_filepath}
-        title={`운동 ${ed.exercise_name}`}
+        title={`${t("title_exercise")} ${ed.exercise_name}`}
       />
     </div>
   )

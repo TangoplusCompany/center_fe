@@ -7,14 +7,14 @@ import { actionKakaoEncrypt, actionPrintEncrypt } from "@/app/actions/getCrypto"
 import { postKakaoSend } from "@/app/actions/postKakaoSend";
 import { getMergedPrintUrl } from "@/app/actions/openMergedPrintPage";
 import MeasureDetail from "./Detail";
-import { measureType, viewType } from "../User/Detail";
+import { viewType } from "../User/Detail";
 import CenterUserROMContainer from "../User/ROMContainer";
 import BiaContainer from "./Bia/BiaContainer";
 import { IUserMeasureListItem } from "@/types/user";
 import { DetailPagination } from "@/hooks/api/user/useMeasureListForDetail";
 import { formatDate } from "@/utils/formatDate";
 import { MeasureDetailDatePickerDialog } from "./DetailDatePickerDialog";
-import { IMeasurementMeta } from "@/types/measure";
+import { IMeasurementMeta, MeasureType } from "@/types/measure";
 import { Skeleton } from "../ui/skeleton";
 import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
 import GaitContainer from "./Gait/Container";
@@ -85,7 +85,7 @@ export function PrintSelect({ hasBasic, hasRom, hasBia, hasGait, hasMoire, handl
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/icons/ic_print.svg"
-            alt="인쇄하기"
+            alt={t("btn_print")}
             className="size-4 dark:[filter:brightness(0)_invert(1)]"
           />
           <span>{t('btn_print')}</span>
@@ -101,7 +101,7 @@ export function PrintSelect({ hasBasic, hasRom, hasBia, hasGait, hasMoire, handl
           data-[state=closed]:fade-out-0
           data-[state=open]:zoom-in-95
           data-[state=closed]:zoom-out-95
-          duration-200 /* 속도 조절 */
+          duration-200
           "
           sideOffset={4}
         >
@@ -190,8 +190,8 @@ export type CenterUserMeasureProps = {
   measureList?: IUserMeasureListItem[];
   currentTab?: string;
   setCurrentTab?: (tab : viewType) => void;
-  measureType ?: measureType
-  setMeasureType ?: (mt: measureType) => void;
+  measureType ?: MeasureType
+  setMeasureType ?: (mt: MeasureType) => void;
   userSn: string;
   measureSn: number | undefined;
   setMeasureSn?: (sn: number) => void;
@@ -256,7 +256,7 @@ const MeasureDetailContainer = ({
     });
 
     if (availableType) {
-      setMeasureType(availableType.key as measureType);
+      setMeasureType(availableType.key as MeasureType);
     }
   }, [measureMetaData, setMeasureType, hasBasic, hasRom, hasBia, hasGait, hasMoire]);
 
@@ -274,10 +274,10 @@ const MeasureDetailContainer = ({
     const encryptData = await actionKakaoEncrypt(cryptoData);
     try {
       await postKakaoSend(encryptData);
-      alert("카카오톡으로 측정 정보가 전송되었습니다.");
+      alert(t("alert_kakao_share_success"));
     } catch (error) {
       console.error(error);
-      alert("카카오톡 공유에 실패했습니다. 잠시 후 다시 시도해주세요.");
+      alert(t("alert_kakao_share_fail"));
     }
   };
 
@@ -338,7 +338,7 @@ const MeasureDetailContainer = ({
   }
 
   if (!measureData || !measureData.measurement_meta) {
-    return <p className="py-8 text-center">데이터가 존재하지 않습니다</p>;
+    return <p className="py-8 text-center">{t("measure_no_data")}</p>;
   }
 
   // 2. 정상 측정일 때 렌더링
@@ -366,7 +366,7 @@ const MeasureDetailContainer = ({
                   } ${
                     !isAvailable ? "opacity-40 cursor-not-allowed bg-transparent" : ""
                   } px-2 sm:px-4 py-1 text-xs sm:text-sm font-medium rounded-xl transition-all whitespace-normal sm:whitespace-nowrap text-center leading-tight`}
-                  onClick={() => setMeasureType?.(type.key as measureType)}
+                  onClick={() => setMeasureType?.(type.key as MeasureType)}
                 >
                   {t(type.title)}
                 </button>
@@ -385,7 +385,7 @@ const MeasureDetailContainer = ({
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src="/icons/ic_calendar.svg" alt="date_select" className="lg:!w-5 lg:!h-5" />
                   <span>
-                    {selectedMeasure ? formatDate(selectedMeasure.measure_date, locale) : "측정일 선택"}
+                    {selectedMeasure ? formatDate(selectedMeasure.measure_date, locale) : t("select_measure_date")}
                   </span>
                 </button>
                 <MeasureDetailDatePickerDialog
@@ -403,15 +403,7 @@ const MeasureDetailContainer = ({
               className="w-full sm:w-auto px-6"
               variant="sub"
               onClick={() => {
-                if (
-                  window.confirm(
-                    `${
-                      locale === "ko"
-                        ? `${measureMetaData.user_name}로 카카오톡 결과를 전송하시습니까?`
-                        : `Do you want to send the KakaoTalk results to ${measureMetaData.user_name}?`
-                    }`
-                  )
-                ) {
+                if (window.confirm(t("alert_kakao_share_confirm", { userName: measureMetaData.user_name }))) {
                   handleKakaoSend();
                 }
               }}
@@ -419,7 +411,7 @@ const MeasureDetailContainer = ({
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/icons/ic_send.svg"
-                alt="카카오톡 결과 전송"
+                alt={t("btn_send_kakao")}
                 className="gap-4 size-4 dark:[filter:brightness(0)_invert(1)]"
               />
               <span>{t("btn_send_kakao")}</span>

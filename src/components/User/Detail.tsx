@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { ComponentProps, useEffect, useMemo, useState } from "react";
 import CenterUserInformation from "@/components/User/Information";
 import { ComparePair, CompareSlot } from "@/types/compare";
 import { useMeasureListForDetail } from "@/hooks/api/user/useMeasureListForDetail";
@@ -13,12 +13,13 @@ import AIUserContainer from "./ai/UserContainer";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import { useGetUserMeasureList } from "@/hooks/api/user/useGetUserMeasureList";
 import { IUserMeasureList } from "@/types/user";
-import { useGetUserMeasureBasicList } from "@/hooks/api/user/useGetUserMeasureBasicList";
 import { MeasureType } from "@/types/measure";
+import { ComparePagination } from "../Measure/Rom/PickerDialog";
+import { useTranslations } from "next-intl";
+import { useGetMeasureListByType } from "@/hooks/api/measure/useGetMeasureListByType";
 
 
 export type viewType = "latest" | "dashboard" | "history" | "userInfo";
-export type measureType = "basic" | "rom" | "bia" | "gait" | "moire";
 const UserDetail = ({ 
   userUUID,
   userSn,
@@ -37,18 +38,19 @@ const UserDetail = ({
   comparePair: ComparePair;
   setComparePair: React.Dispatch<React.SetStateAction<ComparePair>>;
   compareType: MeasureType | undefined;
-  setCompareType: (ct: measureType) => void;
+  setCompareType: (ct: MeasureType) => void;
   isMyPage?: boolean;
 }) => {
+  const t = useTranslations("Index");
   const [measureSn, setMeasureSn] = useState<number>();
-  const [measureType, setMeasureType] = useState<measureType>(); // 측정 클릭했을 때 처음 나올 measureType 및 tab으로 관리될 type
+  const [measureType, setMeasureType] = useState<MeasureType>(); // 측정 클릭했을 때 처음 나올 measureType 및 tab으로 관리될 type
   const [isListClick, setIsListClick] = useState(false); 
 
   const [isDatePickerOpen, setIsDatePickerOpen] = React.useState(false);
   const [aiExerciseOpen, setAiExerciseOpen] = React.useState(false);
   const [isCompareDialogOpen, setIsCompareDialogOpen] = React.useState(false);
   const [activeSlot, setActiveSlot] = React.useState<CompareSlot>(0);
-
+  type DialogPaginationType = ComponentProps<typeof MeasurePickerDialog>["pagination"];
   // 1. URL 쿼리 파라미터 가져오기
   const { setQueryParam, query } = useQueryParams();
   const page = query.page || "1";
@@ -63,13 +65,7 @@ const UserDetail = ({
     isMyPage,
   });
 
-  const {
-    measureList: compareMeasureListItems,
-    pagination: comparePagination,
-  } = useGetUserMeasureBasicList({
-    user_sn: userSn,
-    isMyPage,
-  });
+
   const {
     data: userMeasureList,
     isLoading: isListLoading
@@ -82,6 +78,40 @@ const UserDetail = ({
     sort,
     isMyPage,
   });
+
+  // 1. 다이얼로그용 페이지 상태 (부모에 선언)
+  const [dialogPage, setDialogPage] = useState(1);
+  const DIALOG_LIMIT = 5; // 페이지당 노출 개수
+
+  const {
+    data: userMeasureListForCompare,
+  } = useGetMeasureListByType<IUserMeasureList>({
+    type: compareType ?? "basic",
+    page: dialogPage,
+    limit: DIALOG_LIMIT,
+    user_sn: userSn,
+    isMyPage,
+    enabled: isCompareDialogOpen, // 열렸을 때만 실행
+  });
+
+  // 2. compareType 변경 시 1페이지로 리셋
+  useEffect(() => {
+    setDialogPage(1);
+  }, [compareType]);
+
+  const total = userMeasureListForCompare?.total ?? 0;
+  const dialogPagination: ComparePagination = useMemo(() => ({
+    page: dialogPage,
+    total,
+    limit: DIALOG_LIMIT,
+    last_page: Math.max(1, Math.ceil(total / DIALOG_LIMIT)),
+    setPage: setDialogPage,
+  }), [total, dialogPage]);
+
+  // 4. 기존 filteredItems, pagedItems 삭제 후 바로 사용
+  const compareList = userMeasureListForCompare?.measurement_list ?? [];
+  
+
   useEffect(() => {
     if (currentTab !== "latest" && (!comparePair[0] || !comparePair[1])) {
       setComparePair([undefined, undefined]);
@@ -159,7 +189,7 @@ const UserDetail = ({
             >
               <path d="M19 12H5M12 19l-7-7 7-7"/>
             </svg>
-            <span>뒤로가기</span>
+            <span>{t('btn_previous')}</span>
           </button>
           
           <AIUserContainer 
@@ -227,7 +257,7 @@ const UserDetail = ({
 
       <MeasurePickerDialog
         open={isCompareDialogOpen}
-        items={compareMeasureListItems} 
+        items={compareList} 
         comparePair={comparePair}
         activeSlot={ activeSlot }
         onOpenChange={setIsCompareDialogOpen}
@@ -235,7 +265,8 @@ const UserDetail = ({
           selectCompareSn(sn, slot);
           setIsCompareDialogOpen(false);
         }}
-        pagination={comparePagination}
+        compareType={compareType}
+        pagination={dialogPagination as DialogPaginationType}
       />
 
       {currentTab === "userInfo" && 

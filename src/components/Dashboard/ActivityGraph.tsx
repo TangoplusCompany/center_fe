@@ -9,7 +9,6 @@ const ActivityGraph = ({
 }: {
   data: graphDetailCardProps ;
 }) => {
-  console.log(data)
   const t = useTranslations("Index")  
   const locale = useLocale();
   const barData = React.useMemo(() => {
@@ -49,7 +48,7 @@ const ActivityGraph = ({
 
       ];
     }
-  }, [data]);
+  }, [data, t]);
 
   const maxValue = Math.max(...barData.map(d => d.value));
   // 오늘 날짜 포맷팅

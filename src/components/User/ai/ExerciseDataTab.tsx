@@ -1,5 +1,6 @@
 import { ExerciseDetail } from "@/types/aiAnalysis";
 import { EXERCISE_TYPE_IDS } from "./ExerciseContainer";
+import { useTranslations } from "next-intl";
 
 interface ExerciseDataTabProps {
   selectedPart: 0 | 1 | 2 | 3 | 4 | 5 | 6;
@@ -8,14 +9,15 @@ interface ExerciseDataTabProps {
 }
 
 const ExerciseDataTab = ({ selectedPart, onSelectPart, exercises }: ExerciseDataTabProps) => {
+  const t = useTranslations("Index");
   const tabs = [
-    { id: 0, label: "전체보기" },
-    { id: 1, label: "목(경추)" },
-    { id: 2, label: "어깨(견관절)" },
-    { id: 3, label: "팔꿉(주관절)" },
-    { id: 4, label: "골반(고관절)" },
-    { id: 5, label: "무릎(슬관절)" },
-    { id: 6, label: "발목(족관절)" },
+    { id: 0, label: t("btn_view_all") },
+    { id: 1, label: t("btn_view_neck") },
+    { id: 2, label: t("btn_view_shoulder") },
+    { id: 3, label: t("btn_view_elbow") },
+    { id: 4, label: t("btn_view_hip") },
+    { id: 5, label: t("btn_view_knee") },
+    { id: 6, label: t("btn_view_ankle") },
   ] as const;
 
   const availableTypeIds = new Set(exercises.map(ex => ex.exercise_type_id));

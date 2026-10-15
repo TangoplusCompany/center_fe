@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { actionUserDecrypt } from "@/app/actions/getCrypto";
 import { ComparePair } from "@/types/compare";
 import { MeasureType } from "@/types/measure";
+import { useTranslations } from "next-intl";
 
 interface UserDetailPageProps {
   params: Promise<{ userUUID: string }>;
@@ -13,6 +14,7 @@ interface UserDetailPageProps {
 }
 
 const UserDetailPage = ({ params, searchParams }: UserDetailPageProps) => {
+  const t = useTranslations("Index");
   const [comparePair, setComparePair] = useState<ComparePair>([undefined, undefined]);
   const [compareType, setCompareType] = useState<MeasureType>();
   // ⭐️ 복호화 결과를 담을 상태 추가
@@ -53,7 +55,7 @@ const UserDetailPage = ({ params, searchParams }: UserDetailPageProps) => {
 
   
   if (isLoading) {
-    return <div className="p-6 text-center text-muted-foreground">로딩 중...</div>;
+    return <div className="p-6 text-center text-muted-foreground">{t("loading_1")}</div>;
   }
 
   if (decryptedData) {

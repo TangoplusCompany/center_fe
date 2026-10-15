@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -18,11 +18,12 @@ import { AxiosError } from "axios";
 import type { Purpose, Type } from "@/types/admin";
 import { useTranslations } from "next-intl";
 
-const FormSchema = z.object({
-  otp: z.string().min(6, {
-    message: "OTP는 6자리입니다.",
-  }),
-});
+const createFormSchema = (t: (key: string) => string) =>
+  z.object({
+    otp: z.string().min(6, {
+      message: t("otp_input_6"),
+    }),
+  });
 
 const OTP_VALID_SECONDS = 300; // 5분
 
@@ -56,7 +57,8 @@ export const RequestOtpForm = ({
     onSuccess: handleRequestOtp,
   });
 
-  const form = useForm<z.infer<typeof FormSchema>>({
+  const FormSchema = React.useMemo(() => createFormSchema(t), [t]);
+  const form = useForm<z.infer<ReturnType<typeof createFormSchema>>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       otp: "",

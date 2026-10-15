@@ -1,11 +1,13 @@
 import React from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { useTranslations } from "next-intl";
 
 const SelectMeasureDate = () => {
+  const t = useTranslations("Index");
   return (
     <Select>
       <SelectTrigger>
-        <SelectValue placeholder="날짜 선택" />
+        <SelectValue placeholder={t("select_measure_date")} />
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="light">Light</SelectItem>

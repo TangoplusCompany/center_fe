@@ -132,7 +132,7 @@ const CenterUserDashboardContainer = ({
               {/* 총 N건 */}
               {isROMTab && isActive && (currentROMViewType === "default") && (
                 <div className="flex items-center text-center text-base font-semibold text-sub700 whitespace-nowrap">
-                  총 {ROMItemCount?.total_count ?? 0}건
+                  {t("_all")} {ROMItemCount?.total_count ?? 0}{t("unit_cases")}
                 </div>
               )}
             </div>

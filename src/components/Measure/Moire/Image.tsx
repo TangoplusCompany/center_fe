@@ -13,12 +13,23 @@ export const DUMMY_SECTION_DATA: IMoireSectionData = {
   lineYPercents: [16, 28, 40, 55], 
   labels: ["body_part_upper_top", "body_part_upper_bottom", "body_part_lower_top"],
 };
-export function SectionOverlay({ isFront, sectionData = DUMMY_SECTION_DATA }: { isFront: boolean; sectionData: IMoireSectionData }) {
+export function SectionOverlay({ 
+  isFront, 
+  sectionData = DUMMY_SECTION_DATA,
+  style // 👈 추가
+}: { 
+  isFront: boolean; 
+  sectionData: IMoireSectionData;
+  style?: React.CSSProperties; // 👈 추가
+}) {
   const t = useTranslations("Index");
   const { lineYPercents, labels } = sectionData;
 
   return (
-    <div className="absolute inset-0 pointer-events-none select-none">
+    <div 
+      className="absolute inset-0 pointer-events-none select-none"
+      style={style} // 👈 추가
+    >
       {/* 1. 중앙 수직 레드 라인 */}
       <div
         className="absolute top-0 bottom-0 w-[2px] bg-danger z-10 -translate-x-1/2"

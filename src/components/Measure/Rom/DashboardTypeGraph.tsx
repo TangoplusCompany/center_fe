@@ -39,7 +39,7 @@ const ROMDashboardTypeGraph = ({
         <ChartContainer
           config={{
             score: {
-              label: "점수",
+              label: t("chart_label_score"),
               color: "#2563EB",
             },
           }}

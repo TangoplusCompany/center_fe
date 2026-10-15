@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -6,11 +7,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { CompareSlot } from "@/types/compare";
 import { IUserMeasureListItem } from "@/types/user";
 import { formatDate } from "@/utils/formatDate";
 import { usePathname, useRouter } from "next/navigation";
-import { measureType, viewType } from "./Detail";
+import { viewType } from "./Detail";
 import { useLocale, useTranslations } from "next-intl";
 import { MeasureType } from "@/types/measure";
 
@@ -28,7 +38,6 @@ export const getFirstAvailableMeasureType = (item?: IUserMeasureListItem): Measu
   return typeMap.find(([key]) => item[key] === 1)?.[1];
 };
 
-
 export const CenterUserMeasureList = ({
   measures,
   setMeasureSn,
@@ -40,16 +49,19 @@ export const CenterUserMeasureList = ({
 }: {
   measures: IUserMeasureListItem[];
   setMeasureSn: (measureSn: number) => void;
-  setMeasureType: (tab: measureType) => void;
+  setMeasureType: (tab: MeasureType) => void;
   setCurrentTab?: (tab: viewType) => void;
   selectCompareSn?: (sn: number, slot: CompareSlot) => void;
-  setCompareType : (ct: MeasureType) => void;
+  setCompareType: (ct: MeasureType) => void;
   isMyPage: boolean;
 }) => {
   const router = useRouter();
   const pathname = usePathname();
   const t = useTranslations("Index");
   const locale = useLocale();
+
+  const [isNoticeOpen, setIsNoticeOpen] = useState(false);
+  const [pendingCompare, setPendingCompare] = useState<{ sn: number; type: MeasureType } | null>(null);
 
   const getMeasureTypeText = (measureItem: IUserMeasureListItem): string => {
     const labels: string[] = [];
@@ -59,6 +71,22 @@ export const CenterUserMeasureList = ({
     if (measureItem.has_gait === 1) labels.push(t('m_gait'));
     if (measureItem.has_moire === 1) labels.push(t('m_moire'));
     return labels.length > 0 ? labels.join("/") : "";
+  };
+
+  const executeCompare = (targetSn: number, targetType: MeasureType) => {
+    selectCompareSn?.(targetSn, 0);
+    setCompareType(targetType);
+  };
+
+  const handleCompareClick = (e: React.MouseEvent, targetSn: number, targetType: MeasureType) => {
+    e.stopPropagation();
+
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      setPendingCompare({ sn: targetSn, type: targetType });
+      setIsNoticeOpen(true);
+    } else {
+      executeCompare(targetSn, targetType);
+    }
   };
 
   return (
@@ -77,15 +105,16 @@ export const CenterUserMeasureList = ({
             {measures.map((measure) => {
               const sn = measure.measure_sn;
               const measureTypeText = getMeasureTypeText(measure);
-              const isWrongMeasure = measure?.isWrongMeasure === 1; // 1이면 불완전 측정
-              const isError = !measureTypeText; // 빈 문자열일 때만 클릭 불가(완전 오류)
+              const isWrongMeasure = measure?.isWrongMeasure === 1;
+              const isError = !measureTypeText;
+              const firstType = getFirstAvailableMeasureType(measure);
 
               const handleRowClick = () => {
-                if (isError || !setMeasureSn) return; // isError일 때만 차단, isWrongMeasure는 통과
+                if (isError || !setMeasureSn) return;
 
                 setMeasureSn(sn);
 
-                let targetType: measureType = "basic";
+                let targetType: MeasureType = "basic";
                 if (measure.has_basic === 1) {
                   targetType = "basic";
                 } else if (measure.has_rom === 1) {
@@ -110,11 +139,6 @@ export const CenterUserMeasureList = ({
                 }
               };
 
-              const firstType = getFirstAvailableMeasureType(measure);
-              if (firstType) {
-                setCompareType(firstType);
-              }
-
               return (
                 <TableRow
                   key={sn}
@@ -137,14 +161,13 @@ export const CenterUserMeasureList = ({
                   <TableCell className="text-center">
                     {isError ? (
                       <div className="w-fit px-2 text-xs sm:text-sm text-center whitespace-nowrap text-danger bg-danger/30 border border-red-400 rounded-full mx-auto">
-                        측정오류
+                        {t("measure_error")}
                       </div>
                     ) : (
                       <div className="flex items-center justify-center gap-1.5 flex-wrap">
                         <div className="w-fit px-2 text-xs sm:text-sm text-center whitespace-nowrap text-mainBlue-600 dark:text-white bg-mainBlue-100 dark:bg-mainBlue-600 border border-mainBlue-600 rounded-full">
                           {measureTypeText}
                         </div>
-                        {/* 불완전 측정 안내 뱃지/텍스트 */}
                         {isWrongMeasure && (
                           <span className="text-[11px] sm:text-xs text-amber-600 bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 px-1.5 py-0.5 rounded whitespace-nowrap">
                             ({t('measure_fail_result')})
@@ -154,20 +177,16 @@ export const CenterUserMeasureList = ({
                     )}
                   </TableCell>
                   <TableCell className="flex items-center justify-end gap-2 sm:gap-4 whitespace-nowrap mr-4">
-                    {measure.has_basic === 1 && !isError && (
+                    {!isError && firstType && (
                       <button
                         type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          selectCompareSn?.(sn, 0);
-                          setCompareType(firstType!)
-                        }}
+                        onClick={(e) => handleCompareClick(e, sn, firstType)}
                         className="flex items-center gap-1 sm:gap-2 justify-center cursor-pointer"
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src="/icons/ic_compare.svg"
-                          alt="비교하기"
+                          alt={t("btn_compare_action")}
                           className="w-4 h-4 sm:w-5 sm:h-5"
                         />
                         <span className="text-xs sm:text-sm">{t("m_history_compare")}</span>
@@ -180,6 +199,36 @@ export const CenterUserMeasureList = ({
           </TableBody>
         </Table>
       </div>
+
+      {/* 모바일 화면 최적화 안내 팝업 */}
+      <Dialog open={isNoticeOpen} onOpenChange={setIsNoticeOpen}>
+        <DialogContent className="max-w-[320px] rounded-2xl p-6 sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-base font-semibold">{t("mobile_view_notice_title")}</DialogTitle>
+            <DialogDescription className="text-sm text-gray-500 pt-2">
+              {t("mobile_view_notice_desc")}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex flex-row gap-2 mt-4 justify-end">
+            <Button variant="outline" size="sm" onClick={() => setIsNoticeOpen(false)}>
+              {t("btn_cancel")}
+            </Button>
+            <Button
+              size="sm"
+              onClick={() => {
+                if (pendingCompare) {
+                  executeCompare(pendingCompare.sn, pendingCompare.type);
+                }
+                setIsNoticeOpen(false);
+              }}
+            >
+              {t("btn_confirm")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
+
+export default CenterUserMeasureList;

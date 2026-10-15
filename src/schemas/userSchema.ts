@@ -3,15 +3,18 @@ import { z } from "zod";
 /**
  * 사용자 검색 스키마
  */
-export const userSearchSchema = z.object({
-  name: z
-    .string()
-    .min(1, {
-      message: "이름을 입력해주세요.",
-    })
-    .regex(/^[가-힣a-zA-Z0-9\s]+$/, {
-      message: "한글, 영어, 숫자, 띄어쓰기만 입력해주세요.",
-    }),
-});
+export const createUserSearchSchema = (t?: (key: string) => string) =>
+  z.object({
+    name: z
+      .string()
+      .min(1, {
+        message: t ? t("manager_search_hint") : "Please enter a name.",
+      })
+      .regex(/^[가-힣a-zA-Z0-9\s]+$/, {
+        message: t ? t("manager_search_hint") : "Please enter letters, numbers, or spaces.",
+      }),
+  });
+
+export const userSearchSchema = createUserSearchSchema();
 
 export type IUserSearchForm = z.infer<typeof userSearchSchema>;

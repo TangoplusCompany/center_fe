@@ -27,7 +27,7 @@ export function formatComment(raw: string | null | undefined): string {
     }
 
     // 골반 부위는 줄바꿈 유지
-    if (currentSection.includes("골반 부위")) {
+    if (currentSection.includes("골반 부위") || currentSection.toLowerCase().includes("pelvis")) {
       currentSection += `\n${line}`;
     } else {
       // 다른 부위는 이어붙이기

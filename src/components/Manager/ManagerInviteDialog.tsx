@@ -21,32 +21,35 @@ import { useAuthStore } from "@/providers/AuthProvider";
 import { useTranslations } from "next-intl";
 
 /** 부관리자 초대 API 실패 시 상태별 안내 메시지 */
-function getSendInvitationErrorMessage(error: unknown, t: (key : string) => string): string {
+function getSendInvitationErrorMessage(error: unknown, t: (key: string) => string): string {
   if (error instanceof AxiosError && error.response?.status) {
     switch (error.response.status) {
       case 400:
-        return t('alert_sub_admin_invite_error_400');
+        return t("alert_sub_admin_invite_error_400");
       case 403:
-        return "주관리자만 매니저 초대를 보낼 수 있습니다.";
+        return t("manager_invite_only_primary");
       case 409:
-        return "이미 해당 센터에 등록된 부관리자입니다.";
+        return t("manager_invite_already_registered");
       case 500:
-        return "초대 메일 전송 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
+        return t("manager_invite_email_send_error");
       default:
         break;
     }
   }
-  return "매니저 초대 전송에 실패했습니다.";
+  return t("manager_invite_fail");
 }
 
-const inviteSchema = z.object({
-  email: z
-    .string()
-    .min(1, "이메일을 입력해주세요.")
-    .email("올바른 이메일 형식이 아닙니다."),
-});
+const createInviteSchema = (t: (key: string) => string) =>
+  z.object({
+    email: z
+      .string()
+      .min(1, t("alert_sub_admin_invite_meail_min"))
+      .email(t("alert_sub_admin_invite_email_zod")),
+  });
 
-type InviteFormValues = z.infer<typeof inviteSchema>;
+type InviteFormValues = {
+  email: string;
+};
 
 /** 2: 부관리자, 3: 일반 */
 const ROLE_VALUE = { SUB: 2, NORMAL: 3 } as const;
@@ -67,6 +70,7 @@ export const ManagerInviteDialog = ({
   const [role, setRole] = useState<number>(ROLE_VALUE.SUB);
   const [submitPending, setSubmitPending] = useState(false);
 
+  const inviteSchema = React.useMemo(() => createInviteSchema(t), [t]);
   const form = useForm<InviteFormValues>({
     resolver: zodResolver(inviteSchema),
     defaultValues: { email: "" },
@@ -134,37 +138,7 @@ export const ManagerInviteDialog = ({
             )}
           </div>
 
-          <div className="space-y-2 text-sm text-sub400">
-            
-            {/* <Label>역할</Label>
-            <RadioGroup
-              value={String(role)}
-              onValueChange={(v) => setRole(Number(v))}
-              className="flex gap-4"
-            >
-              <div className="flex items-center gap-2">
-                <RadioGroupItem
-                  value={String(ROLE_VALUE.SUB)}
-                  id="role-sub"
-                />
-                <Label htmlFor="role-sub" className="font-normal cursor-pointer">
-                  부관리자
-                </Label>
-              </div>
-              <div className="flex items-center gap-2">
-                <RadioGroupItem
-                  value={String(ROLE_VALUE.NORMAL)}
-                  id="role-normal"
-                />
-                <Label
-                  htmlFor="role-normal"
-                  className="font-normal cursor-pointer"
-                >
-                  일반
-                </Label>
-              </div>
-            </RadioGroup> */}
-          </div>
+          <div className="space-y-2 text-sm text-sub400" />
 
           <Button type="submit" disabled={submitPending}>
             {submitPending ? t('btn_sub_admin_invite_pending') : t('btn_sub_admin_invite')}

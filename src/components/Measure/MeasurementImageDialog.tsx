@@ -133,10 +133,13 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="p-0 border-none bg-transparent w-fit h-fit [&>button]:hidden" aria-describedby={undefined}>
+      <DialogContent 
+        className="p-0 border-none bg-transparent w-[95vw] max-w-[95vw] md:w-fit md:max-w-none h-fit [&>button]:hidden" 
+        aria-describedby={undefined}
+      >
         <DialogTitle className="sr-only">{stepLabels[step]}</DialogTitle>
         <div className="relative">
-          {/* Header */}
+
           <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between p-4 pointer-events-none">
             {!moireUrl && (
               <div className="px-4 py-2 rounded-full text-white bg-white/10 backdrop-blur-sm pointer-events-auto">
@@ -232,7 +235,7 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/icons/ic_grid.svg"
-                  alt="그리드 라디오버튼"
+                  alt={t("alt_grid_radio")}
                   className="w-4 h-4"
                 />
                 <span className="hidden sm:inline">{showGrid ? t('grid_off') : t('grid_on')}</span>
@@ -248,7 +251,7 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="/icons/ic_skeleton.svg"
-                    alt="랜드마크 라디오버튼"
+                    alt={t("alt_landmark_radio")}
                     className="w-4 h-4"
                   />
                   <span className="hidden sm:inline">{showLine ? t('landmark_off') : t('landmark_on')}</span>
@@ -260,7 +263,7 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
           {/* 이미지 컨테이너 */}
           <div 
             ref={containerRef}
-            className="relative overflow-hidden rounded-2xl"
+            className="relative overflow-hidden rounded-2xl w-full flex justify-center"
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseLeave}
@@ -270,8 +273,8 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
             <img
               ref={imageRef}
               src={imageUrl}
-              alt="측정 이미지 상세보기"
-              className={`block w-auto h-auto max-w-[90vw] max-h-[90vh] select-none ${
+              alt={t("alt_measure_image_detail")}
+              className={`block w-full h-auto max-h-[85vh] md:w-auto md:h-[90vh] md:max-w-[90vw] object-contain select-none ${
                 scale > 1 ? 'cursor-grab' : 'cursor-default'
               } ${isDragging ? 'cursor-grabbing' : ''} ${isDragging ? '' : 'transition-transform duration-300 ease-out'}`}
               style={{
@@ -287,7 +290,7 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
               /* eslint-disable-next-line @next/next/no-img-element */
               <img
                 src={moireUrl}
-                alt="모아레 오버레이"
+                alt={t("alt_moire_overlay")}
                 className={`absolute inset-0 w-full h-full object-contain pointer-events-none select-none ${
                   isDragging ? '' : 'transition-transform duration-300 ease-out'
                 }`}
@@ -316,7 +319,14 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
               />
             )}
             {moireUrl && (
-              <SectionOverlay isFront={step === "first"} sectionData={moireSection ?? DUMMY_SECTION_DATA} />
+              <SectionOverlay 
+                isFront={step === "first"} 
+                sectionData={moireSection ?? DUMMY_SECTION_DATA} 
+                style={{ // 👈 추가
+                  transform: `scale(${scale}) translate(${position.x / scale}px, ${position.y / scale}px)`,
+                  transformOrigin: 'center center',
+                }}
+              />
             )}
           </div>
         </div>

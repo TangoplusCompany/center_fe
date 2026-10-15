@@ -245,7 +245,7 @@ export const SubRegisterContainer = ({
             <Input
               id="name"
               type="text"
-              placeholder="홍길동"
+              placeholder="Hong Gil Dong"
               required
               maxLength={50}
               {...register("name")}
@@ -269,7 +269,7 @@ export const SubRegisterContainer = ({
                 // 🔥 숫자 11자리 정규식 검사
                 pattern: {
                   value: /^010\d{8}$/,
-                  message: "010으로 시작하는 11자리 숫자를 입력해주세요."
+                  message: t('mobile_start_010_11'),
                 },
                 minLength: { value: 11, message: t('mobile_min_max') },
                 maxLength: { value: 11, message: t('mobile_min_max') },

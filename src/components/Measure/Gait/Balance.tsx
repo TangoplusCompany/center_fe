@@ -7,12 +7,10 @@ export default function GaitBalance({data, isCompare}: GaitContainerProps) {
   const iData = data.gait_measure_info
   const t = useTranslations("Index")
   return (
-    <div className="flex flex-col flex-1 min-h-120 h-full border-2 border-sub200 rounded-xl p-4 gap-2">
-
+    <div className={`flex flex-col ${isCompare ? "min-h-[820px]" : "h-full"} border-2 border-sub200 rounded-xl p-4 gap-2`}>
       <div className="text-lg font-semibold mb-2 text-sub700">
         {t('gait_balance')}(Single, Double Support)
       </div>
-
 
       <div className={`${isCompare ? "flex flex-col": "flex flex-col md:grid md:grid-cols-2"} gap-2`}>
         <div className="flex flex-col gap-2">
@@ -27,19 +25,19 @@ export default function GaitBalance({data, isCompare}: GaitContainerProps) {
               left={{
                 label: t('gait_left_support'),
                 percent: iData.avgLeftSingleSupportRatio,
-                time: `${iData.avgDoubleSupportTime.toFixed(1)}초`,
+                time: `${iData.avgDoubleSupportTime.toFixed(1)}${t("unit_sec")}`,
                 color: { id: "leftGrad", start: "#5B93FF00", end: "#5B93FF" },
               }}
               both={{
                 label: t('gait_double_support'),
                 percent: iData.avgDoubleSupportRatio,
-                time: `${iData.avgLeftSingleSupportTime.toFixed(1)}초`,
+                time: `${iData.avgLeftSingleSupportTime.toFixed(1)}${t("unit_sec")}`,
                 color: { id: "bothGrad", start: "#7E7E7E00", end: "#7E7E7E" },
               }}
               right={{
                 label: t('gait_right_support'),
                 percent: iData.avgRightSingleSupportRatio,
-                time: `${iData.avgRightSingleSupportTime.toFixed(1)}초`,
+                time: `${iData.avgRightSingleSupportTime.toFixed(1)}${t("unit_sec")}`,
                 color: { id: "rightGrad", start: "#49D68F00", end: "#49D68F" },
               }}
             />

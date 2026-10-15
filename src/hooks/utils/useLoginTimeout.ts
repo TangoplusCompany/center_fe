@@ -1,6 +1,7 @@
 import { useAuthStore } from '@/providers/AuthProvider';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 const SESSION_TIMEOUT = 60 * 60 * 1000; // 60분(1시간)
 
@@ -11,6 +12,7 @@ const SESSION_TIMEOUT = 60 * 60 * 1000; // 60분(1시간)
  * @returns 로그인 타임아웃 상태
  */
 export const useLoginTimeout = () => {
+  const t = useTranslations("Index");
   const router = useRouter();
   const logout = useAuthStore((state) => state.setLogout);
   const [remaining, setRemaining] = useState<number>(SESSION_TIMEOUT);
@@ -28,13 +30,13 @@ export const useLoginTimeout = () => {
       if (timeLeft <= 0) {
         clearInterval(interval);
         logout();
-        alert('1시간이 지나 자동 로그아웃 되었습니다.');
+        alert(t('alert_auto_logout_1hour'));
         router.push('/login');
       }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [now, logout, router]);
+  }, [now, logout, router, t]);
 
   return {
     resetTimer,

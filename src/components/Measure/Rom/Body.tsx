@@ -31,10 +31,7 @@ export const ROMBody = ({
   setCurrentView
 }: ROMBodyProps) => {
   const t = useTranslations("Index");
-  // const [romCompareMode, setRomCompareMode] = useState(false);
-  // const toggleRomCompareMode = {
 
-  // }
   const leftData = data0 ? {
     measure_server_file_name: data0.measure_server_file_name,
     measure_server_json_name: data0.measure_server_json_name,

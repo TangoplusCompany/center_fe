@@ -4,10 +4,11 @@ import CompareBody from "./Basic/Body";
 import CompareBiaBody from "./Bia/Body";
 import CompareGaitBody from "./Gait/Body";
 import CompareMoireBody from "./Moire/Body";
-// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-// import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
-// import { useTranslations } from "next-intl";
-// import CompareBodySkeleton from "./Basic/BodySkeleton";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
+import { useTranslations } from "next-intl";
+import CompareBodySkeleton from "./Basic/BodySkeleton";
+import { CompareROMBody } from "./ROM/Body";
 
 export const getAvailableMeasureTypes = (data?: IMeasureResponse): MeasureType[] => {
   if (!data) return [];
@@ -25,13 +26,13 @@ export const getAvailableMeasureTypes = (data?: IMeasureResponse): MeasureType[]
     .map(([, type]) => type);
 };
 
-// const MeasureTypeString : Record<MeasureType, string> = {
-//   "basic": "m_basic",
-//   "rom": "m_rom_test",
-//   "bia": "m_bia_test",
-//   "gait": "m_gait_test",
-//   "moire": "m_moire_test"
-// }
+const MeasureTypeString : Record<MeasureType, string> = {
+  "basic": "m_basic",
+  "rom": "m_rom_test",
+  "bia": "m_bia_test",
+  "gait": "m_gait_test",
+  "moire": "m_moire_test"
+}
 
 const CompareContainer = ({
   userSn,
@@ -39,7 +40,7 @@ const CompareContainer = ({
   setComparePair,
   onCompareDialogOpen,
   compareType,
-  // setCompareType,
+  setCompareType,
   isMyPage = false,
 }: {
   userSn: string;
@@ -50,55 +51,49 @@ const CompareContainer = ({
   setCompareType: (ct: MeasureType) => void;
   isMyPage: boolean;
 }) => {
-  // const t = useTranslations("Index");
-  // const leftSn = comparePair[0];
-  // const leftEnabled = !!leftSn;
-  // const {
-  //     data: leftData,
-  //     isLoading: leftLoading,
-  //     isError: leftError,
-  //   } = useMeasureInfo({
-  //     measure_sn: leftEnabled ? leftSn : undefined,
-  //     user_sn: userSn,
-  //     isMyPage,
-  //   });
-  // const existedCompareType = getAvailableMeasureTypes(leftData)
-  // if (leftLoading) {
-  //   return <CompareBodySkeleton />;
-  // }
+  const t = useTranslations("Index");
+  const leftSn = comparePair[0];
+  const leftEnabled = !!leftSn;
+  const {
+      data: leftData,
+      isLoading: leftLoading,
+      isError: leftError,
+    } = useMeasureInfo({
+      measure_sn: leftEnabled ? leftSn : undefined,
+      user_sn: userSn,
+      isMyPage,
+    });
+  const existedCompareType = getAvailableMeasureTypes(leftData)
+  if (leftLoading) {
+    return <CompareBodySkeleton />;
+  }
 
-  // if (leftError) {
-  //   return <div>{t('etc_error')}</div>;
-  // }
+  if (leftError) {
+    return <div>{t('etc_error')}</div>;
+  }
   return (
     <div className="w-full h-full min-h-0 flex flex-col">
-      <div className="flex w-full justify-between ">
-        {/* 뒤로가기 버튼 */}
+      <div className="flex flex-col w-full gap-2">
         <button
           onClick={() => setComparePair([undefined, undefined])}
-          className="flex items-center gap-2 text-sm text-sub700 hover:text-sub900 transition-colors w-fit"
+          className="flex items-center gap-2 text-sm text-sub400 hover:text-sub600 transition-colors w-fit"
         >
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            width="20" 
-            height="20" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-          >
-            <path d="M19 12H5M12 19l-7-7 7-7"/>
-          </svg>
-          <span>뒤로가기</span>
+          
+          <span>← {t('go_list')}</span>
         </button>
 
-        {/* <div>
+        <div className="flex justify-between">
+
+          <div className="flex gap-2 items-center">
+            <h2 className="text-xl font-bold text-sub700">
+              {t(MeasureTypeString[compareType ?? "basic"])} {t("compare")}
+            </h2>
+          </div>
           <Select
             value={compareType}
             onValueChange={(val) => {
               setCompareType(val as MeasureType);
+              setComparePair([leftSn, undefined]);
             }}
             defaultValue={existedCompareType[0]}
           >
@@ -116,7 +111,7 @@ const CompareContainer = ({
               })}
             </SelectContent>
           </Select>
-        </div> */}
+        </div>
       </div>
       <div className="flex-1 min-h-0 min-w-0 overflow-y-auto p-4">
         {compareType === "basic" && (
@@ -127,7 +122,14 @@ const CompareContainer = ({
             isMyPage={isMyPage}
           />
         )}
-
+        {compareType === "rom" && (
+          <CompareROMBody
+            userSn={userSn}
+            comparePair={comparePair}
+            onCompareDialogOpen={onCompareDialogOpen}
+            isMyPage={isMyPage}
+          />
+        )}
         {compareType === "bia" && (
           <CompareBiaBody
             userSn={userSn}

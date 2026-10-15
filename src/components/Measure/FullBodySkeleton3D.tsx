@@ -6,6 +6,7 @@ import { Suspense, useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 // import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { IMeasureInfo } from "@/types/measure";
+import { useTranslations } from "next-intl";
 
 type RiskKey = "risk_neck" | "risk_shoulder_left" | "risk_shoulder_right" | "risk_elbow_left" | "risk_elbow_right" | "risk_hip_left" | "risk_hip_right" | "risk_knee_left" | "risk_knee_right" | "risk_ankle_left" | "risk_ankle_right";
 
@@ -203,6 +204,7 @@ type FullBodySkeleton3DProps = {
 };
 
 export function FullBodySkeleton3D({ data, className }: FullBodySkeleton3DProps) {
+  const t = useTranslations("Index");
   return (
     <div className={className ?? "w-full h-full min-h-[300px]"}>
       <Canvas
@@ -235,7 +237,7 @@ export function FullBodySkeleton3D({ data, className }: FullBodySkeleton3DProps)
                   className="h-6 w-6 animate-spin rounded-full border-2 border-white/30 border-t-white"
                   aria-hidden
                 />
-                <span className="text-sm text-white/90">로딩중...</span>
+                <span className="text-sm text-white/90">{t("loading_1")}</span>
               </div>
             </Html>
           }

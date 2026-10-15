@@ -72,7 +72,7 @@ export const ROMRawDataContainer = ({
     </div>
   )
 
-  if (jsonError0 && jsonError1) return <div>데이터 로딩 중 오류가 발생했습니다.</div>;
+  if (jsonError0 && jsonError1) return <div>{t("moire_data_loading_error")}</div>;
 
   return (
     <div className="grid grid-cols-2 gap-4">

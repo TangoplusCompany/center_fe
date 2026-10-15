@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { IMatStaticPressure } from "./FootStaticContainer";
 import { removeBlackBackground } from "@/utils/removeBlackBackground";
+import { useTranslations } from "next-intl";
 
 export interface FootStaticProps {
   fileName: string;
@@ -15,6 +16,7 @@ const FootStatic = ({
   }: FootStaticProps) => {
     // lCase 0일 때 결과요약 Intro /  1 일 떄 frontMeasurement
   // 또는 환경변수에서 가져오기
+  const t = useTranslations("Index");
   const percentText = footStaticType === 0 ? "text-sub400" : "text-white"
   const baseUrl = process.env.NEXT_PUBLIC_FILE_URL || '';
   const imageUrl = `${baseUrl}/${fileName}`;
@@ -34,7 +36,7 @@ const FootStatic = ({
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={processedImageSrc}
-            alt="정적 족압 이미지"
+            alt={t("alt_foot_static")}
             className="w-full h-full p-1 rounded-md border bg-accent"
             onError={(e) => {
               e.currentTarget.src = "/images/measure_default.png";

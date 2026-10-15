@@ -7,7 +7,7 @@ import React from "react";
 import { ICenterManagerData } from "@/types/manager";
 
 // ManagerEditForm에서 실제로 사용하는 속성만 포함하는 타입
-type ManagerEditData = Pick<ICenterManagerData, 'sn' | 'admin_name' | 'mobile' | 'admin_email' | 'admin_role'>;
+type ManagerEditData = Pick<ICenterManagerData, 'sn' | 'admin_name' | 'mobile' | 'admin_email' >;
 
 const EditManagerProfileContainer = () => {
   const { adminSn, adminRole, adminName, adminEmail, adminMobile } = useAuthStore((state) => state);
@@ -27,7 +27,6 @@ const EditManagerProfileContainer = () => {
         admin_name: adminName,
         mobile: adminMobile,
         admin_email: adminEmail,
-        admin_role: adminRole,
       };
       return <ManagerEditForm managerData={defaultManagerData} />;
     }
@@ -41,7 +40,6 @@ const EditManagerProfileContainer = () => {
         admin_name: adminName,
         mobile: adminMobile,
         admin_email: adminEmail,
-        admin_role: adminRole,
       };
       return <ManagerEditForm managerData={defaultManagerData} />;
     }

@@ -1,11 +1,12 @@
 import UnAuthLayout from "@/components/Layouts/UnAuthLayout";
+import { getTranslations } from "next-intl/server";
 
-
-export default function UnAuthorizationLayout({
+export default async function UnAuthorizationLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const t = await getTranslations("Index");
   return (
     <UnAuthLayout>
       <div className="min-h-[100dvh] w-full">
@@ -15,7 +16,7 @@ export default function UnAuthorizationLayout({
           {children}
           <div className="flex-1" />
           <div className="text-center text-sm text-muted-foreground">
-            TangoBody V3.0 관리자 웹 서비스
+            {t("service_info_admin")}
           </div>
         </div>
       </div>

@@ -99,7 +99,7 @@ export const MainUserList = ({
                     <TableCell className="text-center">
                       {isError ? (
                         <div className="w-fit px-2 text-xs sm:text-sm text-center whitespace-nowrap text-danger bg-danger/30 border border-red-400 rounded-full mx-auto">
-                          측정오류
+                          {t("measure_error")}
                         </div>
                       ) : (
                         <div className="flex items-center justify-center gap-1.5 flex-wrap">
@@ -109,7 +109,7 @@ export const MainUserList = ({
                           {/* 불완전 측정 안내 뱃지/텍스트 */}
                           {isWrongMeasure && (
                             <span className="text-[11px] sm:text-xs text-amber-600 bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 px-1.5 py-0.5 rounded whitespace-nowrap">
-                              (불완전 측정)
+                              ({t("measure_fail_result")})
                             </span>
                           )}
                         </div>

@@ -165,7 +165,7 @@ const MeasureDetail = ({
         const finalUrl = `${bProjectBaseUrl}?t_r0=${encryptData}&${urlParams.join("&")}&seq=${seq}`;
         window.open(finalUrl, '_blank');
       } else {
-        alert("이미지 주소 생성에 실패했습니다.");
+        alert(t("alert_image_url_fail"));
       }
 
     } catch (error) {
@@ -189,7 +189,7 @@ const MeasureDetail = ({
                   key={measure.value}
                   value={measure.value}
                   className={cn(
-                    "relative pb-2 text-lg font-semibold transition-colors whitespace-nowrap flex-shrink-0",
+                    "relative pb-2 text-sm ssm:text-lg font-semibold transition-colors whitespace-nowrap flex-shrink-0",
                     "bg-transparent data-[state=active]:bg-transparent",
                     "shadow-none data-[state=active]:shadow-none",
                     "text-sub600 hover:text-sub800 data-[state=active]:text-mainBlue-600",
@@ -226,7 +226,7 @@ const MeasureDetail = ({
               <span className="ripple-dot" style={{ animationDelay: "0.5s" }} />
             </div>
             
-            <span className="relative z-10 flex items-center justify-center gap-1.5 text-xs sm:text-sm whitespace-nowrap">
+            <span className="relative z-10 flex items-center justify-center text-sm gap-1.5 whitespace-nowrap">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={`/icons/ic_ai_analysis_bubble.svg`}
@@ -257,7 +257,7 @@ const MeasureDetail = ({
               /* eslint-disable-next-line @next/next/no-img-element */
               <img
                 src="/icons/ic_people_image.svg"
-                alt="인쇄하기"
+                alt={t("btn_print")}
                 className="size-4 dark:[filter:brightness(0)_invert(1)]"
               />
             )}

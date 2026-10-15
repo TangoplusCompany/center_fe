@@ -9,5 +9,5 @@ const VALID_OTP = "123456";
 export const postManagerInviteVerifyOtp = async (otp: string) => {
   await new Promise((resolve) => setTimeout(resolve, MOCK_DELAY_MS));
   const match = otp === VALID_OTP;
-  return { success: match, message: match ? "otp가 일치합니다." : "otp가 일치하지 않습니다." };
+  return { success: match, message: match ? "OTP verified." : "OTP does not match." };
 };

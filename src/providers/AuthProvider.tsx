@@ -18,7 +18,7 @@ export const AuthContext = createContext<AuthStoreApi | null>(null);
 export const useAuthStore = <T,>(selector: (store: AuthStore) => T): T => {
   const authStore = useContext(AuthContext);
   if (!authStore) {
-    throw new Error("authStore는 AuthStoreProvider 내부에서만 사용할 수 있습니다.");
+    throw new Error("useAuthStore must be used within AuthStoreProvider");
   }
   return useStore(authStore, selector);
 };

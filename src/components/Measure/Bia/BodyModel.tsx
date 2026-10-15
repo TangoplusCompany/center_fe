@@ -133,8 +133,8 @@ export default function BodyModel({
   data,
 } : {
   data: IBiaData;
-  isCompare: boolean
 }) {
+  const t = useTranslations("Index");
 
   const getStatusLabel = (status: number): string => {
     const statusMap: Record<number, string> = {
@@ -143,7 +143,7 @@ export default function BodyModel({
       2: "bia_above_standard"
     };
 
-    return statusMap[status] ?? "데이터 없음";
+    return statusMap[status] ?? "no_data";
   };
   const muscleData = [
     { subject: "bia_part_abdomen", 
@@ -239,7 +239,7 @@ export default function BodyModel({
         <div className='flex justify-between '>
           <div className='flex gap-1 pl-1 pt-1 items-center'>
             <div className='w-3 h-3 rounded-[3px] bg-mainBlue-600' />
-            <span className='text-mainBlue-600 font-bold text-sm'>근육 분포</span>
+            <span className='text-mainBlue-600 font-bold text-sm'>{t("muscle_distribution")}</span>
           </div>
         </div>
         
@@ -250,7 +250,7 @@ export default function BodyModel({
         <div className='flex justify-between '>
           <div className='flex gap-1 pl-1 pt-1 items-center'>
             <div className='w-3 h-3 rounded-[3px] bg-mainBlue-600' />
-            <span className='text-mainBlue-600 font-bold text-sm'>지방 분포</span>
+            <span className='text-mainBlue-600 font-bold text-sm'>{t("fat_distribution")}</span>
           </div>
         </div>
         <PentagonChart data={fatData} isMuscle={false} />

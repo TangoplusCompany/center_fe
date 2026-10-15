@@ -4,7 +4,6 @@ import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input } from "../ui/input";
-import { ADMIN_ROLE } from "@/utils/constants/adminRole";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { phoneHyphen } from "@/utils/regexFiltering";
@@ -16,7 +15,7 @@ import {
 import { useTranslations } from "next-intl";
 
 // ManagerEditForm에서 실제로 사용하는 속성만 포함하는 타입
-type ManagerEditData = Pick<ICenterManagerData, 'sn' | 'admin_name' | 'mobile' | 'admin_email' | 'admin_role'>;
+type ManagerEditData = Pick<ICenterManagerData, 'sn' | 'admin_name' | 'mobile' | 'admin_email'>;
 
 const ManagerEditForm = ({
   managerData,
@@ -143,19 +142,6 @@ const ManagerEditForm = ({
           disabled
           value={managerData.admin_email ?? ""}
           placeholder={t('setting_account_email')}
-          readOnly
-        />
-      </div>
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="managerGrade">{t('setting_account_role')}</Label>
-        <Input
-          type="text"
-          id="managerGrade"
-          disabled
-          value={
-            t(ADMIN_ROLE[managerData.admin_role as keyof typeof ADMIN_ROLE] ?? "")
-          }
-          placeholder={t('setting_account_role')}
           readOnly
         />
       </div>

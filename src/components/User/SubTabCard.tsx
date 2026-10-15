@@ -2,6 +2,7 @@ import { actionUserDecrypt } from "@/app/actions/getCrypto";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useSidebar } from "../ui/sidebar";
 
 interface UserSubTabCardProps {
   encryptedParam: string;
@@ -20,8 +21,15 @@ const USER_SUB_TABS = [
 const UserSubTabCard = ({encryptedParam, searchParams, currentSubTab} : UserSubTabCardProps) => {
   const t = useTranslations("Index");
   const [userName, setUserName] = useState<string>(t('h_user'));
+  const { setOpenMobile, isMobile, } = useSidebar(); 
+  
+  const handleTabClick = () => {
+    if (isMobile) {
+      setOpenMobile(false); // 모바일 사이드바 닫기
+    }
+    // 데스크톱 사이드바도 함께 접고 싶다면: setOpen(false);
+  };
 
-  // 컴포넌트 마운트 시 암호화 키를 복호화하여 이름 세팅
   useEffect(() => {
     async function getUserName() {
       try {
@@ -44,7 +52,9 @@ const UserSubTabCard = ({encryptedParam, searchParams, currentSubTab} : UserSubT
         <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 text-sm font-semibold">
           {userName.charAt(0)}
         </div>
-        <span className="text-sub700 font-medium text-base">{userName} 님</span>
+        <span className="text-sub700 font-medium text-base">
+          {userName}{t('user_honorific') ? ` ${t('user_honorific')}` : ''}
+        </span>
       </div>
 
       <div className="flex flex-col gap-1">
@@ -58,6 +68,7 @@ const UserSubTabCard = ({encryptedParam, searchParams, currentSubTab} : UserSubT
             <Link
               key={subTab.key}
               href={`/user/${encryptedParam}?${newParams.toString()}`}
+              onClick={handleTabClick}
               className={`w-full text-center py-2.5 px-4 rounded-xl text-sm font-medium transition-all duration-200 ${
                 isSubActive 
                   ? "bg-blue-600 text-white shadow-sm" 

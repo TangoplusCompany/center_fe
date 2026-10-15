@@ -129,7 +129,7 @@ export const MeasureRomContainer = () => {
   })
   
   if (decryptLoading) return <MeasureDetailSkeleton />;
-  if (decryptError) return <div>잘못된 접근입니다.</div>;
+  if (decryptError) return <div>{t("invalid_access")}</div>;
   return (
     <div className="flex flex-col gap-4">
       
@@ -137,7 +137,7 @@ export const MeasureRomContainer = () => {
         <div className="flex items-center gap-3">
           <div className="w-1 h-12 bg-mainBlue-600 rounded-full"></div>
           <h2 className="text-3xl font-semibold text-[#333] dark:text-white flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-            <span>{romItems[0].user_name}님 ROM 측정 결과</span>
+            <span>{t("rom_measure_result_title", { userName: romItems[0].user_name })}</span>
             <span className="text-sm text-sub300 dark:text-sub200 sm:pl-2"> {formatDate(romItems[0].reg_date.slice(0,16), locale)}</span>
           </h2>
         </div>
@@ -177,7 +177,7 @@ export const MeasureRomContainer = () => {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/icons/ic_print.svg"
-                  alt="인쇄하기"
+                  alt={t("btn_print")}
                   className="gap-4 size-4 dark:[filter:brightness(0)_invert(1)]"
                 />
                 {t("btn_print")}
