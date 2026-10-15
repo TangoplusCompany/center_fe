@@ -105,7 +105,7 @@ export const CenterUserMeasureCard = ({
           }}
         >
           <div className="relative bg-mainBlue-600 text-white px-3 py-2 rounded-lg shadow-lg text-sm font-semibold whitespace-nowrap">
-            비교하기
+            {t('btn_compare_action')}
             {/* 말풍선 왼쪽 위 꼬리 */}
             <div className="absolute -left-1 top-3 w-2 h-2 bg-mainBlue-600 rotate-45"></div>
           </div>

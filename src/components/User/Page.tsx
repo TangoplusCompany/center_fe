@@ -55,7 +55,7 @@ const CenterUserPage = () => {
   if (isError) {
     return (
       <div className="col-span-12">
-        <p>에러가 발생했습니다.</p>
+        <p>{t("data_error_msg_1")}</p>
       </div>
     );
   }

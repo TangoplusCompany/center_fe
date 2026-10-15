@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { IMatOhsPressure } from "./FootDynamicContainer";
 import { removeBlackBackground } from "@/utils/removeBlackBackground";
+import { useTranslations } from "next-intl";
 
 export interface FootDynamicProps {
   footFileName: string
@@ -13,6 +14,7 @@ const FootDynamic = ({
 }: FootDynamicProps
 
 ) => {
+  const t = useTranslations("Index");
   const baseUrl = process.env.NEXT_PUBLIC_FILE_URL || '';
     const footImageUrl = `${baseUrl}/${footFileName}`;
     const [processedFootSrc, setProcessedFootSrc] = useState<string>("");
@@ -35,7 +37,7 @@ const FootDynamic = ({
         /* eslint-disable-next-line @next/next/no-img-element */
         <img
           src={processedFootSrc}
-          alt="동적 족압 분석"
+          alt={t("alt_foot_dynamic")}
           className="w-full h-full p-1 rounded-md border bg-accent"
           onError={(e) => {
             e.currentTarget.src = "/images/measure_default.png";

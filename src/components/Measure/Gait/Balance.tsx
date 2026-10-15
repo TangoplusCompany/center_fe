@@ -25,19 +25,19 @@ export default function GaitBalance({data, isCompare}: GaitContainerProps) {
               left={{
                 label: t('gait_left_support'),
                 percent: iData.avgLeftSingleSupportRatio,
-                time: `${iData.avgDoubleSupportTime.toFixed(1)}초`,
+                time: `${iData.avgDoubleSupportTime.toFixed(1)}${t("unit_sec")}`,
                 color: { id: "leftGrad", start: "#5B93FF00", end: "#5B93FF" },
               }}
               both={{
                 label: t('gait_double_support'),
                 percent: iData.avgDoubleSupportRatio,
-                time: `${iData.avgLeftSingleSupportTime.toFixed(1)}초`,
+                time: `${iData.avgLeftSingleSupportTime.toFixed(1)}${t("unit_sec")}`,
                 color: { id: "bothGrad", start: "#7E7E7E00", end: "#7E7E7E" },
               }}
               right={{
                 label: t('gait_right_support'),
                 percent: iData.avgRightSingleSupportRatio,
-                time: `${iData.avgRightSingleSupportTime.toFixed(1)}초`,
+                time: `${iData.avgRightSingleSupportTime.toFixed(1)}${t("unit_sec")}`,
                 color: { id: "rightGrad", start: "#49D68F00", end: "#49D68F" },
               }}
             />

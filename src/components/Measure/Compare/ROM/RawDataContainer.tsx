@@ -48,7 +48,7 @@ export const CompareRomRawDataContainer = ({
     </div>
   )
 
-  if (jsonError0) return <div>데이터 로딩 중 오류가 발생했습니다.</div>;
+  if (jsonError0) return <div>{t("moire_data_loading_error")}</div>;
 
   return (
     <div className="flex flex-col gap-4">

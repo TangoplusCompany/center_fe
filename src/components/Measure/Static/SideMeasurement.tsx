@@ -6,6 +6,7 @@ import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
 import RawDataContainer from "../RawDataContainer";
 import { IUserMeasureDetailData, IMeasureResponse } from "@/types/measure";
 import StaticDataContainer from "./DataContainer";
+import { useTranslations } from "next-intl";
 
 const SideMeasurement = ({
   sns,
@@ -23,6 +24,7 @@ const SideMeasurement = ({
   onImageReady?: (idx: 0 | 1, url: string) => void;
   isMyPage: boolean;
 }) => {
+  const t = useTranslations("Index");
   const {
         data: measureThird,
         isLoading: seq3Loading,
@@ -53,14 +55,14 @@ const SideMeasurement = ({
     if (seq3Loading || seq4Loading) {
       return (
         <div className="col-span-12">
-          <p>로딩중...</p>
+          <p>{t("loading_1")}</p>
         </div>
       );
     }
     if (seq3Error || seq4Error) {
       return (
         <div className="col-span-12">
-          <p>오류가 발생했습니다</p>
+          <p>{t("data_error_msg_1")}</p>
         </div>
       );
     }

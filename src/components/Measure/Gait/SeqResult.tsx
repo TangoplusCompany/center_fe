@@ -159,7 +159,7 @@ export function GaitGraphItem({
           <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
 
           <ChartTooltip
-            content={<ChartTooltipContent labelFormatter={(value) => `${t(value)} 프레임`} />}
+            content={<ChartTooltipContent labelFormatter={(value) => `${t(value)} ${t("unit_frame")}`} />}
           />
 
           <Area

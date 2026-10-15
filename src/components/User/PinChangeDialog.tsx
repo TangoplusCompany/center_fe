@@ -1,9 +1,9 @@
-// PinChangeDialog.tsx
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
+import { useTranslations } from 'next-intl';
 
 interface PinChangeDialogProps {
   open: boolean;
@@ -11,12 +11,13 @@ interface PinChangeDialogProps {
 }
 
 export function PinChangeDialog({ open, onOpenChange }: PinChangeDialogProps) {
+  const t = useTranslations('Index');
   const [newPin, setNewPin] = useState('');
   const [confirmPin, setConfirmPin] = useState('');
 
   const handleSubmit = () => {
     if (newPin !== confirmPin) {
-      alert('PIN 번호가 일치하지 않습니다.');
+      alert(t('pin_change_mismatch'));
       return;
     }
     // PIN 변경 로직
@@ -42,36 +43,36 @@ export function PinChangeDialog({ open, onOpenChange }: PinChangeDialogProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>PIN 번호 변경</DialogTitle>
+          <DialogTitle>{t('pin_change_title')}</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid gap-2">
-            <Label htmlFor="new-pin">새 PIN 번호</Label>
+            <Label htmlFor="new-pin">{t('pin_change_new')}</Label>
             <Input
               id="new-pin"
               type="password"
               value={newPin}
               onChange={(e) => setNewPin(e.target.value)}
-              placeholder="새 PIN 입력"
+              placeholder={t('pin_change_new_placeholder')}
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="confirm-pin">PIN 번호 확인</Label>
+            <Label htmlFor="confirm-pin">{t('pin_change_confirm')}</Label>
             <Input
               id="confirm-pin"
               type="password"
               value={confirmPin}
               onChange={(e) => setConfirmPin(e.target.value)}
-              placeholder="PIN 재입력"
+              placeholder={t('pin_change_confirm_placeholder')}
             />
           </div>
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            취소
+            {t('btn_cancel')}
           </Button>
           <Button onClick={handleSubmit}>
-            변경
+            {t('btn_confirm')}
           </Button>
         </DialogFooter>
       </DialogContent>

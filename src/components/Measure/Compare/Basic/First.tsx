@@ -66,7 +66,7 @@ const MeasureStaticCompareFirst = React.memo(
   const hasData1 = measureJson1 && measure1;
   const measureData0 = extractMeasureData(left);
   if (!measureData0) {
-    return <div>데이터가 없습니다.</div>; // 또는 null, 로딩 UI 등
+    return <div>{t("measure_no_data")}</div>; // 또는 null, 로딩 UI 등
   }
   const measureData1 = extractMeasureData(right);
 

@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { preprocessTrajectoryImage } from "@/utils/preprocessTrajectoryImage";
+import { useTranslations } from "next-intl";
 
 const HipTrajectory = ({   hipFileName }: {   hipFileName: string }) => {
+  const t = useTranslations("Index");
   const baseUrl = process.env.NEXT_PUBLIC_FILE_URL || '';
   const [processedHipSrc, setProcessedHipSrc] = useState<string>("");
   const hipImageUrl = `${baseUrl}/${hipFileName}`;
@@ -17,7 +19,7 @@ const HipTrajectory = ({   hipFileName }: {   hipFileName: string }) => {
         /* eslint-disable-next-line @next/next/no-img-element */
         <img
           src={processedHipSrc}
-          alt="골반 궤적 분석"
+          alt={t("alt_hip_trajectory")}
           className="w-full h-full p-1 rounded-md border bg-accent"
           onError={(e) => {
             e.currentTarget.src = "/images/measure_default.png";

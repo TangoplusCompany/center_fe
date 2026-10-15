@@ -24,7 +24,6 @@ const ManagerEditForm = ({
   managerData: ManagerEditData;
   onUpdateSuccess?: () => void;
 }) => {
-  // admin Role이라는ㄴ게 없음.
   const t = useTranslations("Index");
   const { isBoolean: editState, setToggle: setEditState } = useBoolean();
 

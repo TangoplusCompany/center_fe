@@ -18,7 +18,7 @@ export const ResultPageUserContext = createContext<ResultPageUserStoreApi | null
 export const useResultPageUserStore = <T,>(selector: (store: ResultPageUserStore) => T): T => {
   const userStore = useContext(ResultPageUserContext);
   if (!userStore) {
-    throw new Error("userStore는 ResultPageUserProvider 내부에서만 사용할 수 있습니다.");
+    throw new Error("useResultPageUserStore must be used within ResultPageUserProvider");
   }
   return useStore(userStore, selector);
 };

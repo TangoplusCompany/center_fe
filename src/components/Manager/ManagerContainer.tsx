@@ -8,8 +8,10 @@ import { useGetManagerList } from "@/hooks/api/manager/useGetManagerList";
 import { useQueryParams } from "@/hooks/utils/useQueryParams";
 import ManagerDummyList from "@/components/Manager/ManagerDummyList";
 import DataError from "@/components/Util/DataError";
+import { useTranslations } from "next-intl";
 
 const ManagerContainer = () => {
+  const t = useTranslations("Index");
   const { query, setQueryParam } = useQueryParams();
   const search = query.search || "";
   const page = parseInt(query.page || "1");
@@ -38,7 +40,7 @@ const ManagerContainer = () => {
       <>
         <CenterManagerList managerList={[]} />
         <div className="h-[100px] flex items-center justify-center w-full">
-          <p>조회된 관리자가 없습니다.</p>
+          <p>{t("manager_list_empty")}</p>
         </div>
         <CustomPagination total={1} last_page={1} limit={20} page={1} />
         <SearchForm setSearch={onChangeSearch} search={search} />

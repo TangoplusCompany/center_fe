@@ -9,14 +9,14 @@ import { useTranslations } from "next-intl";
 const CompareBodySkeleton = () => {
   const t = useTranslations("Index")
   const measureTabs = [
-    { title: "결과 요약", value: "summary" },
-    { title: "정면 측정", value: "first" },
-    { title: "팔꿉 측정", value: "second" },
-    { title: "좌측 측정", value: "third" },
-    { title: "우측 측정", value: "fourth" },
-    { title: "후면 측정", value: "fifth" },
-    { title: "앉은 후면", value: "sixth" },
-    { title: "오버헤드 스쿼트", value: "squart" },
+    { title: t('result_summary'), value: "summary" },
+    { title: t('pose_seq_0'), value: "first" },
+    { title: t('pose_seq_1'), value: "second" },
+    { title: t('pose_seq_2'), value: "third" },
+    { title: t('pose_seq_3'), value: "fourth" },
+    { title: t('pose_seq_4'), value: "fifth" },
+    { title: t('pose_seq_5'), value: "sixth" },
+    { title: t('pose_seq_6'), value: "squart" },
   ];
 
   return (

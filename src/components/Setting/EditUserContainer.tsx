@@ -12,8 +12,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { usePost2FAWithDrawAccount } from "@/hooks/api/auth/usePost2FAWithDrawAccount";
 import EditManagerProfileContainer from "./EditUserProfileContainer";
+import { useTranslations } from "next-intl";
 
 export const EditUserContainer = () => {
+  const t = useTranslations("Index");
   const [isWarningOpen, setIsWarningOpen] = useState(false);
   const [isOtpOpen, setIsOtpOpen] = useState(false);
   const [isDelegateOpen, setIsDelegateOpen] = useState(false); // 주관리자 위임 모달 상태
@@ -55,17 +57,16 @@ export const EditUserContainer = () => {
         className="flex w-full justify-end text-sub400 hover:text-sub400/90 cursor-pointer"
         onClick={() => setIsWarningOpen(true)}
       >
-        회원 탈퇴
+        {t("withdraw_membership")}
       </div>
 
       {/* 1. 탈퇴 경고 모달 */}
       <Dialog open={isWarningOpen} onOpenChange={setIsWarningOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>회원 탈퇴 안내</DialogTitle>
+            <DialogTitle>{t("withdraw_title")}</DialogTitle>
             <DialogDescription className="space-y-2 pt-2 text-sm text-muted-foreground">
-              탈퇴 시 계정 정보 및 모든 데이터가 영구 삭제되며 복구할 수 없습니다.
-              계속 진행하시겠습니까?
+              {t("withdraw_desc")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2 sm:gap-0">
@@ -74,14 +75,14 @@ export const EditUserContainer = () => {
               onClick={() => setIsWarningOpen(false)}
               disabled={isRequesting2FA}
             >
-              취소
+              {t("btn_cancel")}
             </Button>
             <Button
               variant="destructive"
               onClick={handleConfirmWarning}
               disabled={isRequesting2FA}
             >
-              {isRequesting2FA ? "요청 중..." : "확인 및 인증번호 받기"}
+              {isRequesting2FA ? t("withdraw_btn_requesting") : t("withdraw_btn_request_code")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -91,11 +92,11 @@ export const EditUserContainer = () => {
       <Dialog open={isDelegateOpen} onOpenChange={setIsDelegateOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>주관리자 권한 위임 필요</DialogTitle>
+            <DialogTitle>{t("delegate_required_title")}</DialogTitle>
             <DialogDescription className="space-y-2 pt-2 text-sm text-muted-foreground">
-              현재 계정은 주관리자 권한을 보유하고 있어 바로 탈퇴할 수 없습니다.
+              {t("delegate_required_desc_1")}
               <br />
-              다른 관리자에게 권한을 위임한 후 탈퇴를 진행해 주세요.
+              {t("delegate_required_desc_2")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -106,7 +107,7 @@ export const EditUserContainer = () => {
                 // TODO: 권한 위임 페이지 이동 또는 위임 모달 열기 로직 연동
               }}
             >
-              확인
+              {t("btn_confirm")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -116,16 +117,16 @@ export const EditUserContainer = () => {
       <Dialog open={isOtpOpen} onOpenChange={setIsOtpOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>이메일 인증</DialogTitle>
+            <DialogTitle>{t("email_auth_title")}</DialogTitle>
             <DialogDescription>
-              가입된 이메일로 전송된 인증번호 6자리를 입력해주세요.
+              {t("email_auth_desc")}
             </DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleSubmitOtp} className="space-y-4 pt-2">
             <Input
               type="text"
-              placeholder="인증번호 입력"
+              placeholder={t("email_auth_code_placeholder")}
               value={otpCode}
               onChange={(e) => setOtpCode(e.target.value)}
               maxLength={6}
@@ -142,10 +143,10 @@ export const EditUserContainer = () => {
                   setOtpCode("");
                 }}
               >
-                취소
+                {t("btn_cancel")}
               </Button>
               <Button type="submit" variant="destructive" disabled={!otpCode}>
-                탈퇴 완료
+                {t("withdraw_complete_btn")}
               </Button>
             </DialogFooter>
           </form>

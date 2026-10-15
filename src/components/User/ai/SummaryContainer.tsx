@@ -32,6 +32,11 @@ const AISummaryContainer = ({
       '주의': "bg-warning",
       '위험': "bg-danger",
     }[pa.status] ?? "bg-sub600 dark:bg-gray-600";
+    const statusLabel = {
+      '정상': t('grade_normal'),
+      '주의': t('grade_caution'),
+      '위험': t('grade_danger'),
+    }[pa.status] ?? pa.status;
     return (
       <div className="flex flex-col gap-2 rounded-xl bg-sub100 dark:bg-zinc-800 p-4">
         <div className="flex justify-between">
@@ -39,7 +44,7 @@ const AISummaryContainer = ({
             {partString(partKey)}
           </div>
           <div className={`${textBgCondition} rounded-xl px-2 py-1 text-sm text-white`}>
-            {pa.status}
+            {statusLabel}
           </div>
         </div>
 
@@ -55,7 +60,7 @@ const AISummaryContainer = ({
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={`/icons/ic_ai_analysis.svg`}
-          alt="ai반짝임 이미지"
+          alt={t('alt_ai_sparkle')}
           className="w-8 h-8 p-1"
           onError={(e) => {
             e.currentTarget.src = "/images/measure_default.png";

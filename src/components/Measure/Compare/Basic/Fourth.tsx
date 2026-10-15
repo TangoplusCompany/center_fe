@@ -7,6 +7,7 @@ import DummyStaticContainer from "../../DummyStaticContainer";
 import { MeasurementImage } from "../../MeasurementImage";
 import CompareDefault from "../CompareDefault";
 import RawDataContainer from "../../RawDataContainer";
+import { useTranslations } from "next-intl";
 
 const MeasureStaticCompareFourth = React.memo(
 ({
@@ -17,6 +18,7 @@ const MeasureStaticCompareFourth = React.memo(
   onImageReady,
   isMyPage = false,
 }: CompareStaticProps) => {
+  const t = useTranslations("Index");
   const leftSummaryData = left?.basic_result?.result_summary_data
   const rightSummaryData = right?.basic_result?.result_summary_data
   const {
@@ -60,7 +62,7 @@ const MeasureStaticCompareFourth = React.memo(
     return <DummyStaticContainer />;
   }
   if (isError) {
-    return <div>에러가 발생했습니다.</div>;
+    return <div>{t("compare_error")}</div>;
   }
   if (!hasData0 && !hasData1) {
     return <DummyStaticContainer />;

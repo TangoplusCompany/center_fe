@@ -6,9 +6,10 @@ import CenterUserMeasureListSkeleton from "@/components/User/MeasureListSkeleton
 import { CompareSlot } from "@/types/compare";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import CustomPagination from "../common/Pagination";
-import { measureType, viewType } from "./Detail";
+import { viewType } from "./Detail";
 import { IUserMeasureList } from "@/types/user";
 import { useTranslations } from "next-intl";
+import { MeasureType } from "@/types/measure";
 
 const CenterUserMeasureListContainer = ({ 
   userMeasureList,
@@ -26,8 +27,8 @@ const CenterUserMeasureListContainer = ({
   handleSortChange: (value : string) => void;
   sort: string;
   setMeasureSn: (measureSn: number) => void;
-  setMeasureType: (mt: measureType) => void;
-  setCompareType: (ct: measureType) => void;
+  setMeasureType: (mt: MeasureType) => void;
+  setCompareType: (ct: MeasureType) => void;
   setCurrentTab ?: (tab : viewType) => void;
   selectCompareSn: (sn: number, slot: CompareSlot) => void;
   isMyPage: boolean;

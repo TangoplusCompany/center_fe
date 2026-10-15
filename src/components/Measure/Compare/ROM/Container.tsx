@@ -2,8 +2,7 @@ import { IMeasureROMItemDetail } from "@/types/measure"
 import CompareROMItemCard from "./ItemCard";
 import { useState } from "react";
 import CompareROMDetailBody from "./DetailBody";
-
-
+import { useTranslations } from "next-intl";
 
 export const CompareROMContainer = ({
   datas,
@@ -13,8 +12,8 @@ export const CompareROMContainer = ({
   romMeasureType: number | undefined;
   setRomMeasureType: (mt: number) => void;
 }) => {
+  const t = useTranslations("Index");
   const [selectedRomSn, setSelectedRomSn] = useState<number>();
-  
 
   const onROMItemSelect = (selectRomSn: number, romMeasureType: number) => {
     setSelectedRomSn(selectRomSn);
@@ -35,7 +34,7 @@ export const CompareROMContainer = ({
           />
         ))
       ) : (
-        selectedData ? (<CompareROMDetailBody data={selectedData} setSelectedRomSn={setSelectedRomSn} setMeasureType={setRomMeasureType} />) : (<div>올바르지 않은 sn 입니다.</div>)
+        selectedData ? (<CompareROMDetailBody data={selectedData} setSelectedRomSn={setSelectedRomSn} setMeasureType={setRomMeasureType} />) : (<div>{t("invalid_sn")}</div>)
       )}
     </div>
   );

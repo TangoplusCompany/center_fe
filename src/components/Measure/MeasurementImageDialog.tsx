@@ -235,7 +235,7 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/icons/ic_grid.svg"
-                  alt="그리드 라디오버튼"
+                  alt={t("alt_grid_radio")}
                   className="w-4 h-4"
                 />
                 <span className="hidden sm:inline">{showGrid ? t('grid_off') : t('grid_on')}</span>
@@ -251,7 +251,7 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="/icons/ic_skeleton.svg"
-                    alt="랜드마크 라디오버튼"
+                    alt={t("alt_landmark_radio")}
                     className="w-4 h-4"
                   />
                   <span className="hidden sm:inline">{showLine ? t('landmark_off') : t('landmark_on')}</span>
@@ -273,7 +273,7 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
             <img
               ref={imageRef}
               src={imageUrl}
-              alt="측정 이미지 상세보기"
+              alt={t("alt_measure_image_detail")}
               className={`block w-full h-auto max-h-[85vh] md:w-auto md:h-[90vh] md:max-w-[90vw] object-contain select-none ${
                 scale > 1 ? 'cursor-grab' : 'cursor-default'
               } ${isDragging ? 'cursor-grabbing' : ''} ${isDragging ? '' : 'transition-transform duration-300 ease-out'}`}
@@ -290,7 +290,7 @@ export const MeasurementImageDialog: React.FC<MeasurementImageDialogProps> = ({
               /* eslint-disable-next-line @next/next/no-img-element */
               <img
                 src={moireUrl}
-                alt="모아레 오버레이"
+                alt={t("alt_moire_overlay")}
                 className={`absolute inset-0 w-full h-full object-contain pointer-events-none select-none ${
                   isDragging ? '' : 'transition-transform duration-300 ease-out'
                 }`}

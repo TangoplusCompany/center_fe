@@ -15,7 +15,7 @@ import { IUserData } from "@/types/user";
 import { useDeleteUser } from "@/hooks/api/user/useDeleteUser";
 import { useRouter } from "next/navigation";
 import { actionUserEncrypt } from "@/app/actions/getCrypto";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 
 export const UserList = ({
   users,
@@ -27,7 +27,6 @@ export const UserList = ({
   adminRole: number;
 }) => {
   const t = useTranslations("Index");
-  const locale = useLocale();
   const [list, setList] = useState<IUserData[]>(users);
   const router = useRouter();
   const mutationDeleteUser = useDeleteUser(refetch, t);
@@ -65,7 +64,13 @@ export const UserList = ({
               <TableCell className="text-center whitespace-nowrap">
                 {phoneFiltering(phoneHyphen(user.mobile))}
               </TableCell>
-              <TableCell className="text-center whitespace-nowrap">{user.gender === "남성" || user.gender === "여성" ? user.gender : "미설정"}</TableCell>
+              <TableCell className="text-center whitespace-nowrap">
+                {user.gender === "남성"
+                  ? t("gender_male")
+                  : user.gender === "여성"
+                    ? t("gender_female")
+                    : t("gender_unspecified")}
+              </TableCell>
               <TableCell className="flex items-center justify-end gap-2 whitespace-nowrap">
                 <button
                   onClick={() => handleNavigate(user.user_uuid, user.user_sn, user.user_name)}
@@ -77,7 +82,7 @@ export const UserList = ({
                 {adminRole < 3 && (
                   <button
                     onClick={() => {
-                      if (window.confirm(`${locale === "ko" ? `${user.user_name} 사용자를 제거하시습니까?` : `Do you want to delete ${user.user_name}?` }`)) {
+                      if (window.confirm(t("confirm_delete_user", { name: user.user_name }))) {
                         handleRemoveUser(user.user_sn);
                       }
                     }}

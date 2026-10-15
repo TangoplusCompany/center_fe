@@ -6,9 +6,9 @@ import { removeOutliersIQR } from "@/utils/graph";
 import { useTranslations } from "next-intl";
 
 export const RISK_RECORD = {
-  0: { label: "정상", badgeCss: "bg-sub600 dark:bg-gray-600" },
-  1: { label: "주의", badgeCss: "bg-warning" },
-  2: { label: "위험", badgeCss: "bg-danger" },
+  0: { label: "grade_normal", badgeCss: "bg-sub600 dark:bg-gray-600" },
+  1: { label: "grade_caution", badgeCss: "bg-warning" },
+  2: { label: "grade_danger", badgeCss: "bg-danger" },
 } as const;
 
 export interface IMoireGraphProps {

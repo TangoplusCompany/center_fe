@@ -10,7 +10,7 @@ const UpdateSessionButton = () => {
   const t = useTranslations("Index")
   const handleUpdateSession = () => {
     resetTimer();
-    alert("로그인이 연장되었습니다.");
+    alert(t("alert_session_extended"));
   };
   return (
     <div className="flex items-center gap-2 md:gap-4">

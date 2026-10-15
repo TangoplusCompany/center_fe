@@ -65,7 +65,7 @@ export default function DefaultHeaderLayout() {
       <div className="flex items-center min-w-0">
         <SidebarTrigger
           className="xl:hidden shrink-0 h-9 w-9"
-          aria-label="사이드바 열기"
+          aria-label={t("sidebar_open")}
         />
         {isSidebarCollapsed && showSidebarHint && (
           <Balloon

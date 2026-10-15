@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { useTranslations } from "next-intl";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -16,6 +17,7 @@ export const DelegateDialog = ({
   onOpenChange,
   onSuccess,
 }: DelegateDialogProps) => {
+  const t = useTranslations("Index");
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
@@ -27,15 +29,15 @@ export const DelegateDialog = ({
 
   const handleSubmit = async () => {
     if (!email) {
-      setEmailError("이메일을 입력해주세요.");
+      setEmailError(t("email_invalid"));
       return;
     }
     if (!EMAIL_REGEX.test(email)) {
-      setEmailError("올바른 이메일 형식이 아닙니다.");
+      setEmailError(t("email_invalid"));
       return;
     }
 
-    const confirmed = window.confirm(`${email}로 센터 위임 초대를 보내시겠습니까?`);
+    const confirmed = window.confirm(t("delegate_confirm_msg", { email }));
     if (!confirmed) return;
 
     setIsPending(true);
@@ -46,7 +48,7 @@ export const DelegateDialog = ({
       setEmail("");
       onSuccess?.();
     } catch (e) {
-      setEmailError(e instanceof Error ? e.message : "초대 전송에 실패했습니다.");
+      setEmailError(e instanceof Error ? e.message : t("alert_otp_error_etc"));
     } finally {
       setIsPending(false);
     }
@@ -64,9 +66,9 @@ export const DelegateDialog = ({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>센터 위임</DialogTitle>
+          <DialogTitle>{t("delegate_center_title")}</DialogTitle>
           <DialogDescription>
-            위임할 관리자의 이메일을 입력해주세요. 초대 메일이 발송됩니다.
+            {t("delegate_center_desc")}
           </DialogDescription>
         </DialogHeader>
 
@@ -74,7 +76,7 @@ export const DelegateDialog = ({
           <div className="flex flex-col gap-1.5">
             <Input
               type="email"
-              placeholder="이메일 입력"
+              placeholder={t("delegate_email_input")}
               value={email}
               onChange={handleEmailChange}
               onKeyDown={(e) => {
@@ -94,14 +96,14 @@ export const DelegateDialog = ({
               onClick={() => handleOpenChange(false)}
               disabled={isPending}
             >
-              취소
+              {t("btn_cancel")}
             </Button>
             <Button
               type="button"
               onClick={handleSubmit}
               disabled={isPending}
             >
-              {isPending ? "전송 중..." : "초대"}
+              {isPending ? t("delegate_btn_inviting") : t("delegate_btn_invite")}
             </Button>
           </div>
         </div>

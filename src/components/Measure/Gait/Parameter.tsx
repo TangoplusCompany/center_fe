@@ -83,10 +83,6 @@ function GaitItem({ item }: { item: ParameterItem }) {
         </div>
       </div>
 
-      {/* 게이지 바 
-          💡 2. my-auto를 통해 L/R 박스가 없을 때는 자동으로 세로 중앙에 위치하도록 설정 
-          💡 3. 하단 수치 라벨 공간 확보를 위해 pb-5 pt-2 지정
-      */}
       <div className="relative w-full py-2 mb-3">
         <div className="relative w-full h-3 rounded-full overflow-hidden flex">
           {/* 1구간 (< t0): 위험 영역 */}

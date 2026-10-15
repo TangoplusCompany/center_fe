@@ -33,7 +33,7 @@ export default function CompareROMItemCard ({
     );                
 
     return [...sorted, ...dummy] 
-  }, []);
+  }, [data.history_by_measure_type]);
 
   const seriesKeys = useMemo(
     () => chartData
@@ -104,7 +104,7 @@ export default function CompareROMItemCard ({
             <ChartContainer
               config={{
                 value: {
-                  label: "각도값",
+                  label: t("chart_label_angle"),
                   color: "#2563EB",
                 },
               }}

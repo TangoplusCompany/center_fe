@@ -56,7 +56,7 @@ const CenterUserNormalDashBoard = ({
   if (dashboardDataError) {
     return (
       <div className="w-full flex items-center justify-center py-10 md:py-20 px-4">
-        <p className="text-sm md:text-base text-red-500">대시보드 데이터를 불러오지 못했습니다.</p>
+        <p className="text-sm md:text-base text-red-500">{t("dashboard_error")}</p>
       </div>
     );
   }
@@ -89,7 +89,7 @@ const CenterUserNormalDashBoard = ({
             isMyPage={isMyPage}
             />
           ) : (
-            <p className="text-sm md:text-base text-gray-500 px-2">요약 데이터를 불러오는 중이거나 없습니다.</p>
+            <p className="text-sm md:text-base text-gray-500 px-2">{t("dashboard_summary_loading_or_empty")}</p>
           )}
         </div>
 
@@ -107,7 +107,7 @@ export function calculateExtremePart(
   locale: string,
   history: IBasicHistoryUnit[],
   mode: Mode,
-  t : (key: string) => string
+  t: (key: string, values?: Record<string, string | number | Date>) => string
 ): TWorstPart {
   
   const maxCount = history.length;
@@ -147,20 +147,24 @@ export function calculateExtremePart(
   }
 
   if (!result) {
-  return {
-    partName: "-",
-    level: 0,
-    description: "측정 데이터가 없어 판단할 수 없습니다.",
-  };
-}
+    return {
+      partName: "-",
+      level: 0,
+      description: t("dashboard_no_measure_data_desc"),
+    };
+  }
 
-  const levelText = getRiskString(result.level, locale)
-
+  const levelText = getRiskString(result.level, locale);
 
   return {
     partName: result.partName,
     level: result.level,
-    description: locale === "ko" ? `최근 ${maxCount}회 측정에서 ${t(result.partName)} 부위의 ${levelText} 판단이 ${result.count}회 발생했습니다.` : `In the last ${maxCount} measurements, a ${levelText} assessment for the ${result.partName} area occurred ${result.count} times.`,
+    description: t("dashboard_recent_measure_desc", {
+      maxCount,
+      part: t(result.partName),
+      level: levelText ?? "",
+      count: result.count,
+    }),
   };
 }
 

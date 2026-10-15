@@ -17,6 +17,7 @@ import { formatDate } from "@/utils/formatDate";
 import type { ComparePagination } from "@/hooks/api/user/useMeasureListForCompare";
 import { useLocale, useTranslations } from "next-intl";
 import { AlertCircle } from "lucide-react";
+import { MeasureType } from "@/types/measure";
 
 type MeasurePickerDialogProps = {
   open: boolean;
@@ -25,9 +26,17 @@ type MeasurePickerDialogProps = {
   activeSlot: CompareSlot;
   onOpenChange: (v: boolean) => void;
   selectCompareSn: (measureSn: number, slot: CompareSlot) => void;
-  /** useMeasureListForCompare 연동 시 전달. 있으면 API 페이지네이션 사용 */
+  compareType: MeasureType | undefined;
   pagination?: ComparePagination;
 };
+
+const COMPARE_TYPE_MAP = {
+  basic: "compare_type_basic",
+  rom: "compare_type_rom",
+  bia: "compare_type_bia",
+  gait: "compare_type_gait",
+  moire: "compare_type_moire",
+} as const;
 
 export const MeasurePickerDialog = ({
   open,
@@ -36,6 +45,7 @@ export const MeasurePickerDialog = ({
   activeSlot,
   onOpenChange,
   selectCompareSn,
+  compareType,
   pagination: apiPagination,
 }: MeasurePickerDialogProps) => {
   const t = useTranslations("Index");
@@ -43,8 +53,6 @@ export const MeasurePickerDialog = ({
   const [localPage, setLocalPage] = useState(1);
 
   const useApiPagination = !!apiPagination;
-
-  // comparePair에 포함된 항목 제외
   const filteredItems = items.filter(
     (it) => !comparePair.includes(it.measure_sn)
   );
@@ -74,10 +82,16 @@ export const MeasurePickerDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-full max-w-md rounded-2xl bg-white dark:bg-card p-4" aria-describedby={undefined}>
         {/* 헤더 */}
-        <DialogTitle className="text-base font-semibold mb-3 text-foreground">
-          {t("measure_date_picker")}
-          {/* TODO 여기다가 비교하는 dialog title+현재 필터링된 검사들 고르기 (radio로 그냥 모든 검사 보이게 해도됨) */}
-        </DialogTitle>
+        <div className="flex flex-col gap-0.5 mb-3">
+          <DialogTitle className="text-base font-semibold text-foreground">
+            {compareType ? t("compare_picker_title") : t("measure_date_picker")}
+          </DialogTitle>
+          {compareType && compareType in COMPARE_TYPE_MAP && (
+            <p className="text-sm text-sub600 dark:text-sub500 font-normal">
+              {t("compare_test_item_label")}: {t(COMPARE_TYPE_MAP[compareType])}
+            </p>
+          )}
+        </div>
 
         {/* 내용 영역 */}
         <div className="max-h-[360px] overflow-auto">
@@ -118,7 +132,7 @@ export const MeasurePickerDialog = ({
                     {isError && (
                       <div className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium text-red-600 dark:text-red-300 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-md shrink-0">
                         <AlertCircle className="w-3.5 h-3.5 text-red-500 shrink-0" />
-                        <span>측정오류</span>
+                        <span>{t("measure_error")}</span>
                       </div>
                     )}
                   </button>

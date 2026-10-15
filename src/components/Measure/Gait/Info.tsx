@@ -45,22 +45,22 @@ export function GaitInfoVertiCard({ type, description, grade } : GaitInfoCardPro
     "Rhythm" : "gait_rhythm_speed",
     "FallRisk": "gait_posture_fall_risk",
     "RecommendComment": "label_recommendation"
-  } [type];
+  } [type] ?? "summary_comprehensive";
 
   const gradeTitle = {
     0 : "status_normal",
     1 : "status_caution",
     2: "status_danger",
-  } [grade];
+  } [grade] ?? "status_normal";
 
   return (
     <div className={`flex flex-col gap-2 `}>
       <div className="flex w-full justify-between">
-        <div className={` text-sm sm:text-base font-semibold`}>{t(typeTitle ?? "")}</div>
+        <div className={` text-sm sm:text-base font-semibold`}>{t(typeTitle)}</div>
         <div className={cn(
           "px-3 py-1 rounded-full text-xs text-white text-center whitespace-normal break-keep",
           textBg,
-        )}>{t(gradeTitle ?? "")}</div>
+        )}>{t(gradeTitle)}</div>
       </div>
       <div className="text-sm sm:text-base text-sub700 line-clamp-3 h-[3.75rem] sm:h-[4.5rem]">
         {description}

@@ -6,6 +6,7 @@ import { useMeasureSequence } from "@/hooks/api/measure/useMeasureSequence";
 import RawDataContainer from "../../RawDataContainer";
 import CompareDefault from ".././CompareDefault";
 import { CompareStaticProps } from "./Body";
+import { useTranslations } from "next-intl";
 
 const MeasureStaticCompareSecond = React.memo(
 ({
@@ -16,6 +17,7 @@ const MeasureStaticCompareSecond = React.memo(
   onImageReady,
   isMyPage = false,
 }: CompareStaticProps) => {
+  const t = useTranslations("Index");
   const leftSummaryData = left?.basic_result?.result_summary_data
   const rightSummaryData = right?.basic_result?.result_summary_data
   const {
@@ -61,7 +63,7 @@ const MeasureStaticCompareSecond = React.memo(
     return <DummyStaticContainer />;
   }
   if (isError) {
-    return <div>에러가 발생했습니다.</div>;
+    return <div>{t("compare_error")}</div>;
   }
   if (!hasData0 && !hasData1) {
     return <DummyStaticContainer />;

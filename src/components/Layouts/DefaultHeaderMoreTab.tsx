@@ -1,10 +1,10 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
+import { ChevronRight, Globe, Menu, X } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useState } from "react";
 import NoticeContainer from "../announcement/Container";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 
 export default function DefaultHeaderMoreTab({
@@ -13,7 +13,7 @@ export default function DefaultHeaderMoreTab({
   tabs: { key: string; title: string }[];
 }) {
   const t = useTranslations("Index");
-  // const locale = useLocale();
+  const locale = useLocale();
 
   const [isOpen, setIsOpen] = useState(false);
   const [isNoticeOpen, setIsNoticeOpen] = useState(false);
@@ -40,14 +40,14 @@ export default function DefaultHeaderMoreTab({
     }
   };
 
-  // const handleLanguageChange = (newLocale: string) => {
-  //   setIsLangOpen(false);
-  //   if (newLocale === locale) return;
-  //   document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
-  //   window.location.reload();
-  //   setIsLangOpen(false);
-  //   setIsOpen(false);
-  // };
+  const handleLanguageChange = (newLocale: string) => {
+    setIsLangOpen(false);
+    if (newLocale === locale) return;
+    document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
+    window.location.reload();
+    setIsLangOpen(false);
+    setIsOpen(false);
+  };
 
   return (
     <div className="relative">
@@ -57,7 +57,7 @@ export default function DefaultHeaderMoreTab({
           setIsLangOpen(false);
         }}
         className="p-1.5 border border-input bg-white dark:bg-black shadow-sm hover:bg-sub100/90 dark:hover:bg-black/90 rounded-xl transition-colors"
-        aria-label="메뉴 토글"
+        aria-label={t("menu_toggle")}
       >
         {isOpen ? <X className="w-5.5 h-5.5 text-gray-600" /> : <Menu className="w-5.5 h-5.5 text-gray-600" />}
       </button>
@@ -93,7 +93,7 @@ export default function DefaultHeaderMoreTab({
             ))}
 
             {/* 언어 변경 탭 */}
-            {/* <button
+            <button
               onClick={() => handleTabClick("language")}
               className={`w-full text-left px-4 py-2 text-sm hover:bg-sub100/50 rounded-xl transition-colors flex items-center justify-between ${
                 isLangOpen ? "bg-sub100/70 dark:bg-sub700 font-semibold" : ""
@@ -106,11 +106,11 @@ export default function DefaultHeaderMoreTab({
                 </span>
               </div>
               <ChevronRight className={`w-4 h-4 text-gray-400 transition-transform ${isLangOpen ? "rotate-90" : ""}`} />
-            </button> */}
+            </button>
           </div>
 
           {/* 💡 윈도우 스타일 좌측 하단 계단식(Cascading) 서브메뉴 */}
-          {/* {isLangOpen && (
+          {isLangOpen && (
             <div className="absolute right-10 top-24 w-40 bg-white dark:bg-sub800 border border-gray-200 dark:border-sub600 rounded-2xl shadow-2xl p-2 z-50 flex flex-col gap-1 animate-in fade-in slide-in-from-top-2 duration-150">
               <button
                 onClick={() => handleLanguageChange("ko")}
@@ -135,7 +135,7 @@ export default function DefaultHeaderMoreTab({
                 {locale === "en" && <span className="w-1.5 h-1.5 rounded-full bg-primary" />}
               </button>
             </div>
-          )} */}
+          )}
         </>
       )}
 

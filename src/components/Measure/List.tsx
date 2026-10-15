@@ -18,16 +18,17 @@ import { actionMeasureEncrypt } from "@/app/actions/getCrypto";
 import { useLocale, useTranslations } from "next-intl";
 
 export const MeasureDummyList = ({ limit }: { limit: number }) => {
+  const t = useTranslations("Index");
   return (
     <div className="w-full table table-fixed min-w-0">
       <div className="w-full overflow-x-auto overflow-y-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="text-center w-[100px] whitespace-nowrap">이름</TableHead>
-            <TableHead className="text-center whitespace-nowrap">전화번호</TableHead>
-            <TableHead className="text-center whitespace-nowrap">측정일</TableHead>
-            <TableHead className="text-center whitespace-nowrap">측정기기</TableHead>
+            <TableHead className="text-center w-[100px] whitespace-nowrap">{t("th_name")}</TableHead>
+            <TableHead className="text-center whitespace-nowrap">{t("th_phone")}</TableHead>
+            <TableHead className="text-center whitespace-nowrap">{t("th_measure_date")}</TableHead>
+            <TableHead className="text-center whitespace-nowrap">{t("th_device")}</TableHead>
             <TableHead className="text-center whitespace-nowrap"></TableHead>
             <TableHead className="text-right whitespace-nowrap"></TableHead>
           </TableRow>
@@ -116,8 +117,8 @@ export const MeasureList = ({
     const hasBia = measureItem.has_bia === 1;
     const hasGait = measureItem.has_gait === 1;
     const hasMoire = measureItem.has_moire === 1;
-    if (hasBasic) labels.push(t("m_basic").replaceAll("Test", ""));
-    if (hasRom) labels.push(t("m_rom_test").replace("검사", "").replaceAll("Test", ""));
+    if (hasBasic) labels.push(t("m_basic").replaceAll("Test", "").trim());
+    if (hasRom) labels.push(t("m_rom"));
     if (hasBia) labels.push(t("m_bia_test"));
     if (hasGait) labels.push(t("m_gait_test"));
     if (hasMoire) labels.push(t("m_moire_test"));

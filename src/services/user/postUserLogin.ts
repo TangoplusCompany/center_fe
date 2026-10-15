@@ -45,7 +45,6 @@ export const postUserLogin = async ({
   
   try {
     // 사용자 로그인 API 호출
-    // TODO: 백엔드에서 CORS 설정 완료되면 직접 호출 가능
     const { data } = await axios.post<IResultPageLoginResponse>(
       process.env.NEXT_PUBLIC_API_URL_V1 + "/login",
       {
@@ -78,6 +77,6 @@ export const postUserLogin = async ({
       throw error;
     }
     // GS 인증: 암호화 실패와 예기치 않은 로그인 처리 오류는 동일한 안내 문구로 표시한다.
-    throw new Error("로그인을 처리할 수 없습니다. 잠시 후 다시 시도해주세요.");
+    throw new Error(t ? t("alert_login_process_error") : "Failed to process login. Please try again later.");
   }
 };

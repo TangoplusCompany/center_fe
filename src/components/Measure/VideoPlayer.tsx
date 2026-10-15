@@ -4,6 +4,7 @@ import { PoseLandmarks, setupHiDPICanvas } from "./DetailDynamic";
 import { drawSkeleton, drawTrailSegment, midPoint } from "./Compare/utils/compareUtils";
 import { IMeasureJson } from "@/types/measure";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface VideoPlayerProps {
   videoSrc: string | undefined;
@@ -38,6 +39,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   romType,
   cropScale = 2.35,
 }) => {
+  const t = useTranslations("Index");
   const {
     stageRef,
     videoRef,
@@ -377,13 +379,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
         {isLoading && (
           <div className="absolute inset-0 z-[50] flex items-center justify-center bg-black/20">
-            <p className="text-white">로딩중...</p>
+            <p className="text-white">{t("loading_1")}</p>
           </div>
         )}
 
         {isError && (
           <div className="absolute inset-0 z-[50] flex items-center justify-center bg-black/20">
-            <p className="text-white">오류가 발생했습니다</p>
+            <p className="text-white">{t("data_error_msg_1")}</p>
           </div>
         )}
       </div>

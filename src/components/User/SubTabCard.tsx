@@ -52,7 +52,9 @@ const UserSubTabCard = ({encryptedParam, searchParams, currentSubTab} : UserSubT
         <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 text-sm font-semibold">
           {userName.charAt(0)}
         </div>
-        <span className="text-sub700 font-medium text-base">{userName} 님</span>
+        <span className="text-sub700 font-medium text-base">
+          {userName}{t('user_honorific') ? ` ${t('user_honorific')}` : ''}
+        </span>
       </div>
 
       <div className="flex flex-col gap-1">

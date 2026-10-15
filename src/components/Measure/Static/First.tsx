@@ -3,7 +3,7 @@ import React from "react";
 import DummyStaticContainer from "../DummyStaticContainer";
 import { useMeasureJson } from "@/hooks/api/measure/useMeasureJson";
 import { MeasurementImage } from "../MeasurementImage";
-
+import { useTranslations } from "next-intl";
 
 const MeasureStaticFirst = React.memo(
   ({
@@ -17,6 +17,7 @@ const MeasureStaticFirst = React.memo(
     cameraOrientation: 0 | 1;
     onImageReady?: (idx: 0 | 1, url: string) => void;
   }) => {
+    const t = useTranslations("Index");
     const {
       data: measureJson,
       isLoading,
@@ -26,7 +27,7 @@ const MeasureStaticFirst = React.memo(
 
     if (!measureJson) return <DummyStaticContainer />;
     if (isLoading) return <DummyStaticContainer />;
-    if (isError) return <div>에러가 발생했습니다.</div>;
+    if (isError) return <div>{t("compare_error")}</div>;
     
     return (
       <div className={`${className ?? ""} flex flex-col gap-4 lg:gap-10`}>

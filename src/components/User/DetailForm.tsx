@@ -436,20 +436,6 @@ const UserDetailForm = ({
           )}
         </div>
       </div>
-      {/* <div className="flex flex-col items-end gap-2">
-        <Button 
-          variant="outline" 
-          type="button" 
-          className="w-fit sm:w-auto" 
-          onClick={() => setIsPinDialogOpen(true)}>
-          키오스크 PIN번호 변경
-        </Button>
-
-        <PinChangeDialog 
-          open={isPinDialogOpen} 
-          onOpenChange={setIsPinDialogOpen} 
-        />
-      </div> */}
     </form>
   );
 };

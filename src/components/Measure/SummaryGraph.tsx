@@ -222,7 +222,7 @@ const MeasureSummaryGraph = ({
                 fillOpacity={0.4}
                 strokeWidth={2}
                 cursor="pointer"
-                name="상체"
+                name={t("body_upper")}
               />
             )}
             {dCase === 1 && (
@@ -234,7 +234,7 @@ const MeasureSummaryGraph = ({
                 fillOpacity={0.4}
                 strokeWidth={2}
                 cursor="pointer"
-                name="하체"
+                name={t("body_lower")}
               />
             )}
             {dCase === 2 && (
@@ -246,7 +246,7 @@ const MeasureSummaryGraph = ({
                 fillOpacity={0.4}
                 strokeWidth={2}
                 cursor="pointer"
-                name="하체"
+                name={t("body_lower")}
               />
             )}
           </AreaChart>

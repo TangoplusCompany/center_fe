@@ -3,6 +3,7 @@
 import { useEffect, useContext } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useResultPageUserStore, ResultPageUserContext } from "@/providers/ResultPageUserProvider";
+import { useTranslations } from "next-intl";
 
 const RESULT_PAGE_IDLE_TIMEOUT_MS = 60 * 60 * 1_000;
 const RESULT_PAGE_ACTIVITY_EVENTS = [
@@ -13,6 +14,7 @@ const RESULT_PAGE_ACTIVITY_EVENTS = [
 ] as const;
 
 export default function ResultPageAuthCheck() {
+  const t = useTranslations("Index");
   const router = useRouter();
   const pathname = usePathname();
   
@@ -45,7 +47,7 @@ export default function ResultPageAuthCheck() {
 
       hasLoggedOut = true;
       store.getState().setLogout();
-      alert("1시간 동안 사용하지 않아 자동 로그아웃되었습니다.");
+      alert(t("alert_auto_logout_1hour"));
       router.replace("/result-page/login");
     };
 
@@ -68,7 +70,7 @@ export default function ResultPageAuthCheck() {
       });
       document.removeEventListener("visibilitychange", checkIdleTimeout);
     };
-  }, [router, pathname, isLogin, user, store]);
+  }, [router, pathname, isLogin, user, store, t]);
 
   useEffect(() => {
     // 로그인 페이지 자체에서는 체크 안 함 (무한 리다이렉트 방지)

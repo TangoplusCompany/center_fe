@@ -4,6 +4,7 @@ import AIExerciseContainer from "./ExerciseContainer";
 import { useGetAIAnalysis } from "@/hooks/api/ai/useGetAIAnalysis";
 import AISummaryContainer from "./SummaryContainer";
 import AILoadingScreen from "./AILoadingScreen";
+import { useTranslations } from "next-intl";
 
 export interface ExerciseUserProps {
   user_uuid: string;
@@ -15,6 +16,7 @@ export interface ExerciseUserProps {
 const AIUserContainer = ({
   user_sn
 }: ExerciseUserProps) => {
+  const t = useTranslations("Index");
   const {
     data: aiResult,
     isLoading: aiResultLoading,
@@ -28,7 +30,7 @@ const AIUserContainer = ({
   }
 
   if (aiResultError) {
-    return <div>오류가 발생했습니다</div>;
+    return <div>{t("data_error_msg_1")}</div>;
   }
 
   return (

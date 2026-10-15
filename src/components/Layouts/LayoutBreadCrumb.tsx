@@ -10,6 +10,7 @@
 import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/providers/AuthProvider";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 /* 기존 BreadCrumb용 Menus - 주석 해제 시 사용
 interface IMenu {
@@ -61,6 +62,7 @@ const breadcrumbLinkClass =
   "text-base xl:text-xl transition-all duration-200 rounded-xl px-1.5 py-0.5 -mx-1.5 -my-0.5 hover:opacity-80 hover:bg-muted/60";
 
 export function LayoutBreadCrumb() {
+  const t = useTranslations("Index");
   const pathName = usePathname();
   const centerSn = useAuthStore((state) => state.centerSn);
   const centerName = useAuthStore((state) => state.centerName);
@@ -74,7 +76,7 @@ export function LayoutBreadCrumb() {
         href="/center"
         className={`${breadcrumbLinkClass} text-base xl:text-sn text-slate-950 dark:text-foreground`}
       >
-        센터 목록
+        {t("h_center")}
       </Link>
 
       {/* 센터 이름 - xs에서는 숨김, 있을 때만 표시 */}

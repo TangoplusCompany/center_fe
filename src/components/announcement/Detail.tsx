@@ -95,7 +95,7 @@ export default function AnnouncementDetail({
           {announcement.attachments && announcement.attachments.length > 0 && (
             <div className="flex flex-col bg-sub100/50 border rounded-lg p-4 gap-2 shrink-0">
               <span className="text-sm font-semibold text-gray-700">
-                첨부파일 ({announcement.attachments.length})
+                {t("announcement_attachments")} ({announcement.attachments.length})
               </span>
               <div className="flex flex-col gap-1.5 max-h-36 overflow-y-auto">
                 {announcement.attachments.map((file) => (

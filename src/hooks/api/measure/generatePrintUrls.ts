@@ -28,13 +28,13 @@ export async function generatePrintUrls(images: PrintImageData[]) {
         .from('temp_print_images')
         .upload(filePath, blob);
 
-      if (uploadErr) throw new Error(`${item.paramKey} 업로드 실패: ${uploadErr.message}`);
+      if (uploadErr) throw new Error(`${item.paramKey} upload failed: ${uploadErr.message}`);
 
       const { data: urlData, error: signErr } = await supabase.storage
         .from('temp_print_images')
         .createSignedUrl(filePath, 300);
 
-      if (signErr || !urlData) throw new Error(`${item.paramKey} URL 생성 실패`);
+      if (signErr || !urlData) throw new Error(`${item.paramKey} failed to generate URL`);
 
       return `${item.paramKey}=${encodeURIComponent(urlData.signedUrl)}`;
     });

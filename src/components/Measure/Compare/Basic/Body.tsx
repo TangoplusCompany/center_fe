@@ -272,7 +272,7 @@ const CompareBody = ({
         const finalUrl = `${bProjectBaseUrl}?t_r0=${encryptData0}&t_r1=${encryptData1}&${urlParams.join("&")}&seq=${seq}`;
         window.open(finalUrl, '_blank');
       } else {
-        alert("이미지 주소 생성에 실패했습니다.");
+        alert(t("alert_image_url_fail"));
       }
 
     } catch (error) {

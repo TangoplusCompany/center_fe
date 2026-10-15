@@ -1,8 +1,17 @@
-import { IAnnouncementsItem, ANNOUNCEMENT_TYPE_LIST } from "@/types/announcement";
+import { IAnnouncementsItem } from "@/types/announcement";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { FileText } from "lucide-react";
 import { formatDate } from "@/utils/formatDate";
 import { useLocale, useTranslations } from "next-intl";
+
+const CATEGORY_MAP: Record<string, string> = {
+  NOTICE: "announcement_category_notice",
+  HOTFIX: "announcement_category_hotfix",
+  UPDATE: "announcement_category_update",
+  MAINTENANCE: "announcement_category_maintenance",
+  PROMOTION: "announcement_category_promotion",
+  ETC: "announcement_category_etc",
+};
 
 export interface DashboardannouncementContainerProps {
   announcementsItem: IAnnouncementsItem[];
@@ -50,9 +59,7 @@ export default function DashboardannouncementContainer({
             >
               <TableCell className="text-center font-medium whitespace-nowrap">
                 <span className="px-2 py-1 bg-blue-50 text-mainBlue-600 rounded text-xs font-bold">
-                  { // 이모지만 제거
-                  (ANNOUNCEMENT_TYPE_LIST?.find((meta) => meta.key === announcement.category)?.label || announcement.category)
-                    ?.replace(/^[\p{Emoji}\p{Emoji_Component}\s]+/gu, '')}
+                  {CATEGORY_MAP[announcement.category] ? t(CATEGORY_MAP[announcement.category]) : announcement.category}
                 </span>
               </TableCell>
 

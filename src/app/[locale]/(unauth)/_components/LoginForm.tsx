@@ -15,11 +15,8 @@ import { postLoginFor2FA, AdminLoginError } from "@/services/auth/postLogin";
 import { Login2FAMethodDialog } from "@/components/auth/Login2FAMethodDialog";
 import type { Login2FAMethod } from "@/components/auth/Login2FAMethodDialog";
 import { LoginOtpDialog } from "@/components/auth/LoginOtpDialog";
-import { useTranslations } from "next-intl";
-
-
-
-
+import { useLocale, useTranslations } from "next-intl";
+import { Check, Globe } from "lucide-react";
 
 const ErrorText = ({ children }: { children: ReactNode }) => {
   return <p className="text-sm text-red-500">{children}</p>;
@@ -32,8 +29,8 @@ export default function LoginForm({
   const router = useRouter();
   const t = useTranslations("Index");
 
-  // const currentLocale = useLocale();
-  // const [isLangOpen, setIsLangOpen] = useState(false);
+  const currentLocale = useLocale();
+  const [isLangOpen, setIsLangOpen] = useState(false);
 
   const [is2FADialogOpen, setIs2FADialogOpen] = useState(false);
   const [tempJwt, setTempJwt] = useState<string | null>(null);
@@ -83,12 +80,12 @@ export default function LoginForm({
     resolver: zodResolver(loginSchema),
   });
 
-  // const handleLanguageChange = (newLocale: string) => {
-  //   setIsLangOpen(false);
-  //   if (newLocale === currentLocale) return;
-  //   document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
-  //   window.location.reload();
-  // };
+  const handleLanguageChange = (newLocale: string) => {
+    setIsLangOpen(false);
+    if (newLocale === currentLocale) return;
+    document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
+    window.location.reload();
+  };
 
   const loginHandleSubmit = handleSubmit(async (data) => {
     setIsLoginPending(true);
@@ -133,16 +130,16 @@ export default function LoginForm({
       >
         {/* 🌐 우측 상단 다국어 선택 드롭다운 */}
         <div className="flex justify-end relative">
-          {/* <button
+          <button
             type="button"
             onClick={() => setIsLangOpen((prev) => !prev)}
             className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg border border-border hover:bg-sub100 dark:hover:bg-sub800 transition-colors"
           >
             <Globe className="w-4 h-4 text-sub500" />
             <span>{currentLocale === "ko" ? "한국어" : "English"}</span>
-          </button> */}
+          </button>
 
-          {/* {isLangOpen && (
+          {isLangOpen && (
             <>
               <div
                 className="fixed inset-0 z-40"
@@ -175,7 +172,7 @@ export default function LoginForm({
                 </button>
               </div>
             </>
-          )} */}
+          )}
         </div>
         <div className="flex flex-col items-center gap-2 text-center">
           <h1 className="text-2xl font-bold">{t("login_title")}</h1>

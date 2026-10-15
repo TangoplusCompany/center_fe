@@ -8,6 +8,7 @@ import { useVideoPlayer } from "../Compare/hooks/useVideoPlayer";
 import { setupHiDPICanvas } from "../DetailDynamic";
 import { cn } from "@/lib/utils";
 import { I2DPoseLandmark } from "@/types/pose";
+import { useTranslations } from "next-intl";
 
 interface VideoPlayerProps {
   videoSrc?: string;
@@ -42,6 +43,7 @@ export default function VideoPlayer({
   romType,
   cropScale = 2.35,
 }: VideoPlayerProps) {
+  const t = useTranslations("Index");
   const {
     stageRef,
     videoRef,
@@ -201,13 +203,13 @@ export default function VideoPlayer({
 
         {isLoading && (
           <div className="absolute inset-0 z-[50] flex items-center justify-center bg-black/20">
-            <p className="text-white">로딩중...</p>
+            <p className="text-white">{t("loading_1")}</p>
           </div>
         )}
 
         {isError && (
           <div className="absolute inset-0 z-[50] flex items-center justify-center bg-black/20">
-            <p className="text-white">오류가 발생했습니다</p>
+            <p className="text-white">{t("data_error_msg_1")}</p>
           </div>
         )}
       </div>

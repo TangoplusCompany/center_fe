@@ -15,10 +15,11 @@ import { useGetUserMeasureList } from "@/hooks/api/user/useGetUserMeasureList";
 import { IUserMeasureList } from "@/types/user";
 import { MeasureType } from "@/types/measure";
 import { ComparePagination } from "../Measure/Rom/PickerDialog";
+import { useTranslations } from "next-intl";
+import { useGetMeasureListByType } from "@/hooks/api/measure/useGetMeasureListByType";
 
 
 export type viewType = "latest" | "dashboard" | "history" | "userInfo";
-export type measureType = "basic" | "rom" | "bia" | "gait" | "moire";
 const UserDetail = ({ 
   userUUID,
   userSn,
@@ -37,11 +38,12 @@ const UserDetail = ({
   comparePair: ComparePair;
   setComparePair: React.Dispatch<React.SetStateAction<ComparePair>>;
   compareType: MeasureType | undefined;
-  setCompareType: (ct: measureType) => void;
+  setCompareType: (ct: MeasureType) => void;
   isMyPage?: boolean;
 }) => {
+  const t = useTranslations("Index");
   const [measureSn, setMeasureSn] = useState<number>();
-  const [measureType, setMeasureType] = useState<measureType>(); // 측정 클릭했을 때 처음 나올 measureType 및 tab으로 관리될 type
+  const [measureType, setMeasureType] = useState<MeasureType>(); // 측정 클릭했을 때 처음 나올 measureType 및 tab으로 관리될 type
   const [isListClick, setIsListClick] = useState(false); 
 
   const [isDatePickerOpen, setIsDatePickerOpen] = React.useState(false);
@@ -76,45 +78,39 @@ const UserDetail = ({
     sort,
     isMyPage,
   });
-  const filteredItems = useMemo(() => {
-    const list = userMeasureList?.measurement_list;
-    if (!list) return [];
-    if (!compareType) return list;
-
-    const flagKey = `has_${compareType}` as const; 
-    return list.filter((item) => item[flagKey] === 1);
-  }, [userMeasureList?.measurement_list, compareType]);
 
   // 1. 다이얼로그용 페이지 상태 (부모에 선언)
   const [dialogPage, setDialogPage] = useState(1);
   const DIALOG_LIMIT = 5; // 페이지당 노출 개수
+
+  const {
+    data: userMeasureListForCompare,
+  } = useGetMeasureListByType<IUserMeasureList>({
+    type: compareType ?? "basic",
+    page: dialogPage,
+    limit: DIALOG_LIMIT,
+    user_sn: userSn,
+    isMyPage,
+    enabled: isCompareDialogOpen, // 열렸을 때만 실행
+  });
 
   // 2. compareType 변경 시 1페이지로 리셋
   useEffect(() => {
     setDialogPage(1);
   }, [compareType]);
 
-  // 3. 필터링된 전체 목록 기반 pagination 객체 구성
-  const dialogPagination: ComparePagination = useMemo(() => {
-    const total = filteredItems.length;
-    const last_page = Math.max(1, Math.ceil(total / DIALOG_LIMIT));
+  const total = userMeasureListForCompare?.total ?? 0;
+  const dialogPagination: ComparePagination = useMemo(() => ({
+    page: dialogPage,
+    total,
+    limit: DIALOG_LIMIT,
+    last_page: Math.max(1, Math.ceil(total / DIALOG_LIMIT)),
+    setPage: setDialogPage,
+  }), [total, dialogPage]);
 
-    return {
-      page: dialogPage,
-      total,
-      limit: DIALOG_LIMIT,
-      last_page,
-      setPage: setDialogPage,
-    };
-  }, [filteredItems.length, dialogPage]);
-
-  // 4. 현재 페이지에 해당하는 데이터만 슬라이싱 (다이얼로그 내부가 아닌 외부에서 처리 시)
-  // *다이얼로그 내부에서 pagination 정보를 보고 자체 slice를 수행한다면 filteredItems 전체를 넘겨도 됩니다.
-  const pagedItems = useMemo(() => {
-    const start = (dialogPage - 1) * DIALOG_LIMIT;
-    return filteredItems.slice(start, start + DIALOG_LIMIT);
-  }, [filteredItems, dialogPage]);
-
+  // 4. 기존 filteredItems, pagedItems 삭제 후 바로 사용
+  const compareList = userMeasureListForCompare?.measurement_list ?? [];
+  
 
   useEffect(() => {
     if (currentTab !== "latest" && (!comparePair[0] || !comparePair[1])) {
@@ -193,7 +189,7 @@ const UserDetail = ({
             >
               <path d="M19 12H5M12 19l-7-7 7-7"/>
             </svg>
-            <span>뒤로가기</span>
+            <span>{t('btn_previous')}</span>
           </button>
           
           <AIUserContainer 
@@ -261,7 +257,7 @@ const UserDetail = ({
 
       <MeasurePickerDialog
         open={isCompareDialogOpen}
-        items={pagedItems} 
+        items={compareList} 
         comparePair={comparePair}
         activeSlot={ activeSlot }
         onOpenChange={setIsCompareDialogOpen}
@@ -269,6 +265,7 @@ const UserDetail = ({
           selectCompareSn(sn, slot);
           setIsCompareDialogOpen(false);
         }}
+        compareType={compareType}
         pagination={dialogPagination as DialogPaginationType}
       />
 

@@ -17,7 +17,7 @@ export default function CompareRomRawDataUnit ({
     2: t('grade_normal'),
     3: t('grade_very_good')
   };
-  const romState = data && (romStateMap[data.score] ?? "정상");
+  const romState = data && (romStateMap[data.score] ?? t('grade_normal'));
   const romValue = data && getRomDisplayMaxAngle(data.value_1_min)?.toFixed(1);
   return (
     <div className="flex flex-col w-full h-full gap-4">

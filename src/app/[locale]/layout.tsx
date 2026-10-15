@@ -4,18 +4,19 @@ import { headers } from "next/headers";
 import { ThemeProvider } from "@/components/theme-provider";
 import QueryProvider from "@/providers/QueryProvider";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata(): Promise<Metadata> {
   const host = (await headers()).get("host") ?? "";
   const isMy = host.startsWith("my.tangobody.co.kr");
+  const t = await getTranslations("Index");
 
   return {
-    title: isMy ? "탱고바디 측정 결과" : "탱고바디 센터 관리자",
+    title: isMy ? t("meta_title_my") : t("meta_title_admin"),
     description: isMy
-      ? "탱고바디 측정 결과 확인 페이지입니다."
-      : "탱고바디 센터 관리자 페이지 입니다.",
+      ? t("meta_desc_my")
+      : t("meta_desc_admin"),
     icons: {
       icon: isMy ? "/favicon_my.ico" : "/favicon_admin.ico",
     },

@@ -142,7 +142,7 @@ export default function BodyBenchMark({
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img 
             src={bodyTypeImg}
-            alt='건강지표이미지'
+            alt={t('alt_health_indicator_image')}
             className='rounded-2xl print:rounded-xl bg-sub100 w-20 h-20 my-auto border-2 border-sub200/60'
           >
           </img>

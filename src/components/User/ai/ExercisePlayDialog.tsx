@@ -4,6 +4,7 @@ import {
   DialogContent,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { useTranslations } from 'next-intl';
 
 interface ExercisePlayDialogProps {
   open: boolean;
@@ -17,10 +18,11 @@ const ExercisePlayDialog = ({
   onOpenChange,
   videoUrl,
 }: ExercisePlayDialogProps) => {
+  const t = useTranslations("Index");
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-5xl w-full p-0 overflow-hidden [&>button]:hidden" aria-describedby={undefined}>
-        <DialogTitle className="sr-only">AI 운동 영상 재생</DialogTitle>
+        <DialogTitle className="sr-only">{t("ai_exercise_video_play")}</DialogTitle>
         <div className="w-full aspect-video bg-transparent">
           <video
             className="w-full h-full"
@@ -32,7 +34,7 @@ const ExercisePlayDialog = ({
             }}
           >
             <source src={videoUrl} type="video/mp4" />
-            브라우저가 비디오 태그를 지원하지 않습니다.
+            {t("video_tag_not_supported")}
           </video>
         </div>
       </DialogContent>

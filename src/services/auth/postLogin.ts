@@ -21,7 +21,7 @@ export class AdminLoginError extends Error {
   userMessage: string;
 
   constructor(errorResponse: IAdminLoginNewErrorResponse, t?: TranslateFn) {
-    const message = errorResponse.message?.[0] ?? "로그인에 실패했습니다.";
+    const message = errorResponse.message?.[0] ?? "Failed to log in.";
     super(message);
     this.name = "AdminLoginError";
     this.status = errorResponse.status;

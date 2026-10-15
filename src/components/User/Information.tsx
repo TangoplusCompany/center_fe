@@ -5,6 +5,7 @@ import { useAuthStoreOptional } from "@/providers/AuthProvider";
 import React from "react";
 import UserDetailForm from "./DetailForm";
 import DataError from "../Util/DataError";
+import { useTranslations } from "next-intl";
 
 interface CenterUserInformationProps {
   userSn: number;
@@ -12,6 +13,7 @@ interface CenterUserInformationProps {
 }
 
 const CenterUserInformation = ({ userSn, isMyPage }: CenterUserInformationProps) => {
+  const t = useTranslations("Index");
   const {
     data: userDetailData,
     isLoading: userDetailDataLoading,
@@ -25,7 +27,7 @@ const CenterUserInformation = ({ userSn, isMyPage }: CenterUserInformationProps)
     return (
       <div className="w-full px-2 sm:px-4 md:px-0">
         <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-400">
-          사용자 정보 불러오는중...
+          {t("user_info_loading")}
         </p>
       </div>
     );

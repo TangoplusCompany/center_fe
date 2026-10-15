@@ -22,7 +22,7 @@ const CompareSummaryFootStatic = ({
 }) => {
   const t = useTranslations("Index");
   const locale = useLocale();
-  const riskString1 = getRiskString(static0?.risk_level) ?? " ";
+  const riskString1 = getRiskString(static0?.risk_level, locale) ?? " ";
   
   const score0 = getRiskScore(static0.risk_level, static0.range_level);
   const score1 = static1 ? getRiskScore(static1.risk_level, static1.range_level) : undefined;
@@ -30,7 +30,7 @@ const CompareSummaryFootStatic = ({
     score1 < score0 ? "▲" :  // 점수가 낮아짐 = 좋아짐
     score1 > score0 ? "▼" :  // 점수가 높아짐 = 나빠짐
     " ";
-  const trendString = riskString1 === " " ? " " : `${riskString1} ${static0?.range_level}단계`
+  const trendString = riskString1 === " " ? " " : `${riskString1} ${static0?.range_level}${t("unit_grade")}`
 
   const getTrendText = () => {
     if (!static0 || score1 === undefined) return "";

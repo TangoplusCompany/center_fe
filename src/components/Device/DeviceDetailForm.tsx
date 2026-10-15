@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { UseFormReturn } from "react-hook-form";
 import { IDeviceDetail } from "@/types/device";
 import { IDeviceDetailForm } from "@/schemas/deviceSchema";
+import { useTranslations } from "next-intl";
 
 interface IDeviceDetailFormProps extends UseFormReturn<IDeviceDetailForm> {
   isEdit: boolean;
@@ -21,17 +22,18 @@ const DeviceDetailForm = ({
   isEdit,
   handleEdit,
 }: IDeviceDetailFormProps) => {
+  const t = useTranslations("Index");
   return (
     <form
       onSubmit={updateDeviceDetail}
       className="flex flex-col col-span-12 gap-4 relative"
     >
       <div className="relative w-full">
-        <legend className="text-2xl col-span-12">센터 기기 상세 조회</legend>
+        <legend className="text-2xl col-span-12">{t("device_detail_title")}</legend>
         <span className="">{}</span>
       </div>
       <Label className="w-full flex flex-col gap-1" htmlFor="device_name">
-        <h3 className="text-xl">기기 이름</h3>
+        <h3 className="text-xl">{t("device_name")}</h3>
         <Input
           {...register("device_name")}
           defaultValue={data.data.device_name}
@@ -47,7 +49,7 @@ const DeviceDetailForm = ({
         )}
       </Label>
       <Label className="w-full flex flex-col gap-1" htmlFor="install_location">
-        <h3 className="text-xl">기기 설치 장소</h3>
+        <h3 className="text-xl">{t("device_label_install_location")}</h3>
         <Input
           {...register("install_location")}
           defaultValue={data.data.install_location}
@@ -67,7 +69,7 @@ const DeviceDetailForm = ({
           className="w-full flex flex-col gap-1"
           htmlFor="install_address_1"
         >
-          <h3 className="text-xl">기기 설치 주소</h3>
+          <h3 className="text-xl">{t("device_label_install_address")}</h3>
           <Input
             {...register("install_address_1")}
             defaultValue={data.data.install_address_1}
@@ -86,7 +88,7 @@ const DeviceDetailForm = ({
           className="w-full flex flex-col gap-1"
           htmlFor="install_address_2"
         >
-          <h3 className="text-xl">기기 설치 상세 주소</h3>
+          <h3 className="text-xl">{t("device_label_install_address_detail")}</h3>
           <Input
             {...register("install_address_2")}
             defaultValue={data.data.install_address_2}
@@ -104,11 +106,11 @@ const DeviceDetailForm = ({
       </div>
       <div className="flex items-center justify-center gap-3 mt-10">
         <Button type="button" onClick={handleEdit} variant="outline">
-          {!isEdit ? "수정하기" : "취소하기"}
+          {!isEdit ? t("btn_edit_submit") : t("btn_cancel")}
         </Button>
         {isEdit && (
           <Button type="submit" className="">
-            저장하기
+            {t("btn_save")}
           </Button>
         )}
       </div>

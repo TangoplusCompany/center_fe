@@ -39,7 +39,7 @@ export class Verify2FAError extends Error {
   remainingIssueCount?: number;
 
   constructor(errorResponse: IVerify2FAErrorResponse, t: (key: string) => string) {
-    const message = errorResponse.message?.[0] ?? "OTP 검증에 실패했습니다.";
+    const message = errorResponse.message?.[0] ?? "OTP verification failed.";
     super(message);
     this.name = "Verify2FAError";
     this.status = errorResponse.status;

@@ -20,7 +20,7 @@ import { CompareSlot } from "@/types/compare";
 import { IUserMeasureListItem } from "@/types/user";
 import { formatDate } from "@/utils/formatDate";
 import { usePathname, useRouter } from "next/navigation";
-import { measureType, viewType } from "./Detail";
+import { viewType } from "./Detail";
 import { useLocale, useTranslations } from "next-intl";
 import { MeasureType } from "@/types/measure";
 
@@ -49,7 +49,7 @@ export const CenterUserMeasureList = ({
 }: {
   measures: IUserMeasureListItem[];
   setMeasureSn: (measureSn: number) => void;
-  setMeasureType: (tab: measureType) => void;
+  setMeasureType: (tab: MeasureType) => void;
   setCurrentTab?: (tab: viewType) => void;
   selectCompareSn?: (sn: number, slot: CompareSlot) => void;
   setCompareType: (ct: MeasureType) => void;
@@ -114,7 +114,7 @@ export const CenterUserMeasureList = ({
 
                 setMeasureSn(sn);
 
-                let targetType: measureType = "basic";
+                let targetType: MeasureType = "basic";
                 if (measure.has_basic === 1) {
                   targetType = "basic";
                 } else if (measure.has_rom === 1) {
@@ -161,7 +161,7 @@ export const CenterUserMeasureList = ({
                   <TableCell className="text-center">
                     {isError ? (
                       <div className="w-fit px-2 text-xs sm:text-sm text-center whitespace-nowrap text-danger bg-danger/30 border border-red-400 rounded-full mx-auto">
-                        측정오류
+                        {t("measure_error")}
                       </div>
                     ) : (
                       <div className="flex items-center justify-center gap-1.5 flex-wrap">
@@ -186,7 +186,7 @@ export const CenterUserMeasureList = ({
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src="/icons/ic_compare.svg"
-                          alt="비교하기"
+                          alt={t("btn_compare_action")}
                           className="w-4 h-4 sm:w-5 sm:h-5"
                         />
                         <span className="text-xs sm:text-sm">{t("m_history_compare")}</span>
@@ -204,14 +204,14 @@ export const CenterUserMeasureList = ({
       <Dialog open={isNoticeOpen} onOpenChange={setIsNoticeOpen}>
         <DialogContent className="max-w-[320px] rounded-2xl p-6 sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-base font-semibold">화면 안내</DialogTitle>
+            <DialogTitle className="text-base font-semibold">{t("mobile_view_notice_title")}</DialogTitle>
             <DialogDescription className="text-sm text-gray-500 pt-2">
-              비교 화면은 PC 및 태블릿 환경에 최적화되어 있습니다. 계속 진행하시겠습니까?
+              {t("mobile_view_notice_desc")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex flex-row gap-2 mt-4 justify-end">
             <Button variant="outline" size="sm" onClick={() => setIsNoticeOpen(false)}>
-              취소
+              {t("btn_cancel")}
             </Button>
             <Button
               size="sm"
@@ -222,7 +222,7 @@ export const CenterUserMeasureList = ({
                 setIsNoticeOpen(false);
               }}
             >
-              확인
+              {t("btn_confirm")}
             </Button>
           </DialogFooter>
         </DialogContent>

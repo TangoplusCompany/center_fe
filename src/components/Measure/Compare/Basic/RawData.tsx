@@ -259,8 +259,8 @@ export const CompareRawData = ({
         <div className="grid grid-cols-[20%_80%] h-full w-full min-w-[1000px]">
         <div className="flex flex-col h-full border-r-2 border-sub200 dark:border-border w-full">
           <div className={isLeftRightData ? "grid grid-cols-2 bg-sub200 dark:bg-muted py-2" : "flex w-full  justify-center items-center bg-sub200 dark:bg-muted py-2"}>
-            <div className="flex justify-center items-center text-base text-sub600 dark:text-muted-foreground py-[3px]">{isLeftRightData ? "좌측" : "비교차이"}</div>
-            {isLeftRightData && <div className="flex justify-center items-center text-base text-sub600 dark:text-muted-foreground">우측</div>}
+            <div className="flex justify-center items-center text-base text-sub600 dark:text-muted-foreground py-[3px]">{isLeftRightData ? t("raw_data_left") : t("raw_data_diff")}</div>
+            {isLeftRightData && <div className="flex justify-center items-center text-base text-sub600 dark:text-muted-foreground">{t("raw_data_right")}</div>}
           </div>
                     
           <div className={isLeftRightData ? "grid grid-cols-2 items-center justify-center h-full w-full" : "grid h-full w-full"}>

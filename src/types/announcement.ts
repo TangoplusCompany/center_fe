@@ -38,10 +38,10 @@ export interface IAnnouncementMeta {
   label: string;
 }
 export const ANNOUNCEMENT_TYPE_LIST: IAnnouncementMeta[] = [
-  { idx: 0, key: 'NOTICE',   label: '📢 일반 공지' },
-  { idx: 1, key: 'HOTFIX', label: '🚨 긴급 수정' },
-  { idx: 2, key: 'UPDATE',   label: '✨ 신규 기능' },
-  { idx: 3, key: 'MAINTENANCE', label: '⚙️ 점검' },
-  { idx: 4, key: 'PROMOTION', label: '🎁 프로모션' },
-  { idx: 5, key: 'ETC', label: '기타' },
+  { idx: 0, key: 'NOTICE',   label: 'Notice' },
+  { idx: 1, key: 'HOTFIX', label: 'Hotfix' },
+  { idx: 2, key: 'UPDATE',   label: 'New Feature' },
+  { idx: 3, key: 'MAINTENANCE', label: 'Maintenance' },
+  { idx: 4, key: 'PROMOTION', label: 'Promotion' },
+  { idx: 5, key: 'ETC', label: 'Other' },
 ];

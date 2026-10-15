@@ -3,26 +3,29 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCheckDevice, type OnCenterCheckFn } from "@/hooks/api/auth/useCheckDevice";
 import React from "react";
+import { useTranslations } from "next-intl";
 
 const RegisterCenterCheckForm = ({
   onCenterCheck,
 }: {
   onCenterCheck: OnCenterCheckFn;
 }) => {
+  const t = useTranslations("Index");
   const [serialNumber, setSerialNumber] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
   const mutationCheckDevice = useCheckDevice({
     onCenterCheck,
     deviceId: serialNumber,
+    t,
   });
 
   const handleCheck = () => {
     if (errorMessage) {
-      alert("올바른 시리얼 넘버를 입력해주세요.");
+      alert(t("device_error_bad_request_serial"));
       return;
     }
     if (!serialNumber.trim()) {
-      alert("시리얼 넘버를 입력해주세요.");
+      alert(t("device_serial_placeholder"));
       return;
     }
     mutationCheckDevice.mutateAsync({
@@ -34,7 +37,7 @@ const RegisterCenterCheckForm = ({
     const inputValue = e.target.value;
 
     if (inputValue.length > 30) {
-      setErrorMessage("시리얼 넘버는 최대 30자까지 입력 가능합니다.");
+      setErrorMessage(t("device_serial_max_30"));
       return;
     }
 
@@ -42,7 +45,7 @@ const RegisterCenterCheckForm = ({
     if (invalidChars) {
       const uniqueInvalidChars = [...new Set(invalidChars)];
       setErrorMessage(
-        `허용되지 않는 문자가 포함되어 있습니다: ${uniqueInvalidChars.join(", ")}`
+        t("device_serial_invalid_chars", { chars: uniqueInvalidChars.join(", ") })
       );
       return;
     }
@@ -54,7 +57,7 @@ const RegisterCenterCheckForm = ({
   return (
     <div className="w-full flex flex-col items-start gap-2">
       <Label htmlFor="serialNumber" className="lg:text-lg">
-        시리얼 넘버 확인
+        {t("label_check_serial_number")}
       </Label>
       <div className="w-full flex items-center gap-2">
         <Input
@@ -62,13 +65,13 @@ const RegisterCenterCheckForm = ({
           type="text"
           value={serialNumber}
           onChange={changeSerialNumber}
-          placeholder="시리얼 넘버를 입력해주세요."
+          placeholder={t("device_serial_placeholder")}
           required
           maxLength={30}
           className="bg-white dark:bg-border"
         />
         <Button type="button" onClick={handleCheck}>
-          확인
+          {t("btn_confirm")}
         </Button>
       </div>
       {errorMessage && (
