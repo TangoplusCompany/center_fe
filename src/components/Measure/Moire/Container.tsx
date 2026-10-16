@@ -8,7 +8,7 @@ export interface IMoireContainerProps {
   data : IMoireDetail,
   isCompare: boolean
 }
-export type IMoireGraphTitle = "어깨 등고선" | "허리 등고선" | "골반 등고선"
+export type IMoireGraphTitle = string;
 
 // 2. 부위 식별 키
 export type MoireBodyPart = 

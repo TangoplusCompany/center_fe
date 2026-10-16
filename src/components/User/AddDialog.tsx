@@ -80,7 +80,7 @@ export const CenterUserAddDialog: React.FC<CenterUserAddDialogProps> = ({
               type="button"
               onClick={handleClose}
               className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-sub200 transition-colors shrink-0"
-              aria-label="닫기"
+              aria-label={t("btn_close")}
             >
               <X className="w-5 h-5" />
             </button>

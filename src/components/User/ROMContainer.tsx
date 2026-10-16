@@ -8,6 +8,7 @@ import { useGetROMItemHistory } from "@/hooks/api/measure/rom/useGetROMItemHisto
 import ROMBody from "../Measure/Rom/Body";
 import { useGetROMItemDetail } from "@/hooks/api/measure/rom/useGetROMItemDetail";
 import { useGetROMItems } from "@/hooks/api/measure/rom/useGetROMItems";
+import { useTranslations } from "next-intl";
 
 export interface UserROMProps {
   userSn: number,
@@ -21,6 +22,7 @@ export const CenterUserROMContainer = ({
   measureSn,
   isMyPage,
 }: UserROMProps) => {
+  const t = useTranslations("Index");
 
   const [measureType, setMeasureType] = useState(-1); // 이전 항목 선택을 관리하는 ROM 타입
 
@@ -105,7 +107,7 @@ export const CenterUserROMContainer = ({
           </div>
         ) : romError ? (
           <div className="flex items-center justify-center h-[200px] text-sm text-red-400">
-            오류가 발생했습니다. 잠시후 다시 시도해주세요.
+            {t("etc_error")}
           </div>
         ) : (
           <ROMItemContainer

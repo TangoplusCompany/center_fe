@@ -1,8 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import "@/app/globals.css";
+import { getTranslations } from "next-intl/server";
 
-export default function NotFound() {
+export default async function NotFound() {
+  const t = await getTranslations("Index");
   return (
     <html lang="ko">
       <body className="antialiased m-0 p-0 bg-[#f5f8fc] text-foreground">
@@ -14,7 +16,7 @@ export default function NotFound() {
                 src="/icons/app_logo.svg"
                 width={36}
                 height={36}
-                alt="탱고로고"
+                alt={t("alt_logo")}
                 className="size-8 md:size-9 object-contain"
               />
               <p className="text-xl font-bold tracking-tight">Tango Body</p>
@@ -43,7 +45,7 @@ export default function NotFound() {
                 <span className="transition-transform duration-200 ease-out group-hover:-translate-x-1">
                   &larr;
                 </span>
-                <span>메인으로 돌아가기</span>
+                <span>{t("btn_back_to_main")}</span>
               </Link>
             </div>
           </main>

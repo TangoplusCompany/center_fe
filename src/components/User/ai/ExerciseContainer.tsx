@@ -2,6 +2,7 @@ import { ExerciseDetail } from "@/types/aiAnalysis";
 import AIExerciseUnit from "./ExerciseUnit";
 import { useRef, useState } from "react";
 import ExerciseDataTab from "./ExerciseDataTab";
+import { useTranslations } from "next-intl";
 
 export interface AIExerciseProps {
     exerciseDetails: ExerciseDetail[];
@@ -20,6 +21,7 @@ export const EXERCISE_TYPE_IDS: { [key: number]: number } = {
 const AIExerciseContainer = ( {
   exerciseDetails
 }: AIExerciseProps) => {
+  const t = useTranslations("Index");
   const [selectedPart, setSelectedPart] = useState<0 | 1 | 2 | 3 | 4 | 5 | 6>(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const handleSelectPart = (part: 0 | 1 | 2 | 3 | 4 | 5 | 6) => {
@@ -40,7 +42,7 @@ const AIExerciseContainer = ( {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={`/icons/ic_ai_analysis.svg`}
-          alt="ai반짝임 이미지"
+          alt={t("alt_ai_sparkle")}
           className="w-8 h-8 p-1"
           onError={(e) => {
             e.currentTarget.src = "/images/measure_default.png";
@@ -65,7 +67,7 @@ const AIExerciseContainer = ( {
         className="flex items-center text-white text-lg font-semibold px-4 pt-2 pb-6"
       >
         <SparkleSvg />
-        AI 맞춤 운동 추천
+        {t("ai_exercise_recommend_title")}
       </div>
 
       {/* 운동 목록 카드 - 위로 올라온 느낌 */}

@@ -44,7 +44,7 @@ export const useOtpRequest = ({
       purpose: Purpose;
     }) => postOtpRequest(params),
     onSuccess: (_data, variables) => {
-      alert("OTP 요청이 완료되었습니다.");
+      alert(t("alert_otp_request"));
       setEmail(variables.email_or_mobile);
     },
     onError: (error: AxiosError<RequestOtpErrorResponse>) => {

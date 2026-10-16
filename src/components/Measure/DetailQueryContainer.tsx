@@ -6,9 +6,9 @@ import { useMeasureDecrypt } from "@/hooks/auth/useMeasureDecrypt";
 import { Skeleton } from "../ui/skeleton";
 import { formatDate } from "@/utils/formatDate";
 import MeasureDetailContainer from "./DetailContainer";
-import { measureType } from "../User/Detail";
 import { useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
+import { MeasureType } from "@/types/measure";
 
 export const MeasureDetailSkeleton = () => {
   return (
@@ -27,7 +27,7 @@ export const MeasureDetailSkeleton = () => {
   );
 }
 export interface MeasureDetailQueryProps {
-  firstMeasureType: measureType
+  firstMeasureType: MeasureType
 }
 const MeasureDetailQueryContainer = ({firstMeasureType}:MeasureDetailQueryProps) => {
 
@@ -50,7 +50,7 @@ const MeasureDetailQueryContainer = ({firstMeasureType}:MeasureDetailQueryProps)
     user_sn: decryptedData?.user_sn ? `${decryptedData.user_sn}` : "",
   });
   const isWrongMeasure = measureData?.isWrongMeasure ?? 0;
-  const [measureType, setMeasureType] = useState<measureType>(firstMeasureType);
+  const [measureType, setMeasureType] = useState<MeasureType>(firstMeasureType);
   useEffect(() => {
     if (!measureData?.measurement_meta) return;
     const { has_basic, has_rom, has_bia, has_gait, has_moire } = measureData.measurement_meta;
@@ -73,17 +73,17 @@ const MeasureDetailQueryContainer = ({firstMeasureType}:MeasureDetailQueryProps)
     }
   }, [measureData, measureType]);
   if (decryptLoading) return <MeasureDetailSkeleton />;
-  if (decryptError) return <div>잘못된 접근입니다.</div>;
+  if (decryptError) return <div>{t("invalid_access")}</div>;
   if (measureDataLoading) return <MeasureDetailSkeleton />;
   if (measureDataError) return <div>Error...</div>;
   if (!measureData) return <div>No data</div>;
   if (isWrongMeasure) return (
     <div className="flex flex-col items-center justify-center min-h-[400px] gap-2 text-center">
       <p className="text-base sm:text-lg font-semibold text-sub900 dark:text-sub50">
-        정상적인 측정 기록이 아닙니다.
+        {t("measure_invalid_record_title")}
       </p>
       <p className="text-sm sm:text-base text-sub500 dark:text-sub300">
-        키오스크의 안내에 따라 측정을 다시 시작해주세요. 
+        {t("measure_invalid_record_desc")}
       </p>
     </div>
   )

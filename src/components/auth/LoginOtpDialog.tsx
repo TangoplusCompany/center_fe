@@ -113,7 +113,7 @@ export const LoginOtpDialog = ({
     }
 
     setTimeLeft(INITIAL_TIME);
-    const type = phone === "휴대폰" ? "mobile" : "email";
+    const type = isPhoneType ? "mobile" : "email";
     // remaining issue count / remaining fail count 둘다 옴-> 
     setResendPending(true);
     try {

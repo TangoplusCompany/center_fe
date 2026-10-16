@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import CenterInfoFields from "@/components/Center/CenterInfoFields";
 import { centerEditSchema, ICenterEditForm } from "@/schemas/centerSchema";
+import { useTranslations } from "next-intl";
 
 export type RegisterCenterInfoDialogProps = {
   open: boolean;
@@ -23,6 +24,7 @@ export const RegisterCenterInfoDialog = ({
   open,
   onOpenChange,
 }: RegisterCenterInfoDialogProps) => {
+  const t = useTranslations("Index");
   const {
     register,
     setValue,
@@ -44,7 +46,7 @@ export const RegisterCenterInfoDialog = ({
         aria-describedby={undefined}
       >
         <DialogHeader>
-          <DialogTitle>센터 정보</DialogTitle>
+          <DialogTitle>{t("setting_center_info_title")}</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-4">
           <CenterInfoFields
@@ -55,7 +57,7 @@ export const RegisterCenterInfoDialog = ({
         </div>
         <DialogFooter>
           <Button type="button" onClick={() => onOpenChange(false)}>
-            확인
+            {t("btn_confirm")}
           </Button>
         </DialogFooter>
       </DialogContent>

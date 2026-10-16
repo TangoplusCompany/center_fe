@@ -11,12 +11,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import OptionBar from "@/components/Util/OptionBar";
+import { useTranslations } from "next-intl";
 
 interface CenterUserPageSkeletonProps {
   adminRole: number;
 }
 
 const CenterUserPageSkeleton = ({ adminRole }: CenterUserPageSkeletonProps) => {
+  const t = useTranslations("Index");
   // 작동하지 않게 하기 위한 빈 함수들
   const noop = () => {};
   const noopDialog = () => {};
@@ -38,9 +40,9 @@ const CenterUserPageSkeleton = ({ adminRole }: CenterUserPageSkeletonProps) => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="text-center w-[100px]">이름</TableHead>
-            <TableHead className="text-center">전화번호</TableHead>
-            <TableHead className="text-center">이메일</TableHead>
+            <TableHead className="text-center w-[100px]">{t("th_name")}</TableHead>
+            <TableHead className="text-center">{t("th_phone")}</TableHead>
+            <TableHead className="text-center">{t("th_email")}</TableHead>
             <TableHead className="text-right"></TableHead>
           </TableRow>
         </TableHeader>

@@ -13,18 +13,19 @@ import MeasureDeviceTab from "../Measure/DeviceTab";
 import { useTranslations } from "next-intl";
 
 export const DummyOptionBar = () => {
+  const t = useTranslations("Index");
   return (
     <div className="flex items-center justify-between ">
-      <p>검색 결과를 조회중입니다.</p>
+      <p>{t("search_query_loading")}</p>
       <div className="inline-block">
         <Select>
           <SelectTrigger>
-            <SelectValue placeholder="행 갯수" />
+            <SelectValue placeholder={t("placeholder_row_count")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="10">10건</SelectItem>
-            <SelectItem value="20">20건</SelectItem>
-            <SelectItem value="50">50건</SelectItem>
+            <SelectItem value="10">10{t("unit_cases")}</SelectItem>
+            <SelectItem value="20">20{t("unit_cases")}</SelectItem>
+            <SelectItem value="50">50{t("unit_cases")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -96,7 +97,7 @@ const OptionBar = ({
             defaultValue={defaultLimit.toString()}
           >
             <SelectTrigger className="w-[120px]">
-              <SelectValue placeholder="행 갯수" />
+              <SelectValue placeholder={t("placeholder_row_count")} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="10">10{t('unit_cases')}</SelectItem>

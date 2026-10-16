@@ -113,7 +113,7 @@ export const ROMItemCard = ({
             <ChartContainer
               config={{
                 value: {
-                  label: "각도값",
+                  label: t("chart_label_angle"),
                   color: "#2563EB",
                 },
               }}

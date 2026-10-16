@@ -1,10 +1,12 @@
 import React from "react";
+import { useTranslations } from "next-intl";
 
 const DataError = () => {
+  const t = useTranslations("Index");
   return (
     <div className="w-full py-10 border rounded flex flex-col items-center justify-center text-red-500 text-xl">
-      <p>데이터 호출에 오류가 발생했습니다.</p>
-      <p>잠시 후 다시 시도 바랍니다.</p>
+      <p>{t("data_error_msg_1")}</p>
+      <p>{t("data_error_msg_2")}</p>
     </div>
   );
 };

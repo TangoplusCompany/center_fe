@@ -5,31 +5,33 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { useForm, FieldValues, UseFormSetError } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import { useUserLogin } from "@/hooks/api/ResultUser/useUserLogin";
-import { useTranslations } from "next-intl";
-// import { Check, Globe } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import { Check, Globe } from "lucide-react";
+import Link from "next/link";
 
 const prefillParentOrigins = new Set([
   "https://www.tangohouse.co.kr",
   "https://tangohouse.co.kr",
-  "http://localhost:3000",
+  "https://localhost:4862/",
   "http://127.0.0.1:3000",
   "http://[::1]:3000",
 ]);
 
-const resultPageLoginSchema = z.object({
-  phone: z
-    .string()
-    .min(1, { message: "휴대폰 번호를 입력해주세요." })
-    .regex(/^\d{11}$/, "휴대폰 번호 11자리를 입력해주세요."),
-  pin: z
-    .string()
-    .min(1, { message: "PIN 번호를 입력해주세요." })
-    .regex(/^\d{4}$/, "PIN 번호 4자리를 입력해주세요."),
-});
+const createResultPageLoginSchema = (t: (key: string) => string) =>
+  z.object({
+    phone: z
+      .string()
+      .min(1, { message: t("result_page_phone_hint") })
+      .regex(/^\d{11}$/, t("result_page_phone_11")),
+    pin: z
+      .string()
+      .min(1, { message: t("result_page_pin_hint") })
+      .regex(/^\d{4}$/, t("result_page_pin_4")),
+  });
 
 const ErrorText = ({ children }: { children: ReactNode }) => {
   return <p className="text-sm text-red-500">{children}</p>;
@@ -40,8 +42,9 @@ export default function ResultPageLoginForm({
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
   const t = useTranslations("Index")
-  // const currentLocale = useLocale();
-  // const [isLangOpen, setIsLangOpen] = useState(false);
+  const currentLocale = useLocale();
+  const [isLangOpen, setIsLangOpen] = useState(false);
+  const loginSchema = useMemo(() => createResultPageLoginSchema(t), [t]);
   const {
     register,
     handleSubmit,
@@ -49,7 +52,11 @@ export default function ResultPageLoginForm({
     setError,
     setValue,
   } = useForm({
-    resolver: zodResolver(resultPageLoginSchema),
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      phone: "",
+      pin: "",
+    },
   });
 
   useEffect(() => {
@@ -62,7 +69,7 @@ export default function ResultPageLoginForm({
         return;
       }
       if (prefilled || event.data?.type !== "tangobody-login-prefill") return;
-      const values = resultPageLoginSchema.safeParse({
+      const values = loginSchema.safeParse({
         phone: event.data.mobile,
         pin: event.data.pin_password,
       });
@@ -75,9 +82,11 @@ export default function ResultPageLoginForm({
     // Only the non-sensitive readiness signal is broadcast; credentials use exact origins.
     window.parent.postMessage({ type: "tangobody-login-ready" }, "*");
     return () => window.removeEventListener("message", receivePrefill);
-  }, [setValue]);
+  }, [setValue, loginSchema]);
 
-  const { mutate: login, isPending } = useUserLogin(setError);
+  const { mutate: login, isPending } = useUserLogin(
+    setError as unknown as UseFormSetError<FieldValues>
+  );
   
   const loginHandleSubmit = handleSubmit((data) => {
     login({
@@ -86,12 +95,12 @@ export default function ResultPageLoginForm({
       t : t
     });
   });
-  // const handleLanguageChange = (newLocale: string) => {
-  //   setIsLangOpen(false);
-  //   if (newLocale === currentLocale) return;
-  //   document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
-  //   window.location.reload();
-  // };
+  const handleLanguageChange = (newLocale: string) => {
+    setIsLangOpen(false);
+    if (newLocale === currentLocale) return;
+    document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
+    window.location.reload();
+  };
 
   // GS 인증: 브라우저별 기본 문구 대신 제품에 정의된 네 가지 입력 오류 문구를 표시한다.
   return (
@@ -103,16 +112,16 @@ export default function ResultPageLoginForm({
     >
       {/* 🌐 우측 상단 다국어 선택 드롭다운 */}
         <div className="flex justify-end relative">
-          {/* <button
+          <button
             type="button"
             onClick={() => setIsLangOpen((prev) => !prev)}
             className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg border border-border hover:bg-sub100 dark:hover:bg-sub800 transition-colors"
           >
             <Globe className="w-4 h-4 text-sub500" />
             <span>{currentLocale === "ko" ? "한국어" : "English"}</span>
-          </button> */}
+          </button>
 
-          {/* {isLangOpen && (
+          {isLangOpen && (
             <>
               <div
                 className="fixed inset-0 z-40"
@@ -145,7 +154,7 @@ export default function ResultPageLoginForm({
                 </button>
               </div>
             </>
-          )} */}
+          )}
         </div>
 
       <div className="flex flex-col items-center gap-2 text-center">
@@ -195,6 +204,12 @@ export default function ResultPageLoginForm({
         >
           {isPending ? t('confirm_pending') : t('login')}
         </Button>
+        <div className="text-center text-sm">
+          {t("result_page_signup_prompt")}{" "}
+          <Link href="/result-page/register" className="underline underline-offset-4">
+            {t("result_page_signup_btn")}
+          </Link>
+        </div>
       </div>
     </form>
   );

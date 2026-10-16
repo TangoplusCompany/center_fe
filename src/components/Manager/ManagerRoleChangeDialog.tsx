@@ -69,19 +69,15 @@ const ManagerRoleChangeDialog = ({
   };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {/* <button className="flex items-center gap-0.5 text-sm">
-          <UserRoundPen className="w-4 h-4 text-mainBlue-600 dark:text-white" />
-          <span className="text-mainBlue-600 dark:text-white">매니저 등급 수정</span>
-        </button> */}
-      </DialogTrigger>
+      <DialogTrigger asChild />
       <DialogContent className="gap-4">
         <DialogHeader>
           <DialogTitle>{t('manager_role_change')}</DialogTitle>
           <DialogDescription>
-            {`현재 ${manager.admin_name}님의 등급은 ${
-              t(ADMIN_ROLE[manager.admin_role as keyof typeof ADMIN_ROLE])
-            }입니다.`}
+            {t("manager_role_current_desc", {
+              name: manager.admin_name,
+              role: t(ADMIN_ROLE[manager.admin_role as keyof typeof ADMIN_ROLE]),
+            })}
           </DialogDescription>
         </DialogHeader>
         <ManagerRoleRadioGroup nowRole={role} updateRole={handleRoleChange} />

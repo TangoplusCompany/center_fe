@@ -1,42 +1,42 @@
 import * as z from "zod";
-import {
-  isValidKoreanPhone,
-  KOREAN_PHONE_ERROR_MESSAGE,
-} from "@/utils/validateKoreanPhone";
+import { isValidKoreanPhone } from "@/utils/validateKoreanPhone";
 
 /**
  * 센터 정보 수정 스키마
  */
-export const centerEditSchema = z.object({
-  centerName: z
-    .string()
-    .min(1, { message: "센터 이름을 입력해주세요." })
-    .max(30, { message: "센터 이름은 최대 30자까지 입력 가능합니다." })
-    .regex(/^[가-힣a-zA-Z0-9\s-_]+$/, {
-      message: "한글, 영어, 숫자, 띄어쓰기, 하이픈(-), 언더스코어(_)만 입력해주세요.",
-    }),
-  centerAddress: z
-    .string()
-    .min(1, { message: "센터 주소를 입력해주세요." })
-    .max(60, { message: "센터 주소는 최대 60자까지 입력 가능합니다." })
-    .regex(/^[가-힣a-zA-Z0-9\s-]+$/, {
-      message: "한글, 영어, 숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
-    }),
-  centerAddressDetail: z
-    .string()
-    .max(30, { message: "센터 상세 주소는 최대 30자까지 입력 가능합니다." })
-    .regex(/^[가-힣a-zA-Z0-9\s-]*$/, {
-      message: "한글, 영어, 숫자, 띄어쓰기, 하이픈(-)만 입력해주세요.",
-    })
-    .optional(),
-  centerPhone: z
-    .string()
-    .regex(/^\d*$/, { message: "숫자만 입력해주세요. 띄어쓰기·하이픈은 입력할 수 없습니다." })
-    .refine(
-      (val) => !val || val.length === 0 || isValidKoreanPhone(val),
-      { message: "센터 전화 번호는 " + KOREAN_PHONE_ERROR_MESSAGE.replace("전화번호는 ", "") },
-    )
-    .optional(),
-});
+export const createCenterEditSchema = (t?: (key: string) => string) =>
+  z.object({
+    centerName: z
+      .string()
+      .min(1, { message: t ? t("label_center_name") : "Please enter center name." })
+      .max(30, { message: "Center name must be 30 characters or less." })
+      .regex(/^[가-힣a-zA-Z0-9\s-_]+$/, {
+        message: "Only letters, numbers, spaces, hyphens(-), and underscores(_) are allowed.",
+      }),
+    centerAddress: z
+      .string()
+      .min(1, { message: "Please enter center address." })
+      .max(60, { message: "Center address must be 60 characters or less." })
+      .regex(/^[가-힣a-zA-Z0-9\s-]+$/, {
+        message: "Only letters, numbers, spaces, and hyphens are allowed.",
+      }),
+    centerAddressDetail: z
+      .string()
+      .max(30, { message: "Center detailed address must be 30 characters or less." })
+      .regex(/^[가-힣a-zA-Z0-9\s-]*$/, {
+        message: "Only letters, numbers, spaces, and hyphens are allowed.",
+      })
+      .optional(),
+    centerPhone: z
+      .string()
+      .regex(/^\d*$/, { message: "Only numbers are allowed." })
+      .refine(
+        (val) => !val || val.length === 0 || isValidKoreanPhone(val),
+        { message: t ? t("telephone_zod") : "Phone number must be valid." },
+      )
+      .optional(),
+  });
+
+export const centerEditSchema = createCenterEditSchema();
 
 export type ICenterEditForm = z.infer<typeof centerEditSchema>;

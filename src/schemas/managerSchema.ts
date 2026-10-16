@@ -5,10 +5,10 @@ import { z } from "zod";
  */
 export const managerPasswordSchema = (t: (key: string) => string) => z
   .object({
-    currentPassword: z.string().min(1, "현재 비밀번호를 입력해주세요."),
+    currentPassword: z.string().min(1, t('current_pw_hint')),
     newPassword: z
       .string()
-      .min(1, "새 비밀번호를 입력해주세요.")
+      .min(1, t('reset_pw_hint'))
       .min(8, t('pw_min'))
       .max(16, t('pw_max'))
       .regex(

@@ -52,7 +52,7 @@ const MeasureDynamicCompare = ({
   const isRotated1 = rightSummaryData?.camera_orientation === 1;
   const measureData0 = extractMeasureData(left);
   if (!measureData0) {
-    return <div>데이터가 없습니다.</div>; 
+    return <div>{t("measure_no_data")}</div>; 
   }
   const measureData1 = extractMeasureData(right);
   const footData0: CompareFootTrajectoryGridProps = {

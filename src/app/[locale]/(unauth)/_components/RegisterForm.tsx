@@ -248,7 +248,7 @@ export const RegisterContainer = () => {
     } catch (e) {
       const msg =
         e instanceof AxiosError
-          ? getRequestEmailVerificationOtpErrorMessage(e.response?.status)
+          ? getRequestEmailVerificationOtpErrorMessage(e.response?.status, t)
           : e && typeof e === "object" && "message" in e
             ? String((e as { message: unknown }).message)
             : t('alert_otp_error_etc');
@@ -303,7 +303,7 @@ export const RegisterContainer = () => {
     } catch (e) {
       const msg =
         e instanceof AxiosError
-          ? getRequestEmailVerificationOtpErrorMessage(e.response?.status)
+          ? getRequestEmailVerificationOtpErrorMessage(e.response?.status, t)
           : e && typeof e === "object" && "message" in e
             ? String((e as { message: unknown }).message)
             : t('alert_otp_request_again_fail');
@@ -362,7 +362,7 @@ export const RegisterContainer = () => {
     } catch (e) {
       const msg =
         e instanceof AxiosError
-          ? getRegisterAdminErrorMessage(e.response?.status)
+          ? getRegisterAdminErrorMessage(e.response?.status, t)
           : e && typeof e === "object" && "message" in e
             ? String((e as { message: unknown }).message)
             : t('signup_failed');
@@ -378,7 +378,7 @@ export const RegisterContainer = () => {
       onSubmit={registerHandleSubmit}
     >
       <div className="flex flex-col items-center gap-5 text-center">
-        <legend className="sr-only">센터관리자 회원가입</legend>
+        <legend className="sr-only">{t('signup_admin_title')} {t('btn_signup')}</legend>
         <h1 className="text-2xl font-bold mb-3 lg:mb-5">
           <span className="block sm:inline">{t('signup_admin_title')}</span>{" "}
           <span className="block sm:inline">{t('btn_signup')}</span>
@@ -393,7 +393,7 @@ export const RegisterContainer = () => {
           <div className="flex flex-col gap-6 w-full">
             <div className="flex flex-col items-start gap-2">
               <Label htmlFor="email" className="lg:text-lg">
-                이메일
+                {t('label_email')}
               </Label>
               <div className="flex gap-2 w-full items-stretch">
                 <Input

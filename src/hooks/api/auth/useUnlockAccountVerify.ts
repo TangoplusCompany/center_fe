@@ -26,7 +26,7 @@ function getUnlockAccountErrorMessage(
       const d = data?.data;
       const extra =
         d && typeof d === "object" && "remaining_fail_count" in d
-          ? ` (${t('alert_login_error_count')}: ${(d as { remaining_fail_count: number }).remaining_fail_count}회)`
+          ? ` (${t('alert_login_error_count')}: ${(d as { remaining_fail_count: number }).remaining_fail_count}${t('unit_times')})`
           : "";
       return t('alert_otp_error_401') + extra;
     }

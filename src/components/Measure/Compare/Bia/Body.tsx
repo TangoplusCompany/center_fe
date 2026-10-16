@@ -3,6 +3,8 @@ import CompareDateCard from "../Basic/DateCard";
 import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
 import CompareBodySkeleton from "../Basic/BodySkeleton";
 import { useTranslations } from "next-intl";
+import BiaContainer from "../../Bia/BiaContainer";
+import CompareDefault from "../CompareDefault";
 
 const CompareBiaBody = ({
   userSn,
@@ -63,6 +65,23 @@ const CompareBiaBody = ({
             currentSlot={1}
             onCardClick={onCompareDialogOpen} />
         </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-2">
+        <>
+          {leftData?.bia_result ? (
+            <BiaContainer data={leftData.bia_result} isCompare={true} />
+          ) : (
+            <CompareDefault className="w-full h-[733px]" onCompareDialogOpen={onCompareDialogOpen} currentSlot={0} />
+          )}
+        </>
+        <>
+          {rightData?.bia_result ? (
+            <BiaContainer data={rightData.bia_result} isCompare={true} />
+          ) : (
+            <CompareDefault className="w-full h-[733px]" onCompareDialogOpen={onCompareDialogOpen} currentSlot={1} />
+          )}
+        </>
       </div>
     </div>
   );

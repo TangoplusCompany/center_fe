@@ -15,13 +15,14 @@ export type OnCenterCheckFn = (
 type Props = {
   onCenterCheck: OnCenterCheckFn;
   deviceId: string;
+  t?: (key: string) => string;
 };
 
 /**
  * 기기(시리얼 넘버) 확인 후 다음 단계로 진행
  * 응답의 temp_token, device_sn을 onCenterCheck로 전달
  */
-export const useCheckDevice = ({ onCenterCheck, deviceId }: Props) => {
+export const useCheckDevice = ({ onCenterCheck, deviceId, t }: Props) => {
   return useMutation({
     mutationFn: getCheckDevice,
     onSuccess: (res: ICheckDeviceResponse) => {
@@ -31,7 +32,7 @@ export const useCheckDevice = ({ onCenterCheck, deviceId }: Props) => {
       }
     },
     onError: (error: AxiosError<{ message?: string[] }>) => {
-      alert(getCheckDeviceErrorMessage(error.response?.status));
+      alert(getCheckDeviceErrorMessage(error.response?.status, t));
     },
   });
 };

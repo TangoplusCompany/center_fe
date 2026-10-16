@@ -1,6 +1,7 @@
 import { getCenterCheck } from "@/services/center/getCenterCheck";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { useTranslations } from "next-intl";
 
 interface ICenterCheck {
   status: number;
@@ -20,6 +21,7 @@ type Props = {
  * @returns 센터 존재 여부 확인 뮤테이션
  */
 export const useCenterCheck = ({ onCenterCheck, centerCode }: Props) => {
+  const t = useTranslations("Index");
   return useMutation({
     mutationFn: getCenterCheck,
     onSuccess: () => {
@@ -34,7 +36,7 @@ export const useCenterCheck = ({ onCenterCheck, centerCode }: Props) => {
       }>,
     ) => {
       if (data.status === 404) {
-        alert("해당 센터가 존재하지 않습니다. 다시한번 확인 바랍니다.");
+        alert(t("alert_center_not_found"));
       }
       return;
     },

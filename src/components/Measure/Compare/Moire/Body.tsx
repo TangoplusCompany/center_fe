@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { useMeasureInfo } from "@/hooks/api/measure/useMeasureInfo";
 import CompareBodySkeleton from "../Basic/BodySkeleton";
 import MoireContainer from "../../Moire/Container";
+import CompareDefault from "../CompareDefault";
 
 const CompareMoireBody = ({
   userSn,
@@ -71,9 +72,7 @@ const CompareMoireBody = ({
           {leftData?.moire_result ? (
             <MoireContainer data={leftData.moire_result} isCompare={true} /> 
           ) : (
-            <div className="w-full h-[741px] px-4 py-2  transition flex items-center justify-center border-dashed border-2 border-sub200 rounded-xl text-center  dark:border-border  bg-white dark:bg-black cursor-pointer hover:border-sub400 dark:hover:border-sub300 active:border-sub400">
-              선택된 항목이 없습니다
-            </div>
+            <CompareDefault className="w-full h-[741px]" onCompareDialogOpen={onCompareDialogOpen} currentSlot={0} />
           )}
         </>
         
@@ -81,11 +80,9 @@ const CompareMoireBody = ({
           {rightData?.moire_result ? (
             <MoireContainer data={rightData.moire_result} isCompare={true} /> 
           ) : (
-            <div className="w-full h-[741px] px-4 py-2  transition flex items-center justify-center border-dashed border-2 border-sub200 rounded-xl text-center  dark:border-border  bg-white dark:bg-black cursor-pointer hover:border-sub400 dark:hover:border-sub300 active:border-sub400">
-              선택된 항목이 없습니다
-            </div>
-          )}
-        </>
+            <CompareDefault className="w-full h-[741px]" onCompareDialogOpen={onCompareDialogOpen} currentSlot={1} />
+              )}
+            </>
       </div>
 
 

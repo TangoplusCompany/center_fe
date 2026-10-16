@@ -8,6 +8,7 @@ import {
 import { CircleCheck, CircleX, Link2Off } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 function parseStatus(value: string | null): DelegationStatus | null {
   if (value === "1") return 1;
@@ -16,13 +17,14 @@ function parseStatus(value: string | null): DelegationStatus | null {
 }
 
 const DelegationContent = () => {
+  const t = useTranslations("Index");
   const searchParams = useSearchParams();
 
   const acceptToken = searchParams.get("accept_token")?.trim() ?? "";
   const status = parseStatus(searchParams.get("status"));
 
   const isValid = Boolean(acceptToken) && status !== null;
-  const { title, description } = getDelegationMessage(isValid ? status : null);
+  const { title, description } = getDelegationMessage(isValid ? status : null, t);
 
   const isSuccess = isValid && status === 1;
   const isError = isValid && status === 0;
@@ -49,7 +51,7 @@ const DelegationContent = () => {
           </div>
 
           <Button asChild className="w-full">
-            <Link href="/login">로그인 페이지로 이동</Link>
+            <Link href="/login">{t("btn_go_to_login")}</Link>
           </Button>
         </div>
       </div>

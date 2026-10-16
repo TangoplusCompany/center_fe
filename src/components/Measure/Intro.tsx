@@ -20,7 +20,7 @@ const MeasureIntro = ({
 }) => {
   const t = useTranslations("Index");
   if (!data?.basic_result?.result_summary_data) {
-    return <p className="py-8 text-center text-sub400">측정 기본 데이터가 존재하지 않습니다.</p>;
+    return <p className="py-8 text-center text-sub400">{t("measure_default_empty")}</p>;
   }
   
   const {

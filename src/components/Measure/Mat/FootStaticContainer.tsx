@@ -61,7 +61,7 @@ const FootStaticContainer = ({
             <div className="flex justify-center mb-4">
               <div className="flex flex-col items-center w-fit">
                 <div className="w-full rounded-md border text-center py-1 mb-1 invisible">
-                  가려진 타이틀
+                  &nbsp;
                 </div>
                 <div className="flex flex-col items-center w-32 h-32">
                   <FootStatic fileName={fileName} matStatics={matStatics} />

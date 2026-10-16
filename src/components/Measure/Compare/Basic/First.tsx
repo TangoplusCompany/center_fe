@@ -66,7 +66,7 @@ const MeasureStaticCompareFirst = React.memo(
   const hasData1 = measureJson1 && measure1;
   const measureData0 = extractMeasureData(left);
   if (!measureData0) {
-    return <div>데이터가 없습니다.</div>; // 또는 null, 로딩 UI 등
+    return <div>{t("measure_no_data")}</div>; // 또는 null, 로딩 UI 등
   }
   const measureData1 = extractMeasureData(right);
 
@@ -101,7 +101,7 @@ const MeasureStaticCompareFirst = React.memo(
   
   return (
     <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="flex flex-col md:grid md:grid-cols-2 gap-4">
         <div className={`flex flex-col gap-4 lg:gap-10`}>
           {measureJson0 && measure0 && (
             <MeasurementImage

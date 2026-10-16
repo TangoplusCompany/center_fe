@@ -148,9 +148,9 @@ export const RawData = (
             {data1 && data0.ment_all === data1.ment_all ? (
               // 두 내용이 같으면 하나만 표시. 색상은 더 심한 단계(위험 > 주의 > 정상) 기준
               (() => {
-                const worseLevel = (data0.risk_level === 2 || data1?.risk_level === 2) ? "위험"
-                  : (data0.risk_level === 1 || data1?.risk_level === 1) ? "주의" : "정상";
-                const sameTextCondition = { 정상: "text-sub600 dark:text-muted-foreground", 주의: "text-warningDeep dark:text-warning-foreground", 위험: "text-dangerDeep dark:text-danger" }[worseLevel] ?? "text-sub600 dark:text-muted-foreground";
+                const worseLevel = (data0.risk_level === 2 || data1?.risk_level === 2) ? 2
+                  : (data0.risk_level === 1 || data1?.risk_level === 1) ? 1 : 0;
+                const sameTextCondition = { 0: "text-sub600 dark:text-muted-foreground", 1: "text-warningDeep dark:text-warning-foreground", 2: "text-dangerDeep dark:text-danger" }[worseLevel] ?? "text-sub600 dark:text-muted-foreground";
                 return (
                   <div className={`text-base ${sameTextCondition} px-3 place-self-center whitespace-normal break-keep`}>
                     {data0.ment_all}

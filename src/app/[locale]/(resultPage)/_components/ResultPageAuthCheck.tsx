@@ -3,6 +3,7 @@
 import { useEffect, useContext } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useResultPageUserStore, ResultPageUserContext } from "@/providers/ResultPageUserProvider";
+import { useTranslations } from "next-intl";
 
 const RESULT_PAGE_IDLE_TIMEOUT_MS = 60 * 60 * 1_000;
 const RESULT_PAGE_ACTIVITY_EVENTS = [
@@ -13,6 +14,7 @@ const RESULT_PAGE_ACTIVITY_EVENTS = [
 ] as const;
 
 export default function ResultPageAuthCheck() {
+  const t = useTranslations("Index");
   const router = useRouter();
   const pathname = usePathname();
   
@@ -24,6 +26,7 @@ export default function ResultPageAuthCheck() {
   useEffect(() => {
     if (
       pathname.includes("/result-page/login") ||
+      pathname.includes("/result-page/register") ||
       !isLogin ||
       !user ||
       !store
@@ -45,7 +48,7 @@ export default function ResultPageAuthCheck() {
 
       hasLoggedOut = true;
       store.getState().setLogout();
-      alert("1시간 동안 사용하지 않아 자동 로그아웃되었습니다.");
+      alert(t("alert_auto_logout_1hour"));
       router.replace("/result-page/login");
     };
 
@@ -68,18 +71,19 @@ export default function ResultPageAuthCheck() {
       });
       document.removeEventListener("visibilitychange", checkIdleTimeout);
     };
-  }, [router, pathname, isLogin, user, store]);
+  }, [router, pathname, isLogin, user, store, t]);
 
   useEffect(() => {
-    // 로그인 페이지 자체에서는 체크 안 함 (무한 리다이렉트 방지)
-    if (pathname.includes("/result-page/login")) {
+    // 로그인 및 회원가입 페이지 자체에서는 체크 안 함 (무한 리다이렉트 방지)
+    if (
+      pathname.includes("/result-page/login") ||
+      pathname.includes("/result-page/register")
+    ) {
       return;
     }
 
     // Store 상태 확인 (persist가 자동으로 복원하므로 store 상태만 확인)
     if (!isLogin || !user) {
-      // GS 인증: URL의 key 유무와 관계없이 실제 로그인 상태가 없으면 직접 접근을 차단한다.
-      // Store에 데이터가 없으면 설정될 때까지 polling
       let attempts = 0;
       const maxAttempts = 30; // 최대 3초 (100ms * 30)
       const interval = setInterval(() => {

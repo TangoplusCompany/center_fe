@@ -58,7 +58,7 @@ const ROMDashboardTypeList = ({
               key={romItem.sn}
               className="text-base hover:bg-sub100 cursor-pointer"
               onClick={()=> {
-                const pair : ComparePair = romItem.title.includes("왼") ?
+                const pair : ComparePair = (romItem.title.includes("왼") || romItem.title.toLowerCase().includes("left")) ?
                  [romItem.sn, romItem.opposite_side_rom_sn] : 
                  [romItem.opposite_side_rom_sn, romItem.sn]
                 

@@ -86,8 +86,8 @@ const filledData = [...[...limitedData].reverse(), ...padding];
                           } transition-colors hover:opacity-80 flex items-center justify-center text-sm font-semibold`}
                           title={
                             dayData.date === "" 
-                              ? '측정 데이터 없음' 
-                              : `${part}: ${dayData.riskValues[rowIdx] === 0 ? '정상' : dayData.riskValues[rowIdx] === 1 ? '주의' : '위험'}`
+                              ? t('measure_no_data') 
+                              : `${t(part)}: ${dayData.riskValues[rowIdx] === 0 ? t('grade_normal') : dayData.riskValues[rowIdx] === 1 ? t('grade_caution') : t('grade_danger')}`
                           }
                         >
                       {dayData.rangeValues[rowIdx] > 0 && (

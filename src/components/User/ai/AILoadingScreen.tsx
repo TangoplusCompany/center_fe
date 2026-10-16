@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 
 const AILoadingScreen = () => {
+  const t = useTranslations("Index");
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [displayedText, setDisplayedText] = useState('');
   const [isTyping, setIsTyping] = useState(true);
 
   const messages = [
-    "AI 분석 결과를 받고 있습니다.",
-    "맞춤형 운동을 선정하고 있습니다."
+    t("ai_loading_msg_1"),
+    t("ai_loading_msg_2")
   ];
 
   useEffect(() => {

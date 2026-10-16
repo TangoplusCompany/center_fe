@@ -73,7 +73,7 @@ const DeviceAddDialog = ({ deviceCount = 0 }: DeviceAddDialogProps) => {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={`/icons/ic_device_add.svg`}
-                    alt="정적 족압 이미지"
+                    alt={t("alt_device_add_icon")}
                     className="w-full h-full p-1"
                     onError={(e) => {
                       e.currentTarget.src = "/images/measure_default.png";
@@ -102,7 +102,7 @@ const DeviceAddContainer = ({ deviceInfo, deviceCount }: { deviceInfo: IDeviceSe
 
   const handlePostDeviceAdd = (deviceSn: number) => {
     if (deviceCount >= 4) {
-      alert("디바이스는 최대 4개까지만 등록할 수 있습니다.");
+      alert(t("alert_device_max_limit"));
       return;
     }
     mutateDeviceAdd.mutate({ deviceSn });

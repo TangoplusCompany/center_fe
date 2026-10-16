@@ -29,7 +29,7 @@ const EditCenterContainer = () => {
   }, [isOtpDialogOpen]);
 
   const handle2FANext = (method: Login2FAMethod, requestedTempToken: string) => {
-    const contact = method === "email" ? "이메일" : "휴대폰";
+    const contact = method === "email" ? "email" : "phone";
     setTempJwt(requestedTempToken);
     updateTempJwt(requestedTempToken);
     openDialog(contact, EMPTY_LOGIN_DATA, requestedTempToken);
@@ -42,16 +42,6 @@ const EditCenterContainer = () => {
   return (
     <div className="flex flex-col gap-4">
       <CenterEditForm centerData={centerInformation} />
-
-      {/* <div className="flex w-full items-center justify-end gap-4">
-        <div className="w-fit text-sub400 text-base font-semibold cursor-pointer hover:text-sub400/90" onClick={() => setIsWarningOpen(true)}>
-          주관리자 권한 위임
-        </div>
-        <div className="w-[2px] h-6 bg-sub200 rounded-full" />
-        <div className="w-fit text-sub400 text-base font-semibold cursor-pointer hover:text-sub400/90" onClick={() => {}}>
-          센터 비활성화
-        </div>
-      </div> */}
       {/* TODO 버튼 클릭하면 삭제 프로세스대로 otp 2fa 넣기. 아마 hooks만 수정하면 됨 */}
       <WarningDialog
         open={isWarningOpen}

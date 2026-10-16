@@ -7,9 +7,11 @@ import { useAuthStore } from "@/providers/AuthProvider";
 import { getAdminCenters } from "@/services/auth/getAdminCenters";
 import { useQuery } from "@tanstack/react-query";
 import { IAdminCenterListItem } from "@/types/center";
+import { useTranslations } from "next-intl";
 
 export const 
 CenterMainContainer = () => {
+  const t = useTranslations("Index");
   const adminSn = useAuthStore((state) => state.adminSn);
 
   const { data: centers = [], isLoading, isError } = useQuery({
@@ -34,7 +36,7 @@ CenterMainContainer = () => {
   if (isError) {
     return (
       <div className="col-span-12 flex flex-col gap-4">
-        <p className="text-destructive">센터 목록을 불러오는데 실패했습니다.</p>
+        <p className="text-destructive">{t("center_list_fetch_fail")}</p>
       </div>
     );
   }
@@ -43,7 +45,7 @@ CenterMainContainer = () => {
   if (centers.length === 0) {
     return (
       <div className="col-span-12 flex flex-col gap-4">
-        <p className="text-muted-foreground">센터 목록이 없습니다.</p>
+        <p className="text-muted-foreground">{t("center_list_empty")}</p>
       </div>
     );
   }

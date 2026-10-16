@@ -15,7 +15,7 @@ export const DeviceMainContainer = () => {
   const { data: deviceStatus, isLoading } = useGetDeviceStatus<IDeviceStatus>();
   if (isLoading) return <div className="flex w-full"><SkeletonDeviceCard /></div>;
   if (!deviceStatus) {
-    return <p>잘못된 요청입니다. 잠시 후 다시 시도바랍니다.</p>;
+    return <p>{t("alert_bad_request_retry")}</p>;
   }
   const deviceCount = deviceStatus.data?.length ?? 0;
   if (!deviceStatus.data || deviceStatus.data.length === 0) {

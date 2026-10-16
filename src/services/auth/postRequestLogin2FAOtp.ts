@@ -54,7 +54,7 @@ export const postRequestLogin2FAOtp = async ({
   } catch (err) {
     if (axios.isAxiosError(err)) {
       const axiosError = err as AxiosError<IRequest2FAErrorResponse>;
-      const message = axiosError.response?.data?.message?.[0] || "요청에 실패했습니다.";
+      const message = axiosError.response?.data?.message?.[0] || "Failed to process request.";
       const status = axiosError.response?.status;
       throw new ApiStatusError(message, status);
     }

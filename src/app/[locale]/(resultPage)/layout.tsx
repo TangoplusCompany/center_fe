@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import ResultPageUserProvider from "@/providers/ResultPageUserProvider";
 import ResultPageAuthCheck from "./_components/ResultPageAuthCheck";
+import { getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-  title: "탱고바디 결과 페이지",
-  description: "탱고바디 결과 페이지 입니다.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Index");
+  return {
+    title: t("meta_title_result_page"),
+    description: t("meta_desc_result_page"),
+  };
+}
 
 export default function ResultPageLayout({
   children,
