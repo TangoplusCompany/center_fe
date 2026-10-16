@@ -14,6 +14,7 @@ export interface IGetUserQRCodeParams {
 export interface IKioskAuthCodeData {
   six_digit_code: string;
   reg_date: string;
+  end_date: string;
 }
 
 export type GetUserQRCodeResponse = {

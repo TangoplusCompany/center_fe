@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import dayjs from "dayjs";
-import { Clock, Copy, Check, AlertCircle, RefreshCw, Loader2 } from "lucide-react";
+import { Clock, AlertCircle, RefreshCw, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import {
@@ -21,6 +21,7 @@ interface ResultPageQrDialogProps {
   user_sn?: number | string;
   sixDigitCode?: string;
   regDate?: string;
+  endDate?: string;
 }
 
 const TOTAL_VALID_SECONDS = 180;
@@ -31,9 +32,9 @@ export default function ResultPageQrDialog({
   user_sn,
   sixDigitCode: propSixDigitCode,
   regDate: propRegDate,
+  endDate: propEndDate,
 }: ResultPageQrDialogProps) {
   const t = useTranslations("Index");
-  const [copied, setCopied] = useState(false);
   
   const shouldFetchApi = isOpen && !propSixDigitCode && !!user_sn;
   const {
@@ -48,9 +49,16 @@ export default function ResultPageQrDialog({
 
   const sixDigitCode = propSixDigitCode || apiData?.six_digit_code || "";
   const regDate = propRegDate || apiData?.reg_date;
+  const endDate = propEndDate || apiData?.end_date;
 
-  // 2. 남은 유효시간(초) 계산
-  const initialSeconds = useMemo(() => {
+  // 2. 남은 유효시간(초) 실시간 계산 함수 (end_date 기준, 없으면 reg_date 기준)
+  const calculateRemainingSeconds = useCallback(() => {
+    if (endDate) {
+      const end = dayjs(endDate);
+      if (end.isValid()) {
+        return Math.max(0, end.diff(dayjs(), "second"));
+      }
+    }
     if (regDate) {
       const regTime = dayjs(regDate);
       if (regTime.isValid()) {
@@ -59,32 +67,57 @@ export default function ResultPageQrDialog({
       }
     }
     return TOTAL_VALID_SECONDS;
-  }, [regDate]);
+  }, [endDate, regDate]);
 
-  const [remainingSeconds, setRemainingSeconds] = useState(initialSeconds);
+  const [remainingSeconds, setRemainingSeconds] = useState<number>(calculateRemainingSeconds);
 
+  // isOpen 또는 날짜(endDate, regDate) 변경 시 즉시 시간 동기화
   useEffect(() => {
     if (isOpen) {
-      setRemainingSeconds(initialSeconds);
+      setRemainingSeconds(calculateRemainingSeconds());
     }
-  }, [isOpen, initialSeconds]);
+  }, [isOpen, calculateRemainingSeconds]);
 
-  // 카운트다운 타이머
+  // 카운트다운 타이머 (end_date 기준 실시간 차이 계산 + 모바일 백그라운드/카톡 트레이 복귀 대응)
   useEffect(() => {
-    if (!isOpen || remainingSeconds <= 0 || isLoading || isError) return;
+    if (!isOpen || isLoading || isError) return;
 
+    // 현재 남은 시간이 0 이하면 타이머 미실행
+    if (calculateRemainingSeconds() <= 0) {
+      setRemainingSeconds(0);
+      return;
+    }
+
+    const updateRemaining = () => {
+      const remaining = calculateRemainingSeconds();
+      setRemainingSeconds(remaining);
+    };
+
+    // 1초마다 end_date와 현재 시간의 차이를 절대 계산
     const timer = setInterval(() => {
-      setRemainingSeconds((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          return 0;
-        }
-        return prev - 1;
-      });
+      const remaining = calculateRemainingSeconds();
+      setRemainingSeconds(remaining);
+      if (remaining <= 0) {
+        clearInterval(timer);
+      }
     }, 1000);
 
-    return () => clearInterval(timer);
-  }, [isOpen, remainingSeconds, isLoading, isError]);
+    // 모바일 카카오톡 트레이 최소화/백그라운드 복귀 시 화면 복원 즉시 시간 재동기화
+    const handleVisibilityOrFocus = () => {
+      if (document.visibilityState === "visible") {
+        updateRemaining();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityOrFocus);
+    window.addEventListener("focus", handleVisibilityOrFocus);
+
+    return () => {
+      clearInterval(timer);
+      document.removeEventListener("visibilitychange", handleVisibilityOrFocus);
+      window.removeEventListener("focus", handleVisibilityOrFocus);
+    };
+  }, [isOpen, isLoading, isError, calculateRemainingSeconds]);
 
   const isExpired = remainingSeconds <= 0;
   const isUrgent = remainingSeconds <= 30 && !isExpired;
@@ -100,18 +133,6 @@ export default function ResultPageQrDialog({
     const cleanCode = sixDigitCode.replace(/\s+/g, "").slice(0, 6);
     return Array.from({ length: 6 }, (_, i) => cleanCode[i] || "-");
   }, [sixDigitCode]);
-
-  const handleCopyCode = async () => {
-    if (!sixDigitCode) return;
-    try {
-      await navigator.clipboard.writeText(sixDigitCode);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error("클립보드 복사 실패:", err);
-    }
-  };
-
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
@@ -190,18 +211,28 @@ export default function ResultPageQrDialog({
 
               {/* 유효시간 만료 시 오버레이 */}
               {isExpired && (
-                <div className="absolute inset-0 bg-white/90 dark:bg-sub900/90 rounded-3xl flex flex-col items-center justify-center p-4 text-center backdrop-blur-xs">
-                  <AlertCircle className="w-10 h-10 text-red-500 mb-2" />
+                <div className="absolute inset-0 bg-white/90 dark:bg-sub900/90 rounded-3xl flex flex-col items-center justify-center p-4 text-center backdrop-blur-xs gap-1.5">
+                  <AlertCircle className="w-10 h-10 text-red-500 mb-1" />
                   <p className="text-sm font-semibold text-gray-900 dark:text-white">
                     {t("result_page_qr_expired")}
                   </p>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => refetch()}
+                    className="gap-1.5 text-xs rounded-full mt-1"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" />
+                    {t("btn_retry")}
+                  </Button>
                 </div>
               )}
             </div>
           )}
 
           {/* 3. six_digit_code 표시 */}
-          <div className="w-full flex flex-col items-center gap-3">
+          <div className="w-full flex flex-col items-center gap-3 my-8">
             <div className="flex items-center justify-center gap-2 sm:gap-2.5">
               {codeChars.map((char, index) => (
                 <div
@@ -212,31 +243,6 @@ export default function ResultPageQrDialog({
                 </div>
               ))}
             </div>
-
-            {/* 코드 복사 버튼 */}
-            {sixDigitCode && !isLoading && (
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={handleCopyCode}
-                className="mt-1 text-xs gap-1.5 rounded-full px-3.5 py-1.5 h-8 border-gray-200 hover:bg-gray-50 dark:border-sub700 dark:hover:bg-sub800"
-              >
-                {copied ? (
-                  <>
-                    <Check className="w-3.5 h-3.5 text-green-600" />
-                    <span className="text-green-600 font-medium">
-                      {t("result_page_qr_copied")}
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-3.5 h-3.5 text-gray-500" />
-                    <span>{t("result_page_qr_copy")}</span>
-                  </>
-                )}
-              </Button>
-            )}
           </div>
         </div>
       </DialogContent>

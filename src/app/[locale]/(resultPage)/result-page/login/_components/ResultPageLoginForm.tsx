@@ -5,17 +5,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { useForm, FieldValues, UseFormSetError } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReactNode, useEffect, useMemo, useState } from "react";
 import { useUserLogin } from "@/hooks/api/ResultUser/useUserLogin";
 import { useLocale, useTranslations } from "next-intl";
 import { Check, Globe } from "lucide-react";
+import Link from "next/link";
 
 const prefillParentOrigins = new Set([
   "https://www.tangohouse.co.kr",
   "https://tangohouse.co.kr",
-  "http://localhost:3000",
+  "https://localhost:4862/",
   "http://127.0.0.1:3000",
   "http://[::1]:3000",
 ]);
@@ -52,6 +53,10 @@ export default function ResultPageLoginForm({
     setValue,
   } = useForm({
     resolver: zodResolver(loginSchema),
+    defaultValues: {
+      phone: "",
+      pin: "",
+    },
   });
 
   useEffect(() => {
@@ -79,7 +84,9 @@ export default function ResultPageLoginForm({
     return () => window.removeEventListener("message", receivePrefill);
   }, [setValue, loginSchema]);
 
-  const { mutate: login, isPending } = useUserLogin(setError);
+  const { mutate: login, isPending } = useUserLogin(
+    setError as unknown as UseFormSetError<FieldValues>
+  );
   
   const loginHandleSubmit = handleSubmit((data) => {
     login({
@@ -197,6 +204,12 @@ export default function ResultPageLoginForm({
         >
           {isPending ? t('confirm_pending') : t('login')}
         </Button>
+        <div className="text-center text-sm">
+          {t("result_page_signup_prompt")}{" "}
+          <Link href="/result-page/register" className="underline underline-offset-4">
+            {t("result_page_signup_btn")}
+          </Link>
+        </div>
       </div>
     </form>
   );
