@@ -220,6 +220,8 @@ const MeasureDetailContainer = ({
 }: CenterUserMeasureProps) => {
   const t = useTranslations("Index");
   const locale = useLocale();
+
+  
   const measureMetaData = measureList
     ? measureList.find((measure) => measure.measure_sn === measureSn)
     : externalMeasureData;
@@ -259,6 +261,14 @@ const MeasureDetailContainer = ({
       setMeasureType(availableType.key as MeasureType);
     }
   }, [measureMetaData, setMeasureType, hasBasic, hasRom, hasBia, hasGait, hasMoire]);
+  
+  if (!measureList || measureList.length === 0) {
+    return (
+      <div className="flex flex-1 min-h-[512px] w-full items-center justify-center text-sm sm:text-lg text-sub700">
+        아직 측정 기록이 없습니다.
+      </div>
+    );
+  }
 
   const handleKakaoSend = async () => {
     if (!measureMetaData) return;

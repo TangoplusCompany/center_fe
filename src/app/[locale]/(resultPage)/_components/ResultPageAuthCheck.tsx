@@ -26,6 +26,7 @@ export default function ResultPageAuthCheck() {
   useEffect(() => {
     if (
       pathname.includes("/result-page/login") ||
+      pathname.includes("/result-page/register") ||
       !isLogin ||
       !user ||
       !store
@@ -73,15 +74,16 @@ export default function ResultPageAuthCheck() {
   }, [router, pathname, isLogin, user, store, t]);
 
   useEffect(() => {
-    // 로그인 페이지 자체에서는 체크 안 함 (무한 리다이렉트 방지)
-    if (pathname.includes("/result-page/login")) {
+    // 로그인 및 회원가입 페이지 자체에서는 체크 안 함 (무한 리다이렉트 방지)
+    if (
+      pathname.includes("/result-page/login") ||
+      pathname.includes("/result-page/register")
+    ) {
       return;
     }
 
     // Store 상태 확인 (persist가 자동으로 복원하므로 store 상태만 확인)
     if (!isLogin || !user) {
-      // GS 인증: URL의 key 유무와 관계없이 실제 로그인 상태가 없으면 직접 접근을 차단한다.
-      // Store에 데이터가 없으면 설정될 때까지 polling
       let attempts = 0;
       const maxAttempts = 30; // 최대 3초 (100ms * 30)
       const interval = setInterval(() => {
