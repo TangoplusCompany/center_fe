@@ -37,13 +37,41 @@ const InputOTPSlot = React.forwardRef<
   const inputOTPContext = React.useContext(OTPInputContext)
   const { char, hasFakeCaret, isActive } = inputOTPContext.slots[index]
 
-  const displayChar = mask
-    ? char
-      ? typeof mask === "string"
-        ? mask
-        : "*"
-      : null
-    : char
+  const [showPlain, setShowPlain] = React.useState(false)
+  const prevCharRef = React.useRef(char)
+
+  React.useEffect(() => {
+    if (char && char !== prevCharRef.current) {
+      setShowPlain(true)
+      const timer = setTimeout(() => {
+        setShowPlain(false)
+      }, 1500)
+      prevCharRef.current = char
+      return () => clearTimeout(timer)
+    }
+    prevCharRef.current = char
+  }, [char])
+
+  React.useEffect(() => {
+    if (!inputOTPContext.isFocused) {
+      setShowPlain(false)
+    }
+  }, [inputOTPContext.isFocused])
+
+  let displayChar: React.ReactNode = char
+
+  if (mask && char) {
+    const maskChar = typeof mask === "string" ? mask : "*"
+    const hasNextChar = inputOTPContext.slots
+      .slice(index + 1)
+      .some((s) => s.char !== null)
+
+    if (hasNextChar || !showPlain || !inputOTPContext.isFocused) {
+      displayChar = maskChar
+    } else {
+      displayChar = char
+    }
+  }
 
   return (
     <div

@@ -179,6 +179,14 @@ customUserAxios.interceptors.request.use((config: InternalAxiosRequestConfig) =>
 customUserAxios.interceptors.response.use(
   (response) => response,
   async (error) => {
+    // PIN 비밀번호 변경 API의 401(현재 비밀번호 오류)은 로그아웃 제외하고 호출부에서 처리
+    const isPinPasswordUpdateRequest =
+      typeof error.config?.url === "string" &&
+      /\/users\/[^/]+\/pin-password/.test(error.config.url);
+    if (isPinPasswordUpdateRequest && error.response?.status === 401) {
+      return Promise.reject(error);
+    }
+
     // 401 에러 발생 시 로그인 페이지로 리다이렉트
     if (error.response?.status === 401) {
       // 전역 store에서 로그아웃 처리 (persist가 자동으로 sessionStorage도 업데이트)

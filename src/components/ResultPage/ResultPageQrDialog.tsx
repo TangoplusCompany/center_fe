@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import dayjs from "dayjs";
-import { Clock, AlertCircle, RefreshCw, Loader2 } from "lucide-react";
+import { Clock, AlertCircle, RefreshCw, Loader2, CheckCircle2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import {
@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useGetUserQRCode } from "@/hooks/api/ResultUser/useGetUserQRCode";
+import { useGetQrCodeStatus } from "@/hooks/api/ResultUser/useGetQrCodeStatus";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ResultPageQrDialogProps {
   isOpen: boolean;
@@ -25,6 +27,7 @@ interface ResultPageQrDialogProps {
 }
 
 const TOTAL_VALID_SECONDS = 180;
+const SCAN_SUCCESS_AUTO_CLOSE_SECONDS = 7;
 
 export default function ResultPageQrDialog({
   isOpen,
@@ -36,10 +39,15 @@ export default function ResultPageQrDialog({
 }: ResultPageQrDialogProps) {
   const t = useTranslations("Index");
   
+  const queryClient = useQueryClient();
+  const [isScanSuccess, setIsScanSuccess] = useState(false);
+  const [closeCountdown, setCloseCountdown] = useState(SCAN_SUCCESS_AUTO_CLOSE_SECONDS);
+
   const shouldFetchApi = isOpen && !propSixDigitCode && !!user_sn;
   const {
     data: apiData,
     isLoading,
+    isFetching,
     isError,
     refetch,
   } = useGetUserQRCode({
@@ -50,6 +58,18 @@ export default function ResultPageQrDialog({
   const sixDigitCode = propSixDigitCode || apiData?.six_digit_code || "";
   const regDate = propRegDate || apiData?.reg_date;
   const endDate = propEndDate || apiData?.end_date;
+
+  // 다이얼로그 닫힐 때 이전 QR 코드 및 상태 캐시, 스캔 성공 상태 정리
+  useEffect(() => {
+    if (!isOpen) {
+      setIsScanSuccess(false);
+      setCloseCountdown(SCAN_SUCCESS_AUTO_CLOSE_SECONDS);
+      if (user_sn) {
+        queryClient.removeQueries({ queryKey: ["UserQRCode", user_sn] });
+        queryClient.removeQueries({ queryKey: ["QrCodeStatus", user_sn] });
+      }
+    }
+  }, [isOpen, user_sn, queryClient]);
 
   // 2. 남은 유효시간(초) 실시간 계산 함수 (end_date 기준, 없으면 reg_date 기준)
   const calculateRemainingSeconds = useCallback(() => {
@@ -80,7 +100,7 @@ export default function ResultPageQrDialog({
 
   // 카운트다운 타이머 (end_date 기준 실시간 차이 계산 + 모바일 백그라운드/카톡 트레이 복귀 대응)
   useEffect(() => {
-    if (!isOpen || isLoading || isError) return;
+    if (!isOpen || isLoading || isError || isScanSuccess) return;
 
     // 현재 남은 시간이 0 이하면 타이머 미실행
     if (calculateRemainingSeconds() <= 0) {
@@ -117,10 +137,59 @@ export default function ResultPageQrDialog({
       document.removeEventListener("visibilitychange", handleVisibilityOrFocus);
       window.removeEventListener("focus", handleVisibilityOrFocus);
     };
-  }, [isOpen, isLoading, isError, calculateRemainingSeconds]);
+  }, [isOpen, isLoading, isError, isScanSuccess, calculateRemainingSeconds]);
 
   const isExpired = remainingSeconds <= 0;
   const isUrgent = remainingSeconds <= 30 && !isExpired;
+
+  // 3. QR 코드 사용 완료 상태(403) 실시간 폴링 (3초 간격)
+  // 유효시간(3분) 내이고, QR 코드가 정상 발급된 상태에서 스캔 완료 전까지만 폴링 수행
+  const isQrReady = !isLoading && !isFetching && !isError && !!sixDigitCode;
+  const shouldPollStatus = isOpen && isQrReady && !isExpired && !isScanSuccess && !!user_sn;
+
+  const { data: qrStatusData } = useGetQrCodeStatus({
+    user_sn,
+    codeKey: sixDigitCode,
+    enabled: shouldPollStatus,
+    refetchInterval: 3000,
+  });
+
+  // 403 (사용 완료 / no longer in use) 수신 시 스캔 완료 화면으로 전환 (7초간 표시 후 자동 닫힘)
+  useEffect(() => {
+    if (!isOpen || isScanSuccess) return;
+
+    const isNoLongerInUse =
+      qrStatusData?.status === 403 ||
+      (Array.isArray(qrStatusData?.message) &&
+        qrStatusData.message.some(
+          (msg) =>
+            typeof msg === "string" &&
+            msg.toLowerCase().includes("no longer in use")
+        ));
+
+    if (isNoLongerInUse) {
+      setIsScanSuccess(true);
+      setCloseCountdown(SCAN_SUCCESS_AUTO_CLOSE_SECONDS);
+    }
+  }, [qrStatusData, isOpen, isScanSuccess]);
+
+  // 4. 스캔 완료 화면 표시 중 카운트다운(7초) 및 자동 닫기
+  useEffect(() => {
+    if (!isOpen || !isScanSuccess) return;
+
+    const timer = setInterval(() => {
+      setCloseCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          onClose();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isOpen, isScanSuccess, onClose]);
   
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -144,28 +213,67 @@ export default function ResultPageQrDialog({
           {t("result_page_qr_title")}
         </DialogTitle>
 
-        {/* 1. 상단 바: 유효시간(3분) - Dialog 기본 우측상단 닫기(X) 버튼 사용 */}
+        {/* 1. 상단 바: 유효시간 또는 스캔 완료 뱃지 */}
         <DialogHeader className="p-4 sm:p-5 pb-3 border-b border-gray-100 dark:border-sub800 flex flex-row items-center justify-between space-y-0 pr-12">
-          {/* 유효시간 배지 */}
-          <div
-            className={cn(
-              "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-colors",
-              isExpired
-                ? "bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400 border border-red-200 dark:border-red-800"
-                : isUrgent
-                ? "bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400 border border-amber-200 dark:border-amber-800 animate-pulse"
-                : "bg-blue-50 text-mainBlue-600 dark:bg-mainBlue-950/40 dark:text-mainBlue-400 border border-blue-200 dark:border-blue-800"
-            )}
-          >
-            <Clock className="w-4 h-4 shrink-0" />
-            <span>
-              {t("result_page_qr_valid_time")} {formatTime(remainingSeconds)}
-            </span>
-          </div>
+          {isScanSuccess ? (
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-blue-50 text-mainBlue-600 dark:bg-mainBlue-900/40 dark:text-mainBlue-300 border border-blue-200 dark:border-mainBlue-800">
+              <CheckCircle2 className="w-4 h-4 shrink-0" />
+              <span>{t("result_page_qr_scan_badge")}</span>
+            </div>
+          ) : (
+            <div
+              className={cn(
+                "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-colors",
+                isExpired
+                  ? "bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400 border border-red-200 dark:border-red-800"
+                  : isUrgent
+                  ? "bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400 border border-amber-200 dark:border-amber-800 animate-pulse"
+                  : "bg-blue-50 text-mainBlue-600 dark:bg-mainBlue-950/40 dark:text-mainBlue-400 border border-blue-200 dark:border-blue-800"
+              )}
+            >
+              <Clock className="w-4 h-4 shrink-0" />
+              <span>
+                {t("result_page_qr_valid_time")} {formatTime(remainingSeconds)}
+              </span>
+            </div>
+          )}
         </DialogHeader>
 
-        {/* 2. 본문 영역: 전체 크기의 QR 코드 & 6자리 코드 */}
-        <div className="flex flex-col items-center justify-center p-6 gap-6">
+        {isScanSuccess ? (
+          /* 스캔 완료 화면 (5~10초간 표시 후 자동 닫힘) */
+          <div className="flex flex-col items-center justify-center p-8 sm:p-10 gap-6 text-center animate-in fade-in zoom-in-95 duration-300">
+            <div className="relative flex items-center justify-center my-2">
+              <div className="w-24 h-24 rounded-full bg-blue-50 dark:bg-mainBlue-900/40 flex items-center justify-center text-mainBlue-600 dark:text-mainBlue-300 shadow-inner">
+                <CheckCircle2 className="w-14 h-14" />
+              </div>
+              <div className="absolute -inset-1.5 rounded-full border-2 border-mainBlue-600/30 animate-ping pointer-events-none" />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+                {t("result_page_qr_scan_success_title")}
+              </h3>
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
+                {t("result_page_qr_scan_success_desc")}
+              </p>
+            </div>
+
+            <div className="w-full flex flex-col items-center gap-3 mt-4">
+              <p className="text-xs sm:text-sm font-medium text-gray-400 dark:text-gray-500">
+                {t("result_page_qr_scan_auto_close", { seconds: closeCountdown })}
+              </p>
+              <Button
+                type="button"
+                onClick={onClose}
+                className="w-full max-w-[200px] rounded-full bg-mainBlue-600 hover:bg-mainBlue-800 text-white font-semibold shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]"
+              >
+                {t("result_page_qr_close")}
+              </Button>
+            </div>
+          </div>
+        ) : (
+          /* 2. 본문 영역: 전체 크기의 QR 코드 & 6자리 코드 */
+          <div className="flex flex-col items-center justify-center p-6 gap-6">
           {/* 안내 텍스트 */}
           <div className="text-center">
             <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400">
@@ -245,6 +353,7 @@ export default function ResultPageQrDialog({
             </div>
           </div>
         </div>
+      )}
       </DialogContent>
     </Dialog>
   );
