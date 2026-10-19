@@ -117,7 +117,6 @@ export default function DefaultSidebar() {
       return pathname.startsWith(item.url);
     });
 
-    // 모바일에서 사이드바가 열려있을 때만 인디케이터 위치 계산
     if (activeIndex >= 0 && menuItemRefs.current[activeIndex] && (openMobile || !isMobile)) {
       // 약간의 지연을 주어 Sheet가 완전히 렌더링된 후 위치 계산
       const timer = setTimeout(() => {

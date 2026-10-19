@@ -12,12 +12,12 @@ import { usePatchUserDetail } from "@/hooks/api/user/usePatchUserDetail";
 import { actionDecrypt } from "@/app/actions/getCrypto";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, KeyRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 import dayjs from "dayjs";
 import { ko } from "date-fns/locale";
 import { useTranslations } from "next-intl";
-// import { PinChangeDialog } from "./PinChangeDialog";
+import { PinChangeDialog } from "./PinChangeDialog";
 
 const UserDetailForm = ({ 
   userData, 
@@ -33,7 +33,7 @@ const UserDetailForm = ({
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const { isBoolean: editState, setToggle: setEditState } = useBoolean();
   const editableFieldClass = editState ? "bg-background border border-input shadow-sm" : undefined;
-  // const [isPinDialogOpen, setIsPinDialogOpen] = useState(false);
+  const [isPinDialogOpen, setIsPinDialogOpen] = useState(false);
 
   
   const handleEditState = () => {
@@ -205,11 +205,23 @@ const UserDetailForm = ({
   });
 
   return (
-    <form onSubmit={submitUserDetailForm} className="flex flex-col gap-4 sm:gap-5">
+    <>
+      <form onSubmit={submitUserDetailForm} className="flex flex-col gap-4 sm:gap-5">
       <legend className="sr-only">{t('title_edit_user_info')}</legend>
       {/* isMyPage가 false이고 admin_role이 3일 때는 수정 버튼 숨김 */}
       {(isMyPage || adminRole !== 3) && (
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2">
+          {isMyPage && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsPinDialogOpen(true)}
+              className="w-full sm:w-auto flex items-center justify-center gap-1.5 border-mainBlue-500 text-mainBlue-600 hover:bg-mainBlue-50 dark:hover:bg-mainBlue-950/30"
+            >
+              <KeyRound className="w-4 h-4" />
+              <span>{t("pin_change_title")}</span>
+            </Button>
+          )}
           <Button variant="outline" onClick={handleEditState} type="button" className="w-full sm:w-auto">
             {editState ? t('btn_cancel') : t('btn_edit_submit')}
           </Button>
@@ -255,6 +267,7 @@ const UserDetailForm = ({
           </div>
         </div>
       </div>
+      
       <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3">
         <div className="flex flex-col gap-2">
           <Label htmlFor="address" className="text-sm sm:text-base">{t('label_address')}</Label>
@@ -437,6 +450,14 @@ const UserDetailForm = ({
         </div>
       </div>
     </form>
+      {isMyPage && (
+        <PinChangeDialog
+          open={isPinDialogOpen}
+          onOpenChange={setIsPinDialogOpen}
+          userSn={userData.user_sn}
+        />
+      )}
+    </>
   );
 };
 
